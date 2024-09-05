@@ -106,11 +106,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Tools.cs" />
     <Compile Include="Commands\Plugin.Commands.cs" />
     <Compile Include="Configs\Config.cs" />
+    <Compile Include="Modes\Gamble.cs" />
+    <Compile Include="Modes\Giveaway.cs" />
     <Compile Include="Modes\Jailbird.cs" />
     <Compile Include="Modes\OnePunch.cs" />
+    <Compile Include="Modes\Outlaw.cs" />
     <Compile Include="Modes\SCPRUSH.cs" />
+    <Compile Include="Modes\StandardItems.cs" />
+    <Compile Include="Modes\WhoamI.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
