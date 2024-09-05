@@ -31,10 +31,11 @@ namespace RGM.Modes
             {
                 ItemType.GunCOM15,
                 ItemType.GunCOM18,
-                ItemType.GunCom45
+                ItemType.GunCom45,
+                ItemType.GunRevolver
             };
 
-            if (Pistols.Contains(ev.Player.CurrentItem.Type))
+            if (Pistols.Contains(ev.Attacker.CurrentItem.Type))
             {
                 ev.DamageHandler.Damage = 4 * ev.DamageHandler.Damage;
             }

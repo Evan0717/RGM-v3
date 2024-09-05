@@ -6,7 +6,7 @@ using Exiled.API.Features;
 using MEC;
 using PluginAPI.Loader.Features;
 
-namespace Plugin.Commands
+namespace RGM.Commands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ForceMode : ICommand
@@ -21,15 +21,15 @@ namespace Plugin.Commands
             {
                 List<string> ModeList = new List<string>();
 
-                foreach (var Mode in Plugin.Instance.ModeList.Keys)
+                foreach (var Mode in RGM.Instance.ModeList.Keys)
                     ModeList.Add($"{Mode}");
 
                 response = $"<b><size=30>[ 모드 리스트 ]</b></size>\n{string.Join(", ", ModeList)}\nSending Command Error..";
                 return false;
             }
-            else if (Plugin.Instance.ModeList.Keys.Contains(args))
+            else if (RGM.Instance.ModeList.Keys.Contains(args))
             {
-                Plugin.Instance.CurrentMode = args;
+                RGM.Instance.CurrentMode = args;
                 Server.ExecuteCommand($"/cassie_sl <mark=#ffff00aa><color=#000000>관리자(<color=#ffffff>{player.Nickname}</color>)에 의하여 이번 라운드의 모드가 <b>{args}</b>으로 확정되었습니다.</color></mark>");
                 response = $"이번 라운드의 모드는 <b>{args}</b>입니다.\nSending Command Complete!";
                 return true;

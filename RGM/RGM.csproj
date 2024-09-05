@@ -20,7 +20,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>5</WarningLevel>
+    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PreferNativeArm64>true</PreferNativeArm64>
   </PropertyGroup>
@@ -107,8 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Tools.cs" />
-    <Compile Include="Commands\Plugin.Commands.cs" />
+    <Compile Include="Commands\RGM.Commands.cs" />
     <Compile Include="Configs\Config.cs" />
+    <Compile Include="Logger\Discord.cs" />
     <Compile Include="Modes\Blackout.cs" />
     <Compile Include="Modes\Blessing.cs" />
     <Compile Include="Modes\Collector.cs" />

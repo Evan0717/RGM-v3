@@ -6,12 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Interfaces;
 
-namespace Plugin
+namespace RGM
 {
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
+
+        public string WebhookURL { get; set; } = "웹훅 URL(주소)를 입력해주세요.";
 
         [Description("모드 이름 : 색상, 설명, 파일 이름, 공개 여부(public/private), 아이디어 제공자")]
         public Dictionary<string, List<string>> Modes { get; set; } = new Dictionary<string, List<string>>() 
