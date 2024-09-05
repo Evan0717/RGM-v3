@@ -64,7 +64,11 @@ namespace Plugin
             foreach (var player in Player.List)
             {
                 player.ClearBroadcasts();
-                player.Broadcast(10, $"<size=30>[<b><color=#{ModeColor}>{CurrentMode}</color></b>]</size>\n<size=25>{ModeDescription}</size>");
+                player.Broadcast(10, Config.StartModeDescription
+                    .Replace("{ModeColor}", ModeColor)
+                    .Replace("{CurrentMode}", CurrentMode)
+                    .Replace("{ModeDescription}", ModeDescription)
+                    );
             }
 
             var modeType = Type.GetType($"RGM.Modes.{ModeFileName}");
@@ -86,15 +90,18 @@ namespace Plugin
         {
             if (Round.IsStarted)
             {
-                ev.Player.Broadcast(10, $"<size=20>현재 진행중인 모드</size>\n<size=25><b>[<color=#{ModeList[CurrentMode][0]}>{CurrentMode}</color>]</b></size>");
+                ev.Player.Broadcast(10, Config.LateJoinModeDescription
+                    .Replace("{ModeColor}", ModeList[CurrentMode][0])
+                    .Replace("{CurrentMode}", CurrentMode)
+                    );
             }
             else
             {
-                ev.Player.Broadcast(10, $"<size=25><b>랜덤게임모드</b>에 오신 것을 환영합니다!</size>");
+                ev.Player.Broadcast(10, Config.WelcomeMessage);
 
                 while (!Round.IsStarted)
                 {
-                    ev.Player.ShowHint("\n\n\n\n\n\n\n<size=200><b>?</b></size>\n<size=20>\"이번 라운드는 어떤 모드가 걸릴까요?\"</size>\n", 1.2f);
+                    ev.Player.ShowHint(Config.LobbyMessage, 1.2f);
                     await Task.Delay(1000);
                 }
             }
