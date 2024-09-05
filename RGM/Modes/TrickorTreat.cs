@@ -41,7 +41,7 @@ namespace RGM.Modes
         {
             List<CandyKindID> CandyList = Tools.EnumToList<CandyKindID>();
 
-            for (int i=1; i<4; i++)
+            for (int i=1; i<5; i++)
             {
                 var toGive = CandyList[UnityEngine.Random.Range(0, CandyList.Count())];
                 player.TryAddCandy(toGive);

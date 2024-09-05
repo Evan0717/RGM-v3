@@ -14,11 +14,12 @@ namespace Plugin
         public static Plugin Instance;
 
         public string CurrentMode = null;
-        public Dictionary<string, List<string>> ModeList = Config.Modes;
+        public Dictionary<string, List<string>> ModeList;
 
         public override void OnEnabled()
         {
             Instance = this;
+            ModeList = Config.Modes;
 
             // + EventHandlers / Round
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
