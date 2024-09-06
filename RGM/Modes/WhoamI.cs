@@ -24,7 +24,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>();
+                List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>().Where(role => role != RoleTypeId.Filmmaker).ToList();
 
                 foreach (var player in Player.List)
                 {

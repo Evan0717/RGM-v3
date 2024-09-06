@@ -18,6 +18,7 @@ namespace RGM.Modes
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -41,11 +42,20 @@ namespace RGM.Modes
         {
             List<CandyKindID> CandyList = Tools.EnumToList<CandyKindID>();
 
-            for (int i=1; i<5; i++)
+            for (int i = 1; i < 5; i++)
             {
                 var toGive = CandyList[UnityEngine.Random.Range(0, CandyList.Count())];
                 player.TryAddCandy(toGive);
             }
         }
+
+        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        {
+            List<CandyKindID> CandyList = Tools.EnumToList<CandyKindID>();
+            {
+                var toGive = CandyList[UnityEngine.Random.Range(0, CandyList.Count())];
+                ev.Attacker.TryAddCandy(toGive);
+            }
+        }
     }
-}
+};

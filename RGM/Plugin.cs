@@ -54,12 +54,17 @@ namespace RGM
             Instance = null;
         }
 
-        public void OnWaitingForPlayers()
+        public async void OnWaitingForPlayers()
         {
             Server.ExecuteCommand("rnr");
 
-            Logger.Discord discord = new Logger.Discord();
-            discord.OnEnabled();
+            var webhook = new Discord.Webhook();
+            webhook.OnEnabled();
+
+            var botService = new BotService();
+            await botService.InitializeAsync("OTQ4NTY0NjI5NDQ4MTgzODE4.GCpMqF.0QX48j0eGT2GOZUqr7cBbv5ivDiN94dajy5kms");
+
+            await Task.Delay(-1);
         }
 
         // EventArgs / Round
