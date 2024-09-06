@@ -62,7 +62,7 @@ namespace RGM
             webhook.OnEnabled();
 
             var botService = new BotService();
-            await botService.InitializeAsync("OTQ4NTY0NjI5NDQ4MTgzODE4.GCpMqF.0QX48j0eGT2GOZUqr7cBbv5ivDiN94dajy5kms");
+            await botService.InitializeAsync(Config.DiscordBotToken);
 
             await Task.Delay(-1);
         }

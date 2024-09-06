@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Mono.Cecil;
 using System;
 using System.Threading.Tasks;
+using Exiled.API.Features;
 
 public class BotService
 {
@@ -23,13 +24,13 @@ public class BotService
 
     private Task LogAsync(LogMessage log)
     {
-        Console.WriteLine(log.ToString());
+        Log.Info(log.ToString());
         return Task.CompletedTask;
     }
 
     private Task ReadyAsync()
     {
-        Console.WriteLine("Bot is connected!");
+        Log.Info("Bot is connected!");
         return Task.CompletedTask;
     }
 }
