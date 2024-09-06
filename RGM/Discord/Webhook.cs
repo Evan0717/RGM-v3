@@ -70,17 +70,17 @@ namespace RGM.Discord
 
             if (ev.Attacker == null || ev.Player == ev.Attacker)
             {
-                Send($"[{_time}] :skull: **자살**: `{ev.Player.Nickname}` ({ev.Player.Role}) | {ev.DamageHandler.Type}");
+                Send($"[{_time}] :skull: **자살**: `{ev.Player.Nickname}` ({ev.Player.Role.Name}) | {ev.DamageHandler.Type}");
             }
             else
             {
                 if (ev.Player.IsCuffed && !ev.Player.IsScp)
                 {
-                    Send($"[{_time}] :exclamation: **체포킬**: `{ev.Attacker.Nickname}` ({ev.Attacker.Role}) -> `{ev.Player.Nickname}` ({ev.Player.Role}) | {ev.DamageHandler.Type}\n체포자: `{ev.Player.Cuffer.Nickname}`");
+                    Send($"[{_time}] :exclamation: **체포킬**: `{ev.Attacker.Nickname}` ({ev.Attacker.Role.Name}) -> `{ev.Player.Nickname}` ({ev.Player.Role.Name}) | {ev.DamageHandler.Type}\n체포자: `{ev.Player.Cuffer.Nickname}`");
                 }
                 else
                 {
-                    Send($"[{_time}] :skull: **사살**: `{ev.Attacker.Nickname}` ({ev.Attacker.Role}) -> `{ev.Player.Nickname}` ({ev.Player.Role}) | {ev.DamageHandler.Type}");
+                    Send($"[{_time}] :skull: **사살**: `{ev.Attacker.Nickname}` ({ev.Attacker.Role.Name}) -> `{ev.Player.Nickname}` ({ev.Player.Role.Name}) | {ev.DamageHandler.Type}");
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace RGM.Discord
         {
             if (ev.Target.ReferenceHub.isLocalPlayer) return;
 
-            Send($"[{_time}] :lock: **체포**: `{ev.Player.Nickname}` ({ev.Player.Role}) -> `{ev.Target.Nickname}` ({ev.Target.Role})");
+            Send($"[{_time}] :lock: **체포**: `{ev.Player.Nickname}` ({ev.Player.Role.Name}) -> `{ev.Target.Nickname}` ({ev.Target.Role.Name})");
         }
 
         public void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
@@ -104,7 +104,7 @@ namespace RGM.Discord
         {
             if (ev.Target.ReferenceHub.isLocalPlayer) return;
 
-            Send($"[{_time}] :unlock: **체포**: `{ev.Player.Nickname}` ({ev.Player.Role}) -> `{ev.Target.Nickname}` ({ev.Target.Role})");
+            Send($"[{_time}] :unlock: **체포**: `{ev.Player.Nickname}` ({ev.Player.Role.Name}) -> `{ev.Target.Nickname}` ({ev.Target.Role.Name})");
         }
 
         public void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)

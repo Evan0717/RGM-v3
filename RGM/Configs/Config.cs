@@ -14,11 +14,10 @@ namespace RGM
         public bool Debug { get; set; } = false;
 
         public string WebhookURL { get; set; } = "웹훅 URL(주소)를 입력해주세요.";
-        public string DiscordBotToken { get; set; } = "디스코드 봇 토큰을 입력해주세요.";
         public string StartModeDescription { get; set; } = "<size=30>[<b><color=#{ModeColor}>{CurrentMode}</color></b>]</size>\n<size=25>{ModeDescription}</size>";
         public string LateJoinModeDescription { get; set; } = "<size=20>현재 진행중인 모드</size>\n<size=25><b>[<color=#{ModeColor}>{CurrentMode}</color>]</b></size>";
         public string WelcomeMessage { get; set; } = "<size=25><b>랜덤게임모드</b>에 오신 것을 환영합니다!</size>";
-        public string LobbyMessage { get; set; } = "\n\n\n\n\n\n\n<size=200><b>?</b></size>\n<size=20>\"이번 라운드는 어떤 모드가 걸릴까요?\"</size>\n";
+        public string LobbyMessage { get; set; } = "\n<align=left>\n[1] {First} : {FirstVote}\n[2] {Second} : {SecondVote}\n[3] {Third} : {ThirdVote}\n</align>\n\n\n<size=200><b>?</b></size>\n<size=20>\"이번 라운드는 어떤 모드가 걸릴까요?\"</size>\n";
 
         [Description("모드 이름 : 색상, 설명, 파일 이름, 공개 여부(public/private), 아이디어 제공자")]
         public Dictionary<string, List<string>> Modes { get; set; } = new Dictionary<string, List<string>>() 

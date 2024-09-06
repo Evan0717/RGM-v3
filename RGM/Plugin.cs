@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
+using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using UnityEngine;
+using MapEditorReborn.API.Features.Objects;
 
 namespace RGM
 {
@@ -18,6 +20,7 @@ namespace RGM
 
         public string CurrentMode = null;
         public Dictionary<string, List<string>> ModeList;
+        public Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
 
@@ -57,21 +60,58 @@ namespace RGM
         public async void OnWaitingForPlayers()
         {
             Server.ExecuteCommand("rnr");
+            Server.ExecuteCommand($"/mp load RGMLobby");
 
             var webhook = new Discord.Webhook();
             webhook.OnEnabled();
 
-            var botService = new BotService();
-            await botService.InitializeAsync(Config.DiscordBotToken);
+            for (int i=1; i<4; i++)
+            {
+                var mode = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList()[UnityEngine.Random.Range(0, ModeList.Count)];
+                ModeVote.Add(mode, new List<Player>());
+            }
 
-            await Task.Delay(-1);
+            var First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
+            var Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
+            var Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
+
+            List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
+
+            for (int i=0; i<3; i++)
+            {
+                foreach (var Pad in Pads[i])
+                    Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
+            }
+
+            var Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
+
+            Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+
+            foreach (var Number in Numbers)
+                Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
+
+            while (!Round.IsStarted)
+            {
+                if (Player.List.Count() > 1 && Round.LobbyWaitingTime < 1)
+                {
+                    Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
+                    Round.Start();
+                }
+
+                await Task.Delay(1000);
+            }
         }
 
         // EventArgs / Round
         public void OnRoundStarted()
         {
             if (CurrentMode == null)
-                CurrentMode = ModeList.Keys.Where(x => ModeList[x][3] != "private").ToList()[UnityEngine.Random.Range(0, ModeList.Count)];
+            {
+                var maxLength = ModeVote.Values.Max(list => list.Count);
+                var longestKeys = ModeVote.Keys.Where(key => ModeVote[key].Count == maxLength).ToList();
+                var randomKey = longestKeys[UnityEngine.Random.Range(0, longestKeys.Count)];
+                CurrentMode = randomKey;
+            }
 
             string ModeColor = ModeList[CurrentMode][0];
             string ModeDescription = ModeList[CurrentMode][1];
@@ -119,12 +159,56 @@ namespace RGM
             }
             else
             {
+                List<RoleTypeId> Humans = new List<RoleTypeId>()
+                {
+                    RoleTypeId.ClassD,
+                    RoleTypeId.Scientist,
+                    RoleTypeId.FacilityGuard,
+                    RoleTypeId.ChaosConscript,
+                    RoleTypeId.NtfSpecialist,
+                    RoleTypeId.Tutorial
+                };
+
+                ev.Player.Role.Set(Humans[UnityEngine.Random.Range(0, Humans.Count())]);
+                ev.Player.ClearInventory();
+                ev.Player.Position = new Vector3(47.103f, 1007.963f, -6.374592f);
                 ev.Player.Broadcast(10, Config.WelcomeMessage);
+
+                string iv(int num)
+                {
+                    return ModeVote.Keys.ToList()[num - 1];
+                }
 
                 while (!Round.IsStarted)
                 {
-                    ev.Player.ShowHint(Config.LobbyMessage, 1.2f);
-                    await Task.Delay(1000);
+                    if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 2f, (LayerMask)1))
+                    {
+                        if (new List<string>() { "First", "Second", "Third" }.Contains(hit.collider.name))
+                        {
+                            for (int i = 0; i < 3; i++)
+                            {
+                                if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
+                                    ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
+                            }
+
+                            if (hit.collider.name == "First")
+                                ModeVote[ModeVote.Keys.ToList()[0]].Add(ev.Player);
+
+                            else if (hit.collider.name == "Second")
+                                ModeVote[ModeVote.Keys.ToList()[1]].Add(ev.Player);
+
+                            else if (hit.collider.name == "Third")
+                                ModeVote[ModeVote.Keys.ToList()[2]].Add(ev.Player);
+                        }
+                    }
+
+                    ev.Player.ShowHint(Config.LobbyMessage
+                        .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
+                        .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
+                        .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString()), 1.2f);
+
+
+                    await Task.Delay(500);
                 }
             }
         }
