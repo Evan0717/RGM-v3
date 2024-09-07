@@ -35,20 +35,19 @@ namespace RGM.Discord
             }
         }
 
-        public static async void Request(Dictionary<string, object> dictionaryData, HttpListenerResponse response)
+        public static async void Request(string requestBody, HttpListenerResponse response)
         { 
-            string request = dictionaryData["data"].ToString();
-            List<string> strings = request.Split('/').ToList();
-            string Content = string.Join("/", strings);
+            string Content = WebUtility.UrlDecode(requestBody.Replace("data=", ""));
             string result = "null";
+            Log.Info(Content);
 
-            if (Content.StartsWith("print/"))
+            if (Content.StartsWith("print"))
             {
-                result = string.Join("/", strings);
+                result = Content.Split('/')[1];
             }
-            else if (Content.StartsWith($"command/"))
+            else if (Content.StartsWith("command"))
             {
-                result = Server.ExecuteCommand(strings[1]);
+                result = Server.ExecuteCommand(Content.Split('/')[1]);
             }
 
             response.ContentLength64 = result.Length;
@@ -66,12 +65,10 @@ namespace RGM.Discord
             {
                 using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
                 {
-                    var requestBody = await reader.ReadToEndAsync();
+                    string requestBody = await reader.ReadToEndAsync();
 
-                    var jsonData = SimpleJsonSerializer(new { data = requestBody });
-                    var dictionaryData = DeserializeJson(jsonData);
-
-                    Request(dictionaryData, response);
+                    Log.Info(requestBody);
+                    Request(requestBody, response);
                 }
             }
             else if (request.HttpMethod == "GET")
