@@ -17,6 +17,7 @@ namespace RGM
         public static RGM Instance;
 
         public static string WebhookURL;
+        public static string BotAPIServer;
 
         public string CurrentMode = null;
         public Dictionary<string, List<string>> ModeList;
@@ -30,6 +31,7 @@ namespace RGM
             base.OnEnabled();
 
             WebhookURL = Config.WebhookURL;
+            BotAPIServer = Config.BotAPIServer;
             ModeList = Config.Modes;
 
             // + EventHandlers / Round

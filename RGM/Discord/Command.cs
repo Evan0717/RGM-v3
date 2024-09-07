@@ -23,15 +23,22 @@ namespace RGM.Discord
 
         static async Task Main()
         {
-            var listener = new HttpListener();
-            listener.Prefixes.Add("http://127.0.0.1:9000/");
-            listener.Start();
-            Log.Info("Listening on http://127.0.0.1:9000/");
-
-            while (true)
+            try
             {
-                var context = await listener.GetContextAsync();
-                _ = Task.Run(() => HandleRequest(context));
+                var listener = new HttpListener();
+                listener.Prefixes.Add(RGM.BotAPIServer);
+                listener.Start();
+                Log.Info($"Listening on {RGM.BotAPIServer}");
+
+                while (true)
+                {
+                    var context = await listener.GetContextAsync();
+                    _ = Task.Run(() => HandleRequest(context));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
             }
         }
 
