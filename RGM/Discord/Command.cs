@@ -47,7 +47,6 @@ namespace RGM.Discord
             string Content = WebUtility.UrlDecode(requestBody.Replace("data=", ""));
             string[] Value = Content.Split('/');
             string result = "null";
-            Log.Info(Content);
 
             if (Content.StartsWith("print"))
             {

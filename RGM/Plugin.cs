@@ -190,23 +190,20 @@ namespace RGM
                 {
                     if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 2f, (LayerMask)1))
                     {
-                        if (new List<string>() { "First", "Second", "Third" }.Contains(hit.collider.name))
+                        for (int i = 0; i < 3; i++)
                         {
-                            for (int i = 0; i < 3; i++)
-                            {
-                                if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
-                                    ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
-                            }
-
-                            if (hit.collider.name == "First")
-                                ModeVote[ModeVote.Keys.ToList()[0]].Add(ev.Player);
-
-                            else if (hit.collider.name == "Second")
-                                ModeVote[ModeVote.Keys.ToList()[1]].Add(ev.Player);
-
-                            else if (hit.collider.name == "Third")
-                                ModeVote[ModeVote.Keys.ToList()[2]].Add(ev.Player);
+                            if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
+                                ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
                         }
+
+                        if (hit.collider.name == "First")
+                            ModeVote[ModeVote.Keys.ToList()[0]].Add(ev.Player);
+
+                        else if (hit.collider.name == "Second")
+                            ModeVote[ModeVote.Keys.ToList()[1]].Add(ev.Player);
+
+                        else if (hit.collider.name == "Third")
+                            ModeVote[ModeVote.Keys.ToList()[2]].Add(ev.Player);
                     }
 
                     ev.Player.ShowHint(Config.LobbyMessage
