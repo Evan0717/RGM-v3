@@ -45,5 +45,19 @@ namespace RGM
             { "여긴 어디?", new List<string>() { "B40486", "랜덤한 곳에서 스폰됩니다.", "WhereamI", "public", "" } },
             { "나는 누구?", new List<string>() { "886A08", "1분마다 진영이 변경됩니다.", "WhoamI", "public", "" } },
         };
+
+        [Description("Indicates whether the plugin should replace the broadcast command or not.")]
+        public bool ReplaceBroadcastCommand { get; set; } = true;
+
+        [Description(
+            "Indicates order of broadcasts. Descending = newest broadcasts add on top, Ascending = newest broadcasts add on bottom"
+        )]
+        public BroadcastOrder Order { get; set; } = BroadcastOrder.Descending;
+
+        public enum BroadcastOrder
+        {
+            Descending,
+            Ascending
+        }
     }
 }

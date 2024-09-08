@@ -4,10 +4,6 @@ using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
 using UnityEngine;
-using PlayerRoles;
-using MEC;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
 
 namespace RGM.Commands
 {
@@ -37,7 +33,7 @@ namespace RGM.Commands
                 });
                 foreach (Player ply in Player.List.Where(x => x.IsScp))
                 {
-                    Bc.Message(ply, 6, text2);
+                    MultiBroadcast.API.MultiBroadcast.AddPlayerBroadcast(ply, 6, text2);
                 }
                 response = $"'{text2}'";
                 return true;
@@ -47,19 +43,19 @@ namespace RGM.Commands
                 string text = player.Role.Name;
                 string text2 = string.Concat(new string[]
                 {
-                            "<size=25><color=#FFFFFF>",
-                            text,
-                            $"</color> ({player.Nickname}) <b>|</b> ",
-                            string.Join(" ", arguments),
-                            "</size>"
+                    $"<size=25><color={player.Role.Color.ToHex()}>",
+                    text,
+                    $"</color> ({player.Nickname}) <b>|</b> ",
+                    string.Join(" ", arguments),
+                    "</size>"
                 });
 
-                foreach (Player ply in Player.List)
+                foreach (Player ply in Player.List.Where(x => x != player))
                 {
                     if (Vector3.Distance(ply.Position, player.Position) <= 5f)
                     {
-                        Bc.Message(player, 6, text2);
-                        Bc.Message(ply, 6, text2);
+                        MultiBroadcast.API.MultiBroadcast.AddPlayerBroadcast(player, 6, text2);
+                        MultiBroadcast.API.MultiBroadcast.AddPlayerBroadcast(ply, 6, text2);
                     }
                 }
 
