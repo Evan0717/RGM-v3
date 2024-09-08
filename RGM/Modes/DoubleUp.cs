@@ -13,9 +13,9 @@ namespace RGM.Modes
     {
         public static DoubleUp Instance;
 
-        public Dictionary<string, List<string>> Mods = RGM.Instance.ModeList;
+        public static Dictionary<string, List<string>> Mods = RGM.Instance.ModeList;
 
-        public static List<string> ModeKeys = RGM.Instance.ModeList.Keys.ToList();
+        public static List<string> ModeKeys = RGM.Instance.ModeList.Keys.Where(x => Mods[x][3] != "private").ToList();
         public static string mod1 = ModeKeys[UnityEngine.Random.Range(0, ModeKeys.Count())];
         public static string mod2 = ModeKeys[UnityEngine.Random.Range(0, ModeKeys.Count())];
 
@@ -32,9 +32,9 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(10f);
 
-            for (int i=0; i<3; i++)
+            for (int i=0; i<2; i++)
             {
-                var modeType = Type.GetType($"GPOffice.Modes.{Mods[Modes[i]].ToString().Split('/')[2].Replace(" ", "")}");
+                var modeType = Type.GetType($"RGM.Modes.{Mods[Modes[i]][2]}");
                 if (modeType != null)
                 {
                     var modeInstance = Activator.CreateInstance(modeType);
@@ -43,9 +43,7 @@ namespace RGM.Modes
                 }
             }
 
-            Player.List.ToList().ForEach(x => x.Broadcast(10, $"<size=25><b>[<color=#{Mods[mod1].ToString().Split('/')[0]}>{mod1}</color> + <color=#{Mods[mod2].ToString().Split('/')[0]}>{mod2}</color>]</b></size>"));
-
-            yield return 1f;
+            Player.List.ToList().ForEach(x => x.Broadcast(10, $"<size=25><b>[<color=#{Mods[mod1][0]}>{mod1}</color> + <color=#{Mods[mod2][0]}>{mod2}</color>]</b></size>"));
         }
     }
 }
