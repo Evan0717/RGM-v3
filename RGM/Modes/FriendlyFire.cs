@@ -38,16 +38,26 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(0.5f);
+
+            foreach (var player in Player.List)
+            {
+                Spawned(player);
+            }
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
-            if (new List<RoleTypeId>() { RoleTypeId.Scp173, RoleTypeId.Scp106 }.Contains(ev.Player.Role.Type) || ev.Player.IsHuman)
-                ev.Player.ShowHint($"<size=20><b><i>tip.</i></b> [ALT] 키를 눌러 같은 진영에게 피해를 입힐 수 있습니다.</size>", 10);
+            Spawned(ev.Player);
+        }
 
-            else if (ev.Player.Role.Type == RoleTypeId.Scp939)
-                ev.Player.ShowHint($"<size=20><b><i>tip.</i></b> 런지를 사용하는 도중 근접한 SCP를 쳐다보면 해당 개체에 피해를 입힐 수 있습니다.</size>", 10);
+        public void Spawned(Player player)
+        {
+            if (new List<RoleTypeId>() { RoleTypeId.Scp173, RoleTypeId.Scp106 }.Contains(player.Role.Type) || player.IsHuman)
+                player.ShowHint($"<size=20><b><i>tip.</i></b> [ALT] 키를 눌러 같은 진영에게 피해를 입힐 수 있습니다.</size>", 10);
+
+            else if (player.Role.Type == RoleTypeId.Scp939)
+                player.ShowHint($"<size=20><b><i>tip.</i></b> 런지를 사용하는 도중 근접한 SCP를 쳐다보면 해당 개체에 피해를 입힐 수 있습니다.</size>", 10);
         }
 
         public async void OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)

@@ -105,7 +105,7 @@ namespace RGM
 
             while (!Round.IsStarted)
             {
-                if (Player.List.Count() > 1 && Round.LobbyWaitingTime < 1)
+                if (Player.List.Count() > 3 && Round.LobbyWaitingTime < 1)
                 {
                     Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
                     Round.Start();

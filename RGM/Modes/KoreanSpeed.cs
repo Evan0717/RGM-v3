@@ -17,7 +17,6 @@ namespace RGM.Modes
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -42,11 +41,7 @@ namespace RGM.Modes
         public void Spawned(Player player)
         {
             player.EnableEffect(EffectType.MovementBoost, 125);
-        }
-
-        public void OnSearchingPickup(Exiled.Events.EventArgs.Player.SearchingPickupEventArgs ev)
-        {
-            ev.SearchTime = ev.SearchTime / 10;
+            player.EnableEffect(EffectType.Scp1853, 4);
         }
     }
 }
