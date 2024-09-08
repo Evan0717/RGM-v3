@@ -33,6 +33,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 1000;
 
             yield return Timing.WaitForSeconds(1f);
@@ -49,7 +50,7 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(5f);
 
             Player firstBomb = Player.List.Where(x => x.Role == RoleTypeId.ClassD).ToList().RandomItem();
-            firstBomb.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
+            firstBomb.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
 
             /*
             var camera = firstBomb.Camera;
@@ -87,7 +88,7 @@ namespace RGM.Modes
                 }
                 foreach (var boom in Player.List.Where(x => x.IsScp))
                 {
-                    boom.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                    boom.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
                     var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, boom);
                     g.FuseTime = 0f;
                     g.SpawnActive(boom.Position, boom);
@@ -108,7 +109,7 @@ namespace RGM.Modes
                 {
                     Player newBomb = newList.RandomItem();
                     newList.Remove(newBomb);
-                    newBomb.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                    newBomb.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
                     /*
                     var rotation = newBomb.Rotation;
                     Timing.CallDelayed(0.1f, () =>
@@ -146,7 +147,7 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
+            ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
         }
 
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)

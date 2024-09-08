@@ -390,7 +390,7 @@ namespace RGM
                     {
                         if (CurrentRoom[player] == player.CurrentRoom && player.CurrentRoom.Name != "Outside" && player.IsAlive)
                         {
-                            player.ShowHint($"<color=red><i><b>당신은 2분 동안 한 방에 있었습니다!!!</b></i></color>", 15);
+                            player.ShowHint($"<color=red><i><b>당신은 5분 동안 한 방에 있었습니다!!!</b></i></color>", 15);
                             player.EnableEffect(Exiled.API.Enums.EffectType.SeveredHands);
 
                             CurrentRoom[player] = player.CurrentRoom;
@@ -408,7 +408,7 @@ namespace RGM
                     }
                 }
 
-                yield return Timing.WaitForSeconds(120);
+                yield return Timing.WaitForSeconds(300);
             }
         }
     }

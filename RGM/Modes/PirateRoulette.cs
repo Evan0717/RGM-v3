@@ -39,7 +39,7 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(2f);
             var scp = Player.List.ToList()[UnityEngine.Random.Range(0, Player.List.Count())];
-            var bomb = Player.List.Where(x => x != scp).ToList()[UnityEngine.Random.Range(0, Player.List.Count())];
+            var bomb = Player.List.Where(x => x != scp).ToList()[UnityEngine.Random.Range(0, Player.List.Count() - 1)];
             foreach (var p in Player.List)
             {
                 if (p == scp)
@@ -64,7 +64,7 @@ namespace RGM.Modes
                     });
                 }
             }
-            yield return Timing.WaitForSeconds(10f);
+            yield return Timing.WaitForSeconds(5f);
             foreach (var p in Player.List)
             {
                 if (p == scp)

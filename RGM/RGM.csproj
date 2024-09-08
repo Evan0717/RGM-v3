@@ -164,6 +164,7 @@
     <Compile Include="Modes\Blackout.cs" />
     <Compile Include="Modes\Blessing.cs" />
     <Compile Include="Modes\Collector.cs" />
+    <Compile Include="Modes\DoubleUp.cs" />
     <Compile Include="Modes\FriendlyFire.cs" />
     <Compile Include="Modes\Gamble.cs" />
     <Compile Include="Modes\Giveaway.cs" />
