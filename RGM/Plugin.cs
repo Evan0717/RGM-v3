@@ -26,6 +26,7 @@ namespace RGM
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
 
+        public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool AutoNuke = false;
 
         public override void OnEnabled()
@@ -44,7 +45,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.Left += OnLeft;
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
-            Exiled.Events.Handlers.Player.Spawning += OnSpawned;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
@@ -62,7 +63,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Player.Left -= OnLeft;
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
-            Exiled.Events.Handlers.Player.Spawning -= OnSpawned;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
 
             Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
@@ -264,7 +265,8 @@ namespace RGM
                     ev.Player.ShowHint(Config.LobbyMessage
                         .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
                         .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
-                        .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString()), 1.2f);
+                        .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
+                        .Replace("{ModeDescription}", "이번 라운드는 어떤 모드가 걸릴까요?"), 1.2f);
 
 
                     await Task.Delay(500);
@@ -295,25 +297,44 @@ namespace RGM
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawningEventArgs ev)
-        {
-            ev.Player.EnableEffect(Exiled.API.Enums.EffectType.FogControl);
-        }
-
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             ev.Player.EnableEffect(Exiled.API.Enums.EffectType.FogControl);
 
-            if (ev.Player.IsScp && ev.Reason == Exiled.API.Enums.SpawnReason.RoundStart)
+            if (ev.Reason == Exiled.API.Enums.SpawnReason.RoundStart)
             {
-                if (UnityEngine.Random.Range(1, 14) == 1)
-                    ev.Player.Role.Set(RoleTypeId.Scp3114);
+                if (ev.Player.IsScp)
+                {
+                    if (UnityEngine.Random.Range(1, 14) == 1)
+                        ev.Player.Role.Set(RoleTypeId.Scp3114);
+                }
+                else if (ev.Player.IsHuman)
+                {
+                    if (StartupRandom == 1) // 시작 카오스
+                    {
+                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                            ev.Player.Role.Set(RoleTypeId.ChaosConscript);
+                    }
+                    if (StartupRandom == 2) // 시작 NTF
+                    {
+                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                            ev.Player.Role.Set(RoleTypeId.NtfSpecialist);
+                    }
+
+                    int rand = UnityEngine.Random.Range(1, 21); // 시작 좀?비
+                    if (rand == 1)
+                    {
+                        ev.Player.Role.Set(RoleTypeId.Scp0492);
+                        ev.Player.MaxHealth = 1000;
+                        ev.Player.Health = ev.Player.MaxHealth;
+                    }
+                }
             }
         }
 
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
         {
-            if (ev.Player.IsScp && ev.Player.CurrentItem != null && ev.Door.IsPartOfCheckpoint)
+            if (ev.Player.IsScp && ev.Player.CurrentItem != null && ev.Door.Name.Contains("CHECKPOINT"))
                 ev.Door.IsOpen = true;
         }
 

@@ -29,7 +29,7 @@ namespace RGM
             { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.\nSCP도 마찬가지입니다!", "FriendlyFire", "public", "" } },
             { "도박", new List<string>() { "8A4B08", "아이템을 떨구면 새로운 아이템을 획득합니다.\n단, 2% 확률로 손이 잘립니다.", "Gamble", "public", "" } },
             { "기브 어웨이", new List<string>() { "E6E6E6", "60초마다 랜덤한 아이템이 지급됩니다.", "Giveaway", "public", "" } },
-            { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "public", "" } },
+            { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "private", "" } },
             { "무한 탄약", new List<string>() { "6E6E6E", "무제한 탄약과 함께 승전보를 울리세요!", "InfiniteAmmo", "public", "" } },
             { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "public", "" } },
             { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "public", "" } },
