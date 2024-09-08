@@ -42,12 +42,10 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            for (int i=1; i<5; i++)
+            var p = player.AddItem(ItemType.SCP330);
+            if (p is Scp330 candy)
             {
-                var p = player.AddItem(ItemType.SCP330);
-                if (p is Scp330 candy)
-                {
-                    List<CandyKindID> Candies = new List<CandyKindID>
+                List<CandyKindID> Candies = new List<CandyKindID>
                     {
                         (CandyKindID)UnityEngine.Random.Range(1, 8),
                         (CandyKindID)UnityEngine.Random.Range(1, 8),
@@ -55,10 +53,9 @@ namespace RGM.Modes
                         (CandyKindID)UnityEngine.Random.Range(1, 8)
                     };
 
-                    foreach (var Candy in Candies)
-                    {
-                        candy.AddCandy(Candy);
-                    }
+                foreach (var Candy in Candies)
+                {
+                    candy.AddCandy(Candy);
                 }
             }
         }
