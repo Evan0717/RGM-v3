@@ -49,7 +49,6 @@ namespace RGM.Modes
                     {
                         (CandyKindID)UnityEngine.Random.Range(1, 8),
                         (CandyKindID)UnityEngine.Random.Range(1, 8),
-                        (CandyKindID)UnityEngine.Random.Range(1, 8),
                         (CandyKindID)UnityEngine.Random.Range(1, 8)
                     };
 
