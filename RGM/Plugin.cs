@@ -26,6 +26,8 @@ namespace RGM
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
 
+        public bool AutoNuke = false;
+
         public override void OnEnabled()
         {
             Instance = this;
@@ -35,32 +37,37 @@ namespace RGM
             BotAPIServer = Config.BotAPIServer;
             ModeList = Config.Modes;
 
-            // + EventHandlers / Round
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            // + EventHandlers / Player
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.Left += OnLeft;
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawning += OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+            
+            Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
+
+            Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
+
         }
 
         public override void OnDisabled()
         {
-            // - EventHandlers / Round
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
-            // - EventHandlers / Player
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Player.Left -= OnLeft;
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawning -= OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+
+            Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
+
+            Exiled.Events.Handlers.Scp330.InteractingScp330 -= OnInteractingScp330;
 
             base.OnDisabled();
             Instance = null;
@@ -116,7 +123,7 @@ namespace RGM
         }
 
         // EventArgs / Round
-        public void OnRoundStarted()
+        public async void OnRoundStarted()
         {
             foreach (var player in Player.List)
             {
@@ -158,6 +165,37 @@ namespace RGM
                 var modeInstance = Activator.CreateInstance(modeType);
                 var onEnabledMethod = modeType.GetMethod("OnEnabled");
                 onEnabledMethod?.Invoke(modeInstance, null);
+            }
+
+            await Task.Delay(25 * 60 * 1000);
+
+            if (Warhead.IsDetonated)
+            {
+                AutoNuke = true;
+                Server.ExecuteCommand("/cassie_sl 시간이 너무 오래 걸립니다! 모두의 체력이 초당 1%씩 줄어듭니다!");
+
+                while (true)
+                {
+                    Player.List.ToList().ForEach(x => x.Health -= (x.MaxHealth / 100));
+                    await Task.Delay(1000);
+                }
+            }
+            else
+            {
+                AutoNuke = true;
+                Warhead.Start();
+                Server.ExecuteCommand("/cassie_sl <color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
+            }
+
+            await Task.Delay(300 * 1000);
+
+            AutoNuke = true;
+            Server.ExecuteCommand("/cassie_sl 시간이 너무 오래 걸립니다! 모두의 체력이 초당 1%씩 줄어듭니다!");
+
+            while (true)
+            {
+                Player.List.ToList().ForEach(x => x.Health -= (x.MaxHealth / 100));
+                await Task.Delay(1000);
             }
         }
 
@@ -277,6 +315,12 @@ namespace RGM
         {
             if (ev.Player.IsScp && ev.Player.CurrentItem != null && ev.Door.IsPartOfCheckpoint)
                 ev.Door.IsOpen = true;
+        }
+
+        public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
+        {
+            if (AutoNuke)
+                ev.IsAllowed = false;
         }
 
         public void OnInteractingScp330(Exiled.Events.EventArgs.Scp330.InteractingScp330EventArgs ev)
