@@ -222,6 +222,8 @@ namespace RGM
         // EventArgs / Player
         public async void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
+            OnGround.Add(ev.Player, 5);
+
             if (Round.IsStarted)
             {
                 ev.Player.AddBroadcast(10, Config.LateJoinModeDescription
@@ -341,7 +343,7 @@ namespace RGM
                             ev.Player.Role.Set(RoleTypeId.NtfSpecialist);
                     }
 
-                    int rand = UnityEngine.Random.Range(1, 51); // 시작 좀?비
+                    int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
                     if (rand == 1)
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp0492);
@@ -379,7 +381,7 @@ namespace RGM
             {
                 foreach (var player in Player.List)
                 {
-                    if (player.IsAlive && OnGround.ContainsKey(player) && !player.IsNoclipPermitted && player.Role.Type != PlayerRoles.RoleTypeId.Scp079)
+                    if (player.IsAlive && OnGround.ContainsKey(player) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
                     {
                         if (FpcExtensionMethods.IsGrounded(player.ReferenceHub))
                             OnGround[player] = 5;

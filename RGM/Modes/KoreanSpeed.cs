@@ -16,8 +16,6 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -25,23 +23,16 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(1f);
 
-            foreach (var player in Player.List)
+            while (true)
             {
-                Spawned(player);
+                foreach (var player in Player.List)
+                {
+                    player.EnableEffect(EffectType.MovementBoost, 125);
+                    player.EnableEffect(EffectType.Scp1853, 4);
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
-
-            yield break;
-        }
-
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
-        {
-            Spawned(ev.Player);
-        }
-
-        public void Spawned(Player player)
-        {
-            player.EnableEffect(EffectType.MovementBoost, 125);
-            player.EnableEffect(EffectType.Scp1853, 4);
         }
     }
 }

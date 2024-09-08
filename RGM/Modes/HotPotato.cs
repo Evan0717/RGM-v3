@@ -47,7 +47,7 @@ namespace RGM.Modes
                 });
             }
 
-            yield return Timing.WaitForSeconds(5f);
+            yield return Timing.WaitForSeconds(8f);
 
             Player firstBomb = Player.List.Where(x => x.Role == RoleTypeId.ClassD).ToList().RandomItem();
             firstBomb.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);

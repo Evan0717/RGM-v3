@@ -17,7 +17,7 @@ namespace RGM.Commands
 
             if (player.IsScp)
             {
-                response = string.Join("\n", Player.List.Where(x => x.IsScp).Select(x => $"{x.Role.Name} - ({x.Nickname})"));
+                response = "\n" + string.Join("\n", Player.List.Where(x => x.IsScp).Select(x => $"{x.Role.Name} : {x.Nickname}"));
                 return true;
             }
             else
