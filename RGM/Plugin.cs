@@ -29,6 +29,13 @@ namespace RGM
         public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool AutoNuke = false;
 
+        public static T GetRandomValue<T>(List<T> list)
+        {
+            System.Random random = new System.Random();
+            int index = random.Next(0, list.Count);
+            return list[index];
+        }
+
         public override void OnEnabled()
         {
             Instance = this;

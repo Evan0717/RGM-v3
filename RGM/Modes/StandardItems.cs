@@ -39,15 +39,17 @@ namespace RGM.Modes
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        public async void Spawned(Player player)
         {
-            player.ClearItems();
+            player.ClearInventory();
+
+            await Task.Delay(100);
 
             List<ItemType> itemList = Tools.EnumToList<ItemType>();
 
             for (int i=1; i<UnityEngine.Random.Range(6, 10); i++)
             {
-                ItemType toGive = itemList[UnityEngine.Random.Range(1, itemList.Count())];
+                ItemType toGive = itemList[UnityEngine.Random.Range(0, itemList.Count())];
                 Item CurrentItem = player.AddItem(toGive);
 
                 if (player.IsScp)

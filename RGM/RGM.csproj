@@ -179,7 +179,10 @@
     <Compile Include="Modes\Outlaw.cs" />
     <Compile Include="Modes\PirateRoulette.cs" />
     <Compile Include="Modes\SCPRUSH.cs" />
+    <Compile Include="Modes\SpecialAbilities\N1.cs" />
+    <Compile Include="Modes\SpecialAbilities\N2.cs" />
     <Compile Include="Modes\SpecialAbility.cs" />
+    <Compile Include="Modes\SpecialAbilities\N0.cs" />
     <Compile Include="Modes\StandardItems.cs" />
     <Compile Include="Modes\TrickorTreat.cs" />
     <Compile Include="Modes\WhereamI.cs" />
@@ -191,8 +194,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modes\SpecialAbility\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
