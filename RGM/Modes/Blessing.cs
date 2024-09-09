@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
+using Exiled.API.Features.Roles;
 
 namespace RGM.Modes
 {
@@ -25,15 +26,26 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive))
+                foreach (var player in Player.List)
                 {
-                    int s = player.CurrentSpectatingPlayers.Count();
-                    player.ShowHint($"현재 {s}명이 당신을 관전하고 있습니다.", 1.2f);
+                    if (player.IsAlive)
+                    {
+                        int s = player.CurrentSpectatingPlayers.Count();
+                        player.ShowHint($"현재 {s}명이 당신을 관전하고 있습니다.", 1.2f);
 
-                    player.GetEffect(Exiled.API.Enums.EffectType.MovementBoost).Intensity = (byte)(5 * s);
-                    player.GetEffect(Exiled.API.Enums.EffectType.DamageReduction).Intensity = (byte)(2 * s);
-                    player.Heal(0.35f * s);
-                    player.Scale = new Vector3(1 - s * 0.02f, 1 - s * 0.02f, 1 - s * 0.02f);
+                        player.GetEffect(Exiled.API.Enums.EffectType.MovementBoost).Intensity = (byte)(5 * s);
+                        player.GetEffect(Exiled.API.Enums.EffectType.DamageReduction).Intensity = (byte)(2 * s);
+                        player.Heal(0.35f * s);
+                        player.Scale = new Vector3(1 - s * 0.02f, 1 - s * 0.02f, 1 - s * 0.02f);
+                    }
+                    else
+                    {
+                        if (player.Role is SpectatorRole spectator)
+                        {
+                            int s = spectator.SpectatedPlayer.CurrentSpectatingPlayers.Count();
+                            player.ShowHint($"현재 {s}명이 이 플레이어를 관전하고 있습니다.", 1.2f);
+                        }
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1);

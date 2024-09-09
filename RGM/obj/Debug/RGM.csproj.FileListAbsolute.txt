@@ -191,12 +191,6 @@ C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\obj\Debug\RGM.csproj.Up2Date
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\obj\Debug\RGM.dll
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\obj\Debug\RGM.pdb
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\RGM.dll.config
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Commands.dll
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Core.dll
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Interactions.dll
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Rest.dll
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Webhook.dll
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.WebSocket.dll
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.Buffers.dll
@@ -208,12 +202,6 @@ C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.Numerics.Vectors.dl
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.Reactive.dll
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.Threading.Tasks.Extensions.dll
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Commands.xml
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Core.xml
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Interactions.xml
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Rest.xml
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.Webhook.xml
-C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Discord.Net.WebSocket.xml
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
 C:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Newtonsoft.Json.xml
