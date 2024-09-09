@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\whoami.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\whoami.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\standarditems.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\standarditems.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\giveaway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\giveaway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:Configs\\Config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,10 +13,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Commands\\RGM.Commands.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:Commands\\RGM.Commands.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:Configs\\Config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,50 +22,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "WhoamI.cs",
-              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\WhoamI.cs",
-              "RelativeDocumentMoniker": "Modes\\WhoamI.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\WhoamI.cs",
-              "RelativeToolTip": "Modes\\WhoamI.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACIAAABVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-09T04:15:10.663Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "StandardItems.cs",
-              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\StandardItems.cs",
-              "RelativeDocumentMoniker": "Modes\\StandardItems.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\StandardItems.cs",
-              "RelativeToolTip": "Modes\\StandardItems.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAIwC8AAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-09T04:14:38.16Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Giveaway.cs",
-              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\Giveaway.cs",
-              "RelativeDocumentMoniker": "Modes\\Giveaway.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\Giveaway.cs",
-              "RelativeToolTip": "Modes\\Giveaway.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAewB8AAABZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-09T04:14:13.019Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Plugin.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
@@ -90,19 +39,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 0,
               "Title": "Config.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Config.cs",
               "RelativeDocumentMoniker": "Configs\\Config.cs",
               "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Config.cs",
               "RelativeToolTip": "Configs\\Config.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAywC4AAABlAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAABoAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-06T10:06:50.948Z"
+              "WhenOpened": "2024-09-06T10:06:50.948Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "RGM.Commands.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Commands\\RGM.Commands.cs",
               "RelativeDocumentMoniker": "Commands\\RGM.Commands.cs",
@@ -110,7 +60,8 @@
               "RelativeToolTip": "Commands\\RGM.Commands.cs",
               "ViewState": "AgIAABkAAAAAAAAAAAAAwBoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-05T14:24:34.286Z"
+              "WhenOpened": "2024-09-05T14:24:34.286Z",
+              "EditorCaption": ""
             }
           ]
         }
