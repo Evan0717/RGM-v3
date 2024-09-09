@@ -23,7 +23,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(10f);
 
             List<RoleTypeId> BlackList = new List<RoleTypeId>() 
             { 

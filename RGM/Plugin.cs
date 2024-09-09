@@ -220,7 +220,7 @@ namespace RGM
 
         public async void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
-            await Task.Delay(19000);
+            await Task.Delay(9000);
 
             Server.ExecuteCommand("sr");
         }

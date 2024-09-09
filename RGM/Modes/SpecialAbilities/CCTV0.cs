@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 
 namespace RGM.Modes.SpecialAbilities
 {
-    public class N3 // 종이접기
+    public class CCTV0 // RTX4090
     {
         Player target;
 
@@ -21,7 +22,10 @@ namespace RGM.Modes.SpecialAbilities
 
         public IEnumerator<float> OnStarted()
         {
-            target.Scale = new UnityEngine.Vector3(0.01f, 1f, 1f);
+            if (target.Role is Scp079Role scp079)
+            {
+                scp079.Level = 3;
+            }
 
             yield return 1f;
         }
