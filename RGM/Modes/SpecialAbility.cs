@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using PlayerRoles;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -54,6 +55,7 @@ namespace RGM.Modes
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -109,8 +111,9 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        public void OnChangingRole(Exiled.Events.EventArgs.Player.ChangingRoleEventArgs ev)
         {
+            ev.Player.Scale = new Vector3(1, 1, 1);
             if (PlayerAbilities.ContainsKey(ev.Player))
                 PlayerAbilities.Remove(ev.Player);
         }
@@ -159,18 +162,18 @@ namespace RGM.Modes
             {
                 Dictionary<string, string> Colors = new Dictionary<string, string>()
                     {
-                        { "X", "00FFFF" },
-                        { "SSR", "FFD700" },
-                        { "SR", "FF00FF" },
-                        { "R", "FF0000" },
+                        { "X", "FF0000" },
+                        { "SSR", "F7FE2E" },
+                        { "SR", "FE2EF7" },
+                        { "R", "0080FF" },
                         { "N", "BDBDBD" },
-                        { "CCTV", "00FF00" }
+                        { "CCTV", "58FA58" }
                     };
 
                 return Colors[AllAbilities[SelectedAbility].Split('/')[0]];
             }
 
-            player.ShowHint($"<b><color=#{ColorPicker()}>{SelectedAbility}</color></b> 특수능력을 획득하셨습니다.\n<size=20>{AllAbilities[SelectedAbility].Split('/')[2]}</size>", 10);
+            player.ShowHint($"<b><color=#{ColorPicker()}>[{AllAbilities[SelectedAbility].Split('/')[0]}] {SelectedAbility}</color></b> 특수능력을 획득하셨습니다.\n<size=20>{AllAbilities[SelectedAbility].Split('/')[2]}</size>", 10);
 
             string[] strings = AllAbilities[PlayerAbilities[player]].Split('/');
             var modeType = Type.GetType($"RGM.Modes.SpecialAbilities.{strings[0]}{strings[1]}");

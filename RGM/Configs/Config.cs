@@ -33,7 +33,7 @@ namespace RGM
             { "무한 탄약", new List<string>() { "6E6E6E", "무제한 탄약과 함께 승전보를 울리세요!", "InfiniteAmmo", "public", "" } },
             { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "public", "" } },
             { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "public", "" } },
-            { "한국인이 좋아하는 속도", new List<string>() { "5882FA", "이런 거 좋아하죠?", "KoreanSpeed", "public", "" } },
+            { "한국인이 좋아하는 속도", new List<string>() { "5882FA", "이런 거 좋아하시죠?", "KoreanSpeed", "public", "" } },
             { "리더", new List<string>() { "64FE2E", "각 진영마다 리더가 정해집니다.\n리더를 도와 진영을 승리로 이끄세요!", "Leader", "public", "" } },
             { "중첩", new List<string>() { "04B45F", "HP 제한이 제거됩니다.", "Nesting", "public", "" } },
             { "한 방", new List<string>() { "FAAC58", "피격당하는 즉시 죽습니다.", "OnePunch", "public", "" } },
