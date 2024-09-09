@@ -100,7 +100,7 @@ namespace RGM.Commands
                 response = $"'{text2}'";
                 return true;
             }
-            else if (player.Role.Type == PlayerRoles.RoleTypeId.Spectator)
+            else if (player.IsDead)
             {
                 string text = player.Role.Name;
                 string text2 = string.Concat(new string[]
@@ -112,7 +112,7 @@ namespace RGM.Commands
                     "</size>"
                 });
 
-                foreach (Player ply in Player.List.Where(x => x.Role.Type == PlayerRoles.RoleTypeId.Spectator))
+                foreach (Player ply in Player.List.Where(x => x.IsDead))
                     ply.AddBroadcast(6, text2);
 
                 response = $"'{text2}'";
@@ -132,7 +132,7 @@ namespace RGM.Commands
 
                 foreach (Player ply in Player.List)
                 {
-                    if (Vector3.Distance(ply.Position, player.Position) <= 10 || ply.Role.Type == PlayerRoles.RoleTypeId.Spectator)
+                    if (Vector3.Distance(ply.Position, player.Position) <= 10 || ply.IsDead)
                         ply.AddBroadcast(6, text2);
                 }
 

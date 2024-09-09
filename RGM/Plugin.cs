@@ -60,7 +60,6 @@ namespace RGM
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
 
             Timing.RunCoroutine(IsFallDown());
-            Timing.RunCoroutine(BlockAFK());
 
         }
 
@@ -403,38 +402,6 @@ namespace RGM
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
-            }
-        }
-
-        public IEnumerator<float> BlockAFK()
-        {
-            while (true)
-            {
-                foreach (var player in Player.List)
-                {
-                    if (CurrentRoom.ContainsKey(player))
-                    {
-                        if (CurrentRoom[player] == player.CurrentRoom && player.CurrentRoom.Name != "Outside" && player.IsAlive)
-                        {
-                            player.ShowHint($"<color=red><i><b>당신은 5분 동안 한 방에 있었습니다!!!</b></i></color>", 15);
-                            player.EnableEffect(Exiled.API.Enums.EffectType.SeveredHands);
-
-                            CurrentRoom[player] = player.CurrentRoom;
-                        }
-                        else
-                        {
-                            if (player.IsAlive)
-                                CurrentRoom[player] = player.CurrentRoom;
-                        }
-                    }
-                    else
-                    {
-                        if (player.IsAlive)
-                            CurrentRoom.Add(player, player.CurrentRoom);
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(300);
             }
         }
     }

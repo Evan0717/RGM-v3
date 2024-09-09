@@ -28,7 +28,7 @@ namespace RGM.Modes
         {
             { "광전사", "R/0/남은 체력이 적어질수록 공격력이 1%씩 증가합니다." },
             { "흡혈귀", "R/1/상대를 공격하면 데미지의 20%를 AHP로 받습니다." },
-            { "행운", "R/2/문에 상호작용하면 5% 확률로 문이 열립니다." },
+            { "행운아", "R/2/문에 상호작용하면 5% 확률로 문이 열립니다." },
             { "난쟁이", "R/3/몸의 크기가 50% 작아집니다." }
         };
         public Dictionary<string, string> SR_Abilities = new Dictionary<string, string>()
@@ -41,7 +41,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> X_Abilities = new Dictionary<string, string>()
         {
-            { "눈빛맨", "X/0/객체를 쳐다보는 것만으로도 강제로 느려지게 합니다." }
+            { "눈빛맨", "X/0/매 초마다 쳐다본 객체는 하늘로 승천합니다." }
         };
 
         Dictionary<string, string> AllAbilities = new Dictionary<string, string>();
@@ -150,7 +150,7 @@ namespace RGM.Modes
             {
                 var modeInstance = Activator.CreateInstance(modeType);
                 var onEnabledMethod = modeType.GetMethod("OnEnabled");
-                onEnabledMethod?.Invoke(modeInstance, null);
+                onEnabledMethod?.Invoke(modeInstance, new object[] { ev.Player });
             }
 
             ev.Item.Destroy();

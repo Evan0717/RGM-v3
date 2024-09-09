@@ -44,7 +44,8 @@ namespace RGM
             { "트릭 오어 트릿", new List<string>() { "5F04B4", "사탕 4개를 가지고 시작합니다.\n다른 이를 사살하면 사탕 1개를 더 받습니다.", "TrickorTreat", "public", "" } },
             { "여긴 어디?", new List<string>() { "B40486", "랜덤한 곳에서 스폰됩니다.", "WhereamI", "public", "" } },
             { "나는 누구?", new List<string>() { "886A08", "1분마다 진영이 변경됩니다.", "WhoamI", "public", "" } },
-            { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다.", "DoubleUp", "public", "" } }
+            { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다.", "DoubleUp", "public", "" } },
+            { "특수능력", new List<string>() { "2EFEF7", "모두가 특수 능력을 지니고 시작합니다.", "SpecialAbility", "public", "" } }
         };
     }
 }
