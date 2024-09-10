@@ -37,6 +37,35 @@ namespace RGM
             return list[index];
         }
 
+        public void PickModes()
+        {
+            for (int i = 1; i < 4; i++)
+            {
+                var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
+                var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
+                ModeVote.Add(mode, new List<Player>());
+            }
+
+            var First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
+            var Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
+            var Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
+
+            List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
+
+            for (int i = 0; i < 3; i++)
+            {
+                foreach (var Pad in Pads[i])
+                    Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
+            }
+
+            var Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
+
+            Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+
+            foreach (var Number in Numbers)
+                Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
+        }
+
         public override void OnEnabled()
         {
             Instance = this;
@@ -84,7 +113,7 @@ namespace RGM
             Instance = null;
         }
 
-        public async void OnWaitingForPlayers()
+        public void OnWaitingForPlayers()
         {
             Round.IsLobbyLocked = true;
             Server.ExecuteCommand($"/mp load RGMLobby");
@@ -95,76 +124,10 @@ namespace RGM
             var command = new Discord.Command();
             command.OnEnabled();
 
-            for (int i=1; i<4; i++)
-            {
-                var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
-                var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
-                ModeVote.Add(mode, new List<Player>());
-            }
+            PickModes();
 
-            var First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
-            var Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
-            var Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
-
-            List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
-
-            for (int i=0; i<3; i++)
-            {
-                foreach (var Pad in Pads[i])
-                    Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
-            }
-
-            var Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
-
-            Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
-
-            foreach (var Number in Numbers)
-                Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
-
-            bool ButtonPressed = false;
-            Transform redObject = null;
-
-            while (!ButtonPressed)
-            {
-                bool pressing = false;
-
-                foreach (var player in Player.List)
-                {
-                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
-                    {
-                        if (hit.transform.name == "GameStartRed")
-                        {
-                            if (Player.List.Count() > 1)
-                            {
-                                if (RemainingPress <= 0)
-                                    ButtonPressed = true;
-                            }
-
-                            redObject = hit.transform;
-                            pressing = true;
-
-                            RemainingPress -= 1;
-
-                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
-                        }
-                    }
-                }
-
-                if (!pressing)
-                {
-                    if (RemainingPress < 20)
-                    {
-                        RemainingPress += 1;
-
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
-                    }
-                }
-
-                await Task.Delay(100);
-            }
-
-            Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
-            Round.Start();
+            Timing.RunCoroutine(GameStartButton());
+            Timing.RunCoroutine(ModeResetButton());
         }
 
         // EventArgs / Round
@@ -416,6 +379,101 @@ namespace RGM
                 ev.IsAllowed = false;
                 ev.Player.TryAddCandy(InventorySystem.Items.Usables.Scp330.CandyKindID.Pink);
             }
+        }
+
+        public IEnumerator<float> GameStartButton()
+        {
+            bool ButtonPressed = false;
+            Transform redObject = null;
+
+            while (!ButtonPressed)
+            {
+                bool pressing = false;
+
+                foreach (var player in Player.List)
+                {
+                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
+                    {
+                        if (hit.transform.name == "GameStartRed")
+                        {
+                            if (Player.List.Count() > 1)
+                            {
+                                if (RemainingPress <= 0)
+                                    ButtonPressed = true;
+                            }
+
+                            redObject = hit.transform;
+                            pressing = true;
+
+                            RemainingPress -= 1;
+
+                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
+                        }
+                    }
+                }
+
+                if (!pressing)
+                {
+                    if (RemainingPress < 20)
+                    {
+                        RemainingPress += 1;
+
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+
+            Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
+            Round.Start();
+        }
+
+        public IEnumerator<float> ModeResetButton()
+        {
+            bool ButtonPressed = false;
+            Transform redObject = null;
+
+            while (!ButtonPressed)
+            {
+                bool pressing = false;
+
+                foreach (var player in Player.List)
+                {
+                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
+                    {
+                        if (hit.transform.name == "ModeResetRed")
+                        {
+                            if (Player.List.Count() > 1)
+                            {
+                                if (RemainingPress <= 0)
+                                    ButtonPressed = true;
+                            }
+
+                            redObject = hit.transform;
+                            pressing = true;
+
+                            RemainingPress -= 1;
+
+                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.05f, redObject.transform.position.z);
+                        }
+                    }
+                }
+
+                if (!pressing)
+                {
+                    if (RemainingPress < 20)
+                    {
+                        RemainingPress += 1;
+
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.05f, redObject.transform.position.z);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+
+            PickModes();
         }
 
         public IEnumerator<float> IsFallDown()
