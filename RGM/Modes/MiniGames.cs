@@ -10,7 +10,7 @@ using Mirror;
 using MultiBroadcast;
 using UnityEngine;
 
-namespace GPOffice.Modes
+namespace RGM.Modes
 {
     class MiniGames
     {

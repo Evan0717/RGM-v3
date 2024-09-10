@@ -84,7 +84,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
-            
+
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
 
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
@@ -130,7 +130,6 @@ namespace RGM
             Timing.RunCoroutine(ModeResetButton());
         }
 
-        // EventArgs / Round
         public async void OnRoundStarted()
         {
             foreach (var player in Player.List)
@@ -222,7 +221,6 @@ namespace RGM
             Server.ExecuteCommand("sr");
         }
 
-        // EventArgs / Player
         public async void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
             OnGround.Add(ev.Player, 5);
@@ -271,6 +269,8 @@ namespace RGM
                 {
                     if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 2f, (LayerMask)1))
                     {
+                        string SelectedMode = null;
+
                         for (int i = 0; i < 3; i++)
                         {
                             if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
@@ -278,22 +278,29 @@ namespace RGM
                         }
 
                         if (hit.collider.name == "First")
-                            ModeVote[ModeVote.Keys.ToList()[0]].Add(ev.Player);
-
+                        {
+                            SelectedMode = ModeVote.Keys.ToList()[0];
+                            ModeVote[SelectedMode].Add(ev.Player);
+                        }
                         else if (hit.collider.name == "Second")
-                            ModeVote[ModeVote.Keys.ToList()[1]].Add(ev.Player);
-
+                        {
+                            SelectedMode = ModeVote.Keys.ToList()[1];
+                            ModeVote[SelectedMode].Add(ev.Player);
+                        }
                         else if (hit.collider.name == "Third")
-                            ModeVote[ModeVote.Keys.ToList()[2]].Add(ev.Player);
+                        {
+                            SelectedMode = ModeVote.Keys.ToList()[2];
+                            ModeVote[SelectedMode].Add(ev.Player);
+                        }
+
+                        ev.Player.ShowHint(Config.LobbyMessage
+                            .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
+                            .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
+                            .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
+                            .Replace("{ModeDescription}", $"{ModeList[SelectedMode][1]}"), 1.2f);
+
+                        await Task.Delay(500);
                     }
-
-                    ev.Player.ShowHint(Config.LobbyMessage
-                        .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
-                        .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
-                        .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                        .Replace("{ModeDescription}", $"\"TIP. 콘솔(`)창을 열고 [.help] 명령어를 사용해보세요.\""), 1.2f);
-
-                    await Task.Delay(500);
                 }
             }
         }

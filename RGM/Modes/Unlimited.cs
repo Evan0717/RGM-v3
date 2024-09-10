@@ -7,7 +7,7 @@ using Exiled.API.Features;
 using MEC;
 using MultiBroadcast;
 
-namespace GPOffice.Modes
+namespace RGM.Modes
 {
     class Unlimited
     {

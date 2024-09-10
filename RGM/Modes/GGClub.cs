@@ -17,7 +17,7 @@ using UnityEngine;
 using SCPSLAudioApi.AudioCore;
 using MultiBroadcast;
 
-namespace GPOffice.Modes
+namespace RGM.Modes
 {
     class GGClub
     {
