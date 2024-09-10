@@ -246,6 +246,14 @@ namespace RGM
 
         public async void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
+            var modeType = Type.GetType($"RGM.Modes.FriendlyFire");
+            if (modeType != null)
+            {
+                var modeInstance = Activator.CreateInstance(modeType);
+                var onEnabledMethod = modeType.GetMethod("OnEnabled");
+                onEnabledMethod?.Invoke(modeInstance, null);
+            }
+
             await Task.Delay(9000);
 
             Server.ExecuteCommand("sr");
@@ -387,7 +395,7 @@ namespace RGM
 
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
         {
-            if (ev.Player.IsScp && ev.Door.Name.Contains("CHECKPOINT"))
+            if (ev.Player.IsScp && ev.Player.CurrentItem != null && ev.Door.Name.Contains("CHECKPOINT"))
                 ev.Door.IsOpen = true;
         }
 

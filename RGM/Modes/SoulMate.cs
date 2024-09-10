@@ -9,7 +9,7 @@ using MEC;
 using Mirror;
 using UnityEngine;
 
-namespace GPOffice.Modes
+namespace RGM.Modes
 {
     class SoulMate
     {
