@@ -242,3 +242,4 @@ D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.Threading.Tasks.Ext
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\System.ValueTuple.xml
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\MapEditorReborn.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\MultiBroadcast.dll
+D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\GGUtils.dll

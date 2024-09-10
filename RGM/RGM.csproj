@@ -69,6 +69,9 @@
     <Reference Include="Exiled.Permissions">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
     </Reference>
+    <Reference Include="GGUtils">
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\GGUtils.dll</HintPath>
+    </Reference>
     <Reference Include="MapEditorReborn">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\MapEditorReborn.dll</HintPath>
     </Reference>
@@ -161,24 +164,31 @@
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
+    <Compile Include="Modes\ABattle.cs" />
     <Compile Include="Modes\Blackout.cs" />
     <Compile Include="Modes\Blessing.cs" />
+    <Compile Include="Modes\BombParty.cs" />
     <Compile Include="Modes\Collector.cs" />
     <Compile Include="Modes\DoubleUp.cs" />
+    <Compile Include="Modes\FreeForAll.cs" />
     <Compile Include="Modes\FriendlyFire.cs" />
     <Compile Include="Modes\Gamble.cs" />
+    <Compile Include="Modes\GGClub.cs" />
     <Compile Include="Modes\Giveaway.cs" />
+    <Compile Include="Modes\HIDE.cs" />
     <Compile Include="Modes\HotPotato.cs" />
     <Compile Include="Modes\InfiniteAmmo.cs" />
     <Compile Include="Modes\Jailbird.cs" />
     <Compile Include="Modes\JohnWick.cs" />
     <Compile Include="Modes\KoreanSpeed.cs" />
     <Compile Include="Modes\Leader.cs" />
+    <Compile Include="Modes\MiniGames.cs" />
     <Compile Include="Modes\Nesting.cs" />
     <Compile Include="Modes\OnePunch.cs" />
     <Compile Include="Modes\Outlaw.cs" />
     <Compile Include="Modes\PirateRoulette.cs" />
     <Compile Include="Modes\SCPRUSH.cs" />
+    <Compile Include="Modes\SoulMate.cs" />
     <Compile Include="Modes\SpecialAbilities\CCTV0.cs" />
     <Compile Include="Modes\SpecialAbilities\N1.cs" />
     <Compile Include="Modes\SpecialAbilities\N2.cs" />
@@ -192,8 +202,11 @@
     <Compile Include="Modes\SpecialAbilities\X0.cs" />
     <Compile Include="Modes\SpecialAbility.cs" />
     <Compile Include="Modes\SpecialAbilities\N0.cs" />
+    <Compile Include="Modes\Spirit.cs" />
     <Compile Include="Modes\StandardItems.cs" />
+    <Compile Include="Modes\Tomb.cs" />
     <Compile Include="Modes\TrickorTreat.cs" />
+    <Compile Include="Modes\Unlimited.cs" />
     <Compile Include="Modes\WhereamI.cs" />
     <Compile Include="Modes\WhoamI.cs" />
     <Compile Include="Plugin.cs" />
