@@ -23,21 +23,25 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield return Timing.WaitForSeconds(10f);
 
-            List<RoleTypeId> BlackList = new List<RoleTypeId>() 
-            { 
-                RoleTypeId.Filmmaker, 
-                RoleTypeId.Spectator, 
-                RoleTypeId.Overwatch
-            };
-
-            List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>().Where(role => !BlackList.Contains(role)).ToList();
-
-            foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
+            while (true)
             {
-                RoleTypeId SelectedRole = Roles[UnityEngine.Random.Range(1, Roles.Count())];
-                player.Role.Set(SelectedRole, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
+                yield return Timing.WaitForSeconds(60f);
+
+                List<RoleTypeId> BlackList = new List<RoleTypeId>()
+                {
+                    RoleTypeId.Filmmaker,
+                    RoleTypeId.Spectator,
+                    RoleTypeId.Overwatch
+                };
+
+                List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>().Where(role => !BlackList.Contains(role)).ToList();
+
+                foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
+                {
+                    RoleTypeId SelectedRole = Roles[UnityEngine.Random.Range(1, Roles.Count())];
+                    player.Role.Set(SelectedRole, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
+                }
             }
         }
     }
