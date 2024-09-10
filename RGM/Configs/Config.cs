@@ -19,7 +19,7 @@ namespace RGM
         public string StartModeDescription { get; set; } = "<size=30>[<b><color=#{ModeColor}>{CurrentMode}</color></b>]</size>\n<size=25>{ModeDescription}</size>";
         public string LateJoinModeDescription { get; set; } = "<size=20>현재 진행중인 모드</size>\n<size=25><b>[<color=#{ModeColor}>{CurrentMode}</color>]</b></size>";
         public string WelcomeMessage { get; set; } = "<size=25><b>랜덤게임모드</b>에 오신 것을 환영합니다!</size>";
-        public string LobbyMessage { get; set; } = "\n<align=left>\n[1] {First} | {FirstVote}\n[2] {Second} | {SecondVote}\n[3] {Third} | {ThirdVote}\n</align>\n\n{ModeDescription}\n";
+        public string LobbyMessage { get; set; } = "\n<align=left>\n[1] {First} | {FirstVote}\n[2] {Second} | {SecondVote}\n[3] {Third} | {ThirdVote}\n</align>\n\n<color={ModeColor}>{ModeName}</color>\n{ModeDescription}\n{Lines}";
 
         [Description("모드 이름 : 색상, 설명, 파일 이름, 공개 여부(public/private), 아이디어 제공자")]
         public Dictionary<string, List<string>> Modes { get; set; } = new Dictionary<string, List<string>>()
