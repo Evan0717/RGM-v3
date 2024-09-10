@@ -15,7 +15,12 @@ namespace RGM.Modes
     {
         public static SpecialAbility Instance;
 
-        public List<ushort> AbilityCoins = new List<ushort>();
+        public List<ushort> N_AbilityCoins = new List<ushort>();
+        public List<ushort> R_AbilityCoins = new List<ushort>();
+        public List<ushort> SR_AbilityCoins = new List<ushort>();
+        public List<ushort> SSR_AbilityCoins = new List<ushort>();
+        public List<ushort> X_AbilityCoins = new List<ushort>();
+
         public Dictionary<Player, string> PlayerAbilities = new Dictionary<Player, string>();
 
         public Dictionary<string, string> N_Abilities = new Dictionary<string, string>()
@@ -60,6 +65,21 @@ namespace RGM.Modes
 
         Dictionary<string, string> AllAbilities = new Dictionary<string, string>();
 
+        string ColorPicker(string Rank)
+        {
+            Dictionary<string, string> Colors = new Dictionary<string, string>()
+                    {
+                        { "X", "FF0000" },
+                        { "SSR", "F7FE2E" },
+                        { "SR", "FE2EF7" },
+                        { "R", "0080FF" },
+                        { "N", "BDBDBD" },
+                        { "CCTV", "58FA58" }
+                    };
+
+            return Colors[Rank];
+        }
+
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -90,9 +110,37 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    if (player.CurrentItem != null && AbilityCoins.Contains(player.CurrentItem.Serial))
+                    if (player.CurrentItem != null)
                     {
-                        player.ShowHint("동전을 튕겨 <b><color=#FF0000>특</color><color=#CC1833>수</color><color=#993166>⭐</color><color=#664999>능</color><color=#3362CC>력</color></b>을 획득하세요.", 1.2f);
+                        string Rank()
+                        {
+                            if (N_AbilityCoins.Contains(player.CurrentItem.Serial))
+                            {
+                                return $"<color=#{ColorPicker("N")}>N</color>";
+                            }
+                            else if (R_AbilityCoins.Contains(player.CurrentItem.Serial))
+                            {
+                                return $"<color=#{ColorPicker("R")}>R</color>";
+                            }
+                            else if (SR_AbilityCoins.Contains(player.CurrentItem.Serial))
+                            {
+                                return $"<color=#{ColorPicker("SR")}>SR</color>";
+                            }
+                            else if (SSR_AbilityCoins.Contains(player.CurrentItem.Serial))
+                            {
+                                return $"<color=#{ColorPicker("SSR")}>SSR</color>";
+                            }
+                            else if (X_AbilityCoins.Contains(player.CurrentItem.Serial))
+                            {
+                                return $"<color=#{ColorPicker("X")}>X</color>";
+                            }
+                            else
+                            {
+                                return $"<color=#{ColorPicker("CCTV")}>CCTV</color>";
+                            }
+                        }
+
+                        player.ShowHint($"동전을 튕겨 <b><color=#FF0000>특</color><color=#CC1833>수</color><color=#993166>⭐</color><color=#664999>능</color><color=#3362CC>력</color></b>을 획득하세요.\n<size=25>[ 현재 등급 : <b>{Rank()}</b> ]</size>", 1.2f);
                     }
                 }
 
@@ -108,11 +156,11 @@ namespace RGM.Modes
         public void Spawned(Player player)
         {
             Item Coin = player.AddItem(ItemType.Coin);
-            AbilityCoins.Add(Coin.Serial);
+            N_AbilityCoins.Add(Coin.Serial);
 
             if (player.Role.Type == RoleTypeId.Scp079)
             {
-                AddAbility(player);
+                AddAbility(player, CCTV_Abilities);
             }
             else if (player.IsScp)
             {
@@ -128,63 +176,17 @@ namespace RGM.Modes
         }
 
 
-        public void AddAbility(Player player)
+        public void AddAbility(Player player, Dictionary<string, string> Abilities)
         {
             string SelectedAbility;
             int Random = UnityEngine.Random.Range(1, 1001);
 
-            if (player.Role.Type == RoleTypeId.Scp079)
-            {
-                SelectedAbility = RGM.GetRandomValue(CCTV_Abilities.Keys.ToList());
-                PlayerAbilities.Add(player, SelectedAbility);
-            }
-            else
-            {
-                if (Random < 6)
-                {
-                    SelectedAbility = RGM.GetRandomValue(X_Abilities.Keys.ToList());
-                    PlayerAbilities.Add(player, SelectedAbility);
-                }
-                else if (Random < 41)
-                {
-                    SelectedAbility = RGM.GetRandomValue(SSR_Abilities.Keys.ToList());
-                    PlayerAbilities.Add(player, SelectedAbility);
-                }
-                else if (Random < 151)
-                {
-                    SelectedAbility = RGM.GetRandomValue(SR_Abilities.Keys.ToList());
-                    PlayerAbilities.Add(player, SelectedAbility);
-                }
-                else if (Random < 501)
-                {
-                    SelectedAbility = RGM.GetRandomValue(R_Abilities.Keys.ToList());
-                    PlayerAbilities.Add(player, SelectedAbility);
-                }
-                else
-                {
-                    SelectedAbility = RGM.GetRandomValue(N_Abilities.Keys.ToList());
-                    PlayerAbilities.Add(player, SelectedAbility);
-                }
-            }
+            SelectedAbility = RGM.GetRandomValue(CCTV_Abilities.Keys.ToList());
+            PlayerAbilities.Add(player, SelectedAbility);
 
             string[] strings = AllAbilities[SelectedAbility].Split('/');
 
-            string ColorPicker()
-            {
-                Dictionary<string, string> Colors = new Dictionary<string, string>()
-                    {
-                        { "X", "FF0000" },
-                        { "SSR", "F7FE2E" },
-                        { "SR", "FE2EF7" },
-                        { "R", "0080FF" },
-                        { "N", "BDBDBD" },
-                        { "CCTV", "58FA58" }
-                    };
-
-                return Colors[strings[0]];
-            }
-
-            player.ShowHint($"<b><color=#{ColorPicker()}>[{strings[0]}] {SelectedAbility}</color></b> 특수능력을 획득하였습니다.\n<size=20>{strings[2]}</size>", 10);
+            player.ShowHint($"<b><color=#{ColorPicker(strings[0])}>[{strings[0]}] {SelectedAbility}</color></b> 특수능력을 획득하였습니다.\n<size=20>{strings[2]}</size>", 10);
 
             var modeType = Type.GetType($"RGM.Modes.SpecialAbilities.{strings[0]}{strings[1]}");
             if (modeType != null)
@@ -197,9 +199,76 @@ namespace RGM.Modes
 
         public void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
         {
-            ev.Item.Destroy();
+            Item Coin = ev.Player.CurrentItem;
 
-            AddAbility(ev.Player);
+            if (!PlayerAbilities.ContainsKey(ev.Player))
+            {
+                if (UnityEngine.Random.Range(1, 4) == 1) // 동전 등급 업그레이드
+                {
+                    if (N_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        N_AbilityCoins.Remove(Coin.Serial);
+                        R_AbilityCoins.Add(Coin.Serial);
+                    }
+                    else if (R_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        R_AbilityCoins.Remove(Coin.Serial);
+                        SR_AbilityCoins.Add(Coin.Serial);
+                    }
+                    else if (SR_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        SR_AbilityCoins.Remove(Coin.Serial);
+                        SSR_AbilityCoins.Add(Coin.Serial);
+                    }
+                    else if (SSR_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        SSR_AbilityCoins.Remove(Coin.Serial);
+                        X_AbilityCoins.Add(Coin.Serial);
+                    }
+                    else if (X_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        X_AbilityCoins.Remove(Coin.Serial);
+                        N_AbilityCoins.Add(Coin.Serial);
+                    }
+                    else
+                    {
+                        ev.Player.ShowHint("이 동전은 특수능력을 가지고 있지 않습니다.", duration: 1.5f);
+                    }
+                }
+                else // 능력 뽑기
+                {
+                    if (N_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        AddAbility(ev.Player, N_Abilities);
+                    }
+                    else if (R_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        AddAbility(ev.Player, R_Abilities);
+                    }
+                    else if (SR_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        AddAbility(ev.Player, SR_Abilities);
+                    }
+                    else if (SSR_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        AddAbility(ev.Player, SSR_Abilities);
+                    }
+                    else if (X_AbilityCoins.Contains(Coin.Serial))
+                    {
+                        AddAbility(ev.Player, X_Abilities);
+                    }
+                    else
+                    {
+                        ev.Player.ShowHint("이 동전은 특수능력을 가지고 있지 않습니다.", duration: 1.5f);
+                    }
+                }
+
+                ev.Item.Destroy();
+            }
+            else
+            {
+                ev.Player.ShowHint("이미 능력을 획득하였습니다.", duration: 1.5f);
+            }
         }
     }
 }
