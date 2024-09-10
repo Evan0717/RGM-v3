@@ -94,7 +94,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < UnityEngine.Random.Range(2, 5); i++)
                 {
-                    Transform goldPad = RGM.RGM.GetRandomValue(Pads);
+                    Transform goldPad = RGM.GetRandomValue(Pads);
 
                     if (!goldPads.Contains(goldPad))
                         goldPads.Add(goldPad);

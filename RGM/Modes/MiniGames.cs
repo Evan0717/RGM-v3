@@ -45,7 +45,7 @@ namespace RGM.Modes
             {
                 bool end = true;
 
-                Server.ExecuteCommand($"/ev run {RGM.RGM.GetRandomValue(Games)}");
+                Server.ExecuteCommand($"/ev run {RGM.GetRandomValue(Games)}");
 
                 while (end)
                 {
