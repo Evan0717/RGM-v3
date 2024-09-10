@@ -187,6 +187,7 @@
     <Compile Include="Modes\OnePunch.cs" />
     <Compile Include="Modes\Outlaw.cs" />
     <Compile Include="Modes\PirateRoulette.cs" />
+    <Compile Include="Modes\RandomItem.cs" />
     <Compile Include="Modes\SCPRUSH.cs" />
     <Compile Include="Modes\SoulMate.cs" />
     <Compile Include="Modes\SpecialAbilities\CCTV0.cs" />

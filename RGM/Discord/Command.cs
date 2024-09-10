@@ -54,7 +54,7 @@ namespace RGM.Discord
             }
             else if (Content.StartsWith("command"))
             {
-                result = Server.ExecuteCommand(Value[1]);
+                result = Server.ExecuteCommand($"/{Value[1]}");
             }
             else if (Content.StartsWith("status"))
             {

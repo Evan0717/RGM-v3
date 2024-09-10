@@ -145,7 +145,7 @@ namespace RGM
 
                             RemainingPress -= 1;
 
-                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.03f, redObject.transform.position.z);
+                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
                         }
                     }
                 }
@@ -156,7 +156,7 @@ namespace RGM
                     {
                         RemainingPress += 1;
 
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.03f, redObject.transform.position.z);
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
                     }
                 }
 
@@ -320,7 +320,7 @@ namespace RGM
                         .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
                         .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
                         .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                        .Replace("{ModeDescription}", $"{ModeVote}"), 1.2f);
+                        .Replace("{ModeDescription}", $"\"TIP. 콘솔(`)창을 열고 [.help] 명령어를 사용해보세요.\""), 1.2f);
 
                     await Task.Delay(500);
                 }
