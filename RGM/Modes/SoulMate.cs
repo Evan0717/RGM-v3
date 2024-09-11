@@ -16,7 +16,7 @@ namespace RGM.Modes
     {
         public static SoulMate Instance;
 
-        private Dictionary<Player, Player> soulMates;
+        private Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
         private List<Player> waitingPlayers;
 
         public void OnEnabled()
@@ -58,16 +58,14 @@ namespace RGM.Modes
 
         public IEnumerator<float> SoulMateMatching()
         {
-            soulMates = new Dictionary<Player, Player>();
-            waitingPlayers = new List<Player>();
-
-            List<Player> players = Player.List.ToList();
-
-            players.ShuffleList();
-
             while (true)
             {
-                foreach (var player in soulMates.Keys.ToList())
+                waitingPlayers = new List<Player>();
+                List<Player> players = Player.List.ToList();
+
+                players.ShuffleList();
+
+                foreach (var player in players)
                 {
                     if (player.IsDead)
                     {
