@@ -320,7 +320,7 @@ namespace RGM.Modes
                     Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 [{mod1}] 모드를 설치했습니다.");
                     break;
                 case "뱀의 손 무전기":
-                    Server.ExecuteCommand($"/fc {player.Id} Tutorial 0");
+                    player.Role.Set(PlayerRoles.RoleTypeId.Tutorial, Exiled.API.Enums.SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
 
                     List<Player> SnakeHands = Player.List.Where(x => x.IsDead).ToList();
 

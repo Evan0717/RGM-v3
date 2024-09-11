@@ -16,7 +16,7 @@ namespace RGM.Modes
     {
         public static SoulMate Instance;
 
-        private Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
+        private Dictionary<Player, Player> soulMates;
         private List<Player> waitingPlayers;
 
         public void OnEnabled()
@@ -24,7 +24,6 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
-            Exiled.Events.Handlers.Player.ChangingItem += OnChaningItem;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -58,14 +57,27 @@ namespace RGM.Modes
 
         public IEnumerator<float> SoulMateMatching()
         {
+            soulMates = new Dictionary<Player, Player>();
+            waitingPlayers = new List<Player>();
+
+            List<Player> players = Player.List.ToList();
+
+            players.ShuffleList();
+
+            for (int i = 0; i < players.Count; i += 2)
+            {
+                if (i + 1 < players.Count)
+                {
+                    soulMates.Add(players[i], players[i + 1]);
+                    soulMates.Add(players[i + 1], players[i]);
+                }
+            }
+
+            yield return Timing.WaitForSeconds(10f);
+
             while (true)
             {
-                waitingPlayers = new List<Player>();
-                List<Player> players = Player.List.ToList();
-
-                players.ShuffleList();
-
-                foreach (var player in players)
+                foreach (var player in soulMates.Keys.ToList())
                 {
                     if (player.IsDead)
                     {
@@ -86,8 +98,6 @@ namespace RGM.Modes
 
                 if (waitingPlayers.Count >= 2)
                 {
-                    waitingPlayers.ShuffleList();
-
                     Player player1 = waitingPlayers[0];
                     Player player2 = waitingPlayers[1];
 
