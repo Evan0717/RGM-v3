@@ -24,6 +24,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            Exiled.Events.Handlers.Player.ChangingItem += OnChaningItem;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -31,6 +32,7 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(10f);
 
             Timing.RunCoroutine(SoulMateMatching());
+            Timing.RunCoroutine(CurrentItemAsync());
 
             yield return Timing.WaitForSeconds(5f);
 
@@ -52,6 +54,36 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public IEnumerator<float> CurrentItemAsync()
+        {
+            Dictionary<Player, Item> CurrentItem = new Dictionary<Player, Item>();
+
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (soulMates.ContainsKey(player))
+                    {
+                        Player soulmate = soulMates[player];
+
+                        if (CurrentItem.ContainsKey(player))
+                        {
+                            if (CurrentItem[player] != player.CurrentItem)
+                                soulmate.CurrentItem = player.CurrentItem;
+                        }
+                        else
+                        {
+                            CurrentItem.Add(player, player.CurrentItem);
+                        }
+
+                        soulmate.CurrentItem = player.CurrentItem;
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
