@@ -19,6 +19,10 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
+            Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
+            Exiled.Events.Handlers.Player.Hurt += OnHurt;
+
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Died += OnDied;
@@ -90,6 +94,37 @@ namespace RGM.Modes
                     ev.Player.Kill($"{soulMate.DisplayNickname}(와)과 {ev.Player.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
                     Server.ExecuteCommand($"/cassie_sl <color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
                 }
+            }
+        }
+
+        public void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
+        {
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                soulMate.AddItem(ev.Item);
+            }
+        }
+
+        public void OnItemRemoved(Exiled.Events.EventArgs.Player.ItemRemovedEventArgs ev)
+        {
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                soulMate.RemoveItem(ev.Item);
+            }
+        }
+
+        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        {
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                soulMate.MaxHealth = ev.Player.MaxHealth;
+                soulMate.Health = ev.Player.Health;
             }
         }
     }
