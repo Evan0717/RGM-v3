@@ -33,14 +33,15 @@ namespace RGM.Modes
                     RoleTypeId.Filmmaker,
                     RoleTypeId.Spectator,
                     RoleTypeId.Overwatch,
-                    RoleTypeId.Scp079
+                    RoleTypeId.Scp079,
+                    RoleTypeId.None
                 };
 
                 List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>().Where(role => !BlackList.Contains(role)).ToList();
 
                 foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
                 {
-                    RoleTypeId SelectedRole = Roles[UnityEngine.Random.Range(1, Roles.Count())];
+                    RoleTypeId SelectedRole = Roles[UnityEngine.Random.Range(0, Roles.Count())];
                     player.Role.Set(SelectedRole, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
                 }
             }

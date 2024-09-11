@@ -486,11 +486,13 @@ namespace RGM
                         ButtonPressed = true;
                 }
 
-                RemainingPress -= 0.2f * stack;
+                if (pressing)
+                {
+                    RemainingPress -= 0.2f * stack;
 
-                redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.002f * stack, redObject.transform.position.z);
-
-                if (!pressing)
+                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.002f * stack, redObject.transform.position.z);
+                }
+                else
                 {
                     if (RemainingPress < 20)
                     {
@@ -504,6 +506,7 @@ namespace RGM
             }
 
             PickModes();
+            Server.ExecuteCommand($"/cassie_sl <mark=#ffff00aa><color=#000000><color=#ffffff>모드 투표 리스트</color>가 초기화되었습니다.</color></mark>");
         }
 
         public IEnumerator<float> IsFallDown()

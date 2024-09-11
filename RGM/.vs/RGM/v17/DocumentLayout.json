@@ -30,9 +30,9 @@
               "Title": "Plugin.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
-              "RelativeToolTip": "Plugin.cs",
-              "ViewState": "AgIAAN8BAAAAAAAAAAAYwO4BAAAsAAAAAAAAAA==",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs*",
+              "RelativeToolTip": "Plugin.cs*",
+              "ViewState": "AgIAANkBAAAAAAAAAAAYwPsBAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-07T16:14:40.698Z",
               "EditorCaption": ""
@@ -45,9 +45,10 @@
               "RelativeDocumentMoniker": "Configs\\Config.cs",
               "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Config.cs",
               "RelativeToolTip": "Configs\\Config.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAA+wB4AAABBAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAA9wB4AAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-06T10:06:50.948Z"
+              "WhenOpened": "2024-09-06T10:06:50.948Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -57,9 +58,10 @@
               "RelativeDocumentMoniker": "Commands\\RGM.Commands.cs",
               "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Commands\\RGM.Commands.cs",
               "RelativeToolTip": "Commands\\RGM.Commands.cs",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAuwMQAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAJoAAAAAAAAAAAAQwKoAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-05T14:24:34.286Z"
+              "WhenOpened": "2024-09-05T14:24:34.286Z",
+              "EditorCaption": ""
             }
           ]
         }

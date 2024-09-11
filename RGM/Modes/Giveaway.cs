@@ -29,7 +29,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    var toGive = itemList[UnityEngine.Random.Range(1, itemList.Count())];
+                    var toGive = itemList.Where(x => x != ItemType.None).ToList()[UnityEngine.Random.Range(0, itemList.Count())];
                     Item CurrentItem = player.AddItem(toGive);
 
                     if (player.IsScp)
