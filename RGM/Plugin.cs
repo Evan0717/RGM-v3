@@ -378,7 +378,7 @@ namespace RGM
                     }
                     else if (rand == 2)
                     {
-                        ev.Player.Scale = new Vector3(-1, -1, -1);
+                        ev.Player.Scale = new Vector3(-1, -1, 1);
                     }
                 }
             }
