@@ -7,7 +7,6 @@ using CustomRendering;
 using Exiled.API.Features;
 using MEC;
 using Mirror;
-using MultiBroadcast.API;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -16,14 +15,10 @@ namespace RGM.Modes
     {
         public static SoulMate Instance;
 
-        private Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
+        private Dictionary<Player, Player> soulMates;
 
         public void OnEnabled()
         {
-            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
-            Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
-            Exiled.Events.Handlers.Player.Hurt += OnHurt;
-
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Died += OnDied;
@@ -33,7 +28,32 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(10f);
 
-            Timing.RunCoroutine(SoulMateManager());
+            soulMates = new Dictionary<Player, Player>();
+
+            List<Player> players = Player.List.ToList();
+
+            players.ShuffleList();
+
+            for (int i = 0; i < players.Count; i += 2)
+            {
+                if (i + 1 < players.Count)
+                {
+                    soulMates.Add(players[i], players[i + 1]);
+                    soulMates.Add(players[i + 1], players[i]);
+
+                    for (int n = i; n < i + 2; n++)
+                        players[n].ShowHint($"당신의 단짝이 존재하나 누군지 모릅니다..", 5);
+                }
+                else
+                {
+                    soulMates.Add(players[i], null);
+
+                    players[i].ShowHint($"당신은 <color=#BFFF00>외톨이</color>입니다.\n<color=red>분노</color>로 인해 체력이 2배 상승합니다.", 5);
+                    players[i].MaxHealth = players[i].MaxHealth * 2;
+                    players[i].Health = players[i].MaxHealth;
+                    players[i].Group = new UserGroup { BadgeText = "외톨이", BadgeColor = "lime" };
+                }
+            }
 
             yield return Timing.WaitForSeconds(5f);
 
@@ -49,46 +69,12 @@ namespace RGM.Modes
                     if (Player.List.ToList().Where(x => x.IsAlive).Count() < 3 && player.Role.Type != PlayerRoles.RoleTypeId.Tutorial)
                     {
                         Player.List.ToList().Where(x => x.IsAlive).ToList().ForEach(x => Server.ExecuteCommand($"/fc {x.Id} Tutorial 1"));
-                        Player.List.ToList().ForEach(x => x.AddBroadcast(15, $"<size=30><b>{(Player.List.ToList().Where(x => x.IsAlive).Count() == 2 ? "<color=#ffd700>소울메이트</color>" : "<color=#BFFF00>외톨이</color>")}</b>({string.Join(", ", Player.List.ToList().Where(x => x.IsAlive).Select(x => x.DisplayNickname))})의 승리입니다!</size>"));
+                        Player.List.ToList().ForEach(x => x.Broadcast(15, $"<size=30><b>{(Player.List.ToList().Where(x => x.IsAlive).Count() == 2 ? "<color=#ffd700>소울메이트</color>" : "<color=#BFFF00>외톨이</color>")}</b>({string.Join(", ", Player.List.ToList().Where(x => x.IsAlive).Select(x => x.DisplayNickname))})의 승리입니다!</size>"));
                         yield return Timing.WaitForSeconds(100f);
                     }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
-            }
-        }
-
-        public IEnumerator<float> SoulMateManager()
-        {
-            while (true)
-            {
-                List<Player> players = Player.List.ToList();
-
-                players.ShuffleList();
-
-                foreach (var player in players)
-                {
-                    if (player.IsDead)
-                    {
-                        if (soulMates.ContainsKey(player))
-                            soulMates.Remove(player);
-                    }
-                    else
-                    {
-                        if (!soulMates.ContainsKey(player))
-                        {
-                            Player soulMate = players.Where(x => x.IsAlive && !soulMates.ContainsValue(x) && x != player).FirstOrDefault();
-
-                            if (soulMate != null)
-                            {
-                                soulMates.Add(player, soulMate);
-                                soulMates.Add(soulMate, player);
-                            }
-                        }
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(10f);
             }
         }
 
@@ -104,37 +90,6 @@ namespace RGM.Modes
                     ev.Player.Kill($"{soulMate.DisplayNickname}(와)과 {ev.Player.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
                     Server.ExecuteCommand($"/cassie_sl <color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
                 }
-            }
-        }
-
-        public void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
-        {
-            if (soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                soulMate.AddItem(ev.Item);
-            }
-        }
-
-        public void OnItemRemoved(Exiled.Events.EventArgs.Player.ItemRemovedEventArgs ev)
-        {
-            if (soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                soulMate.RemoveItem(ev.Item);
-            }
-        }
-
-        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
-        {
-            if (soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                soulMate.MaxHealth = ev.Player.MaxHealth;
-                soulMate.Health = ev.Player.Health;
             }
         }
     }
