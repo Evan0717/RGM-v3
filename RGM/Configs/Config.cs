@@ -53,7 +53,7 @@ namespace RGM
             { "특수능력", new List<string>() { "2EFEF7", "모두가 특수 능력을 지니고 시작합니다.", "SpecialAbility", "private", "" } },
             { "스피릿", new List<string>() { "CED8F6", "죽으면 영혼 상태에 돌입합니다!", "Spirit", "public", "" } },
             { "기본템", new List<string>() { "FA5858", "5~8개의 아이템이 사전에 지급됩니다.\n기존에 가지고 있던 아이템은 제거됩니다.", "StandardItems", "private", "" } },
-            { "슈퍼 스타", new List<string>() { "FE2EF7", "모두의 마이크가 공유됩니다.", "SuperStar", "private", "" } },
+            { "슈퍼 스타", new List<string>() { "FE2EF7", "모두의 마이크가 공유됩니다.", "SuperStar", "public", "" } },
             { "무덤", new List<string>() { "000000", "살아남으려면 뭐라도 해야 합니다.", "Tomb", "public", "" } },
             { "트릭 오어 트릿", new List<string>() { "5F04B4", "사탕 4개를 가지고 시작합니다.\n다른 이를 사살하면 사탕 1개를 더 받습니다.", "TrickorTreat", "public", "" } },
             { "무제한", new List<string>() { "3F13AB", "무제한을 악용하지 않는 것을 추천합니다.", "Unlimited", "public", "" } },

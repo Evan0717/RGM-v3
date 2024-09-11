@@ -488,9 +488,9 @@ namespace RGM
 
                 if (pressing)
                 {
-                    RemainingPress -= 0.2f * stack;
+                    RemainingPress -= 0.1f * stack;
 
-                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.002f * stack, redObject.transform.position.z);
+                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.001f * stack, redObject.transform.position.z);
                 }
                 else
                 {
@@ -498,7 +498,7 @@ namespace RGM
                     {
                         RemainingPress += 1;
 
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.002f * stack, redObject.transform.position.z);
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.001f * stack, redObject.transform.position.z);
                     }
                 }
 
