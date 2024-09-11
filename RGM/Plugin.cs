@@ -380,7 +380,7 @@ namespace RGM
                     }
                     else if (rand == 2)
                     {
-                        ev.Player.Scale = new Vector3(-1, -1, 1);
+                        ev.Player.Scale = new Vector3(-1, -1, -1);
                     }
                 }
             }
@@ -489,9 +489,9 @@ namespace RGM
 
                 if (pressing)
                 {
-                    RemainingPress -= 0.05f * stack;
+                    RemainingPress -= 0.02f * stack;
 
-                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.0005f * stack, redObject.transform.position.z);
+                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.0002f * stack, redObject.transform.position.z);
                 }
                 else
                 {
@@ -499,7 +499,7 @@ namespace RGM
                     {
                         RemainingPress += 1;
 
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.0005f * stack, redObject.transform.position.z);
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.0002f * stack, redObject.transform.position.z);
                     }
                 }
 
