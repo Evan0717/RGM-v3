@@ -17,6 +17,8 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
