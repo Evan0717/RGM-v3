@@ -309,7 +309,7 @@ namespace RGM.Modes
                     string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.ToList());
                     string mod1 = Mode1.ToString();
 
-                    var modeType = Type.GetType($"RGM.Modes.{RGM.Instance.ModeList[Mode1].ToString().Split('/')[2].Replace(" ", "")}");
+                    var modeType = Type.GetType($"RGM.Modes.{RGM.Instance.ModeList[Mode1][2]}");
                     if (modeType != null)
                     {
                         var modeInstance = Activator.CreateInstance(modeType);
