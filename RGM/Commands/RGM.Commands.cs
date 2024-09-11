@@ -190,6 +190,25 @@ namespace RGM.Commands
     }
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class ForceModeReset : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            RGM.Instance.PickModes();
+            response = "모드 리셋이 완료되었습니다.";
+            return true;
+        }
+
+        public string Command { get; } = "forcemodereset";
+
+        public string[] Aliases { get; } = { "fmr" };
+
+        public string Description { get; } = "'/fmrㅣ모드 투표를 강제로 리셋합니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Test : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

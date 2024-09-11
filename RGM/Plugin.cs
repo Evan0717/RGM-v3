@@ -26,7 +26,6 @@ namespace RGM
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
 
-        public int RemainingPress = 20;
         public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool AutoNuke = false;
 
@@ -39,6 +38,8 @@ namespace RGM
 
         public void PickModes()
         {
+            ModeVote.Clear();
+
             for (int i = 1; i < 4; i++)
             {
                 var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
@@ -132,6 +133,8 @@ namespace RGM
 
         public async void OnRoundStarted()
         {
+            Server.ExecuteCommand("/mp unload RGMLobby");
+            
             foreach (var player in Player.List)
             {
                 Server.ExecuteCommand($"/speak {player.Id} disable");
@@ -267,7 +270,7 @@ namespace RGM
 
                 while (!Round.IsStarted)
                 {
-                    if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 2f, (LayerMask)1))
+                    if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 5f, (LayerMask)1))
                     {
                         string SelectedMode;
                         string ModeColor;
@@ -302,8 +305,8 @@ namespace RGM
                         }
                         else
                         {
-                            SelectedMode = "<i>[ 서버 설명 (TIP) ]</i>";
-                            ModeColor = "FFFFFF";
+                            SelectedMode = "<i>서버 설명 (TIP)</i>";
+                            ModeColor = "ffffff";
                             ModeDescription = "원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
                         }
 
@@ -311,10 +314,10 @@ namespace RGM
                             .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
                             .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
                             .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                            .Replace("{ModeName}", $"{SelectedMode}").Replace("{ModeColor}", $"{SelectedMode}").Replace("{ModeDescription}", $"{ModeDescription}").Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}"), 1.2f);
-
-                        await Task.Delay(500);
+                            .Replace("{ModeName}", $"{SelectedMode}").Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}").Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}"), 1.2f);
                     }
+
+                    await Task.Delay(500);
                 }
             }
         }
@@ -404,6 +407,7 @@ namespace RGM
 
         public IEnumerator<float> GameStartButton()
         {
+            int RemainingPress = 20;
             bool ButtonPressed = false;
             Transform redObject = null;
 
@@ -452,6 +456,7 @@ namespace RGM
 
         public IEnumerator<float> ModeResetButton()
         {
+            int RemainingPress = 20;
             bool ButtonPressed = false;
             Transform redObject = null;
 
@@ -476,7 +481,7 @@ namespace RGM
 
                             RemainingPress -= 1;
 
-                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.05f, redObject.transform.position.z);
+                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
                         }
                     }
                 }
@@ -487,7 +492,7 @@ namespace RGM
                     {
                         RemainingPress += 1;
 
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.05f, redObject.transform.position.z);
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
                     }
                 }
 
