@@ -23,7 +23,6 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Died += OnDied;
-            Exiled.Events.Handlers.Player.Shooting += OnShooting;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -51,12 +50,9 @@ namespace RGM.Modes
 
                 if (ev.Player.Role is FpcRole fpc)
                     fpc.IsInvisible = true;
-            }
-        }
 
-        public void OnShooting(Exiled.Events.EventArgs.Player.ShootingEventArgs ev)
-        {
-            ev.Player.DisableEffect(Exiled.API.Enums.EffectType.Invisible);
+                ev.Player.GetEffect(Exiled.API.Enums.EffectType.Ghostly).Intensity += 1;
+            }
         }
     }
 }

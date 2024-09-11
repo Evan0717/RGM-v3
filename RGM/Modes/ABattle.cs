@@ -60,7 +60,8 @@ namespace RGM.Modes
             {"[희귀] 순간이동", "지급된 동전을 튕기면 랜덤한 유저의 위치로 순간이동합니다."},
             {"[희귀] 봄버맨", "랜덤한 유저의 위치에 고폭 수류탄을 투척합니다."},
             {"[희귀] 갈고리", "지급된 동전을 튕기면 랜덤한 1인을 끌어옵니다."},
-            {"[희귀] 잠수", "스태미나가 줄어들지 않습니다."}
+            {"[희귀] 잠수", "스태미나가 줄어들지 않습니다."},
+            {"[희귀] 고스트룰", "문을 통과할 수 있습니다."}
         };
         public Dictionary<string, string> EpicAbilities = new Dictionary<string, string>()
         {
@@ -83,7 +84,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> MythicAbilities = new Dictionary<string, string>()
         {
-            {"[신화] 해킹", "시설 핵을 즉시 터트립니다."},
+            // {"[신화] 해킹", "시설 핵을 즉시 터트립니다."},
             {"[신화] 로켓 런처", "상대방을 한방에 보내버릴 수 있습니다."},
             {"[신화] 스피릿", "2초마다 영혼 상태가 됩니다."}
         };
@@ -182,7 +183,7 @@ namespace RGM.Modes
                 abilityGrade = "[희귀]";
             else if (grade <= 990)
                 abilityGrade = "[영웅]";
-            else if (grade <= 998)
+            else if (grade <= 999)
                 abilityGrade = "[전설]";
             else
                 abilityGrade = "[신화]";
@@ -284,6 +285,7 @@ namespace RGM.Modes
                         player.CurrentItem = gc;
                     break;
                 case "잠수": player.IsUsingStamina = false; break;
+                case "고스트룰": player.GetEffect(Exiled.API.Enums.EffectType.Ghostly).Intensity += 1; break;
                 case "테러리스트의 유품": player.TryAddCandy(CandyKindID.Pink); break;
                 case "랜덤상자":
                     int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 44, 45, 47, 48, 49, 50, 51, 52, 53 });
