@@ -62,7 +62,7 @@ namespace RGM.Modes
 
         public async void OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)
         {
-            if (ev.Player.IsHuman)
+            if (ev.Player.IsHuman && !ev.Player.IsCuffed)
             {
                 if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 2f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                     hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
