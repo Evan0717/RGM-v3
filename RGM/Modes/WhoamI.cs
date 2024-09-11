@@ -32,7 +32,8 @@ namespace RGM.Modes
                 {
                     RoleTypeId.Filmmaker,
                     RoleTypeId.Spectator,
-                    RoleTypeId.Overwatch
+                    RoleTypeId.Overwatch,
+                    RoleTypeId.Scp079
                 };
 
                 List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>().Where(role => !BlackList.Contains(role)).ToList();
