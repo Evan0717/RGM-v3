@@ -10,19 +10,19 @@ using MEC;
 using Mirror;
 using UnityEngine;
 
-namespace RGM.Modes
+namespace GPOffice.Modes
 {
     class SoulMate
     {
         public static SoulMate Instance;
 
         private Dictionary<Player, Player> soulMates;
-        private List<Player> waitingPlayers;
 
         public void OnEnabled()
         {
             Timing.RunCoroutine(OnModeStarted());
 
+            Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.ChangingItem += OnChaningItem;
         }
@@ -31,8 +31,32 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(10f);
 
-            Timing.RunCoroutine(SoulMateMatching());
-            Timing.RunCoroutine(CurrentItemAsync());
+            soulMates = new Dictionary<Player, Player>();
+
+            List<Player> players = Player.List.ToList();
+
+            players.ShuffleList();
+
+            for (int i = 0; i < players.Count; i += 2)
+            {
+                if (i + 1 < players.Count)
+                {
+                    soulMates.Add(players[i], players[i + 1]);
+                    soulMates.Add(players[i + 1], players[i]);
+
+                    for (int n = i; n < i + 2; n++)
+                        players[n].ShowHint($"당신의 단짝이 존재하나 누군지 모릅니다..", 5);
+                }
+                else
+                {
+                    soulMates.Add(players[i], null);
+
+                    players[i].ShowHint($"당신은 <color=#BFFF00>외톨이</color>입니다.\n<color=red>분노</color>로 인해 체력이 2배 상승합니다.", 5);
+                    players[i].MaxHealth = players[i].MaxHealth * 2;
+                    players[i].Health = players[i].MaxHealth;
+                    players[i].Group = new UserGroup { BadgeText = "외톨이", BadgeColor = "lime" };
+                }
+            }
 
             yield return Timing.WaitForSeconds(5f);
 
@@ -57,88 +81,18 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> CurrentItemAsync()
+        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            Dictionary<Player, Item> CurrentItem = new Dictionary<Player, Item>();
-
-            while (true)
+            if (soulMates.ContainsKey(ev.Player))
             {
-                foreach (var player in Player.List)
+                Player soulMate = soulMates[ev.Player];
+
+                if (soulMate != null && soulMate.IsAlive)
                 {
-                    if (soulMates.ContainsKey(player))
-                    {
-                        Player soulmate = soulMates[player];
-
-                        if (CurrentItem.ContainsKey(player))
-                        {
-                            if (CurrentItem[player] != player.CurrentItem)
-                                soulmate.CurrentItem = player.CurrentItem;
-                        }
-                        else
-                        {
-                            CurrentItem.Add(player, player.CurrentItem);
-                        }
-                    }
+                    soulMate.Kill($"{ev.Player.DisplayNickname}(와)과 {soulMate.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
+                    ev.Player.Kill($"{soulMate.DisplayNickname}(와)과 {ev.Player.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
+                    Server.ExecuteCommand($"/cassie_sl <color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
                 }
-
-                yield return Timing.WaitForSeconds(0.1f);
-            }
-        }
-
-        public IEnumerator<float> SoulMateMatching()
-        {
-            soulMates = new Dictionary<Player, Player>();
-            waitingPlayers = new List<Player>();
-
-            List<Player> players = Player.List.ToList();
-
-            players.ShuffleList();
-
-            for (int i = 0; i < players.Count; i += 2)
-            {
-                if (i + 1 < players.Count)
-                {
-                    soulMates.Add(players[i], players[i + 1]);
-                    soulMates.Add(players[i + 1], players[i]);
-                }
-            }
-
-            yield return Timing.WaitForSeconds(10f);
-
-            while (true)
-            {
-                foreach (var player in soulMates.Keys.ToList())
-                {
-                    if (player.IsDead)
-                    {
-                        Player soulMate = soulMates[player];
-                        soulMates.Remove(player);
-
-                        if (soulMate != null && soulMate.IsAlive)
-                        {
-                            soulMate.Kill($"{player.DisplayNickname}(와)과 {soulMate.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
-                            Server.ExecuteCommand($"/cassie_sl <color=red>{player.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
-                        }
-                    }
-                    else if (player.IsAlive && !soulMates.ContainsKey(player))
-                    {
-                        waitingPlayers.Add(player);
-                    }
-                }
-
-                if (waitingPlayers.Count >= 2)
-                {
-                    Player player1 = waitingPlayers[0];
-                    Player player2 = waitingPlayers[1];
-
-                    soulMates.Add(player1, player2);
-                    soulMates.Add(player2, player1);
-
-                    waitingPlayers.Remove(player1);
-                    waitingPlayers.Remove(player2);
-                }
-
-                yield return Timing.WaitForSeconds(10f);
             }
         }
 
