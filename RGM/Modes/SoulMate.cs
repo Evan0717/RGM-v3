@@ -78,8 +78,6 @@ namespace RGM.Modes
                         {
                             CurrentItem.Add(player, player.CurrentItem);
                         }
-
-                        soulmate.CurrentItem = player.CurrentItem;
                     }
                 }
 

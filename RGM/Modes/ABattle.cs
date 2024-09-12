@@ -34,6 +34,7 @@ namespace RGM.Modes
         public List<ushort> FollowCoinSerials = new List<ushort>();
         public List<ushort> GrapCoinSerials = new List<ushort>();
 
+        public List<Player> insurers = new List<Player>();
         public List<Player> spirits = new List<Player>();
         public List<Player> repairs = new List<Player>();
         public List<Player> magicians = new List<Player>();
@@ -49,7 +50,8 @@ namespace RGM.Modes
             {"[일반] 체력 보충", "75AHP를 받습니다."},
             {"[일반] 랜덤박스", "랜덤한 아이템을 지급받습니다."},
             {"[일반] 위치 추적", "10초 간 랜덤한 1인의 위치를 확인합니다."},
-            {"[일반] 뽑기", "지급된 동전을 튕기면 10% 확률로 새로운 능력을 3개 더 얻습니다."}
+            {"[일반] 뽑기", "지급된 동전을 튕기면 10% 확률로 새로운 능력을 3개 더 얻습니다."},
+            {"[일반] 보험", "사망 판정을 받을 경우 1번 버텨냅니다." }
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
@@ -263,6 +265,7 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = pc;
                     break;
+                case "보험": insurers.Add(player); break;
                 case "강철 껍질": player.GetEffect(Exiled.API.Enums.EffectType.DamageReduction).Intensity += 1; break;
                 case "투명 망토": player.EnableEffect(Exiled.API.Enums.EffectType.Invisible, 1, 25); break;
                 case "순간이동":
@@ -451,6 +454,13 @@ namespace RGM.Modes
         {
             if (PlayerWorkstation.ContainsKey(ev.Player.UserId))
             {
+                if (insurers.Contains(ev.Player))
+                {
+                    insurers.Remove(ev.Player);
+                    ev.IsAllowed = false;
+                    return;
+                }
+
                 PlayerAbilities[ev.Player.UserId].Clear();
                 PlayerWorkstation[ev.Player.UserId].Clear();
                 ev.Player.Scale = new Vector3(1, 1, 1);
