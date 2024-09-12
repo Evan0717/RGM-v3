@@ -54,7 +54,7 @@ namespace RGM.Modes
 
             foreach (var item in CDItems)
             {
-                if (UnityEngine.Random.Range(1, 2) == 1)
+                if (UnityEngine.Random.Range(1, 3) == 1)
                     Items.Add(item);
             }
 

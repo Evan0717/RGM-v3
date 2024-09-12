@@ -580,13 +580,14 @@ namespace RGM.Modes
                 {
                     magicians.Remove(ev.Player);
 
-                    ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
                     ev.IsAllowed = false;
 
                     ev.Player.Role.Set(ev.Attacker.Role, Exiled.API.Enums.SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
                     ev.Player.Health = ev.Attacker.Health;
                     foreach (Item Item in ev.Attacker.Items)
                         ev.Player.AddItem(Item);
+
+                    ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
                 }
 
                 if (posions.Contains(ev.Player))
