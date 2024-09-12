@@ -96,11 +96,11 @@ namespace RGM.Commands
                     string text = player.Role.Name;
                     string text2 = string.Concat(new string[]
                     {
-                    $"<size=25><color={player.Role.Color.ToHex()}>",
-                    text,
-                    $"</color> ({player.Nickname}) <b> | </b>",
-                    string.Join(" ", arguments),
-                    "</size>"
+                        $"<size=25><color={player.Role.Color.ToHex()}>",
+                        text,
+                        $"</color> ({player.Nickname}) <b> | </b>",
+                        string.Join(" ", arguments),
+                        "</size>"
                     });
                     foreach (Player ply in Player.List.Where(x => x.IsScp))
                     {
@@ -114,11 +114,11 @@ namespace RGM.Commands
                     string text = player.Role.Name;
                     string text2 = string.Concat(new string[]
                     {
-                    $"<size=25><color={player.Role.Color.ToHex()}>",
-                    text,
-                    $"</color> ({player.Nickname}) <b> | </b>",
-                    string.Join(" ", arguments),
-                    "</size>"
+                        $"<size=25><color={player.Role.Color.ToHex()}>",
+                        text,
+                        $"</color> ({player.Nickname}) <b> | </b>",
+                        string.Join(" ", arguments),
+                        "</size>"
                     });
 
                     foreach (Player ply in Player.List.Where(x => x.IsDead))
@@ -132,11 +132,11 @@ namespace RGM.Commands
                     string text = player.Role.Name;
                     string text2 = string.Concat(new string[]
                     {
-                    $"<size=25><color={player.Role.Color.ToHex()}>",
-                    text,
-                    $"</color> ({player.Nickname}) <b> | </b>",
-                    string.Join(" ", arguments),
-                    "</size>"
+                        $"<size=25><color={player.Role.Color.ToHex()}>",
+                        text,
+                        $"</color> ({player.Nickname}) <b> | </b>",
+                        string.Join(" ", arguments),
+                        "</size>"
                     });
 
                     foreach (Player ply in Player.List)
