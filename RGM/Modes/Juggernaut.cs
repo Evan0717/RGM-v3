@@ -52,7 +52,7 @@ namespace RGM.Modes
 
             juggernaut.Role.Set(PlayerRoles.RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.2f, 1.1f, 1.2f);
-            juggernaut.MaxHealth = 200 * (Player.List.Count() - 1);
+            juggernaut.MaxHealth = 200 * Player.List.Count() + 80 * Player.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);

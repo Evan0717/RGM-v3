@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CustomRendering;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using MEC;
 using Mirror;
@@ -24,11 +25,24 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
+            Exiled.Events.Handlers.Player.Hurt += OnHurt;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
             yield return Timing.WaitForSeconds(1f);
+
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (spirits.Contains(player))
+                        player.EnableEffect(EffectType.Invisible);
+                }
+
+                yield return Timing.WaitForSeconds(1.5f);
+            }
         }
 
         public async void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
@@ -49,10 +63,23 @@ namespace RGM.Modes
 
                 Server.ExecuteCommand($"/fc {ev.Player.Id} Tutorial 1");
 
-                ev.Player.ChangeAppearance(PlayerRoles.RoleTypeId.Spectator);
-
-                ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Ghostly, 1);
+                ev.Player.GetEffect(EffectType.Ghostly).Intensity += 1;
             }
+        }
+
+        public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+        {
+            if (spirits.Contains(ev.Player))
+                ev.Player.DisableEffect(EffectType.Invisible);
+        }
+
+        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        {
+            if (ev.Attacker != null && spirits.Contains(ev.Attacker))
+                ev.Attacker.DisableEffect(EffectType.Invisible);
+
+            if (spirits.Contains(ev.Player))
+                ev.Player.DisableEffect(EffectType.Invisible);
         }
     }
 }

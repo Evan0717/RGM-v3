@@ -24,11 +24,14 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            Exiled.Events.Handlers.Player.Healed += OnHealed;
+            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
+            Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield return Timing.WaitForSeconds(10f);
+            yield return Timing.WaitForSeconds(1f);
 
             soulMates = new Dictionary<Player, Player>();
 
@@ -80,6 +83,36 @@ namespace RGM.Modes
             }
         }
 
+        public IEnumerator<float> CurrentItemAsync()
+        {
+            Dictionary<Player, Item> CurrentItem = new Dictionary<Player, Item>();
+
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (soulMates.ContainsKey(player))
+                    {
+                        Player soulmate = soulMates[player];
+
+                        if (CurrentItem.ContainsKey(player))
+                        {
+                            if (CurrentItem[player] != player.CurrentItem)
+                                soulmate.CurrentItem = player.CurrentItem;
+                        }
+                        else
+                        {
+                            CurrentItem.Add(player, player.CurrentItem);
+                        }
+
+                        soulmate.CurrentItem = player.CurrentItem;
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
             if (soulMates.ContainsKey(ev.Player))
@@ -104,6 +137,45 @@ namespace RGM.Modes
                 if (soulMate != null && soulMate.IsAlive)
                 {
                     soulMate.Health = ev.Player.Health;
+                }
+            }
+        }
+
+        public void OnHealed(Exiled.Events.EventArgs.Player.HealedEventArgs ev)
+        {
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                if (soulMate != null && soulMate.IsAlive)
+                {
+                    soulMate.Health = ev.Player.Health;
+                }
+            }
+        }
+
+        public void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
+        {
+            if (!ev.Item.IsAmmo && soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                if (soulMate != null && soulMate.IsAlive && !soulMate.Items.Contains(ev.Item))
+                {
+                    soulMate.AddItem(ev.Item);
+                }
+            }
+        }
+
+        public void OnItemRemoved(Exiled.Events.EventArgs.Player.ItemRemovedEventArgs ev)
+        {
+            if (!ev.Item.IsAmmo && soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                if (soulMate != null && soulMate.IsAlive && soulMate.Items.Contains(ev.Item))
+                {
+                    soulMate.RemoveItem(ev.Item);
                 }
             }
         }

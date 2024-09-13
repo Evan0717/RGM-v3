@@ -170,7 +170,7 @@ namespace RGM
             foreach (var player in Player.List)
             {
                 player.ClearPlayerBroadcasts();
-                player.AddBroadcast(10, Config.StartModeDescription
+                player.AddBroadcast(10, Notions.StartModeDescription
                 .Replace("{ModeColor}", ModeColor)
                 .Replace("{CurrentMode}", CurrentMode)
                 .Replace("{ModeDescription}", ModeDescription)
@@ -243,7 +243,7 @@ namespace RGM
 
             if (Round.IsStarted)
             {
-                ev.Player.AddBroadcast(10, Config.LateJoinModeDescription
+                ev.Player.AddBroadcast(10, Notions.LateJoinModeDescription
                     .Replace("{ModeColor}", ModeList[CurrentMode][0])
                     .Replace("{CurrentMode}", CurrentMode)
                     );
@@ -274,7 +274,7 @@ namespace RGM
                 ev.Player.Role.Set(Humans[UnityEngine.Random.Range(0, Humans.Count())]);
                 ev.Player.ClearInventory();
                 ev.Player.Position = new Vector3(47.103f, 1007.963f, -6.374592f);
-                MultiBroadcast.API.MultiBroadcast.AddPlayerBroadcast(ev.Player, 10, Config.WelcomeMessage);
+                MultiBroadcast.API.MultiBroadcast.AddPlayerBroadcast(ev.Player, 10, Notions.WelcomeMessage);
 
                 string iv(int num)
                 {
@@ -323,12 +323,20 @@ namespace RGM
                             ModeDescription = "원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
                         }
 
-                        ev.Player.ShowHint(Config.LobbyMessage
+                        string IdeaBy()
+                        {
+                            if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode][4] == "")
+                                return "";
+                            else
+                                return $" <size=20><color=white>Idea by {ModeList[SelectedMode][4]}</color></size>";
+                        }
+
+                        ev.Player.ShowHint(Notions.LobbyMessage
                             .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
                             .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
                             .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                            .Replace("{ModeName}", $"{SelectedMode}{(ModeList[SelectedMode][4] == "" ? "" : $" <size=20><b>Idea by <i>{ModeList[SelectedMode][4]}</i></size></size>")}").Replace("{ModeColor}", $"{ModeColor}")
-                            .Replace("{ModeDescription}", $"{ModeDescription}").Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}"), 1.2f);
+                            .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}").Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
+                            .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}"), 1.2f);
                     }
 
                     await Task.Delay(500);

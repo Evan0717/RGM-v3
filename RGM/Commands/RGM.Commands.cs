@@ -220,24 +220,24 @@ namespace RGM.Commands
     }
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class Test : ICommand
+    public class Invisible : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
+            Player player = Player.Get(arguments.At(0));
 
-            player.ChangeAppearance(PlayerRoles.RoleTypeId.Spectator);
+            player.ChangeAppearance(PlayerRoles.RoleTypeId.None, true);
 
-            response = "테스트 성공입니다. 제대로 작동하네요.\nHello, World!";
+            response = "Invisible Complete!";
 
             return true;
         }
 
-        public string Command { get; } = "test";
+        public string Command { get; } = "invisble";
 
-        public string[] Aliases { get; } = null;
+        public string[] Aliases { get; } = { "ivb" };
 
-        public string Description { get; } = "테스트용 명령어";
+        public string Description { get; } = "특정 유저를 투명화 상태로 만듭니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

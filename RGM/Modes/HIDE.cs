@@ -14,6 +14,7 @@ using Mirror;
 using MultiBroadcast;
 using PlayerRoles;
 using UnityEngine;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -37,8 +38,10 @@ namespace RGM.Modes
                 );
 
             Timing.RunCoroutine(OnModeStarted());
+            Timing.RunCoroutine(Invisible());
 
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
         }
 
@@ -78,8 +81,6 @@ namespace RGM.Modes
                     monster.Health = health;
                     monster.IsUsingStamina = false;
 
-                    monster.ChangeAppearance(RoleTypeId.Spectator);
-
                     foreach (var player in Player.List)
                     {
                         if (player != monster)
@@ -90,6 +91,8 @@ namespace RGM.Modes
                                 player.AddItem(ItemType.Ammo556x45);
                         }
                     }
+
+
                 });
             }
             catch (Exception e)
@@ -108,13 +111,36 @@ namespace RGM.Modes
             }
         }
 
+        public IEnumerator<float> Invisible()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (player == monster)
+                        player.EnableEffect(EffectType.Invisible);
+                }
+
+                yield return Timing.WaitForSeconds(2f);
+            }
+        }
+
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Player == monster || ev.Attacker == monster)
                 monster.HumeShield = 0;
 
-            if (ev.Attacker.IsScp && ev.DamageHandler.Type != Exiled.API.Enums.DamageType.Strangled)
+            if (ev.Attacker.IsScp && ev.DamageHandler.Type != DamageType.Strangled)
                 ev.DamageHandler.Damage += 15;
+        }
+
+        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        {
+            if (ev.Attacker != null && ev.Attacker == monster)
+                ev.Attacker.DisableEffect(EffectType.Invisible);
+
+            if (ev.Player == monster)
+                ev.Player.DisableEffect(EffectType.Invisible);
         }
 
         public async void OnJumping(Exiled.Events.EventArgs.Player.JumpingEventArgs ev)
