@@ -12,9 +12,9 @@ using InventorySystem.Items.Usables.Scp244.Hypothermia;
 
 namespace RGM.Modes
 {
-    public class IceAge
+    public class Siberia
     {
-        public static IceAge Instance;
+        public static Siberia Instance;
 
         public void OnEnabled()
         {
@@ -31,7 +31,7 @@ namespace RGM.Modes
                 {
                     foreach (var p2 in Player.List)
                     {
-                        if (p1 != p2 && Vector3.Distance(p1.Position, p2.Position) < 7.5f)
+                        if (p1 != p2 && Vector3.Distance(p1.Position, p2.Position) < 3f)
                         {
                             if (!PassPlayers.Contains(p1))
                             {
@@ -44,7 +44,7 @@ namespace RGM.Modes
 
                 foreach (var player in Player.List.Where(x => !PassPlayers.Contains(x)))
                 {
-                    player.EnableEffect(Exiled.API.Enums.EffectType.Hypothermia, 40, 1.5f);
+                    player.EnableEffect(Exiled.API.Enums.EffectType.Hypothermia, 255, 1.5f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);

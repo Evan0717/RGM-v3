@@ -77,7 +77,7 @@ namespace RGM
 
             WebhookURL = Config.WebhookURL;
             BotAPIServer = Config.BotAPIServer;
-            ModeList = Config.Modes;
+            ModeList = ModeManager.Modes;
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
