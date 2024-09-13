@@ -92,6 +92,7 @@ namespace RGM
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
 
             Exiled.Events.Handlers.Scp244.OpeningScp244 += OnOpeningScp244;
+            Exiled.Events.Handlers.Scp244.UsingScp244 += OnUsingScp244;
 
             Timing.RunCoroutine(IsFallDown());
             Timing.RunCoroutine(ChattingCooldown());
@@ -115,6 +116,7 @@ namespace RGM
             Exiled.Events.Handlers.Scp330.InteractingScp330 -= OnInteractingScp330;
 
             Exiled.Events.Handlers.Scp244.OpeningScp244 -= OnOpeningScp244;
+            Exiled.Events.Handlers.Scp244.UsingScp244 -= OnUsingScp244;
 
             base.OnDisabled();
             Instance = null;
@@ -373,7 +375,7 @@ namespace RGM
                     if (StartupRandom == 2) // 시작 NTF
                     {
                         if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
-                            ev.Player.Role.Set(RoleTypeId.NtfSpecialist);
+                            ev.Player.Role.Set(RoleTypeId.NtfPrivate);
                     }
 
                     int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
@@ -416,7 +418,16 @@ namespace RGM
         {
             await Task.Delay(60 * 1000);
 
+            ev.Pickup.Health = 0;
             ev.Pickup.Destroy();
+        }
+
+        public async void OnUsingScp244(Exiled.Events.EventArgs.Scp244.UsingScp244EventArgs ev)
+        {
+            await Task.Delay(60 * 1000);
+
+            ev.Scp244.Health = 0;
+            ev.Scp244.Destroy();
         }
 
         public IEnumerator<float> GameStartButton()

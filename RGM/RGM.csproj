@@ -180,6 +180,7 @@
     <Compile Include="Modes\InfiniteAmmo.cs" />
     <Compile Include="Modes\Jailbird.cs" />
     <Compile Include="Modes\JohnWick.cs" />
+    <Compile Include="Modes\Juggernaut.cs" />
     <Compile Include="Modes\KoreanSpeed.cs" />
     <Compile Include="Modes\Leader.cs" />
     <Compile Include="Modes\MiniGames.cs" />
