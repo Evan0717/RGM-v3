@@ -11,6 +11,7 @@ using UnityEngine;
 using MapEditorReborn.API.Features.Objects;
 using MultiBroadcast.API;
 using Exiled.API.Enums;
+using Exiled.API.Features.Roles;
 
 namespace RGM
 {
@@ -357,9 +358,9 @@ namespace RGM
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             ev.Player.Scale = new Vector3(1, 1, 1);
-            ev.Player.EnableEffect(Exiled.API.Enums.EffectType.FogControl);
+            ev.Player.EnableEffect(EffectType.FogControl);
 
-            if (ev.Reason == Exiled.API.Enums.SpawnReason.RoundStart)
+            if (ev.Reason == SpawnReason.RoundStart)
             {
                 if (ev.Player.IsScp)
                 {
@@ -391,6 +392,12 @@ namespace RGM
                         ev.Player.Scale = new Vector3(-1, -1, -1);
                     }
                 }
+            }
+            
+            if (ev.Player.Role.Type == RoleTypeId.Scp079)
+            {
+                ev.Player.MaxHealth = 12050;
+                ev.Player.Health = ev.Player.MaxHealth;
             }
         }
 

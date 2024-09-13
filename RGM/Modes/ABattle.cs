@@ -300,8 +300,13 @@ namespace RGM.Modes
 
             switch (aT)
             {
-                case "운동": player.MaxHealth = player.MaxHealth + player.MaxHealth * (25/100); player.Health = player.MaxHealth; break;
-                case "경공": player.GetEffect(Exiled.API.Enums.EffectType.MovementBoost).Intensity += 10; break;
+                case "운동":
+                    float maxHealth = player.MaxHealth;
+                    float healthIncrease = maxHealth * 0.25f;
+                    player.MaxHealth += healthIncrease;
+                    player.Health += healthIncrease;
+                    break;
+                case "경공": player.GetEffect(EffectType.MovementBoost).Intensity += 10; break;
                 case "진화": player.Scale = new Vector3(player.Scale.x - 0.12f, player.Scale.y - 0.12f, player.Scale.z - 0.12f); break;
                 case "체력 보충": player.TryAddCandy(CandyKindID.Blue); break;
                 case "랜덤박스":
@@ -397,9 +402,9 @@ namespace RGM.Modes
                 case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
                 case "극독": posions.Add(player); break;
                 case "구사일생": ability941s.Add(player); break;
-                case "스피드왜건": player.GetEffect(Exiled.API.Enums.EffectType.MovementBoost).Intensity += 100; break;
+                case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
                 case "모드 설치":
-                    string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.ToList());
+                    string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.Where(x => RGM.Instance.ModeList[x][3] != "private").ToList());
                     string mod1 = Mode1.ToString();
 
                     var modeType = Type.GetType($"RGM.Modes.{RGM.Instance.ModeList[Mode1][2]}");
@@ -413,7 +418,7 @@ namespace RGM.Modes
                     Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 [{mod1}] 모드를 설치했습니다.");
                     break;
                 case "뱀의 손 무전기":
-                    player.Role.Set(PlayerRoles.RoleTypeId.Tutorial, Exiled.API.Enums.SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
+                    player.Role.Set(PlayerRoles.RoleTypeId.Tutorial, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
 
                     List<Player> SnakeHands = Player.List.Where(x => x.IsDead).ToList();
 

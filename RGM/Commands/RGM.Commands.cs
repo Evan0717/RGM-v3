@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MultiBroadcast.API;
 using UnityEngine;
@@ -223,6 +224,10 @@ namespace RGM.Commands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            Player player = Player.Get(sender);
+
+            player.ChangeAppearance(PlayerRoles.RoleTypeId.Spectator);
+
             response = "테스트 성공입니다. 제대로 작동하네요.\nHello, World!";
 
             return true;

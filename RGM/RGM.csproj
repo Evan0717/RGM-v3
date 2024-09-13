@@ -177,6 +177,7 @@
     <Compile Include="Modes\Giveaway.cs" />
     <Compile Include="Modes\HIDE.cs" />
     <Compile Include="Modes\HotPotato.cs" />
+    <Compile Include="Modes\IceAge.cs" />
     <Compile Include="Modes\InfiniteAmmo.cs" />
     <Compile Include="Modes\Jailbird.cs" />
     <Compile Include="Modes\JohnWick.cs" />
