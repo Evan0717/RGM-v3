@@ -221,7 +221,7 @@ namespace RGM.Modes
                 {
                     if (player.CurrentItem != null && FlashLightSerials.Contains(player.CurrentItem.Serial))
                     {
-                        if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 10f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
+                        if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 15f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                             hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                         {
                             var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
@@ -229,13 +229,13 @@ namespace RGM.Modes
                             if (player != target)
                             {
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                                target.EnableEffect(EffectType.Flashed, 1, 1.6f);
+                                target.EnableEffect(EffectType.Flashed, 1, 0.07f);
                             }
                         }
                     }
                 }
 
-                yield return Timing.WaitForSeconds(2f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
@@ -611,12 +611,12 @@ namespace RGM.Modes
                     ability941s.Remove(ev.Player);
                     ev.IsAllowed = false;
 
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Blinded, 1, 3);
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Invisible, 1, 3);
-                    ev.Player.GetEffect(Exiled.API.Enums.EffectType.MovementBoost).Intensity += 20;
+                    ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
+                    ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
+                    ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 20;
                     ev.Player.IsGodModeEnabled = true;
                     await Task.Delay(3000);
-                    ev.Player.GetEffect(Exiled.API.Enums.EffectType.MovementBoost).Intensity -= 20;
+                    ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
                     ev.Player.IsGodModeEnabled = false;
                     return;
                 }
@@ -646,7 +646,7 @@ namespace RGM.Modes
 
                     ev.IsAllowed = false;
 
-                    ev.Player.Role.Set(ev.Attacker.Role, Exiled.API.Enums.SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
+                    ev.Player.Role.Set(ev.Attacker.Role, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
                     ev.Player.Health = ev.Attacker.Health;
                     foreach (Item Item in ev.Attacker.Items)
                         ev.Player.AddItem(Item);
@@ -658,7 +658,7 @@ namespace RGM.Modes
                 {
                     posions.Remove(ev.Player);
 
-                    ev.Attacker.EnableEffect(Exiled.API.Enums.EffectType.CardiacArrest);
+                    ev.Attacker.EnableEffect(EffectType.CardiacArrest);
                 }
             }
         }
@@ -698,7 +698,7 @@ namespace RGM.Modes
             if (PlayerAbilities[ev.Player.UserId].Contains("[영웅] 도박꾼"))
             {
                 if (UnityEngine.Random.Range(0, 100) <= 5)
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.SeveredHands);
+                    ev.Player.EnableEffect(EffectType.SeveredHands);
 
                 else
                 {
@@ -722,7 +722,7 @@ namespace RGM.Modes
                 if (PlayerAbilities[ev.Attacker.UserId].Contains("[희귀] 흡혈귀"))
                     ev.Attacker.AddAhp(20 * (ev.DamageHandler.Damage / 100));
 
-                if (PlayerAbilities[ev.Attacker.UserId].Contains("[신화] 로켓 런처") && ev.Attacker != ev.Player)
+                if (PlayerAbilities[ev.Attacker.UserId].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
                     Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
             }
             catch (Exception ex)
