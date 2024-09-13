@@ -96,6 +96,7 @@ namespace RGM
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
 
             Exiled.Events.Handlers.Scp244.UsingScp244 += OnUsingScp244;
+            Exiled.Events.Handlers.Scp244.OpeningScp244 += OnOpeningScp244;
 
             Timing.RunCoroutine(IsFallDown());
             Timing.RunCoroutine(ChattingCooldown());
@@ -120,6 +121,7 @@ namespace RGM
             Exiled.Events.Handlers.Scp330.InteractingScp330 -= OnInteractingScp330;
 
             Exiled.Events.Handlers.Scp244.UsingScp244 -= OnUsingScp244;
+            Exiled.Events.Handlers.Scp244.OpeningScp244 -= OnOpeningScp244;
 
             base.OnDisabled();
             Instance = null;
@@ -325,7 +327,7 @@ namespace RGM
                             .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
                             .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
                             .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                            .Replace("{ModeName}", $"{SelectedMode}{(ModeList[SelectedMode][4] == null ? "" : $" <size=20>Idea by {ModeList[SelectedMode][4]}</size>")}").Replace("{ModeColor}", $"{ModeColor}")
+                            .Replace("{ModeName}", $"{SelectedMode}{(ModeList[SelectedMode][4] == "" ? "" : $" <size=20><b>Idea by <i>{ModeList[SelectedMode][4]}</i></size></size>")}").Replace("{ModeColor}", $"{ModeColor}")
                             .Replace("{ModeDescription}", $"{ModeDescription}").Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}"), 1.2f);
                     }
 
@@ -434,6 +436,15 @@ namespace RGM
             await Task.Delay(60 * 1000);
 
             ev.Scp244.Health = 0;
+            ev.Scp244.Destroy();
+        }
+
+        public async void OnOpeningScp244(Exiled.Events.EventArgs.Scp244.OpeningScp244EventArgs ev)
+        {
+            await Task.Delay(60 * 1000);
+
+            ev.Pickup.Health = 0;
+            ev.Pickup.Destroy();
         }
 
         public IEnumerator<float> GameStartButton()
