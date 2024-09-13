@@ -10,9 +10,11 @@ using MEC;
 using Mirror;
 using UnityEngine;
 using Exiled.API.Features.Items;
-using System.Runtime.InteropServices;
 using MultiBroadcast;
 using MultiBroadcast.API;
+using CustomPlayerEffects;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
 
 namespace RGM.Modes
 {
@@ -29,16 +31,22 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(AutoWarhead());
 
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
             yield return Timing.WaitForSeconds(10);
+
+            foreach (var player in Player.List)
+            {
+                Spawned(player);
+            }
 
             juggernaut = RGM.GetRandomValue(Player.List.ToList());
 
@@ -47,8 +55,8 @@ namespace RGM.Modes
             juggernaut.MaxHealth = 200 * (Player.List.Count() - 1);
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
-            juggernaut.EnableEffect(Exiled.API.Enums.EffectType.SinkHole);
-            juggernaut.EnableEffect(Exiled.API.Enums.EffectType.DamageReduction, 10);
+            juggernaut.EnableEffect(EffectType.SinkHole);
+            juggernaut.EnableEffect(EffectType.DamageReduction, 10);
             juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25><i>본인을 제외한 모두를 사살하십시오.</i></size>");
             juggernaut.Position = new Vector3(123.8387f, 988.7921f, 25.39412f);
 
@@ -92,6 +100,19 @@ namespace RGM.Modes
             Warhead.Start();
         }
 
+        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        {
+            Spawned(ev.Player);
+        }
+
+        public void Spawned(Player player)
+        {
+            if (player.Role.Type == PlayerRoles.RoleTypeId.Scp3114)
+            {
+                player.Role.Set(PlayerRoles.RoleTypeId.Scp939);
+            }
+        }
+
         public void OnSearchingPickup(Exiled.Events.EventArgs.Player.SearchingPickupEventArgs ev)
         {
             if (ev.Player == juggernaut)
@@ -133,11 +154,11 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
         {
-            if (ev.Player.Role.Type == PlayerRoles.RoleTypeId.Scp3114)
+            if (ev.Effect.GetEffectType() == EffectType.PocketCorroding)
             {
-                ev.Player.Role.Set(PlayerRoles.RoleTypeId.Scp939);
+                ev.IsAllowed = false;
             }
         }
     }

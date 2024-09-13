@@ -170,6 +170,7 @@
     <Compile Include="Modes\Blessing.cs" />
     <Compile Include="Modes\BombParty.cs" />
     <Compile Include="Modes\Collector.cs" />
+    <Compile Include="Modes\Distancing.cs" />
     <Compile Include="Modes\DoubleUp.cs" />
     <Compile Include="Modes\FreeForAll.cs" />
     <Compile Include="Modes\FriendlyFire.cs" />

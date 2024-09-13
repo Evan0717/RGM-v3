@@ -78,8 +78,7 @@ namespace RGM.Modes
                     monster.Health = health;
                     monster.IsUsingStamina = false;
 
-                    if (monster.Role is FpcRole fpc)
-                        fpc.IsInvisible = true;
+                    monster.ChangeAppearance(RoleTypeId.Spectator);
 
                     foreach (var player in Player.List)
                     {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CustomRendering;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using MEC;
@@ -48,10 +49,9 @@ namespace RGM.Modes
 
                 Server.ExecuteCommand($"/fc {ev.Player.Id} Tutorial 1");
 
-                if (ev.Player.Role is FpcRole fpc)
-                    fpc.IsInvisible = true;
+                ev.Player.ChangeAppearance(PlayerRoles.RoleTypeId.Spectator);
 
-                ev.Player.GetEffect(Exiled.API.Enums.EffectType.Ghostly).Intensity += 1;
+                ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Ghostly, 1);
             }
         }
     }
