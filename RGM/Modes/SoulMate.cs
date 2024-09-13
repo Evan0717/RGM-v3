@@ -95,8 +95,10 @@ namespace RGM.Modes
 
                         if (CurrentItem.ContainsKey(player))
                         {
-                            if (CurrentItem[player] != player.CurrentItem)
+                            if (CurrentItem[player] != player.CurrentItem && player.CurrentItem != null)
+                            {
                                 soulmate.CurrentItem = player.CurrentItem;
+                            }
                         }
                         else
                         {
