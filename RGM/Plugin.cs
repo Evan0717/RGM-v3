@@ -23,6 +23,7 @@ namespace RGM
         public static string BotAPIServer;
 
         public string CurrentMode = null;
+        public bool FreezeGameStart = false;
         public Dictionary<string, List<string>> ModeList;
         public Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
@@ -468,7 +469,7 @@ namespace RGM
 
                 if (!pressing)
                 {
-                    if (RemainingPress < 20)
+                    if (!FreezeGameStart && RemainingPress < 20)
                     {
                         RemainingPress += 1;
 
@@ -535,6 +536,12 @@ namespace RGM
 
             PickModes();
             Server.ExecuteCommand($"/cassie_sl <mark=#ffff00aa><color=#000000><color=#ffffff>모드 투표 리스트</color>가 초기화되었습니다.</color></mark>");
+
+            FreezeGameStart = true;
+
+            yield return Timing.WaitForSeconds(5f);
+
+            FreezeGameStart = false;
         }
 
         public IEnumerator<float> IsFallDown()
