@@ -57,10 +57,13 @@ namespace RGM.Modes
             Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
-            foreach (var Door in Door.List)
+            foreach (var Door in Door.List.Where(x => x.Zone == ZoneType.HeavyContainment))
             {
                 if (Door.IsCheckpoint || Door.IsElevator)
                     Door.Lock(1205, DoorLockType.Lockdown079);
+
+                else
+                    Door.IsOpen = true;
             }
 
             yield return Timing.WaitForSeconds(1f);
@@ -75,8 +78,11 @@ namespace RGM.Modes
                     {
                         if (Stage[player] >= GunsList.Count - 1)
                         {
-                            Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None));
-                            Server.ExecuteCommand($"/cassie_sl <b><color=yellow>{player.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!");
+                            foreach (var p in Player.List)
+                            {
+                                p.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                                p.AddBroadcast(20, $"<b><color=yellow>{p.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!");
+                            }
                             Round.IsLocked = false;
                             IsEnd = true;
                         }
@@ -121,7 +127,7 @@ namespace RGM.Modes
         public void PlayerSpawn(Player player)
         {
             Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
-            !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106 }.Contains(x.Room.Type)).ToList());
+            !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList());
 
             player.Role.Set(RoleTypeId.ClassD);
             player.AddItem(GunsList[Stage[player]]);
