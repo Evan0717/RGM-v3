@@ -41,7 +41,7 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            Door SelectedDoor = Door.List.ToList()[UnityEngine.Random.Range(0, Door.List.Count())];
+            Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator).ToList());
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
         }
     }
