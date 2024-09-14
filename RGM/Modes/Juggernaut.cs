@@ -159,6 +159,7 @@ namespace RGM.Modes
                         {
                             ev.IsAllowed = false;
                             ev.Player.Hurt(300, DamageType.Scp);
+                            ev.Attacker.ShowHitMarker(1.5f);
                         }
                     }
                 }

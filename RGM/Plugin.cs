@@ -461,39 +461,42 @@ namespace RGM
             bool ButtonPressed = false;
             Transform redObject = null;
 
-            while (!ButtonPressed && !FreezeGameStart)
+            while (!ButtonPressed)
             {
-                bool pressing = false;
-
-                foreach (var player in Player.List)
+                if (!FreezeGameStart)
                 {
-                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
+                    bool pressing = false;
+
+                    foreach (var player in Player.List)
                     {
-                        if (hit.transform.name == "GameStartRed")
+                        if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
                         {
-                            if (Player.List.Count() > 1)
+                            if (hit.transform.name == "GameStartRed")
                             {
-                                if (RemainingPress <= 0)
-                                    ButtonPressed = true;
+                                if (Player.List.Count() > 1)
+                                {
+                                    if (RemainingPress <= 0)
+                                        ButtonPressed = true;
+                                }
+
+                                redObject = hit.transform;
+                                pressing = true;
+
+                                RemainingPress -= 1;
+
+                                redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
                             }
-
-                            redObject = hit.transform;
-                            pressing = true;
-
-                            RemainingPress -= 1;
-
-                            redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
                         }
                     }
-                }
 
-                if (!pressing)
-                {
-                    if (RemainingPress < 20)
+                    if (!pressing)
                     {
-                        RemainingPress += 1;
+                        if (RemainingPress < 20)
+                        {
+                            RemainingPress += 1;
 
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
+                            redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
+                        }
                     }
                 }
 
