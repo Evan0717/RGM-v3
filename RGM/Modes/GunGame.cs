@@ -28,6 +28,7 @@ namespace RGM.Modes
         public List<ItemType> GunsList = new List<ItemType>()
         { 
             ItemType.Jailbird,
+            ItemType.ParticleDisruptor,
             ItemType.GunFRMG0,
             ItemType.GunLogicer,
             ItemType.GunE11SR,
@@ -78,10 +79,12 @@ namespace RGM.Modes
                     {
                         if (Stage[player] >= GunsList.Count - 1)
                         {
+                            Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+
                             foreach (var p in Player.List)
                             {
                                 p.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                                p.AddBroadcast(20, $"<b><color=yellow>{p.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!");
+                                p.AddBroadcast(20, $"<b><color=yellow>{topPlayer.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!");
                             }
                             Round.IsLocked = false;
                             IsEnd = true;
@@ -129,7 +132,10 @@ namespace RGM.Modes
             Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
             !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList());
 
-            player.Role.Set(RoleTypeId.ClassD);
+            if (player.Role.Type != RoleTypeId.ClassD)
+                player.Role.Set(RoleTypeId.ClassD);
+            player.Health = player.MaxHealth;
+            player.EnableEffect(EffectType.Flashed, 1, 0.1f);
             player.AddItem(GunsList[Stage[player]]);
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
         }
@@ -141,6 +147,8 @@ namespace RGM.Modes
                 Stage[ev.Attacker]++;
                 ev.Attacker.ClearInventory();
                 ev.Attacker.AddItem(GunsList[Stage[ev.Attacker]]);
+                PlayerSpawn(ev.Player);
+                ev.IsAllowed = false;
             }
         }
 
