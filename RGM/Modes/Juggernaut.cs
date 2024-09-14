@@ -158,7 +158,7 @@ namespace RGM.Modes
                         if (Scps.Contains(ev.Attacker.Role.Type))
                         {
                             ev.IsAllowed = false;
-                            ev.Player.Hurt(300, DamageType.Scp);
+                            ev.Player.Hurt(120.5f, DamageType.Scp);
                             ev.Attacker.ShowHitMarker(1.5f);
                         }
                     }
