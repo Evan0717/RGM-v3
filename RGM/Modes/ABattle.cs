@@ -231,7 +231,7 @@ namespace RGM.Modes
                             if (player != target)
                             {
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                                target.EnableEffect(EffectType.Flashed, 1, 0.07f);
+                                target.EnableEffect(EffectType.Flashed, 1, 0.2f);
                             }
                         }
                     }
@@ -590,7 +590,7 @@ namespace RGM.Modes
             {
                 ev.Item.Destroy();
 
-                ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Ensnared, 1, 3);
+                ev.Player.EnableEffect(EffectType.Ensnared, 1, 3);
                 ev.Player.IsGodModeEnabled = true;
 
                 await Task.Delay(3000);
