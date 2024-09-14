@@ -38,7 +38,10 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     if (spirits.Contains(player))
+                    {
                         player.EnableEffect(EffectType.Invisible);
+                        player.EnableEffect(EffectType.Ghostly);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1.5f);
@@ -62,8 +65,6 @@ namespace RGM.Modes
                 spirits.Add(ev.Player);
 
                 Server.ExecuteCommand($"/fc {ev.Player.Id} Tutorial 1");
-
-                ev.Player.GetEffect(EffectType.Ghostly).Intensity += 1;
             }
         }
 
