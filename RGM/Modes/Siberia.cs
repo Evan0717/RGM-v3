@@ -17,11 +17,18 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
+            foreach (var player in Player.List)
+            {
+                Spawned(player);
+            }
+
             while (true)
             {
                 List<Player> PassPlayers = new List<Player>();
@@ -46,6 +53,17 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
+        }
+
+        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        {
+            Spawned(ev.Player);
+        }
+
+        public async void Spawned(Player player)
+        {
+            await Task.Delay(1000);
+            player.EnableEffect(Exiled.API.Enums.EffectType.FogControl, 7);
         }
     }
 }

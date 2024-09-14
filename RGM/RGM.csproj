@@ -106,6 +106,9 @@
     <Reference Include="SCPSLAudioApi">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
     </Reference>
+    <Reference Include="Site02">
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Site02.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -178,8 +181,10 @@
     <Compile Include="Modes\Gamble.cs" />
     <Compile Include="Modes\GGClub.cs" />
     <Compile Include="Modes\Giveaway.cs" />
+    <Compile Include="Modes\GunGame.cs" />
     <Compile Include="Modes\HIDE.cs" />
     <Compile Include="Modes\HotPotato.cs" />
+    <Compile Include="Modes\JumpMap.cs" />
     <Compile Include="Modes\Siberia.cs" />
     <Compile Include="Modes\InfiniteAmmo.cs" />
     <Compile Include="Modes\Jailbird.cs" />
