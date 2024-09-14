@@ -39,7 +39,8 @@ namespace RGM.Modes
             ItemType.GunRevolver,
             ItemType.GunCOM18,
             ItemType.GunCOM15,
-            ItemType.MicroHID
+            ItemType.MicroHID,
+            ItemType.Lantern
         };
 
         public void OnEnabled()
@@ -64,6 +65,8 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1f);
 
+            Server.ExecuteCommand("/atkill all");
+
             while (!IsEnd)
             {
                 foreach (var player in Player.List)
@@ -72,6 +75,7 @@ namespace RGM.Modes
                     {
                         if (Stage[player] >= GunsList.Count - 1)
                         {
+                            Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None));
                             Server.ExecuteCommand($"/cassie_sl <b><color=yellow>{player.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!");
                             Round.IsLocked = false;
                             IsEnd = true;
@@ -105,8 +109,8 @@ namespace RGM.Modes
                     {
                         player.ClearPlayerBroadcasts();
                         Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
-                        player.AddBroadcast(2, $"<size=25><b><color=yellow>선두주자(1st) 플레이어</color> - {topPlayer.Nickname}({Stage[topPlayer]})</b></size>\n" +
-                            $"<size=20><i>우승까지 <color=red>{GunsList.Count - Stage[topPlayer] - 1}</color>킬 남았습니다.</i></size>");
+                        player.AddBroadcast(2, $"<size=25><b><color=yellow>선두주자(1st) 플레이어</color> - {topPlayer.Nickname}({Stage[topPlayer]}점)</b></size>\n" +
+                            $"<size=20><i>우승까지 <color=red>{GunsList.Count - Stage[player] - 1}</color>킬({Stage[player]}점) 남았습니다.</i></size>");
                     }
                 }
 
@@ -116,7 +120,8 @@ namespace RGM.Modes
 
         public void PlayerSpawn(Player player)
         {
-            Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment).ToList());
+            Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
+            !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106 }.Contains(x.Room.Type)).ToList());
 
             player.Role.Set(RoleTypeId.ClassD);
             player.AddItem(GunsList[Stage[player]]);
