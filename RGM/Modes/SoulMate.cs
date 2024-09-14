@@ -25,8 +25,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.Healed += OnHealed;
-            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
-            Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
         }
 
         public IEnumerator<float> OnModeStarted()
