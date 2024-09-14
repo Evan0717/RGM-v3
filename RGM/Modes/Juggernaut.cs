@@ -23,7 +23,9 @@ namespace RGM.Modes
     class Juggernaut
     {
         public static Juggernaut Instance;
+
         public Player juggernaut;
+        public List<Player> ScpAttackCooldown = new List<Player>();
 
         public void OnEnabled()
         {
@@ -134,7 +136,7 @@ namespace RGM.Modes
                 ev.Player.CurrentItem.As<Firearm>().Ammo = 250;
         }
 
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        public async void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Attacker != null)
             {
@@ -155,11 +157,15 @@ namespace RGM.Modes
                             RoleTypeId.Scp939
                         };
 
-                        if (Scps.Contains(ev.Attacker.Role.Type))
+                        if (Scps.Contains(ev.Attacker.Role.Type) && !ScpAttackCooldown.Contains(ev.Attacker))
                         {
                             ev.IsAllowed = false;
                             ev.Player.Hurt(120.5f, DamageType.Scp);
                             ev.Attacker.ShowHitMarker(1.5f);
+
+                            ScpAttackCooldown.Add(ev.Attacker);
+                            await Task.Delay(1500);
+                            ScpAttackCooldown.Remove(ev.Attacker);
                         }
                     }
                 }

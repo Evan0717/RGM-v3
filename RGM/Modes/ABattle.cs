@@ -122,6 +122,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.InteractingLocker += InteractingLocker;
             Exiled.Events.Handlers.Player.DroppedItem += DroppedItem;
             Exiled.Events.Handlers.Player.Hurting += Hurting;
+            Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.ChangingSpectatedPlayer += ChangingSpectatedPlayer;
         }
 
@@ -729,6 +731,21 @@ namespace RGM.Modes
             {
 
             }
+        }
+
+        public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+        {
+            if (spirits.Contains(ev.Player))
+                ev.Player.DisableEffect(EffectType.Invisible);
+        }
+
+        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        {
+            if (ev.Attacker != null && spirits.Contains(ev.Attacker))
+                ev.Attacker.DisableEffect(EffectType.Invisible);
+
+            if (spirits.Contains(ev.Player))
+                ev.Player.DisableEffect(EffectType.Invisible);
         }
 
         public void ChangingSpectatedPlayer(Exiled.Events.EventArgs.Player.ChangingSpectatedPlayerEventArgs ev)
