@@ -249,13 +249,13 @@ namespace RGM.Modes
             int grade = UnityEngine.Random.Range(1, 1001);
             string abilityGrade;
 
-            if (grade <= 600)
+            if (grade <= 650)
                 abilityGrade = "[일반]";
-            else if (grade <= 900)
+            else if (grade <= 920)
                 abilityGrade = "[희귀]";
-            else if (grade <= 990)
+            else if (grade <= 995)
                 abilityGrade = "[영웅]";
-            else if (grade <= 999)
+            else if (grade <= 1000)
                 abilityGrade = "[전설]";
             else
                 abilityGrade = "[신화]";
