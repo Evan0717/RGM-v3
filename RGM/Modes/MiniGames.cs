@@ -18,7 +18,7 @@ namespace RGM.Modes
 
         public int RoundCount = 0;
         public List<string> Games = new List<string>() { "airstrike", "dm", "escape", "battle", "versus", "cs", "glass", "line", "dodge", "fall",
-            "football", "gungame", "knives", "puzzle", "race", "light", "spleef", "tag", "tdm", "lava", "zombie3", "zombie2", "zombie" };
+            "football", "gungame", "knives", "puzzle", "race", "light", "spleef", "tag", "tdm", "lava", "zombie2", "zombie" };
 
         public void OnEnabled()
         {
