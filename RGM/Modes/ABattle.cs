@@ -310,7 +310,10 @@ namespace RGM.Modes
                     break;
                 case "경공": player.GetEffect(EffectType.MovementBoost).Intensity += 10; break;
                 case "진화": player.Scale = new Vector3(player.Scale.x - 0.12f, player.Scale.y - 0.12f, player.Scale.z - 0.12f); break;
-                case "체력 보충": player.TryAddCandy(CandyKindID.Blue); break;
+                case "체력 보충": 
+                    player.TryAddCandy(CandyKindID.Blue);
+                    Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                    break;
                 case "랜덤박스":
                     int rn = UnityEngine.Random.Range(0, 55);
 
@@ -341,7 +344,7 @@ namespace RGM.Modes
                         player.CurrentItem = pc;
                     break;
                 case "보험": insurers.Add(player); break;
-                case "주먹다짐": fighters.Add(player); break;
+                case "회축": fighters.Add(player); break;
                 case "보급":
                     List<string> Ammos = new List<string> { "19", "22", "27", "28", "29" };
 
