@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using MEC;
 using Mirror;
 using UnityEngine;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -49,6 +50,7 @@ namespace RGM.Modes
             foreach (var player in Player.List)
             {
                 player.Role.Set(PlayerRoles.RoleTypeId.Tutorial);
+                player.EnableEffect(EffectType.FogControl);
                 Timing.CallDelayed(0.01f, () =>
                 {
                     player.Position = RandomPosition();
