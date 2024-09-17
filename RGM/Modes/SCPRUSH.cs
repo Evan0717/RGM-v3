@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using PlayerRoles;
+using Exiled.API.Features.Roles;
 
 namespace RGM.Modes
 {
@@ -36,6 +37,9 @@ namespace RGM.Modes
             foreach (var player in Player.List.Where(x => x.IsScp))
             {
                 player.Role.Set(RandomScpRole);
+
+                if (player.Role is Scp079Role scp079)
+                    scp079.Level = 4;
             }
 
             yield break;
