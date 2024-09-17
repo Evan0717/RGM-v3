@@ -40,6 +40,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
         }
 
@@ -173,6 +174,15 @@ namespace RGM.Modes
                 {
                     ev.IsAllowed = false;
                 }
+            }
+        }
+
+        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        {
+            if (ev.Attacker != null)
+            {
+                if (ev.Player == juggernaut && ev.DamageHandler.Damage == -1)
+                    ev.DamageHandler.Damage = 120.5f;
             }
         }
 
