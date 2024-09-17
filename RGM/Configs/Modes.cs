@@ -42,7 +42,7 @@ namespace RGM
             { "로켓 런처", new List<string>() { "FA8258", "무슨 이유로든 피격당하면 승천합니다.", "RocketLauncher", "public", "" } },
             { "SCP 러쉬", new List<string>() { "FE2E2E", "모든 SCP가 한 개체로 통일됩니다.", "SCPRUSH", "public", "" } },
             { "시베리아", new List<string>() { "FAFAFA", "최대한 다른 자들과 붙어 온기를 나눠 가지세요!", "Siberia", "public", "몬키키" } },
-            { "소울메이트", new List<string>() { "FF00FF", "단짝이 죽으면 자신도 죽습니다.", "SoulMate", "public", "" } },
+            { "소울메이트", new List<string>() { "FF00FF", "단짝 친구와 모든 것을 함께하세요!", "SoulMate", "private", "" } },
             { "특수능력", new List<string>() { "2EFEF7", "모두가 특수 능력을 지니고 시작합니다.", "SpecialAbility", "private", "" } },
             { "스피릿", new List<string>() { "CED8F6", "죽으면 영혼 상태에 돌입합니다!", "Spirit", "public", "" } },
             { "스플리프", new List<string>() { "BEF781", "떨어지지 않으려면 계속 움직이세요!", "Spleef", "public", "" } },
