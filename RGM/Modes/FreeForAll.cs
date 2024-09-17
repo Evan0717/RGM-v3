@@ -34,7 +34,6 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawnRagdoll;
         }
 
         public List<ItemType> Items()
@@ -78,6 +77,14 @@ namespace RGM.Modes
                 player.Position = BusterCall.Position;
                 player.Broadcast(5, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
             }
+
+            while (true)
+            {
+                Map.CleanAllItems();
+                Map.CleanAllRagdolls();
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
@@ -111,11 +118,6 @@ namespace RGM.Modes
                 foreach (var item in StartupItems)
                     player.AddItem(item);
             }
-        }
-
-        public void OnSpawnRagdoll(Exiled.Events.EventArgs.Player.SpawningRagdollEventArgs ev)
-        {
-            ev.IsAllowed = false;
         }
     }
 }

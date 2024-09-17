@@ -144,7 +144,7 @@ namespace RGM.Modes
             foreach (var Ammo in AmmosList)
             {
                 for (int i = 1; i < 4; i++)
-                    Server.ExecuteCommand($"/give {ev.Player.Id} {Ammo}");
+                    Server.ExecuteCommand($"/give {player.Id} {Ammo}");
             }
         }
 
