@@ -29,6 +29,7 @@ namespace RGM.Modes
         {
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
+            Server.FriendlyFire = true;
 
             Timing.RunCoroutine(OnModeStarted());
 
@@ -66,12 +67,9 @@ namespace RGM.Modes
 
                         else if (hit.transform.name == "Lava")
                             player.Kill("용암을 좋아한 나머지 뛰어들어갔습니다.");
-
-                        else
-                        {
-                            player.Hurt(12.05f, "떨어지지 않으려면 계속 움직이세요.");
-                        }
                     }
+                    else
+                        player.Hurt(12.05f, "떨어지지 않으려면 계속 움직이세요.");
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
