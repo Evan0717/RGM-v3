@@ -47,7 +47,6 @@ namespace RGM.Modes
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(ScoreBoard());
@@ -136,6 +135,7 @@ namespace RGM.Modes
                 player.Role.Set(RoleTypeId.ClassD);
             player.Health = player.MaxHealth;
             player.EnableEffect(EffectType.Flashed, 1, 0.1f);
+            player.ClearInventory();
             player.AddItem(GunsList[Stage[player]]);
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
         }
@@ -144,22 +144,19 @@ namespace RGM.Modes
         {
             if (Stage.ContainsKey(ev.Player))
             {
+                List<string> AmmosList = new List<string>() { "19", "22", "27", "28", "29" };
+
+                foreach (var Ammo in AmmosList)
+                {
+                    for (int i = 1; i < 4; i++)
+                        Server.ExecuteCommand($"/give {ev.Player.Id} {Ammo}");
+                }
+
                 Stage[ev.Attacker]++;
                 ev.Attacker.ClearInventory();
                 ev.Attacker.AddItem(GunsList[Stage[ev.Attacker]]);
                 PlayerSpawn(ev.Player);
                 ev.IsAllowed = false;
-            }
-        }
-
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
-        {
-            List<string> AmmosList = new List<string>() { "19", "22", "27", "28", "29" };
-
-            foreach (var Ammo in AmmosList)
-            {
-                for (int i=1; i<4; i++)
-                    Server.ExecuteCommand($"/give {ev.Player.Id} {Ammo}");
             }
         }
     }
