@@ -393,7 +393,7 @@ namespace RGM.Modes
                     break;
                 case "럭키비키": PlayerWorkstation[player.UserId].Clear(); break;
                 case "핵 리모컨": Warhead.Start(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 활성화했습니다.</b>"); break;
-                case "수리 기사": Server.ExecuteCommand("/el l all"); player.IsBypassModeEnabled = true; await Task.Delay(15000); Server.ExecuteCommand("/el u all"); break;
+                case "수리 기사": player.IsBypassModeEnabled = true; await Task.Delay(15000); Server.ExecuteCommand("/el u all"); break;
                 case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
                 case "극독": posions.Add(player); break;
                 case "구사일생": ability941s.Add(player); break;

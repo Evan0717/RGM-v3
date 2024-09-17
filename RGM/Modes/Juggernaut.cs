@@ -178,7 +178,7 @@ namespace RGM.Modes
 
         public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
         {
-            if (ev.Effect.GetEffectType() == EffectType.PocketCorroding)
+            if (ev.Player == juggernaut)
                 ev.IsAllowed = false;
         }
     }
