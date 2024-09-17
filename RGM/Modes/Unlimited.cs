@@ -20,6 +20,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.Healing += OnHealing;
 
             Exiled.Events.Handlers.Scp106.Teleporting += OnTeleporting;
             Exiled.Events.Handlers.Scp106.Stalking += OnStalking;
@@ -58,8 +59,13 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            player.MaxHealth = 30000;
             player.IsUsingStamina = false;
+        }
+
+
+        public void OnHealing(Exiled.Events.EventArgs.Player.HealingEventArgs ev)
+        {
+            ev.Player.MaxHealth = ev.Player.Health + ev.Amount;
         }
 
         public async void OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
