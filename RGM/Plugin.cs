@@ -374,7 +374,6 @@ namespace RGM
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             ev.Player.Scale = new Vector3(1, 1, 1);
-            ev.Player.EnableEffect(EffectType.FogControl);
 
             if (ev.Reason == SpawnReason.RoundStart)
             {
