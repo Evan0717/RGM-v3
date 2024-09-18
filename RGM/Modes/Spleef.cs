@@ -69,10 +69,10 @@ namespace RGM.Modes
                             player.Kill("용암을 좋아한 나머지 뛰어들어갔습니다.");
                     }
                     else
-                        player.Hurt(0.1f, "떨어지지 않으려면 계속 움직이세요.");
+                        player.Hurt(10f, "떨어지지 않으려면 계속 움직이세요.");
                 }
 
-                yield return Timing.WaitForSeconds(0.1f);
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
