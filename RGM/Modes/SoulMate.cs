@@ -16,25 +16,20 @@ namespace RGM.Modes
     {
         public static SoulMate Instance;
 
-        private Dictionary<Player, Player> soulMates;
-        private List<Player> waitingPlayers;
+        private Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
+        private List<Player> waitingPlayers = new List<Player>();
 
         public void OnEnabled()
         {
-            Exiled.Events.Handlers.Player.Died += OnDied;
-            Exiled.Events.Handlers.Player.Hurt += OnHurt;
-            Exiled.Events.Handlers.Player.Healed += OnHealed;
-            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
-            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
-            Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
-
             Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(CurrentItemAsync());
+            Timing.RunCoroutine(SoulMateAsync());
             Timing.RunCoroutine(SoulMateMatching());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
+            yield return Timing.WaitForSeconds(1f);
+
             while (true)
             {
                 foreach (var player in Player.List)
@@ -51,172 +46,61 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> SoulMateMatching()
+        public IEnumerator<float> SoulMateAsync()
         {
-            soulMates = new Dictionary<Player, Player>();
-            waitingPlayers = new List<Player>();
-
-            List<Player> players = Player.List.ToList();
-
-            players.ShuffleList();
-
-            for (int i = 0; i < players.Count; i += 2)
-            {
-                if (i + 1 < players.Count)
-                {
-                    soulMates.Add(players[i], players[i + 1]);
-                    soulMates.Add(players[i + 1], players[i]);
-                }
-            }
-
-            yield return Timing.WaitForSeconds(10f);
-
-            while (true)
-            {
-                foreach (var player in soulMates.Keys.ToList())
-                {
-                    if (player.IsDead)
-                    {
-                        Player soulMate = soulMates[player];
-                        soulMates.Remove(player);
-                    }
-                    else if (player.IsAlive && !soulMates.ContainsKey(player))
-                    {
-                        waitingPlayers.Add(player);
-                    }
-                }
-
-                if (waitingPlayers.Count >= 2)
-                {
-                    Player player1 = waitingPlayers[0];
-                    Player player2 = waitingPlayers[1];
-
-                    soulMates.Add(player1, player2);
-                    soulMates.Add(player2, player1);
-
-                    waitingPlayers.Remove(player1);
-                    waitingPlayers.Remove(player2);
-                }
-
-                yield return Timing.WaitForSeconds(10f);
-            }
-        }
-
-        public IEnumerator<float> CurrentItemAsync()
-        {
-            Dictionary<Player, Item> CurrentItem = new Dictionary<Player, Item>();
-
             while (true)
             {
                 foreach (var player in Player.List)
                 {
                     if (soulMates.ContainsKey(player))
                     {
-                        Player soulmate = soulMates[player];
+                        Player soulMate = soulMates[player];
 
-                        if (CurrentItem.ContainsKey(player))
-                        {
-                            if (CurrentItem[player] != player.CurrentItem)
-                            {
-                                foreach (var Item in soulmate.Items)
-                                {
-                                    if (Item.Type == player.CurrentItem.Type)
-                                        soulmate.CurrentItem = Item;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            CurrentItem.Add(player, player.CurrentItem);
-                        }
-
-                        soulmate.CurrentItem = player.CurrentItem;
+                        soulMate.MaxHealth = player.MaxHealth;
+                        soulMate.Health = player.Health;
                     }
                 }
 
-                yield return Timing.WaitForSeconds(0.1f);
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        public IEnumerator<float> SoulMateMatching()
         {
-            if (soulMates.ContainsKey(ev.Player))
+            while (true)
             {
-                Player soulMate = soulMates[ev.Player];
+                List<Player> pl = new List<Player>();
 
-                if (soulMate != null && soulMate.IsAlive)
+                Player.List.CopyTo(pl);
+                pl.ShuffleList();
+
+                foreach (var player in pl)
                 {
-                    soulMate.Kill($"{ev.Player.DisplayNickname}(와)과 {soulMate.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
-                    ev.Player.Kill($"{soulMate.DisplayNickname}(와)과 {ev.Player.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
-                    Server.ExecuteCommand($"/cassie_sl <color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
-                }
-            }
-        }
-
-        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
-        {
-            if (soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                if (soulMate != null && soulMate.IsAlive)
-                {
-                    soulMate.Health = ev.Player.Health;
-                }
-            }
-        }
-
-        public void OnHealed(Exiled.Events.EventArgs.Player.HealedEventArgs ev)
-        {
-            if (soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                if (soulMate != null && soulMate.IsAlive)
-                {
-                    soulMate.Health = ev.Player.Health;
-                }
-            }
-        }
-
-        public async void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
-        {
-            float MaxHealth = ev.Player.MaxHealth;
-            float Health = ev.Player.Health;
-
-            await Task.Delay(500);
-
-            ev.Player.MaxHealth = MaxHealth;
-            ev.Player.Health = Health;
-        }
-
-        public void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
-        {
-            if (!ev.Item.IsAmmo && soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                if (soulMate != null && soulMate.IsAlive)
-                {
-                    soulMate.AddItem(ev.Item.Type);
-                }
-            }
-        }
-
-        public void OnItemRemoved(Exiled.Events.EventArgs.Player.ItemRemovedEventArgs ev)
-        {
-            if (!ev.Item.IsAmmo && soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                if (soulMate != null && soulMate.IsAlive)
-                {
-                    foreach (var Item in soulMate.Items)
+                    if (player.IsAlive)
                     {
-                        if (Item.Type == ev.Item.Type)
-                            soulMate.RemoveItem(Item);
+                        if (!soulMates.ContainsKey(player))
+                            waitingPlayers.Add(player);
+                    }
+                    else
+                    {
+                        if (soulMates.ContainsKey(player))
+                            soulMates.Remove(player);
                     }
                 }
+
+                while (waitingPlayers.Count > 1)
+                {
+                    Player first = waitingPlayers[0];
+                    Player second = waitingPlayers[1];
+
+                    waitingPlayers.Remove(first);
+                    waitingPlayers.Remove(second);
+
+                    soulMates.Add(first, second);
+                    soulMates.Add(second, first);
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
     }
