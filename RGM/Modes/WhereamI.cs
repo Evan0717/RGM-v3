@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using MEC;
 using UnityEngine;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -41,7 +42,14 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator).ToList());
+            Door SelectedDoor = null;
+
+            if (Map.IsLczDecontaminated)
+                SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator && x.Zone != ZoneType.LightContainment).ToList());
+
+            else
+                SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator).ToList());
+
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
         }
     }
