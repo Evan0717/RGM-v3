@@ -98,7 +98,7 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(9 * 60);
 
-            Server.ExecuteCommand("1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+            Server.ExecuteCommand("/cassie_sl 1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
 
             yield return Timing.WaitForSeconds(1 * 60);
 
