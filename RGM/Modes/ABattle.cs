@@ -18,6 +18,7 @@ using MapEditorReborn.API.Features.Objects;
 using MEC;
 using MultiBroadcast;
 using MultiBroadcast.API;
+using PlayerRoles;
 using PluginAPI.Roles;
 using UnityEngine;
 
@@ -603,14 +604,14 @@ namespace RGM.Modes
             {
                 ev.Item.Destroy();
 
-                Player target = RGM.GetRandomValue(Player.List.Where(x => x != ev.Player && x.IsAlive).ToList());
+                Player target = RGM.GetRandomValue(Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList());
                 ev.Player.Position = target.Position;
             }
             else if (GrapCoinSerials.Contains(ev.Item.Serial))
             {
                 ev.Item.Destroy();
 
-                Player target1 = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive && x != ev.Player).ToList());
+                Player target1 = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive && x != ev.Player && x.Role.Type != RoleTypeId.Scp079).ToList());
                 target1.Position = ev.Player.Position;
             }
             if (ClockCoinSerials.Contains(ev.Item.Serial))
