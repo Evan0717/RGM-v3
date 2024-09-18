@@ -21,6 +21,7 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.Healed += OnHealed;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
@@ -102,27 +103,43 @@ namespace RGM.Modes
                     {
                         if (currentItems[player] != player.CurrentItem)
                         {
-                            Player soulMate = soulMates[player];
-
-                            foreach (var Item in soulMate.Items)
+                            Timing.CallDelayed(0.1f, () =>
                             {
-                                if (Item.Type == player.CurrentItem.Type)
+                                Player soulMate = soulMates[player];
+
+                                foreach (var Item in soulMate.Items)
                                 {
-                                    soulMate.CurrentItem = Item;
-                                    break;
+                                    if (Item.Type == player.CurrentItem.Type)
+                                    {
+                                        soulMate.CurrentItem = Item;
+                                        break;
+                                    }
                                 }
-                            }
+                            });
                         }
 
                         currentItems[player] = player.CurrentItem;
                     }
                     else
-                    {
                         currentItems.Add(player, player.CurrentItem);
-                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        {
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                if (soulMate != null && soulMate.IsAlive)
+                {
+                    soulMate.Kill($"{ev.Player.DisplayNickname}(와)과 {soulMate.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
+                    ev.Player.Kill($"{soulMate.DisplayNickname}(와)과 {ev.Player.DisplayNickname}(은)는 영혼의 단짝이였습니다.");
+                    Server.ExecuteCommand($"/cassie_sl <color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
+                }
             }
         }
 
