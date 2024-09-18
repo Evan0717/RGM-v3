@@ -33,12 +33,12 @@ namespace RGM.Modes
 
             while (true)
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 50));
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 51));
 
                 Light = "Red";
                 Player.List.ToList().ForEach(x => x.ShowHint($"<color=red>빨간 불</color>! 움직이지 마세요!", 250));
 
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 5));
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 6));
 
                 Light = "Green";
                 Player.List.ToList().ForEach(x => x.ShowHint($"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
@@ -64,7 +64,7 @@ namespace RGM.Modes
                         PlayerRotation.Add(player, player.Rotation);
                     }
 
-                    yield return Timing.WaitForSeconds(1f);
+                    yield return Timing.WaitForSeconds(0.35f);
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace RGM.Modes
                 while (Light == "Green")
                     yield return Timing.WaitForSeconds(0.1f);
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.5f);
 
                 while (Light == "Red")
                 {
@@ -96,7 +96,7 @@ namespace RGM.Modes
                         }
                     }
 
-                    yield return Timing.WaitForSeconds(1f);
+                    yield return Timing.WaitForSeconds(0.35f);
                 }
             }
         }
