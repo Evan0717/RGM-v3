@@ -107,7 +107,10 @@ namespace RGM.Modes
                             foreach (var Item in soulMate.Items)
                             {
                                 if (Item.Type == player.CurrentItem.Type)
+                                {
                                     soulMate.CurrentItem = Item;
+                                    break;
+                                }
                             }
                         }
 
@@ -164,7 +167,10 @@ namespace RGM.Modes
                 foreach (var Item in soulMate.Items)
                 {
                     if (Item.Type == ev.Item.Type)
+                    {
                         soulMate.RemoveItem(Item);
+                        break;
+                    }
                 }
             }
         }
