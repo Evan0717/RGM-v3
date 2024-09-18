@@ -40,8 +40,10 @@ namespace RGM.Modes
 
         public List<Player> insurers = new List<Player>();
         public List<Player> fighters = new List<Player>();
+        public List<Player> martyrs = new List<Player>();
         public List<Player> repairs = new List<Player>();
         public List<Player> ability941s = new List<Player>();
+        public List<Player> culprits = new List<Player>(); // 최후의 발악
         public List<Player> magicians = new List<Player>();
         public List<Player> posions = new List<Player>();
         public List<Player> spirits = new List<Player>();
@@ -61,7 +63,8 @@ namespace RGM.Modes
             {"[일반] 뽑기", "지급된 동전을 튕기면 10% 확률로 새로운 능력을 3개 더 얻습니다."},
             {"[일반] 보험", "사망 판정을 받을 경우 1번 버텨냅니다." },
             {"[일반] 회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)"},
-            {"[일반] 보급", "탄약이 랜덤하게 지급됩니다."}
+            {"[일반] 보급", "탄약이 랜덤하게 지급됩니다."},
+            {"[일반] 정화", "초록 사탕을 받습니다."}
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
@@ -74,7 +77,9 @@ namespace RGM.Modes
             {"[희귀] 갈고리", "지급된 동전을 튕기면 랜덤한 1인을 끌어옵니다."},
             {"[희귀] 잠수", "스태미나가 줄어들지 않습니다."},
             {"[희귀] 고스트룰", "문을 통과할 수 있습니다."},
-            {"[희귀] 회중시계", "지급된 동전을 튕기면 3초간 움직일 수 없는 대신에 무적 상태가 됩니다."}
+            {"[희귀] 회중시계", "지급된 동전을 튕기면 3초간 움직일 수 없는 대신에 무적 상태가 됩니다."},
+            {"[희귀] 스테로이드", "25초 간 이동 속도가 많이 증가합니다."},
+            {"[희귀] 순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다."}
         };
         public Dictionary<string, string> EpicAbilities = new Dictionary<string, string>()
         {
@@ -86,7 +91,8 @@ namespace RGM.Modes
             {"[영웅] 슈퍼 스타", "자신의 마이크가 모두에게 공유됩니다."},
             {"[영웅] 럭키비키", "이전에 방문했던 워크스테이션에서 다시 한번 더 능력을 획득할 수 있습니다."},
             {"[영웅] 극독", "누군가에게 죽으면 죽인 자에게 심장 마비 효과를 겁니다."},
-            {"[영웅] 구사일생", "사망 판정을 받을 경우 1번 버텨내며 3초간 무적이 됩니다."}
+            {"[영웅] 구사일생", "사망 판정을 받을 경우 1번 버텨내며 3초간 무적이 됩니다."},
+            {"[영웅] 최후의 발악", "5초 뒤 반드시 죽지만, 그동안 무적이 되며 속도가 매우 빨라집니다."}
         };
         public Dictionary<string, string> LegendAbilities = new Dictionary<string, string>()
         {
@@ -100,7 +106,7 @@ namespace RGM.Modes
         public Dictionary<string, string> MythicAbilities = new Dictionary<string, string>()
         {
             // {"[신화] 해킹", "시설 핵을 즉시 터트립니다."},
-            {"[신화] 로켓 런처", "상대방을 하늘로 승천시킬 수 있습니다!"},
+            {"[신화] 로켓 런처", "5% 확률로 상대방을 하늘로 승천시킬 수 있습니다!"},
             {"[신화] 스피릿", "2초마다 영혼 상태가 됩니다!"},
             {"[신화] 눈빛맨", "쳐다보는 것만으로도 당신을 두려워할 것입니다!"}
         };
@@ -206,6 +212,7 @@ namespace RGM.Modes
                             if (player != target)
                             {
                                 target.EnableEffect(EffectType.Slowness, 50, 0.2f);
+                                target.EnableEffect(EffectType.Blinded, 1, 0.2f);
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.5f);
                             }
                         }
@@ -354,6 +361,12 @@ namespace RGM.Modes
                     for (int i=1; i<4; i++)
                         Server.ExecuteCommand($"/give {player.Id} {RGM.GetRandomValue(Ammos)}");
                     break;
+                case "정화":
+                    player.TryAddCandy(CandyKindID.Green);
+
+                    if (player.IsScp)
+                        Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                    break;
                 case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 1; break;
                 case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
                 case "순간이동":
@@ -384,6 +397,13 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = cc;
                     break;
+                case "스테로이드":
+                    player.GetEffect(EffectType.MovementBoost).Intensity += 50;
+                    Timing.CallDelayed(25, () => { player.GetEffect(EffectType.MovementBoost).Intensity -= 50; });
+                    break;
+                case "순교":
+                    martyrs.Add(player);
+                    break;
                 case "테러리스트의 유품": player.TryAddCandy(CandyKindID.Pink); break;
                 case "랜덤상자":
                     int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 44, 45, 47, 48, 49, 50, 51, 52, 53 });
@@ -403,6 +423,7 @@ namespace RGM.Modes
                 case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
                 case "극독": posions.Add(player); break;
                 case "구사일생": ability941s.Add(player); break;
+                case "최후의 발악": culprits.Add(player); break;
                 case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
                 case "모드 설치":
                     string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.Where(x => RGM.Instance.ModeList[x][3] != "private").ToList());
@@ -629,6 +650,22 @@ namespace RGM.Modes
                     return;
                 }
 
+                if (culprits.Contains(ev.Player))
+                {
+                    culprits.Remove(ev.Player);
+                    ev.IsAllowed = false;
+
+                    ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 30;
+                    ev.Player.IsGodModeEnabled = true;
+
+                    Timing.CallDelayed(5f, () =>
+                    {
+                        ev.Player.IsGodModeEnabled = false;
+                        ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
+                    });
+                    return;
+                }
+
                 PlayerAbilities[ev.Player.UserId].Clear();
                 PlayerWorkstation[ev.Player.UserId].Clear();
                 ev.Player.Scale = new Vector3(1, 1, 1);
@@ -638,6 +675,15 @@ namespace RGM.Modes
 
                 if (fighters.Contains(ev.Player))
                     fighters.Remove(ev.Player);
+
+                if (martyrs.Contains(ev.Player))
+                {
+                    martyrs.Remove(ev.Player);
+
+                    var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
+                    g.FuseTime = 3f;
+                    g.SpawnActive(new Vector3(UnityEngine.Random.Range(-9.941405f, 10.92998f), 1004.188f, UnityEngine.Random.Range(-15.76172f, 2.550781f)), ev.Player);
+                }
 
                 if (BlackOutCooldown.Contains(ev.Player.UserId))
                     BlackOutCooldown.Remove(ev.Player.UserId);
@@ -673,6 +719,9 @@ namespace RGM.Modes
 
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
         {
+            if (ev.Door.Type == DoorType.Scp079First)
+                return;
+
             if (ev.Player != null && PlayerAbilities[ev.Player.UserId].Contains("[일반] 행운") && UnityEngine.Random.Range(0, 100) <= 5)
             {
                 if (ev.Door.IsOpen)
@@ -731,7 +780,10 @@ namespace RGM.Modes
                     ev.Attacker.AddAhp(20 * (ev.DamageHandler.Damage / 100));
 
                 if (PlayerAbilities[ev.Attacker.UserId].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
-                    Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
+                {
+                    if (UnityEngine.Random.Range(1, 21) == 1)
+                        Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
+                }
             }
         }
 
