@@ -42,6 +42,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
+            Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -190,6 +191,11 @@ namespace RGM.Modes
         {
             if (ev.Effect.GetEffectType() != EffectType.SinkHole)
                 ev.IsAllowed = false;
+        }
+
+        public void OnHandcuffing(Exiled.Events.EventArgs.Player.HandcuffingEventArgs ev)
+        {
+            ev.IsAllowed = false;
         }
     }
 }
