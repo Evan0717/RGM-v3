@@ -13,6 +13,7 @@ using MapEditorReborn.API.Features.Objects;
 using MEC;
 using Mirror;
 using MultiBroadcast;
+using site02;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -51,6 +52,14 @@ namespace RGM.Modes
                 player.Position = new Vector3(41.58984f, 1044.594f, -113.3477f);
             }
 
+            void Processing(GameObject gameObject)
+            {
+                Primitive Platform = gameObject.GetComponent<PrimitiveObject>().Primitive;
+                Platform.Color = new Color(255, 0, 0);
+
+                Timing.CallDelayed(0.75f, Platform.Destroy);
+            }
+
             while (true)
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive).ToList())
@@ -59,20 +68,34 @@ namespace RGM.Modes
                     {
                         if (hit.transform.name == "Platform")
                         {
-                            Primitive Platform = hit.transform.gameObject.GetComponent<PrimitiveObject>().Primitive;
-                            Platform.Color = new Color(255, 0, 0);
-
-                            Timing.CallDelayed(0.75f, Platform.Destroy);
+                            Processing(hit.transform.gameObject);
                         }
 
                         else if (hit.transform.name == "Lava")
                             player.Kill("용암을 좋아한 나머지 뛰어들어갔습니다.");
                     }
                     else
-                        player.Hurt(10f, "떨어지지 않으려면 계속 움직이세요.");
+                    {
+                        Vector3 playerPosition = player.Position;
+                        Transform closestPlatform = null;
+                        float closestDistance = float.MaxValue;
+
+                        foreach (var platform in GameObject.FindGameObjectsWithTag("Platform"))
+                        {
+                            float distance = Vector3.Distance(playerPosition, platform.transform.position);
+
+                            if (distance < closestDistance)
+                            {
+                                closestPlatform = platform.transform;
+                                closestDistance = distance;
+                            }
+                        }
+
+                        Processing(closestPlatform.gameObject);
+                    }
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
