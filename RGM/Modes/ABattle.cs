@@ -211,7 +211,7 @@ namespace RGM.Modes
                         {
                             var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
 
-                            if (player != target)
+                            if (player != target && player.LeadingTeam != target.LeadingTeam)
                             {
                                 target.EnableEffect(EffectType.Slowness, 50, 0.2f);
                                 target.EnableEffect(EffectType.Blinded, 1, 0.2f);
@@ -238,7 +238,7 @@ namespace RGM.Modes
                         {
                             var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
 
-                            if (player != target)
+                            if (player != target && player.LeadingTeam != target.LeadingTeam)
                             {
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
                                 target.EnableEffect(EffectType.Flashed, 1, 0.2f);
