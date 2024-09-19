@@ -33,6 +33,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
             Exiled.Events.Handlers.Scp049.Attacking += OnScp049Attacking;
 
+            Exiled.Events.Handlers.Scp0492.ConsumingCorpse += OnConsumingCorpse;
+
             Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
 
             Exiled.Events.Handlers.Scp173.PlacingTantrum += OnPlacingTantrum;
@@ -100,7 +102,7 @@ namespace RGM.Modes
         public async void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
         {
             await Task.Delay(100);
-            ev.Scp049.CallCooldown = 0;
+            ev.Scp049.CallAbility.Duration.Remaining = 0;
         }
 
         public async void OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
@@ -108,6 +110,11 @@ namespace RGM.Modes
             await Task.Delay(100);
             ev.Scp049.RemainingAttackCooldown = 0;
             ev.Scp049.GoodSenseCooldown = 0;
+        }
+
+        public void OnConsumingCorpse(Exiled.Events.EventArgs.Scp0492.ConsumingCorpseEventArgs ev)
+        {
+            ev.Player.MaxHealth = ev.Player.MaxHealth + 100;
         }
 
         public async void OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)

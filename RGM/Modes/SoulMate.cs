@@ -91,7 +91,6 @@ namespace RGM.Modes
 
                     second.MaxArtificialHealth = first.MaxArtificialHealth;
                     second.ArtificialHealth = first.ArtificialHealth;
-                    second.HumeShield = first.HumeShield;
                     second.MaxHealth = first.MaxHealth;
                     second.Health = first.Health;
 
@@ -110,22 +109,25 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
                     if (currentItems.ContainsKey(player))
                     {
                         if (currentItems[player] != player.CurrentItem)
                         {
-                            Player soulMate = soulMates[player];
-
-                            foreach (var Item in soulMate.Items)
+                            Timing.CallDelayed(0.1f, () =>
                             {
-                                if (Item.Type == player.CurrentItem.Type)
+                                Player soulMate = soulMates[player];
+
+                                foreach (var Item in soulMate.Items)
                                 {
-                                    soulMate.CurrentItem = Item;
-                                    break;
+                                    if (Item.Type == player.CurrentItem.Type)
+                                    {
+                                        soulMate.CurrentItem = Item;
+                                        break;
+                                    }
                                 }
-                            }
+                            });
                         };
 
                         currentItems[player] = player.CurrentItem;
@@ -134,7 +136,7 @@ namespace RGM.Modes
                         currentItems.Add(player, player.CurrentItem);
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
@@ -161,7 +163,6 @@ namespace RGM.Modes
 
                 soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
                 soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
-                soulMate.HumeShield = ev.Player.HumeShield;
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
             }
@@ -175,7 +176,6 @@ namespace RGM.Modes
 
                 soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
                 soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
-                soulMate.HumeShield = ev.Player.HumeShield;
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
             }
@@ -235,7 +235,6 @@ namespace RGM.Modes
 
                     soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
                     soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
-                    soulMate.HumeShield = ev.Player.HumeShield;
                     ev.Player.MaxHealth = soulMate.MaxHealth;
                     ev.Player.Health = soulMate.Health;
 
