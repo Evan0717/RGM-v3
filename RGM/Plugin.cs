@@ -430,7 +430,7 @@ namespace RGM
 
         public void OnDetonating(Exiled.Events.EventArgs.Warhead.DetonatingEventArgs ev)
         {
-            Player.List.ToList().Where(x => x.CurrentRoom.Type != RoomType.Surface && x.IsAlive).ToList().ForEach(x => 
+            Player.List.Where(x => x.Zone != ZoneType.Surface && x.IsAlive).ToList().ForEach(x => 
             {
                 x.IsGodModeEnabled = false;
                 x.Kill("핵폭발에 사망하였습니다."); 
