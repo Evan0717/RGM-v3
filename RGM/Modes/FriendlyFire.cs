@@ -119,8 +119,6 @@ namespace RGM.Modes
                         if (Scp106Stacks.Contains(player))
                         {
                             player.EnableEffect(Exiled.API.Enums.EffectType.PocketCorroding);
-                            await Task.Delay(1000);
-                            player.DisableEffect(Exiled.API.Enums.EffectType.PocketCorroding);
 
                             Scp106AttackTeamCoolDown = 0;
                         }
