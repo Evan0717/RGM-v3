@@ -23,6 +23,7 @@ namespace RGM
         public static string BotAPIServer;
 
         public string CurrentMode = null;
+        public bool IsRandomSelectModeEnabled = false;
         public bool FreezeGameStart = false;
         public Dictionary<string, List<string>> ModeList;
         public Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
@@ -146,6 +147,12 @@ namespace RGM
 
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
+
+            if (UnityEngine.Random.Range(1, 4) == 1)
+            {
+                IsRandomSelectModeEnabled = true;
+                Timing.RunCoroutine(RandomSelectMode());
+            }
         }
 
         public async void OnRoundStarted()
@@ -279,7 +286,11 @@ namespace RGM
 
                 string iv(int num)
                 {
-                    return ModeVote.Keys.ToList()[num - 1];
+                    if (CurrentMode != null)
+                        return CurrentMode;
+
+                    else
+                        return ModeVote.Keys.ToList()[num - 1];
                 }
 
                 while (!Round.IsStarted)
@@ -319,9 +330,18 @@ namespace RGM
                         }
                         else
                         {
+                            string FirstDesc()
+                            {
+                                if (IsRandomSelectModeEnabled)
+                                    return "랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?";
+
+                                else
+                                    return "원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.";
+                            }
+
                             SelectedMode = "<i>서버 설명 (TIP)</i>";
                             ModeColor = "ffffff";
-                            ModeDescription = "원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
+                            ModeDescription = $"{FirstDesc()}\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
                         }
 
                         string IdeaBy()
@@ -517,6 +537,16 @@ namespace RGM
 
             Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
             Round.Start();
+        }
+
+        public IEnumerator<float> RandomSelectMode()
+        {
+            while (!Round.IsStarted)
+            {
+                PickModes();
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public IEnumerator<float> ModeResetButton()
