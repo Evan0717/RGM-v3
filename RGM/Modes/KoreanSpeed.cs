@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.API.Enums;
 using MEC;
+using Exiled.API.Features.Roles;
 
 namespace RGM.Modes
 {
@@ -29,6 +30,9 @@ namespace RGM.Modes
                 {
                     player.EnableEffect(EffectType.MovementBoost, 125);
                     player.EnableEffect(EffectType.Scp1853, 4);
+
+                    if (player.Role is Scp173Role scp173)
+                        scp173.BlinkCooldown = scp173.BlinkCooldown / 2;
                 }
 
                 yield return Timing.WaitForSeconds(1f);
