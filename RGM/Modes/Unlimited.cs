@@ -150,7 +150,7 @@ namespace RGM.Modes
 
         public void OnShooting(Exiled.Events.EventArgs.Player.ShootingEventArgs ev)
         {
-            ev.Player.CurrentItem.As<Exiled.API.Features.Items.Firearm>().Ammo += 250;
+            ev.Player.CurrentItem.As<Exiled.API.Features.Items.Firearm>().Ammo = 250;
         }
 
         public void OnChangingMicroHIDState(Exiled.Events.EventArgs.Player.ChangingMicroHIDStateEventArgs ev)
