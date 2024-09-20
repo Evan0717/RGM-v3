@@ -30,7 +30,7 @@ namespace RGM.Modes
     {
         public static ABattle Instance;
 
-        public Dictionary<string, List<Vector3>> PlayerWorkstation = new Dictionary<string, List<Vector3>>();
+        public Dictionary<Player, List<Vector3>> PlayerWorkstation = new Dictionary<Player, List<Vector3>>();
         public Dictionary<Player, List<string>> PlayerAbilities = new Dictionary<Player, List<string>>();
 
         public List<Player> BlackOutCooldown = new List<Player>();
@@ -136,7 +136,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
-            Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
             Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
             Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -162,29 +161,26 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
-                    if (!PlayerWorkstation.ContainsKey(player.UserId))
+                    if (!PlayerWorkstation.ContainsKey(player))
                     {
-                        PlayerWorkstation.Add(player.UserId, new List<Vector3>());
+                        PlayerWorkstation.Add(player, new List<Vector3>());
                         PlayerAbilities.Add(player, new List<string>());
                     }
                     else
                     {
-                        if (!player.IsDead)
+                        if (PlayerAbilities[player].Count <= 0)
+                            player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
+                            
+                        else
                         {
-                            if (PlayerAbilities[player].Count <= 0)
-                                player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
-                            else
-                            {
-                                string abilitiesText = string.Join(", ", PlayerAbilities[player]);
-                                abilitiesText = abilitiesText.Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
+                            string abilitiesText = string.Join(", ", PlayerAbilities[player]);
+                            abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
 
-                                player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
-                            }
+                            player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
                         }
                     }
-
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -337,7 +333,7 @@ namespace RGM.Modes
 
                 string Message = $"<size=20><b>다음 능력이 추가되었습니다.</b></size>\n<size=30>{styleName}</size>\n<size=25>{AbilityList()[abilityName]}</size>";
                 player.AddBroadcast(8, Message);
-                player.SendConsoleMessage($"\n<color=white>{Message}</color>", null);
+                player.SendConsoleMessage($"\n{Message}", "ffffff");
             }
 
             string abilityName = RGM.GetRandomValue(AbilityList().Keys.ToList());
@@ -461,7 +457,7 @@ namespace RGM.Modes
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} {rn1}");
                     break;
-                case "럭키비키": PlayerWorkstation[player.UserId].Clear(); break;
+                case "럭키비키": PlayerWorkstation[player].Clear(); break;
                 case "핵 리모컨": Warhead.Start(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 활성화했습니다.</b>"); break;
                 case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
                 case "극독": posions.Add(player); break;
@@ -610,9 +606,9 @@ namespace RGM.Modes
             {
                 Transform WorkStation = hit.transform.parent.parent;
 
-                if (WorkStation.name.Contains("Work Station") && !PlayerWorkstation[ev.Player.UserId].Contains(WorkStation.position))
+                if (WorkStation.name.Contains("Work Station") && !PlayerWorkstation[ev.Player].Contains(WorkStation.position))
                 {
-                    PlayerWorkstation[ev.Player.UserId].Add(WorkStation.position);
+                    PlayerWorkstation[ev.Player].Add(WorkStation.position);
 
                     AddAbility(ev.Player);
                 }
@@ -733,7 +729,7 @@ namespace RGM.Modes
 
         public async void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
-            if (PlayerWorkstation.ContainsKey(ev.Player.UserId))
+            if (PlayerWorkstation.ContainsKey(ev.Player))
             {
                 if (insurers.Contains(ev.Player))
                 {
@@ -772,8 +768,8 @@ namespace RGM.Modes
                     return;
                 }
 
+                PlayerWorkstation[ev.Player].Clear();
                 PlayerAbilities[ev.Player].Clear();
-                PlayerWorkstation[ev.Player.UserId].Clear();
                 ev.Player.Scale = new Vector3(1, 1, 1);
                 Server.ExecuteCommand($"/speak {ev.Player.Id} disable");
                 ev.Player.IsUsingStamina = true;
@@ -828,26 +824,13 @@ namespace RGM.Modes
                 ev.Player.ShowHint("이 헤비도어는 능력으로 개폐가 불가능합니다.", 1.2f);
                 return;
             }
-
-            if (ev.Player != null && ((PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(0, 100) <= 5) || PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사")))
+            else if (ev.Player != null && ((PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(1, 101) <= 5) || PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사")))
             {
                 if (ev.Door.IsOpen)
                     ev.Door.IsOpen = false;
 
                 else
                     ev.Door.IsOpen = true;
-            }
-        }
-
-        public void OnInteractingLocker(Exiled.Events.EventArgs.Player.InteractingLockerEventArgs ev)
-        {
-            if (ev.Player != null && PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(0, 100) <= 5)
-            {
-                if (ev.Chamber.IsOpen)
-                    ev.Chamber.IsOpen = false;
-
-                else
-                    ev.Chamber.IsOpen = true;
             }
         }
 

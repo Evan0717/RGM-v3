@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using Mirror;
+using PlayerRoles;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -58,6 +59,13 @@ namespace RGM.Modes
                     {
                         PlayerPosition.Add(player, player.Position);
                         PlayerRotation.Add(player, player.Rotation);
+                    }
+
+                    if (player.Role.Type == RoleTypeId.Scp079 && Player.List.Where(x => x.IsScp).Count() < 2)
+                    {
+                        player.Role.Set(RoleTypeId.Tutorial);
+                        player.Position = RGM.GetRandomValue(Player.List.Where(x => x.IsHuman).ToList()).Position;
+                        Server.ExecuteCommand($"/rocket {player.Id} 1");
                     }
                 }
 
