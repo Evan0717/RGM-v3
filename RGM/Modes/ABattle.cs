@@ -572,23 +572,31 @@ namespace RGM.Modes
                         {
                             var player = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
 
-                            if (ev.Player != player && !MeleeCooldown.Contains(ev.Player) && ev.Player.LeadingTeam != player.LeadingTeam)
+                            if (ev.Player != player && !MeleeCooldown.Contains(ev.Player))
                             {
-                                Item Item = RGM.GetRandomValue(player.Items.ToList());
+                                if (!player.IsInventoryEmpty)
+                                {
+                                    Item Item = RGM.GetRandomValue(player.Items.ToList());
 
-                                player.RemoveItem(Item);
-                                player.ShowHint("주머니가 허전합니다..", 1.2f);
-                                Item I = ev.Player.AddItem(Item.Type);
-                                ev.Player.ShowHint("소매치기에 성공했습니다.", 1.2f);
+                                    player.RemoveItem(Item);
+                                    player.ShowHint("주머니가 허전합니다..", 1.2f);
+                                    Item I = ev.Player.AddItem(Item.Type);
+                                    ev.Player.ShowHint("소매치기에 성공했습니다.", 1.2f);
 
-                                if (ev.Player.IsScp)
-                                    ev.Player.CurrentItem = I;
+                                    if (ev.Player.IsScp)
+                                        ev.Player.CurrentItem = I;
 
-                                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
+                                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
 
-                                MeleeCooldown.Add(ev.Player);
-                                await Task.Delay(60 * 1000);
-                                MeleeCooldown.Remove(ev.Player);
+                                    MeleeCooldown.Add(ev.Player);
+                                    await Task.Delay(60 * 1000);
+                                    MeleeCooldown.Remove(ev.Player);
+                                }
+                                else
+                                {
+                                    player.ShowHint("누군가가 소매치기를 하려고 시도했습니다.", 1.2f);
+                                    ev.Player.ShowHint("소매치기에 실패했습니다.\n대상은 아이템을 가지고 있지 않습니다.", 1.2f);
+                                }
                             }
                         }
                     }
