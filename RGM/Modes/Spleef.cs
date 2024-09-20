@@ -16,6 +16,8 @@ using MultiBroadcast;
 using site02;
 using UnityEngine;
 using Exiled.API.Enums;
+using PlayerRoles.FirstPersonControl;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
@@ -26,6 +28,7 @@ namespace RGM.Modes
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = null;
         public Door door = RGM.GetRandomValue(Door.List.ToList());
+        public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
 
         public void OnEnabled()
         {
@@ -49,7 +52,7 @@ namespace RGM.Modes
 
             foreach (var player in Player.List)
             {
-                player.Role.Set(PlayerRoles.RoleTypeId.ClassD);
+                player.Role.Set(RoleTypeId.ClassD);
                 player.Position = new Vector3(41.58984f, 1044.594f, -113.3477f);
             }
 
@@ -69,6 +72,8 @@ namespace RGM.Modes
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
                     {
+                        OnGround[player] = 5;
+
                         if (hit.transform.name == "Platform")
                             Processing(hit.transform.gameObject);
 
@@ -77,21 +82,37 @@ namespace RGM.Modes
                     }
                     else
                     {
-                        Transform closestPlatform = null;
-                        float closestDistance = float.MaxValue;
-
-                        foreach (var platform in GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Platform").ToList())
+                        if (player.IsAlive && OnGround.ContainsKey(player))
                         {
-                            float distance = Vector3.Distance(player.Position, platform.transform.position);
+                            OnGround[player] -= 0.1f;
 
-                            if (distance < closestDistance)
-                            {
-                                closestPlatform = platform.transform;
-                                closestDistance = distance;
-                            }
+                            if (OnGround[player] <= 0)
+                                player.Kill("꼼수를 쓰면 안되죠!");
                         }
+                    }
+                }
 
-                        Processing(closestPlatform.gameObject);
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public IEnumerator<float> IsFallDown()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (player.IsAlive && OnGround.ContainsKey(player) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
+                    {
+                        if (FpcExtensionMethods.IsGrounded(player.ReferenceHub))
+                            OnGround[player] = 5;
+                        else
+                        {
+                            OnGround[player] -= 0.1f;
+
+                            if (OnGround[player] <= 0)
+                                player.Kill("공허에 빨려들어갔습니다. (5초 이상 낙하)");
+                        }
                     }
                 }
 

@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using MEC;
 using RGM.API;
 using UnityEngine;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -43,10 +44,8 @@ namespace RGM.Modes
 
                 foreach (var player in DamagePlayers)
                 {
-                    player.Health -= player.MaxHealth / 50;
-
-                    if (player.IsAlive && player.Health < 1)
-                        player.EnableEffect(Exiled.API.Enums.EffectType.Poisoned, 1, 1.5f);
+                    if (player.IsAlive)
+                        player.EnableEffect(EffectType.Poisoned, 1, 1.5f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);

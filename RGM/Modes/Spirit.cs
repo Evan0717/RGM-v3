@@ -11,6 +11,7 @@ using Exiled.API.Features.Roles;
 using MEC;
 using Mirror;
 using UnityEngine;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
@@ -22,16 +23,19 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
-
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
             yield return Timing.WaitForSeconds(1f);
+
+            Server.FriendlyFire = true;
 
             while (true)
             {
@@ -81,6 +85,12 @@ namespace RGM.Modes
 
             if (spirits.Contains(ev.Player))
                 ev.Player.DisableEffect(EffectType.Invisible);
+        }
+
+        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        {
+            if (ev.Player.LeadingTeam == ev.Attacker.LeadingTeam && ev.Player.Role.Type != RoleTypeId.Tutorial)
+                ev.IsAllowed = false;
         }
     }
 }

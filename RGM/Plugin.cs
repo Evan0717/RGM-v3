@@ -664,7 +664,7 @@ namespace RGM
                     }
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
