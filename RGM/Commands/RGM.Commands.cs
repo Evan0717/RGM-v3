@@ -92,7 +92,7 @@ namespace RGM.Commands
                     .Replace("{CurrentMode}", CurrentMode)
                     .Replace("{ModeDescription}", ModeDescription);
 
-                response = $"<\n<color=white>{Message}</color>";
+                response = $"\n<color=#ffffff>{Message}</color>";
 
                 return true;
             }

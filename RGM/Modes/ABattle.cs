@@ -824,7 +824,7 @@ namespace RGM.Modes
                 ev.Player.ShowHint("이 헤비도어는 능력으로 개폐가 불가능합니다.", 1.2f);
                 return;
             }
-            else if (ev.Player != null && ((PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(1, 101) <= 5) || PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사")))
+            else if (ev.Player != null && !ev.Door.IsMoving && ((PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(1, 101) <= 5) || PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사")))
             {
                 if (ev.Door.IsOpen)
                     ev.Door.IsOpen = false;
