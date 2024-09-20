@@ -333,7 +333,7 @@ namespace RGM.Modes
 
                 string Message = $"<size=20><b>다음 능력이 추가되었습니다.</b></size>\n<size=30>{styleName}</size>\n<size=25>{AbilityList()[abilityName]}</size>";
                 player.AddBroadcast(8, Message);
-                player.SendConsoleMessage($"\n{Message}", "ffffff");
+                player.SendConsoleMessage($"\n{Message}", "white");
             }
 
             string abilityName = RGM.GetRandomValue(AbilityList().Keys.ToList());

@@ -194,12 +194,12 @@ namespace RGM
                 player.ClearPlayerBroadcasts();
                 player.AddBroadcast(10, Message);
 
-                player.SendConsoleMessage($"\n{Message}", "ffffff");
+                player.SendConsoleMessage($"\n{Message}", "white");
                 if (ModeDescriptionDetail == "")
-                    player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "ffffff");
+                    player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
                 else
-                    player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "ffffff");
+                    player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "white");
             }
 
             var modeType = Type.GetType($"RGM.Modes.{ModeFileName}");
@@ -275,12 +275,12 @@ namespace RGM
 
                 ev.Player.AddBroadcast(10, Message);
 
-                ev.Player.SendConsoleMessage($"\n{Message}", "ffffff");
+                ev.Player.SendConsoleMessage($"\n{Message}", "white");
                 if (ModeDescriptionDetail == "")
-                    ev.Player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "ffffff");
+                    ev.Player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
                 else
-                    ev.Player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "ffffff");
+                    ev.Player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "white");
             }
             else
             {
