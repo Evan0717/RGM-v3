@@ -88,9 +88,6 @@ namespace RGM.Modes
                     soulMates.Add(first, second);
                     soulMates.Add(second, first);
 
-
-                    second.MaxArtificialHealth = first.MaxArtificialHealth;
-                    second.ArtificialHealth = first.ArtificialHealth;
                     second.MaxHealth = first.MaxHealth;
                     second.Health = first.Health;
 
@@ -158,8 +155,6 @@ namespace RGM.Modes
             {
                 Player soulMate = soulMates[ev.Player];
 
-                soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
-                soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
             }
@@ -171,8 +166,6 @@ namespace RGM.Modes
             {
                 Player soulMate = soulMates[ev.Player];
 
-                soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
-                soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
             }
@@ -230,8 +223,6 @@ namespace RGM.Modes
                 {
                     Player soulMate = soulMates[ev.Player];
 
-                    soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
-                    soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
                     ev.Player.MaxHealth = soulMate.MaxHealth;
                     ev.Player.Health = soulMate.Health;
 

@@ -890,15 +890,18 @@ namespace RGM.Modes
         {
             if (ev.NewTarget != null)
             {
-                if (PlayerAbilities[ev.NewTarget].Count <= 0)
-                    ev.Player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 250f);
-
-                else
+                if (PlayerAbilities.ContainsKey(ev.NewTarget))
                 {
-                    string abilitiesText = string.Join(", ", PlayerAbilities[ev.NewTarget]);
-                    abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
+                    if (PlayerAbilities[ev.NewTarget].Count <= 0)
+                        ev.Player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 250f);
 
-                    ev.Player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 250f);
+                    else
+                    {
+                        string abilitiesText = string.Join(", ", PlayerAbilities[ev.NewTarget]);
+                        abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
+
+                        ev.Player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 250f);
+                    }
                 }
             }
         }

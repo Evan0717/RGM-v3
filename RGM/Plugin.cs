@@ -199,7 +199,7 @@ namespace RGM
                     player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "ffffff");
 
                 else
-                    player.SendConsoleMessage($"\n{ModeDescriptionDetail}", null);
+                    player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "ffffff");
             }
 
             var modeType = Type.GetType($"RGM.Modes.{ModeFileName}");
