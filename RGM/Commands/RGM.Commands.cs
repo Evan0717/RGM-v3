@@ -34,7 +34,7 @@ namespace RGM.Commands
 
         public string Command { get; } = "report";
 
-        public string[] Aliases { get; } = { "rep", "ㄱ데", "ㄱ데ㅐㄱㅅ" };
+        public string[] Aliases { get; } = { "rep", "ㄱ데", "ㄱ데ㅐㄱㅅ", "문의", "신고", "건의" };
 
         public string Description { get; } = "[RGM] 관리자에게 매세지를 보낼 수 있습니다.";
 

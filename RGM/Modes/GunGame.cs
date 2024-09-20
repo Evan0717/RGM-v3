@@ -74,34 +74,25 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
+                    if (Stage[player] >= GunsList.Count - 1)
+                        IsEnd = true;
+
                     if (Stage.ContainsKey(player))
                     {
-                        if (Stage[player] >= GunsList.Count - 1)
-                        {
-                            Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
-
-                            foreach (var p in Player.List)
-                            {
-                                p.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                                p.AddBroadcast(20, $"<b><color=yellow>{topPlayer.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!");
-                            }
-                            Round.IsLocked = false;
-                            IsEnd = true;
-                        }
-                        else
-                        {
-                            if (player.IsDead)
-                                PlayerSpawn(player);
-                        }
+                        if (player.IsDead)
+                            PlayerSpawn(player);
                     }
                     else
-                    {
                         Stage.Add(player, 0);
-                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
+
+            Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+            Round.IsLocked = false;
+
+            Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><color=yellow>{topPlayer.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!"));
         }
 
         public IEnumerator<float> ScoreBoard()
