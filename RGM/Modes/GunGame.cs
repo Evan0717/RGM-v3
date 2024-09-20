@@ -74,11 +74,11 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    if (Stage[player] >= GunsList.Count - 1)
-                        IsEnd = true;
-
                     if (Stage.ContainsKey(player))
                     {
+                        if (Stage[player] >= GunsList.Count - 1)
+                            IsEnd = true;
+
                         if (player.IsDead)
                             PlayerSpawn(player);
                     }
@@ -139,11 +139,7 @@ namespace RGM.Modes
 
             List<string> AmmosList = new List<string>() { "19", "22", "27", "28", "29" };
 
-            foreach (var Ammo in AmmosList)
-            {
-                for (int i = 1; i < 4; i++)
-                    Server.ExecuteCommand($"/give {player.Id} {Ammo}");
-            }
+            Server.ExecuteCommand($"/give {player.Id} {string.Join(".", AmmosList)}.");
         }
 
         public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)

@@ -88,7 +88,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(3, 15));
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(3, 12));
 
                 IsSongStopped = true;
 

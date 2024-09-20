@@ -14,7 +14,10 @@ namespace RGM.API
             List<T> itemList = new List<T>();
 
             foreach (T item in items)
-                itemList.Add(item);
+            {
+                if (!item.ToString().Contains("None"))
+                    itemList.Add(item);
+            }
 
             return itemList;
         }

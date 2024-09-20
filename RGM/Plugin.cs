@@ -12,6 +12,7 @@ using MapEditorReborn.API.Features.Objects;
 using MultiBroadcast.API;
 using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
+using RGM.API;
 
 namespace RGM
 {
@@ -151,6 +152,8 @@ namespace RGM
                 IsRandomSelectModeEnabled = true;
                 Timing.RunCoroutine(RandomSelectMode());
             }
+
+            Log.Info(string.Join("\n", Tools.EnumToList<RoleTypeId>()));
         }
 
         public async void OnRoundStarted()
@@ -158,9 +161,7 @@ namespace RGM
             Server.ExecuteCommand("/mp unload RGMLobby");
             
             foreach (var player in Player.List)
-            {
                 Server.ExecuteCommand($"/speak {player.Id} disable");
-            }
 
             if (CurrentMode == null)
             {
@@ -384,9 +385,7 @@ namespace RGM
         public void OnSpawningRagdoll(Exiled.Events.EventArgs.Player.SpawningRagdollEventArgs ev)
         {
             if (!Round.IsStarted)
-            {
                 ev.IsAllowed = false;
-            }
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
@@ -397,20 +396,32 @@ namespace RGM
             {
                 if (ev.Player.IsScp)
                 {
-                    if (UnityEngine.Random.Range(1, 14) == 1)
+                    if (UnityEngine.Random.Range(1, 21) == 1)
+                    {
                         ev.Player.Role.Set(RoleTypeId.Scp3114);
+
+                        ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>SCP-3114(5%, 정규)</color> 기믹이 적용되었습니다.");
+                    }
                 }
                 else if (ev.Player.IsHuman)
                 {
                     if (StartupRandom == 1) // 시작 카오스
                     {
                         if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                        {
                             ev.Player.Role.Set(RoleTypeId.ChaosConscript);
+
+                            ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>시작 카오스(5%, 정규)</color> 기믹이 적용되었습니다.");
+                        }
                     }
                     if (StartupRandom == 2) // 시작 NTF
                     {
                         if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                        {
                             ev.Player.Role.Set(RoleTypeId.NtfPrivate);
+
+                            ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>시작 NTF(5%, 정규)</color> 기믹이 적용되었습니다.");
+                        }
                     }
 
                     int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
@@ -419,10 +430,14 @@ namespace RGM
                         ev.Player.Role.Set(RoleTypeId.Scp0492);
                         ev.Player.MaxHealth = 1000;
                         ev.Player.Health = ev.Player.MaxHealth;
+
+                        ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>시작 좀비(1%, 이스터에그)</color> 기믹이 적용되었습니다.");
                     }
                     else if (rand == 2)
                     {
                         ev.Player.Scale = new Vector3(-1, -1, -1);
+
+                        ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>뒤집기(1%, 이스터에그)</color> 기믹이 적용되었습니다.");
                     }
                 }
             }
@@ -457,10 +472,12 @@ namespace RGM
 
         public void OnInteractingScp330(Exiled.Events.EventArgs.Scp330.InteractingScp330EventArgs ev)
         {
-            if (UnityEngine.Random.Range(1, 14) == 1)
+            if (UnityEngine.Random.Range(1, 21) == 1)
             {
                 ev.IsAllowed = false;
                 ev.Player.TryAddCandy(InventorySystem.Items.Usables.Scp330.CandyKindID.Pink);
+
+                ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>핑크 캔디(5%, 정규)</color> 기믹이 적용되었습니다.");
             }
         }
 

@@ -403,7 +403,10 @@ namespace RGM.Modes
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
                     break;
                 case "생존 전문가":
-                    player.AddItem(ItemType.SCP1853);
+                    Item scp1853 = player.AddItem(ItemType.SCP1853);
+
+                    if (player.IsScp)
+                        player.CurrentItem = scp1853;
                     break;
                 case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 1; break;
                 case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
