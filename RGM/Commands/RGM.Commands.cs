@@ -10,6 +10,38 @@ using UnityEngine;
 namespace RGM.Commands
 {
     [CommandHandler(typeof(ClientCommandHandler))]
+    public class Report : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(sender);
+            string args = string.Join(" ", arguments).Trim();
+
+            if (args == "")
+            {
+                response = "보낼 메세지를 입력해주세요.";
+                return false;
+            }
+            else
+            {
+                Discord.Webhook.Send($"## 랜덤게임모드({Server.Port}) \n**{player.Nickname}**({player.Id}, {player.UserId})\n```\n{args}```", 
+                    "https://discord.com/api/webhooks/1286570523924627478/oIkgSYPAHul8pKB1tqqXWk3hvVocJBzoWOQTPu0Ha9KmF08NmzXbB3PsY6c7RVg3th6Z");
+
+                response = "서버 관리자에게 메세지가 전달되었습니다.\n유저 정보도 같이 전송되므로, 언행에 주의하십시오.";
+                return true;
+            }
+        }
+
+        public string Command { get; } = "report";
+
+        public string[] Aliases { get; } = { "rep", "ㄱ데", "ㄱ데ㅐㄱㅅ" };
+
+        public string Description { get; } = "[RGM] 관리자에게 매세지를 보낼 수 있습니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
     public class ScpList : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -30,7 +62,7 @@ namespace RGM.Commands
 
         public string Command { get; } = "scplist";
 
-        public string[] Aliases { get; } = { "sl", "scp" };
+        public string[] Aliases { get; } = { "sl", "scp", "니", "ㄴ체", "ㄴ체ㅣㅑㄴㅅ" };
 
         public string Description { get; } = "[RGM] 존재하는 SCP 리스트를 나열합니다.";
 

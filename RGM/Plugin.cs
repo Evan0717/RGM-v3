@@ -100,10 +100,6 @@ namespace RGM
             Exiled.Events.Handlers.Scp244.OpeningScp244 += OnOpeningScp244;
 
             Exiled.Events.Handlers.Scp079.Recontained += OnRecontained;
-
-            Timing.RunCoroutine(IsFallDown());
-            Timing.RunCoroutine(ChattingCooldown());
-
         }
 
         public override void OnDisabled()
@@ -147,6 +143,8 @@ namespace RGM
 
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
+            Timing.RunCoroutine(IsFallDown());
+            Timing.RunCoroutine(ChattingCooldown());
 
             if (UnityEngine.Random.Range(1, 4) == 1)
             {

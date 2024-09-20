@@ -13,17 +13,20 @@ namespace RGM.Discord
     {
         public static Webhook Instance;
 
-        public static async void Send(string msg)
+        public static async void Send(string msg, string url = null)
         {
-            await _send(msg);
+            await _send(msg, url);
         }
 
-        private static async Task _send(string message)
+        private static async Task _send(string message, string url = null)
         {
+            if (url == null)
+                url = RGM.WebhookURL;
+
             WebClient client = new WebClient();
             client.Headers.Add("Content-Type", "application/json");
             string payload = "{\"content\": \"" + message + "\"}";
-            await client.UploadDataTaskAsync(RGM.WebhookURL, Encoding.UTF8.GetBytes(payload));
+            await client.UploadDataTaskAsync(url, Encoding.UTF8.GetBytes(payload));
         }
 
         public string _time
