@@ -31,7 +31,7 @@ namespace RGM.Modes
                         room.TurnOffLights();
                         break;
                     case 2:
-                        room.Color = Color.HSVToRGB(UnityEngine.Random.Range(1f, 255f), UnityEngine.Random.Range(1f, 255f), UnityEngine.Random.Range(1f, 255f));
+                        room.Color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
                         break;
                     case 3:
                         break;
