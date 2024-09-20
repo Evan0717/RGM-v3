@@ -39,7 +39,7 @@ namespace RGM
             { "해적 룰렛", new List<string>() { "FFBF00", "폭탄을 잘 추려내야 합니다.", "PirateRoulette", "public", "" } },
             { "랜덤박스", new List<string>() { "BFFF00", "60초마다 랜덤한 아이템을 얻을 수 있습니다!", "RandomItem", "public", "" } },
             { "빨간 불, 초록 불", new List<string>() { "F7D358", "빨간 불에는 움직이지 마세요.", "RedLightGreenLight", "public", "" } },
-            { "반전", new List<string>() { "A4A4A4", "이동 키(WASD)가 반대로 됩니다.", "Reversal", "public", "world_of_warship_is_ddong_game" } },
+            { "반전", new List<string>() { "A4A4A4", "이동 키(WASD)가 반대로 됩니다.", "Reversal", "private", "world_of_warship_is_ddong_game" } },
             { "로켓 런처", new List<string>() { "FA8258", "무슨 이유로든 피격당하면 승천합니다.", "RocketLauncher", "public", "" } },
             { "SCP 러쉬", new List<string>() { "FE2E2E", "모든 SCP가 한 개체로 통일됩니다.", "SCPRUSH", "public", "" } },
             { "시베리아", new List<string>() { "FAFAFA", "최대한 다른 자들과 붙어 온기를 나눠 가지세요!", "Siberia", "public", "몬키키" } },

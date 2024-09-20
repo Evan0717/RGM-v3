@@ -44,33 +44,40 @@ namespace RGM
 
         public void PickModes()
         {
-            ModeVote.Clear();
-
-            for (int i = 1; i < 4; i++)
+            IEnumerator<float> ModePickup()
             {
-                var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
-                var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
-                ModeVote.Add(mode, new List<Player>());
+                ModeVote.Clear();
+
+                for (int i = 1; i < 4; i++)
+                {
+                    var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
+                    var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
+                    ModeVote.Add(mode, new List<Player>());
+                }
+
+                var First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
+                var Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
+                var Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
+
+                List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
+
+                for (int i = 0; i < 3; i++)
+                {
+                    foreach (var Pad in Pads[i])
+                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
+                }
+
+                var Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
+
+                Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+
+                foreach (var Number in Numbers)
+                    Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
+
+                yield break;
             }
 
-            var First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
-            var Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
-            var Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
-
-            List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
-
-            for (int i = 0; i < 3; i++)
-            {
-                foreach (var Pad in Pads[i])
-                    Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
-            }
-
-            var Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
-
-            Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
-
-            foreach (var Number in Numbers)
-                Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
+            Timing.RunCoroutine(ModePickup());
         }
 
         public override void OnEnabled()
