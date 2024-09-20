@@ -337,7 +337,7 @@ namespace RGM.Modes
 
                 string Message = $"<size=20><b>다음 능력이 추가되었습니다.</b></size>\n<size=30>{styleName}</size>\n<size=25>{AbilityList()[abilityName]}</size>";
                 player.AddBroadcast(8, Message);
-                player.SendConsoleMessage(Message, null);
+                player.SendConsoleMessage($"\n<color=white>{Message}</color>", null);
             }
 
             string abilityName = RGM.GetRandomValue(AbilityList().Keys.ToList());
@@ -578,8 +578,11 @@ namespace RGM.Modes
 
                                 player.RemoveItem(Item);
                                 player.ShowHint("주머니가 허전합니다..", 1.2f);
-                                ev.Player.AddItem(Item.Type);
+                                Item I = ev.Player.AddItem(Item.Type);
                                 ev.Player.ShowHint("소매치기에 성공했습니다.", 1.2f);
+
+                                if (ev.Player.IsScp)
+                                    ev.Player.CurrentItem = I;
 
                                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
 
