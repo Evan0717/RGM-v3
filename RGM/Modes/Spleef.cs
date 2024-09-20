@@ -77,7 +77,7 @@ namespace RGM.Modes
                         if (hit.transform.name == "Platform")
                             Processing(hit.transform.gameObject);
 
-                        else if (hit.transform.name == "Lava")
+                        else if (hit.collider.name == "Lava")
                             player.Kill("용암을 좋아한 나머지 뛰어들어갔습니다.");
                     }
                     else

@@ -49,7 +49,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Player.List.ToList().ForEach(x => Spawned(x));
+            Player.List.ToList().ForEach(Spawned);
 
             yield return 1f;
         }

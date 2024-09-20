@@ -36,6 +36,11 @@ namespace RGM
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
         public List<Player> ChatCooldown = new List<Player>();
 
+        List<Transform> First;
+        List<Transform> Second;
+        List<Transform> Third;
+        List<Transform> Numbers;
+
         public static T GetRandomValue<T>(List<T> list)
         {
             System.Random random = new System.Random();
@@ -45,40 +50,27 @@ namespace RGM
 
         public void PickModes()
         {
-            IEnumerator<float> ModePickup()
+            ModeVote.Clear();
+
+            for (int i = 1; i < 4; i++)
             {
-                ModeVote.Clear();
-
-                for (int i = 1; i < 4; i++)
-                {
-                    var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
-                    var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
-                    ModeVote.Add(mode, new List<Player>());
-                }
-
-                var First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
-                var Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
-                var Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
-
-                List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
-
-                for (int i = 0; i < 3; i++)
-                {
-                    foreach (var Pad in Pads[i])
-                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
-                }
-
-                var Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
-
-                Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
-
-                foreach (var Number in Numbers)
-                    Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
-
-                yield break;
+                var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
+                var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
+                ModeVote.Add(mode, new List<Player>());
             }
 
-            Timing.RunCoroutine(ModePickup());
+            List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
+
+            for (int i = 0; i < 3; i++)
+            {
+                foreach (var Pad in Pads[i])
+                    Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
+            }
+
+            Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+
+            foreach (var Number in Numbers)
+                Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
         }
 
         public override void OnEnabled()
@@ -147,6 +139,11 @@ namespace RGM
 
             var command = new Discord.Command();
             command.OnEnabled();
+
+            First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
+            Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
+            Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
+            Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
 
             PickModes();
 
@@ -406,7 +403,7 @@ namespace RGM
                 ev.IsAllowed = false;
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        public async void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive)
                 ev.Player.Scale = new Vector3(1, 1, 1);
@@ -467,6 +464,17 @@ namespace RGM
                 ev.Player.MaxHealth = 12050;
                 ev.Player.Health = ev.Player.MaxHealth;
             }
+
+            ev.Player.IsGodModeEnabled = true;
+
+            for (int i = 1; i<6; i++)
+            {
+                ev.Player.ShowHint($"{6 - i}초 후 스폰 무적이 해제됩니다.");
+
+                await Task.Delay(1000);
+            }
+
+            ev.Player.IsGodModeEnabled = false;
         }
 
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
