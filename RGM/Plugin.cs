@@ -24,16 +24,17 @@ namespace RGM
         public static string BotAPIServer;
 
         public string CurrentMode = null;
+        public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool IsRandomSelectModeEnabled = false;
         public bool FreezeGameStart = false;
+        public bool AutoNuke = false;
+        public bool IsScp3114Enabled = false;
+
         public Dictionary<string, List<string>> ModeList;
         public Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
         public List<Player> ChatCooldown = new List<Player>();
-
-        public int StartupRandom = UnityEngine.Random.Range(1, 21);
-        public bool AutoNuke = false;
 
         public static T GetRandomValue<T>(List<T> list)
         {
@@ -403,11 +404,12 @@ namespace RGM
             {
                 if (ev.Player.IsScp)
                 {
-                    if (UnityEngine.Random.Range(1, 21) == 1)
+                    if (UnityEngine.Random.Range(1, 21) == 1 && !IsScp3114Enabled)
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp3114);
 
                         ev.Player.AddBroadcast(10, $"당신은 <color={ev.Player.Role.Color.ToHex()}>SCP-3114(5%, 정규)</color> 기믹이 적용되었습니다.");
+                        IsScp3114Enabled = true;
                     }
                 }
                 else if (ev.Player.IsHuman)
