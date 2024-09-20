@@ -465,16 +465,21 @@ namespace RGM
                 ev.Player.Health = ev.Player.MaxHealth;
             }
 
-            ev.Player.IsGodModeEnabled = true;
-
-            for (int i = 1; i<6; i++)
+            if (ev.Player.IsAlive)
             {
-                ev.Player.ShowHint($"{6 - i}초 후 스폰 무적이 해제됩니다.");
+                ev.Player.IsGodModeEnabled = true;
 
-                await Task.Delay(1000);
+                for (int i = 1; i < 6; i++)
+                {
+                    ev.Player.ShowHint($"{6 - i}초 후 스폰 무적이 해제됩니다.", 1.2f);
+
+                    await Task.Delay(1000);
+                }
+
+                ev.Player.ShowHint($"스폰 무적이 해제되었습니다.");
+
+                ev.Player.IsGodModeEnabled = false;
             }
-
-            ev.Player.IsGodModeEnabled = false;
         }
 
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
