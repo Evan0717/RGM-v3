@@ -742,6 +742,8 @@ namespace RGM.Modes
                 {
                     if (PlayerAbilities[ev.Player].Contains("[전용] RTX4090"))
                     {
+                        PlayerAbilities[ev.Player].Clear();
+
                         ev.Player.Role.Set(RoleTypeId.Tutorial);
 
                         Vector3 Pos = Door.Get(DoorType.Scp079First).Position;
