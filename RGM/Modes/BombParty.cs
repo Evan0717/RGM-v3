@@ -75,18 +75,12 @@ namespace RGM.Modes
                 if (t > 90)
                 {
                     if (UnityEngine.Random.Range(1, 3) == 1)
-                    {
-                        foreach (var player in Player.List)
-                            Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(44, 46)} 1");
-                    }
+                        Server.ExecuteCommand($"/drop {RGM.GetRandomValue(Player.List.ToList()).Id} {UnityEngine.Random.Range(44, 46)} 1");
                 }
                 if (t > 120)
                 {
                     if (UnityEngine.Random.Range(1, 3) == 1)
-                    {
-                        foreach (var player in Player.List)
-                            Server.ExecuteCommand($"/drop {player.Id} 31 1");
-                    }
+                        Server.ExecuteCommand($"/drop {RGM.GetRandomValue(Player.List.ToList()).Id} 31 1");
                 }
 
                 Player.List.ToList().ForEach(x => x.DisableAllEffects());
