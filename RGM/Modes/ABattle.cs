@@ -70,7 +70,7 @@ namespace RGM.Modes
             {"[일반] 회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)"},
             {"[일반] 보급", "탄약이 랜덤하게 지급됩니다."},
             {"[일반] 정화", "초록 사탕을 받습니다."},
-            {"[일반] 생존 전문가", "SCP-1853을 받습니다."}
+            {"[일반] 무기 전문가", "SCP-1853을 받습니다."}
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
@@ -408,7 +408,7 @@ namespace RGM.Modes
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
                     break;
-                case "생존 전문가":
+                case "무기 전문가":
                     Item scp1853 = player.AddItem(ItemType.SCP1853);
 
                     if (player.IsScp)
@@ -453,7 +453,7 @@ namespace RGM.Modes
                     break;
                 case "테러리스트의 유품": player.TryAddCandy(CandyKindID.Pink); break;
                 case "랜덤상자":
-                    int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 44, 45, 47, 48, 49, 50, 51, 52, 53 });
+                    int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 47, 48, 49, 50, 51, 52, 53 });
 
                     if (player.IsInventoryFull)
                         Server.ExecuteCommand($"/drop {player.Id} {rn1} 1");
