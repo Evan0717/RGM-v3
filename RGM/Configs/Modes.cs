@@ -26,7 +26,15 @@ namespace RGM
 20% 확률로 피버 모드가 활성화됩니다.
 <b><i><color=#FF00EA>피</color><color=#EF00EB>버</color> <color=#CF00ED>모</color><color=#BF00EF>드</color></i></b> 활성화 시, 재단에 등장하는 워크스테이션의 수가 증가합니다.
 """ } },
-            { "블랙아웃", new List<string>() { "2A0A0A", "시설 곳곳이 정전됩니다.", "Blackout", "public", "", "" } },
+            { "블랙아웃", new List<string>() { "2A0A0A", "시설 곳곳이 정전됩니다.", "Blackout", "public", "", 
+"""
+각 방마다 기믹이 적용될 수 있습니다.
+
+33% - 방이 정전됩니다.
+33% - 방의 색상이 변경됩니다.
+33% - 아무 일도 일어나지 않습니다.
+(소숫점 버림)
+""" } },
             { "축복", new List<string>() { "F6D8CE", "관전자의 수에 비례해 능력치가 상승합니다.", "Blessing", "public", "", "" } },
             { "폭탄 파티", new List<string>() { "FAAC58", "버티면 버틸수록 난이도가 올라갑니다.", "BombParty", "public", "", "" } },
             { "수집가", new List<string>() { "FFBF00", "SCP 아이템 3개를 가지고 시작합니다.", "Collector", "public", "", "" } },
