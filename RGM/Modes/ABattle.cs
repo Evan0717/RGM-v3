@@ -70,7 +70,8 @@ namespace RGM.Modes
             {"[일반] 회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)"},
             {"[일반] 보급", "탄약이 랜덤하게 지급됩니다."},
             {"[일반] 정화", "초록 사탕을 받습니다."},
-            {"[일반] 무기 전문가", "SCP-1853을 받습니다."}
+            {"[일반] 무기 전문가", "SCP-1853을 받습니다."},
+            {"[일반] 신내림", "당신을 지켜보는 관전자가 5초 이내로 나타나면 능력 2~3개를 추가로 얻습니다."}
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
@@ -86,7 +87,8 @@ namespace RGM.Modes
             {"[희귀] 회중시계", "지급된 동전을 튕기면 3초간 움직일 수 없는 대신에 무적 상태가 됩니다."},
             {"[희귀] 스테로이드", "25초 간 이동 속도가 많이 증가합니다."},
             {"[희귀] 순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다."},
-            {"[희귀] 소매치기", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)"}
+            {"[희귀] 소매치기", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)"},
+            {"[희귀] 하이패스", "25초 간 무적이 됩니다."}
         };
         public Dictionary<string, string> EpicAbilities = new Dictionary<string, string>()
         {
@@ -99,7 +101,8 @@ namespace RGM.Modes
             {"[영웅] 럭키비키", "이전에 방문했던 워크스테이션에서 다시 한번 더 능력을 획득할 수 있습니다."},
             {"[영웅] 극독", "누군가에게 죽으면 죽인 자에게 심장 마비 효과를 겁니다."},
             {"[영웅] 구사일생", "사망 판정을 받을 경우 1번 버텨내며 3초간 무적이 됩니다."},
-            {"[영웅] 최후의 발악", "5초 뒤 반드시 죽지만, 그동안 무적이 되며 속도가 매우 빨라집니다."}
+            {"[영웅] 최후의 발악", "5초 뒤 반드시 죽지만, 그동안 무적이 되며 속도가 매우 빨라집니다."},
+            {"[영웅] 초재생", "핑크 콜라를 지급받습니다."}
         };
         public Dictionary<string, string> LegendAbilities = new Dictionary<string, string>()
         {
@@ -414,6 +417,26 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = scp1853;
                     break;
+                case "신내림":
+                    bool Pass = false;
+
+                    for (int i=1; i<61; i++)
+                    {
+                        if (player.CurrentSpectatingPlayers.Count() > 0)
+                        {
+                            Pass = true;
+                            break;
+                        }
+
+                        await Task.Delay(100);
+                    }
+
+                    if (Pass)
+                    {
+                        for (int i=1; i<UnityEngine.Random.Range(3, 5); i++)
+                            AddAbility(player);
+                    }
+                    break;
                 case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 1; break;
                 case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
                 case "순간이동":
@@ -451,7 +474,20 @@ namespace RGM.Modes
                 case "순교":
                     martyrs.Add(player);
                     break;
-                case "테러리스트의 유품": player.TryAddCandy(CandyKindID.Pink); break;
+                case "하이패스":
+                    RGM.Instance.GodModePlayers.Add(player);
+                    Timing.CallDelayed(25, () => 
+                    {
+                        if (RGM.Instance.GodModePlayers.Contains(player))
+                            RGM.Instance.GodModePlayers.Remove(player); 
+                    });
+                    break;
+                case "테러리스트의 유품": 
+                    player.TryAddCandy(CandyKindID.Pink); 
+
+                    if (player.IsScp)
+                        Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                    break;
                 case "랜덤상자":
                     int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 47, 48, 49, 50, 51, 52, 53 });
 
@@ -470,6 +506,12 @@ namespace RGM.Modes
                 case "극독": posions.Add(player); break;
                 case "구사일생": ability941s.Add(player); break;
                 case "최후의 발악": culprits.Add(player); break;
+                case "초재생": 
+                    Item AntiScp207 = player.AddItem(ItemType.AntiSCP207); 
+
+                    if (player.IsScp)
+                        player.CurrentItem = AntiScp207;
+                    break;
                 case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
                 case "모드 설치":
                     string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.Where(x => RGM.Instance.ModeList[x][3] != "private").ToList());
