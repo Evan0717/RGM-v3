@@ -696,7 +696,7 @@ namespace RGM
                             OnGround[player] = 5;
                         else
                         {
-                            OnGround[player] -= 0.3f;
+                            OnGround[player] -= 0.1f;
 
                             if (OnGround[player] <= 0)
                                 player.Kill("공허에 빨려들어갔습니다. (5초 이상 낙하)");
@@ -704,7 +704,7 @@ namespace RGM
                     }
                 }
 
-                yield return Timing.WaitForSeconds(0.3f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
