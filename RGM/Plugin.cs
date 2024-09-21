@@ -13,6 +13,7 @@ using MultiBroadcast.API;
 using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using RGM.API;
+using System.Windows;
 
 namespace RGM
 {
@@ -91,6 +92,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
 
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
@@ -114,6 +116,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
 
             Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
@@ -466,7 +469,7 @@ namespace RGM
                 ev.Player.Health = ev.Player.MaxHealth;
             }
 
-            if (ev.Player.IsAlive && Round.IsStarted)
+            if (ev.Player.IsAlive && Round.IsStarted && ev.Reason == SpawnReason.RoundStart)
             {
                 ev.Player.IsGodModeEnabled = true;
 
@@ -487,6 +490,15 @@ namespace RGM
         {
             if (ev.Player.IsScp && ev.Player.CurrentItem != null && ev.Door.Name.Contains("CHECKPOINT"))
                 ev.Door.IsOpen = true;
+        }
+
+        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        {
+            if (new List<DamageType>() { DamageType.Crushed, DamageType.Falldown, DamageType.Warhead }.Contains(ev.DamageHandler.Type))
+            {
+                ev.Player.IsGodModeEnabled = false;
+                ev.Player.Kill("운명에 의해 사망하였습니다.");
+            }
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
@@ -678,7 +690,7 @@ namespace RGM
                     }
                 }
 
-                yield return Timing.WaitForSeconds(0.1f);
+                yield return Timing.WaitForSeconds(0.5f);
             }
         }
 

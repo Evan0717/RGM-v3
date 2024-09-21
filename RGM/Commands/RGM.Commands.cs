@@ -54,6 +54,7 @@ namespace RGM.Commands
             }
             else
             {
+                Discord.Webhook.Send("test", "https://discord.com/api/webhooks/1286570523924627478/oIkgSYPAHul8pKB1tqqXWk3hvVocJBzoWOQTPu0Ha9KmF08NmzXbB3PsY6c7RVg3th6Z");
                 Discord.Webhook.Send($"## 랜덤게임모드({Server.Port.ToString()}) \n**{player.Nickname}**({player.Id}, {player.UserId})\n```\n{args}```",
                     "https://discord.com/api/webhooks/1286570523924627478/oIkgSYPAHul8pKB1tqqXWk3hvVocJBzoWOQTPu0Ha9KmF08NmzXbB3PsY6c7RVg3th6Z");
 
