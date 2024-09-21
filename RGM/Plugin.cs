@@ -92,6 +92,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
 
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
@@ -116,6 +117,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
 
             Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
@@ -491,13 +493,16 @@ namespace RGM
                 ev.Door.IsOpen = true;
         }
 
+        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        {
+            if (ev.Attacker == null)
+                ev.Player.IsGodModeEnabled = false;
+        }
+
         public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
-            if (new List<DamageType>() { DamageType.Crushed, DamageType.Falldown, DamageType.Warhead }.Contains(ev.DamageHandler.Type))
-            {
+            if (ev.Attacker == null)
                 ev.Player.IsGodModeEnabled = false;
-                ev.Player.Kill("운명에 의해 사망하였습니다.");
-            }
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
