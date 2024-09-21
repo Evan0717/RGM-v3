@@ -77,7 +77,7 @@ namespace RGM.Modes
                     if (UnityEngine.Random.Range(1, 3) == 1)
                     {
                         foreach (var player in Player.List)
-                            Server.ExecuteCommand($"/drop {player.Id} 31 1");
+                            Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(44, 46)} 1");
                     }
                 }
                 if (t > 120)
@@ -85,7 +85,7 @@ namespace RGM.Modes
                     if (UnityEngine.Random.Range(1, 3) == 1)
                     {
                         foreach (var player in Player.List)
-                            Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(44, 46)} 1");
+                            Server.ExecuteCommand($"/drop {player.Id} 31 1");
                     }
                 }
 
