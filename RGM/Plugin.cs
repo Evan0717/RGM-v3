@@ -485,7 +485,7 @@ namespace RGM
                 ev.Player.ShowHint($"스폰 무적이 해제되었습니다.");
 
                 if (GodModePlayers.Contains(ev.Player))
-                    GodModePlayers.Add(ev.Player);
+                    GodModePlayers.Remove(ev.Player);
             }
         }
 
@@ -608,6 +608,8 @@ namespace RGM
 
             Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
             Round.Start();
+
+            yield break;
         }
 
         public IEnumerator<float> RandomSelectMode()
@@ -678,6 +680,8 @@ namespace RGM
             yield return Timing.WaitForSeconds(5f);
 
             FreezeGameStart = false;
+
+            yield break;
         }
 
         public IEnumerator<float> IsFallDown()
@@ -692,7 +696,7 @@ namespace RGM
                             OnGround[player] = 5;
                         else
                         {
-                            OnGround[player] -= 0.1f;
+                            OnGround[player] -= 0.5f;
 
                             if (OnGround[player] <= 0)
                                 player.Kill("공허에 빨려들어갔습니다. (5초 이상 낙하)");
