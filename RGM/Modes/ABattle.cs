@@ -1008,7 +1008,10 @@ namespace RGM.Modes
         public void OnChangingSpeakerStatus(Exiled.Events.EventArgs.Scp079.ChangingSpeakerStatusEventArgs ev)
         {
             foreach (var player in ev.Room.Players)
-                player.EnableEffect(EffectType.SinkHole, 1, 1);
+            {
+                if (PlayerAbilities[player].Contains("[전용] 고대의 존재 압도"))
+                    player.EnableEffect(EffectType.SinkHole, 1, 1);
+            }
         }
     }
 }
