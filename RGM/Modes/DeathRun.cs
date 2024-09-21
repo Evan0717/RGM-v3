@@ -37,12 +37,12 @@ namespace RGM.Modes
             Tagger.Position = new Vector3(44.57422f, 999.7067f, 78.52734f);
             Tagger.ClearInventory();
 
-            for (int i=1; i<6; i++)
+            for (int i=1; i<11; i++)
             {
                 foreach (var player in Player.List)
                 {
                     player.ClearPlayerBroadcasts();
-                    player.AddBroadcast(2, $"<size=30><b><color=red>{6 - i}</color>초 후 게임이 시작됩니다. 준비하세요!</size>");
+                    player.AddBroadcast(2, $"<size=30><b><color=red>{11 - i}</color>초 후 게임이 시작됩니다. 준비하세요!</size>");
                 }
                 yield return Timing.WaitForSeconds(1f);
             }
