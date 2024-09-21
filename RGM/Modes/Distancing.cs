@@ -44,6 +44,8 @@ namespace RGM.Modes
 
                 foreach (var player in DamagePlayers)
                 {
+                    player.Health -= player.MaxHealth / 50;
+
                     if (player.IsAlive)
                         player.EnableEffect(EffectType.Poisoned, 1, 1.5f);
                 }
