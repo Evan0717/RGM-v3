@@ -468,7 +468,7 @@ namespace RGM
                 ev.Player.Health = ev.Player.MaxHealth;
             }
 
-            if (ev.Player.IsAlive && Round.IsStarted && ev.Reason == SpawnReason.RoundStart)
+            if (ev.Player.IsAlive && Round.IsStarted && (ev.Reason == SpawnReason.RoundStart || ev.Reason == SpawnReason.Respawn || ev.Reason == SpawnReason.Revived))
             {
                 ev.Player.IsGodModeEnabled = true;
 
