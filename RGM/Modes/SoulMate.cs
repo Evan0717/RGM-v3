@@ -67,7 +67,7 @@ namespace RGM.Modes
                 {
                     if (player.IsAlive)
                     {
-                        if (!waitingPlayers.Contains(player))
+                        if (!soulMates.ContainsKey(player))
                             waitingPlayers.Add(player);
                     }
                     else
@@ -112,16 +112,19 @@ namespace RGM.Modes
                     {
                         if (currentItems[player] != player.CurrentItem)
                         {
-                            Player soulMate = soulMates[player];
-
-                            foreach (var Item in soulMate.Items)
+                            Timing.CallDelayed(1f, () =>
                             {
-                                if (Item.Type == player.CurrentItem.Type)
+                                Player soulMate = soulMates[player];
+
+                                foreach (var Item in soulMate.Items)
                                 {
-                                    soulMate.CurrentItem = Item;
-                                    break;
+                                    if (Item.Type == player.CurrentItem.Type)
+                                    {
+                                        soulMate.CurrentItem = Item;
+                                        break;
+                                    }
                                 }
-                            }
+                            });
                         };
 
                         currentItems[player] = player.CurrentItem;
@@ -130,7 +133,7 @@ namespace RGM.Modes
                         currentItems.Add(player, player.CurrentItem);
                 }
 
-                yield return Timing.WaitForSeconds(0.1f);
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
