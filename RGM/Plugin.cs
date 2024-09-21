@@ -688,9 +688,9 @@ namespace RGM
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
-                    if (player.IsAlive && OnGround.ContainsKey(player) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
+                    if (OnGround.ContainsKey(player) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
                     {
                         if (FpcExtensionMethods.IsGrounded(player.ReferenceHub))
                             OnGround[player] = 5;
