@@ -153,6 +153,7 @@ namespace RGM
 
             PickModes();
 
+            Timing.RunCoroutine(Credit());
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
             Timing.RunCoroutine(IsFallDown());
@@ -610,6 +611,34 @@ namespace RGM
             Round.Start();
 
             yield break;
+        }
+
+        public IEnumerator<float> Credit()
+        {
+            while (!Round.IsStarted)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 2, (LayerMask)1))
+                    {
+                        if (hit.transform.name == "Credit")
+                            player.ShowHint(
+"""
+<b>[관리진]</b>
+Serendipity(@mercedes83) - 총괄 관리자
+작성 예정
+
+<b>[개발진]</b>
+GoldenPig1205(@GoldenPig1205) - 메인 개발자
+
+<b>[후원자]</b>
+작성 예정
+""", 1.2f);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public IEnumerator<float> RandomSelectMode()
