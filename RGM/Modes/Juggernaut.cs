@@ -189,8 +189,7 @@ namespace RGM.Modes
 
         public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
         {
-            if (ev.Effect.GetEffectType() != EffectType.SinkHole)
-                ev.IsAllowed = false;
+            ev.IsAllowed = false;
         }
 
         public void OnHandcuffing(Exiled.Events.EventArgs.Player.HandcuffingEventArgs ev)
