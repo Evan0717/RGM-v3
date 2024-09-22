@@ -9,6 +9,8 @@ using MEC;
 using RGM.API;
 using UnityEngine;
 using Exiled.API.Enums;
+using Exiled.API.Features.Roles;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
@@ -67,6 +69,9 @@ namespace RGM.Modes
         {
             await Task.Delay(1000);
             player.EnableEffect(EffectType.FogControl, 7);
+
+            if (player.Role.Type == RoleTypeId.Scp079)
+                player.Health += 100000;
         }
     }
 }
