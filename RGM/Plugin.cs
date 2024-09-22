@@ -624,7 +624,11 @@ namespace RGM
                         if (hit.transform.name == "Credit")
                             player.ShowHint(
 """
+<size=50><b>[ ⭐ 랜덤게임모드(RGM) 크레딧 ⭐ ]</b></size>
+
+<align=left><size=30>
 <b>[관리진]</b>
+Arloramäki(@alvar_noah) - 서버 소유자
 Serendipity(@mercedes83) - 총괄 관리자
 Normalperson(@normal._.person) - 관리자
 
@@ -632,7 +636,8 @@ Normalperson(@normal._.person) - 관리자
 GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
 <b>[후원자]</b>
-작성 예정
+<size=20>[D.I.]Dotory001(@dotory001), 류세(@milkyway_0119), Lu(@1__neeko__1), 뇨호호(@yeeeee222), ㅠㅅㅠ(@tampast)</size>
+</size></align>
 """, 1.2f);
                     }
                 }

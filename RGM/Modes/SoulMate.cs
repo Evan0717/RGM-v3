@@ -70,14 +70,14 @@ namespace RGM.Modes
                         if (!soulMates.ContainsKey(player))
                             waitingPlayers.Add(player);
                     }
-                    else
+                    else if (player.IsDead)
                     {
                         if (soulMates.ContainsKey(player))
                             soulMates.Remove(player);
                     }
                 }
 
-                while (waitingPlayers.Count > 1)
+                while (waitingPlayers.Count() > 1)
                 {
                     Player first = waitingPlayers[0];
                     Player second = waitingPlayers[1];
@@ -90,6 +90,8 @@ namespace RGM.Modes
 
                     second.MaxHealth = first.MaxHealth;
                     second.Health = first.Health;
+                    second.MaxArtificialHealth = first.MaxArtificialHealth;
+                    second.ArtificialHealth = first.ArtificialHealth;
 
                     second.ClearInventory();
                     foreach (var Item in first.Items)
@@ -160,6 +162,8 @@ namespace RGM.Modes
 
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
+                soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
+                soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
             }
         }
 
@@ -171,6 +175,8 @@ namespace RGM.Modes
 
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
+                soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
+                soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
             }
         }
 
@@ -228,6 +234,8 @@ namespace RGM.Modes
 
                     ev.Player.MaxHealth = soulMate.MaxHealth;
                     ev.Player.Health = soulMate.Health;
+                    soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
+                    soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
 
                     soulMate.ClearInventory();
                     foreach (var Item in ev.Player.Items)
