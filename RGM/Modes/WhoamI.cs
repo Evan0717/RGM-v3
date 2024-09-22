@@ -9,6 +9,7 @@ using MEC;
 using PlayerRoles;
 using RGM.API;
 using Achievements.Handlers;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -23,7 +24,6 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-
             while (true)
             {
                 yield return Timing.WaitForSeconds(60f);
@@ -40,8 +40,8 @@ namespace RGM.Modes
 
                 foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
                 {
-                    RoleTypeId SelectedRole = Roles[UnityEngine.Random.Range(0, Roles.Count())];
-                    player.Role.Set(SelectedRole, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
+                    RoleTypeId SelectedRole = RGM.GetRandomValue(Roles);
+                    player.Role.Set(SelectedRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
                 }
             }
         }

@@ -622,7 +622,7 @@ namespace RGM
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 2, (LayerMask)1))
                     {
                         if (hit.transform.name == "Credit")
-                            player.SendConsoleMessage(
+                            player.ShowHint(
 """
 <b>[관리진]</b>
 Serendipity(@mercedes83) - 총괄 관리자
@@ -633,11 +633,11 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
 <b>[후원자]</b>
 작성 예정
-""", "white");
+""", 1.2f);
                     }
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.5f);
             }
         }
 

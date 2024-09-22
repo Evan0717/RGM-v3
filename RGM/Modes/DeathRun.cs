@@ -70,12 +70,13 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            Round.EndRound(true);
-
             foreach (var player in Player.List)
             {
                 player.ClearPlayerBroadcasts();
                 player.AddBroadcast(20, $"<size=25><b><color=yellow>과학자</color>({player.Nickname})의 승리입니다!");
+
+                if (player != Tagger)
+                    player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
             }
 
             Tagger.AddItem(ItemType.GunE11SR);

@@ -47,11 +47,13 @@ namespace RGM.Modes
                 {
                     player.Health -= player.MaxHealth / 50;
 
-                    if (player.Health <= 0)
-                        player.Kill("사회가 당신과 거리를 두었습니다.");
-
                     if (player.IsAlive)
+                    {
                         player.EnableEffect(EffectType.Poisoned, 1, 1.5f);
+
+                        if (player.Health <= 0)
+                            player.Kill("사회가 당신과 거리를 두었습니다.");
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
