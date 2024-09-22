@@ -335,7 +335,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 <b>[후원자]</b>
 <size=20>[D.I.]Dotory001(@dotory001), 류세(@milkyway_0119), Lu(@1__neeko__1), 뇨호호(@yeeeee222), ㅠㅅㅠ(@tampast)</size>
 </size></align>
-\n\n\n\n\n\n
+\n\n\n\n\n\n\n\n\n\n\n\n\n
 """, 1.2f);
                         }
                         else

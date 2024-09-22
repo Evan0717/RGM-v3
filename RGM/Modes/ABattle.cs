@@ -240,7 +240,7 @@ namespace RGM.Modes
 
                             if (player != target && player.LeadingTeam != target.LeadingTeam)
                             {
-                                target.EnableEffect(EffectType.Slowness, 50, 0.2f);
+                                target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                                 target.EnableEffect(EffectType.Blinded, 1, 0.2f);
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.5f);
                             }

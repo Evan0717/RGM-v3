@@ -22,12 +22,15 @@ namespace RGM.Modes
         public void OnEnabled()
         {
             Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(RecordPlayerInfo());
-            Timing.RunCoroutine(CheckRedLight());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
+            yield return Timing.WaitForSeconds(10f);
+
+            Timing.RunCoroutine(RecordPlayerInfo());
+            Timing.RunCoroutine(CheckRedLight());
+
             Player.List.ToList().ForEach(x => x.ShowHint($"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
 
             while (true)
