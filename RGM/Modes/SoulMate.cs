@@ -58,12 +58,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                List<Player> pl = new List<Player>();
-
-                Player.List.CopyTo(pl);
-                pl.ShuffleList();
-
-                foreach (var player in pl)
+                foreach (var player in Player.List)
                 {
                     if (player.IsAlive)
                     {
@@ -79,8 +74,8 @@ namespace RGM.Modes
 
                 while (waitingPlayers.Count() > 1)
                 {
-                    Player first = waitingPlayers[0];
-                    Player second = waitingPlayers[1];
+                    Player first = RGM.GetRandomValue(waitingPlayers);
+                    Player second = RGM.GetRandomValue(waitingPlayers.Where(x => x != first).ToList());
 
                     waitingPlayers.Remove(first);
                     waitingPlayers.Remove(second);
@@ -98,7 +93,7 @@ namespace RGM.Modes
                         second.AddItem(Item.Type);
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(10f);
             }
         }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using RGM.API;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
@@ -40,35 +41,36 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            List<ItemType> FirearmList = new List<ItemType>() 
-            { 
-                ItemType.GunCOM15,
-                ItemType.GunCOM18,
-                ItemType.GunCom45,
-                ItemType.GunFSP9,
-                ItemType.GunE11SR,
-                ItemType.GunFRMG0,
-                ItemType.GunAK,
-                ItemType.GunShotgun,
-                ItemType.GunRevolver,
-                ItemType.GunLogicer,
-                ItemType.GunA7,
-                ItemType.Jailbird,
-                ItemType.ParticleDisruptor,
-                ItemType.MicroHID
-            };
-
-            Item CurrentItem = player.AddItem(FirearmList[UnityEngine.Random.Range(0, FirearmList.Count())]);
-
-            if (CurrentItem is Firearm firearm)
+            if (player.Role.Type != RoleTypeId.Scp079)
             {
-                for (int i=0; i<3; i++)
-                    player.AddAmmo(firearm.AmmoType, firearm.MaxAmmo);
-            }
+                List<ItemType> FirearmList = new List<ItemType>()
+                {
+                    ItemType.GunCOM15,
+                    ItemType.GunCOM18,
+                    ItemType.GunCom45,
+                    ItemType.GunFSP9,
+                    ItemType.GunE11SR,
+                    ItemType.GunFRMG0,
+                    ItemType.GunAK,
+                    ItemType.GunShotgun,
+                    ItemType.GunRevolver,
+                    ItemType.GunLogicer,
+                    ItemType.GunA7,
+                    ItemType.Jailbird,
+                    ItemType.ParticleDisruptor,
+                    ItemType.MicroHID
+                };
 
-            if (player.IsScp)
-            {
-                player.CurrentItem = CurrentItem;
+                Item CurrentItem = player.AddItem(RGM.GetRandomValue(FirearmList));
+
+                if (CurrentItem is Firearm firearm)
+                {
+                    for (int i = 0; i < 3; i++)
+                        player.AddAmmo(firearm.AmmoType, firearm.MaxAmmo);
+                }
+
+                if (player.IsScp)
+                    player.CurrentItem = CurrentItem;
             }
         }
     }
