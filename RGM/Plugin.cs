@@ -197,7 +197,7 @@ namespace RGM
                 player.ClearPlayerBroadcasts();
                 player.AddBroadcast(10, Message);
 
-                player.SendConsoleMessage($"\n{Message}", "white");
+                player.SendConsoleMessage($"\n{Message.Replace("\n", "\\n")}", "white");
                 if (ModeDescriptionDetail == "")
                     player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
@@ -285,7 +285,7 @@ namespace RGM
 
                 ev.Player.AddBroadcast(10, Message);
 
-                ev.Player.SendConsoleMessage($"\n{Message}", "white");
+                ev.Player.SendConsoleMessage($"\n{Message.Replace("\n", "\\n")}", "white");
                 if (ModeDescriptionDetail == "")
                     ev.Player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
@@ -331,15 +331,15 @@ namespace RGM
 <size=50><b>[ ⭐ 랜덤게임모드(RGM) 크레딧 ⭐ ]</b></size>
 
 <align=left><size=30>
-<b>[관리진]</b>
+<b><size=35><color=#F7FE2E>관리진</color></size></b>
 Arloramäki(@alvar_noah) - 서버 소유자
 Serendipity(@mercedes83) - 총괄 관리자
 Normalperson(@normal._.person) - 관리자
 
-<b>[개발진]</b>
+<b><size=35><color=#C8FE2E>개발진</color></size></b>
 GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
-<b>[후원자]</b>
+<b><size=35><color=#F79F81>후원자</color></size></b>
 <size=20>[D.I.]Dotory001(@dotory001), 류세(@milkyway_0119), Lu(@1__neeko__1), 뇨호호(@yeeeee222), ㅠㅅㅠ(@tampast)</size>
 </size></align>
 \n\n\n\n\n\n\n\n\n\n\n\n\n
