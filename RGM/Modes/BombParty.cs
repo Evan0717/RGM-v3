@@ -52,40 +52,51 @@ namespace RGM.Modes
 
                 var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                 g.FuseTime = 3f;
-                g.SpawnActive(new Vector3(UnityEngine.Random.Range(-9.941405f, 10.92998f), 1004.188f, UnityEngine.Random.Range(-15.76172f, 2.550781f)), Server.Host);
+                g.SpawnActive(GetRandomPosition(), Server.Host);
 
                 if (t > 30)
                 {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
+                    if (UnityEngine.Random.Range(1, 4) == 1)
                     {
                         var g1 = (FlashGrenade)Item.Create(ItemType.GrenadeFlash, Server.Host);
                         g1.FuseTime = 2f;
-                        g1.SpawnActive(new Vector3(UnityEngine.Random.Range(-9.941405f, 10.92998f), 1004.188f, UnityEngine.Random.Range(-15.76172f, 2.550781f)), Server.Host);
+                        g1.SpawnActive(GetRandomPosition(), Server.Host);
                     }
                 }
                 if (t > 60)
                 {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
+                    if (UnityEngine.Random.Range(1, 4) == 1)
                     {
                         var g1 = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                         g1.FuseTime = 5f;
-                        g1.SpawnActive(new Vector3(UnityEngine.Random.Range(-9.941405f, 10.92998f), 1004.188f, UnityEngine.Random.Range(-15.76172f, 2.550781f)), Server.Host);
+                        g1.SpawnActive(GetRandomPosition(), Server.Host);
                     }
                 }
                 if (t > 90)
                 {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
-                        Server.ExecuteCommand($"/drop {RGM.GetRandomValue(Player.List.ToList()).Id} {UnityEngine.Random.Range(44, 46)} 1");
+                    if (UnityEngine.Random.Range(1, 11) == 1)
+                    {
+                        var scp244 = (Scp244)Item.Create(RGM.GetRandomValue(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }), Server.Host);
+                        scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
+                    }
                 }
                 if (t > 120)
                 {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
-                        Server.ExecuteCommand($"/drop {RGM.GetRandomValue(Player.List.ToList()).Id} 31 1");
+                    if (UnityEngine.Random.Range(1, 4) == 1)
+                    {
+                        var scp018 = (Scp018)Item.Create(ItemType.SCP018, Server.Host);
+                        scp018.SpawnActive(GetRandomPosition(), Server.Host);
+                    }
                 }
 
                 Player.List.ToList().ForEach(x => x.DisableAllEffects());
                 yield return Timing.WaitForSeconds(3f);
             }
+        }
+
+        public Vector3 GetRandomPosition()
+        {
+            return new Vector3(UnityEngine.Random.Range(-9.941405f, 10.92998f), 1004.188f, UnityEngine.Random.Range(-15.76172f, 2.550781f));
         }
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
