@@ -26,7 +26,7 @@ namespace RGM.Modes
                 if (ev.Player.IsScp)
                     Server.ExecuteCommand($"<color=#{ev.Player.Role.Color.ToHex()}>{ev.Player.Role.Name}</color>(이)가 하늘로 승천했습니다.");
 
-                Server.ExecuteCommand($"/rocket {ev.Player.Id} 0.3");
+                Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
             }
         }
 
