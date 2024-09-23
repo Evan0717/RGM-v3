@@ -53,7 +53,7 @@ namespace RGM.Commands
             }
             else
             {
-                Discord.Webhook.Send($"```\n{args}```",
+                Discord.Webhook.Send($"{player.Nickname}({player.Id}, {player.UserId}) {args}",
                     "https://discord.com/api/webhooks/1286570523924627478/oIkgSYPAHul8pKB1tqqXWk3hvVocJBzoWOQTPu0Ha9KmF08NmzXbB3PsY6c7RVg3th6Z");
 
                 response = "서버 관리자에게 메세지가 전달되었습니다.\n유저 정보도 같이 전송되므로, 언행에 주의하십시오.";
