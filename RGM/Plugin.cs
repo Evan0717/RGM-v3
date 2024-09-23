@@ -240,7 +240,14 @@ namespace RGM
 
             while (true)
             {
-                Player.List.ToList().ForEach(x => x.Health -= (x.MaxHealth / 100));
+                foreach (var player in Player.List)
+                {
+                    player.Health -= player.MaxHealth / 100;
+
+                    if (player.Health <= 0 && player.IsAlive)
+                        player.Kill("게임을 질질 끌어서 죽었습니다.");
+                }
+
                 await Task.Delay(1000);
             }
         }

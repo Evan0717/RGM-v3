@@ -113,11 +113,14 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            if (player.Role.Type == RoleTypeId.Scp3114)
-                player.Role.Set(RoleTypeId.Scp939);
+            if (player.IsAlive)
+            {
+                if (player.Role.Type == RoleTypeId.Scp3114)
+                    player.Role.Set(RoleTypeId.Scp939);
 
-            if (player.Role is Scp079Role scp079)
-                scp079.AddExperience(1205);
+                if (player.Role is Scp079Role scp079)
+                    scp079.AddExperience(1205);
+            }
         }
 
         public void OnSearchingPickup(Exiled.Events.EventArgs.Player.SearchingPickupEventArgs ev)
