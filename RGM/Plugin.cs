@@ -338,6 +338,25 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 \n\n\n\n\n\n\n\n\n\n\n\n\n
 """, 1.2f);
                         }
+                        else if (hit.transform.name == "Mode")
+                        {
+                            List<string> Modes = new List<string>();
+                            
+                            foreach (var mode in ModeList)
+                            {
+                                string modeName = mode.Key;
+                                string color = mode.Value[0];
+                                bool IsPrivate = mode.Value[3] == "private";
+
+                                if (IsPrivate)
+                                    Modes.Add($"<s><color=#{color}>{modeName}</color></s>");
+
+                                else
+                                    Modes.Add($"<color=#{color}>{modeName}</color>");
+                            }
+
+                            ev.Player.ShowHint($"\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
+                        }
                         else
                         {
                             string SelectedMode;
