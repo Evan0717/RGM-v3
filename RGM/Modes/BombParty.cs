@@ -74,7 +74,7 @@ namespace RGM.Modes
                 }
                 if (t > 90)
                 {
-                    if (UnityEngine.Random.Range(1, 11) == 1)
+                    if (UnityEngine.Random.Range(1, 4) == 1)
                     {
                         var scp244 = (Scp244)Item.Create(RGM.GetRandomValue(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }), Server.Host);
                         scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
