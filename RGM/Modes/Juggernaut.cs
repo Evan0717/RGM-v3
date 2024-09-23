@@ -182,7 +182,7 @@ namespace RGM.Modes
         {
             if (ev.Attacker != null)
             {
-                if (ev.Player == juggernaut && ev.DamageHandler.Damage == -1)
+                if (ev.Player == juggernaut && ev.Attacker.Role.Type == RoleTypeId.Scp173)
                     ev.DamageHandler.Damage = 120.5f;
             }
         }

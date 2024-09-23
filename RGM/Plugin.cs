@@ -355,7 +355,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                     Modes.Add($"<color=#{color}>{modeName}</color>");
                             }
 
-                            ev.Player.ShowHint($"\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
+                            ev.Player.ShowHint($"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
                         }
                         else
                         {
