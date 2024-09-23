@@ -111,8 +111,6 @@ namespace RGM.Modes
 
                     second.MaxHealth = first.MaxHealth;
                     second.Health = first.Health;
-                    second.MaxArtificialHealth = first.MaxArtificialHealth;
-                    second.ArtificialHealth = first.ArtificialHealth;
 
                     second.ClearInventory();
                     foreach (var Item in first.Items)
@@ -132,7 +130,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive))
+                foreach (var player in Player.List.Where(x => x.IsAlive && soulMates.ContainsKey(x)))
                 {
                     if (currentItems.ContainsKey(player))
                     {
@@ -142,12 +140,18 @@ namespace RGM.Modes
                             {
                                 Player soulMate = soulMates[player];
 
-                                foreach (var Item in soulMate.Items)
+                                if (player.CurrentItem == null)
+                                    soulMate.CurrentItem = null;
+
+                                else
                                 {
-                                    if (Item.Type == player.CurrentItem.Type)
+                                    foreach (var Item in soulMate.Items)
                                     {
-                                        soulMate.CurrentItem = Item;
-                                        break;
+                                        if (Item.Type == player.CurrentItem.Type)
+                                        {
+                                            soulMate.CurrentItem = Item;
+                                            break;
+                                        }
                                     }
                                 }
                             });
@@ -186,8 +190,6 @@ namespace RGM.Modes
 
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
-                soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
-                soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
             }
         }
 
@@ -199,8 +201,6 @@ namespace RGM.Modes
 
                 soulMate.MaxHealth = ev.Player.MaxHealth;
                 soulMate.Health = ev.Player.Health;
-                soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
-                soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
             }
         }
 
@@ -258,8 +258,6 @@ namespace RGM.Modes
 
                     ev.Player.MaxHealth = soulMate.MaxHealth;
                     ev.Player.Health = soulMate.Health;
-                    soulMate.MaxArtificialHealth = ev.Player.MaxArtificialHealth;
-                    soulMate.ArtificialHealth = ev.Player.ArtificialHealth;
 
                     soulMate.ClearInventory();
                     foreach (var Item in ev.Player.Items)
