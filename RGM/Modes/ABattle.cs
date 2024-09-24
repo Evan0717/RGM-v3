@@ -296,29 +296,29 @@ namespace RGM.Modes
 
         public async void AddAbility(Player player, bool force = false)
         {
-            if (force || (UnityEngine.Random.Range(1, 3) == 1))
+            if (player.IsScp && player.Role.Type != RoleTypeId.Scp079)
             {
-                if (player.IsScp)
+                foreach (var scp079 in Player.List.Where(x => x.IsAlive))
                 {
-                    foreach (var scp079 in Player.List.Where(x => x.IsAlive))
+                    if (scp079.Role.Type == RoleTypeId.Scp079)
                     {
-                        if (scp079.Role.Type == RoleTypeId.Scp079)
+                        if (UnityEngine.Random.Range(1, 11) == 1)
                         {
-                            if (UnityEngine.Random.Range(1, 11) == 1)
+                            if (scp079.Role.Type == RoleTypeId.Scp079)
                             {
-                                if (scp079.Role.Type == RoleTypeId.Scp079)
-                                {
-                                    foreach (var scp in Player.List.Where(x => x.IsScp))
-                                        scp.AddBroadcast(10, $"<size=25><color=red>{player.Nickname}</color>({player.Role.Name}) 덕분에 <color=red>{scp079.Nickname}</color>({scp079.Role.Name})(이)가 능력을 획득하였습니다.</size>");
+                                foreach (var scp in Player.List.Where(x => x.IsScp))
+                                    scp.AddBroadcast(10, $"<size=25><color=red>{player.Nickname}</color>({player.Role.Name}) 덕분에 <color=red>{scp079.Nickname}</color>({scp079.Role.Name})(이)가 능력을 획득하였습니다.</size>");
 
-                                    AddAbility(scp079, true);
-                                }
+                                AddAbility(scp079, true);
+                                return;
                             }
-
-                            break;
                         }
                     }
                 }
+            }
+
+            if (force || (UnityEngine.Random.Range(1, 3) == 1))
+            {
 
                 int grade = UnityEngine.Random.Range(1, 1001);
                 string abilityGrade;
