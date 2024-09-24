@@ -197,7 +197,7 @@ namespace RGM
                 player.ClearPlayerBroadcasts();
                 player.AddBroadcast(10, Message);
 
-                player.SendConsoleMessage($"\n{Message.Replace("\n", "\\n")}", "white");
+                player.SendConsoleMessage($"\n{Message}", "white");
                 if (ModeDescriptionDetail == "")
                     player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
@@ -285,7 +285,7 @@ namespace RGM
 
                 ev.Player.AddBroadcast(10, Message);
 
-                ev.Player.SendConsoleMessage($"\n{Message.Replace("\n", "\\n")}", "white");
+                ev.Player.SendConsoleMessage($"\n{Message}", "white");
                 if (ModeDescriptionDetail == "")
                     ev.Player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
@@ -525,14 +525,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 GodModePlayers.Add(ev.Player);
 
-                for (int i = 1; i < 6; i++)
-                {
-                    ev.Player.ShowHint($"{6 - i}초 후 스폰 무적이 해제됩니다.", 1.2f);
-
-                    await Task.Delay(1000);
-                }
-
-                ev.Player.ShowHint($"스폰 무적이 해제되었습니다.");
+                await Task.Delay(5000);
 
                 if (GodModePlayers.Contains(ev.Player))
                     GodModePlayers.Remove(ev.Player);
@@ -572,6 +565,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 if (GodModePlayers.Contains(x))
                     GodModePlayers.Remove(x);
+
                 x.Kill("핵폭발에 사망하였습니다."); 
             });
         }
