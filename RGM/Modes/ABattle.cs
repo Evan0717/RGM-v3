@@ -201,7 +201,7 @@ namespace RGM.Modes
                     {
                         if (player.Role is SpectatorRole spectator)
                         {
-                            if (spectator != null)
+                            if (spectator.SpectatedPlayer != null)
                                 ShowStatus(player, spectator.SpectatedPlayer);
                         }
                     }
@@ -624,8 +624,7 @@ namespace RGM.Modes
             }
             else
             {
-                string Bang = "<color=#000000>꽝</color>";
-                string Message = $"<size=20><b>{Bang}! 다음 기회에..</b></size>";
+                string Message = $"<size=20><b>꽝! 다음 기회에..</b></size>";
 
                 player.AddBroadcast(8, Message);
                 player.SendConsoleMessage($"\n{Message}", "white");
