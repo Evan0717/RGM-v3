@@ -145,9 +145,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
-            Exiled.Events.Handlers.Player.ChangingSpectatedPlayer += OnChangingSpectatedPlayer;
 
-            Exiled.Events.Handlers.Scp079.GainingLevel += OnGainingLevel;
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
             Exiled.Events.Handlers.Scp079.ZoneBlackout += OnZoneBlackout;
             Exiled.Events.Handlers.Scp079.ChangingSpeakerStatus += OnChangingSpeakerStatus;
@@ -157,6 +155,28 @@ namespace RGM.Modes
             Timing.RunCoroutine(Spirit());
             Timing.RunCoroutine(Twinkle());
             Timing.RunCoroutine(FlashLight());
+        }
+
+        public void ShowStatus(Player player, Player target)
+        {
+            if (!PlayerWorkstation.ContainsKey(target))
+            {
+                PlayerWorkstation.Add(target, new List<Vector3>());
+                PlayerAbilities.Add(target, new List<string>());
+            }
+            else
+            {
+                if (PlayerAbilities[target].Count <= 0)
+                    player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 0.6f);
+
+                else
+                {
+                    string abilitiesText = string.Join(", ", PlayerAbilities[target]);
+                    abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
+
+                    player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 0.6f);
+                }
+            }
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -172,29 +192,19 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive))
+                foreach (var player in Player.List)
                 {
-                    if (!PlayerWorkstation.ContainsKey(player))
-                    {
-                        PlayerWorkstation.Add(player, new List<Vector3>());
-                        PlayerAbilities.Add(player, new List<string>());
-                    }
+                    if (player.IsAlive)
+                        ShowStatus(player, player);
+
                     else
                     {
-                        if (PlayerAbilities[player].Count <= 0)
-                            player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
-                            
-                        else
-                        {
-                            string abilitiesText = string.Join(", ", PlayerAbilities[player]);
-                            abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
-
-                            player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
-                        }
+                        if (player.Role is SpectatorRole spectator)
+                            ShowStatus(player, spectator.SpectatedPlayer);
                     }
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.5f);
             }
         }
 
@@ -281,310 +291,341 @@ namespace RGM.Modes
 
         // -------------------------------------------------------------------------------------------------------------------------- //
 
-        public async void AddAbility(Player player)
+        public async void AddAbility(Player player, bool force = false)
         {
-
-            int grade = UnityEngine.Random.Range(1, 1001);
-            string abilityGrade;
-
-            if (player.Role.Type == RoleTypeId.Scp079)
-                abilityGrade = "[전용]";
-
-            else
+            if (force || UnityEngine.Random.Range(1, 3) == 1)
             {
-                if (grade <= 650)
-                    abilityGrade = "[일반]";
-                else if (grade <= 920)
-                    abilityGrade = "[희귀]";
-                else if (grade <= 995)
-                    abilityGrade = "[영웅]";
-                else if (grade <= 999)
-                    abilityGrade = "[전설]";
-                else
-                    abilityGrade = "[신화]";
-            }
-
-            Dictionary<string, string> AbilityList()
-            {
-                if (abilityGrade == "[일반]")
-                    return CommonAbilities;
-                else if (abilityGrade == "[희귀]")
-                    return RareAbilities;
-                else if (abilityGrade == "[영웅]")
+                if (player.IsScp)
                 {
-                    Cassie.Clear();
-                    Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#FF00FF>[영웅]</color> 업그레이드를 입수하였습니다.");
-                    return EpicAbilities;
-                }
-                else if (abilityGrade == "[전설]")
-                {
-                    Cassie.Clear();
-                    Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#ffd700>[전설]</color> 업그레이드를 입수하였습니다.");
-                    return LegendAbilities;
-                }
-                else if (abilityGrade == "[신화]")
-                {
-                    Cassie.Clear();
-                    Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#DF0101>[신화]</color> 업그레이드를 입수하였습니다.");
-                    return MythicAbilities;
-                }
-                else
-                {
-                    Cassie.Clear();
-                    Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#F7819F>[전용]</color> 업그레이드를 입수하였습니다.");
-                    return Scp079Abilities;
-                }
-            }
-
-            void ApplyGiveAbility(string abilityName)
-            {
-                PlayerAbilities[player].Add(abilityName);
-                string styleName = abilityName.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
-                player.ClearBroadcasts();
-
-                string Message = $"<size=20><b>다음 능력이 추가되었습니다.</b></size>\n<size=30>{styleName}</size>\n<size=25>{AbilityList()[abilityName]}</size>";
-                player.AddBroadcast(8, Message);
-                player.SendConsoleMessage($"\n{Message}", "white");
-            }
-
-            string abilityName = RGM.GetRandomValue(AbilityList().Keys.ToList());
-
-            ApplyGiveAbility(abilityName);
-
-            string aT = abilityName.Replace("[전용]", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "");
-
-            switch (aT)
-            {
-                case "운동":
-                    float maxHealth = player.MaxHealth;
-                    float healthIncrease = maxHealth * 0.25f;
-                    player.MaxHealth += healthIncrease;
-                    player.Health += healthIncrease;
-                    break;
-                case "경공": player.GetEffect(EffectType.MovementBoost).Intensity += 10; break;
-                case "진화": player.Scale = new Vector3(player.Scale.x - 0.12f, player.Scale.y - 0.12f, player.Scale.z - 0.12f); break;
-                case "체력 보충": 
-                    player.TryAddCandy(CandyKindID.Blue);
-
-                    if (player.IsScp)
-                        Server.ExecuteCommand($"/forceeq {player.Id} 42");
-                    break;
-                case "랜덤박스":
-                    int rn = UnityEngine.Random.Range(0, 55);
-
-                    if (player.IsInventoryFull)
-                        Server.ExecuteCommand($"/drop {player.Id} {rn} 1");
-
-                    else
-                        Server.ExecuteCommand($"/give {player.Id} {rn}");
-
-                    if (player.IsScp)
-                        Server.ExecuteCommand($"/forceeq {player.Id} {rn}");
-                    break;
-                case "위치 추적":
-                    Player target1 = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
-
-                    for (int i = 1; i < 11; i++)
+                    foreach (var scp079 in Player.List.Where(x => x.IsAlive))
                     {
-                        player.ShowHint($"소속이 <color={target1.Role.Color.ToHex()}>{target1.Role.Name}</color>인 ???은(는) <b>{target1.CurrentRoom.Name}</b>에 있습니다.", 1.2f);
-                        await Task.Delay(1000);
-                    }
-                    break;
-                case "광고": Server.ExecuteCommand($"/cassie_sl <b>[<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color>이(가) 출력한 진영 정보]</b>\n <color=red>SCP</color> : {Player.List.Where(x => x.IsScp).Count()} / <color=#088A29>혼돈의 반란</color> : {Player.List.Where(x => x.IsCHI).Count()} / <color=#0080FF>NTF</color> : {Player.List.Where(x => x.IsNTF).Count()}"); break;
-                case "뽑기":
-                    Item pc = player.AddItem(ItemType.Coin);
-                    PickCoinSerials.Add(pc.Serial);
-
-                    if (player.IsScp)
-                        player.CurrentItem = pc;
-                    break;
-                case "보험": insurers.Add(player); break;
-                case "회축": fighters.Add(player); break;
-                case "보급":
-                    List<string> Ammos = new List<string> { "19", "22", "27", "28", "29" };
-
-                    for (int i=1; i<4; i++)
-                        Server.ExecuteCommand($"/give {player.Id} {RGM.GetRandomValue(Ammos)}");
-                    break;
-                case "정화":
-                    player.TryAddCandy(CandyKindID.Green);
-
-                    if (player.IsScp)
-                        Server.ExecuteCommand($"/forceeq {player.Id} 42");
-                    break;
-                case "무기 전문가":
-                    Item scp1853 = player.AddItem(ItemType.SCP1853);
-
-                    if (player.IsScp)
-                        player.CurrentItem = scp1853;
-                    break;
-                case "신내림":
-                    bool Pass = false;
-
-                    for (int i=1; i<61; i++)
-                    {
-                        if (player.CurrentSpectatingPlayers.Count() > 0)
+                        if (scp079.Role.Type == RoleTypeId.Scp079)
                         {
-                            player.AddBroadcast(5, $"<size=25>당신은 {player.CurrentSpectatingPlayers.ToList()[0].Nickname}로부터 신내림을 받았습니다.</size>");
-                            player.CurrentSpectatingPlayers.ToList()[0].AddBroadcast(5, $"<size=25>당신은 {player.Nickname}(에)게 신내림을 내려주었습니다.</size>");
-                            Pass = true;
+                            if (UnityEngine.Random.Range(1, 11) == 1)
+                            {
+                                if (scp079.Role.Type == RoleTypeId.Scp079)
+                                {
+                                    foreach (var scp in Player.List.Where(x => x.IsScp))
+                                        scp.AddBroadcast(10, $"<size=25><color=red>{player.Nickname}</color>({player.Role.Name}) 덕분에 <color=red>{scp079.Nickname}</color>({scp079.Role.Name})(이)가 능력을 획득하였습니다.</size>");
+
+                                    AddAbility(scp079, true);
+                                }
+                            }
+
                             break;
                         }
-
-                        await Task.Delay(100);
                     }
+                }
 
-                    if (Pass)
-                    {
-                        for (int i=1; i<UnityEngine.Random.Range(3, 5); i++)
-                            AddAbility(player);
-                    }
-                    break;
-                case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 10; break;
-                case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
-                case "순간이동":
-                    Item fc = player.AddItem(ItemType.Coin);
-                    FollowCoinSerials.Add(fc.Serial);
+                int grade = UnityEngine.Random.Range(1, 1001);
+                string abilityGrade;
 
-                    if (player.IsScp)
-                        player.CurrentItem = fc;
-                    break;
-                case "봄버맨":
-                    var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
-                    g.FuseTime = 3f;
-                    g.SpawnActive(RGM.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != player.Role.Team && player != x).ToList()).Position, player);
-                    break;
-                case "갈고리":
-                    Item gc = player.AddItem(ItemType.Coin);
-                    GrapCoinSerials.Add(gc.Serial);
+                if (player.Role.Type == RoleTypeId.Scp079)
+                    abilityGrade = "[전용]";
 
-                    if (player.IsScp)
-                        player.CurrentItem = gc;
-                    break;
-                case "잠수": player.IsUsingStamina = false; break;
-                case "고스트룰": player.GetEffect(EffectType.Ghostly).Intensity += 1; break;
-                case "회중시계":
-                    Item cc = player.AddItem(ItemType.Coin);
-                    ClockCoinSerials.Add(cc.Serial);
-
-                    if (player.IsScp)
-                        player.CurrentItem = cc;
-                    break;
-                case "스테로이드":
-                    player.GetEffect(EffectType.MovementBoost).Intensity += 50;
-                    Timing.CallDelayed(25, () => { player.GetEffect(EffectType.MovementBoost).Intensity -= 50; });
-                    break;
-                case "순교":
-                    martyrs.Add(player);
-                    break;
-                case "하이패스":
-                    RGM.Instance.GodModePlayers.Add(player);
-                    Timing.CallDelayed(25, () => 
-                    {
-                        if (RGM.Instance.GodModePlayers.Contains(player))
-                            RGM.Instance.GodModePlayers.Remove(player); 
-                    });
-                    break;
-                case "테러리스트의 유품": 
-                    player.TryAddCandy(CandyKindID.Pink); 
-
-                    if (player.IsScp)
-                        Server.ExecuteCommand($"/forceeq {player.Id} 42");
-                    break;
-                case "랜덤상자":
-                    int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 47, 48, 49, 50, 51, 52, 53 });
-
-                    if (player.IsInventoryFull)
-                        Server.ExecuteCommand($"/drop {player.Id} {rn1} 1");
-
+                else
+                {
+                    if (grade <= 650)
+                        abilityGrade = "[일반]";
+                    else if (grade <= 920)
+                        abilityGrade = "[희귀]";
+                    else if (grade <= 995)
+                        abilityGrade = "[영웅]";
+                    else if (grade <= 999)
+                        abilityGrade = "[전설]";
                     else
-                        Server.ExecuteCommand($"/give {player.Id} {rn1}");
+                        abilityGrade = "[신화]";
+                }
 
-                    if (player.IsScp)
-                        Server.ExecuteCommand($"/forceeq {player.Id} {rn1}");
-                    break;
-                case "럭키비키": PlayerWorkstation[player].Clear(); break;
-                case "핵 리모컨": Warhead.Start(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 활성화했습니다.</b>"); break;
-                case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
-                case "극독": posions.Add(player); break;
-                case "구사일생": ability941s.Add(player); break;
-                case "최후의 발악": culprits.Add(player); break;
-                case "초재생": 
-                    Item AntiScp207 = player.AddItem(ItemType.AntiSCP207); 
-
-                    if (player.IsScp)
-                        player.CurrentItem = AntiScp207;
-                    break;
-                case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
-                case "모드 설치":
-                    string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.Where(x => RGM.Instance.ModeList[x][3] != "private").ToList());
-                    string mod1 = Mode1.ToString();
-
-                    var modeType = Type.GetType($"RGM.Modes.{RGM.Instance.ModeList[Mode1][2]}");
-                    if (modeType != null)
+                Dictionary<string, string> AbilityList()
+                {
+                    if (abilityGrade == "[일반]")
+                        return CommonAbilities;
+                    else if (abilityGrade == "[희귀]")
+                        return RareAbilities;
+                    else if (abilityGrade == "[영웅]")
                     {
-                        var modeInstance = Activator.CreateInstance(modeType);
-                        var onEnabledMethod = modeType.GetMethod("OnEnabled");
-                        onEnabledMethod?.Invoke(modeInstance, null);
+                        Cassie.Clear();
+                        Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#FF00FF>[영웅]</color> 업그레이드를 입수하였습니다.");
+                        return EpicAbilities;
                     }
-
-                    Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 [{mod1}] 모드를 설치했습니다.");
-                    break;
-                case "뱀의 손 무전기":
-                    player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
-                    List<Player> SnakeHands = Player.List.Where(x => x.IsDead).ToList();
-
-                    foreach (var p in SnakeHands)
+                    else if (abilityGrade == "[전설]")
                     {
-                        p.Role.Set(RoleTypeId.Tutorial);
-                        p.Position = new Vector3(-0.08203125f, 1000.96f, 6.828125f);
-
-                        foreach (ItemType Item in new List<ItemType> { ItemType.KeycardFacilityManager, ItemType.GunFSP9, ItemType.GunRevolver, ItemType.Adrenaline, ItemType.AntiSCP207 })
-                            p.AddItem(Item);
-
-                        for (int i = 1; i < 3; i++)
-                            Player.List.ToList().ForEach(x => Server.ExecuteCommand($"/give {x.Id} 27.29."));
+                        Cassie.Clear();
+                        Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#ffd700>[전설]</color> 업그레이드를 입수하였습니다.");
+                        return LegendAbilities;
                     }
-
-                    player.ShowHint($"<i>{SnakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..</i>", 5);
-                    break;
-                case "랜덤택배":
-                    for (int i = 1; i < Player.List.Count() + 1; i++)
-                        Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(1, 55)} 1");
-                    break;
-                case "마술사": magicians.Add(player); break;
-                case "플래시라이트":
-                    Item fl = player.AddItem(ItemType.Flashlight);
-                    FlashLightSerials.Add(fl.Serial);
-
-                    if (player.IsScp)
-                        player.CurrentItem = fl;
-                    break;
-                case "해킹": Warhead.Start(); Warhead.Detonate(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 터트렸습니다.</b>"); break;
-                case "스피릿": spirits.Add(player); break;
-                case "눈빛맨": twinkles.Add(player); break;
-                case "핑 리모컨": 
-                    break;
-                case "간이 충전기":
-                    if (player.Role is Scp079Role scp079)
-                        scp079.Experience += 20;
-                    break;
-                case "과전류":
-                    for (int i=1; i<21; i++)
+                    else if (abilityGrade == "[신화]")
                     {
-                        if (player.Role is Scp079Role scp0791)
-                            scp0791.Energy = scp0791.MaxEnergy;
-
-                        await Task.Delay(1000);
+                        Cassie.Clear();
+                        Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#DF0101>[신화]</color> 업그레이드를 입수하였습니다.");
+                        return MythicAbilities;
                     }
-                    break;
-                case "랜덤 함수":
-                    break;
-                case "RTX4090":
-                    break;
-                case "고대의 존재 압도":
-                    break;
+                    else
+                    {
+                        Cassie.Clear();
+                        Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color=#F7819F>[전용]</color> 업그레이드를 입수하였습니다.");
+                        return Scp079Abilities;
+                    }
+                }
+
+                void ApplyGiveAbility(string abilityName)
+                {
+                    PlayerAbilities[player].Add(abilityName);
+                    string styleName = abilityName.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
+
+                    string Message = $"<size=20><b>다음 능력이 추가되었습니다.</b></size>\n<size=30>{styleName}</size>\n<size=25>{AbilityList()[abilityName]}</size>";
+                    player.AddBroadcast(8, Message);
+                    player.SendConsoleMessage($"\n{Message}", "white");
+                }
+
+                string abilityName = RGM.GetRandomValue(AbilityList().Keys.ToList());
+
+                ApplyGiveAbility(abilityName);
+
+                string aT = abilityName.Replace("[전용]", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "");
+
+                switch (aT)
+                {
+                    case "운동":
+                        float maxHealth = player.MaxHealth;
+                        float healthIncrease = maxHealth * 0.25f;
+                        player.MaxHealth += healthIncrease;
+                        player.Health += healthIncrease;
+                        break;
+                    case "경공": player.GetEffect(EffectType.MovementBoost).Intensity += 10; break;
+                    case "진화": player.Scale = new Vector3(player.Scale.x - 0.12f, player.Scale.y - 0.12f, player.Scale.z - 0.12f); break;
+                    case "체력 보충":
+                        player.TryAddCandy(CandyKindID.Blue);
+
+                        if (player.IsScp)
+                            Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                        break;
+                    case "랜덤박스":
+                        int rn = UnityEngine.Random.Range(0, 55);
+
+                        if (player.IsInventoryFull)
+                            Server.ExecuteCommand($"/drop {player.Id} {rn} 1");
+
+                        else
+                            Server.ExecuteCommand($"/give {player.Id} {rn}");
+
+                        if (player.IsScp)
+                            Server.ExecuteCommand($"/forceeq {player.Id} {rn}");
+                        break;
+                    case "위치 추적":
+                        Player target1 = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+
+                        for (int i = 1; i < 11; i++)
+                        {
+                            player.ShowHint($"소속이 <color={target1.Role.Color.ToHex()}>{target1.Role.Name}</color>인 ???은(는) <b>{target1.CurrentRoom.Name}</b>에 있습니다.", 1.2f);
+                            await Task.Delay(1000);
+                        }
+                        break;
+                    case "광고": Server.ExecuteCommand($"/cassie_sl <b>[<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color>이(가) 출력한 진영 정보]</b>\n <color=red>SCP</color> : {Player.List.Where(x => x.IsScp).Count()} / <color=#088A29>혼돈의 반란</color> : {Player.List.Where(x => x.IsCHI).Count()} / <color=#0080FF>NTF</color> : {Player.List.Where(x => x.IsNTF).Count()}"); break;
+                    case "뽑기":
+                        Item pc = player.AddItem(ItemType.Coin);
+                        PickCoinSerials.Add(pc.Serial);
+
+                        if (player.IsScp)
+                            player.CurrentItem = pc;
+                        break;
+                    case "보험": insurers.Add(player); break;
+                    case "회축": fighters.Add(player); break;
+                    case "보급":
+                        List<string> Ammos = new List<string> { "19", "22", "27", "28", "29" };
+
+                        for (int i = 1; i < 4; i++)
+                            Server.ExecuteCommand($"/give {player.Id} {RGM.GetRandomValue(Ammos)}");
+                        break;
+                    case "정화":
+                        player.TryAddCandy(CandyKindID.Green);
+
+                        if (player.IsScp)
+                            Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                        break;
+                    case "무기 전문가":
+                        Item scp1853 = player.AddItem(ItemType.SCP1853);
+
+                        if (player.IsScp)
+                            player.CurrentItem = scp1853;
+                        break;
+                    case "신내림":
+                        bool Pass = false;
+
+                        for (int i = 1; i < 61; i++)
+                        {
+                            if (player.CurrentSpectatingPlayers.Count() > 0)
+                            {
+                                player.AddBroadcast(5, $"<size=25>당신은 {player.CurrentSpectatingPlayers.ToList()[0].Nickname}로부터 신내림을 받았습니다.</size>");
+                                player.CurrentSpectatingPlayers.ToList()[0].AddBroadcast(5, $"<size=25>당신은 {player.Nickname}(에)게 신내림을 내려주었습니다.</size>");
+                                Pass = true;
+                                break;
+                            }
+
+                            await Task.Delay(100);
+                        }
+
+                        if (Pass)
+                        {
+                            for (int i = 1; i < UnityEngine.Random.Range(3, 5); i++)
+                                AddAbility(player);
+                        }
+                        break;
+                    case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 10; break;
+                    case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
+                    case "순간이동":
+                        Item fc = player.AddItem(ItemType.Coin);
+                        FollowCoinSerials.Add(fc.Serial);
+
+                        if (player.IsScp)
+                            player.CurrentItem = fc;
+                        break;
+                    case "봄버맨":
+                        var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
+                        g.FuseTime = 3f;
+                        g.SpawnActive(RGM.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != player.Role.Team && player != x).ToList()).Position, player);
+                        break;
+                    case "갈고리":
+                        Item gc = player.AddItem(ItemType.Coin);
+                        GrapCoinSerials.Add(gc.Serial);
+
+                        if (player.IsScp)
+                            player.CurrentItem = gc;
+                        break;
+                    case "잠수": player.IsUsingStamina = false; break;
+                    case "고스트룰": player.GetEffect(EffectType.Ghostly).Intensity += 1; break;
+                    case "회중시계":
+                        Item cc = player.AddItem(ItemType.Coin);
+                        ClockCoinSerials.Add(cc.Serial);
+
+                        if (player.IsScp)
+                            player.CurrentItem = cc;
+                        break;
+                    case "스테로이드":
+                        player.GetEffect(EffectType.MovementBoost).Intensity += 50;
+                        Timing.CallDelayed(25, () => { player.GetEffect(EffectType.MovementBoost).Intensity -= 50; });
+                        break;
+                    case "순교":
+                        martyrs.Add(player);
+                        break;
+                    case "하이패스":
+                        RGM.Instance.GodModePlayers.Add(player);
+                        Timing.CallDelayed(25, () =>
+                        {
+                            if (RGM.Instance.GodModePlayers.Contains(player))
+                                RGM.Instance.GodModePlayers.Remove(player);
+                        });
+                        break;
+                    case "테러리스트의 유품":
+                        player.TryAddCandy(CandyKindID.Pink);
+
+                        if (player.IsScp)
+                            Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                        break;
+                    case "랜덤상자":
+                        int rn1 = RGM.GetRandomValue(new List<int> { 11, 16, 18, 24, 31, 32, 47, 48, 49, 50, 51, 52, 53 });
+
+                        if (player.IsInventoryFull)
+                            Server.ExecuteCommand($"/drop {player.Id} {rn1} 1");
+
+                        else
+                            Server.ExecuteCommand($"/give {player.Id} {rn1}");
+
+                        if (player.IsScp)
+                            Server.ExecuteCommand($"/forceeq {player.Id} {rn1}");
+                        break;
+                    case "럭키비키": PlayerWorkstation[player].Clear(); break;
+                    case "핵 리모컨": Warhead.Start(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 활성화했습니다.</b>"); break;
+                    case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
+                    case "극독": posions.Add(player); break;
+                    case "구사일생": ability941s.Add(player); break;
+                    case "최후의 발악": culprits.Add(player); break;
+                    case "초재생":
+                        Item AntiScp207 = player.AddItem(ItemType.AntiSCP207);
+
+                        if (player.IsScp)
+                            player.CurrentItem = AntiScp207;
+                        break;
+                    case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
+                    case "모드 설치":
+                        string Mode1 = RGM.GetRandomValue(RGM.Instance.ModeList.Keys.Where(x => RGM.Instance.ModeList[x][3] != "private").ToList());
+                        string mod1 = Mode1.ToString();
+
+                        var modeType = Type.GetType($"RGM.Modes.{RGM.Instance.ModeList[Mode1][2]}");
+                        if (modeType != null)
+                        {
+                            var modeInstance = Activator.CreateInstance(modeType);
+                            var onEnabledMethod = modeType.GetMethod("OnEnabled");
+                            onEnabledMethod?.Invoke(modeInstance, null);
+                        }
+
+                        Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 [{mod1}] 모드를 설치했습니다.");
+                        break;
+                    case "뱀의 손 무전기":
+                        player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
+
+                        List<Player> SnakeHands = Player.List.Where(x => x.IsDead).ToList();
+
+                        foreach (var p in SnakeHands)
+                        {
+                            p.Role.Set(RoleTypeId.Tutorial);
+                            p.Position = new Vector3(-0.08203125f, 1000.96f, 6.828125f);
+
+                            foreach (ItemType Item in new List<ItemType> { ItemType.KeycardFacilityManager, ItemType.GunFSP9, ItemType.GunRevolver, ItemType.Adrenaline, ItemType.AntiSCP207 })
+                                p.AddItem(Item);
+
+                            for (int i = 1; i < 3; i++)
+                                Player.List.ToList().ForEach(x => Server.ExecuteCommand($"/give {x.Id} 27.29."));
+                        }
+
+                        player.ShowHint($"<i>{SnakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..</i>", 5);
+                        break;
+                    case "랜덤택배":
+                        for (int i = 1; i < Player.List.Count() + 1; i++)
+                            Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(1, 55)} 1");
+                        break;
+                    case "마술사": magicians.Add(player); break;
+                    case "플래시라이트":
+                        Item fl = player.AddItem(ItemType.Flashlight);
+                        FlashLightSerials.Add(fl.Serial);
+
+                        if (player.IsScp)
+                            player.CurrentItem = fl;
+                        break;
+                    case "해킹": Warhead.Start(); Warhead.Detonate(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 터트렸습니다.</b>"); break;
+                    case "스피릿": spirits.Add(player); break;
+                    case "눈빛맨": twinkles.Add(player); break;
+                    case "핑 리모컨":
+                        break;
+                    case "간이 충전기":
+                        if (player.Role is Scp079Role scp079)
+                            scp079.Experience += 20;
+                        break;
+                    case "과전류":
+                        for (int i = 1; i < 21; i++)
+                        {
+                            if (player.Role is Scp079Role scp0791)
+                                scp0791.Energy = scp0791.MaxEnergy;
+
+                            await Task.Delay(1000);
+                        }
+                        break;
+                    case "랜덤 함수":
+                        break;
+                    case "RTX4090":
+                        break;
+                    case "고대의 존재 압도":
+                        break;
+                }
+            }
+            else
+            {
+                string Bang = "<color=#000000>꽝</color>";
+                string Message = $"<size=20><b>{Bang}! 다음 기회에..</b></size>";
+
+                player.AddBroadcast(8, Message);
+                player.SendConsoleMessage($"\n{Message}", "white");
             }
         }
 
@@ -974,31 +1015,6 @@ namespace RGM.Modes
                 ev.Player.DisableEffect(EffectType.Invisible);
         }
 
-        public void OnChangingSpectatedPlayer(Exiled.Events.EventArgs.Player.ChangingSpectatedPlayerEventArgs ev)
-        {
-            if (ev.NewTarget != null)
-            {
-                if (PlayerAbilities.ContainsKey(ev.NewTarget))
-                {
-                    if (PlayerAbilities[ev.NewTarget].Count <= 0)
-                        ev.Player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 250f);
-
-                    else
-                    {
-                        string abilitiesText = string.Join(", ", PlayerAbilities[ev.NewTarget]);
-                        abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
-
-                        ev.Player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 250f);
-                    }
-                }
-            }
-        }
-
-        public void OnGainingLevel(Exiled.Events.EventArgs.Scp079.GainingLevelEventArgs ev)
-        {
-            AddAbility(ev.Player);
-        }
-
         public void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] 핑 리모컨"))
@@ -1020,9 +1036,9 @@ namespace RGM.Modes
 
         public void OnChangingSpeakerStatus(Exiled.Events.EventArgs.Scp079.ChangingSpeakerStatusEventArgs ev)
         {
-            foreach (var player in ev.Room.Players)
+            if (PlayerAbilities[ev.Player].Contains("[전용] 고대의 존재 압도"))
             {
-                if (PlayerAbilities[player].Contains("[전용] 고대의 존재 압도"))
+                foreach (var player in ev.Room.Players)
                     player.EnableEffect(EffectType.SinkHole, 1, 1);
             }
         }
