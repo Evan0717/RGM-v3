@@ -197,7 +197,7 @@ namespace RGM
                 player.ClearPlayerBroadcasts();
                 player.AddBroadcast(10, Message);
 
-                player.SendConsoleMessage($"\n{Message}", "white");
+                player.SendConsoleMessage($"\n{Message.Replace("\n", "\n")}", "white");
                 if (ModeDescriptionDetail == "")
                     player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
@@ -285,7 +285,7 @@ namespace RGM
 
                 ev.Player.AddBroadcast(10, Message);
 
-                ev.Player.SendConsoleMessage($"\n{Message}", "white");
+                ev.Player.SendConsoleMessage($"\n{Message.Replace("\n", "\n")}", "white");
                 if (ModeDescriptionDetail == "")
                     ev.Player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 

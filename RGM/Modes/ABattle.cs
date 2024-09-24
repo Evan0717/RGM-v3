@@ -930,7 +930,7 @@ namespace RGM.Modes
                     {
                         posions.Remove(ev.Player);
 
-                        ev.Attacker.EnableEffect(EffectType.CardiacArrest);
+                        ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 15);
                     }
                 }
             }
