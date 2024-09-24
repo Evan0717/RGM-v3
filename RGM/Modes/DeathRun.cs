@@ -71,7 +71,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in Player.List.Where(x => x.IsAlive))
             {
                 if (player != Tagger)
                     player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
