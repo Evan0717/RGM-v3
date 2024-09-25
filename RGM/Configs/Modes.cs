@@ -12,8 +12,8 @@ namespace RGM
         {
             { "워크스테이션 업그레이드", new List<string>() { "00FFFF", "워크스테이션에서 업그레이드하세요!", "ABattle", "public", "",
 """
-<color=#F5DA81>인간 진영</color>일 경우, 워크스테이션에서 점프하면 50% 확률로 능력을 1개 얻습니다.
-<color=red>SCP-079</color>일 경우, 같은 팀인 SCP가 능력을 얻으면 10% 확률로 획득합니다.
+<color=#F5DA81>인간 진영</color>일 경우, 워크스테이션에서 점프하면 능력을 1개 얻습니다.
+<color=red>SCP-079</color>일 경우, 아군 SCP가 능력을 얻으면 10% 확률로 획득합니다.
 
 각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
 • <color=#A4A4A4>일반</color> - 65%
