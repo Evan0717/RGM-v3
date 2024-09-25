@@ -466,7 +466,10 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         public async void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive)
+            {
                 ev.Player.Scale = new Vector3(1, 1, 1);
+                ev.Player.EnableEffect(EffectType.FogControl, 1);
+            }
 
             if (ev.Reason == SpawnReason.RoundStart)
             {

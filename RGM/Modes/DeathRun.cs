@@ -61,12 +61,12 @@ namespace RGM.Modes
 
         public IEnumerator<float> Timer()
         {
-            for (int i=1; i<181; i++)
+            for (int i=1; i<241; i++)
             {
                 foreach (var player in Player.List)
                 {
                     player.ClearPlayerBroadcasts();
-                    player.AddBroadcast(2, $"<size=25><b><color=yellow>과학자</color> 승리까지 <color=red>{181 - i}</color>초 남았습니다.</b></size>");
+                    player.AddBroadcast(2, $"<size=25><b><color=yellow>과학자</color> 승리까지 <color=red>{241 - i}</color>초 남았습니다.</b></size>");
                 }
                 yield return Timing.WaitForSeconds(1f);
             }
