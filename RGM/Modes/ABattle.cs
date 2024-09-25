@@ -1091,7 +1091,7 @@ namespace RGM.Modes
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] 고대의 존재 압도"))
             {
-                foreach (var player in ev.Room.Players)
+                foreach (var player in ev.Scp079.Camera.Room.Players)
                     player.EnableEffect(EffectType.SinkHole, 1, 1);
             }
         }
