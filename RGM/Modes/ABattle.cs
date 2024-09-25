@@ -302,7 +302,7 @@ namespace RGM.Modes
                 {
                     if (scp079.Role.Type == RoleTypeId.Scp079)
                     {
-                        if (UnityEngine.Random.Range(1, 11) == 1)
+                        if (UnityEngine.Random.Range(1, 21) == 1)
                         {
                             if (scp079.Role.Type == RoleTypeId.Scp079)
                             {
