@@ -88,7 +88,7 @@ namespace RGM.Modes
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Player.Role.Type == RoleTypeId.Tutorial)
-                ev.IsAllowed = true;
+                ev.Player.Hurt(ev.DamageHandler.Damage, DamageType.Marshmallow);
         }
     }
 }
