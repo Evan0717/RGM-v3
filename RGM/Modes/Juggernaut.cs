@@ -70,6 +70,8 @@ namespace RGM.Modes
             foreach (var Item in Items)
                 juggernaut.AddItem(Item);
 
+            Timing.RunCoroutine(FindLocate());
+
             bool IsEnd = false;
             while (!IsEnd)
             {
@@ -104,6 +106,34 @@ namespace RGM.Modes
 
             RGM.Instance.AutoNuke = true;
             Warhead.Start();
+        }
+
+        public IEnumerator<float> FindLocate()
+        {
+            while (true)
+            {
+                Player closestPlayer = null;
+                float closestDistance = float.MaxValue;
+
+                foreach (var player in Player.List.Where(x => x != juggernaut))
+                {
+                    float distance = Vector3.Distance(juggernaut.Position, player.Position);
+
+                    if (distance < closestDistance)
+                    {
+                        closestPlayer = player;
+                        closestDistance = distance;
+                    }
+                }
+
+                if (closestPlayer != null)
+                    juggernaut.ShowHint($"<mark=#DF01D7FF><color=black><b>[ <color={closestPlayer.Role.Color.ToHex()}>{closestPlayer.Role.Name}</color>, 거리: {closestDistance} ]</b></color></mark>", 1.2f);
+
+                else
+                    juggernaut.ShowHint("당신은 임무를 완수하였습니다.", 1.2f);
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
