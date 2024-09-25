@@ -12,8 +12,8 @@ namespace RGM
         {
             { "워크스테이션 업그레이드", new List<string>() { "00FFFF", "워크스테이션에서 업그레이드하세요!", "ABattle", "public", "",
 """
-<color=#F5DA81>인간 진영</color>일 경우, 워크스테이션에서 점프하면 50% 확률로 능력을 1개 얻습니다.
-<color=red>SCP-079</color>일 경우, 같은 팀인 SCP가 능력을 얻으면 5% 확률로 획득합니다.
+<color=#F5DA81>인간 진영</color>일 경우, 워크스테이션에서 점프하면 능력을 1개 얻습니다.
+<color=red>SCP-079</color>일 경우, 아군 SCP가 능력을 얻으면 10% 확률로 획득합니다.
 
 각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
 • <color=#A4A4A4>일반</color> - 65%
@@ -64,21 +64,21 @@ namespace RGM
             { "사회적 거리두기", new List<string>() { "38610B", "최대한 다른 사람과 멀어지세요! 감염 예방이 최우선입니다!", "Distancing", "private", "", "" } },
             { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다.", "DoubleUp", "public", "", "" } },
             { "개인전", new List<string>() { "FA58F4", "최후의 1인이 되세요!", "FreeForAll", "public", "", "" } },
-            { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.\nSCP도 마찬가지입니다!", "FriendlyFire", "public", "", "" } },
-            { "도박", new List<string>() { "8A4B08", "아이템을 떨구면 새로운 아이템을 획득합니다.\n단, 2% 확률로 손이 잘립니다.", "Gamble", "public", "", "" } },
+            { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.", "FriendlyFire", "public", "", "" } },
+            { "도박", new List<string>() { "8A4B08", "아이템을 떨구면 새로운 아이템을 획득합니다. 단, 2% 확률로 손이 잘립니다.", "Gamble", "public", "", "" } },
             { "기브 어웨이", new List<string>() { "E6E6E6", "60초마다 랜덤한 아이템이 지급됩니다.", "Giveaway", "private", "", "" } },
-            { "Gun Game", new List<string>() { "088A08", "대인전에 자신 있으신가요?\n실력을 증명하기 위해 우승을 차지하세요!", "GunGame", "public", "", "" } },
+            { "Gun Game", new List<string>() { "088A08", "대인전에 자신 있으신가요? 실력을 증명하기 위해 우승을 차지하세요!", "GunGame", "public", "", "" } },
             { "HIDE", new List<string>() { "0489B1", "숨 죽이는 그를 사살하십시오.", "HIDE", "public", "", "" } },
             { "GG 클럽", new List<string>() { "C8FE2E", "빠르게 황금색 플랫폼을 사수하세요!", "GGClub", "public", "", "" } },
             { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "private", "", "" } },
             { "무한 탄약", new List<string>() { "6E6E6E", "무제한 탄약과 함께 승전보를 울리세요!", "InfiniteAmmo", "private", "", "" } },
             { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "public", "", "" } },
             { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "public", "", "" } },
-            { "저거너트", new List<string>() { "088A08", "모두 힘을 합쳐 외부의 적에 대항하세요.\n10분에 자동핵이 작동됩니다.", "Juggernaut", "private", "", "" } },
+            { "저거너트", new List<string>() { "088A08", "모두 힘을 합쳐 외부의 적에 대항하세요.\n10분에 자동핵이 작동됩니다.", "Juggernaut", "public", "", "" } },
             { "점프맵 라운지", new List<string>() { "A9D0F5", "5분 안에 최대한 멀리 가세요!", "JumpMap", "private", "", "" } },
             { "한국인이 좋아하는 속도", new List<string>() { "5882FA", "이런 거 좋아하시죠?", "KoreanSpeed", "public", "", "" } },
-            { "리더", new List<string>() { "64FE2E", "각 진영마다 리더가 정해집니다.\n리더를 도와 진영을 승리로 이끄세요!", "Leader", "private", "", "" } },
-            { "미니 게임", new List<string>() { "6E6E6E", "미니 게임 중 하나가 랜덤으로 선택됩니다.\n총 3개의 라운드로 진행됩니다.", "MiniGames", "public", "", "" } },
+            { "리더", new List<string>() { "64FE2E", "각 진영마다 리더가 정해집니다. 리더를 도와 진영을 승리로 이끄세요!", "Leader", "private", "", "" } },
+            { "미니 게임", new List<string>() { "6E6E6E", "미니 게임 중 하나가 랜덤으로 선택됩니다. 총 3개의 라운드로 진행됩니다.", "MiniGames", "public", "", "" } },
             { "중첩", new List<string>() { "04B45F", "HP 제한이 제거됩니다.", "Nesting", "private", "", "" } },
             { "한 방", new List<string>() { "FAAC58", "피격당하는 즉시 죽습니다.", "OnePunch", "private", "", "" } },
             { "무법자", new List<string>() { "9F81F7", "모두가 총기 하나를 가지고 시작합니다.", "Outlaw", "public", "", "" } },
@@ -98,10 +98,10 @@ namespace RGM
 스피릿은 같은 스피릿을 사살할 수 있으니, 유의하십시오.
 """ } },
             { "스플리프", new List<string>() { "BEF781", "떨어지지 않으려면 계속 움직이세요!", "Spleef", "public", "", "" } },
-            { "기본템", new List<string>() { "FA5858", "5~8개의 아이템이 사전에 지급됩니다.\n기존에 가지고 있던 아이템은 제거됩니다.", "StandardItems", "private", "", "" } },
+            { "기본템", new List<string>() { "FA5858", "5~8개의 아이템이 사전에 지급됩니다. 기존에 가지고 있던 아이템은 제거됩니다.", "StandardItems", "private", "", "" } },
             { "슈퍼 스타", new List<string>() { "FE2EF7", "모두의 마이크가 공유됩니다.", "SuperStar", "public", "", "" } },
             { "무덤", new List<string>() { "000000", "살아남으려면 뭐라도 해야 합니다.", "Tomb", "public", "", "" } },
-            { "트릭 오어 트릿", new List<string>() { "5F04B4", "사탕 4개를 가지고 시작합니다.\n다른 이를 사살하면 사탕 1개를 더 받습니다.", "TrickorTreat", "public", "", "" } },
+            { "트릭 오어 트릿", new List<string>() { "5F04B4", "사탕 4개를 가지고 시작합니다. 다른 이를 사살하면 사탕 1개를 더 받습니다.", "TrickorTreat", "public", "", "" } },
             { "무제한", new List<string>() { "3F13AB", "무제한을 악용하지 않는 것을 추천합니다.", "Unlimited", "public", "", "" } },
             { "여긴 어디?", new List<string>() { "B40486", "랜덤한 곳에서 스폰됩니다.", "WhereamI", "public", "", "" } },
             { "나는 누구?", new List<string>() { "886A08", "1분마다 진영이 변경됩니다.", "WhoamI", "public", "", "" } },
