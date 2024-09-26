@@ -549,7 +549,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         {
             if (GodModePlayers.Contains(ev.Player))
             {
-                if (ev.Attacker != null)
+                if (ev.Attacker != null && ev.Attacker != ev.Player)
                     ev.IsAllowed = false;
             }
         }
@@ -557,7 +557,13 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
             if (GodModePlayers.Contains(ev.Player))
-                GodModePlayers.Remove(ev.Player);
+            {
+                if (ev.Attacker != null && ev.Attacker != ev.Player)
+                    ev.IsAllowed = false;
+
+                else
+                    GodModePlayers.Remove(ev.Player);
+            }
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)

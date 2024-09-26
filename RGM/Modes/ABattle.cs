@@ -929,7 +929,9 @@ namespace RGM.Modes
                         ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 20;
                         RGM.Instance.GodModePlayers.Add(ev.Player);
+
                         await Task.Delay(3000);
+
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
                         if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                             RGM.Instance.GodModePlayers.Remove(ev.Player);

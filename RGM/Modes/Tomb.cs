@@ -9,6 +9,8 @@ using MEC;
 using Mirror;
 using UnityEngine;
 using Exiled.API.Enums;
+using Exiled.API.Features.Items;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -43,7 +45,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 250; i++)
             {
-                Dummy.Position = RandomPosition();
+                List<Item> Items = Tools.EnumToList<Item>();
                 Server.ExecuteCommand($"/drop {Dummy.Id} {UnityEngine.Random.Range(0, 55)} {UnityEngine.Random.Range(1, 3)}");
             }
 
