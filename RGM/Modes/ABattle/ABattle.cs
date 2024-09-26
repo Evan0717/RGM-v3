@@ -564,7 +564,7 @@ namespace RGM.Modes
                     case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
                     case "모드 설치":
                         Item IM = player.AddItem(ItemType.Coin);
-                        FlashLightSerials.Add(IM.Serial);
+                        InstallModeSerials.Add(IM.Serial);
 
                         if (player.IsScp)
                             player.CurrentItem = IM;
@@ -854,18 +854,36 @@ namespace RGM.Modes
 
                 ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
 
-                List<Player> SnakeHands = Player.List.Where(x => x.IsDead).ToList();
+                List<Player> SnakeHands = Player.List.Where(x => !x.IsAlive).ToList();
 
                 foreach (var p in SnakeHands)
                 {
                     p.Role.Set(RoleTypeId.Tutorial);
                     p.Position = new Vector3(-0.08203125f, 1000.96f, 6.828125f);
 
-                    foreach (ItemType Item in new List<ItemType> { ItemType.KeycardFacilityManager, ItemType.GunFSP9, ItemType.GunRevolver, ItemType.Adrenaline, ItemType.AntiSCP207 })
+                    List<ItemType> Items = new List<ItemType> 
+                    { 
+                        ItemType.KeycardFacilityManager, 
+                        ItemType.GunFSP9, 
+                        ItemType.GunRevolver, 
+                        ItemType.Adrenaline, 
+                        ItemType.AntiSCP207 
+                    };
+
+                    List<ItemType> Ammos = new List<ItemType>
+                    {
+                        ItemType.Ammo9x19,
+                        ItemType.Ammo44cal
+                    };
+
+                    foreach (ItemType Item in Items)
                         p.AddItem(Item);
 
-                    for (int i = 1; i < 3; i++)
-                        Player.List.ToList().ForEach(x => Server.ExecuteCommand($"/give {x.Id} 27.29."));
+                    for (int i=1; i<3; i++)
+                    {
+                        foreach (ItemType Ammo in Ammos)
+                            p.AddItem(Ammo);
+                    }
                 }
 
                 for (int i = 1; i < 6; i++)

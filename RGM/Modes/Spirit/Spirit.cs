@@ -12,6 +12,9 @@ using MEC;
 using Mirror;
 using UnityEngine;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
+using HarmonyLib;
+using PlayerRoles.Visibility;
 
 namespace RGM.Modes
 {
@@ -24,11 +27,14 @@ namespace RGM.Modes
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
-            Exiled.Events.Handlers.Player.Shot += OnShot;
-            Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            // Exiled.Events.Handlers.Player.Shot += OnShot;
+            // Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
             Timing.RunCoroutine(OnModeStarted());
+
+            Harmony harmony = new Harmony("VisibilityControllerPatch");
+            harmony.PatchAll();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -41,7 +47,7 @@ namespace RGM.Modes
                 {
                     if (spirits.Contains(player))
                     {
-                        player.EnableEffect(EffectType.Invisible);
+                        // player.EnableEffect(EffectType.Invisible);
                         player.EnableEffect(EffectType.Ghostly);
                     }
                 }
@@ -87,8 +93,26 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Player.Role.Type == RoleTypeId.Tutorial)
+            if (ev.Attacker.Role.Type == RoleTypeId.Tutorial && ev.Player.Role.Type == RoleTypeId.Tutorial)
                 ev.Player.Hurt(ev.DamageHandler.Damage, DamageType.Marshmallow);
+        }
+
+        [HarmonyPatch(typeof(VisibilityController), nameof(VisibilityController.ValidateVisibility), typeof(ReferenceHub))]
+        public class VisibilityControllerPatchPostfix
+        {
+            public virtual void Postfix(ref bool __result, ReferenceHub hub)
+            {
+                Player player = Player.Get(hub);
+
+                if (player.Role.Type == RoleTypeId.Tutorial)
+                    __result = false;
+
+                else
+                {
+                    ICustomVisibilityRole customVisibilityRole = hub.roleManager.CurrentRole as ICustomVisibilityRole;
+                    __result = customVisibilityRole == null || (customVisibilityRole.VisibilityController.GetActiveFlags(hub) & ~InvisibilityFlags.None) == InvisibilityFlags.None;
+                }
+            }
         }
     }
 }
