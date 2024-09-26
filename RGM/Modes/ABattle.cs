@@ -564,7 +564,7 @@ namespace RGM.Modes
                     case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
                     case "모드 설치":
                         Item IM = player.AddItem(ItemType.Coin);
-                        FlashLightSerials.Add(IM.Serial);
+                        InstallModeSerials.Add(IM.Serial);
 
                         if (player.IsScp)
                             player.CurrentItem = IM;
@@ -856,16 +856,33 @@ namespace RGM.Modes
 
                 List<Player> SnakeHands = Player.List.Where(x => x.IsDead).ToList();
 
+                List<ItemType> Items = new List<ItemType>
+                {
+                    ItemType.KeycardFacilityManager,
+                    ItemType.GunFSP9, ItemType.GunRevolver,
+                    ItemType.Adrenaline,
+                    ItemType.AntiSCP207
+                };
+
+                List<ItemType> Ammos = new List<ItemType> 
+                {
+                    ItemType.Ammo44cal,
+                    ItemType.Ammo762x39
+                };
+
                 foreach (var p in SnakeHands)
                 {
                     p.Role.Set(RoleTypeId.Tutorial);
                     p.Position = new Vector3(-0.08203125f, 1000.96f, 6.828125f);
 
-                    foreach (ItemType Item in new List<ItemType> { ItemType.KeycardFacilityManager, ItemType.GunFSP9, ItemType.GunRevolver, ItemType.Adrenaline, ItemType.AntiSCP207 })
+                    foreach (ItemType Item in Items)
                         p.AddItem(Item);
 
                     for (int i = 1; i < 3; i++)
-                        Player.List.ToList().ForEach(x => Server.ExecuteCommand($"/give {x.Id} 27.29."));
+                    {
+                        foreach (var Ammo in Ammos)
+                            p.AddItem(Ammo);
+                    }
                 }
 
                 for (int i = 1; i < 6; i++)
