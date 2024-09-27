@@ -175,7 +175,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp3114Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 숙련된 암살자", "교살 데미지가 10배가 됩니다."}
+            {"[전용] 숙련된 암살자", "교살 데미지가 10배 증가합니다."}
         };
         public Dictionary<string, string> Scp079Abilities = new Dictionary<string, string>() 
         {
@@ -201,6 +201,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
+
+            Exiled.Events.Handlers.Scp0492.ConsumedCorpse += OnConsumedCorpse;
 
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
             Exiled.Events.Handlers.Scp079.ZoneBlackout += OnZoneBlackout;
