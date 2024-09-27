@@ -95,23 +95,5 @@ namespace RGM.Modes
             if (ev.Player.Role.Type == RoleTypeId.Tutorial)
                 ev.Player.Hurt(ev.DamageHandler.Damage, DamageType.Marshmallow);
         }
-
-        [HarmonyPatch(typeof(VisibilityController), nameof(VisibilityController.ValidateVisibility), typeof(ReferenceHub))]
-        public class VisibilityControllerPatchPostfix
-        {
-            public virtual void Postfix(ref bool __result, ReferenceHub hub)
-            {
-                Player player = Player.Get(hub);
-
-                if (player.Role.Type == RoleTypeId.Tutorial)
-                    __result = false;
-
-                else
-                {
-                    ICustomVisibilityRole customVisibilityRole = hub.roleManager.CurrentRole as ICustomVisibilityRole;
-                    __result = customVisibilityRole == null || (customVisibilityRole.VisibilityController.GetActiveFlags(hub) & ~InvisibilityFlags.None) == InvisibilityFlags.None;
-                }
-            }
-        }
     }
 }

@@ -171,6 +171,7 @@
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
     <Compile Include="Modes\ABattle\ABattle.cs" />
+    <Compile Include="Modes\ABattle\Synergy.cs" />
     <Compile Include="Modes\Blackout\Blackout.cs" />
     <Compile Include="Modes\Blessing\Blessing.cs" />
     <Compile Include="Modes\BombParty\BombParty.cs" />

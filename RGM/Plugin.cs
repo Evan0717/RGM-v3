@@ -178,8 +178,6 @@ namespace RGM
             {
                 SelectMode = "MostVote";
             }
-
-            SelectMode = "SimpleSelect";
         }
 
         public async void OnRoundStarted()
@@ -206,7 +204,8 @@ namespace RGM
                         Player player = GetRandomValue(filiteredPlayers);
                         CurrentMode = ModeVote.FirstOrDefault(x => x.Value.Contains(player)).Key;
 
-                        player.AddBroadcast(10, $"<size=25><b>간이 셀렉트 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode}(으)로 선택되었습니다.</size>");
+                        foreach (var p in Player.List)
+                            p.AddBroadcast(10, $"<size=25><b>간이 셀렉트 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode}(으)로 선택되었습니다.</size>");
                     }
                 }
             }
@@ -285,12 +284,19 @@ namespace RGM
 
         public async void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
-            var modeType = Type.GetType($"RGM.Modes.FriendlyFire");
-            if (modeType != null)
+            try
             {
-                var modeInstance = Activator.CreateInstance(modeType);
-                var onEnabledMethod = modeType.GetMethod("OnEnabled");
-                onEnabledMethod?.Invoke(modeInstance, null);
+                var modeType = Type.GetType($"RGM.Modes.FriendlyFire");
+                if (modeType != null)
+                {
+                    var modeInstance = Activator.CreateInstance(modeType);
+                    var onEnabledMethod = modeType.GetMethod("OnEnabled");
+                    onEnabledMethod?.Invoke(modeInstance, null);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
             }
 
             await Task.Delay(19000);

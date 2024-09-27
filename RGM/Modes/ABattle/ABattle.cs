@@ -105,13 +105,13 @@ namespace RGM.Modes
             {"[영웅] 최후의 발악", "5초 뒤 반드시 죽지만, 그동안 무적이 되며 속도가 매우 빨라집니다."},
             {"[영웅] 초재생", "핑크 콜라를 지급받습니다."},
             {"[영웅] 고스트룰", "문을 통과할 수 있습니다."},
-            {"[영웅] 잠수부", "스태미나가 줄어들지 않습니다."},
+            {"[영웅] 잠수부", "스태미나가 줄어들지 않습니다."}
         };
         public Dictionary<string, string> LegendAbilities = new Dictionary<string, string>()
         {
             {"[전설] 스피드왜건", "속도가 크게 증가합니다."},
             {"[전설] 뱀의 손 무전기", "지급된 무전기를 조작하면 뱀의 손 지원을 부르며, 자신도 뱀의 손 소속이 됩니다."},
-            {"[전설] 모드 설치", "지급된 동전을 튕기면 모드를 하나 더 추가할 수 있습니다."},
+            // {"[전설] 모드 설치", "지급된 동전을 튕기면 모드를 하나 더 추가할 수 있습니다."},
             {"[전설] 랜덤택배", "서버 인원 수 만큼 랜덤한 아이템을 드롭합니다."},
             {"[전설] 마술사", "누군가에게 죽으면 죽인 자와 교체됩니다."},
             {"[전설] 플래시라이트", "지급된 손전등을 들고 상대를 쳐다보면 눈뽕 공격을 가할 수 있습니다."},
@@ -145,10 +145,10 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
-            Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
             Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
 
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
             Exiled.Events.Handlers.Scp079.ZoneBlackout += OnZoneBlackout;
@@ -1035,12 +1035,6 @@ namespace RGM.Modes
             }
         }
 
-        public void OnTriggeringTesla(Exiled.Events.EventArgs.Player.TriggeringTeslaEventArgs ev)
-        {
-            if (repairs.Contains(ev.Player))
-                ev.IsAllowed = false;
-        }
-
         public void OnDroppedItem(Exiled.Events.EventArgs.Player.DroppedItemEventArgs ev)
         {
             if (PlayerAbilities[ev.Player].Contains("[영웅] 도박꾼"))
@@ -1085,6 +1079,12 @@ namespace RGM.Modes
 
             if (PlayerAbilities[ev.Player].Contains("[신화] 스피릿"))
                 ev.Player.DisableEffect(EffectType.Invisible);
+        }
+
+        public void OnTriggeringTesla(Exiled.Events.EventArgs.Player.TriggeringTeslaEventArgs ev)
+        {
+            if (PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사"))
+                ev.DisableTesla = true;
         }
 
         public void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
