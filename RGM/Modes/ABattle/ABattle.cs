@@ -485,7 +485,7 @@ namespace RGM.Modes
 
                 ApplyGiveAbility(abilityName);
 
-                string aT = abilityName.Replace("[전용]", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "");
+                string aT = abilityName.Replace("[전용] ", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "");
 
                 switch (aT)
                 {
@@ -1249,7 +1249,7 @@ namespace RGM.Modes
                     ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * count)));
                 }
 
-                if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀"))
+                if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀") && ev.Player.LeadingTeam != ev.Attacker.LeadingTeam)
                     ev.Attacker.AddAhp(20 * (ev.DamageHandler.Damage / 100));
 
                 if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
@@ -1319,7 +1319,7 @@ namespace RGM.Modes
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] 고대의 존재 압도"))
             {
-                foreach (var player in ev.Scp079.Camera.Room.Players)
+                foreach (var player in Player.List.Where(x => x.CurrentRoom == ev.Room))
                     player.EnableEffect(EffectType.SinkHole, 1, 1);
             }
         }
