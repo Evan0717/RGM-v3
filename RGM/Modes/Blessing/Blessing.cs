@@ -37,7 +37,6 @@ namespace RGM.Modes
                         player.EnableEffect(EffectType.MovementBoost, 5 * s);
                         player.EnableEffect(EffectType.DamageReduction, 2 * s);
                         player.Heal(0.35f * s);
-                        player.Scale = new Vector3(1 - s * 0.02f, 1 - s * 0.02f, 1 - s * 0.02f);
                     }
                     else
                     {
