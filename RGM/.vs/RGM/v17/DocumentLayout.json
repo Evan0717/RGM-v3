@@ -40,9 +40,9 @@
               "RelativeDocumentMoniker": "Modes\\ABattle\\ABattle.cs",
               "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs*",
               "RelativeToolTip": "Modes\\ABattle\\ABattle.cs*",
-              "ViewState": "AgIAANAEAAAAAAAAAAAuwN8EAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABUCAAAAAAAAAAAAAC4CAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-27T14:30:24.754Z",
+              "WhenOpened": "2024-09-27T14:34:03.024Z",
               "EditorCaption": ""
             },
             {
@@ -53,9 +53,10 @@
               "RelativeDocumentMoniker": "Plugin.cs",
               "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeToolTip": "Plugin.cs",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAAAGkBAABCAAAAAAAAAA==",
+              "ViewState": "AgIAALIAAAAAAAAAAAAAAMsAAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T08:33:34.509Z"
+              "WhenOpened": "2024-09-24T08:33:34.509Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -65,7 +66,7 @@
               "RelativeDocumentMoniker": "Configs\\Modes.cs",
               "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Modes.cs",
               "RelativeToolTip": "Configs\\Modes.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAAwDYAAABMAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAwDkAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-21T07:28:37.813Z",
               "EditorCaption": ""
