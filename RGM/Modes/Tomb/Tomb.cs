@@ -33,7 +33,7 @@ namespace RGM.Modes
 
         public Vector3 RandomPosition()
         {
-            return new Vector3(UnityEngine.Random.Range(-27.92969f, 44.88281f), 1042.989f, UnityEngine.Random.Range(-75.78906f, -2.71875f));
+            return new Vector3(UnityEngine.Random.Range(-27.92969f, 44.88281f), 1043f, UnityEngine.Random.Range(-75.78906f, -2.71875f));
         }
 
         public IEnumerator<float> OnModeStarted()

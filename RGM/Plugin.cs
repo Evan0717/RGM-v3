@@ -178,6 +178,8 @@ namespace RGM
             {
                 SelectMode = "MostVote";
             }
+
+            SelectMode = "SimpleSelect";
         }
 
         public async void OnRoundStarted()
