@@ -167,6 +167,7 @@
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\Modes.cs" />
     <Compile Include="Configs\Notions.cs" />
+    <Compile Include="Configs\Tips.cs" />
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
     <Compile Include="Modes\ABattle.cs" />

@@ -26,6 +26,7 @@ namespace RGM
 
         public string CurrentMode = null;
         public string SelectMode = null;
+        string Tip = GetRandomValue(Tips.LobbyTips);
         public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool FreezeGameStart = false;
         public bool AutoNuke = false;
@@ -463,7 +464,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
                                 .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
                                 .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}").Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
-                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}"), 1.2f);
+                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}").Replace("{Tip}", Tip), 1.2f);
                         }
                     }
 
