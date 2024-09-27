@@ -559,7 +559,7 @@ namespace RGM.Modes
                         {
                             if (player.CurrentSpectatingPlayers.Count() > 0)
                             {
-                                player.AddBroadcast(5, $"<size=25>당신은 {player.CurrentSpectatingPlayers.ToList()[0].Nickname}로부터 신내림을 받았습니다.</size>");
+                                Timing.CallDelayed(1f, () => { player.AddBroadcast(5, $"<size=25>당신은 {player.CurrentSpectatingPlayers.ToList()[0].Nickname}로부터 신내림을 받았습니다.</size>"); } );
                                 player.CurrentSpectatingPlayers.ToList()[0].AddBroadcast(5, $"<size=25>당신은 {player.Nickname}(에)게 신내림을 내려주었습니다.</size>");
                                 Pass = true;
                                 break;
