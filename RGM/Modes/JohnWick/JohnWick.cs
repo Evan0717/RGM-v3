@@ -41,7 +41,6 @@ namespace RGM.Modes
                 {
                     ev.DamageHandler.Damage = 4 * ev.DamageHandler.Damage;
                 }
-
             }
         }
     }

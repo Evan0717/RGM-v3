@@ -52,7 +52,11 @@ namespace RGM.Discord
             {
                 result = Value[1];
             }
-            else if (Content.StartsWith("command"))
+            else if (Content.StartsWith("consolecommand"))
+            {
+                result = Server.ExecuteCommand($"{Value[1]}");
+            }
+            else if (Content.StartsWith("servercommand"))
             {
                 result = Server.ExecuteCommand($"/{Value[1]}");
             }
