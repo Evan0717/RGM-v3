@@ -26,7 +26,7 @@ namespace RGM
 
         public string CurrentMode = null;
         public string SelectMode = null;
-        string Tip = GetRandomValue(Tips.LobbyTips);
+        public string Tip = GetRandomValue(Tips.LobbyTips);
         public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool FreezeGameStart = false;
         public bool AutoNuke = false;

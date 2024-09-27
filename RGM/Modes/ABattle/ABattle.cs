@@ -219,7 +219,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                 {
                     if (PlayerAbilities[player].Contains("[희귀] 육체 강화"))
                         if (player.MaxHealth > player.Health)
@@ -233,7 +233,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                 {
                     if (spirits.Contains(player))
                         player.EnableEffect(EffectType.Invisible);
@@ -247,7 +247,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                 {
                     if (twinkles.Contains(player))
                     {
@@ -274,7 +274,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                 {
                     if (player.CurrentItem != null && FlashLightSerials.Contains(player.CurrentItem.Serial))
                     {
