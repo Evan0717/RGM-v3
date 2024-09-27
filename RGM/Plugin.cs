@@ -25,8 +25,8 @@ namespace RGM
         public static string BotAPIServer;
 
         public string CurrentMode = null;
+        public string SelectMode = null;
         public int StartupRandom = UnityEngine.Random.Range(1, 21);
-        public bool IsRandomSelectModeEnabled = false;
         public bool FreezeGameStart = false;
         public bool AutoNuke = false;
         public bool IsScp3114Enabled = false;
@@ -162,10 +162,20 @@ namespace RGM
             Timing.RunCoroutine(IsFallDown());
             Timing.RunCoroutine(ChattingCooldown());
 
-            if (UnityEngine.Random.Range(1, 6) == 1)
+            int rn = UnityEngine.Random.Range(1, 11);
+
+            if (rn == 1)
             {
-                IsRandomSelectModeEnabled = true;
+                SelectMode = "RandomSelect";
                 Timing.RunCoroutine(RandomSelectMode());
+            }
+            else if (rn == 2)
+            {
+                SelectMode = "SimpleSelect";
+            }
+            else
+            {
+                SelectMode = "MostVote";
             }
         }
 
@@ -175,13 +185,27 @@ namespace RGM
             
             foreach (var player in Player.List)
                 Server.ExecuteCommand($"/speak {player.Id} disable");
-
+            
             if (CurrentMode == null)
             {
                 var maxLength = ModeVote.Values.Max(list => list.Count);
                 var longestKeys = ModeVote.Keys.Where(key => ModeVote[key].Count == maxLength).ToList();
                 var randomKey = longestKeys[UnityEngine.Random.Range(0, longestKeys.Count)];
                 CurrentMode = randomKey;
+
+                if (SelectMode == "SimpleSelect")
+                {
+                    List<Player> mergedPlayers = ModeVote.Values.SelectMany(x => x).ToList();
+                    List<Player> filiteredPlayers = mergedPlayers.Where(mergedPlayers.Contains).ToList();
+
+                    if (filiteredPlayers.Count > 0)
+                    {
+                        Player player = GetRandomValue(filiteredPlayers);
+                        CurrentMode = ModeVote.FirstOrDefault(x => x.Value.Contains(player)).Key;
+
+                        player.AddBroadcast(10, $"<size=25><b>간이 셀렉트 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode}(으)로 선택되었습니다.</size>");
+                    }
+                }
             }
 
             string ModeColor = ModeList[CurrentMode][0];
@@ -405,14 +429,20 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                             {
                                 string FirstDesc()
                                 {
-                                    if (IsRandomSelectModeEnabled)
-                                        return "랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?";
+                                    if (SelectMode == "RandomSelect")
+                                        return "<b>[선택 모드 : 임의의 손길]</b> <color=#F8E0E0>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
+
+                                    else if (SelectMode == "SimpleSelect")
+                                        return "<b>[선택 모드 : 간이 셀렉트]</b> <color=#F5F6CE>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
+
+                                    else if (SelectMode == "MostVote")
+                                        return "<b>[선택 모드 : 다수 결정자]</b> <color=#E0F2F7>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
 
                                     else
-                                        return "원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.";
+                                        return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
                                 }
 
-                                SelectedMode = "<i>서버 설명 (TIP)</i>";
+                                SelectedMode = "<i>참고</i>";
                                 ModeColor = "ffffff";
                                 ModeDescription = $"{FirstDesc()}\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
                             }
