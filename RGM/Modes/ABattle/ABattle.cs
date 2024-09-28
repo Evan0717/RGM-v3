@@ -202,6 +202,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
 
+            Exiled.Events.Handlers.Scp049.Attacking += OnAttacking;
+
             Exiled.Events.Handlers.Scp0492.ConsumedCorpse += OnConsumedCorpse;
 
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
@@ -731,8 +733,6 @@ namespace RGM.Modes
                     case "공포": 
                         break;
                     case "사자":
-                        if (player.Role is Scp049Role scp049)
-                            scp049.RemainingAttackCooldown /= 2;
                         break;
                     case "허기":
                         break;
@@ -1209,7 +1209,7 @@ namespace RGM.Modes
 
                 if (aa.Contains("[전용] 공포"))
                 {
-                    foreach (var player in ev.Attacker.CurrentRoom.Players.Where(x => !x.IsScp))
+                    foreach (var player in Player.List.Where(x => x.CurrentRoom == ev.Player.CurrentRoom && !ev.Player.IsScp))
                         player.EnableEffect(EffectType.Ensnared, 1, 0.5f);
                 }
             }
@@ -1300,6 +1300,17 @@ namespace RGM.Modes
         {
             if (PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사"))
                 ev.DisableTesla = true;
+        }
+
+        public void OnAttacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
+        {
+            if (PlayerAbilities[ev.Player].Contains("[전용] 사자"))
+            {
+                Timing.CallDelayed(0.1f, () =>
+                {
+                    ev.Scp049.RemainingAttackCooldown /= 2;
+                });
+            }
         }
 
         public void OnConsumedCorpse(Exiled.Events.EventArgs.Scp0492.ConsumedCorpseEventArgs ev)
