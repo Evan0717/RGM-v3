@@ -17,8 +17,34 @@ namespace RGM.Modes
         public static MiniGames Instance;
 
         public int RoundCount = 0;
-        public List<string> Games = new List<string>() { "airstrike", "dm", "escape", "battle", "versus", "cs", "glass", "line", "dodge", "fall",
-            "football", "gungame", "knives", "puzzle", "race", "light", "spleef", "tag", "tdm", "lava", "zombie2", "zombie" };
+        public List<string> Games = new List<string>() 
+        { 
+            "airstrike", 
+            "dm", 
+            "escape", 
+            "battle", 
+            "versus", 
+            "cs", 
+            "glass", 
+            "deathrun",
+            "line", 
+            "dodge", 
+            "fall",
+            "football", 
+            "gungame", 
+            "knives", 
+            "chair",
+            "puzzle", 
+            "race", 
+            "light", 
+            "jail",
+            "spleef", 
+            "tag", 
+            "tdm", 
+            "lava", 
+            "zombie", 
+            "zombie2" 
+        };
 
         public void OnEnabled()
         {
