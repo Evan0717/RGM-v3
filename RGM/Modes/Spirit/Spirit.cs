@@ -28,7 +28,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -85,12 +84,6 @@ namespace RGM.Modes
 
             if (spirits.Contains(ev.Player))
                 ev.Player.DisableEffect(EffectType.Invisible);
-        }
-
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
-        {
-            if (ev.Player.Role.Type == RoleTypeId.Tutorial && ev.DamageHandler.Type != DamageType.Marshmallow)
-                ev.Player.Hurt(ev.DamageHandler.Damage, DamageType.Marshmallow);
         }
     }
 }
