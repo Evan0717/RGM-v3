@@ -115,11 +115,13 @@ namespace RGM.Modes
         public Dictionary<string, string> ClassDAbilities = new Dictionary<string, string>()
         {
             {"[전용] 소매치기", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)"},
-            {"[전용] 변장의 달인", "SCP-268을 지급받습니다."}
+            {"[전용] 변장의 달인", "SCP-268을 지급받습니다."},
+            {"[전용] 반란의 씨앗", "카오스 티켓을 전체 인원 수의 20% 만큼 추가합니다."}
         };
         public Dictionary<string, string> ScientistAbilities = new Dictionary<string, string>()
         {
-            {"[전용] 05 평의회", "05등급 키카드를 지급받습니다."}
+            {"[전용] 05 평의회", "05등급 키카드를 지급받습니다."},
+            {"[전용] 특무부대의 씨앗", "NTF 티켓을 진체 인원 수의 20% 만큼 추가합니다."}
         };
         public Dictionary<string, string> GuardAbilities = new Dictionary<string, string>()
         {
@@ -213,30 +215,24 @@ namespace RGM.Modes
             Timing.RunCoroutine(FlashLight());
         }
 
-        public void ShowStatus(Player player, Player target)
+        public void ShowStatus(Player player)
         {
-            if (!PlayerWorkstation.ContainsKey(target))
+            if (!PlayerWorkstation.ContainsKey(player))
             {
-                PlayerWorkstation.Add(target, new List<Vector3>());
-                PlayerAbilities.Add(target, new List<string>());
+                PlayerWorkstation.Add(player, new List<Vector3>());
+                PlayerAbilities.Add(player, new List<string>());
             }
             else
             {
-                if (player != target)
-                    player.CurrentHint.Content = target.CurrentHint.Content;
+                if (PlayerAbilities[player].Count() <= 0)
+                    player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 0.6f);
 
                 else
                 {
-                    if (PlayerAbilities[target].Count <= 0)
-                        player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 0.6f);
+                    string abilitiesText = string.Join(", ", PlayerAbilities[player]);
+                    abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
 
-                    else
-                    {
-                        string abilitiesText = string.Join(", ", PlayerAbilities[target]);
-                        abilitiesText = abilitiesText.Replace("[전용]", "<color=#F7819F>[전용]</color>").Replace("[신화]", "<color=#DF0101>[신화]</color>").Replace("[전설]", "<color=#ffd700>[전설]</color>").Replace("[영웅]", "<color=#FF00FF>[영웅]</color>").Replace("[희귀]", "<color=#2ECCFA>[희귀]</color>").Replace("[일반]", "<color=#A4A4A4>[일반]</color>");
-
-                        player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 0.6f);
-                    }
+                    player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 0.6f);
                 }
             }
         }
@@ -262,14 +258,17 @@ namespace RGM.Modes
                     if (CurrentHint == null || IsStatusHint)
                     {
                         if (player.IsAlive)
-                            ShowStatus(player, player);
+                            ShowStatus(player);
 
                         else
                         {
                             if (player.Role is SpectatorRole spectator)
                             {
                                 if (spectator.SpectatedPlayer != null)
-                                    ShowStatus(player, spectator.SpectatedPlayer);
+                                {
+                                    if (spectator.SpectatedPlayer.CurrentHint != null)
+                                        player.CurrentHint.Content = spectator.SpectatedPlayer.CurrentHint.Content;
+                                }
                             }
                         }
                     }
@@ -686,7 +685,9 @@ namespace RGM.Modes
                         break;
                     case "해킹": Warhead.Start(); Warhead.Detonate(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 터트렸습니다.</b>"); break;
                     case "변장의 달인": player.AddItem(ItemType.SCP268); break;
+                    case "반란의 씨앗": Respawn.ChaosTickets += (int)(Player.List.Count() * 0.2); break;
                     case "05 평의회": player.AddItem(ItemType.KeycardO5); break;
+                    case "특수부대의 씨앗": Respawn.NtfTickets += (int)(Player.List.Count() * 0.2); break;
                     case "관리 의무자":
                         List<ItemType> ManageDuty = new List<ItemType>() 
                         { 
