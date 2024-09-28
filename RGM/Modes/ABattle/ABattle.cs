@@ -34,7 +34,6 @@ namespace RGM.Modes
         public Dictionary<Player, List<Vector3>> PlayerWorkstation = new Dictionary<Player, List<Vector3>>();
         public Dictionary<Player, List<string>> PlayerAbilities = new Dictionary<Player, List<string>>();
 
-        public List<Player> BlackOutCooldown = new List<Player>();
         public List<Player> MeleeCooldown = new List<Player>();
         public List<Player> PickPocketCooldown = new List<Player>();
         public List<ushort> PickCoinSerials = new List<ushort>();
@@ -45,17 +44,6 @@ namespace RGM.Modes
         public List<ushort> CallSnakeHandsSerials = new List<ushort>();
         public List<ushort> FlashLightSerials = new List<ushort>();
         public List<ushort> ChaosCoinSerials = new List<ushort>();
-
-        public List<Player> insurers = new List<Player>();
-        public List<Player> fighters = new List<Player>();
-        public List<Player> martyrs = new List<Player>();
-        public List<Player> repairs = new List<Player>();
-        public List<Player> ability941s = new List<Player>();
-        public List<Player> culprits = new List<Player>();
-        public List<Player> magicians = new List<Player>();
-        public List<Player> posions = new List<Player>();
-        public List<Player> spirits = new List<Player>();
-        public List<Player> twinkles = new List<Player>();
 
         public Dictionary<string, string> CommonAbilities = new Dictionary<string, string>()
         {
@@ -309,7 +297,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                 {
-                    if (spirits.Contains(player))
+                    if (PlayerAbilities[player].Contains("[신화] 스피릿"))
                         player.EnableEffect(EffectType.Invisible);
                 }
 
@@ -323,7 +311,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                 {
-                    if (twinkles.Contains(player))
+                    if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[신화] 눈빛맨"))
                     {
                         if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 100f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                             hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
@@ -552,8 +540,6 @@ namespace RGM.Modes
                         if (player.IsScp)
                             player.CurrentItem = pc;
                         break;
-                    case "보험": insurers.Add(player); break;
-                    case "회축": fighters.Add(player); break;
                     case "보급":
                         List<string> Ammos = new List<string> { "19", "22", "27", "28", "29" };
 
@@ -633,9 +619,6 @@ namespace RGM.Modes
                         player.GetEffect(EffectType.MovementBoost).Intensity += 50;
                         Timing.CallDelayed(25, () => { player.GetEffect(EffectType.MovementBoost).Intensity -= 50; });
                         break;
-                    case "순교":
-                        martyrs.Add(player);
-                        break;
                     case "하이패스":
                         RGM.Instance.GodModePlayers.Add(player);
                         Timing.CallDelayed(25, () =>
@@ -665,9 +648,6 @@ namespace RGM.Modes
                     case "럭키비키": PlayerWorkstation[player].Clear(); break;
                     case "핵 리모컨": Warhead.Start(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 활성화했습니다.</b>"); break;
                     case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
-                    case "극독": posions.Add(player); break;
-                    case "구사일생": ability941s.Add(player); break;
-                    case "최후의 발악": culprits.Add(player); break;
                     case "초재생":
                         Item AntiScp207 = player.AddItem(ItemType.AntiSCP207);
 
@@ -695,7 +675,6 @@ namespace RGM.Modes
                         for (int i = 1; i < Player.List.Count() + 1; i++)
                             Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(1, 55)} 1");
                         break;
-                    case "마술사": magicians.Add(player); break;
                     case "플래시라이트":
                         Item fl = player.AddItem(ItemType.Flashlight);
                         FlashLightSerials.Add(fl.Serial);
@@ -704,8 +683,6 @@ namespace RGM.Modes
                             player.CurrentItem = fl;
                         break;
                     case "해킹": Warhead.Start(); Warhead.Detonate(); Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 핵을 <b>원격으로 터트렸습니다.</b>"); break;
-                    case "스피릿": spirits.Add(player); break;
-                    case "눈빛맨": twinkles.Add(player); break;
                     case "변장의 달인": player.AddItem(ItemType.SCP268); break;
                     case "05 평의회": player.AddItem(ItemType.KeycardO5); break;
                     case "관리 의무자":
@@ -784,7 +761,7 @@ namespace RGM.Modes
         {
             if (!ev.Player.IsCuffed)
             {
-                if (fighters.Contains(ev.Player))
+                if (PlayerAbilities.ContainsKey(ev.Player) && PlayerAbilities[ev.Player].Contains("[일반] 회축"))
                 {
                     if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 4f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                     hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
@@ -855,17 +832,6 @@ namespace RGM.Modes
                     PlayerWorkstation[ev.Player].Add(WorkStation.position);
 
                     AddAbility(ev.Player);
-                }
-            }
-
-            if (PlayerAbilities[ev.Player].Contains("[희귀] 블랙아웃"))
-            {
-                if (!BlackOutCooldown.Contains(ev.Player))
-                {
-                    BlackOutCooldown.Add(ev.Player);
-                    ev.Player.CurrentRoom.TurnOffLights(3);
-                    await Task.Delay(20000);
-                    BlackOutCooldown.Remove(ev.Player);
                 }
             }
         }
@@ -1107,15 +1073,17 @@ namespace RGM.Modes
                 }
                 else
                 {
-                    if (insurers.Contains(ev.Player))
+                    if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
                     {
-                        insurers.Remove(ev.Player);
+                        PlayerAbilities[ev.Player].Remove("[일반] 보험");
+
                         ev.IsAllowed = false;
                         return;
                     }
-                    if (ability941s.Contains(ev.Player))
+                    if (PlayerAbilities[ev.Player].Contains("[영웅] 구사일생"))
                     {
-                        ability941s.Remove(ev.Player);
+                        PlayerAbilities[ev.Player].Remove("[영웅] 구사일생");
+
                         ev.IsAllowed = false;
 
                         ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
@@ -1131,9 +1099,10 @@ namespace RGM.Modes
                         return;
                     }
 
-                    if (culprits.Contains(ev.Player))
+                    if (PlayerAbilities[ev.Player].Contains("[영웅] 최후의 발악"))
                     {
-                        culprits.Remove(ev.Player);
+                        PlayerAbilities[ev.Player].Remove("[영웅] 최후의 발악");
+
                         ev.IsAllowed = false;
 
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 30;
@@ -1148,38 +1117,18 @@ namespace RGM.Modes
                         return;
                     }
 
-                    PlayerWorkstation[ev.Player].Clear();
-                    PlayerAbilities[ev.Player].Clear();
-                    ev.Player.Scale = new Vector3(1, 1, 1);
-                    Server.ExecuteCommand($"/speak {ev.Player.Id} disable");
-                    ev.Player.IsUsingStamina = true;
-                    if (RGM.Instance.GodModePlayers.Contains(ev.Player))
-                        RGM.Instance.GodModePlayers.Remove(ev.Player);
-
-                    if (fighters.Contains(ev.Player))
-                        fighters.Remove(ev.Player);
-
-                    if (martyrs.Contains(ev.Player))
+                    if (PlayerAbilities[ev.Player].Contains("[희귀] 순교"))
                     {
-                        martyrs.Remove(ev.Player);
+                        PlayerAbilities[ev.Player].Remove("[희귀] 순교");
 
                         var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
                         g.FuseTime = 3f;
                         g.SpawnActive(ev.Player.Position, ev.Player);
                     }
 
-                    if (BlackOutCooldown.Contains(ev.Player))
-                        BlackOutCooldown.Remove(ev.Player);
-
-                    if (spirits.Contains(ev.Player))
-                        spirits.Remove(ev.Player);
-
-                    if (repairs.Contains(ev.Player))
-                        repairs.Remove(ev.Player);
-
-                    if (magicians.Contains(ev.Player))
+                    if (PlayerAbilities[ev.Player].Contains("[전설] 마술사"))
                     {
-                        magicians.Remove(ev.Player);
+                        PlayerAbilities[ev.Player].Remove("[전설] 마술사");
 
                         ev.Player.Role.Set(ev.Attacker.Role, SpawnReason.ForceClass, RoleSpawnFlags.None);
                         ev.Player.Health = ev.Attacker.Health;
@@ -1189,12 +1138,20 @@ namespace RGM.Modes
                         ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
                     }
 
-                    if (posions.Contains(ev.Player))
+                    if (PlayerAbilities[ev.Player].Contains("[영웅] 극독"))
                     {
-                        posions.Remove(ev.Player);
+                        PlayerAbilities[ev.Player].Remove("[영웅] 극독");
 
                         ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 15);
                     }
+
+                    PlayerWorkstation[ev.Player].Clear();
+                    PlayerAbilities[ev.Player].Clear();
+                    ev.Player.Scale = new Vector3(1, 1, 1);
+                    Server.ExecuteCommand($"/speak {ev.Player.Id} disable");
+                    ev.Player.IsUsingStamina = true;
+                    if (RGM.Instance.GodModePlayers.Contains(ev.Player))
+                        RGM.Instance.GodModePlayers.Remove(ev.Player);
                 }
             }
         }
