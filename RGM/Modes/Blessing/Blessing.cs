@@ -9,6 +9,8 @@ using MEC;
 using UnityEngine;
 using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
+using RGM.API;
+using MultiBroadcast.API;
 
 namespace RGM.Modes
 {
@@ -38,6 +40,15 @@ namespace RGM.Modes
                         player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(5 * s);
                         player.Heal(0.35f * s);
 
+                        if (player.Role is Scp079Role scp079)
+                            scp079.Energy += 0.35f * s;
+
+                        if (s > 5)
+                            player.IsUsingStamina = false;
+
+                        else
+                            player.IsUsingStamina = true;
+
                         if (s > 10)
                             player.IsBypassModeEnabled = true;
 
@@ -49,6 +60,27 @@ namespace RGM.Modes
 
                         if (s > 20)
                             player.EnableEffect(EffectType.Invisible, 1, 1.2f);
+
+                        if (s > 25)
+                        {
+                            if (UnityEngine.Random.Range(1, 51) == 1)
+                            {
+                                Item Item = player.AddItem(RGM.GetRandomValue(Tools.EnumToList<ItemType>()));
+
+                                if (player.IsScp)
+                                    player.CurrentItem = Item;
+                            }
+                        }
+
+                        if (s > 30)
+                        {
+                            player.IsNoclipPermitted = true;
+
+                            player.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
+                        }
+
+                        else
+                            player.IsNoclipPermitted = false;
                     }
                     else
                     {
