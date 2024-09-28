@@ -351,7 +351,7 @@ namespace RGM.Commands
 
         public string Command { get; } = "develop";
 
-        public string[] Aliases { get; } = { "dv", "dev" };
+        public string[] Aliases { get; } = { "dv", "dev", "개발", "roqkf" };
 
         public string Description { get; } = "개발하러 갈 때 사용하세요!";
 

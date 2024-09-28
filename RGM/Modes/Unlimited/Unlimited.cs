@@ -106,14 +106,14 @@ namespace RGM.Modes
         public async void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
         {
             await Task.Delay(100);
-            ev.Scp049.CallAbility.Duration.Remaining = 0;
+            ev.Scp049.RemainingCallDuration = 0;
         }
 
         public async void OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
         {
             await Task.Delay(100);
             ev.Scp049.RemainingAttackCooldown = 0;
-            ev.Scp049.GoodSenseCooldown = 0;
+            ev.Scp049.RemainingGoodSenseDuration = 0;
         }
         
         public void OnConsumingCorpse(Exiled.Events.EventArgs.Scp0492.ConsumingCorpseEventArgs ev)
