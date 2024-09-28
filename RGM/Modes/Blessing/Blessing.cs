@@ -36,8 +36,8 @@ namespace RGM.Modes
                         int s = player.CurrentSpectatingPlayers.Count();
                         player.ShowHint($"현재 {s}명이 당신을 관전하고 있습니다.", 1.2f);
 
-                        player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(5 * s);
-                        player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(5 * s);
+                        player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(2.5 * s);
+                        player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(2.5 * s);
                         player.Heal(0.35f * s);
 
                         if (player.Role is Scp079Role scp079)
@@ -104,7 +104,7 @@ namespace RGM.Modes
             if (ev.Attacker != null)
             {
                 float s = ev.Attacker.CurrentSpectatingPlayers.Count();
-                ev.DamageHandler.Damage = ev.DamageHandler.Damage + ev.DamageHandler.Damage * (0.3f * s);
+                ev.DamageHandler.Damage = ev.DamageHandler.Damage + ev.DamageHandler.Damage * (0.15f * s);
             }
         }
     }
