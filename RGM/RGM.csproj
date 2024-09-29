@@ -170,6 +170,7 @@
     <Compile Include="Configs\Tips.cs" />
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
+    <Compile Include="Features\BallComponent.cs" />
     <Compile Include="Modes\ABattle\ABattle.cs" />
     <Compile Include="Modes\Blackout\Blackout.cs" />
     <Compile Include="Modes\Blessing\Blessing.cs" />

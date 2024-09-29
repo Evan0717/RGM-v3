@@ -14,6 +14,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using RGM.API;
 using System.Windows;
+using RGM.Features;
 
 namespace RGM
 {
@@ -44,6 +45,7 @@ namespace RGM
         List<Transform> Third;
         List<Transform> Numbers;
         List<Transform> RandomColors;
+        List<Transform> Balls;
 
         public static T GetRandomValue<T>(List<T> list)
         {
@@ -157,6 +159,7 @@ namespace RGM
             Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
             Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
             RandomColors = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "RandomColor").ToList();
+            Balls = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Ball").ToList();
 
             PickModes();
 
@@ -180,6 +183,8 @@ namespace RGM
             {
                 SelectMode = "MostVote";
             }
+
+            Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
         }
 
         public async void OnRoundStarted()
