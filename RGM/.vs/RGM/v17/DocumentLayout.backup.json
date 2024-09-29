@@ -46,8 +46,7 @@
               "RelativeToolTip": "Plugin.cs",
               "ViewState": "AgIAABIDAAAAAAAAAAAswCgDAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T08:33:34.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T08:33:34.509Z"
             },
             {
               "$type": "Document",
@@ -55,9 +54,9 @@
               "Title": "ABattle.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs",
               "RelativeDocumentMoniker": "Modes\\ABattle\\ABattle.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs",
-              "RelativeToolTip": "Modes\\ABattle\\ABattle.cs",
-              "ViewState": "AgIAAP4AAAAAAAAAAAAkwAwBAAA7AAAAAAAAAA==",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs*",
+              "RelativeToolTip": "Modes\\ABattle\\ABattle.cs*",
+              "ViewState": "AgIAAFkEAAAAAAAAAAAkwGoEAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-29T07:47:38.993Z",
               "EditorCaption": ""
@@ -72,8 +71,7 @@
               "RelativeToolTip": "Configs\\Notions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-28T12:59:57.904Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-28T12:59:57.904Z"
             },
             {
               "$type": "Document",
@@ -85,8 +83,7 @@
               "RelativeToolTip": "Configs\\Modes.cs",
               "ViewState": "AgIAADQAAAAAAAAAAAAAwFQAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T07:28:37.813Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T07:28:37.813Z"
             },
             {
               "$type": "Document",
@@ -98,8 +95,7 @@
               "RelativeToolTip": "Configs\\Config.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-06T10:06:50.948Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-06T10:06:50.948Z"
             },
             {
               "$type": "Document",
@@ -111,8 +107,7 @@
               "RelativeToolTip": "Commands\\RGM.Commands.cs",
               "ViewState": "AgIAAF8BAAAAAAAAAAA8wH0BAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-17T12:10:08.408Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-17T12:10:08.408Z"
             }
           ]
         }

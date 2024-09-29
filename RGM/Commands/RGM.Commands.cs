@@ -6,6 +6,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
+using RGM.Modes;
 using UnityEngine;
 
 namespace RGM.Commands
@@ -359,24 +360,25 @@ namespace RGM.Commands
     }
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class Invisible : ICommand
+    public class AddAbility : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(arguments.At(0));
+            string args = string.Join(" ", arguments.Skip(0)).Trim();
 
-            player.ChangeAppearance(PlayerRoles.RoleTypeId.None, true);
+            ABattle.Instance.AddAbility(player, args);
 
-            response = "Invisible Complete!";
+            response = "AddAbility Complete!";
 
             return true;
         }
 
-        public string Command { get; } = "invisble";
+        public string Command { get; } = "addability";
 
-        public string[] Aliases { get; } = { "ivb" };
+        public string[] Aliases { get; } = { "aa", "add" };
 
-        public string Description { get; } = "특정 유저를 투명화 상태로 만듭니다.";
+        public string Description { get; } = "워크스테이션 업그레이드ㅣ능력을 추가합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

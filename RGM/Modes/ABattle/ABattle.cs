@@ -1148,6 +1148,7 @@ namespace RGM.Modes
                         ev.IsAllowed = false;
                         return;
                     }
+
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 구사일생"))
                     {
                         PlayerAbilities[ev.Player].Remove("[영웅] 구사일생");
