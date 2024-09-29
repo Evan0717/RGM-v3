@@ -367,6 +367,8 @@ namespace RGM.Commands
             Player player = Player.Get(arguments.At(0));
             string args = string.Join(" ", arguments.Skip(0)).Trim();
 
+            Log.Info(args);
+
             ABattle.Instance.AddAbility(player, args);
 
             response = "AddAbility Complete!";

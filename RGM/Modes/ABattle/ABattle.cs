@@ -130,11 +130,13 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> GuardAbilities = new Dictionary<string, string>()
         {
-            {"[전용] 관리 의무자", "손전등과 Crossvec를 지급받습니다."}
+            {"[전용] 관리 의무자", "손전등과 Crossvec를 지급받습니다."},
+            {"[전용] 보건소 직원", "주변에 있는 아군들에게 의료 아이템을 랜덤하게 지급합니다."}
         };
         public Dictionary<string, string> NtfAbilities = new Dictionary<string, string>()
         {
-            {"[전용] 격리 의무자", "고폭 수류탄과 섬광탄을 지급받습니다."}
+            {"[전용] 격리 의무자", "고폭 수류탄과 섬광탄을 지급받습니다."},
+            {"[전용] 의무병", "주변에 있는 아군들을 매 초마다 0.5HP씩 치료합니다."}
         };
         public Dictionary<string, string> ChaosAbilities = new Dictionary<string, string>()
         {
@@ -162,7 +164,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp096Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 분노", "분노 때에는 어떠한 데미지도 입지 않습니다. (중첩 불가)"}
+            {"[전용] 격노", "분노 때에는 어떠한 데미지도 입지 않습니다. (중첩 불가)"}
         };
         public Dictionary<string, string> Scp106Abilities = new Dictionary<string, string>()
         {
@@ -170,7 +172,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp939Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 흉내쟁이", "흉내 쿨타임이 1/2배가 됩니다. (중첩 불가)"}
+            {"[전용] 흉내쟁이", "흉내 쿨타임이 사라집니다. (중첩 불가)"}
         };
         public Dictionary<string, string> Scp3114Abilities = new Dictionary<string, string>()
         {
@@ -234,9 +236,10 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(SynergyManager());
             Timing.RunCoroutine(UpgradeBody());
+            Timing.RunCoroutine(FlashLight());
             Timing.RunCoroutine(Spirit());
             Timing.RunCoroutine(Twinkle());
-            Timing.RunCoroutine(FlashLight());
+            Timing.RunCoroutine(Medical());
         }
 
         public void ShowStatus(Player player)
@@ -375,6 +378,29 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public IEnumerator<float> Medical()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(x => x.IsAlive))
+                {
+                    if (PlayerAbilities.ContainsKey(player))
+                    {
+                        if (PlayerAbilities[player].Contains("[전용] 의무병"))
+                        {
+                            foreach (var team in Player.List.Where(x => x.LeadingTeam == player.LeadingTeam && x.IsAlive && x != player))
+                            {
+                                if (team.Health < team.MaxHealth)
+                                    team.Health += 0.5f;
+                            }
+                        }
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
@@ -763,6 +789,20 @@ namespace RGM.Modes
 
                     foreach (var item in ManageDuty)
                         player.AddItem(item);
+                    break;
+                case "보건소 직원":
+                    List<ItemType> HealItem = new List<ItemType>() 
+                    {
+                        ItemType.Medkit,
+                        ItemType.Painkillers,
+                        ItemType.Adrenaline,
+                        ItemType.SCP500,
+                        ItemType.SCP330
+                    };
+
+                    foreach (var team in Player.List.Where(x => x.IsAlive && x.LeadingTeam == player.LeadingTeam && Vector3.Distance(player.Position, x.Position) < 11))
+                        team.AddItem(RGM.GetRandomValue(HealItem));
+
                     break;
                 case "격리 의무자":
                     List<ItemType> ContainDuty = new List<ItemType>()
