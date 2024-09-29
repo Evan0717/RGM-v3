@@ -234,7 +234,9 @@ namespace RGM.Modes
             MapEditorReborn.Events.Handlers.Map.LoadingMap += OnLoadingMap;
 
             Timing.RunCoroutine(OnModeStarted());
+            Timing.RunCoroutine(RequestManager());
             Timing.RunCoroutine(SynergyManager());
+
             Timing.RunCoroutine(UpgradeBody());
             Timing.RunCoroutine(FlashLight());
             Timing.RunCoroutine(Spirit());
@@ -303,6 +305,37 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(0.5f);
+            }
+        }
+
+        public IEnumerator<float> RequestManager()
+        {
+            List<string> Requests = RGM.Instance.Requests;
+
+            while (true)
+            {
+                foreach (var Request in Requests)
+                {
+                    string[] req = Request.Split('/');
+
+                    if (req[0] == "ABattle")
+                    {
+                        Player player = Player.Get(req[1]);
+
+                        if (req[2] == "Add")
+                        {
+                            if (req[3] == "Random")
+                                AddAbility(player);
+
+                            else
+                                AddAbility(player, req[3]);
+                        }
+
+                        Requests.Remove(Request);
+                    }
+                }
+
+                yield return Timing.WaitForOneFrame;
             }
         }
 
@@ -1285,7 +1318,7 @@ namespace RGM.Modes
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            if (PlayerAbilities.ContainsKey(ev.Attacker))
+            if (ev.Attacker != null && PlayerAbilities.ContainsKey(ev.Attacker))
             {
                 List<string> aa = PlayerAbilities[ev.Attacker];
 

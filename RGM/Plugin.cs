@@ -37,6 +37,8 @@ namespace RGM
         public List<Player> GodModePlayers = new List<Player>();
         public List<Player> ChatCooldown = new List<Player>();
 
+        public List<string> Requests = new List<string>();
+
         List<Transform> First;
         List<Transform> Second;
         List<Transform> Third;

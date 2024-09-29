@@ -369,7 +369,7 @@ namespace RGM.Commands
 
             if (arguments.Count < 2)
             {
-                ABattle.Instance.AddAbility(player);
+                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Add/Random");
 
                 response = "AddAbility Complete!";
 
@@ -377,7 +377,7 @@ namespace RGM.Commands
             }
             else
             {
-                ABattle.Instance.AddAbility(player, args);
+                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Add/{args}");
 
                 response = "AddAbility Complete!";
 
