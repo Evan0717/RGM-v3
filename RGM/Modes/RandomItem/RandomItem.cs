@@ -37,8 +37,6 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    player.ClearInventory();
-
                     Item Item = player.AddItem(RGM.GetRandomValue(ItemTypes));
 
                     if (player.IsScp)
