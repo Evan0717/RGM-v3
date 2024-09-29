@@ -798,7 +798,7 @@ namespace RGM.Modes
                     break;
                 case "흉내쟁이":
                     if (player.Role is Scp939Role scp939)
-                        scp939.MimicryCooldown /= 2;
+                        scp939.MimicryCooldown = 0;
                     break;
                 case "간이 충전기":
                     if (player.Role is Scp079Role scp079)
