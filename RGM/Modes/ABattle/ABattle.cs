@@ -25,6 +25,7 @@ using PlayerRoles;
 using PluginAPI.Roles;
 using RGM.API;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Modes
 {
@@ -114,7 +115,7 @@ namespace RGM.Modes
             // {"[신화] 해킹", "시설 핵을 즉시 터트립니다."},
             {"[신화] 로켓 런처", "5% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (중첩 불가)"},
             {"[신화] 스피릿", "2초마다 영혼 상태가 됩니다! (중첩 불가)"},
-            {"[신화] 눈빛맨", "쳐다보는 것만으로도 당신을 두려워할 것입니다! (중첩 불가)"},
+            {"[신화] 눈빛맨", "상대는 눈에 띄거나 근처에 있는 것만으로도 압도당할 것입니다! (중첩 불가)"},
             {"[신화] 차원 강탈자", "죽인 누군가의 능력을 모조리 흡수합니다! (중첩 불가)"}
         };
         public Dictionary<string, string> ClassDAbilities = new Dictionary<string, string>()
@@ -394,6 +395,32 @@ namespace RGM.Modes
             }
         }
 
+        public IEnumerator<float> FlashLight()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                {
+                    if (player.CurrentItem != null && FlashLightSerials.Contains(player.CurrentItem.Serial))
+                    {
+                        if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 45f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
+                            hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
+                        {
+                            var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
+
+                            if (player != target && player.LeadingTeam != target.LeadingTeam)
+                            {
+                                Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
+                                target.EnableEffect(EffectType.Flashed, 1, 0.2f);
+                            }
+                        }
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
         public IEnumerator<float> Twinkle()
         {
             while (true)
@@ -402,6 +429,16 @@ namespace RGM.Modes
                 {
                     if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[신화] 눈빛맨"))
                     {
+                        foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, player.Position) < 11))
+                        {
+                            if (player != near && player.LeadingTeam != near.LeadingTeam)
+                            {
+                                near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                                near.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                                Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);
+                            }
+                        }
+
                         if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 100f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                             hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                         {
@@ -441,32 +478,6 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(1f);
-            }
-        }
-
-        public IEnumerator<float> FlashLight()
-        {
-            while (true)
-            {
-                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
-                {
-                    if (player.CurrentItem != null && FlashLightSerials.Contains(player.CurrentItem.Serial))
-                    {
-                        if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 45f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
-                            hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
-                        {
-                            var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
-
-                            if (player != target && player.LeadingTeam != target.LeadingTeam)
-                            {
-                                Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                                target.EnableEffect(EffectType.Flashed, 1, 0.2f);
-                            }
-                        }
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
