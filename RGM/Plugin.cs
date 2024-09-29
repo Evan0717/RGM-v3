@@ -640,7 +640,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
         public void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
         {
-            ev.Player.DisableAllEffects();
+            Timing.CallDelayed(1f, ev.Player.DisableAllEffects);
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
