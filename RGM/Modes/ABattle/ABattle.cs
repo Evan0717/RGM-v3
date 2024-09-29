@@ -22,6 +22,7 @@ using MultiBroadcast;
 using MultiBroadcast.API;
 using PlayerRoles;
 using PluginAPI.Roles;
+using RGM.API;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -681,8 +682,14 @@ namespace RGM.Modes
                             player.CurrentItem = SH;
                         break;
                     case "랜덤택배":
-                        for (int i = 1; i < Player.List.Count() + 1; i++)
-                            Server.ExecuteCommand($"/drop {player.Id} {UnityEngine.Random.Range(1, 55)} 1");
+                        List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
+
+                        for (int i=1; i<Server.PlayerCount + 1; i++)
+                        {
+                            Item Item = Item.Create(RGM.GetRandomValue(ItemTypes));
+
+                            Item.CreatePickup(new Vector3(player.Position.x, player.Position.y + 1, player.Position.z));
+                        }
                         break;
                     case "플래시라이트":
                         Item fl = player.AddItem(ItemType.Flashlight);
