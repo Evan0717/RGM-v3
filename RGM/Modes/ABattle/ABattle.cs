@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.Remoting;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using CommandSystem.Commands.RemoteAdmin;
@@ -1133,6 +1134,9 @@ namespace RGM.Modes
 
                         for (int i = 1; i < UnityEngine.Random.Range(7, 12); i++)
                             AddAbility(ev.Player);
+
+                        ev.IsAllowed = false;
+                        return;
                     }
                 }
                 else

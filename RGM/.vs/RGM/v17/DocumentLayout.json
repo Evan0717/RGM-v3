@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|d:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\rocketlauncher\\rocketlauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\rocketlauncher\\rocketlauncher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|d:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\abattle\\abattle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\abattle\\abattle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -38,24 +34,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RocketLauncher.cs",
-              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\RocketLauncher\\RocketLauncher.cs",
-              "RelativeDocumentMoniker": "Modes\\RocketLauncher\\RocketLauncher.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\RocketLauncher\\RocketLauncher.cs*",
-              "RelativeToolTip": "Modes\\RocketLauncher\\RocketLauncher.cs*",
-              "ViewState": "AgIAAAYAAAAAAAAAAADwvxcAAABNAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-29T08:16:59.848Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Plugin.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
@@ -63,25 +46,24 @@
               "RelativeToolTip": "Plugin.cs",
               "ViewState": "AgIAABIDAAAAAAAAAAAswCgDAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T08:33:34.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T08:33:34.509Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ABattle.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs",
               "RelativeDocumentMoniker": "Modes\\ABattle\\ABattle.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs",
-              "RelativeToolTip": "Modes\\ABattle\\ABattle.cs",
-              "ViewState": "AgIAAP4AAAAAAAAAAAAkwAwBAAA7AAAAAAAAAA==",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs*",
+              "RelativeToolTip": "Modes\\ABattle\\ABattle.cs*",
+              "ViewState": "AgIAAFkEAAAAAAAAAAAkwGoEAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-29T07:47:38.993Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Notions.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Notions.cs",
               "RelativeDocumentMoniker": "Configs\\Notions.cs",
@@ -89,12 +71,11 @@
               "RelativeToolTip": "Configs\\Notions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-28T12:59:57.904Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-28T12:59:57.904Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "Modes.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Modes.cs",
               "RelativeDocumentMoniker": "Configs\\Modes.cs",
@@ -102,12 +83,11 @@
               "RelativeToolTip": "Configs\\Modes.cs",
               "ViewState": "AgIAADQAAAAAAAAAAAAAwFQAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T07:28:37.813Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T07:28:37.813Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "Config.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Configs\\Config.cs",
               "RelativeDocumentMoniker": "Configs\\Config.cs",
@@ -115,12 +95,11 @@
               "RelativeToolTip": "Configs\\Config.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-06T10:06:50.948Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-06T10:06:50.948Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "RGM.Commands.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Commands\\RGM.Commands.cs",
               "RelativeDocumentMoniker": "Commands\\RGM.Commands.cs",
@@ -128,8 +107,7 @@
               "RelativeToolTip": "Commands\\RGM.Commands.cs",
               "ViewState": "AgIAAF8BAAAAAAAAAAA8wH0BAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-17T12:10:08.408Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-17T12:10:08.408Z"
             }
           ]
         }
