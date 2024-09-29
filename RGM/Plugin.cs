@@ -98,7 +98,6 @@ namespace RGM
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
@@ -124,7 +123,6 @@ namespace RGM
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
-            Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
 
             Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
@@ -636,11 +634,6 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                         ev.IsAllowed = false;
                 }
             }
-        }
-
-        public void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
-        {
-            Timing.CallDelayed(1f, ev.Player.DisableAllEffects);
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)

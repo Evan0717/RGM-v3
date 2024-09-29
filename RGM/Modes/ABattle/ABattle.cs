@@ -701,7 +701,11 @@ namespace RGM.Modes
                     break;
                 case "스테로이드":
                     player.GetEffect(EffectType.MovementBoost).Intensity += 50;
-                    Timing.CallDelayed(25, () => { player.GetEffect(EffectType.MovementBoost).Intensity -= 50; });
+                    Timing.CallDelayed(25, () => 
+                    { 
+                        if (player.GetEffect(EffectType.MovementBoost).Intensity > 50)
+                            player.GetEffect(EffectType.MovementBoost).Intensity -= 50; 
+                    });
                     break;
                 case "하이패스":
                     RGM.Instance.GodModePlayers.Add(player);
