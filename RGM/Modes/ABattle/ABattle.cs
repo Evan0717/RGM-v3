@@ -316,22 +316,29 @@ namespace RGM.Modes
             {
                 foreach (var Request in Requests)
                 {
-                    string[] req = Request.Split('/');
-
-                    if (req[0] == "ABattle")
+                    try
                     {
-                        Player player = Player.Get(req[1]);
+                        string[] req = Request.Split('/');
 
-                        if (req[2] == "Add")
+                        if (req[0] == "ABattle")
                         {
-                            if (req[3] == "Random")
-                                AddAbility(player);
+                            Player player = Player.Get(req[1]);
 
-                            else
-                                AddAbility(player, req[3]);
+                            if (req[2] == "Add")
+                            {
+                                if (req[3] == "Random")
+                                    AddAbility(player);
+
+                                else
+                                    AddAbility(player, req[3]);
+                            }
+
+                            Requests.Remove(Request);
                         }
-
-                        Requests.Remove(Request);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
                     }
                 }
 
