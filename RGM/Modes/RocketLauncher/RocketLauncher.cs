@@ -25,9 +25,7 @@ namespace RGM.Modes
             {
                 if (UnityEngine.Random.Range(1, 21) == 1)
                 {
-                    if (ev.Player.IsScp)
-                        Server.ExecuteCommand($"/cassie_sl <color=#{ev.Player.Role.Color.ToHex()}>{ev.Player.Role.Name}</color>(이)가 하늘로 승천했습니다.");
-
+                    Server.ExecuteCommand($"/cassie_sl <color={ev.Player.Role.Color.ToHex()}>{ev.Player.Role.Name}</color>(이)가 하늘로 승천했습니다.");
                     Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
                 }
             }
