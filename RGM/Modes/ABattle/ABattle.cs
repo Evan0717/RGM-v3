@@ -435,6 +435,7 @@ namespace RGM.Modes
                             {
                                 near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                                 near.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                                near.Hurt(0.1f, "눈빛의 힘에 압도당했습니다.");
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);
                             }
                         }
@@ -448,6 +449,7 @@ namespace RGM.Modes
                             {
                                 target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                                 target.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                                target.Hurt(0.1f, "눈빛의 힘에 압도당했습니다.");
                                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.5f);
                             }
                         }
