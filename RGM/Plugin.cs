@@ -15,6 +15,9 @@ using Exiled.API.Features.Roles;
 using RGM.API;
 using System.Windows;
 using RGM.Features;
+using Exiled.Events.Commands.Reload;
+using MapEditorReborn.Configs;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace RGM
 {
@@ -162,11 +165,13 @@ namespace RGM
             Balls = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Ball").ToList();
 
             PickModes();
+            Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
 
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
             Timing.RunCoroutine(IsFallDown());
             Timing.RunCoroutine(ChattingCooldown());
+            Timing.RunCoroutine(Ball());
 
             int rn = UnityEngine.Random.Range(1, 11);
 
@@ -183,8 +188,6 @@ namespace RGM
             {
                 SelectMode = "MostVote";
             }
-
-            Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
         }
 
         public async void OnRoundStarted()
@@ -340,6 +343,17 @@ namespace RGM
             {
                 Server.ExecuteCommand($"/speak {ev.Player.Id} enable");
 
+                List<RoleTypeId> Scps = new List<RoleTypeId>() 
+                {
+                    RoleTypeId.Scp173,
+                    RoleTypeId.Scp049,
+                    RoleTypeId.Scp0492,
+                    RoleTypeId.Scp096,
+                    RoleTypeId.Scp106,
+                    RoleTypeId.Scp939,
+                    RoleTypeId.Scp3114
+                };
+
                 List<RoleTypeId> Humans = new List<RoleTypeId>()
                 {
                     RoleTypeId.ClassD,
@@ -350,7 +364,16 @@ namespace RGM
                     RoleTypeId.Tutorial
                 };
 
-                ev.Player.Role.Set(Humans[UnityEngine.Random.Range(0, Humans.Count())]);
+                List<RoleTypeId> SelectedRole()
+                {
+                    if (UnityEngine.Random.Range(1, 11) == 1)
+                        return Scps;
+
+                    else
+                        return Humans;
+                }
+
+                ev.Player.Role.Set(GetRandomValue(SelectedRole()));
                 ev.Player.ClearInventory();
                 ev.Player.Position = new Vector3(64.66287f, 893.0417f, -73.39104f);
                 ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
@@ -593,19 +616,31 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (GodModePlayers.Contains(ev.Player))
+            if (!Round.IsStarted)
+                ev.IsAllowed = false;
+
+            else
             {
-                if (ev.Attacker != null && ev.Attacker != ev.Player)
-                    ev.IsAllowed = false;
+                if (GodModePlayers.Contains(ev.Player))
+                {
+                    if (ev.Attacker != null && ev.Attacker != ev.Player)
+                        ev.IsAllowed = false;
+                }
             }
         }
 
         public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
-            if (GodModePlayers.Contains(ev.Player))
+            if (!Round.IsStarted)
+                ev.IsAllowed = false;
+
+            else
             {
-                if (ev.Attacker != null && ev.Attacker != ev.Player)
-                    ev.IsAllowed = false;
+                if (GodModePlayers.Contains(ev.Player))
+                {
+                    if (ev.Attacker != null && ev.Attacker != ev.Player)
+                        ev.IsAllowed = false;
+                }
             }
         }
 
@@ -820,6 +855,28 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                 ChatCooldown.Clear();
 
                 yield return Timing.WaitForSeconds(2f);
+            }
+        }
+
+        public IEnumerator<float> Ball()
+        {
+            while (!Round.IsStarted)
+            {
+                foreach (Player player in Player.List.Where(x => x.IsAlive))
+                {
+                    foreach (Transform Ball in Balls)
+                    {
+                        GameObject _ball = Ball.gameObject;
+
+                        if (Vector3.Distance(_ball.transform.position, player.Position) < 2)
+                        {
+                            _ball.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rig);
+                            rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.1f, 0), ForceMode.Impulse);
+                        }
+                    }
+                }
+
+                yield return Timing.WaitForOneFrame;
             }
         }
     }
