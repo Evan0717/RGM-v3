@@ -1197,8 +1197,6 @@ namespace RGM.Modes
                     {
                         PlayerAbilities[ev.Player].Remove("[영웅] 구사일생");
 
-                        ev.IsAllowed = false;
-
                         ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
                         ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 20;
@@ -1209,14 +1207,14 @@ namespace RGM.Modes
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
                         if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                             RGM.Instance.GodModePlayers.Remove(ev.Player);
+
+                        ev.IsAllowed = false;
                         return;
                     }
 
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 최후의 발악"))
                     {
                         PlayerAbilities[ev.Player].Remove("[영웅] 최후의 발악");
-
-                        ev.IsAllowed = false;
 
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 30;
                         RGM.Instance.GodModePlayers.Add(ev.Player);
@@ -1227,6 +1225,23 @@ namespace RGM.Modes
                                 RGM.Instance.GodModePlayers.Remove(ev.Player);
                             ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
                         });
+
+                        ev.IsAllowed = false;
+                        return;
+                    }
+
+                    if (PlayerAbilities[ev.Player].Contains("[전설] 마술사"))
+                    {
+                        PlayerAbilities[ev.Player].Remove("[전설] 마술사");
+
+                        ev.Player.Role.Set(ev.Attacker.Role, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                        ev.Player.Health = ev.Attacker.Health;
+                        foreach (Item Item in ev.Attacker.Items)
+                            ev.Player.AddItem(Item.Type);
+
+                        ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
+
+                        ev.IsAllowed = false;
                         return;
                     }
 
@@ -1248,18 +1263,6 @@ namespace RGM.Modes
                         var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
                         g.FuseTime = 3f;
                         g.SpawnActive(ev.Player.Position, ev.Player);
-                    }
-
-                    if (PlayerAbilities[ev.Player].Contains("[전설] 마술사"))
-                    {
-                        PlayerAbilities[ev.Player].Remove("[전설] 마술사");
-
-                        ev.Player.Role.Set(ev.Attacker.Role, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                        ev.Player.Health = ev.Attacker.Health;
-                        foreach (Item Item in ev.Attacker.Items)
-                            ev.Player.AddItem(Item.Type);
-
-                        ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
                     }
 
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 극독"))

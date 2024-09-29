@@ -858,7 +858,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                         if (Vector3.Distance(_ball.transform.position, player.Position) < 2)
                         {
                             _ball.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rig);
-                            rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.1f, 0), ForceMode.Impulse);
+                            rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.03f, 0), ForceMode.Impulse);
                         }
                     }
                 }

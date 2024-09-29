@@ -365,15 +365,24 @@ namespace RGM.Commands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(arguments.At(0));
-            string args = string.Join(" ", arguments.Skip(0)).Trim();
+            string args = string.Join(" ", arguments).Replace(arguments.At(0), "").Trim();
 
-            Log.Info(args);
+            if (arguments.Count < 2)
+            {
+                ABattle.Instance.AddAbility(player);
 
-            ABattle.Instance.AddAbility(player, args);
+                response = "AddAbility Complete!";
 
-            response = "AddAbility Complete!";
+                return true;
+            }
+            else
+            {
+                ABattle.Instance.AddAbility(player, args);
 
-            return true;
+                response = "AddAbility Complete!";
+
+                return true;
+            }
         }
 
         public string Command { get; } = "addability";
