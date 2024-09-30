@@ -64,7 +64,7 @@ namespace RGM.Modes
         {
             List<CandyKindID> CandyList = Tools.EnumToList<CandyKindID>();
             {
-                var toGive = RGM.GetRandomValue(CandyList);
+                var toGive = Tools.GetRandomValue(CandyList);
                 ev.Attacker.TryAddCandy(toGive);
 
                 if (ev.Player.IsScp)

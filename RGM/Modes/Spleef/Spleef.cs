@@ -18,6 +18,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -27,7 +28,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = null;
-        public Door door = RGM.GetRandomValue(Door.List.ToList());
+        public Door door = Tools.GetRandomValue(Door.List.ToList());
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
 
         public void OnEnabled()

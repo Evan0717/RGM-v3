@@ -13,6 +13,7 @@ using MultiBroadcast.API;
 using Exiled.API.Enums;
 using RGM.Features;
 using MapEditorReborn.Events.Handlers;
+using RGM.API;
 
 namespace RGM
 {
@@ -25,7 +26,7 @@ namespace RGM
 
         public string CurrentMode = null;
         public string SelectMode = null;
-        public string Tip = GetRandomValue(Tips.LobbyTips);
+        public string Tip = Tools.GetRandomValue(Tips.LobbyTips);
         public int StartupRandom = UnityEngine.Random.Range(1, 21);
         public bool FreezeGameStart = false;
         public bool AutoNuke = false;
@@ -47,13 +48,6 @@ namespace RGM
         List<Transform> RandomColors;
         List<Transform> Balls;
 
-        public static T GetRandomValue<T>(List<T> list)
-        {
-            System.Random random = new System.Random();
-            int index = random.Next(0, list.Count);
-            return list[index];
-        }
-
         public void PickModes()
         {
             ModeVote.Clear();
@@ -73,12 +67,11 @@ namespace RGM
                     Pad.GetComponent<PrimitiveObject>().Primitive.Color = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]][0], out Color color) ? color : Color.white;
             }
 
-            Color randomColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+            Color randomColor = Tools.GetRandomColor(true);
 
-            foreach (var Number in Numbers)
-                Number.GetComponent<PrimitiveObject>().Primitive.Color = randomColor;
-
+            Numbers.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = randomColor);
             RandomColors.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = randomColor);
+            Balls.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = Tools.GetRandomColor(true));
         }
 
         public override void OnEnabled()
@@ -206,7 +199,7 @@ namespace RGM
 
                     if (filiteredPlayers.Count > 0)
                     {
-                        Player player = GetRandomValue(filiteredPlayers);
+                        Player player = Tools.GetRandomValue(filiteredPlayers);
                         CurrentMode = ModeVote.FirstOrDefault(x => x.Value.Contains(player)).Key;
 
                         foreach (var p in Player.List)
@@ -368,7 +361,7 @@ namespace RGM
                         return Humans;
                 }
 
-                ev.Player.Role.Set(GetRandomValue(SelectedRole()));
+                ev.Player.Role.Set(Tools.GetRandomValue(SelectedRole()));
                 ev.Player.ClearInventory();
                 ev.Player.Position = new Vector3(64.66287f, 893.0417f, -73.39104f);
                 ev.Player.AddBroadcast(10, Notions.WelcomeMessage);

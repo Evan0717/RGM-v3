@@ -9,6 +9,7 @@ using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp244;
 using MEC;
 using Mirror;
+using RGM.API;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -76,7 +77,7 @@ namespace RGM.Modes
                 {
                     if (UnityEngine.Random.Range(1, 4) == 1)
                     {
-                        var scp244 = (Scp244)Item.Create(RGM.GetRandomValue(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }), Server.Host);
+                        var scp244 = (Scp244)Item.Create(Tools.GetRandomValue(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }), Server.Host);
                         scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
                     }
                 }

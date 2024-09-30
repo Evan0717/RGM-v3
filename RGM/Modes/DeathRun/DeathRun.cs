@@ -11,6 +11,7 @@ using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
 using PlayerRoles;
 using MultiBroadcast.API;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -33,7 +34,7 @@ namespace RGM.Modes
 
             Server.ExecuteCommand("/mp load DeathRun");
 
-            Tagger = RGM.GetRandomValue(Player.List.ToList());
+            Tagger = Tools.GetRandomValue(Player.List.ToList());
 
             Tagger.Role.Set(RoleTypeId.Scientist);
             Tagger.Position = new Vector3(44.57422f, 999.7067f, 78.52734f);

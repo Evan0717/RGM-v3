@@ -40,7 +40,7 @@ namespace RGM.Modes
 
                 foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
                 {
-                    RoleTypeId SelectedRole = RGM.GetRandomValue(Roles);
+                    RoleTypeId SelectedRole = Tools.GetRandomValue(Roles);
                     player.Role.Set(SelectedRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
                 }
             }

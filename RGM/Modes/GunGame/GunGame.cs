@@ -15,6 +15,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using PlayerRoles;
 using MultiBroadcast.API;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -126,7 +127,7 @@ namespace RGM.Modes
 
         public void PlayerSpawn(Player player)
         {
-            Door SelectedDoor = RGM.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
+            Door SelectedDoor = Tools.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
             !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList());
 
             if (player.Role.Type != RoleTypeId.ClassD)

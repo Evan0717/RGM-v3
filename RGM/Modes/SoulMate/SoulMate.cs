@@ -11,6 +11,7 @@ using Mirror;
 using MultiBroadcast.API;
 using UnityEngine;
 using Exiled.API.Enums;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -102,8 +103,8 @@ namespace RGM.Modes
 
                 while (waitingPlayers.Count() > 1)
                 {
-                    Player first = RGM.GetRandomValue(waitingPlayers);
-                    Player second = RGM.GetRandomValue(waitingPlayers.Where(x => x != first).ToList());
+                    Player first = Tools.GetRandomValue(waitingPlayers);
+                    Player second = Tools.GetRandomValue(waitingPlayers.Where(x => x != first).ToList());
 
                     waitingPlayers.Remove(first);
                     waitingPlayers.Remove(second);

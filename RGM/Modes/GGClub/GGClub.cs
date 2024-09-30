@@ -16,6 +16,7 @@ using PluginAPI.Events;
 using UnityEngine;
 using SCPSLAudioApi.AudioCore;
 using MultiBroadcast;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -97,7 +98,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < UnityEngine.Random.Range(2, 5); i++)
                 {
-                    Transform goldPad = RGM.GetRandomValue(Pads);
+                    Transform goldPad = Tools.GetRandomValue(Pads);
 
                     if (!goldPads.Contains(goldPad))
                         goldPads.Add(goldPad);

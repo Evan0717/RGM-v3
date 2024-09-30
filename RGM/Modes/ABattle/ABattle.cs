@@ -19,6 +19,8 @@ using InventorySystem;
 using InventorySystem.Items.Coin;
 using InventorySystem.Items.Usables.Scp330;
 using MapEditorReborn.API.Features.Objects;
+using MapEditorReborn.API.Features.Serializable;
+using MapEditorReborn.API.Features;
 using MEC;
 using MultiBroadcast;
 using MultiBroadcast.API;
@@ -26,7 +28,6 @@ using PlayerRoles;
 using PluginAPI.Roles;
 using RGM.API;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Modes
 {
@@ -176,11 +177,14 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp106Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 회춘", "데미지를 20% 경감시키는 효과를 받습니다."}
+            {"[전용] 회춘", "데미지를 20% 경감시키는 효과를 받습니다."},
+            {"[전용] 끈적한 늪", "5m 내의 인간들을 느리게 만듭니다. (중첩 불가)"},
+            {"[전용] 사냥감 모색", "공격 성공 후 속도가 일시적으로 증가합니다."}
         };
         public Dictionary<string, string> Scp939Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 흉내쟁이", "흉내 쿨타임이 사라집니다. (중첩 불가)"}
+            {"[전용] 흉내쟁이", "흉내 쿨타임이 사라집니다. (중첩 불가)"},
+            {"[전용] 안아줘요", "런지 공격이 상대를 반드시 죽입니다. (중첩 불가)"}
         };
         public Dictionary<string, string> Scp3114Abilities = new Dictionary<string, string>()
         {
@@ -295,13 +299,15 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Scp173.Blinking += OnBlinking;
 
-            Exiled.Events.Handlers.Scp049.Attacking += OnAttacking;
-            Exiled.Events.Handlers.Scp049.Attacking += OnAttacking;
+            Exiled.Events.Handlers.Scp049.Attacking += OnScp049Attacking;
             Exiled.Events.Handlers.Scp049.FinishingRecall += OnFinishingRecall;
 
             Exiled.Events.Handlers.Scp0492.ConsumedCorpse += OnConsumedCorpse;
+            Exiled.Events.Handlers.Scp0492.TriggeringBloodlust += OnTriggeringBloodlust;
 
             Exiled.Events.Handlers.Scp096.Charging += OnCharging;
+
+            Exiled.Events.Handlers.Scp106.Attacking += OnScp106Attacking;
 
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
             Exiled.Events.Handlers.Scp079.ZoneBlackout += OnZoneBlackout;
@@ -319,6 +325,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(Twinkle());
             Timing.RunCoroutine(Medical());
             Timing.RunCoroutine(Radiation());
+            Timing.RunCoroutine(StickySwamp());
         }
 
         public void ShowStatus(Player player)
@@ -561,12 +568,19 @@ namespace RGM.Modes
 
         public IEnumerator<float> Radiation()
         {
+            Dictionary<Player, Light> RadiationPlayers = new Dictionary<Player, Light>();
+
             while (true)
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
                     if (PlayerAbilities.ContainsKey(player))
                     {
+                        LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
+                        LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, player.Position);
+
+                        Timing.CallDelayed(0.1f, Light.Destroy);
+
                         if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 45f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                             hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                         {
@@ -580,6 +594,26 @@ namespace RGM.Modes
                                     player.EnableEffect(EffectType.Flashed, 1, 1f);
                                 }
                             }
+                        }
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public IEnumerator<float> StickySwamp()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                {
+                    if (PlayerAbilities[player].Contains("[전용] 끈적한 늪"))
+                    {
+                        foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, player.Position) < 6))
+                        {
+                            if (player != near && player.LeadingTeam != near.LeadingTeam)
+                                near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         }
                     }
                 }
@@ -730,7 +764,7 @@ namespace RGM.Modes
                 player.SendConsoleMessage($"\n{Message}", "white");
             }
 
-            string abilityName = force == null ? RGM.GetRandomValue(AbilityList().Keys.ToList()) : force;
+            string abilityName = force == null ? Tools.GetRandomValue(AbilityList().Keys.ToList()) : force;
 
             ApplyGiveAbility(abilityName);
 
@@ -755,13 +789,13 @@ namespace RGM.Modes
                 case "랜덤박스":
                     List<ItemType> RandomBox = Tools.EnumToList<ItemType>();
 
-                    Item RandomBoxItem = player.AddItem(RGM.GetRandomValue(RandomBox));
+                    Item RandomBoxItem = player.AddItem(Tools.GetRandomValue(RandomBox));
 
                     if (player.IsScp)
                         player.CurrentItem = RandomBoxItem;
                     break;
                 case "위치 추적":
-                    Player target1 = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+                    Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
                     for (int i = 1; i < 11; i++)
                     {
@@ -780,7 +814,7 @@ namespace RGM.Modes
                     List<string> Ammos = new List<string> { "19", "22", "27", "28", "29" };
 
                     for (int i = 1; i < 4; i++)
-                        Server.ExecuteCommand($"/give {player.Id} {RGM.GetRandomValue(Ammos)}");
+                        Server.ExecuteCommand($"/give {player.Id} {Tools.GetRandomValue(Ammos)}");
                     break;
                 case "정화":
                     player.TryAddCandy(CandyKindID.Green);
@@ -836,7 +870,7 @@ namespace RGM.Modes
                 case "봄버맨":
                     var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
                     g.FuseTime = 3f;
-                    g.SpawnActive(RGM.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != player.Role.Team && player != x).ToList()).Position, player);
+                    g.SpawnActive(Tools.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != player.Role.Team && player != x).ToList()).Position, player);
                     break;
                 case "갈고리":
                     Item gc = player.AddItem(ItemType.Coin);
@@ -891,7 +925,7 @@ namespace RGM.Modes
                         ItemType.KeycardO5
                     };
 
-                    Item RandomChestItem = player.AddItem(RGM.GetRandomValue(RandomChest));
+                    Item RandomChestItem = player.AddItem(Tools.GetRandomValue(RandomChest));
 
                     if (player.IsScp)
                         player.CurrentItem = RandomChestItem;
@@ -926,7 +960,7 @@ namespace RGM.Modes
 
                     for (int i=1; i<Server.PlayerCount + 1; i++)
                     {
-                        Item Item = Item.Create(RGM.GetRandomValue(ItemTypes));
+                        Item Item = Item.Create(Tools.GetRandomValue(ItemTypes));
 
                         Item.CreatePickup(new Vector3(player.Position.x, player.Position.y + 1, player.Position.z));
                     }
@@ -966,7 +1000,7 @@ namespace RGM.Modes
                     };
 
                     foreach (var team in Player.List.Where(x => x.IsAlive && x.LeadingTeam == player.LeadingTeam && Vector3.Distance(player.Position, x.Position) < 11))
-                        team.AddItem(RGM.GetRandomValue(HealItem));
+                        team.AddItem(Tools.GetRandomValue(HealItem));
 
                     break;
                 case "산업재해보험":
@@ -1002,7 +1036,7 @@ namespace RGM.Modes
 
                     while (!player.IsInventoryFull)
                     {
-                        Item ChaosBagItem = player.AddItem(RGM.GetRandomValue(ChaosBag));
+                        Item ChaosBagItem = player.AddItem(Tools.GetRandomValue(ChaosBag));
 
                         if (player.IsScp)
                             player.CurrentItem = ChaosBagItem;
@@ -1036,7 +1070,7 @@ namespace RGM.Modes
                         ItemType.AntiSCP207
                     };
 
-                    Item SCPItem = player.AddItem(RGM.GetRandomValue(SCPItems));
+                    Item SCPItem = player.AddItem(Tools.GetRandomValue(SCPItems));
 
                     if (player.IsScp)
                         player.CurrentItem = SCPItem;
@@ -1116,7 +1150,7 @@ namespace RGM.Modes
                             {
                                 if (!player.IsInventoryEmpty)
                                 {
-                                    Item Item = RGM.GetRandomValue(player.Items.ToList());
+                                    Item Item = Tools.GetRandomValue(player.Items.ToList());
 
                                     player.RemoveItem(Item);
                                     player.ShowHint("주머니가 허전합니다..", 1.2f);
@@ -1263,14 +1297,14 @@ namespace RGM.Modes
             {
                 ev.Item.Destroy();
 
-                Player target = RGM.GetRandomValue(Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList());
+                Player target = Tools.GetRandomValue(Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList());
                 ev.Player.Position = target.Position;
             }
             else if (GrapCoinSerials.Contains(ev.Item.Serial))
             {
                 ev.Item.Destroy();
 
-                Player target1 = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive && x != ev.Player && x.Role.Type != RoleTypeId.Scp079).ToList());
+                Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != ev.Player && x.Role.Type != RoleTypeId.Scp079).ToList());
                 target1.Position = ev.Player.Position;
             }
             else if (ClockCoinSerials.Contains(ev.Item.Serial))
@@ -1589,7 +1623,7 @@ namespace RGM.Modes
                 ev.Player.CurrentRoom.TurnOffLights(0.5f);
         }
 
-        public void OnAttacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
+        public void OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] 사자"))
             {
@@ -1642,6 +1676,20 @@ namespace RGM.Modes
             }
         }
 
+        public void OnScp106Attacking(Exiled.Events.EventArgs.Scp106.AttackingEventArgs ev)
+        {
+            if (PlayerAbilities[ev.Player].Contains("[전용] 사냥감 모색"))
+            {
+                ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 25;
+
+                Timing.CallDelayed(3f, () => 
+                {
+                    if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity > 25)
+                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 25;
+                });
+            }
+        }
+
         public void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] 핑 리모컨"))
@@ -1654,7 +1702,7 @@ namespace RGM.Modes
             {
                 for (int i = 1; i < 6; i++)
                 {
-                    Room SelectedRoom = RGM.GetRandomValue(Room.List.ToList());
+                    Room SelectedRoom = Tools.GetRandomValue(Room.List.ToList());
 
                     SelectedRoom.TurnOffLights(10);
                 }

@@ -65,7 +65,7 @@ namespace RGM.Modes
                         {
                             if (UnityEngine.Random.Range(1, 51) == 1)
                             {
-                                Item Item = player.AddItem(RGM.GetRandomValue(Tools.EnumToList<ItemType>()));
+                                Item Item = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
 
                                 if (player.IsScp)
                                     player.CurrentItem = Item;

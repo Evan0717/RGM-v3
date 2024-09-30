@@ -11,6 +11,7 @@ using HarmonyLib;
 using MEC;
 using Mirror;
 using MultiBroadcast;
+using RGM.API;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -21,7 +22,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = null;
-        public Door door = RGM.GetRandomValue(Door.List.ToList());
+        public Door door = Tools.GetRandomValue(Door.List.ToList());
 
         public void OnEnabled()
         {
@@ -45,7 +46,7 @@ namespace RGM.Modes
             List<ItemType> CDItems = new List<ItemType>() { ItemType.Medkit, ItemType.Painkillers, ItemType.Radio, ItemType.GrenadeFlash };
             List<ItemType> Items = new List<ItemType>();
 
-            Items.Add(RGM.GetRandomValue(Guns));
+            Items.Add(Tools.GetRandomValue(Guns));
 
             foreach (var ammo in Ammos)
             {
@@ -71,7 +72,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(180f);
 
-            Player BusterCall = RGM.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
             foreach (var player in Player.List)
             {

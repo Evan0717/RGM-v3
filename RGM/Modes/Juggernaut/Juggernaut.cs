@@ -17,6 +17,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using PlayerRoles;
 using Exiled.API.Features.Roles;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -54,7 +55,7 @@ namespace RGM.Modes
                 Spawned(player);
             }
 
-            juggernaut = RGM.GetRandomValue(Player.List.ToList());
+            juggernaut = Tools.GetRandomValue(Player.List.ToList());
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.2f, 1.1f, 1.2f);

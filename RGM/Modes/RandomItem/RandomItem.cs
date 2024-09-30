@@ -37,7 +37,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    Item Item = player.AddItem(RGM.GetRandomValue(ItemTypes));
+                    Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes));
 
                     if (player.IsScp)
                         player.CurrentItem = Item;
@@ -58,7 +58,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 9; i++)
             {
-                Item Item = player.AddItem(RGM.GetRandomValue(ItemTypes));
+                Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes));
 
                 if (player.IsScp)
                     player.CurrentItem = Item;

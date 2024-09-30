@@ -15,6 +15,7 @@ using MultiBroadcast;
 using PlayerRoles;
 using UnityEngine;
 using Exiled.API.Enums;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -65,7 +66,7 @@ namespace RGM.Modes
             Server.ExecuteCommand($"/mp load container");
 
             Player.List.ToList().CopyTo(pl);
-            monster = RGM.GetRandomValue(Player.List.ToList());
+            monster = Tools.GetRandomValue(Player.List.ToList());
 
             try
             {

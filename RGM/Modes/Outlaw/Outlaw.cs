@@ -62,7 +62,7 @@ namespace RGM.Modes
                     ItemType.MicroHID
                 };
 
-                Item CurrentItem = player.AddItem(RGM.GetRandomValue(FirearmList));
+                Item CurrentItem = player.AddItem(Tools.GetRandomValue(FirearmList));
 
                 if (CurrentItem is Firearm firearm)
                 {

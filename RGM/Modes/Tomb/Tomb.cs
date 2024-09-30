@@ -47,7 +47,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 500; i++)
             {
-                Item Item = Item.Create(RGM.GetRandomValue(ItemTypes));
+                Item Item = Item.Create(Tools.GetRandomValue(ItemTypes));
 
                 Item.CreatePickup(RandomPosition());
             }

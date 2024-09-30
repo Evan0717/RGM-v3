@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using MEC;
 using Mirror;
 using MultiBroadcast;
+using RGM.API;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -69,7 +70,7 @@ namespace RGM.Modes
             {
                 bool end = true;
 
-                Server.ExecuteCommand($"/ev run {RGM.GetRandomValue(Games)}");
+                Server.ExecuteCommand($"/ev run {Tools.GetRandomValue(Games)}");
 
                 while (end)
                 {
