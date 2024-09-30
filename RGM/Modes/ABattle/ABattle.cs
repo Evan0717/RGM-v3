@@ -159,7 +159,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp049Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 사자", "공격 쿨타임이 1/2배가 됩니다. (중첩 불가)"},
+            {"[전용] 사자", "공격 속도가 1/2배가 됩니다. (중첩 불가)"},
             {"[전용] 유능한 의사", "소생된 좀비의 체력이 50% 확률로 1.5배가 됩니다. (중첩 불가)"},
             {"[전용] 능수능란", "소생 시간이 1/2배가 됩니다."}
         };
@@ -173,7 +173,8 @@ namespace RGM.Modes
         {
             {"[전용] 격노", "분노 때에는 어떠한 데미지도 입지 않습니다. (중첩 불가)"},
             {"[전용] 별자리 찢기", "25% 확률로 공격한 대상을 즉사시킵니다. (중첩 불가)"},
-            {"[전용] 천리안", "분노 시에 30m 내의 인간들을 모두 목격자에 포함시킵니다. (중첩 불가)"}
+            {"[전용] 천리안", "분노 시에 30m 내의 인간들을 모두 목격자에 포함시킵니다. (중첩 불가)"},
+            {"[전용] 원수", "분노 시간이 1/2배가 됩니다."}
         };
         public Dictionary<string, string> Scp106Abilities = new Dictionary<string, string>()
         {
@@ -184,7 +185,8 @@ namespace RGM.Modes
         public Dictionary<string, string> Scp939Abilities = new Dictionary<string, string>()
         {
             {"[전용] 흉내쟁이", "흉내 쿨타임이 사라집니다. (중첩 불가)"},
-            {"[전용] 안아줘요", "런지 공격이 상대를 반드시 죽입니다. (중첩 불가)"}
+            {"[전용] 안아줘요", "런지 공격이 상대를 반드시 죽입니다. (중첩 불가)"},
+            {"[전용] 민첩한 사냥 도구", "공격 속도가 1/2배가 됩니다."}
         };
         public Dictionary<string, string> Scp3114Abilities = new Dictionary<string, string>()
         {
@@ -230,12 +232,12 @@ namespace RGM.Modes
             {"전설", "#ffd700"},
             {"신화", "#DF0101"},
             {"전용", "#F7819F"},
-            {"시너지", "#F7819F"}
+            {"시너지", "#DEEFED"}
         };
 
         public string ColorFormat(string text)
         {
-            return text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]<color>")
+            return text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
                         .Replace("[전용]", $"<color={RatingColor["전용"]}>[전용]</color>")
                         .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
                         .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
@@ -394,13 +396,11 @@ namespace RGM.Modes
 
         public IEnumerator<float> RequestManager()
         {
-            List<string> Requests = RGM.Instance.Requests;
-
             while (true)
             {
-                foreach (var Request in Requests)
+                try
                 {
-                    try
+                    foreach (var Request in RGM.Instance.Requests)
                     {
                         string[] req = Request.Split('/');
 
@@ -417,16 +417,16 @@ namespace RGM.Modes
                                     AddAbility(player, req[3]);
                             }
 
-                            Requests.Remove(Request);
+                            RGM.Instance.Requests.Remove(Request);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
@@ -576,11 +576,6 @@ namespace RGM.Modes
                 {
                     if (PlayerAbilities.ContainsKey(player))
                     {
-                        LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
-                        LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, player.Position);
-
-                        Timing.CallDelayed(0.1f, Light.Destroy);
-
                         if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 45f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                             hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                         {
@@ -590,6 +585,11 @@ namespace RGM.Modes
                             {
                                 if (player != target && player.LeadingTeam != target.LeadingTeam)
                                 {
+                                    LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
+                                    LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, target.Position);
+
+                                    Timing.CallDelayed(0.2f, Light.Destroy);
+
                                     Hitmarker.SendHitmarkerDirectly(target.ReferenceHub, 0.8f);
                                     player.EnableEffect(EffectType.Flashed, 1, 1f);
                                 }
@@ -768,7 +768,7 @@ namespace RGM.Modes
 
             ApplyGiveAbility(abilityName);
 
-            string aT = abilityName.Replace("[시너지] ", "").Replace("[전용] ", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "");
+            string aT = abilityName.Replace("[전용] ", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "").Replace("[시너지] ", "");
 
             switch (aT)
             {
@@ -1082,15 +1082,17 @@ namespace RGM.Modes
                 case "급식":
                     player.MaxHealth = player.MaxHealth * 1.5f;
                     break;
-                case "":
+                case "원수":
                     if (player.Role is Scp096Role Scp096)
-                    {
                         Scp096.ChargeCooldown /= 2;
-                    }
                     break;
                 case "흉내쟁이":
-                    if (player.Role is Scp939Role scp939)
-                        scp939.MimicryCooldown = 0;
+                    if (player.Role is Scp939Role Scp939)
+                        Scp939.MimicryCooldown = 0;
+                    break;
+                case "민첩한 사냥 도구":
+                    if (player.Role is Scp939Role Scp9391)
+                        Scp9391.AttackCooldown /= 2;
                     break;
                 case "간이 충전기":
                     if (player.Role is Scp079Role scp079)
@@ -1550,7 +1552,7 @@ namespace RGM.Modes
         {
             if (ev.Attacker != null)
             {
-                if (PlayerAbilities[ev.Player].Contains("[일반] 단련"))
+                if (PlayerAbilities[ev.Attacker].Contains("[일반] 단련"))
                 {
                     int count = PlayerAbilities.Values.Count(list => list.Contains("[일반] 단련"));
 
@@ -1566,7 +1568,7 @@ namespace RGM.Modes
                         Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
                 {
                     int PowerCount = 0;
 
@@ -1588,13 +1590,19 @@ namespace RGM.Modes
                     }
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[전용] 별자리 찢기"))
+                if (PlayerAbilities[ev.Attacker].Contains("[전용] 별자리 찢기"))
                 {
                     if (UnityEngine.Random.Range(1, 5) == 1)
                         ev.DamageHandler.Damage = -1;
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[전용] 숙련된 암살자"))
+                if (PlayerAbilities[ev.Attacker].Contains("[전용] 안아줘요"))
+                {
+                    if (ev.DamageHandler.Type == DamageType.Crushed)
+                        ev.DamageHandler.Damage = -1;
+                }
+
+                if (PlayerAbilities[ev.Attacker].Contains("[전용] 숙련된 암살자"))
                 {
                     if (ev.DamageHandler.Type == DamageType.Strangled)
                         ev.DamageHandler.Damage *= 10;
