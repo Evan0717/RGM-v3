@@ -22,7 +22,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield break;
+            yield return 0f;
         }
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)

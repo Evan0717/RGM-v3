@@ -41,7 +41,7 @@ namespace RGM.Modes
                 Spawned(player);
             }
 
-            yield break;
+            yield return 0f;
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)

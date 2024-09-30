@@ -23,7 +23,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield break;
+            yield return 0f;
         }
 
         public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)

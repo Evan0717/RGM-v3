@@ -28,8 +28,6 @@ namespace RGM.Modes
             {
                 Spawned(player);
             }
-
-            yield break;
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
@@ -39,11 +37,10 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            var item = player.AddItem(ItemType.Jailbird);
+            Item item = player.AddItem(ItemType.Jailbird);
+
             if (player.IsScp)
-            {
                 player.CurrentItem = item;
-            }
         }
     }
 }

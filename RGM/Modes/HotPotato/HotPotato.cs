@@ -64,7 +64,6 @@ namespace RGM.Modes
             }
             Timing.RunCoroutine(BoomSequence());
             Timing.RunCoroutine(HighKiller());
-            yield break;
         }
 
         public IEnumerator<float> BoomSequence()
