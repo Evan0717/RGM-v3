@@ -118,8 +118,8 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> ClassDAbilities = new Dictionary<string, string>()
         {
-            {"[전용] 소매치기", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분) (중첩 불가)"},
-            {"[전용] 변장의 달인", "SCP-268을 지급받습니다."},
+            {"[전용] 절도죄", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분) (중첩 불가)"},
+            {"[전용] 주거칩입죄", "SCP-268을 지급받습니다."},
             {"[전용] 반란의 씨앗", "카오스 티켓을 전체 인원 수의 20% 만큼 추가합니다."}
         };
         public Dictionary<string, string> ScientistAbilities = new Dictionary<string, string>()
@@ -441,12 +441,12 @@ namespace RGM.Modes
                         if (synergy.Value.Skip(1).All(x => PlayerAbilities[player].Contains(x)))
                         {
                             if (!PlayerAbilities[player].Contains(synergy.Key))
-                                PlayerAbilities[player].Add(synergy.Key);
+                                AddAbility(player, synergy.Key);
                         }
                     }
-
-                    yield return Timing.WaitForSeconds(1f);
                 }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
@@ -650,7 +650,10 @@ namespace RGM.Modes
             int grade = UnityEngine.Random.Range(1, 1001);
             string abilityGrade;
 
-            if (player.Role.Type == RoleTypeId.Scp079)
+            if (force != null)
+                abilityGrade = "[" + force.Substring(force.IndexOf('[') + 1, force.IndexOf(']') - force.IndexOf('[') - 1) + "]".Trim();
+
+            else if (player.Role.Type == RoleTypeId.Scp079)
                 abilityGrade = "[전용]";
 
             else
@@ -706,30 +709,43 @@ namespace RGM.Modes
 
                         if (role == RoleTypeId.ClassD)
                             return ClassDAbilities;
+
                         else if (role == RoleTypeId.Scientist)
                             return ScientistAbilities;
+
                         else if (role == RoleTypeId.FacilityGuard)
                             return GuardAbilities;
+
                         else if (player.IsNTF)
                             return NtfAbilities;
+
                         else if (player.IsCHI)
                             return ChaosAbilities;
+
                         else if (role == RoleTypeId.Tutorial)
                             return SnakeAbilities;
+
                         else if (role == RoleTypeId.Scp173)
                             return Scp173Abilities;
+
                         else if (role == RoleTypeId.Scp049)
                             return Scp049Abilities;
+
                         else if (role == RoleTypeId.Scp0492)
                             return Scp0492Abilities;
+
                         else if (role == RoleTypeId.Scp096)
                             return Scp096Abilities;
+
                         else if (role == RoleTypeId.Scp106)
                             return Scp106Abilities;
+
                         else if (role == RoleTypeId.Scp939)
                             return Scp939Abilities;
+
                         else if (role == RoleTypeId.Scp3114)
                             return Scp3114Abilities;
+
                         else
                             return Scp079Abilities;
                     }
@@ -972,7 +988,7 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = fl;
                     break;
-                case "변장의 달인": player.AddItem(ItemType.SCP268); break;
+                case "주거칩입죄": player.AddItem(ItemType.SCP268); break;
                 case "반란의 씨앗": Respawn.ChaosTickets += (int)(Player.List.Count() * 0.2); break;
                 case "05 평의회": player.AddItem(ItemType.KeycardO5); break;
                 case "공학 전공": player.AddItem(ItemType.SCP2176); break;
@@ -1139,7 +1155,7 @@ namespace RGM.Modes
                     }
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[전용] 소매치기"))
+                if (PlayerAbilities[ev.Player].Contains("[전용] 절도죄"))
                 {
                     if (!PickPocketCooldown.Contains(ev.Player))
                     {
