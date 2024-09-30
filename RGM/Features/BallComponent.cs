@@ -6,7 +6,7 @@ namespace RGM.Features
     {
         private SphereCollider sphere;
         private Rigidbody rigid;
-        internal static float BallSpeedBoost = 1f;
+        internal static float BallSpeedBoost = 0.1f;
         private void Start()
         {
             sphere = gameObject.AddComponent<SphereCollider>();
