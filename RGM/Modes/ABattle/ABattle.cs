@@ -155,7 +155,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp173Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 공포", "인간을 죽이면 근처에 있는 인간들이 0.5초 동안 움직일 수 없게 됩니다. (중첩 불가)"},
+            {"[전용] 공포", "인간을 죽이면 근처에 있는 인간들이 1초 동안 움직일 수 없게 됩니다. (중첩 불가)"},
             {"[전용] 괴이", "순간이동한 방이 정전됩니다. (중첩 불가)"}
         };
         public Dictionary<string, string> Scp049Abilities = new Dictionary<string, string>()
@@ -1443,7 +1443,9 @@ namespace RGM.Modes
                         {
                             if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                                 RGM.Instance.GodModePlayers.Remove(ev.Player);
-                            ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
+
+                            if (ev.Player.IsAlive)
+                                ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
                         });
 
                         ev.IsAllowed = false;
@@ -1529,7 +1531,7 @@ namespace RGM.Modes
                     foreach (var player in Player.List.Where(x => x.IsHuman))
                     {
                         if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                            player.EnableEffect(EffectType.Ensnared, 1, 0.5f);
+                            player.EnableEffect(EffectType.Ensnared, 1, 1f);
                     }
                 }
             }
@@ -1786,7 +1788,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List.Where(x => x.IsHuman))
                 {
-                    if (player.CurrentRoom.Position == ev.Player.CurrentRoom.Position)
+                    if (player.CurrentRoom == ev.Room)
                         player.EnableEffect(EffectType.SinkHole, 1, 1.2f);
                 }
             }
