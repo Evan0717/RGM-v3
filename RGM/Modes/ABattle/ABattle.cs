@@ -28,6 +28,7 @@ using PlayerRoles;
 using PluginAPI.Roles;
 using RGM.API;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Modes
 {
@@ -208,20 +209,32 @@ namespace RGM.Modes
         {
             {"[시너지] 생존 전문가", new List<string>()
                 {
-                    "즉시 현재 체력의 500%에 해당하는 최대 체력을 얻습니다.",
+                    "<보험, 구사일생, 최후의 발악> 즉시 현재 체력의 500%에 해당하는 최대 체력을 얻습니다.",
                     "[일반] 보험", "[영웅] 구사일생", "[영웅] 최후의 발악"
                 }
             },
             {"[시너지] 시공간 초월자", new List<string>()
                 {
-                    "시공간을 초월했습니다! 대단합니다!",
+                    "<순간이동, 갈고리, 고스트룰, 차원 강탈자> 시공간을 초월했습니다! 대단합니다!",
                     "[희귀] 순간이동", "[희귀] 갈고리", "[영웅] 고스트룰", "[신화] 차원 강탈자"
                 }
             },
             {"[시너지] 광휘", new List<string>()
                 {
-                    "당신을 쳐다보는 눈은 멀어버릴 것입니다.",
+                    "<플래시라이트, 횃불> 당신을 쳐다보는 눈은 멀어버릴 것입니다.",
                     "[전설] 플래시라이트", "[일반] 횃불"
+                }
+            },
+            {"[시너지] 럭키비키니시티", new List<string>()
+                {
+                    "<행운, 행운, 행운> 능력은 행운 3개지만, 실제로는 불운인 당신! 럭키비키 능력을 얻으세요!",
+                    "[일반] 행운", "[일반] 행운", "[일반] 행운"
+                }
+            },
+            {"[시너지] 타고난 사냥꾼", new List<string>()
+                {
+                    "<매의 눈, 잠행, 무기 전문가, 보급, 운동> 사냥꾼의 기운을 타고났습니다!",
+                    "[희귀] 매의 눈", "[일반] 잠행", "[일반] 무기 전문가", "[일반] 보급", "[일반] 운동"
                 }
             }
         };
@@ -572,8 +585,8 @@ namespace RGM.Modes
 
         public IEnumerator<float> Radiation()
         {
-            LightSourceSerializable LightSource;
-            LightSourceObject Light;
+            LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
+            LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, Vector3.zero);
 
             while (true)
             {
@@ -590,8 +603,7 @@ namespace RGM.Modes
                             {
                                 if (player != target && player.LeadingTeam != target.LeadingTeam)
                                 {
-                                    LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
-                                    Light = ObjectSpawner.SpawnLightSource(LightSource, target.Position);
+                                    Light.Position = target.Position;
 
                                     Hitmarker.SendHitmarkerDirectly(target.ReferenceHub, 0.8f);
                                     player.EnableEffect(EffectType.Flashed, 1, 1f);
@@ -1131,6 +1143,9 @@ namespace RGM.Modes
                     
                     if (player.MaxHealth < player.Health)
                         player.MaxHealth = player.Health;
+                    break;
+                case "럭키비키니시티":
+                    AddAbility(player, "[영웅] 럭키비키");
                     break;
             }
         }
