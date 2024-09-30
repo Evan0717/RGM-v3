@@ -94,7 +94,7 @@ namespace RGM.Modes
                         {
                             if (PlayerPosition[player] != player.Position || PlayerRotation[player] != player.Rotation)
                             {
-                                Server.ExecuteCommand($"/rocket {player.Id} 1");
+                                Server.ExecuteCommand($"/rocket {player.Id} 0.01");
 
                                 Server.ExecuteCommand($"/clearcassie");
                                 Server.ExecuteCommand($"/cassie_sl 안타깝게도 {player.DisplayNickname}(이)가 <b><color=red>빨간 불</color></b>에 건넜습니다.");
