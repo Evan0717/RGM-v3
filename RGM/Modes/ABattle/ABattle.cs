@@ -1262,6 +1262,9 @@ namespace RGM.Modes
 
                         for (int i=1; i<21; i++)
                         {
+                            if (ev.Player.IsDead)
+                                return;
+
                             ev.Player.ShowHint($"<align=left><size=30>{string.Join("\n", DisplayVote)}</size>\n\n<size=25><b>{21 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n", 1.2f);
 
                             if (PlayerVotes.ContainsKey(ev.Player))
