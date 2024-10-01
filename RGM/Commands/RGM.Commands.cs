@@ -274,46 +274,70 @@ namespace RGM.Commands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class VoteWU : ICommand
+    public class VoteFirst : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
 
-            if (arguments.Count < 1)
-            {
-                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/Random");
+            RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/1");
 
-                response = "랜덤 선택 완료!";
+            response = "1번 능력 선택 완료!";
 
-                return true;
-            }
-            else
-            {
-                string Number = arguments.At(0).Trim();
-
-                if (new List<string>() { "1", "2", "3" }.Contains(Number))
-                {
-                    RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/{Number}");
-
-                    response = $"선택 완료! {Number}번을 골랐습니다.";
-
-                    return true;
-                }
-                else
-                {
-                    response = $"올바른 번호(1, 2, 3)를 선택하세요.";
-
-                    return false;
-                }
-            }
+            return true;
         }
 
-        public string Command { get; } = "wu";
+        public string Command { get; } = "1";
 
-        public string[] Aliases { get; } = { "선택", "워업" };
+        public string[] Aliases { get; } = {};
 
-        public string Description { get; } = "워크스테이션 업그레이드ㅣ원하는 능력을 선택하세요.";
+        public string Description { get; } = "워크스테이션 업그레이드ㅣ1번 능력 선택";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class VoteSecond : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(sender);
+
+            RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/2");
+
+            response = "2번 능력 선택 완료!";
+
+            return true;
+        }
+
+        public string Command { get; } = "1";
+
+        public string[] Aliases { get; } = { };
+
+        public string Description { get; } = "워크스테이션 업그레이드ㅣ2번 능력 선택";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class VoteThird : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(sender);
+
+            RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/3");
+
+            response = "3번 능력 선택 완료!";
+
+            return true;
+        }
+
+        public string Command { get; } = "1";
+
+        public string[] Aliases { get; } = { };
+
+        public string Description { get; } = "워크스테이션 업그레이드ㅣ3번 능력 선택";
 
         public bool SanitizeResponse { get; } = true;
     }
