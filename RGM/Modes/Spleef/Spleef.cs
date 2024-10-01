@@ -76,9 +76,19 @@ namespace RGM.Modes
                         if (hit.transform.name == "Platform") 
                         {
                             Primitive Platform = hit.transform.gameObject.GetComponent<PrimitiveObject>().Primitive;
-                            Platform.Color = new Color(255, 0, 0);
+                            Platform.Color = new Color(255, 255, 0);
 
-                            Timing.CallDelayed(1f, Platform.Destroy);
+                            Timing.CallDelayed(0.75f, () => 
+                            {
+                                Platform.Color = new Color(255, 165, 0);
+
+                                Timing.CallDelayed(0.75f, () =>
+                                {
+                                    Platform.Color = new Color(255, 0, 0);
+
+                                    Timing.CallDelayed(0.75f, Platform.Destroy);
+                                });
+                            });
                         }
 
                         else if (hit.collider.name == "Lava")
