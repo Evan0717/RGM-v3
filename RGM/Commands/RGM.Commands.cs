@@ -310,7 +310,7 @@ namespace RGM.Commands
             return true;
         }
 
-        public string Command { get; } = "1";
+        public string Command { get; } = "2";
 
         public string[] Aliases { get; } = { };
 
@@ -333,7 +333,7 @@ namespace RGM.Commands
             return true;
         }
 
-        public string Command { get; } = "1";
+        public string Command { get; } = "3";
 
         public string[] Aliases { get; } = { };
 
