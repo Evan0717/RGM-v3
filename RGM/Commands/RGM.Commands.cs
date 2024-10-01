@@ -278,13 +278,22 @@ namespace RGM.Commands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
+            if (RGM.Instance.CurrentMode == "워크스테이션 업그레이드")
+            {
+                Player player = Player.Get(sender);
 
-            RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/1");
+                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/1");
 
-            response = "1번 능력 선택 완료!";
+                response = "1번 능력 선택 완료!";
 
-            return true;
+                return true;
+            }
+            else
+            {
+                response = "<b>워크스테이션 업그레이드</b> 모드에서만 사용할 수 있는 명령어입니다.";
+
+                return false;
+            }
         }
 
         public string Command { get; } = "1";
@@ -301,13 +310,22 @@ namespace RGM.Commands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
+            if (RGM.Instance.CurrentMode == "워크스테이션 업그레이드")
+            {
+                Player player = Player.Get(sender);
 
-            RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/2");
+                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/2");
 
-            response = "2번 능력 선택 완료!";
+                response = "2번 능력 선택 완료!";
 
-            return true;
+                return true;
+            }
+            else
+            {
+                response = "<b>워크스테이션 업그레이드</b> 모드에서만 사용할 수 있는 명령어입니다.";
+
+                return false;
+            }
         }
 
         public string Command { get; } = "2";
@@ -324,13 +342,22 @@ namespace RGM.Commands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
+            if (RGM.Instance.CurrentMode == "워크스테이션 업그레이드")
+            {
+                Player player = Player.Get(sender);
 
-            RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/3");
+                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Vote/3");
 
-            response = "3번 능력 선택 완료!";
+                response = "3번 능력 선택 완료!";
 
-            return true;
+                return true;
+            }
+            else
+            {
+                response = "<b>워크스테이션 업그레이드</b> 모드에서만 사용할 수 있는 명령어입니다.";
+
+                return false;
+            }
         }
 
         public string Command { get; } = "3";
@@ -433,24 +460,33 @@ namespace RGM.Commands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
-            string args = string.Join(" ", arguments).Replace(arguments.At(0), "").Trim();
-
-            if (arguments.Count < 2)
+            if (RGM.Instance.CurrentMode == "워크스테이션 업그레이드")
             {
-                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Add/Random");
+                Player player = Player.Get(arguments.At(0));
+                string args = string.Join(" ", arguments).Replace(arguments.At(0), "").Trim();
 
-                response = "AddAbility Complete!";
+                if (arguments.Count < 2)
+                {
+                    RGM.Instance.Requests.Add($"ABattle/{player.Id}/Add/Random");
 
-                return true;
+                    response = "AddAbility Complete!";
+
+                    return true;
+                }
+                else
+                {
+                    RGM.Instance.Requests.Add($"ABattle/{player.Id}/Add/{args}");
+
+                    response = "AddAbility Complete!";
+
+                    return true;
+                }
             }
             else
             {
-                RGM.Instance.Requests.Add($"ABattle/{player.Id}/Add/{args}");
+                response = "<b>워크스테이션 업그레이드</b> 모드에서만 사용할 수 있는 명령어입니다.";
 
-                response = "AddAbility Complete!";
-
-                return true;
+                return false;
             }
         }
 

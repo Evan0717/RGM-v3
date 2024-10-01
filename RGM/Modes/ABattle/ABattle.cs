@@ -1,35 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Schema;
-using CommandSystem.Commands.RemoteAdmin;
 using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
-using Exiled.Loader.Models;
-using InventorySystem;
-using InventorySystem.Items.Coin;
 using InventorySystem.Items.Usables.Scp330;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
 using MapEditorReborn.API.Features;
 using MEC;
-using MultiBroadcast;
 using MultiBroadcast.API;
 using PlayerRoles;
-using PluginAPI.Roles;
 using RGM.API;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-using System.Windows.Forms;
 using HarmonyLib;
 using Utils.NonAllocLINQ;
 
@@ -1378,9 +1364,12 @@ namespace RGM.Modes
                 ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.");
 
             else if (FlashLightSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.");
 
             else if (FlashLightSerials.Contains(ev.Item.Serial))
+                ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
+
+            else if (FlamethrowerSerials.Contains(ev.Item.Serial))
                 ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 Micro-HID 입니다!");
 
             else if (ChaosCoinSerials.Contains(ev.Item.Serial))
