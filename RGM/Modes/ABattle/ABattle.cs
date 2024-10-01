@@ -31,6 +31,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using System.Windows.Forms;
 using HarmonyLib;
+using Utils.NonAllocLINQ;
 
 namespace RGM.Modes
 {
@@ -52,6 +53,7 @@ namespace RGM.Modes
         public List<ushort> InstallModeSerials = new List<ushort>();
         public List<ushort> CallSnakeHandsSerials = new List<ushort>();
         public List<ushort> FlashLightSerials = new List<ushort>();
+        public List<ushort> RadarSerials = new List<ushort>();
         public List<ushort> ChaosCoinSerials = new List<ushort>();
 
         public Dictionary<string, string> CommonAbilities = new Dictionary<string, string>()
@@ -142,7 +144,8 @@ namespace RGM.Modes
         {
             {"[전용] 격리 의무자", "고폭 수류탄과 섬광탄을 지급받습니다."},
             {"[전용] 의무병", "주변에 있는 아군들을 매 초마다 0.5HP씩 치료합니다."},
-            {"[전용] 집단 지성", "주변에 있는 아군 한명당 데미지가 10% 증가합니다."}
+            {"[전용] 집단 지성", "주변에 있는 아군 한명당 데미지가 10% 증가합니다."},
+            {"[전용] 레이더", "지급된 무전기를 들면 가장 가까운 유기체와의 거리를 확인할 수 있습니다."}
         };
         public Dictionary<string, string> ChaosAbilities = new Dictionary<string, string>()
         {
@@ -159,7 +162,8 @@ namespace RGM.Modes
         public Dictionary<string, string> Scp173Abilities = new Dictionary<string, string>()
         {
             {"[전용] 공포", "인간을 죽이면 근처에 있는 인간들이 1초 동안 움직일 수 없게 됩니다. (중첩 불가)"},
-            {"[전용] 괴이", "순간이동한 방이 정전됩니다. (중첩 불가)"}
+            {"[전용] 괴이", "순간이동한 방이 정전됩니다. (중첩 불가)"},
+            {"[전용] 신기루", "데미지를 입을 때 5% 확률로 일시적으로 투명화가 됩니다. (중첩 불가)"}
         };
         public Dictionary<string, string> Scp049Abilities = new Dictionary<string, string>()
         {
@@ -734,6 +738,37 @@ namespace RGM.Modes
             }
         }
 
+        public IEnumerator<float> Radar()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                {
+                    if (player.CurrentItem != null && RadarSerials.Contains(player.CurrentItem.Serial))
+                    {
+                        Player nearestPlayer = null;
+                        float radius = 99999;
+
+                        foreach (var near in Player.List.Where(x => x.IsAlive && x != player))
+                        {
+                            float Distance = Vector3.Distance(near.Position, player.Position);
+
+                            if (Distance < radius)
+                            {
+                                nearestPlayer = near;
+                                radius = Distance;
+                            }
+                        }
+
+                        if (nearestPlayer != null && radius < 99999)
+                            player.ShowHint($"<color={nearestPlayer.Role.Color.ToHex()}>{nearestPlayer.Role.Name}</color> - {radius}m", 1.2f);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
         public IEnumerator<float> Radiation()
         {
             LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
@@ -1068,6 +1103,13 @@ namespace RGM.Modes
 
                     foreach (var item in ContainDuty)
                         player.AddItem(item);
+                    break;
+                case "레이더":
+                    Item rd = player.AddItem(ItemType.Radio);
+                    RadarSerials.Add(rd.Serial);
+
+                    if (player.IsScp)
+                        player.CurrentItem = rd;
                     break;
                 case "혼돈의 카오스":
                     Item c = player.AddItem(ItemType.SCP018);
@@ -1676,6 +1718,12 @@ namespace RGM.Modes
                     }
 
                     ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.1 * PowerCount)));
+                }
+
+                if (PlayerAbilities[ev.Player].Contains("[전용] 신기루"))
+                {
+                    if (UnityEngine.Random.Range(1, 21) == 1)
+                        ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
                 }
 
                 if (PlayerAbilities[ev.Player].Contains("[전용] 격노"))
