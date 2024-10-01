@@ -120,7 +120,8 @@ namespace RGM.Modes
             {"[신화] 로켓 런처", "5% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (중첩 불가)"},
             {"[신화] 스피릿", "2초마다 영혼 상태가 됩니다! (중첩 불가)"},
             {"[신화] 눈빛맨", "상대는 눈에 띄거나 근처에 있는 것만으로도 압도당할 것입니다! (중첩 불가)"},
-            {"[신화] 차원 강탈자", "죽인 누군가의 능력을 모조리 흡수합니다! (중첩 불가)"}
+            {"[신화] 차원 강탈자", "죽인 누군가의 능력을 모조리 흡수합니다! (중첩 불가)"},
+            {"[신화] 조커", "현실을 부정하라고~? (중첩 불가)"}
         };
         public Dictionary<string, string> ClassDAbilities = new Dictionary<string, string>()
         {
@@ -1522,7 +1523,8 @@ namespace RGM.Modes
 
                         await Task.Delay(3000);
 
-                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
+                        if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 20)
+                            ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
                         if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                             RGM.Instance.GodModePlayers.Remove(ev.Player);
 
@@ -1560,6 +1562,27 @@ namespace RGM.Modes
                             ev.Player.AddItem(Item.Type);
 
                         ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
+
+                        ev.IsAllowed = false;
+                        return;
+                    }
+
+                    if (PlayerAbilities[ev.Player].Contains("[신화] 조커"))
+                    {
+                        PlayerAbilities[ev.Player].Remove("[신화] 조커");
+
+                        ev.Player.MaxHealth *= UnityEngine.Random.Range(1, 3);
+                        ev.Player.Health = ev.Player.MaxHealth;
+
+                        RGM.Instance.GodModePlayers.Add(ev.Player);
+
+                        AddAbility(ev.Player, Tools.GetRandomValue(LegendAbilities.Keys.ToList()));
+                        AddAbility(ev.Player, Tools.GetRandomValue(MythicAbilities.Keys.ToList()));
+
+                        await Task.Delay(10000);
+
+                        if (RGM.Instance.GodModePlayers.Contains(ev.Player))
+                            RGM.Instance.GodModePlayers.Remove(ev.Player);
 
                         ev.IsAllowed = false;
                         return;
