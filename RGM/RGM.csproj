@@ -198,7 +198,7 @@
     <Compile Include="Modes\Nesting\Nesting.cs" />
     <Compile Include="Modes\OnePunch\OnePunch.cs" />
     <Compile Include="Modes\Outlaw\Outlaw.cs" />
-    <Compile Include="Modes\PirateRoulette\PirateRoulette.cs" />
+    <Compile Include="Modes\Outlaw\PirateRoulette\PirateRoulette.cs" />
     <Compile Include="Modes\RandomItem\RandomItem.cs" />
     <Compile Include="Modes\RedLightGreenLight\RedLightGreenLight.cs" />
     <Compile Include="Modes\Reversal\Reversal.cs" />

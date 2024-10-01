@@ -3,15 +3,15 @@
   "WorkspaceRootPath": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|d:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\unlimited\\unlimited.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\unlimited\\unlimited.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|d:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\spleef\\spleef.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\spleef\\spleef.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|d:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\modes\\abattle\\abattle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:modes\\abattle\\abattle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|d:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -43,14 +43,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Unlimited.cs",
-              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\Unlimited\\Unlimited.cs",
-              "RelativeDocumentMoniker": "Modes\\Unlimited\\Unlimited.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\Unlimited\\Unlimited.cs*",
-              "RelativeToolTip": "Modes\\Unlimited\\Unlimited.cs*",
-              "ViewState": "AgIAAAkAAAAAAAAAAADwvyEAAABNAAAAAAAAAA==",
+              "Title": "Spleef.cs",
+              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\Spleef\\Spleef.cs",
+              "RelativeDocumentMoniker": "Modes\\Spleef\\Spleef.cs",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\Spleef\\Spleef.cs*",
+              "RelativeToolTip": "Modes\\Spleef\\Spleef.cs*",
+              "ViewState": "AgIAADwAAAAAAAAAAAAQwF0AAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-01T10:06:39.324Z",
+              "WhenOpened": "2024-10-01T13:00:46.876Z",
               "EditorCaption": ""
             },
             {
@@ -61,7 +61,7 @@
               "RelativeDocumentMoniker": "Modes\\ABattle\\ABattle.cs",
               "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Modes\\ABattle\\ABattle.cs",
               "RelativeToolTip": "Modes\\ABattle\\ABattle.cs",
-              "ViewState": "AgIAAIsAAAAAAAAAAAAAAFEEAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAIsAAAAAAAAAAAAAAKkAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-01T09:34:45.091Z",
               "EditorCaption": ""
@@ -76,8 +76,7 @@
               "RelativeToolTip": "Plugin.cs",
               "ViewState": "AgIAAE4BAAAAAAAAAAAAAIMBAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T08:33:34.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T08:33:34.509Z"
             },
             {
               "$type": "Document",

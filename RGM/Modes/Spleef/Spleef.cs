@@ -55,7 +55,14 @@ namespace RGM.Modes
             foreach (var player in Player.List)
             {
                 player.Role.Set(RoleTypeId.ClassD);
-                player.Position = new Vector3(41.58984f, 1044.594f, -113.3477f);
+                player.Position = new Vector3(41.26563f, 1084.793f, -114.7344f);
+            }
+
+            for (int i=1; i<11; i++)
+            {
+                Player.List.ToList().ForEach(x => x.ShowHint($"<b>{11 - i}초 뒤 게임이 시작됩니다.</b>", 1.2f));
+
+                yield return Timing.WaitForSeconds(1f);
             }
 
             while (true)
@@ -71,7 +78,7 @@ namespace RGM.Modes
                             Primitive Platform = hit.transform.gameObject.GetComponent<PrimitiveObject>().Primitive;
                             Platform.Color = new Color(255, 0, 0);
 
-                            Timing.CallDelayed(0.75f, Platform.Destroy);
+                            Timing.CallDelayed(1f, Platform.Destroy);
                         }
 
                         else if (hit.collider.name == "Lava")
