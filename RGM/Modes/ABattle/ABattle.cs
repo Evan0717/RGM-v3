@@ -482,6 +482,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(Spirit());
             Timing.RunCoroutine(Twinkle());
             Timing.RunCoroutine(Medical());
+            Timing.RunCoroutine(Radar());
             Timing.RunCoroutine(Radiation());
             Timing.RunCoroutine(StickySwamp());
         }
@@ -679,7 +680,7 @@ namespace RGM.Modes
                     {
                         MicroHid MicroHID = (MicroHid)Item;
 
-                        MicroHID.Energy += 1;
+                        MicroHID.Energy += 0.01f;
                     }
                 }
 
@@ -782,7 +783,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> Radiation()
         {
-            LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 10, 10, true);
+            LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 100, 20, true);
             LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, Vector3.zero);
 
             while (true)
@@ -1076,6 +1077,13 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = fl;
                     break;
+                case "화염 방사기":
+                    Item ft = player.AddItem(ItemType.MicroHID);
+                    FlamethrowerSerials.Add(ft.Serial);
+
+                    if (player.IsScp)
+                        player.CurrentItem = ft;
+                    break;
                 case "주거칩입죄": player.AddItem(ItemType.SCP268); break;
                 case "반란의 씨앗": Respawn.ChaosTickets += (int)(Player.List.Count() * 0.2); break;
                 case "05 평의회": player.AddItem(ItemType.KeycardO5); break;
@@ -1348,32 +1356,35 @@ namespace RGM.Modes
 
         public void OnChangedItem(Exiled.Events.EventArgs.Player.ChangedItemEventArgs ev)
         {
-            if (PickCoinSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>뽑기</color></b> 능력을 사용할 수 있습니다.");
+            if (ev.Item != null)
+            {
+                if (PickCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>뽑기</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (EscapeCoinSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
+                else if (EscapeCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (FollowCoinSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>순간이동</color></b> 능력을 사용할 수 있습니다.");
+                else if (FollowCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>순간이동</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (GrapCoinSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.");
+                else if (GrapCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (ClockCoinSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.");
+                else if (ClockCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (FlashLightSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.");
+                else if (CallSnakeHandsSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (FlashLightSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
+                else if (FlashLightSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
-            else if (FlamethrowerSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 Micro-HID 입니다!");
+                else if (FlamethrowerSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 Micro-HID 입니다!", 1.2f);
 
-            else if (ChaosCoinSerials.Contains(ev.Item.Serial))
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.");
+                else if (ChaosCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
+            }
         }
 
         public async void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
@@ -1393,7 +1404,7 @@ namespace RGM.Modes
                 if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 4f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                     hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                 {
-                    if (Player.TryGet(ev.Player.ReferenceHub, out Player player))
+                    if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>(), out Player player) && player != ev.Player)
                     {
                         ev.Item.Destroy();
 
@@ -1401,9 +1412,9 @@ namespace RGM.Modes
 
                         Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
                     }
-                    else
-                        ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
                 }
+                else
+                    ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
             }
             else if (FollowCoinSerials.Contains(ev.Item.Serial))
             {
