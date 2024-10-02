@@ -14,6 +14,7 @@ using Exiled.API.Enums;
 using RGM.Features;
 using MapEditorReborn.Events.Handlers;
 using RGM.API;
+using Discord;
 
 namespace RGM
 {
@@ -136,6 +137,9 @@ namespace RGM
 
         public void OnWaitingForPlayers()
         {
+            UsersManager.LoadUsers();
+            DonatorsManager.LoadUsers();
+
             Round.IsLobbyLocked = true;
             Server.ExecuteCommand($"/mp load RGMLobby");
 
@@ -144,6 +148,9 @@ namespace RGM
 
             var command = new Discord.Command();
             command.OnEnabled();
+
+            var donator = new Donator.Main();
+            donator.OnEnabled();
 
             First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
             Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
@@ -284,6 +291,22 @@ namespace RGM
         {
             try
             {
+                // 라운드 종료 시 Exp, RP 1씩 지급
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
+                {
+                    UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + 1).ToString();
+                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + 1).ToString();
+                }
+
+                UsersManager.SaveUsers();
+            }
+            catch (Exception ex)
+            {
+                ServerConsole.AddLog(ex.ToString());
+            }
+
+            try
+            {
                 var modeType = Type.GetType($"RGM.Modes.FriendlyFire");
                 if (modeType != null)
                 {
@@ -304,6 +327,12 @@ namespace RGM
 
         public async void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
+            if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
+                UsersManager.AddUser(ev.Player.UserId, new List<string>() { "0", "0", "0" });
+
+            if (!DonatorsManager.UsersCache.ContainsKey(ev.Player.UserId))
+                DonatorsManager.AddUser(ev.Player.UserId, new List<string>() { "0" });
+
             OnGround.Add(ev.Player, 5);
 
             if (Round.IsStarted)
@@ -490,7 +519,11 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
                                 .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
                                 .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}").Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
-                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}").Replace("{Tip}", Tip), 1.2f);
+                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}").Replace("{Tip}", Tip)
+                                .Replace("{Exp}", $"{UsersManager.UsersCache[ev.Player.UserId][0]}")
+                                .Replace("{RP}", $"{UsersManager.UsersCache[ev.Player.UserId][1]}")
+                                .Replace("{Cash}", $"{UsersManager.UsersCache[ev.Player.UserId][2]}")
+                                , 1.2f);
                         }
                     }
 
