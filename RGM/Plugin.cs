@@ -45,7 +45,8 @@ namespace RGM
         public Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
-            {"솔라 테라", "죽음에 햇빛 한 점 들기를.."}
+            {"솔라 테라", "죽음에 햇빛 한 점 들기를.."},
+            {"Kerfus", "귀여운 로봇으로 도장을 찍어보세요."}
         };
 
         List<Transform> First;

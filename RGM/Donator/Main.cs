@@ -12,6 +12,7 @@ using PlayerStatsSystem;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MEC;
+using UnityEngine;
 
 namespace RGM.Donator
 {
@@ -22,7 +23,7 @@ namespace RGM.Donator
             Exiled.Events.Handlers.Player.Dying += OnDying;
         }
 
-        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        public async void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
             if (ev.Attacker != null && UsersManager.UsersCache.ContainsKey(ev.Attacker.UserId))
             {
@@ -45,6 +46,31 @@ namespace RGM.Donator
                         {
                             SolarTerra.Destroy();
                         });
+                    }
+
+                    if (Attacker[4] == "Kerfus")
+                    {
+                        Vector3 pos = ev.Player.Position;
+
+                        SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", new Vector3(pos.x, pos.y + 10, pos.z), isStatic: false);
+
+                        for (int i = 1; i < 11; i++)
+                        {
+                            Kerfus.Position = new Vector3(pos.x, pos.y - 1, pos.z);
+
+                            await Task.Delay(100);
+                        }
+
+                        await Task.Delay(350);
+
+                        for (int i = 1; i < 11; i++)
+                        {
+                            Kerfus.Position = new Vector3(pos.x, pos.y + 1, pos.z);
+
+                            await Task.Delay(100);
+                        }
+
+                        Kerfus.Destroy();
                     }
                 }
             }

@@ -1375,12 +1375,16 @@ namespace RGM.Modes
             {
                 if (PlayerAbilities[ev.Player].Contains("[일반] 토끼뜀"))
                 {
+                    Vector3 pos = ev.Player.Position;
+
                     for (int i = 1; i < 11; i++)
                     {
-                        if (Physics.Raycast(ev.Player.Position, Vector3.up, 1, (LayerMask)1))
+                        pos = ev.Player.Position;
+
+                        if (Physics.Raycast(pos, Vector3.up, 1, (LayerMask)1))
                             break;
 
-                        ev.Player.Position += new Vector3(0, 0.05f * DuplicateCount(ev.Player, "[일반] 토끼뜀"), 0);
+                        ev.Player.Position = new Vector3(pos.x, 0.05f * DuplicateCount(ev.Player, "[일반] 토끼뜀"), pos.z);
                         await Task.Delay(10);
                     }
                 }

@@ -395,12 +395,14 @@ namespace RGM.Commands
 $"""
 
 <b>{player.Nickname}</b>님의 정보
+
 SteamID: {player.UserId}
 Exp: {uc[0]}
 RP: {uc[1]}
 <i>Cash</i>: {uc[2]}
 보유한 킬 이펙트: {KillEffects()}
 장착한 킬 이펙트: {(uc[4] == "0" ? "-" : uc[4])}
+<size=15>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬 이펙트를 장착할 수 있습니다." : RGM.Instance.KillEffects[uc[4]])}</size>
 """, "white");
 
             return true;
