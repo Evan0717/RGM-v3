@@ -394,7 +394,8 @@ namespace RGM.Commands
             player.SendConsoleMessage(
 $"""
 
-<b>{player.Nickname}</b>님의 정보
+
+<size=40><b>{player.Nickname}</b>님의 정보</size>
 
 SteamID: {player.UserId}
 Exp: {uc[0]}
