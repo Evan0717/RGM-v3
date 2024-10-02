@@ -26,7 +26,7 @@ namespace RGM.Donator
 
             if (ev.Attacker != null && Attacker[0] != "0")
             {
-                if (Attacker[0] == "영혼 가출")
+                if (Attacker[0] == "영혼 가출" || Player[0] == "영혼 가출")
                 {
                     DamageHandlerBase Disruptor = new DisruptorDamageHandler(ev.Attacker.Footprint, -1);
 

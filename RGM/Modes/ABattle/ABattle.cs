@@ -18,6 +18,7 @@ using RGM.API;
 using UnityEngine;
 using HarmonyLib;
 using Utils.NonAllocLINQ;
+using System.Threading;
 
 namespace RGM.Modes
 {
@@ -57,27 +58,29 @@ namespace RGM.Modes
             {"[일반] 위치 추적", "10초 간 랜덤한 1인의 위치를 확인합니다."},
             {"[일반] 뽑기", "지급된 동전을 튕기면 10% 확률로 새로운 능력을 3개 더 얻습니다."},
             {"[일반] 보험", "사망 판정을 받을 경우 1번 버텨냅니다." },
-            {"[일반] 회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초) (중첩 불가)"},
+            {"[일반] 회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)"},
             {"[일반] 보급", "탄약이 랜덤하게 지급됩니다."},
             {"[일반] 정화", "초록 사탕을 받습니다."},
             {"[일반] 무기 전문가", "SCP-1853을 받습니다."},
             {"[일반] 신내림", "당신을 지켜보는 관전자가 5초 이내로 나타나면 능력 2~3개를 추가로 얻습니다."},
             {"[일반] 횃불", "랜턴과 노란 사탕을 받습니다."},
             {"[일반] 잠행", "발걸음 소리가 줄어듭니다."},
-            {"[일반] 위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다."}
+            {"[일반] 위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다."},
+            {"[일반] 저체중", "점프 속도가 10% 증가합니다."},
+            {"[일반] 토끼뜀", "점프력이 소급 증가합니다."}
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
-            {"[희귀] 육체 강화", "1초당 1HP를 받습니다. (중첩 불가)"},
+            {"[희귀] 육체 강화", "1초당 1HP를 받습니다."},
             {"[희귀] 강철 껍질", "데미지 경감 효과가 5% 추가됩니다."},
             {"[희귀] 투명 망토", "25초 간 투명 효과를 받습니다."},
-            {"[희귀] 흡혈귀", "상대에게 입힌 피해량의 20%만큼 AHP를 받습니다. (중첩 불가)"},
+            {"[희귀] 흡혈귀", "상대에게 입힌 피해량의 20%만큼 AHP를 받습니다."},
             {"[희귀] 순간이동", "지급된 동전을 튕기면 랜덤한 유저의 위치로 순간이동합니다."},
             {"[희귀] 봄버맨", "랜덤한 유저의 위치에 고폭 수류탄을 투척합니다."},
             {"[희귀] 갈고리", "지급된 동전을 튕기면 랜덤한 1인을 끌어옵니다."},
             {"[희귀] 회중시계", "지급된 동전을 튕기면 3초간 움직일 수 없는 대신에 무적 상태가 됩니다."},
             {"[희귀] 스테로이드", "25초 간 이동 속도가 많이 증가합니다."},
-            {"[희귀] 순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다. (중첩 불가)"},
+            {"[희귀] 순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다."},
             {"[희귀] 하이패스", "25초 간 무적이 됩니다."},
             {"[희귀] 매의 눈", "시야가 개선됩니다. (중첩 불가)"}
         };
@@ -224,12 +227,6 @@ namespace RGM.Modes
                     "[전설] 플래시라이트", "[일반] 횃불"
                 }
             },
-            {"[시너지] 중첩 불가 파티 Ⅰ", new List<string>()
-                {
-                    "<회축, 육체 강화, 흡혈귀, 순교, 매의 눈> 일반, 희귀 능력 중에서 중첩이 불가한 것들을 전부 모으셨네요! 럭키비키 능력을 받고 중첩 불가한 능력들을 또 얻으세요!",
-                    "[일반] 회축", "[희귀] 육체 강화", "[희귀] 흡혈귀", "[희귀] 순교", "[희귀] 매의 눈"
-                }
-            },
             {"[시너지] 타고난 사냥꾼", new List<string>()
                 {
                     "<매의 눈, 잠행, 무기 전문가, 보급, 운동> 사냥꾼의 기운을 타고났습니다!",
@@ -258,6 +255,15 @@ namespace RGM.Modes
                         .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
                         .Replace("[희귀]", $"<color={RatingColor["희귀"]}>[희귀]</color>")
                         .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
+        }
+
+        public int DuplicateCount(Player player, string AbilityName)
+        {
+            if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains(AbilityName))
+                return PlayerAbilities[player].Count(list => list.Contains(AbilityName));
+
+            else
+                return 0;
         }
 
         public void CallSnakeHand(Player Convener, List<Player> PlayerList)
@@ -624,7 +630,7 @@ namespace RGM.Modes
                 {
                     if (PlayerAbilities[player].Contains("[희귀] 육체 강화"))
                         if (player.MaxHealth > player.Health)
-                            player.Health += 1;
+                            player.Health += DuplicateCount(player, "[희귀] 육체 강화");
                 }
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -963,6 +969,8 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = ec;
                     break;
+                case "저체중":
+                    if (player.Role is FpcRole fpc) fpc.JumpingSpeed *= 11 / 10; break;
                 case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 10; break;
                 case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
                 case "순간이동":
@@ -1252,7 +1260,7 @@ namespace RGM.Modes
                         if (ev.Player != player && !MeleeCooldown.Contains(ev.Player) && ev.Player.LeadingTeam != player.LeadingTeam)
                         {
                             Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
-                            player.Hurt(12.05f * 3, "무지성으로 구타당해 죽었습니다.");
+                            player.Hurt(12.05f * 3 * DuplicateCount(ev.Player, "[일반] 회축"), "무지성으로 구타당해 죽었습니다.");
 
                             MeleeCooldown.Add(ev.Player);
                             await Task.Delay(1000);
@@ -1350,6 +1358,21 @@ namespace RGM.Modes
                     }
                     else
                         AddAbility(ev.Player);
+                }
+            }
+
+            if (PlayerAbilities.ContainsKey(ev.Player))
+            {
+                if (PlayerAbilities[ev.Player].Contains("[일반] 토끼뜀"))
+                {
+                    for (int i = 1; i < 11; i++)
+                    {
+                        if (Physics.Raycast(ev.Player.Position, Vector3.up, 1, (LayerMask)1))
+                            break;
+
+                        ev.Player.Position += new Vector3(0, 0.05f * DuplicateCount(ev.Player, "[일반] 토끼뜀"), 0);
+                        await Task.Delay(10);
+                    }
                 }
             }
         }
@@ -1586,24 +1609,26 @@ namespace RGM.Modes
                     {
                         PlayerAbilities[ev.Player].Remove("[희귀] 순교");
 
-                        var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
-                        g.FuseTime = 3f;
-                        g.SpawnActive(ev.Player.Position, ev.Player);
+                        for (int i = 1; i < DuplicateCount(ev.Player, "[희귀] 순교") + 1; i++)
+                        {
+                            var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
+                            g.FuseTime = 3f;
+                            g.SpawnActive(ev.Player.Position, ev.Player);
+                        }
                     }
 
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 슈퍼 스타"))
                     {
                         foreach (var player in Player.List)
-                        {
-                            player.AddBroadcast(10, "");
-                        }
+                            player.AddBroadcast(10, $"<color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{ev.Player.Role.Name}</color>)(은)는 " +
+                                $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.");
                     }
 
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 극독"))
                     {
                         PlayerAbilities[ev.Player].Remove("[영웅] 극독");
 
-                        ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 15);
+                        ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 12 * DuplicateCount(ev.Player, "[영웅] 극독"));
 
                         ev.Attacker.ShowHint("극독에 당했습니다!");
                     }
@@ -1644,7 +1669,7 @@ namespace RGM.Modes
                     foreach (var player in Player.List.Where(x => x.IsHuman))
                     {
                         if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                            player.EnableEffect(EffectType.Ensnared, 1, 1f);
+                            player.EnableEffect(EffectType.Ensnared, 1, 1 * DuplicateCount(ev.Player, "[전용] 공포"));
                     }
                 }
             }
@@ -1673,7 +1698,8 @@ namespace RGM.Modes
             else if (ev.IsAllowed)
                 return;
 
-            else if (ev.Player != null && ((PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(1, 101) <= 5) || PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사")))
+            else if (ev.Player != null && ((PlayerAbilities[ev.Player].Contains("[일반] 행운") && UnityEngine.Random.Range(1, 101) <= 5 * DuplicateCount(ev.Player, "[일반] 행운") 
+                || PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사"))))
             {
                 if (ev.Door.IsOpen)
                     ev.Door.IsOpen = false;
@@ -1687,7 +1713,7 @@ namespace RGM.Modes
         {
             if (PlayerAbilities[ev.Player].Contains("[영웅] 도박꾼"))
             {
-                if (UnityEngine.Random.Range(0, 100) <= 5)
+                if (UnityEngine.Random.Range(1, 101) <= 10 * ((1 / 2) * DuplicateCount(ev.Player, "[영웅] 도박꾼")))
                     ev.Player.EnableEffect(EffectType.SeveredHands);
 
                 else
@@ -1707,14 +1733,10 @@ namespace RGM.Modes
             if (ev.Attacker != null)
             {
                 if (PlayerAbilities[ev.Attacker].Contains("[일반] 단련"))
-                {
-                    int count = PlayerAbilities.Values.Count(list => list.Contains("[일반] 단련"));
-
-                    ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * count)));
-                }
+                    ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * DuplicateCount(ev.Player, "[일반] 단련"))));
 
                 if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
-                    ev.Attacker.AddAhp(20 * (ev.DamageHandler.Damage / 100));
+                    ev.Attacker.AddAhp((20 * DuplicateCount(ev.Player, "[희귀] 흡혈귀")) * (ev.DamageHandler.Damage / 100));
 
                 if (ev.Attacker.CurrentItem != null && FlamethrowerSerials.Contains(ev.Attacker.CurrentItem.Serial))
                 {
