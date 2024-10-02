@@ -28,6 +28,7 @@ Exp: {Exp}ㅣRP: {RP}ㅣ<b>Cash: ₩{Cash}</b>
 
 <size=25>tip. <i>{Tip}</i></size>
 
+
 """;
     }
 }

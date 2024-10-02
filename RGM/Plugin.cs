@@ -299,6 +299,7 @@ namespace RGM
                 }
 
                 UsersManager.SaveUsers();
+                DonatorsManager.SaveUsers();
             }
             catch (Exception ex)
             {
