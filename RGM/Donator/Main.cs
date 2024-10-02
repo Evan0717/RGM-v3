@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PlayerStatsSystem;
+using MapEditorReborn.API.Features;
+using MapEditorReborn.API.Features.Objects;
+using MEC;
 
 namespace RGM.Donator
 {
@@ -36,7 +39,12 @@ namespace RGM.Donator
 
                     if (Attacker[4] == "솔라 테라")
                     {
+                        SchematicObject SolarTerra =  ObjectSpawner.SpawnSchematic("SolarTerra", ev.Player.Position, isStatic: false);
 
+                        Timing.CallDelayed(1.5f, () =>
+                        {
+                            SolarTerra.Destroy();
+                        });
                     }
                 }
             }
