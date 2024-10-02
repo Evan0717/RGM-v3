@@ -31,7 +31,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.UsingItemCompleted += OnUsingItemCompleted;
-            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -259,16 +258,6 @@ namespace RGM.Modes
                         break;
                     }
                 }
-            }
-        }
-
-        public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
-        {
-            if (soulMates.ContainsKey(ev.Player))
-            {
-                Player soulMate = soulMates[ev.Player];
-
-                soulMate.EnableEffect(ev.Effect.GetEffectType(), ev.Intensity, ev.Duration);
             }
         }
 
