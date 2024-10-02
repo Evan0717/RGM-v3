@@ -72,7 +72,7 @@ namespace RGM.Features
             {
                 var parts = line.Split(';');
 
-                if (parts.Length != 4)
+                if (parts.Length != parts.Count())
                     continue;
 
                 UsersCache.Add(parts[0], new List<string>() { parts[1], parts[2], parts[3] });
@@ -120,7 +120,7 @@ namespace RGM.Features
             {
                 var parts = line.Split(';');
 
-                if (parts.Length != 4)
+                if (parts.Length != parts.Count())
                     continue;
 
                 UsersCache.Add(parts[0], new List<string>() { parts[1] });
