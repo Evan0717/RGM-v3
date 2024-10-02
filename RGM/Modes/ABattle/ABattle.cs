@@ -259,11 +259,14 @@ namespace RGM.Modes
 
         public int DuplicateCount(Player player, string AbilityName)
         {
-            if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains(AbilityName))
-                return PlayerAbilities[player].Count(list => list.Contains(AbilityName));
-
-            else
-                return 0;
+            try
+            {
+                return PlayerAbilities[player].Count(x => x == AbilityName);
+            }
+            catch
+            {
+                return 1;
+            }
         }
 
         public void CallSnakeHand(Player Convener, List<Player> PlayerList)
@@ -561,41 +564,48 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var Request in RGM.Instance.Requests.ToList())
+                try
                 {
-                    string[] req = Request.Split('/');
-
-                    if (req[0] == "ABattle")
+                    foreach (var Request in RGM.Instance.Requests.ToList())
                     {
-                        Player player = Player.Get(req[1]);
+                        string[] req = Request.Split('/');
 
-                        if (req[2] == "Add")
+                        if (req[0] == "ABattle")
                         {
-                            if (req[3] == "Random")
-                                AddAbility(player);
-                            else
-                                AddAbility(player, req[3]);
-                        }
-                        else if (req[2] == "Vote")
-                        {
-                            string VoteNum;
+                            Player player = Player.Get(req[1]);
 
-                            if (req[3] == "Random")
-                                VoteNum = $"{UnityEngine.Random.Range(1, 4)}";
-                            else
-                                VoteNum = req[3];
-
-                            PlayerVotes.Add(player, VoteNum);
-
-                            Timing.CallDelayed(1f, () =>
+                            if (req[2] == "Add")
                             {
-                                if (PlayerVotes.ContainsKey(player))
-                                    PlayerVotes.Remove(player);
-                            });
-                        }
+                                if (req[3] == "Random")
+                                    AddAbility(player);
+                                else
+                                    AddAbility(player, req[3]);
+                            }
+                            else if (req[2] == "Vote")
+                            {
+                                string VoteNum;
 
-                        RGM.Instance.Requests.Remove(Request);
+                                if (req[3] == "Random")
+                                    VoteNum = $"{UnityEngine.Random.Range(1, 4)}";
+                                else
+                                    VoteNum = req[3];
+
+                                PlayerVotes.Add(player, VoteNum);
+
+                                Timing.CallDelayed(1f, () =>
+                                {
+                                    if (PlayerVotes.ContainsKey(player))
+                                        PlayerVotes.Remove(player);
+                                });
+                            }
+
+                            RGM.Instance.Requests.Remove(Request);
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -1424,7 +1434,7 @@ namespace RGM.Modes
             }
             else if (EscapeCoinSerials.Contains(ev.Item.Serial))
             {
-                if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 4f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
+                if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 10f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                     hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                 {
                     if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>(), out Player player) && player != ev.Player)
@@ -1620,8 +1630,8 @@ namespace RGM.Modes
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 슈퍼 스타"))
                     {
                         foreach (var player in Player.List)
-                            player.AddBroadcast(10, $"<color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{ev.Player.Role.Name}</color>)(은)는 " +
-                                $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.");
+                            player.AddBroadcast(10, $"<size=20><color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{ev.Player.Role.Name}</color>)(은)는 " +
+                                $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.</size>");
                     }
 
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 극독"))

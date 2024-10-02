@@ -382,7 +382,26 @@ namespace RGM.Commands
 
             response = $"성공적으로 플레이어 정보를 불러왔습니다.";
 
-            player.SendConsoleMessage($"\n<b>{player.Nickname}({player.UserId})</b>님의 정보\nExp: {uc[0]}\nRP: {uc[1]}\nCash: {uc[2]}", "white");
+            string KillEffects()
+            {
+                if (uc[3] == "0")
+                    return "-";
+
+                else
+                    return string.Join(", ", uc[3].Split('/'));
+            }
+
+            player.SendConsoleMessage(
+$"""
+
+<b>{player.Nickname}</b>님의 정보
+SteamID: {player.UserId}
+Exp: {uc[0]}
+RP: {uc[1]}
+Cash: {uc[2]}
+보유한 킬 이펙트: {KillEffects()}
+장착한 킬 이펙트: {(uc[4] == "0" ? "-" : uc[4])}
+""", "white");
 
             return true;
         }
@@ -392,6 +411,178 @@ namespace RGM.Commands
         public string[] Aliases { get; } = { "stat", "스텟", "정보", "info" };
 
         public string Description { get; } = "[RGM] 현재 자신의 정보를 확인합니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class ApplyKillEffect : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(sender);
+            string args = string.Join(" ", arguments).Trim();
+
+            if (args == "")
+            {
+                response = "킬 이펙트 이름을 입력해주세요.\n-";
+                return false;
+            }
+            else
+            {
+                if (UsersManager.UsersCache.ContainsKey(player.UserId))
+                {
+                    List<string> uc = UsersManager.UsersCache[player.UserId];
+
+                    if (args == "0")
+                    {
+                        uc[4] = "0";
+                        UsersManager.UsersCache[player.UserId] = uc;
+                        response = "킬 이펙트 장착 해제 완료!\n-";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                    else if (RGM.Instance.KillEffects.ContainsKey(args))
+                    {
+                        uc[4] = args;
+                        UsersManager.UsersCache[player.UserId] = uc;
+                        response = "킬 이펙트 장착 완료!\n-";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                    else
+                    {
+                        response = "존재하지 않는 킬 이펙트입니다.\n-";
+                        return false;
+                    }
+                }
+                else
+                {
+                    response = "플레이어 정보를 찾을 수 없습니다.\n-";
+                    return false;
+                }
+            }
+        }
+
+        public string Command { get; } = "applykilleffect";
+
+        public string[] Aliases { get; } = { "킬이펙트장착", "킬이펙트" };
+
+        public string Description { get; } = "[RGM] 킬 이펙트 이름을 입력하여 장착을 변경합니다. (0 = 장착 해제)";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class AddKillEffect : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(arguments.At(0));
+            string args = string.Join(" ", arguments.Skip(1)).Trim();
+
+            if (arguments.Count < 2)
+            {
+                response = "플레이어 이름과 킬 이펙트 이름을 입력해주세요.\n-";
+                return false;
+            }
+            else
+            {
+                List<string> uc = UsersManager.UsersCache[player.UserId];
+
+                if (uc[3] == "0")
+                {
+                    uc[3] = args;
+                    UsersManager.UsersCache[player.UserId] = uc;
+                    response = "킬 이펙트 추가 완료!\n-";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+                else
+                {
+                    if (uc[3].Contains(args))
+                    {
+                        response = "이미 해당 킬 이펙트를 보유 중입니다.\n-";
+                        return false;
+                    }
+                    else
+                    {
+                        uc[3] += $"/{args}";
+                        UsersManager.UsersCache[player.UserId] = uc;
+                        response = "킬 이펙트 추가 완료!\n-";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                }
+            }
+        }
+
+        public string Command { get; } = "addkilleffect";
+
+        public string[] Aliases { get; } = { "ake" };
+
+        public string Description { get; } = "특정 유저에게 킬 이펙트를 지급합니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class RemoveKillEffect : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(arguments.At(0));
+            string args = string.Join(" ", arguments.Skip(1)).Trim();
+
+            if (arguments.Count < 2)
+            {
+                response = "플레이어 이름과 킬 이펙트 이름을 입력해주세요.\n-";
+                return false;
+            }
+            else
+            {
+                List<string> uc = UsersManager.UsersCache[player.UserId];
+
+                if (uc[3] == "0")
+                {
+                    response = "보유한 킬 이펙트가 없습니다.\n-";
+                    return false;
+                }
+                else
+                {
+                    if (uc[3].Contains(args))
+                    {
+                        List<string> Effects = uc[3].Split('/').ToList();
+
+                        Effects.Remove(args);
+
+                        uc[3] = string.Join("/", Effects);
+                        if (uc[3] == "") uc[3] = "0";
+                        if (uc[4] == args) uc[4] = "0";
+                        UsersManager.UsersCache[player.UserId] = uc;
+                        response = "킬 이펙트 제거 완료!\n-";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                    else
+                    {
+                        response = "보유한 킬 이펙트에 해당 킬 이펙트가 없습니다.\n-";
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public string Command { get; } = "removekilleffect";
+
+        public string[] Aliases { get; } = { "rke" };
+
+        public string Description { get; } = "특정 유저가 보유한 킬 이펙트를 제거합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }
@@ -427,7 +618,6 @@ namespace RGM.Commands
                 response = "존재하지 않는 <모드 이름>입니다.\nSending Command Error..";
                 return false;
             }
-
         }
 
         public string Command { get; } = "forcemode";

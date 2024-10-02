@@ -42,6 +42,12 @@ namespace RGM
 
         public List<string> Requests = new List<string>();
 
+        public Dictionary<string, string> KillEffects = new Dictionary<string, string>()
+        {
+            {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
+            {"솔라 테라", "죽음에 햇빛 한 점 들기를.."}
+        };
+
         List<Transform> First;
         List<Transform> Second;
         List<Transform> Third;
@@ -135,10 +141,9 @@ namespace RGM
             Instance = null;
         }
 
-        public void OnWaitingForPlayers()
+        public async void OnWaitingForPlayers()
         {
             UsersManager.LoadUsers();
-            DonatorsManager.LoadUsers();
 
             Round.IsLobbyLocked = true;
             Server.ExecuteCommand($"/mp load RGMLobby");
@@ -182,6 +187,13 @@ namespace RGM
             else
             {
                 SelectMode = "MostVote";
+            }
+
+            while (true)
+            {
+                UsersManager.LoadUsers();
+
+                await Task.Delay(1000);
             }
         }
 
@@ -299,7 +311,6 @@ namespace RGM
                 }
 
                 UsersManager.SaveUsers();
-                DonatorsManager.SaveUsers();
             }
             catch (Exception ex)
             {
@@ -329,10 +340,7 @@ namespace RGM
         public async void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
             if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
-                UsersManager.AddUser(ev.Player.UserId, new List<string>() { "0", "0", "0" });
-
-            if (!DonatorsManager.UsersCache.ContainsKey(ev.Player.UserId))
-                DonatorsManager.AddUser(ev.Player.UserId, new List<string>() { "0" });
+                UsersManager.AddUser(ev.Player.UserId, new List<string>() { "0", "0", "0", "0", "0" });
 
             OnGround.Add(ev.Player, 5);
 
@@ -512,6 +520,8 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                     return $" <size=20><color=white>Idea by {ModeList[SelectedMode][4]}</color></size>";
                             }
 
+                            List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
+
                             ev.Player.ShowHint(Notions.LobbyMessage
                                 .Replace("{FirstMark}", ModeVote[iv(1)].Contains(ev.Player) ? "■" : "□")
                                 .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
@@ -521,9 +531,10 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
                                 .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}").Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
                                 .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}").Replace("{Tip}", Tip)
-                                .Replace("{Exp}", $"{UsersManager.UsersCache[ev.Player.UserId][0]}")
-                                .Replace("{RP}", $"{UsersManager.UsersCache[ev.Player.UserId][1]}")
-                                .Replace("{Cash}", $"{UsersManager.UsersCache[ev.Player.UserId][2]}")
+                                .Replace("{Exp}", $"{uc[0]}")
+                                .Replace("{RP}", $"{uc[1]}")
+                                .Replace("{Cash}", $"{uc[2]}")
+                                .Replace("{KillEffect}", $"{(uc[4] == "0" ? "-" : uc[4])}")
                                 , 1.2f);
                         }
                     }

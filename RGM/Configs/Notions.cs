@@ -13,7 +13,7 @@ namespace RGM
         public static string WelcomeMessage { get; set; } = "<size=25><b>랜덤게임모드</b>에 오신 것을 환영합니다!</size>";
         public static string LobbyMessage { get; set; } = 
 """
-Exp: {Exp}ㅣRP: {RP}ㅣ<b>Cash: ₩{Cash}</b>
+Exp: {Exp}ㅣRP: {RP}ㅣ<b>Cash: ₩{Cash}</b>ㅣ킬 이펙트: {KillEffect}
 
 <align=left>
 {FirstMark} [1] {First} | {FirstVote}
