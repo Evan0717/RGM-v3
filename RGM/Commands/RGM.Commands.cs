@@ -398,7 +398,7 @@ $"""
 SteamID: {player.UserId}
 Exp: {uc[0]}
 RP: {uc[1]}
-Cash: {uc[2]}
+<i>Cash</i>: {uc[2]}
 보유한 킬 이펙트: {KillEffects()}
 장착한 킬 이펙트: {(uc[4] == "0" ? "-" : uc[4])}
 """, "white");
