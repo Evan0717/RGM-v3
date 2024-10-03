@@ -41,7 +41,7 @@ namespace RGM.Donator
 
                     if (Attacker[4] == "솔라 테라")
                     {
-                        SchematicObject SolarTerra =  ObjectSpawner.SpawnSchematic("SolarTerra", ev.Player.Position, isStatic: false);
+                        SchematicObject SolarTerra =  ObjectSpawner.SpawnSchematic("SolarTerra", ev.Player.Position, ev.Player.Rotation, isStatic: false);
 
                         Timing.CallDelayed(1.5f, () =>
                         {
@@ -74,7 +74,7 @@ namespace RGM.Donator
 
                     if (Attacker[4] == "은제 말뚝")
                     {
-                        SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", ev.Player.Position, isStatic: false);
+                        SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", ev.Player.Position, ev.Player.Rotation, isStatic: false);
 
                         Timing.CallDelayed(1.5f, () =>
                         {

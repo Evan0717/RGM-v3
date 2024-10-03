@@ -694,35 +694,42 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                try
                 {
-                    if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[신화] 눈빛맨"))
+                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
                     {
-                        foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, player.Position) < 11))
+                        if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[신화] 눈빛맨"))
                         {
-                            if (player != near && player.LeadingTeam != near.LeadingTeam)
+                            foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, player.Position) < 11))
                             {
-                                near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
-                                near.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                                near.Hurt(0.1f, "눈빛의 힘에 압도당했습니다.");
-                                Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);
+                                if (player != near && player.LeadingTeam != near.LeadingTeam)
+                                {
+                                    near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                                    near.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                                    near.Hurt(0.1f, "눈빛의 힘에 압도당했습니다.");
+                                    Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);
+                                }
                             }
-                        }
 
-                        if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 100f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
-                            hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
-                        {
-                            var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
-
-                            if (player != target && player.LeadingTeam != target.LeadingTeam)
+                            if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 100f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
+                                hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                             {
-                                target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
-                                target.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                                target.Hurt(0.1f, "눈빛의 힘에 압도당했습니다.");
-                                Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.5f);
+                                var target = Player.Get(hit.collider.GetComponentInParent<ReferenceHub>());
+
+                                if (player != target && player.LeadingTeam != target.LeadingTeam)
+                                {
+                                    target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                                    target.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                                    target.Hurt(0.1f, "눈빛의 힘에 압도당했습니다.");
+                                    Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.5f);
+                                }
                             }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
