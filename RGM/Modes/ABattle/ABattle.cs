@@ -1407,7 +1407,7 @@ namespace RGM.Modes
                 if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 10f, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask) &&
                     hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
                 {
-                    if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>(), out Player player) && player != ev.Player)
+                    if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>(), out Player player) && player != ev.Player && player.LeadingTeam != ev.Player.LeadingTeam)
                     {
                         ev.Item.Destroy();
 
@@ -1415,6 +1415,8 @@ namespace RGM.Modes
 
                         Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
                     }
+                    else
+                        ev.Player.ShowHint("잘못된 대상입니다.");
                 }
                 else
                     ev.Player.ShowHint("대상을 정확히 지정해 주세요.");

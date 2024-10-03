@@ -491,7 +491,7 @@ RP: {uc[1]}
                 response = "플레이어 이름과 킬 이펙트 이름을 입력해주세요.\n-";
                 return false;
             }
-            else
+            else if (RGM.Instance.KillEffects.ContainsKey(args))
             {
                 List<string> uc = UsersManager.UsersCache[player.UserId];
 
@@ -521,6 +521,11 @@ RP: {uc[1]}
                         return true;
                     }
                 }
+            }
+            else
+            {
+                response = "존재하지 않는 킬 이펙트 이름입니다.\n-";
+                return false;
             }
         }
 
