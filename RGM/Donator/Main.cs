@@ -29,6 +29,7 @@ namespace RGM.Donator
             if (ev.Attacker != null && UsersManager.UsersCache.ContainsKey(ev.Attacker.UserId))
             {
                 List<string> Attacker = UsersManager.UsersCache[ev.Attacker.UserId];
+                Quaternion Rotation = ev.Player.CameraTransform.rotation * Quaternion.Euler(0, 180, 0);
 
                 if (Attacker[4] != "0")
                 {
@@ -36,22 +37,19 @@ namespace RGM.Donator
                     {
                         DamageHandlerBase DisruptorDamage = new DisruptorDamageHandler(ev.Attacker.Footprint, -1);
 
-                        Ragdoll.CreateAndSpawn(ev.Player.Role.Type, Attacker[4], DisruptorDamage, ev.Player.Position, ev.Player.Rotation);
+                        Ragdoll.CreateAndSpawn(ev.Player.Role.Type, Attacker[4], DisruptorDamage, ev.Player.Position, Rotation);
                     }
 
                     if (Attacker[4] == "솔라 테라")
                     {
-                        SchematicObject SolarTerra =  ObjectSpawner.SpawnSchematic("SolarTerra", ev.Player.Position, ev.Player.Rotation, isStatic: false);
+                        SchematicObject SolarTerra =  ObjectSpawner.SpawnSchematic("SolarTerra", ev.Player.Position, Rotation, isStatic: false);
 
-                        Timing.CallDelayed(1.5f, () =>
-                        {
-                            SolarTerra.Destroy();
-                        });
+                        Timing.CallDelayed(1.5f, SolarTerra.Destroy);
                     }
 
                     if (Attacker[4] == "Kerfus")
                     {
-                        SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", ev.Player.Position + new Vector3(0, 19, 0), isStatic: false);
+                        SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", ev.Player.Position + new Vector3(0, 19, 0), Rotation, isStatic: false);
 
                         for (int i = 1; i < 11; i++)
                         {
@@ -74,12 +72,16 @@ namespace RGM.Donator
 
                     if (Attacker[4] == "은제 말뚝")
                     {
-                        SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", ev.Player.Position, ev.Player.Rotation, isStatic: false);
+                        SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", ev.Player.Position, Rotation, isStatic: false);
 
-                        Timing.CallDelayed(1.5f, () =>
-                        {
-                            SilverStake.Destroy();
-                        });
+                        Timing.CallDelayed(1.5f, SilverStake.Destroy);
+                    }
+
+                    if (Attacker[4] == "KO 사인")
+                    {
+                        SchematicObject KO = ObjectSpawner.SpawnSchematic("KO", ev.Player.Position, Rotation, isStatic: false);
+
+                        Timing.CallDelayed(1.5f, KO.Destroy);
                     }
                 }
             }
