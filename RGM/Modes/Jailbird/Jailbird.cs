@@ -37,10 +37,13 @@ namespace RGM.Modes
         {
             if (player.IsAlive)
             {
-                Item item = player.AddItem(ItemType.Jailbird);
+                Timing.CallDelayed(1f, () =>
+                {
+                    Item item = player.AddItem(ItemType.Jailbird);
 
-                if (player.IsScp)
-                    player.CurrentItem = item;
+                    if (player.IsScp)
+                        player.CurrentItem = item;
+                });
             }
         }
     }

@@ -62,7 +62,7 @@ namespace RGM
 목적지에 도달한 경우 <color=yellow>과학자</color>를 사살하여 승리할 수 있게 됩니다. 총을 얻게 되는 거죠!
 """ } },
             { "사회적 거리두기", new List<string>() { "38610B", "최대한 다른 사람과 멀어지세요! 감염 예방이 최우선입니다!", "Distancing", "private", "", "" } },
-            { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다. <size=20>(인게임 요소 추가 모드만 포함됨)</size>", "DoubleUp", "public", "", "" } },
+            { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다. <size=20>(요소 추가 모드만 포함됨)</size>", "DoubleUp", "public", "", "" } },
             { "개인전", new List<string>() { "FA58F4", "최후의 1인이 되세요!", "FreeForAll", "public", "", "" } },
             { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.", "FriendlyFire", "public", "", "" } },
             { "도박", new List<string>() { "8A4B08", "아이템을 떨구면 새로운 아이템을 획득합니다. 단, 2% 확률로 손이 잘립니다.", "Gamble", "public", "", "" } },

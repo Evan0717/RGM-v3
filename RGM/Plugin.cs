@@ -223,8 +223,11 @@ namespace RGM
                         Player player = Tools.GetRandomValue(filiteredPlayers);
                         CurrentMode = ModeVote.FirstOrDefault(x => x.Value.Contains(player)).Key;
 
-                        foreach (var p in Player.List)
-                            p.AddBroadcast(10, $"<size=25><b>간이 셀렉트 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode}(으)로 선택되었습니다.</size>");
+                        Timing.CallDelayed(1f, () =>
+                        {
+                            foreach (var p in Player.List)
+                                p.AddBroadcast(10, $"<size=25><b>간이 셀렉트 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode}(으)로 선택되었습니다.</size>");
+                        });
                     }
                 }
             }
