@@ -71,6 +71,16 @@ namespace RGM.Donator
 
                         Kerfus.Destroy();
                     }
+
+                    if (Attacker[4] == "은제 말뚝")
+                    {
+                        SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", ev.Player.Position, isStatic: false);
+
+                        Timing.CallDelayed(1.5f, () =>
+                        {
+                            SilverStake.Destroy();
+                        });
+                    }
                 }
             }
         }

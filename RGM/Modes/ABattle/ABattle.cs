@@ -1455,6 +1455,8 @@ namespace RGM.Modes
                     PlayerAbilities[ev.Player].Clear();
                     PlayerWorkstation[ev.Player].Clear();
                 }
+
+                ev.Player.DisableAllEffects();
             }
         }
 
@@ -1513,6 +1515,11 @@ namespace RGM.Modes
                     ev.Player.Health = ev.Attacker.Health;
                     foreach (Item Item in ev.Attacker.Items)
                         ev.Player.AddItem(Item.Type);
+
+                    PlayerAbilities[ev.Player].Clear();
+
+                    foreach (string ability in PlayerAbilities[ev.Attacker])
+                        AddAbility(ev.Player, ability);
 
                     ev.Attacker.Kill($"몸이 교체되는 마술에 당했네요!");
 
