@@ -25,9 +25,7 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(1f);
 
             foreach (var player in Player.List)
-            {
                 Spawned(player);
-            }
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
@@ -37,10 +35,13 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            Item item = player.AddItem(ItemType.Jailbird);
+            if (player.IsAlive)
+            {
+                Item item = player.AddItem(ItemType.Jailbird);
 
-            if (player.IsScp)
-                player.CurrentItem = item;
+                if (player.IsScp)
+                    player.CurrentItem = item;
+            }
         }
     }
 }
