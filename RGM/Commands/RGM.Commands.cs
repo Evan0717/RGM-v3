@@ -680,7 +680,7 @@ RP: {uc[1]}
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (RGM.Instance.CurrentMode == "워크스테이션 업그레이드")
+            if (Round.IsStarted)
             {
                 Player player = Player.Get(arguments.At(0));
                 string args = string.Join(" ", arguments).Replace(arguments.At(0), "").Trim();
@@ -704,7 +704,7 @@ RP: {uc[1]}
             }
             else
             {
-                response = "<b>워크스테이션 업그레이드</b> 모드에서만 사용할 수 있는 명령어입니다.";
+                response = "라운드 시작 전에는 사용할 수 없습니다.";
 
                 return false;
             }
