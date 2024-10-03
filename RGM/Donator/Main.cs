@@ -59,7 +59,7 @@ namespace RGM.Donator
                             await Task.Delay(30);
                         }
 
-                        await Task.Delay(500);
+                        await Task.Delay(1000);
 
                         for (int i = 1; i < 11; i++)
                         {
