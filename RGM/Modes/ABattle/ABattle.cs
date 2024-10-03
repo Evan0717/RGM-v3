@@ -257,14 +257,7 @@ namespace RGM.Modes
 
         public int DuplicateCount(Player player, string AbilityName)
         {
-            try
-            {
-                return PlayerAbilities[player].Count(x => x == AbilityName);
-            }
-            catch
-            {
-                return 1;
-            }
+            return PlayerAbilities[player].Count(x => x == AbilityName) + 1;
         }
 
         public void CallSnakeHand(Player Convener, List<Player> PlayerList)

@@ -56,16 +56,16 @@ namespace RGM.Donator
                         {
                             Kerfus.Position += new Vector3(0, -2f, 0);
 
-                            await Task.Delay(30);
+                            await Task.Delay(50);
                         }
 
-                        await Task.Delay(1000);
+                        await Task.Delay(1500);
 
                         for (int i = 1; i < 11; i++)
                         {
                             Kerfus.Position += new Vector3(0, 2f, 0);
 
-                            await Task.Delay(30);
+                            await Task.Delay(50);
                         }
 
                         Kerfus.Destroy();
