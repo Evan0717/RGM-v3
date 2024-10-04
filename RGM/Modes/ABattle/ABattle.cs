@@ -172,7 +172,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp096Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 격노", "분노 때에는 어떠한 데미지도 입지 않습니다. (중첩 불가)"},
+            {"[전용] 격노", "분노 때에는 데미지를 50%만 받습니다. (중첩 불가)"},
             {"[전용] 별자리 찢기", "25% 확률로 공격한 대상을 즉사시킵니다. (중첩 불가)"},
             {"[전용] 천리안", "분노 시에 30m 내의 인간들을 모두 목격자에 포함시킵니다. (중첩 불가)"},
             {"[전용] 원수", "분노 시간이 1/2배가 됩니다."}
@@ -1768,7 +1768,7 @@ namespace RGM.Modes
                     if (ev.Player.Role is Scp096Role Scp096)
                     {
                         if (Scp096.RageManager.IsEnraged && ev.Attacker != null && ev.Attacker != ev.Player)
-                            ev.IsAllowed = false;
+                            ev.DamageHandler.Damage /= 2;
                     }
                 }
 
