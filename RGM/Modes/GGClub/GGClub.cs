@@ -41,9 +41,6 @@ namespace RGM.Modes
             Respawn.TimeUntilNextPhase = 10000;
 
             Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(gingerbreadHint());
-            Timing.RunCoroutine(DJHeadBanging());
-            Timing.RunCoroutine(DJ());
 
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -73,9 +70,6 @@ namespace RGM.Modes
             }
 
             GGUtils.Gtool.PlayerGet("dj").DisplayNickname = "DJ";
-            GGUtils.Gtool.PlaySound("dj", "tothemoon", VoiceChat.VoiceChatChannel.Intercom, 25, true);
-
-            yield return Timing.WaitForSeconds(1f);
 
             foreach (var player in Player.List.Where(x => !x.IsNPC).ToList())
             {
@@ -87,6 +81,20 @@ namespace RGM.Modes
 
             Player.List.CopyTo(pl);
 
+            for (int i = 1; i < 11; i++)
+            {
+                Player.List.ToList().ForEach(x => x.ShowHint($"게임이 {11 - i}초 후에 시작됩니다.", 1.2f));
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+
+            Timing.RunCoroutine(gingerbreadHint());
+            Timing.RunCoroutine(DJHeadBanging());
+            Timing.RunCoroutine(DJ());
+            Timing.RunCoroutine(ShowPhase());
+
+            GGUtils.Gtool.PlaySound("dj", "tothemoon", VoiceChat.VoiceChatChannel.Intercom, 25, true);
+
             ClubLights = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "ClubLight").ToList();
             Pads = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Pad").ToList();
 
@@ -94,8 +102,6 @@ namespace RGM.Modes
 
             while (Phase < 11)
             {
-                Player.List.ToList().ForEach(x => x.AddBroadcast(3, $"Phase {Phase}"));
-
                 yield return Timing.WaitForSeconds(11 - Phase);
 
                 IsSongStopped = true;
@@ -108,11 +114,11 @@ namespace RGM.Modes
                         goldPads.Add(goldPad);
                 }
 
-                yield return Timing.WaitForSeconds(1.25f);
+                yield return Timing.WaitForSeconds(3 - Phase * 0.2f);
 
                 foreach (var player in Player.List)
                 {
-                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
+                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 3f, (LayerMask)1))
                     {
                         try
                         {
@@ -133,6 +139,12 @@ namespace RGM.Modes
                         if (player.IsAlive && !player.IsNPC)
                             player.Kill("황금색 발판을 밟지 못한 자여...");
                     }
+                }
+
+                foreach (var Pad in Pads)
+                {
+                    if (Pad.GetComponent<PrimitiveObject>().Primitive.Color == Color.white)
+                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = Color.red;
                 }
 
                 yield return Timing.WaitForSeconds(1.25f);
@@ -223,6 +235,20 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(1.1f - Phase * 0.1f);
+            }
+        }
+
+        public IEnumerator<float> ShowPhase()
+        {
+            while (Phase < 11)
+            {
+                foreach (var player in Player.List)
+                {
+                    player.ClearPlayerBroadcasts();
+                    player.AddBroadcast(2, $"<b><color=#FFF700>P</color><color=#FFC516>h</color><color=#FF942C>a</color><color=#FF6242>s</color><color=#FF3158>e</color></b> {Phase}");
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
