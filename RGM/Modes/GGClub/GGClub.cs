@@ -106,7 +106,7 @@ namespace RGM.Modes
 
                 IsSongStopped = true;
 
-                for (int i = 1; i < UnityEngine.Random.Range(2, 5); i++)
+                for (int i = 1; i < 11 - Phase; i++)
                 {
                     Transform goldPad = Tools.GetRandomValue(Pads);
 
@@ -156,7 +156,9 @@ namespace RGM.Modes
             }
 
             Round.IsLocked = false;
-            Player.List.ToList().ForEach(x => x.AddBroadcast(3, "게임이 종료되었습니다. 그런데 어떻게 살았?"));
+
+            if (pl.Count > 1)
+                Player.List.ToList().ForEach(x => x.AddBroadcast(3, "게임이 종료되었습니다. 그런데 어떻게 살았?"));
         }
 
         public IEnumerator<float> gingerbreadHint()
