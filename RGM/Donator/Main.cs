@@ -29,7 +29,7 @@ namespace RGM.Donator
             if (ev.Attacker != null && UsersManager.UsersCache.ContainsKey(ev.Attacker.UserId))
             {
                 List<string> Attacker = UsersManager.UsersCache[ev.Attacker.UserId];
-                Quaternion Rotation = new Quaternion(0, ev.Attacker.Rotation.y + 180f, 0, 0);
+                Quaternion Rotation = new Quaternion(0, ev.Attacker.CameraTransform.rotation.y + 180, 0, 0);
 
                 if (Attacker[4] != "0")
                 {
