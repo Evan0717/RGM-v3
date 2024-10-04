@@ -15,6 +15,8 @@ using RGM.Features;
 using MapEditorReborn.Events.Handlers;
 using RGM.API;
 using Discord;
+using HarmonyLib;
+using PlayerRoles.Visibility;
 
 namespace RGM
 {
