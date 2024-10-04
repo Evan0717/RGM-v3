@@ -362,7 +362,7 @@ namespace RGM
                     int diff = DefaultValues.Count - userValues.Count;
 
                     for (int i = 0; i < diff; i++)
-                        userValues.Add(DefaultValues[userValues.Count + i]);
+                        userValues.Add("0");
 
                     UsersManager.SaveUsers();
                 }
