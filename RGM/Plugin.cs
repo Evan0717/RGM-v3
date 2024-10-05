@@ -462,10 +462,10 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
 <b><size=35><color=#F79F81>후원자</color></size></b>
 <size=20>[D.I.]Dotory001(@dotory001), 류세(@milkyway_0119), Lu(@1__neeko__1), 뇨호호(@yeeeee222), ㅠㅅㅠ(@tampast)</size>
-</size></align>
 
-<b><size=35><color=#F8E0F7>서포터</color><size><b>
+<b><size=35><color=#F8E0F7>서포터</color></size><b>
 Cocoa(@cocoa_1.19)
+</size></align>
 \n\n\n\n\n\n\n\n\n\n\n\n\n
 """, 1.2f);
                         }
