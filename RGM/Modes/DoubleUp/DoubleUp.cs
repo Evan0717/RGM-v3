@@ -26,7 +26,8 @@ namespace RGM.Modes
             "미니 게임",
             "해적 룰렛",
             "스플리프",
-            "무덤"
+            "무덤",
+            "데드 라인"
         };
         public static Dictionary<string, List<string>> Mods = RGM.Instance.ModeList;
 
