@@ -74,7 +74,7 @@ namespace RGM
             { "Gun Game", new List<string>() { "088A08", "대인전에 자신 있으신가요? 실력을 증명하기 위해 우승을 차지하세요!", "GunGame", "public", "", "" } },
             { "HIDE", new List<string>() { "0489B1", "숨 죽이는 그를 사살하십시오.", "HIDE", "public", "", "" } },
             { "GG 클럽", new List<string>() { "C8FE2E", "빠르게 황금색 플랫폼을 사수하세요!", "GGClub", "public", "", "" } },
-            { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "private", "", "" } },
+            { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "public", "", "" } },
             { "무한 탄약", new List<string>() { "6E6E6E", "무제한 탄약과 함께 승전보를 울리세요!", "InfiniteAmmo", "private", "", "" } },
             { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "public", "", "" } },
             { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "public", "", "" } },

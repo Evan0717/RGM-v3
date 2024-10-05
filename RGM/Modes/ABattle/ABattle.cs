@@ -106,7 +106,7 @@ namespace RGM.Modes
             {"[전설] 마술사", "누군가에게 죽으면 죽인 자와 교체됩니다. (중첩 불가)"},
             {"[전설] 플래시라이트", "지급된 손전등을 들고 상대를 쳐다보면 눈뽕 공격을 가할 수 있습니다."},
             {"[전설] 킬스트릭", "누군가를 죽일 때마다 새로운 능력을 얻습니다. (중첩 불가)"},
-            {"[전설] 화염 방사기", "위력은 10배 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다."}
+            {"[전설] 화염 방사기", "위력은 20%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다."}
         };
         public Dictionary<string, string> MythicAbilities = new Dictionary<string, string>()
         {
@@ -1801,7 +1801,7 @@ namespace RGM.Modes
 
                 if (ev.Attacker.CurrentItem != null && FlamethrowerSerials.Contains(ev.Attacker.CurrentItem.Serial))
                 {
-                    ev.DamageHandler.Damage /= 10;
+                    ev.DamageHandler.Damage /= 5;
 
                     ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
                 }
