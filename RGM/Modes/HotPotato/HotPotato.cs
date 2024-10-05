@@ -60,7 +60,7 @@ namespace RGM.Modes
             }
 
             GGUtils.Gtool.PlayerGet("dj").DisplayNickname = "DJ";
-            GGUtils.Gtool.PlaySound("dj", "LineLite", VoiceChat.VoiceChatChannel.Intercom, 25, true);
+            GGUtils.Gtool.PlaySound("dj", "Skeleton", VoiceChat.VoiceChatChannel.Intercom, 25, true);
 
             Timing.RunCoroutine(DJHeadBanging());
 
