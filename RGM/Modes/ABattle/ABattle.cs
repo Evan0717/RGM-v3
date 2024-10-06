@@ -20,6 +20,7 @@ using HarmonyLib;
 using Utils.NonAllocLINQ;
 using System.Threading;
 using Exiled.API.Extensions;
+using InventorySystem.Items.MicroHID;
 
 namespace RGM.Modes
 {
@@ -460,6 +461,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
+            Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
 
             Exiled.Events.Handlers.Scp173.Blinking += OnBlinking;
 
@@ -1878,6 +1880,12 @@ namespace RGM.Modes
         {
             if (PlayerAbilities[ev.Player].Contains("[영웅] 수리 기사"))
                 ev.DisableTesla = true;
+        }
+
+        public void OnChangingMicroHIDState(Exiled.Events.EventArgs.Player.ChangingMicroHIDStateEventArgs ev)
+        {
+            if (FlamethrowerSerials.Contains(ev.Player.CurrentItem.Serial) && ev.NewState == HidState.PoweringUp)
+                ev.MicroHID.State = HidState.Firing;
         }
 
         public void OnBlinking(Exiled.Events.EventArgs.Scp173.BlinkingEventArgs ev)
