@@ -40,11 +40,12 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
-            Timing.RunCoroutine(OnModeStarted());
-
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
+
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -252,6 +253,11 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
+        }
+
+        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        {
+            Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
         }
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
