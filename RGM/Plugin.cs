@@ -859,7 +859,7 @@ Cocoa(@cocoa_1.19)
                 {
                     RemainingPress -= 0.02f * stack;
 
-                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.0002f * stack, redObject.transform.position.z);
+                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.0001f * stack, redObject.transform.position.z);
                 }
                 else
                 {
@@ -867,7 +867,7 @@ Cocoa(@cocoa_1.19)
                     {
                         RemainingPress += 1;
 
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.0002f * stack, redObject.transform.position.z);
+                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.0001f * stack, redObject.transform.position.z);
                     }
                 }
 
