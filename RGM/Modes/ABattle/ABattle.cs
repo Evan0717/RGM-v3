@@ -187,7 +187,7 @@ namespace RGM.Modes
         public Dictionary<string, string> Scp939Abilities = new Dictionary<string, string>()
         {
             {"[전용] 흉내쟁이", "흉내 쿨타임이 사라집니다. (중첩 불가)"},
-            {"[전용] 안아줘요", "공격 속도가 1/2배가 됩니다."},
+            {"[전용] 안아줘요", "안개 쿨타임이 1/2배가 됩니다."},
             {"[전용] 민첩한 사냥 도구", "공격 속도가 1/2배가 됩니다."}
         };
         public Dictionary<string, string> Scp3114Abilities = new Dictionary<string, string>()
@@ -1285,7 +1285,7 @@ namespace RGM.Modes
                     break;
                 case "안아줘요":
                     if (player.Role is Scp939Role Scp939_1)
-                        Scp939_1.AttackCooldown /= 2;
+                        Scp939_1.AmnesticCloudCooldown /= 2;
                     break;
                 case "민첩한 사냥 도구":
                     if (player.Role is Scp939Role Scp939_2)
