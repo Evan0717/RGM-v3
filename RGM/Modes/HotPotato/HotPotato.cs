@@ -30,10 +30,10 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
-            Timing.RunCoroutine(OnModeStarted());
-
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -74,9 +74,11 @@ namespace RGM.Modes
 
             while (true)
             {
+                pl.ShuffleList();
+
                 for (float i = 1; i < pl.Count / 10 + 2; i++)
                 {
-                    Player BomberMan = Tools.GetRandomValue(pl.Where(x => !BomberMans.Contains(x) && !x.IsNPC && x.Role.Type == RoleTypeId.Scientist).ToList());
+                    Player BomberMan = Tools.GetRandomValue(pl.Where(x => pl.Contains(x) && !BomberMans.Contains(x)).ToList());
 
                     BomberMan.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
                     BomberMans.Add(BomberMan);
@@ -91,32 +93,39 @@ namespace RGM.Modes
 
                 foreach (var bomber in BomberMans)
                 {
-                    if (BomberMans.Contains(bomber))
+                    try
+                    {
                         BomberMans.Remove(bomber);
 
-                    if (pl.Contains(bomber))
-                    {
-                        pl.Remove(bomber);
-
-                        if (pl.Count < 2)
+                        if (pl.Contains(bomber))
                         {
-                            Round.IsLocked = false;
+                            pl.Remove(bomber);
 
-                            pl[0].Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                            Player.List.ToList().ForEach(x => x.ShowHint($"승리자 : {pl[0].Nickname}", 20));
+                            var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                            g.FuseTime = 0.1f;
+                            g.SpawnActive(bomber.Position, Server.Host);
+
+                            bomber.Role.Set(RoleTypeId.Scientist);
+                            bomber.Position = new Vector3(83.82303f, 1026.691f, -37.06291f);
+
+                            if (pl.Count < 2)
+                            {
+                                Round.IsLocked = false;
+
+                                pl[0].Role.Set(RoleTypeId.Scientist, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                                Player.List.ToList().ForEach(x => x.ShowHint($"승리자 : {pl[0].Nickname}", 20));
+                            }
                         }
-
-                        var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
-                        g.FuseTime = 0;
-                        g.SpawnActive(bomber.Position, Server.Host);
-
-                        bomber.Role.Set(RoleTypeId.ClassD);
-                        bomber.Position = new Vector3(83.82303f, 1026.691f, -37.06291f);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
                     }
                 }
 
-                Player.List.ToList().ForEach(x => x.ShowHint($"펑!"));
-                yield return Timing.WaitForSeconds(3f);
+                Player.List.ToList().ForEach(x => x.ShowHint($"펑!", 2));
+
+                yield return Timing.WaitForSeconds(2f);
             }
         }
 
