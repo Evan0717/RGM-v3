@@ -93,7 +93,7 @@ namespace RGM.Modes
 
                 foreach (var bomber in BomberMans)
                 {
-                    if (pl.Contains(bomber))
+                    if (bomber != null && pl.Contains(bomber))
                     {
                         pl.Remove(bomber);
 

@@ -117,7 +117,7 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(3 - Phase * 0.2f);
 
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(pl.Contains))
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 3f, (LayerMask)1))
                     {
