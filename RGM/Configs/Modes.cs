@@ -76,7 +76,7 @@ namespace RGM
             { "GG 클럽", new List<string>() { "C8FE2E", "빠르게 황금색 플랫폼을 사수하세요!", "GGClub", "public", "", "" } },
             { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "public", "", "" } },
             { "무한 탄약", new List<string>() { "6E6E6E", "무제한 탄약과 함께 승전보를 울리세요!", "InfiniteAmmo", "private", "", "" } },
-            { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "public", "", "" } },
+            { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "private", "", "" } },
             { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "public", "", "" } },
             { "저거너트", new List<string>() { "088A08", "모두 힘을 합쳐 외부의 적에 대항하세요.\n10분에 자동핵이 작동됩니다.", "Juggernaut", "private", "", "" } },
             { "점프맵 라운지", new List<string>() { "A9D0F5", "5분 안에 최대한 멀리 가세요!", "JumpMap", "private", "", "" } },
