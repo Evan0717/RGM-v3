@@ -1611,8 +1611,6 @@ namespace RGM.Modes
 
                     PlayerAbilities[ev.Player].Remove("[신화] 조커");
 
-                    ev.Attacker.Kill("아름다운 조커의 향연이야!");
-
                     Player.List.ToList().ForEach(x => x.ShowHint("<b><i><color=#FF0000>조</color><color=#E70717>커</color><color=#D00F2E>를</color> <color=#A21E5C>건</color><color=#8B2673>들</color><color=#732E8B>인</color> <color=#453DB9>죄</color><color=#2E45D0>다</color><color=#174DE7>!</color></i></b>", 3));
 
                     ev.Player.MaxHealth *= UnityEngine.Random.Range(1, 4);
@@ -1888,6 +1886,14 @@ namespace RGM.Modes
             {
                 if (ev.OldState == HidState.Idle && ev.NewState == HidState.PoweringUp)
                     ev.NewState = HidState.Firing;
+
+                else if (ev.OldState == HidState.Firing && ev.NewState == HidState.PoweringDown)
+                {
+                    Timing.CallDelayed(0.1f, () => 
+                    { 
+                        ev.NewState = HidState.Idle; 
+                    });
+                }
             }
         }
 
