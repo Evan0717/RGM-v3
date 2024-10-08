@@ -26,14 +26,16 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -85,7 +87,7 @@ namespace RGM.Modes
 
                     Player target = pl[targetIndex];
 
-                    player.ShowHint($"당신의 타깃 : {target.Nickname}", 1.2f);
+                    player.ShowHint($"당신의 타깃 : {target.DisplayNickname}", 1.2f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -119,6 +121,11 @@ namespace RGM.Modes
             }
         }
 
+        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        {
+            Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
+        }
+
         public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
@@ -136,6 +143,12 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
+            if (ev.Player.IsNPC)
+            {
+                ev.IsAllowed = false;
+                return;
+            }
+
             int attackerIndex = pl.IndexOf(ev.Attacker);
             int targetIndex = (attackerIndex + 1) % pl.Count;
 
@@ -155,14 +168,23 @@ namespace RGM.Modes
         }
 
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
             if (pl.Contains(ev.Player))
             {
                 pl.Remove(ev.Player);
 
+                ev.IsAllowed = false;
+
+                ev.Player.Role.Set(RoleTypeId.ClassD);
+                ev.Player.Position = new Vector3(83.82303f, 1026.691f, -37.06291f);
+
                 if (pl.Count < 2)
+                {
                     Round.IsLocked = false;
+
+                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].Nickname}"));
+                }
             }
         }
     }
