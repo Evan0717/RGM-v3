@@ -1553,6 +1553,24 @@ namespace RGM.Modes
 
         public async void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
+            if (PlayerAbilities[ev.Player].Contains("[전용] RTX4090"))
+            {
+                ev.IsAllowed = false;
+
+                PlayerAbilities[ev.Player].Clear();
+
+                Timing.CallDelayed(0.1f, () =>
+                {
+                    ev.Player.Role.Set(RoleTypeId.Tutorial);
+
+                    Vector3 Pos = Door.Get(DoorType.Scp079First).Position;
+                    ev.Player.Position = new Vector3(Pos.x, Pos.y + 2, Pos.z);
+
+                    for (int i = 1; i < UnityEngine.Random.Range(7, 12); i++)
+                        AddAbility(ev.Player);
+                });
+            }
+
             if (PlayerAbilities.ContainsKey(ev.Attacker) && PlayerAbilities.ContainsKey(ev.Player) && ev.Attacker != null)
             {
                 if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
@@ -1627,24 +1645,6 @@ namespace RGM.Modes
                         RGM.Instance.GodModePlayers.Remove(ev.Player);
 
                     return;
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[전용] RTX4090"))
-                {
-                    ev.IsAllowed = false;
-
-                    PlayerAbilities[ev.Player].Clear();
-
-                    Timing.CallDelayed(0.1f, () =>
-                    {
-                        ev.Player.Role.Set(RoleTypeId.Tutorial);
-
-                        Vector3 Pos = Door.Get(DoorType.Scp079First).Position;
-                        ev.Player.Position = new Vector3(Pos.x, Pos.y + 2, Pos.z);
-
-                        for (int i = 1; i < UnityEngine.Random.Range(7, 12); i++)
-                            AddAbility(ev.Player);
-                    });
                 }
 
                 // 죽음이 확정된 상황
