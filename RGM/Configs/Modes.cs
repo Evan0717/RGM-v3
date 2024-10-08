@@ -102,7 +102,7 @@ namespace RGM
             { "스플리프", new List<string>() { "BEF781", "떨어지지 않으려면 계속 움직이세요!", "Spleef", "public", "", "" } },
             { "기본템", new List<string>() { "FA5858", "5~8개의 아이템이 사전에 지급됩니다. 기존에 가지고 있던 아이템은 제거됩니다.", "StandardItems", "private", "", "" } },
             { "슈퍼 스타", new List<string>() { "FE2EF7", "모두의 마이크가 공유됩니다.", "SuperStar", "public", "", "" } },
-            { "꼬리 잡기", new List<string>() { "A9F5BC", "각자의 타깃을 제거하고 꼬리가 잡히지 않도록 하십시오.", "TailCatcher", "public", "", "" } },
+            { "꼬리 잡기", new List<string>() { "A9F5BC", "절대로 타깃이 아닌 유저를 쏘지 마세요! 꼬리가 잡히지 않도록 하십시오.", "TailCatcher", "public", "", "" } },
             { "무덤", new List<string>() { "000000", "살아남으려면 뭐라도 해야 합니다.", "Tomb", "public", "", "" } },
             { "트릭 오어 트릿", new List<string>() { "5F04B4", "사탕 4개를 가지고 시작합니다. 다른 이를 사살하면 사탕 1개를 더 받습니다.", "TrickorTreat", "public", "", "" } },
             { "무제한", new List<string>() { "3F13AB", "무제한을 악용하지 않는 것을 추천합니다.", "Unlimited", "public", "", "" } },
