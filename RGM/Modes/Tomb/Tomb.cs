@@ -11,6 +11,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using Exiled.API.Features.Items;
 using RGM.API;
+using MultiBroadcast.API;
 
 namespace RGM.Modes
 {
@@ -68,7 +69,11 @@ namespace RGM.Modes
                 pl.Remove(ev.Player);
 
                 if (pl.Count < 2)
+                {
                     Round.IsLocked = false;
+
+                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].Nickname}"));
+                }
             }
         }
     }

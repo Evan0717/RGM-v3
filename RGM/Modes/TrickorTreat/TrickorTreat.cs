@@ -42,22 +42,16 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            var p = player.AddItem(ItemType.SCP330);
-            if (p is Scp330 candy)
+            var Scp330 = player.AddItem(ItemType.SCP330);
+
+            for (int i=1; i<4; i++)
             {
-                List<CandyKindID> Candies = new List<CandyKindID>
-                    {
-                        (CandyKindID)UnityEngine.Random.Range(0, 8),
-                        (CandyKindID)UnityEngine.Random.Range(0, 8),
-                        (CandyKindID)UnityEngine.Random.Range(0, 8)
-                    };
-
-                foreach (var Candy in Candies)
-                    candy.AddCandy(Candy);
-
-                if (player.IsScp)
-                    Server.ExecuteCommand($"/forceeq {player.Id} 42");
+                var Candy = Tools.GetRandomValue(Tools.EnumToList<CandyKindID>());
+                player.TryAddCandy(Candy);
             }
+
+            if (player.IsScp)
+                player.CurrentItem = Scp330;
         }
 
         public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
