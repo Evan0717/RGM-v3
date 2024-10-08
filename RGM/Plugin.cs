@@ -573,7 +573,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}").Replace("{Tip}", Tip)
                                 .Replace("{Exp}", $"{uc[0]}")
                                 .Replace("{RP}", $"{uc[1]}")
-                                .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("NO")}")
+                                .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
                                 .Replace("{KillEffect}", $"{(uc[4] == "0" ? "-" : uc[4])}")
                                 , 1.2f);
                         }

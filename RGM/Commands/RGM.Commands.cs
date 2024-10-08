@@ -7,6 +7,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
+using RGM.API;
 using RGM.Features;
 using RGM.Modes;
 using UnityEngine;
@@ -377,34 +378,10 @@ namespace RGM.Commands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
-            Dictionary<string, List<string>> UserCache = UsersManager.UsersCache;
-            List<string> uc = UsersManager.UsersCache[player.UserId];
 
             response = $"성공적으로 플레이어 정보를 불러왔습니다.";
 
-            string KillEffects()
-            {
-                if (uc[3] == "0")
-                    return "-";
-
-                else
-                    return string.Join(", ", uc[3].Split('/'));
-            }
-
-            player.SendConsoleMessage(
-$"""
-
-
-<size=40><b>{player.Nickname}</b>님의 정보</size>
-
-SteamID: {player.UserId}
-Exp: {uc[0]}
-RP: {uc[1]}
-<i>Cash</i>: {int.Parse(uc[2]).ToString("N0")}
-보유한 킬 이펙트: {KillEffects()}
-장착한 킬 이펙트: {(uc[4] == "0" ? "-" : uc[4])}
-<size=15>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬 이펙트를 장착할 수 있습니다." : RGM.Instance.KillEffects[uc[4]])}</size>
-""", "white");
+            player.SendConsoleMessage(Tools.GetPlayerInfo(player), "white");
 
             return true;
         }
@@ -492,7 +469,7 @@ RP: {uc[1]}
 
                 if (int.Parse(uc[2]) >= 50000)
                 {
-                    uc[5] = args;
+                    uc[5] = args == "" ? "0" : args;
                     UsersManager.UsersCache[player.UserId] = uc;
                     player.DisplayNickname = args;
 
@@ -524,7 +501,7 @@ RP: {uc[1]}
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class ApplyChangeRoleDescription : ICommand
+    public class ApplyChangeCustomInfo : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -537,11 +514,11 @@ RP: {uc[1]}
 
                 if (int.Parse(uc[2]) >= 100000)
                 {
-                    uc[6] = args;
+                    uc[6] = args == "" ? "0" : args;
                     UsersManager.UsersCache[player.UserId] = uc;
                     player.CustomInfo = args;
 
-                    response = "역할 설명 변경 완료!\n-";
+                    response = "인포 변경 완료!\n-";
 
                     UsersManager.SaveUsers();
                     return true;
@@ -559,11 +536,11 @@ RP: {uc[1]}
             }
         }
 
-        public string Command { get; } = "applychangedescription";
+        public string Command { get; } = "applychangecustominfo";
 
-        public string[] Aliases { get; } = { "acrd", "역할설명" };
+        public string[] Aliases { get; } = { "acci", "인포" };
 
-        public string Description { get; } = "[RGM] 다른 유저에게 보여지는 역할 설명을 수정합니다. (0 = 변경 해제)";
+        public string Description { get; } = "[RGM] 다른 유저에게 보여지는 역할 설명을 수정합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }
@@ -681,6 +658,27 @@ RP: {uc[1]}
         public string[] Aliases { get; } = { "rke" };
 
         public string Description { get; } = "특정 유저가 보유한 킬 이펙트를 제거합니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class GetPlayerInfo : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(arguments.At(0));
+
+            response = Tools.GetPlayerInfo(player);
+
+            return true;
+        }
+
+        public string Command { get; } = "getplayerinfo";
+
+        public string[] Aliases { get; } = { "gpi", "정보조회" };
+
+        public string Description { get; } = "특정 유저의 정보를 조회합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

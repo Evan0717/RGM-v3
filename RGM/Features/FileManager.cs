@@ -41,7 +41,7 @@ namespace RGM.Features
         보유한 킬 이펙트 - 3
         장착한 킬 이펙트 - 4
         커스텀 닉네임 - 5
-        커스텀 설명 - 6
+        커스텀 인포 - 6
         */
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.txt");
