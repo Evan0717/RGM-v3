@@ -56,7 +56,7 @@ namespace RGM
 """
 빨간색을 밟으면 죽습니다.
 """ } },
-            { "데스런", new List<string>() { "FF4000", "과학자는 죄수들의 접근을 막아야 합니다. 널리 퍼져 있는 함정들을 조심하십시오!", "DeathRun", "private", "",
+            { "데스런", new List<string>() { "FF4000", "과학자는 죄수들의 접근을 막아야 합니다. 널리 퍼져 있는 함정들을 조심하십시오!", "DeathRun", "public", "",
 """
 <color=yellow>과학자</color>의 경우, <color=red>빨간 버튼</color>을 눌러 함정을 발동시킬 수 있습니다.
 단, 함정은 1번만 작동시킬 수 있으므로, 한번에 최대한 많은 <color=orange>D계급</color>들을 죽이세요.

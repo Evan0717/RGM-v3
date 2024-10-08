@@ -942,7 +942,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                             rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.01f, 0), ForceMode.Impulse);
                         }
 
-                        else if (Vector3.Distance(_ball.transform.position, player.Position) > 27)
+                        else if (Vector3.Distance(_ball.transform.position, player.Position) > 45)
                             _ball.transform.position = new Vector3(player.Position.x, player.Position.y + 2, player.Position.z);
                     }
                 }
