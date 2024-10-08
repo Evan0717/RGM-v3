@@ -28,7 +28,8 @@ namespace RGM.Modes
             "스플리프",
             "무덤",
             "데드 라인",
-            "폭탄 돌리기"
+            "폭탄 돌리기",
+            "꼬리 잡기"
         };
         public static Dictionary<string, List<string>> Mods = RGM.Instance.ModeList;
 
