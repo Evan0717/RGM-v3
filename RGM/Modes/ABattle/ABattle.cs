@@ -21,6 +21,8 @@ using Utils.NonAllocLINQ;
 using System.Threading;
 using Exiled.API.Extensions;
 using InventorySystem.Items.MicroHID;
+using PluginAPI.Events;
+using System.Diagnostics.Tracing;
 
 namespace RGM.Modes
 {
@@ -38,10 +40,11 @@ namespace RGM.Modes
 
         public List<ushort> PickCoinSerials = new List<ushort>();
         public List<ushort> EscapeCoinSerials = new List<ushort>();
+        public List<ushort> EarthquakeCoinSerials = new List<ushort>();
         public List<ushort> FollowCoinSerials = new List<ushort>();
         public List<ushort> GrapCoinSerials = new List<ushort>();
         public List<ushort> ClockCoinSerials = new List<ushort>();
-        public List<ushort> InstallModeSerials = new List<ushort>();
+        public List<ushort> ContractCoinSerials = new List<ushort>();
         public List<ushort> CallSnakeHandsSerials = new List<ushort>();
         public List<ushort> FlashLightSerials = new List<ushort>();
         public List<ushort> FlamethrowerSerials = new List<ushort>();
@@ -68,7 +71,8 @@ namespace RGM.Modes
             {"[일반] 횃불", "랜턴과 노란 사탕을 받습니다."},
             {"[일반] 잠행", "발걸음 소리가 줄어듭니다."},
             {"[일반] 위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다."},
-            {"[일반] 저체중", "점프 속도가 10% 증가합니다."}
+            {"[일반] 저체중", "점프 속도가 20% 증가합니다."},
+            {"[일반] 지진", "지급된 동전을 튕기면 시설 내 모두에게 화면 흔들림 효과를 일시적으로 부여합니다."}
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
@@ -82,13 +86,17 @@ namespace RGM.Modes
             {"[희귀] 회중시계", "지급된 동전을 튕기면 3초간 움직일 수 없는 대신에 무적 상태가 됩니다."},
             {"[희귀] 스테로이드", "25초 간 이동 속도가 많이 증가합니다."},
             {"[희귀] 순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다."},
-            {"[희귀] 하이패스", "25초 간 무적이 됩니다."}
+            {"[희귀] 하이패스", "25초 간 무적이 됩니다."},
+            {"[희귀] 트리플악셀", "여분의 탄약과 함께 COM-45를 지급받습니다."},
+            {"[희귀] 연금", "3분 간, 1분마다 아이템을 하나 획득합니다."},
+            {"[희귀] 계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 2개를 가진 채로 시작합니다."},
+            {"[희귀] 반창고", "최초 1회, 체력이 절반으로 줄어들었을 경우 즉시 회복합니다."}
         };
         public Dictionary<string, string> EpicAbilities = new Dictionary<string, string>()
         {
             {"[영웅] 테러리스트의 유품", "핑크 사탕을 지급받습니다."},
             {"[영웅] 도박꾼", "아이템을 버리면 새로운 아이템을 받지만, 5% 확률로 손이 잘립니다."},
-            {"[영웅] 랜덤상자", "랜덤하지만 좋은 아이템을 지급받습니다."},
+            {"[영웅] 랜덤상자", "랜덤하지만 좋은 아이템을 2개 지급받습니다."},
             {"[영웅] 수리 기사", "모든 잠겨진 문에 액세스할 수 있으며, 테슬라를 작동시키지 않습니다. (중첩 불가)"},
             {"[영웅] 슈퍼 스타", "자신의 마이크가 모두에게 공유되고, 사망 시 사망한 사실이 모두에게 공개됩니다. (중첩 불가)"},
             {"[영웅] 럭키비키", "이전에 방문했던 워크스테이션에서 다시 한번 더 능력을 획득할 수 있습니다."},
@@ -107,7 +115,8 @@ namespace RGM.Modes
             {"[전설] 마술사", "누군가에게 죽으면 죽인 자와 교체됩니다. (중첩 불가)"},
             {"[전설] 플래시라이트", "지급된 손전등을 들고 상대를 쳐다보면 눈뽕 공격을 가할 수 있습니다."},
             {"[전설] 킬스트릭", "누군가를 죽일 때마다 새로운 능력을 얻습니다. (중첩 불가)"},
-            {"[전설] 화염 방사기", "위력은 20%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다."}
+            {"[전설] 화염 방사기", "위력은 20%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다."},
+            {"[전설] 영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다. (중첩 불가)"}
         };
         public Dictionary<string, string> MythicAbilities = new Dictionary<string, string>()
         {
@@ -231,6 +240,12 @@ namespace RGM.Modes
                 {
                     "<매의 눈, 잠행, 무기 전문가, 보급, 운동> 사냥꾼의 기운을 타고났습니다!",
                     "[희귀] 매의 눈", "[일반] 잠행", "[일반] 무기 전문가", "[일반] 보급", "[일반] 운동"
+                }
+            },
+            {"[시너지] 랜덤 컬렉션", new List<string>()
+                {
+                    "<랜덤박스, 랜덤상자, 랜덤택배> 3+1! 셋 중 하나를 더 받으세요!",
+                    "[일반] 랜덤박스", "[영웅] 랜덤상자", "[전설] 랜덤택배"
                 }
             }
         };
@@ -491,6 +506,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(UpgradeBody());
             Timing.RunCoroutine(FlashLight());
             Timing.RunCoroutine(Flamethrower());
+            Timing.RunCoroutine(Blessing());
             Timing.RunCoroutine(Spirit());
             Timing.RunCoroutine(Twinkle());
             Timing.RunCoroutine(Medical());
@@ -740,6 +756,79 @@ namespace RGM.Modes
                             MicroHid MicroHID = (MicroHid)Item;
 
                             MicroHID.Energy += 0.05f;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public IEnumerator<float> Blessing()
+        {
+            while (true)
+            {
+                try
+                {
+                    foreach (var player in Player.List)
+                    {
+                        if (player.IsAlive && PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[전설] 영매"))
+                        {
+                            int s = player.CurrentSpectatingPlayers.Count();
+
+                            player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(2.5 * s);
+                            player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(2.5 * s);
+                            player.Heal(0.35f * s);
+
+                            if (player.Role is Scp079Role scp079)
+                                scp079.Energy += 0.35f * s;
+
+                            if (s > 5)
+                                player.IsUsingStamina = false;
+
+                            else
+                                player.IsUsingStamina = true;
+
+                            if (s > 10)
+                                player.IsBypassModeEnabled = true;
+
+                            else
+                                player.IsBypassModeEnabled = false;
+
+                            if (s > 15)
+                                player.EnableEffect(EffectType.Ghostly, 1, 1.2f);
+
+                            if (s > 20)
+                                player.EnableEffect(EffectType.Invisible, 1, 1.2f);
+
+                            if (s > 25)
+                            {
+                                if (UnityEngine.Random.Range(1, 51) == 1)
+                                {
+                                    Item Item = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
+
+                                    if (player.IsScp)
+                                        player.CurrentItem = Item;
+                                }
+                            }
+
+                            if (s > 30)
+                            {
+                                if (!player.IsNoclipPermitted)
+                                    player.IsNoclipPermitted = true;
+
+                                player.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
+                            }
+
+                            else
+                            {
+                                if (player.IsNoclipPermitted)
+                                    player.IsNoclipPermitted = false;
+                            }
                         }
                     }
                 }
@@ -1042,7 +1131,14 @@ namespace RGM.Modes
                         player.CurrentItem = ec;
                     break;
                 case "저체중":
-                    if (player.Role is FpcRole fpc) fpc.JumpingSpeed *= 11 / 10; break;
+                    if (player.Role is FpcRole fpc) fpc.JumpingSpeed *= 12 / 10; break;
+                case "지진":
+                    Item ec_1 = player.AddItem(ItemType.Coin);
+                    EarthquakeCoinSerials.Add(ec_1.Serial);
+
+                    if (player.IsScp)
+                        player.CurrentItem = ec_1;
+                    break;
                 case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 10; break;
                 case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
                 case "순간이동":
@@ -1087,6 +1183,32 @@ namespace RGM.Modes
                             RGM.Instance.GodModePlayers.Remove(player);
                     });
                     break;
+                case "트리플악셀":
+                    Item COM45 = player.AddItem(ItemType.GunCom45);
+                    player.AddItem(ItemType.Ammo9x19);
+                    if (player.IsScp)
+                        player.CurrentItem = COM45;
+                    break;
+                case "연금":
+                    for (int i=1; i<4; i++)
+                    {
+                        List<ItemType> Pension = Tools.EnumToList<ItemType>();
+
+                        Item pen = player.AddItem(Tools.GetRandomValue(Pension));
+
+                        if (player.IsScp)
+                            player.CurrentItem = pen;
+
+                        await Task.Delay(60 * 1000);
+                    }
+                    break;
+                case "계약":
+                    Item cc_1 = player.AddItem(ItemType.Coin);
+                    ContractCoinSerials.Add(cc_1.Serial);
+
+                    if (player.IsScp)
+                        player.CurrentItem = cc_1;
+                    break;
                 case "테러리스트의 유품":
                     player.TryAddCandy(CandyKindID.Pink);
 
@@ -1109,10 +1231,13 @@ namespace RGM.Modes
                         ItemType.KeycardO5
                     };
 
-                    Item RandomChestItem = player.AddItem(Tools.GetRandomValue(RandomChest));
+                    for (int i=1; i<3; i++)
+                    {
+                        Item RandomChestItem = player.AddItem(Tools.GetRandomValue(RandomChest));
 
-                    if (player.IsScp)
-                        player.CurrentItem = RandomChestItem;
+                        if (player.IsScp)
+                            player.CurrentItem = RandomChestItem;
+                    }
                     break;
                 case "럭키비키": PlayerWorkstation[player].Clear(); break;
                 case "슈퍼 스타": Server.ExecuteCommand($"/speak {player.Id} enable"); break;
@@ -1125,13 +1250,6 @@ namespace RGM.Modes
                 case "고스트룰": player.GetEffect(EffectType.Ghostly).Intensity += 1; break;
                 case "잠수부": player.EnableEffect(EffectType.Invigorated); break;
                 case "스피드왜건": player.GetEffect(EffectType.MovementBoost).Intensity += 100; break;
-                case "모드 설치":
-                    Item IM = player.AddItem(ItemType.Coin);
-                    InstallModeSerials.Add(IM.Serial);
-
-                    if (player.IsScp)
-                        player.CurrentItem = IM;
-                    break;
                 case "뱀의 손 무전기":
                     Item SH = player.AddItem(ItemType.Radio);
                     CallSnakeHandsSerials.Add(SH.Serial);
@@ -1315,8 +1433,15 @@ namespace RGM.Modes
                     if (player.MaxHealth < player.Health)
                         player.MaxHealth = player.Health;
                     break;
-                case "중첩 불가 파티 Ⅰ":
-                    AddAbility(player, "[영웅] 럭키비키");
+                case "랜덤 컬렉션":
+                    List<string> Randoms = new List<string>()
+                    {
+                        "[일반] 랜덤박스",
+                        "[영웅] 랜덤상자",
+                        "[전설] 랜덤택배"
+                    };
+
+                    AddAbility(player, Tools.GetRandomValue(Randoms));
                     break;
             }
         }
@@ -1447,6 +1572,9 @@ namespace RGM.Modes
                 else if (EscapeCoinSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
+                else if (EarthquakeCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>지진</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+
                 else if (FollowCoinSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>순간이동</color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
@@ -1455,6 +1583,9 @@ namespace RGM.Modes
 
                 else if (ClockCoinSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
+
+                else if (ContractCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
 
                 else if (CallSnakeHandsSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.", 1.2f);
@@ -1501,6 +1632,12 @@ namespace RGM.Modes
                 else
                     ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
             }
+            else if (EarthquakeCoinSerials.Contains(ev.Item.Serial))
+            {
+                ev.Item.Destroy();
+
+                Warhead.Shake();
+            }
             else if (FollowCoinSerials.Contains(ev.Item.Serial))
             {
                 ev.Item.Destroy();
@@ -1527,6 +1664,18 @@ namespace RGM.Modes
 
                 if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                     RGM.Instance.GodModePlayers.Remove(ev.Player);
+            }
+            else if (ContractCoinSerials.Contains(ev.Item.Serial))
+            {
+                ev.Item.Destroy();
+
+                ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
+                
+                while (ev.Player.IsAlive)
+                    await Task.Delay(100);
+
+                for (int i=1; i<3; i++)
+                    AddAbility(ev.Player);
             }
             else if (ChaosCoinSerials.Contains(ev.Item.Serial))
             {
@@ -1807,6 +1956,16 @@ namespace RGM.Modes
                     ev.DamageHandler.Damage /= 5;
 
                     ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
+                }
+
+                if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고"))
+                {
+                    if (ev.Player.Health <= ev.Player.MaxHealth / 2)
+                    {
+                        PlayerAbilities[ev.Player].Remove("[희귀] 반창고");
+
+                        ev.Player.Health = ev.Player.MaxHealth;
+                    }
                 }
 
                 if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
