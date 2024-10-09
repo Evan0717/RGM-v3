@@ -90,7 +90,7 @@ namespace RGM.Modes
             {"[희귀] 하이패스", "25초 간 무적이 됩니다."},
             {"[희귀] 트리플악셀", "여분의 탄약과 함께 COM-45를 지급받습니다."},
             {"[희귀] 연금", "3분 간, 1분마다 아이템을 하나 획득합니다."},
-            {"[희귀] 계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 2개를 가진 채로 시작합니다."},
+            {"[희귀] 계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다."},
             {"[희귀] 반창고", "최초 1회, 체력이 절반으로 줄어들었을 경우 즉시 회복합니다."}
         };
         public Dictionary<string, string> EpicAbilities = new Dictionary<string, string>()
@@ -1701,10 +1701,10 @@ namespace RGM.Modes
 
                 ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
                 
-                while (ev.Player.IsAlive)
+                while (!ev.Player.IsAlive)
                     await Task.Delay(100);
 
-                for (int i=1; i<3; i++)
+                for (int i=1; i<4; i++)
                     AddAbility(ev.Player);
             }
             else if (ChaosCoinSerials.Contains(ev.Item.Serial))
