@@ -244,3 +244,4 @@ D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\MapEditorReborn.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\MultiBroadcast.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\GGUtils.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Site02.dll
+D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\SLPlayerRotation.dll
