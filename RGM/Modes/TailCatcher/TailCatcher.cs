@@ -143,28 +143,14 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Player.IsNPC)
-            {
-                ev.IsAllowed = false;
-                return;
-            }
+            int playerIndex = pl.IndexOf(ev.Player);
+            int targetIndex = (playerIndex + 1) % pl.Count;
 
-            int attackerIndex = pl.IndexOf(ev.Attacker);
-            int targetIndex = (attackerIndex + 1) % pl.Count;
+            Player target = pl[targetIndex];
 
-            if (targetIndex == 0 && attackerIndex == pl.Count - 1)
-            {
-                Player target = pl[0];
-            }
-            else if (targetIndex == attackerIndex + 1)
-            {
-                Player target = pl[targetIndex];
-            }
-            else
-            {
+            if (ev.Player != target)
                 ev.IsAllowed = false;
                 ev.Attacker.Hurt(ev.Amount);
-            }
         }
 
 

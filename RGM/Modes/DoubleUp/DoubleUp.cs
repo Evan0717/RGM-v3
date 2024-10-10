@@ -41,8 +41,12 @@ namespace RGM.Modes
 
         public List<string> pl = new List<string>();
 
+        public static string Description = $"<size=25><b>[<color=#{Mods[mod1][0]}>{mod1}</color> + <color=#{Mods[mod2][0]}>{mod2}</color>]</b></size>";
+
         public void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -61,7 +65,17 @@ namespace RGM.Modes
                 }
             }
 
-            Player.List.ToList().ForEach(x => x.AddBroadcast(10, $"<size=25><b>[<color=#{Mods[mod1][0]}>{mod1}</color> + <color=#{Mods[mod2][0]}>{mod2}</color>]</b></size>"));
+            foreach (var player in Player.List.Where(x => !x.IsNPC))
+            {
+                player.AddBroadcast(10, Description);
+                player.SendConsoleMessage(Description, "white");
+            }
+        }
+
+        public void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
+        {
+            ev.Player.AddBroadcast(10, Description);
+            ev.Player.SendConsoleMessage(Description, "white");
         }
     }
 }

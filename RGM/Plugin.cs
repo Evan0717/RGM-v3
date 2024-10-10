@@ -863,18 +863,9 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
                 if (pressing)
                 {
-                    RemainingPress -= 0.02f * stack;
+                    RemainingPress -= 0.01f * stack;
 
                     redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.0001f * stack, redObject.transform.position.z);
-                }
-                else
-                {
-                    if (RemainingPress < 20)
-                    {
-                        RemainingPress += 1;
-
-                        redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.0001f * stack, redObject.transform.position.z);
-                    }
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
@@ -941,9 +932,11 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                             _ball.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rig);
                             rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.01f, 0), ForceMode.Impulse);
                         }
-
+                        
+                        /*
                         else if (Vector3.Distance(_ball.transform.position, player.Position) > 45)
                             _ball.transform.position = new Vector3(player.Position.x, player.Position.y + 2, player.Position.z);
+                        */
                     }
                 }
 

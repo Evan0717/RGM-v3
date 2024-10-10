@@ -21,8 +21,6 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
-            Server.FriendlyFire = true;
-
             Timing.RunCoroutine(OnModeStarted());
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -32,10 +30,9 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Scp939.Lunging += OnLunging;
 
-            Harmony harmony = new Harmony("FriendlyFire");
-            harmony.Patch(
-                AccessTools.Method(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy)), 
-                postfix: new(AccessTools.Method(typeof(HitboxPatchPostfix), nameof(HitboxPatchPostfix.Postfix))));
+            Harmony harmony = new Harmony($"FriendlyFire - {DateTime.Now.Ticks}");
+            harmony.Patch(AccessTools.Method(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy)), 
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(HitboxPatchPostfix), nameof(HitboxPatchPostfix.Postfix))));
         }
 
         public IEnumerator<float> OnModeStarted()
