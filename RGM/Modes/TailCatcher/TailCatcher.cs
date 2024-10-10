@@ -24,6 +24,14 @@ namespace RGM.Modes
 
         ReferenceHub dj;
 
+        public Player GetTarget(Player attacker)
+        {
+            int playerIndex = pl.IndexOf(attacker);
+            int targetIndex = (playerIndex + 1) % pl.Count;
+
+            return pl[targetIndex];
+        }
+
         public void OnEnabled()
         {
             Server.FriendlyFire = true;
@@ -82,10 +90,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List.Where(pl.Contains))
                 {
-                    int playerIndex = pl.IndexOf(player);
-                    int targetIndex = (playerIndex + 1) % pl.Count;
-
-                    Player target = pl[targetIndex];
+                    Player target = GetTarget(player);
 
                     player.ShowHint($"당신의 타깃 : {target.DisplayNickname}", 1.2f);
                 }
@@ -143,14 +148,13 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            int playerIndex = pl.IndexOf(ev.Player);
-            int targetIndex = (playerIndex + 1) % pl.Count;
-
-            Player target = pl[targetIndex];
+            Player target = GetTarget(ev.Attacker);
 
             if (ev.Player != target)
+            {
                 ev.IsAllowed = false;
                 ev.Attacker.Hurt(ev.Amount);
+            }
         }
 
 
