@@ -10,6 +10,7 @@ using PlayerRoles;
 using RGM.API;
 using Achievements.Handlers;
 using Exiled.API.Enums;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -40,8 +41,12 @@ namespace RGM.Modes
 
                 foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
                 {
+                    Quaternion Player = player.CameraTransform.rotation;
+
                     RoleTypeId SelectedRole = Tools.GetRandomValue(Roles);
                     player.Role.Set(SelectedRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
+
+                    player.CameraTransform.rotation = Player;
                 }
             }
         }

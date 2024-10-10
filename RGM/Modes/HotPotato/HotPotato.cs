@@ -166,8 +166,14 @@ namespace RGM.Modes
                 BomberMans.Remove(ev.Attacker);
                 BomberMans.Add(ev.Player);
 
+                Quaternion Attacker = ev.Attacker.CameraTransform.rotation;
+                Quaternion Player = ev.Player.CameraTransform.rotation;
+
                 ev.Attacker.Role.Set(RoleTypeId.ClassD, SpawnReason.ForceClass, RoleSpawnFlags.None);
                 ev.Player.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
+
+                SLPlayerRotation.Extensions.SetHubRotation(ev.Attacker, Attacker);
+                SLPlayerRotation.Extensions.SetHubRotation(ev.Player, Player);
             }
         }
 
