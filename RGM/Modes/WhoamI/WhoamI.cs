@@ -45,44 +45,49 @@ namespace RGM.Modes
 
             while (true)
             {
-                Player.List.ToList().ForEach(x => x.ShowHint("test1"));
-
-                foreach (var player in Player.List.Where(x => x.IsAlive))
+                try
                 {
-                    PlayersInfo.Add(player, new PlayerInfo
+                    foreach (var player in Player.List.Where(x => x.IsAlive))
                     {
-                        RoleType = player.Role.Type,
-                        MaxHealth = player.MaxHealth,
-                        Health = player.Health,
-                        ActiveEffects = player.ActiveEffects.ToList(),
-                        Items = player.Items.ToList(),
-                        CurrentItem = player.CurrentItem,
-                        Position = new Vector3(player.Position.x, player.Position.y, player.Position.z)
-                    });
+                        PlayersInfo.Add(player, new PlayerInfo
+                        {
+                            RoleType = player.Role.Type,
+                            MaxHealth = player.MaxHealth,
+                            Health = player.Health,
+                            ActiveEffects = player.ActiveEffects.ToList(),
+                            Items = player.Items.ToList(),
+                            CurrentItem = player.CurrentItem,
+                            Position = new Vector3(player.Position.x, player.Position.y, player.Position.z)
+                        });
+                    }
+
+                    foreach (var player in PlayersInfo.Keys.ToList())
+                    {
+                        Player p = Tools.GetRandomValue(PlayersInfo.Keys.Where(x => x != player).ToList());
+
+                        player.Role.Set(PlayersInfo[p].RoleType);
+                        player.MaxHealth = PlayersInfo[p].MaxHealth;
+                        player.Health = PlayersInfo[p].Health;
+
+                        foreach (var effect in PlayersInfo[p].ActiveEffects)
+                            player.EnableEffect(effect, effect.Intensity, effect.Duration);
+
+                        player.ClearItems();
+
+                        foreach (var item in PlayersInfo[p].Items)
+                            player.AddItem(item.Type);
+
+                        player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[p].CurrentItem.Type);
+
+                        player.Position = new Vector3(PlayersInfo[p].Position.x, PlayersInfo[p].Position.y, PlayersInfo[p].Position.z);
+
+                        if (PlayersInfo.ContainsKey(p))
+                            PlayersInfo.Remove(p);
+                    }
                 }
-
-                foreach (var player in PlayersInfo.Keys.ToList())
+                catch (Exception e)
                 {
-                    Player p = Tools.GetRandomValue(PlayersInfo.Keys.ToList());
-
-                    player.Role.Set(PlayersInfo[p].RoleType);
-                    player.MaxHealth = PlayersInfo[p].MaxHealth;
-                    player.Health = PlayersInfo[p].Health;
-
-                    foreach (var effect in PlayersInfo[p].ActiveEffects)
-                        player.EnableEffect(effect, effect.Intensity, effect.Duration);
-
-                    player.ClearItems();
-
-                    foreach (var item in PlayersInfo[p].Items)
-                        player.AddItem(item.Type);
-
-                    player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[p].CurrentItem.Type);
-
-                    player.Position = new Vector3(PlayersInfo[p].Position.x, PlayersInfo[p].Position.y, PlayersInfo[p].Position.z);
-
-                    if (PlayersInfo.ContainsKey(p))
-                        PlayersInfo.Remove(p);
+                    Log.Error(e);
                 }
 
                 yield return Timing.WaitForSeconds(60f);

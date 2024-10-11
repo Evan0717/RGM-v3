@@ -722,10 +722,19 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
+            Color ColorFormat(string cn)
+            {
+                if (ColorUtility.TryParseHtmlString(cn, out Color color))
+                    return color;
+
+                else
+                    return Color.white;
+            }
+
             string BadgeFormat(Player player)
             {
                 if (player.Group != null)
-                    return $"<b>[<color={player.Group.BadgeColor}>{player.Group.BadgeText}</color>]</b> ";
+                    return $"[<color={ColorFormat(player.Group.BadgeColor).ToHex()}>{player.Group.BadgeText}</color>] ";
 
                 else
                     return "";
@@ -737,7 +746,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                     return $"💀 <color=#A4A4A4>자살</color>ㅣ{BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
 
                 else
-                    return $"⚔️ <color=#ff0000>사살</color>ㅣ{BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.Nickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>) -> {BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
+                    return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>" : "사살")}</color>ㅣ{BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.Nickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>) -> {BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
             }
 
             foreach (var player in Player.List.Where(x => x.IsDead))
