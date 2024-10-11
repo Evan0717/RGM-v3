@@ -20,6 +20,20 @@ namespace RGM.Modes
     {
         public static WhoamI Instance;
 
+        public Dictionary<Player, PlayerInfo> PlayersInfo = new Dictionary<Player, PlayerInfo>();
+
+        public class PlayerInfo
+        {
+            public RoleTypeId RoleType { get; set; }
+            public float MaxHealth { get; set; }
+            public float Health { get; set; }
+            public IEnumerable<StatusEffectBase> ActiveEffects { get; set; }
+            public IReadOnlyCollection<Item> Items { get; set; }
+            public Item CurrentItem { get; set; }
+            public Vector3 Position { get; set; }
+            public Quaternion Rotation { get; set; }
+        }
+
         public void OnEnabled()
         {
             Timing.RunCoroutine(OnModeStarted());
@@ -31,52 +45,44 @@ namespace RGM.Modes
 
             while (true)
             {
-                List<RoleTypeId> BlackList = new List<RoleTypeId>()
-                {
-                    RoleTypeId.Filmmaker,
-                    RoleTypeId.Spectator,
-                    RoleTypeId.Overwatch,
-                    RoleTypeId.Scp079
-                };
+                Player.List.ToList().ForEach(x => x.ShowHint("test1"));
 
-                Dictionary<Player, List<object>> PlayersInfo = new Dictionary<Player, List<object>>();
-
-                foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
-                    PlayersInfo.Add(player, new List<object>
+                    PlayersInfo.Add(player, new PlayerInfo
                     {
-                        player.Role.Type,
-                        player.MaxHealth,
-                        player.Health,
-                        player.ActiveEffects,
-                        player.Items,
-                        player.CurrentItem,
-                        player.Position,
-                        player.Rotation
+                        RoleType = player.Role.Type,
+                        MaxHealth = player.MaxHealth,
+                        Health = player.Health,
+                        ActiveEffects = player.ActiveEffects.ToList(),
+                        Items = player.Items.ToList(),
+                        CurrentItem = player.CurrentItem,
+                        Position = new Vector3(player.Position.x, player.Position.y, player.Position.z)
                     });
                 }
 
-                foreach (var player in Player.List.Where(PlayersInfo.ContainsKey))
+                foreach (var player in PlayersInfo.Keys.ToList())
                 {
                     Player p = Tools.GetRandomValue(PlayersInfo.Keys.ToList());
 
-                    player.Role.Set((RoleTypeId)PlayersInfo[p][0]);
-                    player.MaxHealth = (int)PlayersInfo[p][1];
-                    player.Health = (int)PlayersInfo[p][2];
+                    player.Role.Set(PlayersInfo[p].RoleType);
+                    player.MaxHealth = PlayersInfo[p].MaxHealth;
+                    player.Health = PlayersInfo[p].Health;
 
-                    foreach (var effect in (List<StatusEffectBase>)PlayersInfo[p][3])
-                        player.EnableEffect(effect);
+                    foreach (var effect in PlayersInfo[p].ActiveEffects)
+                        player.EnableEffect(effect, effect.Intensity, effect.Duration);
 
-                    player.ClearInventory();
+                    player.ClearItems();
 
-                    foreach (var item in (List<Item>)PlayersInfo[p][4])
+                    foreach (var item in PlayersInfo[p].Items)
                         player.AddItem(item.Type);
 
-                    player.CurrentItem = player.Items.ToList().Find(x => x.Type == (ItemType)PlayersInfo[p][5]);
-                    player.Position = (Vector3)PlayersInfo[p][5];
-                    SLPlayerRotation.Extensions.SetHubRotation(player, (Quaternion)PlayersInfo[p][6]);
+                    player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[p].CurrentItem.Type);
 
-                    PlayersInfo.Remove(p);
+                    player.Position = new Vector3(PlayersInfo[p].Position.x, PlayersInfo[p].Position.y, PlayersInfo[p].Position.z);
+
+                    if (PlayersInfo.ContainsKey(p))
+                        PlayersInfo.Remove(p);
                 }
 
                 yield return Timing.WaitForSeconds(60f);

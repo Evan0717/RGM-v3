@@ -27,6 +27,7 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
@@ -166,14 +167,8 @@ namespace RGM.Modes
                 BomberMans.Remove(ev.Attacker);
                 BomberMans.Add(ev.Player);
 
-                Quaternion Attacker = ev.Attacker.CameraTransform.rotation;
-                Quaternion Player = ev.Player.CameraTransform.rotation;
-
-                ev.Attacker.Role.Set(RoleTypeId.ClassD, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                ev.Player.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
-                SLPlayerRotation.Extensions.SetHubRotation(ev.Attacker, Attacker);
-                SLPlayerRotation.Extensions.SetHubRotation(ev.Player, Player);
+                Server.ExecuteCommand($"/fc {ev.Attacker.Id} ClassD 0");
+                Server.ExecuteCommand($"/fc {ev.Player.Id} Scp049 0");
             }
         }
 

@@ -32,8 +32,6 @@ namespace RGM.Modes
             {
                 Spawned(player);
             }
-
-            yield break;
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
