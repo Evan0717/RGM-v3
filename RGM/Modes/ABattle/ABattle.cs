@@ -88,7 +88,7 @@ namespace RGM.Modes
             {"[희귀] 스테로이드", "25초 간 이동 속도가 많이 증가합니다."},
             {"[희귀] 순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다."},
             {"[희귀] 하이패스", "25초 간 무적이 됩니다."},
-            {"[희귀] 트리플악셀", "여분의 탄약과 함께 COM-45를 지급받습니다."},
+            {"[희귀] 트리플악셀", "여분의 탄약과 함께 최대 탄약이 1/2인 COM-45를 지급받습니다."},
             {"[희귀] 연금", "3분 간, 1분마다 아이템을 하나 획득합니다."},
             {"[희귀] 계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다."},
             {"[희귀] 반창고", "최초 1회, 체력이 절반으로 줄어들었을 경우 즉시 회복합니다."}
@@ -1187,7 +1187,11 @@ namespace RGM.Modes
                     break;
                 case "트리플악셀":
                     Item COM45 = player.AddItem(ItemType.GunCom45);
+                    COM45.As<Firearm>().MaxAmmo /= 2;
+                    COM45.As<Firearm>().Ammo = COM45.As<Firearm>().MaxAmmo;
+
                     player.AddItem(ItemType.Ammo9x19);
+
                     if (player.IsScp)
                         player.CurrentItem = COM45;
                     break;
@@ -1592,37 +1596,37 @@ namespace RGM.Modes
             if (ev.Item != null)
             {
                 if (PickCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>뽑기</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>뽑기</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (EscapeCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (EarthquakeCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>지진</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["일반"]}>지진</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (FollowCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>순간이동</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>순간이동</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (GrapCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (ClockCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.");
 
                 else if (ContractCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.");
 
                 else if (CallSnakeHandsSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (FlashLightSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (FlamethrowerSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 Micro-HID 입니다!", 1.2f);
+                    ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 Micro-HID 입니다!");
 
                 else if (ChaosCoinSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.", 1.2f);
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.");
             }
         }
 
