@@ -725,10 +725,10 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             string MessageFormat()
             {
                 if (ev.Attacker == null)
-                    return $"{ev.Player.Nickname}(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>)ㅣ💀 <color=#A4A4A4>자살</color>";
+                    return $"💀 <color=#A4A4A4>자살</color>ㅣ{ev.Player.Nickname}(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
 
                 else
-                    return $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>) -> {ev.Player.Nickname}(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>)ㅣ⚔️ <color=#ffd700>사살</color>";
+                    return $"⚔️ <color=#ffd700>사살</color>ㅣ{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>) -> {ev.Player.Nickname}(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
             }
 
             foreach (var player in Player.List.Where(x => x.IsDead))

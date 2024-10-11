@@ -11,6 +11,7 @@ using RGM.API;
 using Achievements.Handlers;
 using Exiled.API.Enums;
 using UnityEngine;
+using CustomPlayerEffects;
 
 namespace RGM.Modes
 {
@@ -36,17 +37,40 @@ namespace RGM.Modes
                     RoleTypeId.Overwatch,
                     RoleTypeId.Scp079
                 };
-
-                List<RoleTypeId> Roles = Tools.EnumToList<RoleTypeId>().Where(role => !BlackList.Contains(role)).ToList();
+                Dictionary<Player, List<object>> PlayersInfo = new Dictionary<Player, List<object>>();
 
                 foreach (var player in Player.List.Where(x => !BlackList.Contains(x.Role.Type)))
                 {
-                    Quaternion Player = player.CameraTransform.rotation;
+                    PlayersInfo.Add(player, new List<object>
+                    {
+                        player.Role,
+                        player.MaxHealth,
+                        player.Health,
+                        player.ActiveEffects,
+                        player.Items,
+                        player.Position,
+                        player.Rotation
+                    });
+                }
 
-                    RoleTypeId SelectedRole = Tools.GetRandomValue(Roles);
-                    player.Role.Set(SelectedRole, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                foreach (var player in Player.List.Where(PlayersInfo.ContainsKey))
+                {
+                    Player p = Tools.GetRandomValue(PlayersInfo.Keys.ToList());
 
-                    player.CameraTransform.rotation = Player;
+                    player.Role.Set((RoleTypeId)PlayersInfo[p][0]);
+                    player.MaxHealth = (int)PlayersInfo[p][1];
+                    player.Health = (int)PlayersInfo[p][2];
+
+                    foreach (var effect in (List<StatusEffectBase>)PlayersInfo[p][3])
+                        player.EnableEffect(effect);
+                    
+                    foreach (var item in (List<Item>)PlayersInfo[p][4])
+                        player.AddItem(item);
+
+                    player.Position = (Vector3)PlayersInfo[p][5];
+                    SLPlayerRotation.Extensions.SetHubRotation(player, (Quaternion)PlayersInfo[p][6]);
+
+                    PlayersInfo.Remove(p);
                 }
             }
         }
