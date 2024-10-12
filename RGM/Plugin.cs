@@ -183,6 +183,7 @@ namespace RGM
             Timing.RunCoroutine(ChattingCooldown());
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
+            Timing.RunCoroutine(CustomermizingRotation());
 
             int rn = UnityEngine.Random.Range(1, 11);
 
@@ -810,7 +811,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             string MessageFormat()
             {
                 if (ev.Attacker == null)
-                    return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
+                    return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
 
                 else
                     return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.Nickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{ev.Attacker.Role.Name}</color>) -> {BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{ev.TargetOldRole.GetFullName()}</color>) - {ev.DamageHandler.Type}";
@@ -1063,6 +1064,41 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                         CurrentItem = player.CurrentItem,
                         Position = new Vector3(player.Position.x, player.Position.y, player.Position.z)
                     };
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public IEnumerator<float> CustomermizingRotation()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
+                {
+                    if (UsersManager.UsersCache.ContainsKey(player.UserId))
+                    {
+                        List<string> userValues = UsersManager.UsersCache[player.UserId];
+
+                        string Formatter(string str)
+                        {
+                            return str
+                                .Replace("{name}", player.Nickname)
+                                ;
+                        }
+
+                        if (userValues[5] != "0")
+                            player.DisplayNickname = Formatter(userValues[5]);
+
+                        else
+                            player.DisplayNickname = "";
+
+                        if (userValues[6] != "0")
+                            player.CustomInfo = Formatter(userValues[6]);
+
+                        else
+                            player.CustomInfo = "";
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
