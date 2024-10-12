@@ -18,6 +18,8 @@ using Discord;
 using HarmonyLib;
 using PlayerRoles.Visibility;
 using Exiled.API.Extensions;
+using System.CodeDom;
+using RGM.Interfaces;
 
 namespace RGM
 {
@@ -40,11 +42,7 @@ namespace RGM
         public Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
-        public List<Player> GodModePlayers = new List<Player>();
-        public List<Player> ChatCooldown = new List<Player>();
-
-        public List<string> Requests = new List<string>();
-
+        public Dictionary<string, PlayerInfo> PlayersInfo = new Dictionary<string, PlayerInfo>();
         public Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
@@ -53,6 +51,10 @@ namespace RGM
             {"은제 말뚝", "비수를 꽂는 것처럼 소름끼칩니다!"},
             {"KO 사인", "넉 다운! 상대를 쓰러트리세요!"}
         };
+
+        public List<Player> GodModePlayers = new List<Player>();
+        public List<Player> ChatCooldown = new List<Player>();
+        public List<string> Requests = new List<string>();
 
         List<Transform> First;
         List<Transform> Second;
@@ -587,7 +589,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             }
         }
 
-        public void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
+        public async void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
         {
             if (OnGround.ContainsKey(ev.Player))
                 OnGround.Remove(ev.Player);
@@ -598,6 +600,50 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                 {
                     if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
                         ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
+                }
+            }
+
+            if (PlayersInfo.ContainsKey(ev.Player.UserId))
+            {
+                string UserId = ev.Player.UserId;
+
+                Log.Info(UserId);
+
+                await Task.Delay(1000);
+
+                for (int i=1; i<121; i++)
+                {
+                    foreach (var player in Player.List.Where(x => x.IsHuman))
+                    {
+                        if (UserId == player.UserId)
+                        {
+                            Player p = ev.Player;
+
+                            player.Role.Set(PlayersInfo[p.UserId].RoleType);
+                            player.MaxHealth = PlayersInfo[p.UserId].MaxHealth;
+                            player.Health = PlayersInfo[p.UserId].Health;
+
+                            foreach (var effect in PlayersInfo[p.UserId].ActiveEffects)
+                                player.EnableEffect(effect, effect.Intensity, effect.Duration);
+
+                            player.ClearItems();
+
+                            foreach (var item in PlayersInfo[p.UserId].Items)
+                                player.AddItem(item.Type);
+
+                            player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[p.UserId].CurrentItem.Type);
+
+                            player.Position = new Vector3(PlayersInfo[p.UserId].Position.x, PlayersInfo[p.UserId].Position.y, PlayersInfo[p.UserId].Position.z);
+
+                            if (PlayersInfo.ContainsKey(p.UserId))
+                                PlayersInfo.Remove(p.UserId);
+
+                            PlayersInfo.Remove(player.UserId);
+                            return;
+                        }
+                    }
+
+                    await Task.Delay(1000);
                 }
             }
         }
@@ -618,6 +664,20 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
             if (ev.Reason == SpawnReason.RoundStart)
             {
+                if (!Tools.GetMiniGamesList().Contains(CurrentMode))
+                {
+                    PlayersInfo.Add(ev.Player.UserId, new PlayerInfo
+                    {
+                        RoleType = ev.Player.Role.Type,
+                        MaxHealth = ev.Player.MaxHealth,
+                        Health = ev.Player.Health,
+                        ActiveEffects = ev.Player.ActiveEffects.ToList(),
+                        Items = ev.Player.Items.ToList(),
+                        CurrentItem = ev.Player.CurrentItem,
+                        Position = new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z)
+                    });
+                }
+
                 if (ev.Player.IsScp)
                 {
                     if (UnityEngine.Random.Range(1, 21) == 1 && !IsScp3114Enabled)
@@ -722,19 +782,27 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            Color ColorFormat(string cn)
+            string ColorFormat(string cn)
             {
                 if (ColorUtility.TryParseHtmlString(cn, out Color color))
-                    return color;
+                    return color.ToHex();
 
                 else
-                    return Color.white;
+                {
+                    var cd = Tools.GetColorsDictionary();
+
+                    if (cd.ContainsKey(cn))
+                        return cd[cn];
+
+                    else
+                        return "#FFFFFF";
+                }
             }
 
             string BadgeFormat(Player player)
             {
                 if (player.Group != null)
-                    return $"[<color={ColorFormat(player.Group.BadgeColor).ToHex()}>{player.Group.BadgeText}</color>] ";
+                    return $"[<color={ColorFormat(player.Group.BadgeColor)}>{player.Group.BadgeText}</color>] ";
 
                 else
                     return "";

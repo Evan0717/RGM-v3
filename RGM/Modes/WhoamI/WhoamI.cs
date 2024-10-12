@@ -13,6 +13,7 @@ using Exiled.API.Enums;
 using UnityEngine;
 using CustomPlayerEffects;
 using MultiBroadcast.API;
+using RGM.Interfaces;
 
 namespace RGM.Modes
 {
@@ -21,18 +22,6 @@ namespace RGM.Modes
         public static WhoamI Instance;
 
         public Dictionary<Player, PlayerInfo> PlayersInfo = new Dictionary<Player, PlayerInfo>();
-
-        public class PlayerInfo
-        {
-            public RoleTypeId RoleType { get; set; }
-            public float MaxHealth { get; set; }
-            public float Health { get; set; }
-            public IEnumerable<StatusEffectBase> ActiveEffects { get; set; }
-            public IReadOnlyCollection<Item> Items { get; set; }
-            public Item CurrentItem { get; set; }
-            public Vector3 Position { get; set; }
-            public Quaternion Rotation { get; set; }
-        }
 
         public void OnEnabled()
         {

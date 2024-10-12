@@ -7,6 +7,7 @@ using Exiled.API.Features;
 using MEC;
 using MultiBroadcast;
 using MultiBroadcast.API;
+using RGM.API;
 
 namespace RGM.Modes
 {
@@ -14,23 +15,7 @@ namespace RGM.Modes
     {
         public static DoubleUp Instance;
 
-        public static List<string> BlackListMods = new List<string>()
-        { 
-            "더블업", 
-            "저거너트", 
-            "폭탄 파티", 
-            "개인전",
-            "Gun Game",
-            "HIDE",
-            "GG 클럽",
-            "미니 게임",
-            "해적 룰렛",
-            "스플리프",
-            "무덤",
-            "데드 라인",
-            "폭탄 돌리기",
-            "꼬리 잡기"
-        };
+        public static List<string> BlackListMods = Tools.GetMiniGamesList();
         public static Dictionary<string, List<string>> Mods = RGM.Instance.ModeList;
 
         public static List<string> ModeKeys = RGM.Instance.ModeList.Keys.Where(x => Mods[x][3] != "private" && !BlackListMods.Contains(x)).ToList();
