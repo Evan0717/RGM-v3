@@ -43,6 +43,7 @@ namespace RGM
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
         public Dictionary<string, PlayerInfo> PlayersInfo = new Dictionary<string, PlayerInfo>();
+        public Dictionary<string, PlayerReport> PlayersReport = new Dictionary<string, PlayerReport>();
         public Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
@@ -354,6 +355,19 @@ namespace RGM
 
         public async void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
+            if (!PlayersReport.ContainsKey(ev.Player.UserId))
+            {
+                PlayersReport.Add(ev.Player.UserId, new PlayerReport()
+                {
+                    Kill = 0,
+                    Death = 0,
+                    KillScp = 0,
+                    KillHuman = 0
+                });
+            }
+
+            // --------------------------------------------------------------------
+
             List<string> DefaultValues = Enumerable.Repeat("0", 10).ToList();
 
             if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
@@ -819,6 +833,20 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
             foreach (var player in Player.List.Where(x => x.IsDead))
                 player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>");
+
+            if (ev.Attacker != null && !ev.Attacker.IsNPC)
+            {
+                PlayersReport[ev.Attacker.UserId].Kill += 1;
+
+                if (ev.Player.IsScp)
+                    PlayersReport[ev.Attacker.UserId].KillScp += 1;
+
+                if (!ev.Player.IsScp)
+                    PlayersReport[ev.Attacker.UserId].KillHuman += 1;
+            }
+
+            if (!ev.Player.IsNPC)
+                PlayersReport[ev.Player.UserId].Death += 1;
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
@@ -1074,31 +1102,42 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => !x.IsNPC))
+                try
                 {
-                    if (UsersManager.UsersCache.ContainsKey(player.UserId))
+                    foreach (var player in Player.List.Where(x => !x.IsNPC))
                     {
-                        List<string> userValues = UsersManager.UsersCache[player.UserId];
-
-                        string Formatter(string str)
+                        if (UsersManager.UsersCache.ContainsKey(player.UserId))
                         {
-                            return str
-                                .Replace("{name}", player.Nickname)
-                                ;
+                            List<string> userValues = UsersManager.UsersCache[player.UserId];
+
+                            string Formatter(string str)
+                            {
+                                return str
+                                    .Replace("{name}", player.Nickname)
+                                    .Replace("{kill}", $"{PlayersReport[player.UserId].Kill}")
+                                    .Replace("{death}", $"{PlayersReport[player.UserId].Death}")
+                                    .Replace("{kill_scp}", $"{PlayersReport[player.UserId].KillScp}")
+                                    .Replace("{kill_human}", $"{PlayersReport[player.UserId].KillHuman}")
+                                    ;
+                            }
+
+                            if (userValues[5] != "0")
+                                player.DisplayNickname = Formatter(userValues[5]);
+
+                            else
+                                player.DisplayNickname = "";
+
+                            if (userValues[6] != "0")
+                                player.CustomInfo = Formatter(userValues[6]);
+
+                            else
+                                player.CustomInfo = "";
                         }
-
-                        if (userValues[5] != "0")
-                            player.DisplayNickname = Formatter(userValues[5]);
-
-                        else
-                            player.DisplayNickname = "";
-
-                        if (userValues[6] != "0")
-                            player.CustomInfo = Formatter(userValues[6]);
-
-                        else
-                            player.CustomInfo = "";
                     }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
