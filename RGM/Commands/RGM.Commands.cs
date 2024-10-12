@@ -471,7 +471,6 @@ namespace RGM.Commands
                 {
                     uc[5] = args == "" ? "0" : args;
                     UsersManager.UsersCache[player.UserId] = uc;
-                    player.DisplayNickname = args;
 
                     response = "닉네임 변경 완료!\n-";
 
@@ -480,7 +479,7 @@ namespace RGM.Commands
                 }
                 else
                 {
-                    response = "해당 기능은 50,000원 후원 혜택입니다.\n-";
+                    response = "해당 기능은 상점에서 구매할 수 있습니다.\n-";
                     return false;
                 }
             }
@@ -516,7 +515,6 @@ namespace RGM.Commands
                 {
                     uc[6] = args == "" ? "0" : args;
                     UsersManager.UsersCache[player.UserId] = uc;
-                    player.CustomInfo = args;
 
                     response = "인포 변경 완료!\n-";
 
@@ -525,7 +523,7 @@ namespace RGM.Commands
                 }
                 else
                 {
-                    response = "해당 기능은 100,000원 후원 혜택입니다.\n-";
+                    response = "해당 기능은 상점에서 구매할 수 있습니다.\n-";
                     return false;
                 }
             }
