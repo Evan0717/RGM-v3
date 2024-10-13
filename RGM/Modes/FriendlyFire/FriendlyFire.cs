@@ -164,8 +164,10 @@ namespace RGM.Modes
                     if (ev.Player != player && player.IsScp)
                     {
                         Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.5f);
-                        Server.ExecuteCommand($"/cassie {ev.Player.Role.Name}이(가) {player.Role.Name}의 뒷통수를 쳤습니다.");
                         player.Hurt(125, Exiled.API.Enums.DamageType.Scp939);
+
+                        if (ev.Player.IsDead)
+                            Server.ExecuteCommand($"/cassie {ev.Player.Role.Name}이(가) {player.Role.Name}의 뒷통수를 쳤습니다.");
                     }
                 }
 

@@ -58,6 +58,12 @@ namespace RGM
             {"커스텀 닉네임", "표시되는 플레이어 이름을 수정합니다."},
             {"커스텀 인포", "플레이어 인포를 추가합니다."}
         };
+        public Dictionary<string, string> Paints = new Dictionary<string, string>()
+        {
+            {"블랙골드", "검은색과 금색의 달콤한 콜라보!"},
+            {"핫핑크", "두근두근거리는 핑크들의 콜라보!"},
+            {"무지개", "𝐑𝐀𝐈𝐍𝐁𝐎𝐖"}
+        };
 
         public List<Player> GodModePlayers = new List<Player>();
         public List<Player> ChatCooldown = new List<Player>();
@@ -378,7 +384,7 @@ namespace RGM
 
             // --------------------------------------------------------------------
 
-            List<string> DefaultValues = Enumerable.Repeat("0", 10).ToList();
+            List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
 
             if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
             {
@@ -605,7 +611,6 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 .Replace("{Exp}", $"{uc[0]}")
                                 .Replace("{RP}", $"{uc[1]}")
                                 .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
-                                .Replace("{KillEffect}", $"{(uc[4] == "0" ? "-" : uc[4])}")
                                 , 1.2f);
                         }
                     }

@@ -170,6 +170,7 @@
     <Compile Include="Commands\ClientCommands\ShopFeatures\ApplyKillEffect.cs" />
     <Compile Include="Commands\ClientCommands\BasicFeatures\Chat.cs" />
     <Compile Include="Commands\ClientCommands\BasicFeatures\CurrentMode.cs" />
+    <Compile Include="Commands\ClientCommands\ShopFeatures\ApplyPaint.cs" />
     <Compile Include="Commands\ClientCommands\ShopFeatures\PlayerInfo.cs" />
     <Compile Include="Commands\ClientCommands\BasicFeatures\Report.cs" />
     <Compile Include="Commands\ClientCommands\BasicFeatures\ScpList.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Commands\RemoteAdminCommands\AdminFeatures\Develop.cs" />
     <Compile Include="Commands\RemoteAdminCommands\ShopFeatures\GetPlayerInfo.cs" />
     <Compile Include="Commands\RemoteAdminCommands\AdminFeatures\ManageModes.cs" />
+    <Compile Include="Commands\RemoteAdminCommands\ShopFeatures\Paint.cs" />
     <Compile Include="Commands\RemoteAdminCommands\ShopFeatures\SetPlayerCash.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\Modes.cs" />

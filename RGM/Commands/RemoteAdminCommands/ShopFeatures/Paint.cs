@@ -15,7 +15,7 @@ using UnityEngine;
 namespace RGM.Commands.RemoteAdminCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class AddCustom : ICommand
+    public class AddPaint : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -24,34 +24,34 @@ namespace RGM.Commands.RemoteAdminCommands
 
             if (arguments.Count < 2)
             {
-                response = "플레이어 이름과 커스텀 기능을 입력해주세요.\n-";
+                response = "플레이어 이름과 페인트 이름을 입력해주세요.\n-";
                 return false;
             }
-            else if (RGM.Instance.Customizations.ContainsKey(args))
+            else if (RGM.Instance.Paints.ContainsKey(args))
             {
                 List<string> uc = UsersManager.UsersCache[player.UserId];
 
-                if (uc[7] == "0")
+                if (uc[8] == "0")
                 {
-                    uc[7] = args;
+                    uc[8] = args;
                     UsersManager.UsersCache[player.UserId] = uc;
-                    response = "커스텀 기능 추가 완료!\n-";
+                    response = "페인트 추가 완료!\n-";
 
                     UsersManager.SaveUsers();
                     return true;
                 }
                 else
                 {
-                    if (uc[7].Contains(args))
+                    if (uc[8].Contains(args))
                     {
-                        response = "이미 해당 커스텀 기능을 보유 중입니다.\n-";
+                        response = "이미 해당 페인트를 보유 중입니다.\n-";
                         return false;
                     }
                     else
                     {
-                        uc[7] += $"/{args}";
+                        uc[8] += $"/{args}";
                         UsersManager.UsersCache[player.UserId] = uc;
-                        response = "커스텀 기능 추가 완료!\n-";
+                        response = "페인트 추가 완료!\n-";
 
                         UsersManager.SaveUsers();
                         return true;
@@ -60,22 +60,22 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                response = "존재하지 않는 커스텀 기능 이름입니다.\n-";
+                response = "존재하지 않는 페인트 이름입니다.\n-";
                 return false;
             }
         }
 
-        public string Command { get; } = "addcustomfeature";
+        public string Command { get; } = "addpaint";
 
-        public string[] Aliases { get; } = { "acf" };
+        public string[] Aliases { get; } = { "ap" };
 
-        public string Description { get; } = "특정 유저에게 커스텀 기능을 지급합니다.";
+        public string Description { get; } = "특정 유저에게 페인트를 지급합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class RemoveCustom : ICommand
+    public class RemovePaint : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -84,48 +84,49 @@ namespace RGM.Commands.RemoteAdminCommands
 
             if (arguments.Count < 2)
             {
-                response = "플레이어 이름과 커스텀 기능을 입력해주세요.\n-";
+                response = "플레이어 이름과 페인트 이름을 입력해주세요.\n-";
                 return false;
             }
             else
             {
                 List<string> uc = UsersManager.UsersCache[player.UserId];
 
-                if (uc[7] == "0")
+                if (uc[8] == "0")
                 {
-                    response = "보유한 커스텀 기능이 없습니다.\n-";
+                    response = "보유한 페인트가 없습니다.\n-";
                     return false;
                 }
                 else
                 {
-                    if (uc[7].Contains(args))
+                    if (uc[8].Contains(args))
                     {
-                        List<string> Customs = uc[7].Split('/').ToList();
+                        List<string> Paints = uc[8].Split('/').ToList();
 
-                        Customs.Remove(args);
+                        Paints.Remove(args);
 
-                        uc[7] = string.Join("/", Customs);
-                        if (uc[7] == "") uc[7] = "0";
+                        uc[8] = string.Join("/", Paints);
+                        if (uc[8] == "") uc[8] = "0";
+                        if (uc[4] == args) uc[9] = "0";
                         UsersManager.UsersCache[player.UserId] = uc;
-                        response = "커스텀 기능 제거 완료!\n-";
+                        response = "페인트 제거 완료!\n-";
 
                         UsersManager.SaveUsers();
                         return true;
                     }
                     else
                     {
-                        response = "보유한 커스텀에 해당 기능이 없습니다.\n-";
+                        response = "보유한 페인트가 없습니다.\n-";
                         return false;
                     }
                 }
             }
         }
 
-        public string Command { get; } = "removecustomfeature";
+        public string Command { get; } = "removepaint";
 
-        public string[] Aliases { get; } = { "rcf" };
+        public string[] Aliases { get; } = { "rp" };
 
-        public string Description { get; } = "특정 유저가 보유한 커스텀 기능을 제거합니다.";
+        public string Description { get; } = "특정 유저가 보유한 페인트를 제거합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

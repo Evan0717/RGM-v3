@@ -109,18 +109,18 @@ namespace RGM.API
 
             string GetJoinedInfo(int num)
             {
-                if (uc[3] == "0")
+                if (uc[num] == "0")
                     return "-";
 
                 else
-                    return string.Join(", ", uc[3].Split('/'));
+                    return string.Join(", ", uc[num].Split('/'));
             }
 
             return
 $"""
 
 
-<size=40><b>{player.Nickname}</b>님의 정보</size>
+<size=30><b>{player.Nickname}</b>님의 정보</size>
 
 SteamID: {player.UserId}
 Exp: {uc[0]}
@@ -133,9 +133,13 @@ RP: {uc[1]}
 
 보유한 커스텀: {GetJoinedInfo(7)}
 커스텀 닉네임: {(uc[5] == "0" ? "-" : uc[5])}
-<size=15>{(uc[5] == "0" ? "'.닉네임 <텍스트>' 명령어를 사용하여 커스텀 닉네임을 설정할 수 있습니다." : "")}</size>
+<size=15>{(uc[5] == "0" ? "'.닉네임 <텍스트>' 명령어를 사용하여 커스텀 닉네임을 설정할 수 있습니다." : "이 멋진 닉네임이 모두에게 보입니다!")}</size>
 커스텀 인포: {(uc[6] == "0" ? "-" : uc[6])}
-<size=15>{(uc[6] == "0" ? "'.인포 <텍스트>' 명령어를 사용하여 커스텀 인포를 설정할 수 있습니다." : "")}</size>
+<size=15>{(uc[6] == "0" ? "'.인포 <텍스트>' 명령어를 사용하여 커스텀 인포를 설정할 수 있습니다." : "이 아름다운 언포가 모두에게 보입니다!")}</size>
+
+보유한 페인트: {GetJoinedInfo(8)}
+장착한 페인트: {(uc[9] == "0" ? "-" : uc[9])}
+<size=15>{(uc[9] == "0" ? "'.페인트 <페인트 이름>' 명령어를 사용하여 페인트를 장착할 수 있습니다." : RGM.Instance.Paints[uc[9]])}</size>
 """;
         }
     }
