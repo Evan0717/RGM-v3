@@ -44,6 +44,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
+
+            Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -67,7 +69,7 @@ namespace RGM.Modes
             juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25><i>본인을 제외한 모두를 사살하십시오.</i></size>");
             juggernaut.Position = new Vector3(123.8387f, 988.7921f, 25.39412f);
 
-            List<ItemType> Items = new List<ItemType>() { ItemType.GunLogicer };
+            List<ItemType> Items = new List<ItemType>() { ItemType.GunLogicer, ItemType.Jailbird };
             foreach (var Item in Items)
                 juggernaut.AddItem(Item);
 
@@ -233,6 +235,12 @@ namespace RGM.Modes
         public void OnHandcuffing(Exiled.Events.EventArgs.Player.HandcuffingEventArgs ev)
         {
             ev.IsAllowed = false;
+        }
+
+        public void OnChargingJailbird(Exiled.Events.EventArgs.Item.ChargingJailbirdEventArgs ev)
+        {
+            if (ev.Player == juggernaut)
+                ev.Item.As<Exiled.API.Features.Items.Jailbird>().TotalCharges = 0;
         }
     }
 }

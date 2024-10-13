@@ -1113,6 +1113,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                             string Formatter(string str)
                             {
                                 return str
+                                    .Replace("\\n", "\n")
                                     .Replace("{name}", player.Nickname)
                                     .Replace("{kill}", $"{PlayersReport[player.UserId].Kill}")
                                     .Replace("{death}", $"{PlayersReport[player.UserId].Death}")
