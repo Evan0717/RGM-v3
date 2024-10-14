@@ -2168,7 +2168,7 @@ namespace RGM.Modes
 
                             GGUtils.Gtool.PlaySound("dj", "GmanRoaringSound", VoiceChat.VoiceChatChannel.Intercom);
 
-                            await Task.Delay(1250);
+                            await Task.Delay(2500);
 
                             player.EnableEffect(EffectType.Blinded, 1, 5f);
                             player.EnableEffect(EffectType.SinkHole, 1, 10f);

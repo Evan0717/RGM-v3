@@ -67,7 +67,7 @@ namespace RGM
 목적지에 도달한 경우 <color=yellow>과학자</color>를 사살하여 승리할 수 있게 됩니다. 총을 얻게 되는 거죠!
 """ } },
             { "사회적 거리두기", new List<string>() { "38610B", "최대한 다른 사람과 멀어지세요! 감염 예방이 최우선입니다!", "Distancing", "private", "", "" } },
-            { "도플갱어", new List<string>() { "FA5882", "가짜들 속에서 진짜를 찾아 죽이는 플레이어가 승리합니다.", "Doppelganger", "public", "", "" } },
+            { "도플갱어", new List<string>() { "FA5882", "가짜들 속에서 진짜를 찾아 죽이는 플레이어가 승리합니다.", "Doppelganger", "private", "", "" } },
             { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다. <size=20>(요소 추가 모드만 포함됨)</size>", "DoubleUp", "public", "", "" } },
             { "개인전", new List<string>() { "FA58F4", "최후의 1인이 되세요!", "FreeForAll", "public", "", "" } },
             { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.", "FriendlyFire", "public", "", "" } },
