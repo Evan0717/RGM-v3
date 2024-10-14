@@ -190,6 +190,7 @@ namespace RGM
             PickModes();
             Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
 
+            Timing.RunCoroutine(SendHeartbeat());
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
             Timing.RunCoroutine(IsFallDown());
@@ -463,7 +464,6 @@ namespace RGM
                 ev.Player.Role.Set(Tools.GetRandomValue(SelectedRole()));
                 ev.Player.ClearInventory();
                 ev.Player.Position = GameObject.Find("LobbyStartPoint").transform.position;
-                ev.Player.CameraTransform.Rotate(Vector3.left, 180);
                 ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
 
                 string iv(int num)
@@ -909,6 +909,16 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         public void OnRecontained(Exiled.Events.EventArgs.Scp079.RecontainedEventArgs ev)
         {
             ev.Player.Kill("재격리 버튼에 의해 격리되었습니다.");
+        }
+
+        public IEnumerator<float> SendHeartbeat()
+        {
+            while (true)
+            {
+                Log.Info("heartbeat sent");
+
+                yield return Timing.WaitForSeconds(30);
+            }
         }
 
         public IEnumerator<float> GameStartButton()

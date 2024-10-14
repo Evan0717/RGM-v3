@@ -658,9 +658,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var Request in RGM.Instance.Requests.ToList())
                 {
-                    foreach (var Request in RGM.Instance.Requests.ToList())
+                    try
                     {
                         string[] req = Request.Split('/');
 
@@ -672,6 +672,7 @@ namespace RGM.Modes
                             {
                                 if (req[3] == "Random")
                                     AddAbility(player);
+
                                 else
                                     AddAbility(player, req[3]);
                             }
@@ -681,6 +682,7 @@ namespace RGM.Modes
 
                                 if (req[3] == "Random")
                                     VoteNum = $"{UnityEngine.Random.Range(1, 4)}";
+
                                 else
                                     VoteNum = req[3];
 
@@ -692,15 +694,15 @@ namespace RGM.Modes
                                         PlayerVotes.Remove(player);
                                 });
                             }
-
-                            RGM.Instance.Requests.Remove(Request);
                         }
                     }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
+
+                RGM.Instance.Requests.Clear();
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -2136,7 +2138,7 @@ namespace RGM.Modes
                         foreach (var player in Player.List.Where(x => x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
                         {
                             player.EnableEffect(EffectType.Blinded, 1, 5f * DuplicateCount(ev.Player, "[전설] 괴성"));
-                            player.EnableEffect(EffectType.SinkHole, 1, 5f * DuplicateCount(ev.Player, "[전설] 괴성"));
+                            player.EnableEffect(EffectType.SinkHole, 1, 10f * DuplicateCount(ev.Player, "[전설] 괴성"));
 
                             player.ShowHint("<b><i><color=#B08A03>저</color><color=#9C7A02>?</color><color=#886B02>!</color><color=#755C01>주</color><color=#614C01>받</color><color=#4E3D01>은</color> <color=#271E00>과</color><color=#130F00>성</color></i></b>", 5);
                         }

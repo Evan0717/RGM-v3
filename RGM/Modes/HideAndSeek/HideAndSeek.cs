@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CustomRendering;
@@ -30,7 +31,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            yield return Timing.WaitForSeconds(10f);
+            yield return Timing.WaitForSeconds(1f);
 
             Server.ExecuteCommand($"/mp load HideAndSeek");
 
@@ -42,7 +43,7 @@ namespace RGM.Modes
             foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
-                player.Teleport(RoomType.Hcz106, new Vector3(5.386917f, -12.62177f, -10.56022f));
+                player.Position = Room.Get(RoomType.Hcz106).Position + new Vector3(10.61372f, -13.6618f, 5.159119f);
             }
 
             for (int i = 1; i < 10; i++)
@@ -61,8 +62,7 @@ namespace RGM.Modes
             foreach (var Finder in Finders)
             {
                 Finder.Role.Set(RoleTypeId.Scp939);
-                Finder.Teleport(RoomType.Hcz106, new Vector3(5.386917f, -12.62177f, -10.56022f));
-                Finder.CurrentRoom.Blackout(Remaining + 1);
+                Finder.Position = Room.Get(RoomType.Hcz106).Position + new Vector3(10.61372f, -13.6618f, 5.159119f);
             }
 
             yield return Timing.WaitForSeconds(1f);

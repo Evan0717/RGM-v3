@@ -19,7 +19,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
+            string UserId = Tools.TryGetUserId(arguments.At(0));
             string args = string.Join(" ", arguments.Skip(1)).Trim();
 
             if (arguments.Count < 2)
@@ -29,12 +29,12 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else if (RGM.Instance.Customizations.ContainsKey(args))
             {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
+                List<string> uc = UsersManager.UsersCache[UserId];
 
                 if (uc[7] == "0")
                 {
                     uc[7] = args;
-                    UsersManager.UsersCache[player.UserId] = uc;
+                    UsersManager.UsersCache[UserId] = uc;
                     response = "커스텀 기능 추가 완료!\n-";
 
                     UsersManager.SaveUsers();
@@ -50,7 +50,7 @@ namespace RGM.Commands.RemoteAdminCommands
                     else
                     {
                         uc[7] += $"/{args}";
-                        UsersManager.UsersCache[player.UserId] = uc;
+                        UsersManager.UsersCache[UserId] = uc;
                         response = "커스텀 기능 추가 완료!\n-";
 
                         UsersManager.SaveUsers();
@@ -79,7 +79,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
+            string UserId = Tools.TryGetUserId(arguments.At(0));
             string args = string.Join(" ", arguments.Skip(1)).Trim();
 
             if (arguments.Count < 2)
@@ -89,7 +89,7 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
+                List<string> uc = UsersManager.UsersCache[UserId];
 
                 if (uc[7] == "0")
                 {
@@ -106,7 +106,7 @@ namespace RGM.Commands.RemoteAdminCommands
 
                         uc[7] = string.Join("/", Customs);
                         if (uc[7] == "") uc[7] = "0";
-                        UsersManager.UsersCache[player.UserId] = uc;
+                        UsersManager.UsersCache[UserId] = uc;
                         response = "커스텀 기능 제거 완료!\n-";
 
                         UsersManager.SaveUsers();

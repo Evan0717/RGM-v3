@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -52,7 +53,10 @@ namespace RGM.API
                 "데드 라인",
                 "폭탄 돌리기",
                 "꼬리 잡기",
-                "데스런"
+                "데스런",
+                "고문",
+                "숨바꼭질",
+                "점프맵 라운지"
             };
 
             return Mods;
@@ -230,6 +234,18 @@ RP: {uc[1]}
             }
             else
                 return false;
+        }
+
+        public static string TryGetUserId(string Name)
+        {
+            if (Name.Contains("@steam"))
+                return Name;
+
+            else if (Player.TryGet(Name, out Player player))
+                return player.UserId;
+
+            else
+                return null;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
+            string UserId = Tools.TryGetUserId(arguments.At(0));
             string args = string.Join(" ", arguments.Skip(1)).Trim();
 
             if (arguments.Count < 2)
@@ -29,12 +29,12 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else if (RGM.Instance.KillEffects.ContainsKey(args))
             {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
+                List<string> uc = UsersManager.UsersCache[UserId];
 
                 if (uc[3] == "0")
                 {
                     uc[3] = args;
-                    UsersManager.UsersCache[player.UserId] = uc;
+                    UsersManager.UsersCache[UserId] = uc;
                     response = "킬 이펙트 추가 완료!\n-";
 
                     UsersManager.SaveUsers();
@@ -50,7 +50,7 @@ namespace RGM.Commands.RemoteAdminCommands
                     else
                     {
                         uc[3] += $"/{args}";
-                        UsersManager.UsersCache[player.UserId] = uc;
+                        UsersManager.UsersCache[UserId] = uc;
                         response = "킬 이펙트 추가 완료!\n-";
 
                         UsersManager.SaveUsers();
@@ -79,7 +79,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
+            string UserId = Tools.TryGetUserId(arguments.At(0));
             string args = string.Join(" ", arguments.Skip(1)).Trim();
 
             if (arguments.Count < 2)
@@ -89,7 +89,7 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
+                List<string> uc = UsersManager.UsersCache[UserId];
 
                 if (uc[3] == "0")
                 {
@@ -107,7 +107,7 @@ namespace RGM.Commands.RemoteAdminCommands
                         uc[3] = string.Join("/", Effects);
                         if (uc[3] == "") uc[3] = "0";
                         if (uc[4] == args) uc[4] = "0";
-                        UsersManager.UsersCache[player.UserId] = uc;
+                        UsersManager.UsersCache[UserId] = uc;
                         response = "킬 이펙트 제거 완료!\n-";
 
                         UsersManager.SaveUsers();

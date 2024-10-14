@@ -7,6 +7,7 @@ using Exiled.API.Features;
 using MEC;
 using Mirror;
 using MultiBroadcast;
+using MultiBroadcast.API;
 using RGM.API;
 using UnityEngine;
 
@@ -51,7 +52,11 @@ namespace RGM.Modes
                 pl.Remove(ev.Player);
 
                 if (pl.Count < 2)
+                {
                     Round.IsLocked = false;
+
+                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].Nickname}"));
+                }
             }
         }
     }
