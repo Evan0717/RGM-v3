@@ -201,10 +201,12 @@
     <Compile Include="Modes\Blackout\Blackout.cs" />
     <Compile Include="Modes\Blessing\Blessing.cs" />
     <Compile Include="Modes\BombParty\BombParty.cs" />
+    <Compile Include="Modes\Cell\Cell.cs" />
     <Compile Include="Modes\Collector\Collector.cs" />
     <Compile Include="Modes\DeadLine\DeadLine.cs" />
     <Compile Include="Modes\DeathRun\DeathRun.cs" />
     <Compile Include="Modes\Distancing\Distancing.cs" />
+    <Compile Include="Modes\Doppelganger\Doppelganger.cs" />
     <Compile Include="Modes\DoubleUp\DoubleUp.cs" />
     <Compile Include="Modes\FreeForAll\FreeForAll.cs" />
     <Compile Include="Modes\FriendlyFire\FriendlyFire.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="Modes\GGClub\GGClub.cs" />
     <Compile Include="Modes\Giveaway\Giveaway.cs" />
     <Compile Include="Modes\GunGame\GunGame.cs" />
+    <Compile Include="Modes\HideAndSeek\HideAndSeek.cs" />
     <Compile Include="Modes\HIDE\HIDE.cs" />
     <Compile Include="Modes\HotPotato\HotPotato.cs" />
     <Compile Include="Modes\InfiniteAmmo\InfiniteAmmo.cs" />
@@ -233,6 +236,7 @@
     <Compile Include="Modes\SCPRUSH\SCPRUSH.cs" />
     <Compile Include="Modes\Siberia\Siberia.cs" />
     <Compile Include="Modes\SoulMate\SoulMate.cs" />
+    <Compile Include="Modes\SpeedRun\SpeedRun.cs" />
     <Compile Include="Modes\Spirit\Spirit.cs" />
     <Compile Include="Modes\Spleef\Spleef.cs" />
     <Compile Include="Modes\StandardItems\StandardItems.cs" />

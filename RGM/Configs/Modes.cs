@@ -51,6 +51,7 @@ namespace RGM
 
 3분 이상 버틴다면 스스로를 칭찬해주세요.
 """ } },
+            { "고문", new List<string>() { "D7DF01", "고문을 최대한 오래 버티는 플레이어가 승리합니다.", "Cell", "public", "", "" } },
             { "수집가", new List<string>() { "FFBF00", "SCP 아이템 3개를 가지고 시작합니다.", "Collector", "public", "", "" } },
             { "데드 라인", new List<string>() { "FA8258", "빨간색을 밟지 마세요!", "DeadLine", "public", "",
 """
@@ -66,6 +67,7 @@ namespace RGM
 목적지에 도달한 경우 <color=yellow>과학자</color>를 사살하여 승리할 수 있게 됩니다. 총을 얻게 되는 거죠!
 """ } },
             { "사회적 거리두기", new List<string>() { "38610B", "최대한 다른 사람과 멀어지세요! 감염 예방이 최우선입니다!", "Distancing", "private", "", "" } },
+            { "도플갱어", new List<string>() { "FA5882", "가짜들 속에서 진짜를 찾아 죽이는 플레이어가 승리합니다.", "Doppelganger", "public", "", "" } },
             { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다. <size=20>(요소 추가 모드만 포함됨)</size>", "DoubleUp", "public", "", "" } },
             { "개인전", new List<string>() { "FA58F4", "최후의 1인이 되세요!", "FreeForAll", "public", "", "" } },
             { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.", "FriendlyFire", "public", "", "" } },
@@ -74,6 +76,7 @@ namespace RGM
             { "Gun Game", new List<string>() { "088A08", "대인전에 자신 있으신가요? 실력을 증명하기 위해 우승을 차지하세요!", "GunGame", "public", "", "" } },
             { "HIDE", new List<string>() { "0489B1", "숨 죽이는 그를 사살하십시오.", "HIDE", "public", "", "" } },
             { "GG 클럽", new List<string>() { "C8FE2E", "빠르게 황금색 플랫폼을 사수하세요!", "GGClub", "public", "", "" } },
+            { "숨바꼭질", new List<string>() { "F5A9E1", "꼭꼭 숨으세요! 사냥개가 당신을 찾을 것입니다. 제한 시간동안 버티세요!", "HideAndSeek", "public", "", "" } },
             { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "public", "", "" } },
             { "무한 탄약", new List<string>() { "6E6E6E", "무제한 탄약과 함께 승전보를 울리세요!", "InfiniteAmmo", "private", "", "" } },
             { "츄파츕스", new List<string>() { "A9E2F3", "모두가 제일버드를 가지고 시작합니다.", "Jailbird", "private", "", "" } },
@@ -94,6 +97,7 @@ namespace RGM
             { "SCP 러쉬", new List<string>() { "FE2E2E", "모든 SCP가 한 개체로 통일됩니다.", "SCPRUSH", "public", "", "" } },
             { "시베리아", new List<string>() { "FAFAFA", "최대한 다른 자들과 붙어 온기를 나눠 가지세요!", "Siberia", "private", "몬키키", "" } },
             { "소울메이트", new List<string>() { "FF00FF", "단짝 친구와 모든 것을 함께하세요!", "SoulMate", "public", "", "" } },
+            { "스피드런", new List<string>() { "58FAAC", "누구보다 빠르게 시설에서 탈출하세요. 아, 그리고 핵을 중지하려 시도하지 마세요!", "SpeedRun", "public", "", "" } },
             { "스피릿", new List<string>() { "CED8F6", "죽으면 영혼 상태에 돌입합니다!", "Spirit", "public", "", 
 """
 죽으면 영혼 상태로 부활합니다. 이 상태에서 사망하면 성불됩니다.
