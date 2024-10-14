@@ -53,6 +53,8 @@ namespace RGM.Modes
         public List<ushort> RadarSerials = new List<ushort>();
         public List<ushort> ChaosCoinSerials = new List<ushort>();
 
+        ReferenceHub dj;
+
         public Dictionary<string, string> CommonAbilities = new Dictionary<string, string>()
         {
             {"[일반] 운동", "25%만큼 최대 체력을 추가합니다."},
@@ -611,6 +613,26 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            dj = GGUtils.Gtool.Spawn(RoleTypeId.Overwatch, Vector3.zero);
+
+            Dictionary<ReferenceHub, string> register = new Dictionary<ReferenceHub, string>()
+            {
+                { dj, "dj" }
+            };
+
+            foreach (var reg in register)
+            {
+                try
+                {
+                    GGUtils.Gtool.Register(reg.Key, reg.Value);
+                }
+                catch
+                {
+                }
+            }
+
+            GGUtils.Gtool.PlayerGet("dj").DisplayNickname = "DJ";
+
             Timing.CallDelayed(UnityEngine.Random.Range(1, 11), () => 
             {
                 if (UnityEngine.Random.Range(1, 6) == 1)
@@ -1195,6 +1217,9 @@ namespace RGM.Modes
                         Item Own = Tools.GetRandomValue(player.Items.ToList());
 
                         nearestPlayer.AddItem(Own.Type);
+
+                        player.ShowHint($"{nearestPlayer}(에)게 {Translations.Item[Own.Type]}(을)를 나누어 주었습니다.");
+                        nearestPlayer.ShowHint($"{nearestPlayer}(으)로부터 {Translations.Item[Own.Type]}(을)를 나누어 받았습니다.");
 
                         if (nearestPlayer.IsScp)
                             nearestPlayer.CurrentItem = Own;
@@ -2137,11 +2162,19 @@ namespace RGM.Modes
 
                         foreach (var player in Player.List.Where(x => x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
                         {
-                            player.EnableEffect(EffectType.Blinded, 1, 5f * DuplicateCount(ev.Player, "[전설] 괴성"));
-                            player.EnableEffect(EffectType.SinkHole, 1, 10f * DuplicateCount(ev.Player, "[전설] 괴성"));
+                            GGUtils.Gtool.PlayerGet("dj").DisplayNickname = $"{player.Nickname}의 괴성";
 
-                            player.ShowHint("<b><i><color=#B08A03>저</color><color=#9C7A02>?</color><color=#886B02>!</color><color=#755C01>주</color><color=#614C01>받</color><color=#4E3D01>은</color> <color=#271E00>과</color><color=#130F00>성</color></i></b>", 5);
+                            await Task.Delay(10);
+
+                            GGUtils.Gtool.PlaySound("dj", "GmanRoaringSound", VoiceChat.VoiceChatChannel.Intercom);
+
+                            await Task.Delay(1250);
+
+                            player.EnableEffect(EffectType.Blinded, 1, 5f);
+                            player.EnableEffect(EffectType.SinkHole, 1, 10f);
                         }
+
+                        Player.List.ToList().ForEach(x => x.ShowHint("<b><i><color=#B08A03>저</color><color=#9C7A02>?</color><color=#886B02>!</color><color=#755C01>주</color><color=#614C01>받</color><color=#4E3D01>은</color> <color=#271E00>과</color><color=#130F00>성</color></i></b>", 5));
 
                         for (int i = 1; i < 51; i++)
                         {
@@ -2150,7 +2183,7 @@ namespace RGM.Modes
                             await Task.Delay(100);
                         }
 
-                        await Task.Delay(100 * 1000);
+                        await Task.Delay(98 * 1000 * (1 / 2 * (DuplicateCount(ev.Player, "[전설] 괴성") - 1)));
 
                         if (RoaringSoundCooldown.Contains(ev.Player))
                             RoaringSoundCooldown.Remove(ev.Player);

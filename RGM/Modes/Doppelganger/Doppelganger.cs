@@ -23,20 +23,16 @@ namespace RGM.Modes
 
         public void ApplyInfo(Player player)
         {
-            if (target.Group != null)
+            try
             {
-                if (player.Group == null)
-                    player.Group = new UserGroup { BadgeText = target.Group.BadgeText, BadgeColor = target.Group.BadgeColor };
-
-                else
-                {
-                    player.Group.BadgeText = target.Group.BadgeText;
-                    player.Group.BadgeColor = target.Group.BadgeColor;
-                }
+                player.Group.BadgeText = target.Group.BadgeText;
+                player.Group.BadgeColor = target.Group.BadgeColor;
             }
-
-            player.DisplayNickname = target.DisplayNickname;
-            player.CustomInfo = target.CustomInfo;
+            finally
+            {
+                player.DisplayNickname = target.DisplayNickname;
+                player.CustomInfo = target.CustomInfo;
+            }
         }
 
         public void OnEnabled()
@@ -83,7 +79,7 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     player.ClearBroadcasts();
-                    player.Broadcast(15, $"<size=25><b><color=red>표적</color>({target.DisplayNickname})이(가) 잡혔습니다!\n{AttackerName()}의 승리입니다!</b></size>");
+                    player.AddBroadcast(15, $"<size=25><b><color=red>표적</color>({target.DisplayNickname})이(가) 잡혔습니다!\n{AttackerName()}의 승리입니다!</b></size>");
 
                     if (player.IsAlive)
                         Server.ExecuteCommand($"/fc {player.Id} Tutorial 0");
