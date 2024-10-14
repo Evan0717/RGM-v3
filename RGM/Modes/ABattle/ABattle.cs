@@ -112,7 +112,6 @@ namespace RGM.Modes
             {"[영웅] 고스트룰", "문을 통과할 수 있습니다. (중첩 불가)"},
             {"[영웅] 잠수부", "시야가 개선되고 스테미나가 줄어들지 않습니다. (중첩 불가)"},
             {"[영웅] 점멸", "점프할 때마다 근처 문으로 텔레포트합니다. (쿨타임 15초)"},
-            {"[영웅] 괴성", "다른 팀을 보고 있을 때 마이크를 키면 시설 내 모두를 일시적으로 둔해지게 만듭니다. (쿨타임 100초)"}
         };
         public Dictionary<string, string> LegendAbilities = new Dictionary<string, string>()
         {
@@ -123,7 +122,8 @@ namespace RGM.Modes
             {"[전설] 플래시라이트", "지급된 손전등을 들고 상대를 쳐다보면 눈뽕 공격을 가할 수 있습니다."},
             {"[전설] 킬스트릭", "누군가를 죽일 때마다 새로운 능력을 얻습니다. (중첩 불가)"},
             {"[전설] 화염 방사기", "위력은 20%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다."},
-            {"[전설] 영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다. (중첩 불가)"}
+            {"[전설] 영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다."},
+            {"[전설] 괴성", "적을 보고 있을 때 마이크를 키면 시설 내의 적들을 일시적으로 둔해지게 만듭니다. (쿨타임 100초)"}
         };
         public Dictionary<string, string> MythicAbilities = new Dictionary<string, string>()
         {
@@ -845,12 +845,12 @@ namespace RGM.Modes
                         {
                             int s = player.CurrentSpectatingPlayers.Count();
 
-                            player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(2.5 * s);
-                            player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(2.5 * s);
-                            player.Heal(0.35f * s);
+                            player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(2.5 * s * DuplicateCount(player, "[전설] 영매"));
+                            player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(2.5 * s * DuplicateCount(player, "[전설] 영매"));
+                            player.Heal(0.35f * s * DuplicateCount(player, "[전설] 영매"));
 
                             if (player.Role is Scp079Role scp079)
-                                scp079.Energy += 0.35f * s;
+                                scp079.Energy += 0.35f * s * DuplicateCount(player, "[전설] 영매");
 
                             if (s > 5)
                                 player.IsUsingStamina = false;
@@ -2124,7 +2124,7 @@ namespace RGM.Modes
 
         public async void OnVoiceChatting(Exiled.Events.EventArgs.Player.VoiceChattingEventArgs ev)
         {
-            if (PlayerAbilities[ev.Player].Contains("[영웅] 괴성"))
+            if (PlayerAbilities[ev.Player].Contains("[전설] 괴성"))
             {
                 if (!RoaringSoundCooldown.Contains(ev.Player))
                 {
@@ -2134,8 +2134,10 @@ namespace RGM.Modes
 
                         foreach (var player in Player.List.Where(x => x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
                         {
-                            player.EnableEffect(EffectType.Blinded, 1, 5f * DuplicateCount(ev.Player, "[영웅] 괴성"));
-                            player.EnableEffect(EffectType.SinkHole, 1, 5f * DuplicateCount(ev.Player, "[영웅] 괴성"));
+                            player.EnableEffect(EffectType.Blinded, 1, 5f * DuplicateCount(ev.Player, "[전설] 괴성"));
+                            player.EnableEffect(EffectType.SinkHole, 1, 5f * DuplicateCount(ev.Player, "[전설] 괴성"));
+
+                            player.ShowHint("<b><i><color=#B08A03>저</color><color=#9C7A02>?</color><color=#886B02>!</color><color=#755C01>주</color><color=#614C01>받</color><color=#4E3D01>은</color> <color=#271E00>과</color><color=#130F00>성</color></i></b>", 5);
                         }
 
                         for (int i = 1; i < 51; i++)

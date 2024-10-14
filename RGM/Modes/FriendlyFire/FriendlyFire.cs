@@ -77,7 +77,6 @@ namespace RGM.Modes
                     }
                 }
             }
-
             else if (ev.Player.Role.Type == RoleTypeId.Scp173)
             {
                 if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player))
@@ -96,7 +95,6 @@ namespace RGM.Modes
                     }
                 }
             }
-
             else if (ev.Player.Role.Type == RoleTypeId.Scp106)
             {
                 if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player))
