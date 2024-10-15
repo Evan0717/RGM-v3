@@ -1219,7 +1219,7 @@ namespace RGM.Modes
                         nearestPlayer.AddItem(Own.Type);
 
                         player.ShowHint($"{nearestPlayer.Nickname}(에)게 {Translations.Item[Own.Type]}(을)를 나누어 주었습니다.");
-                        nearestPlayer.ShowHint($"{nearestPlayer.Nickname}(으)로부터 {Translations.Item[Own.Type]}(을)를 나누어 받았습니다.");
+                        nearestPlayer.ShowHint($"{player.Nickname}(으)로부터 {Translations.Item[Own.Type]}(을)를 나누어 받았습니다.");
 
                         if (nearestPlayer.IsScp)
                             nearestPlayer.CurrentItem = Own;
