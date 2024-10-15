@@ -23,6 +23,8 @@ using Exiled.API.Extensions;
 using InventorySystem.Items.MicroHID;
 using PluginAPI.Events;
 using System.Diagnostics.Tracing;
+using SCPSLAudioApi.AudioCore;
+using Mirror;
 
 namespace RGM.Modes
 {
@@ -52,8 +54,6 @@ namespace RGM.Modes
         public List<ushort> FlamethrowerSerials = new List<ushort>();
         public List<ushort> RadarSerials = new List<ushort>();
         public List<ushort> ChaosCoinSerials = new List<ushort>();
-
-        ReferenceHub dj;
 
         public Dictionary<string, string> CommonAbilities = new Dictionary<string, string>()
         {
@@ -613,26 +613,6 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            dj = GGUtils.Gtool.Spawn(RoleTypeId.Overwatch, Vector3.zero);
-
-            Dictionary<ReferenceHub, string> register = new Dictionary<ReferenceHub, string>()
-            {
-                { dj, "dj" }
-            };
-
-            foreach (var reg in register)
-            {
-                try
-                {
-                    GGUtils.Gtool.Register(reg.Key, reg.Value);
-                }
-                catch
-                {
-                }
-            }
-
-            GGUtils.Gtool.PlayerGet("dj").DisplayNickname = "DJ";
-
             Timing.CallDelayed(UnityEngine.Random.Range(1, 11), () => 
             {
                 if (UnityEngine.Random.Range(1, 6) == 1)
@@ -644,7 +624,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
                     try
                     {
@@ -864,7 +844,7 @@ namespace RGM.Modes
             {
                 try
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in Player.List.Where(x => !!x.IsNPC))
                     {
                         if (player.IsAlive && PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[전설] 영매"))
                         {
@@ -980,7 +960,7 @@ namespace RGM.Modes
             {
                 try
                 {
-                    foreach (var player in Player.List.Where(x => x.IsAlive))
+                    foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive))
                     {
                         if (PlayerAbilities.ContainsKey(player))
                         {
@@ -1406,7 +1386,7 @@ namespace RGM.Modes
                         ItemType.SCP330
                     };
 
-                    foreach (var team in Player.List.Where(x => x.IsAlive && x.LeadingTeam == player.LeadingTeam && Vector3.Distance(player.Position, x.Position) < 11))
+                    foreach (var team in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == player.LeadingTeam && Vector3.Distance(player.Position, x.Position) < 11))
                         team.AddItem(Tools.GetRandomValue(HealItem));
 
                     break;
@@ -1917,7 +1897,7 @@ namespace RGM.Modes
 
                 if (PlayerAbilities[ev.Player].Contains("[영웅] 슈퍼 스타"))
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in Player.List.Where(x => !x.IsNPC))
                         player.AddBroadcast(10, $"<size=20><color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{Translations.Role[ev.Player.Role.Type]}</color>)(은)는 " +
                             $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{Translations.Role[ev.Attacker.Role.Type]}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.</size>");
                 }
@@ -1959,7 +1939,7 @@ namespace RGM.Modes
 
                     if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
                     {
-                        foreach (var player in Player.List.Where(x => !x.IsScp))
+                        foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
                         {
                             if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
                                 player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
@@ -2069,7 +2049,7 @@ namespace RGM.Modes
                 {
                     int PowerCount = 0;
 
-                    foreach (var player in Player.List.Where(x => x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
+                    foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
                     {
                         if (Vector3.Distance(player.Position, ev.Player.Position) < 11)
                             PowerCount++;
@@ -2160,10 +2140,12 @@ namespace RGM.Modes
                     {
                         RoaringSoundCooldown.Add(ev.Player);
 
-                        GGUtils.Gtool.PlayerGet("dj").DisplayNickname = $"{ev.Player.Nickname}의 괴성";
-                        GGUtils.Gtool.PlaySound("dj", "GmanRoaringSound", VoiceChat.VoiceChatChannel.Intercom);
+                        string sn = $"{UnityEngine.Random.value}";
+                        Player dj = Tools.SpawnDJ($"{ev.Player.Nickname}의 괴성", RoleTypeId.Spectator, Vector3.zero, sn);
 
-                        foreach (var player in Player.List.Where(x => x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
+                        GGUtils.Gtool.PlaySound(sn, "GmanRoaringSound", VoiceChat.VoiceChatChannel.Intercom);
+
+                        foreach (var player in Player.List.Where(x => !x.IsNPC && x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
                         {
                             player.EnableEffect(EffectType.Flashed, 1, 0.3f);
                             player.EnableEffect(EffectType.Blinded, 1, 7.5f);
@@ -2181,6 +2163,11 @@ namespace RGM.Modes
 
                             await Task.Delay(100);
                         }
+
+                        Timing.CallDelayed(5f, () =>
+                        {
+                            NetworkServer.Destroy(dj.ReferenceHub.gameObject);
+                        });
 
                         Timing.CallDelayed(100 * (1 / DuplicateCount(ev.Player, "[전설] 괴성")), () =>
                         {
@@ -2313,7 +2300,7 @@ namespace RGM.Modes
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] 고대의 존재 압도"))
             {
-                foreach (var player in Player.List.Where(x => !x.IsScp && x.IsAlive))
+                foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp && x.IsAlive))
                 {
                     if (player.CurrentRoom == ev.Room)
                         player.EnableEffect(EffectType.SinkHole, 1, 1 * DuplicateCount(ev.Player, "[전용] 고대의 존재 압도"));

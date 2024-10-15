@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.Events.Commands.Reload;
+using PlayerRoles;
 using RGM.Features;
 using UnityEngine;
 
@@ -246,6 +247,34 @@ RP: {uc[1]}
 
             else
                 return null;
+        }
+
+        public static Player SpawnDJ(string name, RoleTypeId roleTypeId, Vector3 position, string sn = null)
+        {
+            ReferenceHub dj = GGUtils.Gtool.Spawn(roleTypeId, position);
+
+            if (sn == null)
+                sn = $"{UnityEngine.Random.value}";
+
+            Dictionary<ReferenceHub, string> register = new Dictionary<ReferenceHub, string>()
+            {
+                { dj, sn }
+            };
+
+            foreach (var reg in register)
+            {
+                try
+                {
+                    GGUtils.Gtool.Register(reg.Key, reg.Value);
+                }
+                catch
+                {
+                }
+            }
+
+            GGUtils.Gtool.PlayerGet(sn).DisplayNickname = name;
+
+            return Player.Get(dj);
         }
     }
 }

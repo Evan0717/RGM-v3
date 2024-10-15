@@ -35,7 +35,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
                     Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes));
 

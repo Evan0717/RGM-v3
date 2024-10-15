@@ -22,7 +22,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
 
-        ReferenceHub dj;
+        Player dj;
 
         public Player GetTarget(Player attacker)
         {
@@ -54,25 +54,8 @@ namespace RGM.Modes
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 
-            dj = GGUtils.Gtool.Spawn(RoleTypeId.Tutorial, new Vector3(82.51834f, 1014.692f, -50.10588f));
+            dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(82.51834f, 1014.692f, -50.10588f), "dj");
 
-            Dictionary<ReferenceHub, string> register = new Dictionary<ReferenceHub, string>()
-            {
-                { dj, "dj" }
-            };
-
-            foreach (var reg in register)
-            {
-                try
-                {
-                    GGUtils.Gtool.Register(reg.Key, reg.Value);
-                }
-                catch
-                {
-                }
-            }
-
-            GGUtils.Gtool.PlayerGet("dj").DisplayNickname = "DJ";
             GGUtils.Gtool.PlaySound("dj", "Initial_D_Dancing", VoiceChat.VoiceChatChannel.Intercom, 25, true);
 
             Timing.RunCoroutine(DJHeadBanging());
@@ -109,7 +92,7 @@ namespace RGM.Modes
             {
                 if (HeadUp)
                 {
-                    GGUtils.Gtool.Rotate(dj, new Vector3(0, -1f, 0));
+                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, -1f, 0));
 
                     HeadUp = false;
 
@@ -117,7 +100,7 @@ namespace RGM.Modes
                 }
                 else
                 {
-                    GGUtils.Gtool.Rotate(dj, new Vector3(0, 1f, 0));
+                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, 1f, 0));
 
                     HeadUp = true;
 

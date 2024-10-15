@@ -33,7 +33,7 @@ namespace RGM.Modes
         public bool IsSongStopped = false;
         public int Phase = 1;
 
-        ReferenceHub dj;
+        Player dj;
 
         public void OnEnabled()
         {
@@ -52,25 +52,7 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load GGClub");
 
-            dj = GGUtils.Gtool.Spawn(RoleTypeId.Tutorial, new Vector3(76.17068f, 1015.741f, -46.65614f));
-
-            Dictionary<ReferenceHub, string> register = new Dictionary<ReferenceHub, string>()
-            {
-                { dj, "dj" }
-            };
-
-            foreach (var reg in register)
-            {
-                try
-                {
-                    GGUtils.Gtool.Register(reg.Key, reg.Value);
-                }
-                catch
-                {
-                }
-            }
-
-            GGUtils.Gtool.PlayerGet("dj").DisplayNickname = "DJ";
+            dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(76.17068f, 1015.741f, -46.65614f), "dj");
 
             foreach (var player in Player.List.Where(x => !x.IsNPC).ToList())
             {
@@ -98,8 +80,6 @@ namespace RGM.Modes
 
             ClubLights = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "ClubLight").ToList();
             Pads = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Pad").ToList();
-
-            AudioPlayerBase val = AudioPlayerBase.Get(dj);
 
             while (Phase < 11)
             {
@@ -183,7 +163,7 @@ namespace RGM.Modes
             {
                 if (HeadUp)
                 {
-                    GGUtils.Gtool.Rotate(dj, new Vector3(0, -1f, 0));
+                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, -1f, 0));
 
                     HeadUp = false;
 
@@ -191,7 +171,7 @@ namespace RGM.Modes
                 }
                 else
                 {
-                    GGUtils.Gtool.Rotate(dj, new Vector3(0, 1f, 0));
+                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, 1f, 0));
 
                     HeadUp = true;
 
