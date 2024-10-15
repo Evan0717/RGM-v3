@@ -43,7 +43,7 @@ namespace RGM.Modes
             foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
-                player.Position = Room.Get(RoomType.Hcz106).Position + new Vector3(10.61372f, -13.6618f, 5.159119f);
+                player.Position = GameObject.Find("StartPoint").transform.position;
             }
 
             for (int i = 1; i < 10; i++)
@@ -62,7 +62,7 @@ namespace RGM.Modes
             foreach (var Finder in Finders)
             {
                 Finder.Role.Set(RoleTypeId.Scp939);
-                Finder.Position = Room.Get(RoomType.Hcz106).Position + new Vector3(10.61372f, -13.6618f, 5.159119f);
+                Finder.Position = GameObject.Find("StartPoint").transform.position;
             }
 
             yield return Timing.WaitForSeconds(1f);

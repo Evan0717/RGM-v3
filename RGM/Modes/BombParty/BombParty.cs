@@ -9,6 +9,7 @@ using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp244;
 using MEC;
 using Mirror;
+using MultiBroadcast.API;
 using RGM.API;
 using UnityEngine;
 
@@ -107,7 +108,11 @@ namespace RGM.Modes
                 pl.Remove(ev.Player);
 
                 if (pl.Count < 2)
+                {
                     Round.IsLocked = false;
+
+                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].Nickname}"));
+                }
             }
         }
     }
