@@ -129,7 +129,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> MythicAbilities = new Dictionary<string, string>()
         {
-            {"[신화] 로켓 런처", "5% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (중첩 불가)"},
+            {"[신화] 로켓 런처", "20% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (중첩 불가)"},
             {"[신화] 스피릿", "2초마다 영혼 상태가 됩니다! (중첩 불가)"},
             {"[신화] 눈빛맨", "상대는 눈에 띄거나 근처에 있는 것만으로도 압도당할 것입니다! (중첩 불가)"},
             {"[신화] 차원 강탈자", "죽인 누군가의 능력을 모조리 흡수합니다! (중첩 불가)"},
@@ -603,7 +603,7 @@ namespace RGM.Modes
                 }
                 else
                 {
-                    string abilitiesText = string.Join(", ", PlayerAbilities[player]);
+                    string abilitiesText = string.Join(", ", PlayerAbilities[player].GroupBy(x => x).Select(g => g.Count() > 1 ? $"{g.Key} ({g.Count()})" : g.Key).ToList());
                     abilitiesText = ColorFormat(abilitiesText);
 
                     player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
@@ -2061,7 +2061,7 @@ namespace RGM.Modes
 
                 if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
                 {
-                    if (UnityEngine.Random.Range(1, 21) == 1)
+                    if (UnityEngine.Random.Range(1, 6) == 1)
                         Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
                 }
 
@@ -2165,8 +2165,10 @@ namespace RGM.Modes
 
                         foreach (var player in Player.List.Where(x => x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
                         {
+                            player.EnableEffect(EffectType.Flashed, 1, 0.3f);
                             player.EnableEffect(EffectType.Blinded, 1, 7.5f);
                             player.EnableEffect(EffectType.SinkHole, 1, 12f);
+                            player.EnableEffect(EffectType.Slowness, 150, 5.5f);
                         }
 
                         await Task.Delay(650);
