@@ -75,7 +75,6 @@ namespace RGM.Modes
             {"[일반] 횃불", "랜턴과 노란 사탕을 받습니다."},
             {"[일반] 잠행", "발걸음 소리가 줄어듭니다."},
             {"[일반] 위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다."},
-            {"[일반] 저체중", "점프 속도가 20% 증가합니다."},
             {"[일반] 지진", "지급된 동전을 튕기면 시설 내 모두에게 화면 흔들림 효과를 일시적으로 부여합니다."},
             {"[일반] 우애", "자신이 가진 아이템 중 하나를 복사하여 근처에 있는 플레이어에게 지급합니다."},
             {"[일반] 무지개", "무지개 사탕을 받습니다."},
@@ -133,7 +132,7 @@ namespace RGM.Modes
             {"[신화] 스피릿", "2초마다 영혼 상태가 됩니다! (중첩 불가)"},
             {"[신화] 눈빛맨", "상대는 눈에 띄거나 근처에 있는 것만으로도 압도당할 것입니다! (중첩 불가)"},
             {"[신화] 차원 강탈자", "죽인 누군가의 능력을 모조리 흡수합니다! (중첩 불가)"},
-            {"[신화] 조커", "현실을 부정하라고~? (중첩 불가)"}
+            {"[신화] 조커", "사망할 경우 3초간 무적이 되고, 최대 체력이 1~3배로 조정되고, 상대방의 능력 1개를 삭제시키고, 전설 능력 2개를 얻습니다."}
         };
         public Dictionary<string, string> ClassDAbilities = new Dictionary<string, string>()
         {
@@ -164,7 +163,7 @@ namespace RGM.Modes
         {
             {"[전용] 혼돈의 카오스", "SCP-018을 지급받습니다."},
             {"[전용] 혼돈의 손길", "지급된 동전을 튕기면 보유한 능력을 전부 삭제합니다."},
-            {"[전용] 혼돈의 가방", "아이템 인벤토리가 전부 채워질 때까지 아이템을 받습니다."}
+            {"[전용] 혼돈의 가방", "인벤토리에 있는 아이템들이 전부 변경됩니다."}
         };
         public Dictionary<string, string> SnakeAbilities = new Dictionary<string, string>()
         {
@@ -1184,8 +1183,6 @@ namespace RGM.Modes
                     if (player.IsScp)
                         player.CurrentItem = ec;
                     break;
-                case "저체중":
-                    if (player.Role is FpcRole fpc) fpc.JumpingSpeed *= 12 / 10; break;
                 case "지진":
                     Item ec_1 = player.AddItem(ItemType.Coin);
                     EarthquakeCoinSerials.Add(ec_1.Serial);
@@ -1249,10 +1246,14 @@ namespace RGM.Modes
                     { 
                         if (player.GetEffect(EffectType.MovementBoost).Intensity >= 50)
                             player.GetEffect(EffectType.MovementBoost).Intensity -= 50; 
+
+                        else
+                            player.GetEffect(EffectType.MovementBoost).Intensity = 0;
                     });
                     break;
                 case "하이패스":
                     RGM.Instance.GodModePlayers.Add(player);
+
                     Timing.CallDelayed(25, () =>
                     {
                         if (RGM.Instance.GodModePlayers.Contains(player))
@@ -1430,12 +1431,13 @@ namespace RGM.Modes
                 case "혼돈의 가방":
                     List<ItemType> ChaosBag = Tools.EnumToList<ItemType>();
 
-                    while (!player.IsInventoryFull)
+                    foreach (var cb in player.Items)
                     {
-                        Item ChaosBagItem = player.AddItem(Tools.GetRandomValue(ChaosBag));
-
-                        if (player.IsScp)
-                            player.CurrentItem = ChaosBagItem;
+                        if (!cb.IsAmmo)
+                        {
+                            player.RemoveItem(cb);
+                            player.AddItem(Tools.GetRandomValue(ChaosBag));
+                        }
                     }
                     break;
                 case "세치 혀":
@@ -1815,6 +1817,10 @@ namespace RGM.Modes
 
                     if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 20)
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
+
+                    else
+                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
+
                     if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                         RGM.Instance.GodModePlayers.Remove(ev.Player);
 
@@ -1855,10 +1861,16 @@ namespace RGM.Modes
 
                     RGM.Instance.GodModePlayers.Add(ev.Player);
 
-                    AddAbility(ev.Player, Tools.GetRandomValue(LegendAbilities.Keys.ToList()));
-                    AddAbility(ev.Player, Tools.GetRandomValue(MythicAbilities.Keys.ToList()));
+                    if (PlayerAbilities.ContainsKey(ev.Attacker))
+                    {
+                        if (PlayerAbilities[ev.Attacker].Count > 0)
+                            PlayerAbilities[ev.Attacker].Remove(Tools.GetRandomValue(PlayerAbilities[ev.Attacker].ToList()));
+                    }
 
-                    await Task.Delay(10000);
+                    for (int i = 1; i < 3; i++)
+                        AddAbility(ev.Player, Tools.GetRandomValue(LegendAbilities.Keys.ToList()));
+
+                    await Task.Delay(3000);
 
                     if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                         RGM.Instance.GodModePlayers.Remove(ev.Player);
@@ -2095,6 +2107,9 @@ namespace RGM.Modes
                     {
                         if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 25)
                             ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 25;
+
+                        else
+                            ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
                     });
                 }
             }
@@ -2253,6 +2268,9 @@ namespace RGM.Modes
                 {
                     if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 25)
                         ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 25;
+
+                    else
+                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
                 });
             }
         }
