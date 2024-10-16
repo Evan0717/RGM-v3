@@ -70,7 +70,6 @@ namespace RGM.Modes
             {"[일반] 회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)"},
             {"[일반] 보급", "탄약이 랜덤하게 지급됩니다."},
             {"[일반] 정화", "초록 사탕을 받습니다."},
-            {"[일반] 무기 전문가", "SCP-1853을 받습니다."},
             {"[일반] 신내림", "당신을 지켜보는 관전자가 5초 이내로 나타나면 능력 2~3개를 추가로 얻습니다."},
             {"[일반] 횃불", "랜턴과 노란 사탕을 받습니다."},
             {"[일반] 잠행", "발걸음 소리가 줄어듭니다."},
@@ -78,7 +77,8 @@ namespace RGM.Modes
             {"[일반] 지진", "지급된 동전을 튕기면 시설 내 모두에게 화면 흔들림 효과를 일시적으로 부여합니다."},
             {"[일반] 우애", "자신이 가진 아이템 중 하나를 복사하여 근처에 있는 플레이어에게 지급합니다."},
             {"[일반] 무지개", "무지개 사탕을 받습니다."},
-            {"[일반] 바디백", "몸통 데미지 경감 효과가 3% 추가됩니다."}
+            {"[일반] 바디백", "몸통 데미지 경감 효과가 3% 추가됩니다."},
+            {"[일반] 대물림", "본인이 죽을 경우 아군에게 자신의 능력 1개를 양도합니다."}
         };
         public Dictionary<string, string> RareAbilities = new Dictionary<string, string>()
         {
@@ -96,7 +96,9 @@ namespace RGM.Modes
             {"[희귀] 트리플악셀", "여분의 탄약과 함께 최대 탄약이 1/2인 COM-45를 지급받습니다."},
             {"[희귀] 연금", "3분 간, 1분마다 아이템을 하나 획득합니다."},
             {"[희귀] 계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다."},
-            {"[희귀] 반창고", "최초 1회, 체력이 절반 이하로 줄어들었을 경우 즉시 회복합니다."}
+            {"[희귀] 반창고", "최초 1회, 체력이 절반 이하로 줄어들었을 경우 즉시 회복합니다."},
+            {"[희귀] 무기 전문가", "SCP-1853을 받습니다."},
+            {"[희귀] 만병통치약", "SCP-500을 받습니다."},
         };
         public Dictionary<string, string> EpicAbilities = new Dictionary<string, string>()
         {
@@ -1140,12 +1142,6 @@ namespace RGM.Modes
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
                     break;
-                case "무기 전문가":
-                    Item scp1853 = player.AddItem(ItemType.SCP1853);
-
-                    if (player.IsScp)
-                        player.CurrentItem = scp1853;
-                    break;
                 case "신내림":
                     bool Pass = false;
 
@@ -1289,6 +1285,18 @@ namespace RGM.Modes
 
                     if (player.IsScp)
                         player.CurrentItem = cc_1;
+                    break;
+                case "무기 전문가":
+                    Item scp1853 = player.AddItem(ItemType.SCP1853);
+
+                    if (player.IsScp)
+                        player.CurrentItem = scp1853;
+                    break;
+                case "만병통치약":
+                    Item scp500 = player.AddItem(ItemType.SCP500);
+
+                    if (player.IsScp)
+                        player.CurrentItem = scp500;
                     break;
                 case "테러리스트의 유품":
                     player.TryAddCandy(CandyKindID.Pink);
@@ -1940,23 +1948,49 @@ namespace RGM.Modes
         {
             try
             {
-                if (ev.Attacker != null && PlayerAbilities.ContainsKey(ev.Attacker) && PlayerAbilities.ContainsKey(ev.Player))
+                if (PlayerAbilities.ContainsKey(ev.Attacker) && PlayerAbilities.ContainsKey(ev.Player))
                 {
-                    if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
+                    if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
                     {
-                        if (UnityEngine.Random.Range(1, 3) == 1)
-                            AddAbilityVote(ev.Attacker);
+                        for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
+                        {
+                            List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam).ToList();
+                            Player Get = null;
+                            string Ability = null;
 
-                        else
-                            AddAbility(ev.Attacker);
+                            if (GetList.Count > 0)
+                            {
+                                Get = Tools.GetRandomValue(GetList);
+                                Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
+
+                                if (PlayerAbilities.ContainsKey(Get))
+                                    PlayerAbilities[Get].Add(Ability);
+
+                                ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
+                                Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
+                            }
+                            else
+                                ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
+                        }
                     }
 
-                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                    if (ev.Attacker != null)
                     {
-                        foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
+                        if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
                         {
-                            if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                                player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
+                            if (UnityEngine.Random.Range(1, 3) == 1)
+                                AddAbilityVote(ev.Attacker);
+
+                            else
+                                AddAbility(ev.Attacker);
+                        }
+                        if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                        {
+                            foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
+                            {
+                                if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
+                                    player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
+                            }
                         }
                     }
                 }
