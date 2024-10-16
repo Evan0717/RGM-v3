@@ -329,7 +329,6 @@ namespace RGM
         {
             try
             {
-                // 라운드 종료 시 Exp, RP 1씩 지급
                 foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
                     UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + 1).ToString();
@@ -344,6 +343,7 @@ namespace RGM
             }
 
             Tools.TryInstallMode("FriendlyFire");
+            Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id).ToList())}. 1");
 
             await Task.Delay(19000);
 

@@ -193,7 +193,7 @@ namespace RGM.Modes
         };
         public Dictionary<string, string> Scp096Abilities = new Dictionary<string, string>()
         {
-            {"[전용] 격노", "분노 때에는 데미지를 50%만 받습니다. (중첩 불가)"},
+            {"[전용] 격노", "분노 때에는 데미지를 50%만 받습니다."},
             {"[전용] 별자리 찢기", "25% 확률로 공격한 대상을 즉사시킵니다. (중첩 불가)"},
             {"[전용] 천리안", "분노 시에 30m 내의 인간들을 모두 목격자에 포함시킵니다. (중첩 불가)"},
             {"[전용] 원수", "분노 충전 시간이 1/2배가 됩니다."}
@@ -564,7 +564,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp079.GainingLevel += OnGainingLevel;
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
             Exiled.Events.Handlers.Scp079.ZoneBlackout += OnZoneBlackout;
-            Exiled.Events.Handlers.Scp079.ChangingSpeakerStatus += OnChangingSpeakerStatus;
 
             MapEditorReborn.Events.Handlers.Map.LoadingMap += OnLoadingMap;
 
@@ -1353,7 +1352,7 @@ namespace RGM.Modes
                     {
                         Item Item = Item.Create(Tools.GetRandomValue(ItemTypes));
 
-                        Item.CreatePickup(new Vector3(player.Position.x, player.Position.y + 1, player.Position.z));
+                        Item.CreatePickup(new Vector3(player.Position.x, player.Position.y + 2, player.Position.z));
                     }
                     break;
                 case "플래시라이트":
@@ -2117,7 +2116,7 @@ namespace RGM.Modes
                     if (ev.Player.Role is Scp096Role Scp096)
                     {
                         if (Scp096.RageManager.IsEnraged && ev.Attacker != null && ev.Attacker != ev.Player)
-                            ev.DamageHandler.Damage /= 2;
+                            ev.DamageHandler.Damage /= DuplicateCount(ev.Player, "[전용] 격노") + 1;
                     }
                 }
 
@@ -2226,6 +2225,14 @@ namespace RGM.Modes
                                 RoaringSoundCooldown.Remove(ev.Player);
                         });
                     }
+                }
+            }
+            if (PlayerAbilities[ev.Player].Contains("[전용] 고대의 존재 압도"))
+            {
+                foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp && x.IsAlive))
+                {
+                    if (player.CurrentRoom == ev.Player.CurrentRoom)
+                        player.EnableEffect(EffectType.SinkHole, 1, 0.1f * DuplicateCount(ev.Player, "[전용] 고대의 존재 압도"));
                 }
             }
         }
@@ -2346,18 +2353,6 @@ namespace RGM.Modes
                     Room SelectedRoom = Tools.GetRandomValue(Room.List.ToList());
 
                     SelectedRoom.TurnOffLights(10);
-                }
-            }
-        }
-
-        public void OnChangingSpeakerStatus(Exiled.Events.EventArgs.Scp079.ChangingSpeakerStatusEventArgs ev)
-        {
-            if (PlayerAbilities[ev.Player].Contains("[전용] 고대의 존재 압도"))
-            {
-                foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp && x.IsAlive))
-                {
-                    if (player.CurrentRoom == ev.Room)
-                        player.EnableEffect(EffectType.SinkHole, 1, 1 * DuplicateCount(ev.Player, "[전용] 고대의 존재 압도"));
                 }
             }
         }

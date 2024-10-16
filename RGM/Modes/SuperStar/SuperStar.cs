@@ -27,10 +27,6 @@ namespace RGM.Modes
                  );
 
             Exiled.Events.Handlers.Player.Left += OnLeft;
-
-            Harmony harmony = new Harmony($"SuperStar - {DateTime.Now.Ticks}");
-            harmony.Patch(AccessTools.Method(typeof(GlobalChatIndicator), nameof(GlobalChatIndicator.TryGetIcon), [typeof(GlobalChatIconType), typeof(ReferenceHub), typeof(Texture)]),
-                postfix: new HarmonyMethod(AccessTools.Method(typeof(TryGetIconPostfix), nameof(TryGetIconPostfix.Postfix))));
         }
 
         public async Task OnModeStarted()
@@ -52,35 +48,6 @@ namespace RGM.Modes
         {
             if (pl.Contains(ev.Player.UserId))
                 pl.Remove(ev.Player.UserId);
-        }
-
-        public class TryGetIconPostfix
-        {
-            public static void Postfix(ref bool __result, GlobalChatIconType icon, ReferenceHub owner, out Texture result)
-            {
-                result = null;
-
-                if (icon == GlobalChatIconType.None)
-                    __result = false;
-
-                else
-                {
-                    if (!(owner == null))
-                    {
-                        IAvatarRole avatarRole = owner.roleManager.CurrentRole as IAvatarRole;
-                        if (avatarRole != null)
-                        {
-                            result = avatarRole.RoleAvatar;
-                            __result = true;
-                        }
-                        else
-                            __result = false;
-
-                    }
-                    else
-                        __result = false;
-                }
-            }
         }
     }
 }

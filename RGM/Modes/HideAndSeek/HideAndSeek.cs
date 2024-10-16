@@ -57,7 +57,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            int Remaining = 130;
+            int Remaining = 75;
 
             foreach (var Finder in Finders)
             {

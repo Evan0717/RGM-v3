@@ -113,20 +113,21 @@ namespace RGM.Modes
                     soulMates.Add(first, second);
                     soulMates.Add(second, first);
 
-                    if (first.MaxHealth > second.MaxHealth)
+                    void SetSoulMate(Player a, Player b)
                     {
-                        second.MaxHealth = first.MaxHealth;
-                        second.Health = first.Health;
-                    }
-                    else
-                    {
-                        first.MaxHealth = second.MaxHealth;
-                        first.Health = second.Health;
+                        a.MaxHealth = b.MaxHealth;
+                        a.Health = b.Health;
+
+                        a.ClearItems();
+                        foreach (var Item in b.Items)
+                            a.AddItem(Item.Type);
                     }
 
-                    second.ClearInventory();
-                    foreach (var Item in first.Items)
-                        second.AddItem(Item.Type);
+                    if (first.MaxHealth > second.MaxHealth)
+                        SetSoulMate(second, first);
+
+                    else
+                        SetSoulMate(first, second);
 
                     first.ShowHint("누군가와 새롭게 매칭되었습니다.", 5);
                     second.ShowHint("누군가와 새롭게 매칭되었습니다.", 5);
