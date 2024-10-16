@@ -342,8 +342,8 @@ namespace RGM
                 ServerConsole.AddLog(ex.ToString());
             }
 
-            Tools.TryInstallMode("FriendlyFire");
-            Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id).ToList())}. 1");
+            Tools.TryInstallMode("어제의 동지는 오늘의 적");
+            Tools.TryInstallMode("슈퍼 스타");
 
             await Task.Delay(19000);
 

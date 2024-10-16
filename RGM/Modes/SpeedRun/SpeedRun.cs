@@ -9,6 +9,7 @@ using MapGeneration.Distributors;
 using MEC;
 using Mirror;
 using MultiBroadcast.API;
+using PlayerRoles;
 using RGM.API;
 using UnityEngine;
 
@@ -57,9 +58,8 @@ namespace RGM.Modes
         {
             if (pl.Contains(player))
             {
-                if (player.Role.Type == PlayerRoles.RoleTypeId.ChaosConscript)
+                if (player.Role.Type == PlayerRoles.RoleTypeId.ChaosConscript && pl.Count < 2)
                 {
-
                 }
                 else
                 {
@@ -86,9 +86,12 @@ namespace RGM.Modes
 
         public void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
         {
-            Round.IsLocked = false;
+            if (ev.Player.Role.Type == RoleTypeId.ClassD)
+            {
+                Round.IsLocked = false;
 
-            Player.List.ToList().ForEach(x => x.AddBroadcast(15, $"<b><size=30><탈출자 : {ev.Player.DisplayNickname}></size></b>"));
+                Player.List.ToList().ForEach(x => x.AddBroadcast(15, $"<b><size=30><탈출자 : {ev.Player.DisplayNickname}></size></b>"));
+            }
         }
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
