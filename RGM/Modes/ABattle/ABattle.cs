@@ -531,6 +531,7 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -585,34 +586,32 @@ namespace RGM.Modes
 
         public void ShowStatus(Player player)
         {
-            if (!PlayerWorkstation.ContainsKey(player))
+            if (PlayerAbilities[player].Count() <= 0)
             {
-                PlayerWorkstation.Add(player, new List<Vector3>());
-                PlayerAbilities.Add(player, new List<string>());
+                if (player.Role.Type == RoleTypeId.Scp079)
+                    player.ShowHint($"<align=left><b><size=22>레벨이 오를 때마다 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
+
+                else
+                    player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
+
             }
             else
             {
-                if (PlayerAbilities[player].Count() <= 0)
-                {
-                    if (player.Role.Type == RoleTypeId.Scp079)
-                        player.ShowHint($"<align=left><b><size=22>레벨이 오를 때마다 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
+                string abilitiesText = string.Join(", ", PlayerAbilities[player].GroupBy(x => x).Select(g => g.Count() > 1 ? $"{g.Key} ({g.Count()})" : g.Key).ToList());
+                abilitiesText = ColorFormat(abilitiesText);
 
-                    else
-                        player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
-
-                }
-                else
-                {
-                    string abilitiesText = string.Join(", ", PlayerAbilities[player].GroupBy(x => x).Select(g => g.Count() > 1 ? $"{g.Key} ({g.Count()})" : g.Key).ToList());
-                    abilitiesText = ColorFormat(abilitiesText);
-
-                    player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
-                }
+                player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
             }
         }
 
         public IEnumerator<float> OnModeStarted()
         {
+            foreach (var player in Player.List.Where(x => !x.IsNPC))
+            {
+                PlayerWorkstation.Add(player, new List<Vector3>());
+                PlayerAbilities.Add(player, new List<string>());
+            }
+
             Timing.CallDelayed(UnityEngine.Random.Range(1, 11), () => 
             {
                 if (UnityEngine.Random.Range(1, 6) == 1)
@@ -716,9 +715,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         foreach (var synergy in Synergies)
                         {
@@ -729,10 +728,10 @@ namespace RGM.Modes
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -743,18 +742,18 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         if (PlayerAbilities[player].Contains("[희귀] 육체 강화"))
                             if (player.MaxHealth > player.Health)
                                 player.Health += DuplicateCount(player, "[희귀] 육체 강화");
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -765,17 +764,17 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         if (PlayerAbilities[player].Contains("[신화] 스피릿"))
                             player.EnableEffect(EffectType.Invisible);
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(2f);
@@ -786,9 +785,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         if (player.CurrentItem != null && FlashLightSerials.Contains(player.CurrentItem.Serial))
                         {
@@ -805,10 +804,10 @@ namespace RGM.Modes
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
@@ -819,9 +818,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var Item in Item.List.Where(x => x.Type == ItemType.MicroHID))
                 {
-                    foreach (var Item in Item.List.Where(x => x.Type == ItemType.MicroHID))
+                    try
                     {
                         if (FlamethrowerSerials.Contains(Item.Serial))
                         {
@@ -830,10 +829,10 @@ namespace RGM.Modes
                             MicroHID.Energy += 0.05f;
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -844,9 +843,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !!x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(x => !!x.IsNPC))
+                    try
                     {
                         if (player.IsAlive && PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[전설] 영매"))
                         {
@@ -903,10 +902,10 @@ namespace RGM.Modes
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -917,9 +916,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         if (PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[신화] 눈빛맨"))
                         {
@@ -929,7 +928,7 @@ namespace RGM.Modes
                                 {
                                     near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                                     near.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                                    near.Hurt(player.MaxHealth / 100, "눈빛의 힘에 압도당했습니다.");
+                                    near.Hurt(player.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
                                     Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);
                                 }
                             }
@@ -940,16 +939,16 @@ namespace RGM.Modes
                                 {
                                     target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                                     target.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                                    target.Hurt(player.MaxHealth / 100, "눈빛의 힘에 압도당했습니다.");
+                                    target.Hurt(player.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
                                     Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.5f);
                                 }
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
@@ -960,9 +959,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive))
                 {
-                    foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive))
+                    try
                     {
                         if (PlayerAbilities.ContainsKey(player))
                         {
@@ -976,10 +975,10 @@ namespace RGM.Modes
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -990,9 +989,9 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         if (player.CurrentItem != null && RadarSerials.Contains(player.CurrentItem.Serial))
                         {
@@ -1003,10 +1002,10 @@ namespace RGM.Modes
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -1020,9 +1019,9 @@ namespace RGM.Modes
 
             while (true)
             {
-                try
+                foreach (Player player in Player.List.Where(x => x.IsAlive))
                 {
-                    foreach (Player player in Player.List.Where(x => x.IsAlive))
+                    try
                     {
                         if (Tools.TryGetLookPlayer(player, 45f, out Player target))
                         {
@@ -1041,10 +1040,10 @@ namespace RGM.Modes
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
@@ -1055,26 +1054,26 @@ namespace RGM.Modes
         {
             while (true)
             {
-                try
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
-                    foreach (var player in Player.List.Where(PlayerAbilities.ContainsKey))
+                    try
                     {
                         if (PlayerAbilities[player].Contains("[전용] 끈적한 늪"))
                         {
                             foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, player.Position) < 6))
                             {
                                 if (player != near && player.LeadingTeam != near.LeadingTeam)
-                                    near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                                    near.EnableEffect(EffectType.SinkHole, 1, 0.5f);
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
-                yield return Timing.WaitForSeconds(0.1f);
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
@@ -1538,11 +1537,20 @@ namespace RGM.Modes
             }
         }
 
+        public void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
+        {
+            if (!PlayerAbilities.ContainsKey(ev.Player))
+            {
+                PlayerWorkstation.Add(ev.Player, new List<Vector3>());
+                PlayerAbilities.Add(ev.Player, new List<string>());
+            }
+        }
+
         public async void OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)
         {
             if (!ev.Player.IsCuffed)
             {
-                if (PlayerAbilities.ContainsKey(ev.Player) && PlayerAbilities[ev.Player].Contains("[일반] 회축"))
+                if (PlayerAbilities[ev.Player].Contains("[일반] 회축"))
                 {
                     if (Tools.TryGetLookPlayer(ev.Player, 4f, out Player player))
                     {
@@ -1610,7 +1618,7 @@ namespace RGM.Modes
                 }
             }
 
-            if (PlayerAbilities.ContainsKey(ev.Player) && PlayerAbilities[ev.Player].Contains("[영웅] 점멸"))
+            if (PlayerAbilities[ev.Player].Contains("[영웅] 점멸"))
             {
                 if (!TeleportCooldown.Contains(ev.Player))
                 {
@@ -1678,7 +1686,7 @@ namespace RGM.Modes
             }
         }
 
-        public async void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
+        public void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
         {
             if (PickCoinSerials.Contains(ev.Item.Serial))
             {
@@ -1736,32 +1744,29 @@ namespace RGM.Modes
 
                 RGM.Instance.GodModePlayers.Add(ev.Player);
 
-                await Task.Delay(3000);
-
-                if (RGM.Instance.GodModePlayers.Contains(ev.Player))
-                    RGM.Instance.GodModePlayers.Remove(ev.Player);
+                Timing.CallDelayed(3, () => 
+                {
+                    if (RGM.Instance.GodModePlayers.Contains(ev.Player))
+                        RGM.Instance.GodModePlayers.Remove(ev.Player);
+                });
             }
             else if (ContractCoinSerials.Contains(ev.Item.Serial))
             {
                 ev.Item.Destroy();
 
                 ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
-                
-                while (!ev.Player.IsAlive)
-                    await Task.Delay(100);
 
-                for (int i=1; i<4; i++)
+                Timing.WaitUntilTrue(() => !ev.Player.IsAlive);
+
+                for (int i = 1; i < 4; i++)
                     AddAbility(ev.Player);
             }
             else if (ChaosCoinSerials.Contains(ev.Item.Serial))
             {
                 ev.Item.Destroy();
 
-                if (PlayerAbilities.ContainsKey(ev.Player))
-                {
-                    PlayerAbilities[ev.Player].Clear();
-                    PlayerWorkstation[ev.Player].Clear();
-                }
+                PlayerAbilities[ev.Player].Clear();
+                PlayerWorkstation[ev.Player].Clear();
 
                 ev.Player.DisableAllEffects();
             }
@@ -1779,7 +1784,7 @@ namespace RGM.Modes
             }
         }
 
-        public async void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
             if (PlayerAbilities[ev.Player].Contains("[전용] RTX4090"))
             {
@@ -1799,7 +1804,7 @@ namespace RGM.Modes
                 });
             }
 
-            if (PlayerAbilities.ContainsKey(ev.Attacker) && PlayerAbilities.ContainsKey(ev.Player) && ev.Attacker != null && ev.DamageHandler.Type != DamageType.Warhead)
+            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Warhead)
             {
                 if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
                 {
@@ -1820,16 +1825,17 @@ namespace RGM.Modes
                     ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 20;
                     RGM.Instance.GodModePlayers.Add(ev.Player);
 
-                    await Task.Delay(3000);
+                    Timing.CallDelayed(3f, () =>
+                    {
+                        if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 20)
+                            ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
 
-                    if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 20)
-                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
+                        else
+                            ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
 
-                    else
-                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
-
-                    if (RGM.Instance.GodModePlayers.Contains(ev.Player))
-                        RGM.Instance.GodModePlayers.Remove(ev.Player);
+                        if (RGM.Instance.GodModePlayers.Contains(ev.Player))
+                            RGM.Instance.GodModePlayers.Remove(ev.Player);
+                    });
 
                     return;
                 }
@@ -1877,10 +1883,11 @@ namespace RGM.Modes
                     for (int i = 1; i < 3; i++)
                         AddAbility(ev.Player, Tools.GetRandomValue(LegendAbilities.Keys.ToList()));
 
-                    await Task.Delay(3000);
-
-                    if (RGM.Instance.GodModePlayers.Contains(ev.Player))
-                        RGM.Instance.GodModePlayers.Remove(ev.Player);
+                    Timing.CallDelayed(3, () => 
+                    {
+                        if (RGM.Instance.GodModePlayers.Contains(ev.Player))
+                            RGM.Instance.GodModePlayers.Remove(ev.Player);
+                    });
 
                     return;
                 }
@@ -1947,7 +1954,7 @@ namespace RGM.Modes
         {
             try
             {
-                if (PlayerAbilities.ContainsKey(ev.Attacker) && PlayerAbilities.ContainsKey(ev.Player))
+                if (ev.Attacker != null)
                 {
                     if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
                     {
@@ -1972,24 +1979,20 @@ namespace RGM.Modes
                                 ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
                         }
                     }
-
-                    if (ev.Attacker != null)
+                    if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
                     {
-                        if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
-                        {
-                            if (UnityEngine.Random.Range(1, 3) == 1)
-                                AddAbilityVote(ev.Attacker);
+                        if (UnityEngine.Random.Range(1, 3) == 1)
+                            AddAbilityVote(ev.Attacker);
 
-                            else
-                                AddAbility(ev.Attacker);
-                        }
-                        if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                        else
+                            AddAbility(ev.Attacker);
+                    }
+                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                    {
+                        foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
                         {
-                            foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
-                            {
-                                if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                                    player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
-                            }
+                            if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
+                                player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
                         }
                     }
                 }
@@ -2008,7 +2011,7 @@ namespace RGM.Modes
 
         public void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
         {
-            if (PlayerAbilities.ContainsKey(ev.Player) && new List<RoleTypeId>() 
+            if (new List<RoleTypeId>() 
                 { 
                     RoleTypeId.Scientist, 
                     RoleTypeId.ClassD 

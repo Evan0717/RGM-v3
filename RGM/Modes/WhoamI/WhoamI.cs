@@ -100,6 +100,8 @@ namespace RGM.Modes
                     }
                 }
 
+                PlayersInfo.Clear();
+
                 yield return Timing.WaitForSeconds(60f);
             }
         }

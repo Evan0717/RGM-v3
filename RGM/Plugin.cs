@@ -226,8 +226,7 @@ namespace RGM
         {
             Server.ExecuteCommand("/mp unload RGMLobby");
             
-            foreach (var player in Player.List)
-                Server.ExecuteCommand($"/speak {player.Id} disable");
+            Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
 
             if (StartupRandom == 3)
                 ABattle.Instance.CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
@@ -343,7 +342,6 @@ namespace RGM
             }
 
             Tools.TryInstallMode("어제의 동지는 오늘의 적");
-            Tools.TryInstallMode("슈퍼 스타");
 
             await Task.Delay(19000);
 

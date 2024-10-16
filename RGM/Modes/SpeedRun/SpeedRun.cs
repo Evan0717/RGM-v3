@@ -58,14 +58,14 @@ namespace RGM.Modes
         {
             if (pl.Contains(player))
             {
-                if (player.Role.Type == PlayerRoles.RoleTypeId.ChaosConscript && pl.Count < 2)
+                if (player.Role.Type == RoleTypeId.ChaosConscript)
                 {
                 }
                 else
                 {
-                    if (player.Role.Type != PlayerRoles.RoleTypeId.ClassD)
+                    if (player.Role.Type != RoleTypeId.ClassD)
                     {
-                        player.Role.Set(PlayerRoles.RoleTypeId.ClassD);
+                        player.Role.Set(RoleTypeId.ClassD);
                         foreach (var item in new List<ItemType>() { ItemType.KeycardO5, ItemType.Flashlight, ItemType.Adrenaline, ItemType.GrenadeFlash, ItemType.Coin, ItemType.SCP330 })
                             player.AddItem(item);
                     }
