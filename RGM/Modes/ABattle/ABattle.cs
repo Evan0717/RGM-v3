@@ -2,29 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
+
 using InventorySystem.Items.Usables.Scp330;
+using InventorySystem.Items.MicroHID;
+
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
 using MapEditorReborn.API.Features;
+
 using MEC;
 using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API;
 using UnityEngine;
-using HarmonyLib;
 using Utils.NonAllocLINQ;
-using System.Threading;
-using Exiled.API.Extensions;
-using InventorySystem.Items.MicroHID;
-using PluginAPI.Events;
-using System.Diagnostics.Tracing;
-using SCPSLAudioApi.AudioCore;
 using Mirror;
+using HarmonyLib;
+using InventorySystem;
+using System.Reflection.Emit;
+using Exiled.API.Features.Pools;
+
+using static HarmonyLib.AccessTools;
+using static RGM.Modes.FriendlyFire;
 
 namespace RGM.Modes
 {
@@ -74,7 +79,6 @@ namespace RGM.Modes
             {"[일반] 횃불", "랜턴과 노란 사탕을 받습니다."},
             {"[일반] 잠행", "발걸음 소리가 줄어듭니다."},
             {"[일반] 위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다."},
-            {"[일반] 지진", "지급된 동전을 튕기면 시설 내 모두에게 화면 흔들림 효과를 일시적으로 부여합니다."},
             {"[일반] 우애", "자신이 가진 아이템 중 하나를 복사하여 근처에 있는 플레이어에게 지급합니다."},
             {"[일반] 무지개", "무지개 사탕을 받습니다."},
             {"[일반] 바디백", "몸통 데미지 경감 효과가 3% 추가됩니다."},
@@ -582,6 +586,10 @@ namespace RGM.Modes
             Timing.RunCoroutine(Radar());
             Timing.RunCoroutine(Radiation());
             Timing.RunCoroutine(StickySwamp());
+
+            Harmony harmony = new Harmony($"ABattle - {DateTime.Now.Ticks}");
+            harmony.Patch(AccessTools.Method(typeof(Inventory), nameof(Inventory.Update)),
+                transpiler: new HarmonyMethod(AccessTools.Method(typeof(InventoryUpdatePatch), nameof(InventoryUpdatePatch.Transpiler))));
         }
 
         public void ShowStatus(Player player)
@@ -1084,11 +1092,7 @@ namespace RGM.Modes
             string abilityGrade = PickAbilityGrade(player, force);
             string abilityName = force == null ? Tools.GetRandomValue(AbilityList(player, abilityGrade).Keys.ToList()) : force;
 
-            Log.Info($"{player.Nickname}(에)게 {abilityName} 능력을 지급하는 중..");
-
             ApplyGiveAbility(player, abilityGrade, abilityName);
-
-            Log.Info($"{player.Nickname}(에)게 {abilityName} 능력을 지급 완료!");
 
             string aT = abilityName.Replace("[전용] ", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "").Replace("[시너지] ", "");
 
@@ -1692,7 +1696,9 @@ namespace RGM.Modes
 
         public void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
         {
-            if (PickCoinSerials.Contains(ev.Item.Serial))
+            ushort Serial = ev.Item.Serial;
+
+            if (PickCoinSerials.Contains(Serial))
             {
                 ev.Item.Destroy();
 
@@ -1702,7 +1708,7 @@ namespace RGM.Modes
                         AddAbility(ev.Player);
                 }
             }
-            else if (EscapeCoinSerials.Contains(ev.Item.Serial))
+            else if (EscapeCoinSerials.Contains(Serial))
             {
                 if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player player))
                 {
@@ -1720,27 +1726,21 @@ namespace RGM.Modes
                 else
                     ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
             }
-            else if (EarthquakeCoinSerials.Contains(ev.Item.Serial))
-            {
-                ev.Item.Destroy();
-
-                Warhead.Shake();
-            }
-            else if (FollowCoinSerials.Contains(ev.Item.Serial))
+            else if (FollowCoinSerials.Contains(Serial))
             {
                 ev.Item.Destroy();
 
                 Player target = Tools.GetRandomValue(Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList());
                 ev.Player.Position = target.Position;
             }
-            else if (GrapCoinSerials.Contains(ev.Item.Serial))
+            else if (GrapCoinSerials.Contains(Serial))
             {
                 ev.Item.Destroy();
 
                 Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != ev.Player && x.Role.Type != RoleTypeId.Scp079).ToList());
                 target1.Position = ev.Player.Position;
             }
-            else if (ClockCoinSerials.Contains(ev.Item.Serial))
+            else if (ClockCoinSerials.Contains(Serial))
             {
                 ev.Item.Destroy();
 
@@ -1754,7 +1754,7 @@ namespace RGM.Modes
                         RGM.Instance.GodModePlayers.Remove(ev.Player);
                 });
             }
-            else if (ContractCoinSerials.Contains(ev.Item.Serial))
+            else if (ContractCoinSerials.Contains(Serial))
             {
                 ev.Item.Destroy();
 
@@ -1765,7 +1765,7 @@ namespace RGM.Modes
                 for (int i = 1; i < 4; i++)
                     AddAbility(ev.Player);
             }
-            else if (ChaosCoinSerials.Contains(ev.Item.Serial))
+            else if (ChaosCoinSerials.Contains(Serial))
             {
                 ev.Item.Destroy();
 
@@ -2176,14 +2176,6 @@ namespace RGM.Modes
             {
                 if (ev.OldState == HidState.Idle && ev.NewState == HidState.PoweringUp)
                     ev.NewState = HidState.Firing;
-
-                else if (ev.OldState == HidState.Firing && ev.NewState == HidState.PoweringDown)
-                {
-                    Timing.CallDelayed(0.1f, () => 
-                    { 
-                        ev.NewState = HidState.Idle; 
-                    });
-                }
             }
         }
 
@@ -2197,7 +2189,7 @@ namespace RGM.Modes
                     {
                         RoaringSoundCooldown.Add(ev.Player);
 
-                        string sn = $"{UnityEngine.Random.value}";
+                        string sn = $"{UnityEngine.Random.Range(-9999999.9f, 9999999.9f)}";
                         Player dj = Tools.SpawnDJ($"{ev.Player.Nickname}의 괴성", RoleTypeId.Spectator, Vector3.zero, sn);
 
                         GGUtils.Gtool.PlaySound(sn, "GmanRoaringSound", VoiceChat.VoiceChatChannel.Intercom);
@@ -2368,6 +2360,37 @@ namespace RGM.Modes
         {
             if (ev.NewMap.Name == "ABattle")
                 Player.List.ToList().ForEach(x => x.AddBroadcast(10, "<size=25><b><i><color=#FF00EA>피</color><color=#EF00EB>버</color> <color=#CF00ED>모</color><color=#BF00EF>드</color><color=#AF00F0>가</color> <color=#8F00F3>활</color><color=#7F00F4>성</color><color=#6F00F5>화</color><color=#5F00F7>되</color><color=#4F00F8>었</color><color=#3F00F9>습</color><color=#2F00FB>니</color><color=#1F00FC>다</color><color=#0F00FD>!</color></i></b></size>"));
+        }
+
+        public class InventoryUpdatePatch
+        {
+            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+            {
+                var newInstructions = ListPool<CodeInstruction>.Pool.Get(instructions);
+
+                var index = newInstructions.FindLastIndex(instruction => instruction.Calls(PropertyGetter(typeof(Behaviour), nameof(Behaviour.enabled))));
+
+                var inequalityOp = typeof(UnityEngine.Object).GetMethod("op_Inequality", new[] { typeof(UnityEngine.Object), typeof(UnityEngine.Object) });
+
+                index--;
+
+                var jumpIndex = index + 5;
+
+                var label = generator.DefineLabel();
+                newInstructions[jumpIndex].WithLabels(label);
+
+                newInstructions.InsertRange(index, [
+                    new CodeInstruction(OpCodes.Ldloc_1),
+                    new CodeInstruction(OpCodes.Ldnull),
+                    new CodeInstruction(OpCodes.Call, inequalityOp),
+                    new CodeInstruction(OpCodes.Brtrue_S, label),
+                ]);
+
+                for (var i = 0; i < newInstructions.Count; i++)
+                    yield return newInstructions[i];
+
+                ListPool<CodeInstruction>.Pool.Return(newInstructions);
+            }
         }
     }
 }
