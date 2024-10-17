@@ -479,8 +479,8 @@ namespace RGM.Modes
             PlayerAbilities[player].Add(abilityName);
             string styleName = ColorFormat(abilityName);
 
-            string Message = $"<size=15><b>다음 능력이 추가되었습니다.</b></size>\n<size=25>{styleName}</size>\n<size=20>{AbilityList(player, abilityGrade)[abilityName]}</size>";
-            player.AddBroadcast(8, Message);
+            string Message = $"<size=20>{styleName}</size>\n<size=15>{AbilityList(player, abilityGrade)[abilityName]}</size>";
+            player.AddBroadcast(10, Message);
             player.SendConsoleMessage($"\n{Message}", "white");
         }
 
