@@ -1084,7 +1084,11 @@ namespace RGM.Modes
             string abilityGrade = PickAbilityGrade(player, force);
             string abilityName = force == null ? Tools.GetRandomValue(AbilityList(player, abilityGrade).Keys.ToList()) : force;
 
+            Log.Info($"{player.Nickname}(에)게 {abilityName} 능력을 지급하는 중..");
+
             ApplyGiveAbility(player, abilityGrade, abilityName);
+
+            Log.Info($"{player.Nickname}(에)게 {abilityName} 능력을 지급 완료!");
 
             string aT = abilityName.Replace("[전용] ", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "").Replace("[시너지] ", "");
 
