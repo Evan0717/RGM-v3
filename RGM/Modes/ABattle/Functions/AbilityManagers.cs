@@ -313,7 +313,18 @@ namespace RGM.Modes.ABattleFunctions
                     break;
                 case "횃불":
                     player.AddItem(ItemType.Lantern);
-                    player.TryAddCandy(CandyKindID.Yellow);
+
+                    if (player.HasItem(ItemType.SCP330))
+                        player.TryAddCandy(CandyKindID.Yellow);
+
+                    else
+                    {
+                        Scp330Bag yc = new Scp330Bag 
+                        {
+                            Candies = new List<CandyKindID> { CandyKindID.Yellow }
+                        };
+                        player.AddItem(yc);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
@@ -348,7 +359,17 @@ namespace RGM.Modes.ABattleFunctions
                     }
                     break;
                 case "무지개":
-                    player.TryAddCandy(CandyKindID.Rainbow);
+                    if (player.HasItem(ItemType.SCP330))
+                        player.TryAddCandy(CandyKindID.Rainbow);
+
+                    else
+                    {
+                        Scp330Bag rc = new Scp330Bag
+                        {
+                            Candies = new List<CandyKindID> { CandyKindID.Rainbow }
+                        };
+                        player.AddItem(rc);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
@@ -446,7 +467,17 @@ namespace RGM.Modes.ABattleFunctions
                         player.CurrentItem = scp500;
                     break;
                 case "테러리스트의 유품":
-                    player.TryAddCandy(CandyKindID.Pink);
+                    if (player.HasItem(ItemType.SCP330))
+                        player.TryAddCandy(CandyKindID.Pink);
+
+                    else
+                    {
+                        Scp330Bag _pc = new Scp330Bag
+                        {
+                            Candies = new List<CandyKindID> { CandyKindID.Pink }
+                        };
+                        player.AddItem(_pc);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");

@@ -14,6 +14,7 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class AddAbility : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

@@ -139,7 +139,7 @@ namespace RGM.Modes.ABattleIEnumerators
                 {
                     try
                     {
-                        if (player.IsAlive && PlayerAbilities.ContainsKey(player) && PlayerAbilities[player].Contains("[전설] 영매"))
+                        if (player.IsAlive && PlayerAbilities[player].Contains("[전설] 영매"))
                         {
                             int s = player.CurrentSpectatingPlayers.Count();
 

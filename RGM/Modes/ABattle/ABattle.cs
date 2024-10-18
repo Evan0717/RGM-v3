@@ -91,17 +91,6 @@ namespace RGM.Modes
             Timing.RunCoroutine(Radiation());
             Timing.RunCoroutine(StickySwamp());
 
-            ClientCommandHandler cch = new ClientCommandHandler();
-            cch.RegisterCommand(new VoteFirst());
-            cch.RegisterCommand(new VoteSecond());
-            cch.RegisterCommand(new VoteThird());
-
-            RemoteAdminCommandHandler rach = new RemoteAdminCommandHandler();
-            rach.RegisterCommand(new AddAbility());
-
-            cch.LoadGeneratedCommands();
-            rach.LoadGeneratedCommands();
-
             Harmony harmony = new Harmony($"ABattle - {DateTime.Now.Ticks}");
             harmony.Patch(Method(typeof(Inventory), nameof(Inventory.Update)),
                 transpiler: new HarmonyMethod(Method(typeof(InventoryUpdatePatch), nameof(InventoryUpdatePatch.Transpiler))));
