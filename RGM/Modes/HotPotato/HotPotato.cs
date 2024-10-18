@@ -64,8 +64,13 @@ namespace RGM.Modes
                 {
                     Player BomberMan = Tools.GetRandomValue(pl.Where(x => pl.Contains(x) && !BomberMans.Contains(x)).ToList());
 
-                    BomberMan.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                    BomberMans.Add(BomberMan);
+                    if (BomberMan != null)
+                    {
+                        BomberMan.Role.Set(RoleTypeId.Scp049, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                        BomberMans.Add(BomberMan);
+                    }
+                    else
+                        pl.Remove(BomberMan);
                 }
 
                 for (int i = 1; i < 11; i++)
@@ -83,15 +88,12 @@ namespace RGM.Modes
                         {
                             pl.Remove(bomber);
 
-                            if (bomber != null)
-                            {
-                                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
-                                g.FuseTime = 0.1f;
-                                g.SpawnActive(bomber.Position, Server.Host);
+                            var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                            g.FuseTime = 0.1f;
+                            g.SpawnActive(bomber.Position, Server.Host);
 
-                                bomber.Role.Set(RoleTypeId.ClassD);
-                                bomber.Position = new Vector3(83.82303f, 1026.691f, -37.06291f);
-                            }
+                            bomber.Role.Set(RoleTypeId.ClassD);
+                            bomber.Position = new Vector3(83.82303f, 1026.691f, -37.06291f);
                         }
                     }
                     catch (Exception e)
