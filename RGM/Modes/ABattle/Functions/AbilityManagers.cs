@@ -7,7 +7,8 @@ using Exiled.API.Features;
 using UnityEngine;
 using MultiBroadcast.API;
 using PlayerRoles;
-using RGM.API;
+using RGM.API.Features;
+using RGM.API.DataBases;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
 
@@ -351,8 +352,8 @@ namespace RGM.Modes.ABattleFunctions
 
                         nearestPlayer.AddItem(Own.Type);
 
-                        player.ShowHint($"{nearestPlayer.Nickname}(에)게 {Translations.Item[Own.Type]}(을)를 나누어 주었습니다.");
-                        nearestPlayer.ShowHint($"{player.Nickname}(으)로부터 {Translations.Item[Own.Type]}(을)를 나누어 받았습니다.");
+                        player.ShowHint($"{nearestPlayer.Nickname}(에)게 {Trans.Item[Own.Type]}(을)를 나누어 주었습니다.");
+                        nearestPlayer.ShowHint($"{player.Nickname}(으)로부터 {Trans.Item[Own.Type]}(을)를 나누어 받았습니다.");
 
                         if (nearestPlayer.IsScp)
                             nearestPlayer.CurrentItem = Own;

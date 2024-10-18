@@ -7,7 +7,8 @@ using CustomRendering;
 using Exiled.API.Features;
 using MEC;
 using Mirror;
-using RGM.API;
+using RGM.API.Features;
+using RGM.API.DataBases;
 using UnityEngine;
 using Exiled.API.Features.Items;
 
@@ -39,7 +40,7 @@ namespace RGM.Modes
                 {
                     Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes));
 
-                    player.ShowHint($"<color=#F3F781>{Translations.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
+                    player.ShowHint($"<color=#F3F781>{Trans.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
 
                     if (player.IsScp)
                         player.CurrentItem = Item;

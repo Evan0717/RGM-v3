@@ -11,7 +11,7 @@ using Mirror;
 using MultiBroadcast.API;
 using UnityEngine;
 using Exiled.API.Enums;
-using RGM.API;
+using RGM.API.Features;
 using Exiled.API.Extensions;
 
 namespace RGM.Modes

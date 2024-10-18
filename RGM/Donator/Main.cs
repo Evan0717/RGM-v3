@@ -2,7 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using PlayerRoles;
-using RGM.Features;
+using RGM.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ using MEC;
 using UnityEngine;
 using Exiled.API.Features.Toys;
 using MapEditorReborn.Commands.ModifyingCommands.Rotation;
-using RGM.API;
+using RGM.API.Interfaces;
 
 namespace RGM.Donator
 {
@@ -108,7 +108,7 @@ namespace RGM.Donator
                     {
                         if (UsersManager.UsersCache.ContainsKey(player.UserId))
                         {
-                            Dictionary<string, Interfaces.PlayerReport> pr = RGM.Instance.PlayersReport;
+                            Dictionary<string, PlayerReport> pr = RGM.Instance.PlayersReport;
 
                             List<string> userValues = UsersManager.UsersCache[player.UserId];
 

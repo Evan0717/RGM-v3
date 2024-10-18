@@ -13,7 +13,8 @@ using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
 using MapEditorReborn.API.Features;
 using MultiBroadcast.API;
-using RGM.API;
+using RGM.API.Features;
+using RGM.API.DataBases;
 using Exiled.API.Enums;
 
 using static RGM.Modes.ABattleVariables.Abilities;
@@ -290,7 +291,7 @@ namespace RGM.Modes.ABattleIEnumerators
                             if (Tools.TryGetNearestPlayer(player, out Player nearestPlayer, out float radius))
                             {
                                 if (nearestPlayer != null && radius < 99999)
-                                    player.ShowHint($"<color={nearestPlayer.Role.Color.ToHex()}>{Translations.Role[nearestPlayer.Role.Type]}</color> - {radius}m", 1.2f);
+                                    player.ShowHint($"<color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color> - {radius}m", 1.2f);
                             }
                         }
                     }

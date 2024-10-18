@@ -13,7 +13,8 @@ using Exiled.API.Enums;
 using UnityEngine;
 using CustomPlayerEffects;
 using MultiBroadcast.API;
-using RGM.Interfaces;
+using RGM.API.Interfaces;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {

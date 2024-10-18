@@ -11,17 +11,12 @@ using UnityEngine;
 using MapEditorReborn.API.Features.Objects;
 using MultiBroadcast.API;
 using Exiled.API.Enums;
-using RGM.Features;
-using MapEditorReborn.Events.Handlers;
-using RGM.API;
-using Discord;
-using HarmonyLib;
-using PlayerRoles.Visibility;
 using Exiled.API.Extensions;
-using System.CodeDom;
-using RGM.Interfaces;
-using RGM.Modes;
-using Exiled.Events.EventArgs.Scp096;
+
+using RGM.API.Features;
+using RGM.API.Components;
+using RGM.API.Interfaces;
+using RGM.API.DataBases;
 
 using static RGM.Modes.ABattleFunctions.SpecificAbilities;
 
@@ -230,9 +225,6 @@ namespace RGM
             Server.ExecuteCommand("/mp unload RGMLobby");
             
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
-
-            if (StartupRandom == 3)
-                CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
             
             if (CurrentMode == null)
             {
@@ -300,6 +292,9 @@ namespace RGM
 
             var modeType = Type.GetType($"RGM.Modes.{ModeFileName}");
             Tools.TryInstallMode(ModeFileName);
+
+            if (StartupRandom == 3)
+                CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
 
             await Task.Delay(20 * 60 * 1000);
 
@@ -671,7 +666,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                             if (PlayersInfo.ContainsKey(UserId))
                                 PlayersInfo.Remove(UserId);
 
-                            Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Translations.Role[player.Role.Type]}</color>)</size>"));
+                            Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
 
                             PlayersInfo.Remove(player.UserId);
                             return;
@@ -853,10 +848,10 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             string MessageFormat()
             {
                 if (ev.Attacker == null)
-                    return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Translations.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                    return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
 
                 else
-                    return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.Nickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{Translations.Role[ev.Attacker.Role.Type]}</color>) -> {BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Translations.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                    return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.Nickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.Nickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
             }
 
             foreach (var player in Player.List.Where(x => x.IsDead))

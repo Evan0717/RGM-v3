@@ -13,7 +13,8 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using InventorySystem.Items.MicroHID;
 using Mirror;
-using RGM.API;
+using RGM.API.Features;
+using RGM.API.DataBases;
 using MultiBroadcast.API;
 
 using static RGM.Modes.ABattleVariables.Abilities;
@@ -418,8 +419,8 @@ namespace RGM.Modes.ABattleEventArgs
                 if (PlayerAbilities[ev.Player].Contains("[영웅] 슈퍼 스타"))
                 {
                     foreach (var player in Player.List.Where(x => !x.IsNPC))
-                        player.AddBroadcast(10, $"<size=20><color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{Translations.Role[ev.Player.Role.Type]}</color>)(은)는 " +
-                            $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{Translations.Role[ev.Attacker.Role.Type]}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.</size>");
+                        player.AddBroadcast(10, $"<size=20><color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{Trans.Role[ev.Player.Role.Type]}</color>)(은)는 " +
+                            $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.</size>");
                 }
 
                 if (PlayerAbilities[ev.Player].Contains("[영웅] 극독"))

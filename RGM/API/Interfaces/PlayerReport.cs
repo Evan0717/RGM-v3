@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace RGM.Interfaces
+namespace RGM.API.Interfaces
 {
     public class PlayerReport
     {

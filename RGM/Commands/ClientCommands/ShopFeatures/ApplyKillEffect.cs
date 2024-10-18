@@ -8,7 +8,8 @@ using Exiled.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API;
-using RGM.Features;
+using RGM.API.Components;
+using RGM.API.Features;
 using RGM.Modes;
 using UnityEngine;
 

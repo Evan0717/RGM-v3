@@ -7,7 +7,7 @@ using Exiled.API.Features;
 using MEC;
 using MultiBroadcast;
 using MultiBroadcast.API;
-using RGM.API;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {

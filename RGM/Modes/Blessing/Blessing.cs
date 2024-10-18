@@ -9,7 +9,7 @@ using MEC;
 using UnityEngine;
 using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
-using RGM.API;
+using RGM.API.Features;
 using MultiBroadcast.API;
 
 namespace RGM.Modes

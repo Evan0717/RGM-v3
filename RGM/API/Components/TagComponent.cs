@@ -2,7 +2,7 @@
 using Exiled.API.Features;
 using UnityEngine;
 
-namespace RGM.Features;
+namespace RGM.API.Components;
 
 public class TagController : MonoBehaviour
 {

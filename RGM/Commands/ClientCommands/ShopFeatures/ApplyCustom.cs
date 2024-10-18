@@ -8,9 +8,10 @@ using Exiled.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API;
-using RGM.Features;
+using RGM.API.Components;
 using RGM.Modes;
 using UnityEngine;
+using RGM.API.Features;
 
 namespace RGM.Commands.ClientCommands
 {

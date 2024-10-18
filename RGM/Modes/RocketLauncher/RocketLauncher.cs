@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
@@ -25,7 +26,7 @@ namespace RGM.Modes
             {
                 if (UnityEngine.Random.Range(1, 21) == 1)
                 {
-                    Server.ExecuteCommand($"/cassie_sl {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{Translations.Role[ev.Player.Role.Type]}</color>)(이)가 하늘로 승천했습니다.");
+                    Server.ExecuteCommand($"/cassie_sl {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{Trans.Role[ev.Player.Role.Type]}</color>)(이)가 하늘로 승천했습니다.");
                     Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
                 }
             }

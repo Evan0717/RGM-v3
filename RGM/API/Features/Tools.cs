@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.Events.Commands.Reload;
 using PlayerRoles;
-using RGM.Features;
+using RGM.API.Components;
 using UnityEngine;
 
-namespace RGM.API
+namespace RGM.API.Features
 {
     public class Tools
     {

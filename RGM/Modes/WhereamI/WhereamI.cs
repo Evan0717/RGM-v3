@@ -9,7 +9,7 @@ using Exiled.API.Features.Doors;
 using MEC;
 using UnityEngine;
 using Exiled.API.Enums;
-using RGM.API;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {

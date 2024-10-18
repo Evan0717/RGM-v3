@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
-using RGM.API;
+using RGM.API.Features;
 using PlayerRoles;
 using Exiled.API.Enums;
 

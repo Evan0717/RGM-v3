@@ -7,8 +7,8 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
-using RGM.API;
-using RGM.Features;
+using RGM.API.Features;
+using RGM.API.DataBases;
 using RGM.Modes;
 using UnityEngine;
 
@@ -64,7 +64,7 @@ namespace RGM.Commands.ClientCommands
                         return false;
                     }
 
-                    string text = Translations.Role[player.Role.Type];
+                    string text = Trans.Role[player.Role.Type];
                     string text2 = string.Concat(new string[]
                     {
                         $"<size=25>{BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
@@ -82,7 +82,7 @@ namespace RGM.Commands.ClientCommands
                 }
                 else if (player.IsDead)
                 {
-                    string text = Translations.Role[player.Role.Type];
+                    string text = Trans.Role[player.Role.Type];
                     string text2 = string.Concat(new string[]
                     {
                         $"<size=25>{BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
@@ -100,7 +100,7 @@ namespace RGM.Commands.ClientCommands
                 }
                 else
                 {
-                    string text = Translations.Role[player.Role.Type];
+                    string text = Trans.Role[player.Role.Type];
                     string text2 = string.Concat(new string[]
                     {
                         $"<size=25>{BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",

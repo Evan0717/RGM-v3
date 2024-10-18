@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RGM
+namespace RGM.API.DataBases
 {
-    public class Translations
+    public class Trans
     {
         public static Dictionary<RoleTypeId, string> Role = new Dictionary<RoleTypeId, string>
         {

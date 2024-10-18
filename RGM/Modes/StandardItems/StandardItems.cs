@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using Exiled.CreditTags.Features;
-using RGM.API;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {

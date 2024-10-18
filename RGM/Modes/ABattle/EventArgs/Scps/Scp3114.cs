@@ -13,7 +13,7 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using InventorySystem.Items.MicroHID;
 using Mirror;
-using RGM.API;
+using RGM.API.Features;
 using MultiBroadcast.API;
 
 using static RGM.Modes.ABattleVariables.Abilities;

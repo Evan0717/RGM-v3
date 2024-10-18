@@ -9,7 +9,7 @@ using Exiled.API.Features;
 using MEC;
 using Mirror;
 using PlayerRoles.FirstPersonControl;
-using RGM.API;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes

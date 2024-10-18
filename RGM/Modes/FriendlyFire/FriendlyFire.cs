@@ -8,7 +8,8 @@ using UnityEngine;
 using MEC;
 using HarmonyLib;
 using PlayerRoles;
-using RGM.API;
+using RGM.API.Features;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
@@ -88,7 +89,7 @@ namespace RGM.Modes
                             if (ev.Player != player && player.IsScp)
                             {
                                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.2f);
-                                Server.ExecuteCommand($"/cassie <color=#ff0000>{Translations.Role[ev.Player.Role.Type]}</color>이(가) <color=#ff0000>{Translations.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
+                                Server.ExecuteCommand($"/cassie <color=#ff0000>{Trans.Role[ev.Player.Role.Type]}</color>이(가) <color=#ff0000>{Trans.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
                                 player.Hurt(-1, Exiled.API.Enums.DamageType.Scp173);
                             }
                         }
@@ -133,7 +134,7 @@ namespace RGM.Modes
                 if (ev.Player != player && player.IsScp)
                 {
                     Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.5f);
-                    Server.ExecuteCommand($"/cassie  <color=#ff0000>{Translations.Role[ev.Player.Role.Type]}</color>이(가)  <color=#ff0000>{Translations.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
+                    Server.ExecuteCommand($"/cassie  <color=#ff0000>{Trans.Role[ev.Player.Role.Type]}</color>이(가)  <color=#ff0000>{Trans.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
                     player.Hurt(-1, Exiled.API.Enums.DamageType.Scp173);
                 }
             }
@@ -151,7 +152,7 @@ namespace RGM.Modes
                         player.Hurt(125, Exiled.API.Enums.DamageType.Scp939);
 
                         if (ev.Player.IsDead)
-                            Server.ExecuteCommand($"/cassie  <color=#ff0000>{Translations.Role[ev.Player.Role.Type]}</color>이(가)  <color=#ff0000>{Translations.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
+                            Server.ExecuteCommand($"/cassie  <color=#ff0000>{Trans.Role[ev.Player.Role.Type]}</color>이(가)  <color=#ff0000>{Trans.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
                     }
                 }
 

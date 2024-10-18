@@ -10,7 +10,7 @@ using MEC;
 using Mirror;
 using MultiBroadcast.API;
 using PlayerRoles;
-using RGM.API;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes

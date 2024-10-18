@@ -17,7 +17,8 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using PlayerRoles;
 using Exiled.API.Features.Roles;
-using RGM.API;
+using RGM.API.Features;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
@@ -116,7 +117,7 @@ namespace RGM.Modes
             while (true)
             {
                 if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius))
-                    juggernaut.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Translations.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius} ]</b>", 1.2f);
+                    juggernaut.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius} ]</b>", 1.2f);
 
                 else
                     juggernaut.ShowHint("당신은 임무를 완수하였습니다.", 1.2f);

@@ -18,7 +18,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles;
-using RGM.API;
+using RGM.API.Features;
 using MultiBroadcast.API;
 
 namespace RGM.Modes

@@ -8,7 +8,7 @@ using MEC;
 using Mirror;
 using MultiBroadcast;
 using MultiBroadcast.API;
-using RGM.API;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes

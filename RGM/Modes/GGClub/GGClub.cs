@@ -16,7 +16,7 @@ using PluginAPI.Events;
 using UnityEngine;
 using SCPSLAudioApi.AudioCore;
 using MultiBroadcast;
-using RGM.API;
+using RGM.API.Features;
 using MultiBroadcast.API;
 
 namespace RGM.Modes
