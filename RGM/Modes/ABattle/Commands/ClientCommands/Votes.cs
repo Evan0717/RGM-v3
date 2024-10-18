@@ -14,7 +14,6 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class VoteFirst : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -46,7 +45,6 @@ namespace RGM.Modes
         public bool SanitizeResponse { get; } = true;
     }
 
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class VoteSecond : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -78,7 +76,6 @@ namespace RGM.Modes
         public bool SanitizeResponse { get; } = true;
     }
 
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class VoteThird : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

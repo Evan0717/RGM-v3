@@ -3,6 +3,7 @@ using HarmonyLib;
 using InventorySystem;
 using CommandSystem;
 using MEC;
+using RemoteAdmin;
 
 using static RGM.Modes.ABattleVariables.Abilities;
 using static RGM.Modes.ABattleVariables.AbiltiyManagers;
@@ -30,6 +31,7 @@ using static RGM.Modes.ABattleEventArgs.MapEvents;
 using RGM.Modes.ABattlePatches;
 
 using static HarmonyLib.AccessTools;
+using Exiled.API.Features;
 
 namespace RGM.Modes
 {
@@ -90,6 +92,12 @@ namespace RGM.Modes
             Timing.RunCoroutine(Radar());
             Timing.RunCoroutine(Radiation());
             Timing.RunCoroutine(StickySwamp());
+
+            QueryProcessor.DotCommandHandler.RegisterCommand(new VoteFirst());
+            QueryProcessor.DotCommandHandler.RegisterCommand(new VoteSecond());
+            QueryProcessor.DotCommandHandler.RegisterCommand(new VoteThird());
+
+            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new AddAbility());
 
             Harmony harmony = new Harmony($"ABattle - {DateTime.Now.Ticks}");
             harmony.Patch(Method(typeof(Inventory), nameof(Inventory.Update)),
