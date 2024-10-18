@@ -605,14 +605,21 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 .Replace("{FirstMark}", ModeVote[iv(1)].Contains(ev.Player) ? "■" : "□")
                                 .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
                                 .Replace("{ThirdMark}", ModeVote[iv(3)].Contains(ev.Player) ? "■" : "□")
-                                .Replace("{First}", iv(1)).Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
-                                .Replace("{Second}", iv(2)).Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
-                                .Replace("{Third}", iv(3)).Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                                .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}").Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
-                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}").Replace("{Tip}", Tip)
+                                .Replace("{First}", iv(1))
+                                .Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
+                                .Replace("{Second}", iv(2))
+                                .Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
+                                .Replace("{Third}", iv(3))
+                                .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
+                                .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}")
+                                .Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
+                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}")
                                 .Replace("{Exp}", $"{uc[0]}")
                                 .Replace("{RP}", $"{uc[1]}")
                                 .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
+                                .Replace("{Tip}", Tip)
+                                .Replace("{Version}", $"{Version}")
+                                .Replace("{Logo}", $"{(UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔")}")
                                 , 1.2f);
                         }
                     }
@@ -1131,5 +1138,10 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                 yield return Timing.WaitForSeconds(1f);
             }
         }
+
+        public override string Name => "RGM";
+        public override string Author => "GoldenPig1205";
+        public override Version Version { get; } = new(2, 12, 1);
+        public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
     }
 }

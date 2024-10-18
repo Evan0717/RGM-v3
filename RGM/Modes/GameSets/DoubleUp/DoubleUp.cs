@@ -18,9 +18,9 @@ namespace RGM.Modes
         public static List<string> BlackListMods = Tools.GetGameSetsList();
         public static Dictionary<string, List<string>> Mods = RGM.Instance.ModeList;
 
-        public static List<string> ModeKeys = RGM.Instance.ModeList.Keys.Where(x => Mods[x][3] != "private" && !BlackListMods.Contains(x)).ToList();
+        public static List<string> ModeKeys = RGM.Instance.ModeList.Keys.Where(x => Mods[x][3] != "private").ToList();
         public static string mod1 = Tools.GetRandomValue(ModeKeys);
-        public static string mod2 = Tools.GetRandomValue(ModeKeys.Where(x => x != mod1).ToList());
+        public static string mod2 = Tools.GetRandomValue(ModeKeys.Where(x => x != mod1 && !BlackListMods.Contains(x)).ToList());
 
         public List<string> Modes = new List<string>() { mod1, mod2 };
 
