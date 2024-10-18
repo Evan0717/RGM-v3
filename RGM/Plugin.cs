@@ -30,8 +30,10 @@ namespace RGM
         public static string BotAPIServer;
 
         public string CurrentMode = null;
+        public string CurrentSubMode = null;
         public string SelectMode = null;
         public string Tip = Tools.GetRandomValue(Tips.LobbyTips);
+        public string Logo = UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔";
         public int StartupRandom = UnityEngine.Random.Range(1, 31);
         public bool FreezeGameStart = false;
         public bool AutoNuke = false;
@@ -63,6 +65,7 @@ namespace RGM
             {"레인보우", "R.A.I.N.B.O.W."}
         };
 
+        public List<string> SubModeVote = new List<string>();
         public List<Player> GodModePlayers = new List<Player>();
         public List<Player> ChatCooldown = new List<Player>();
         public List<string> Requests = new List<string>();
@@ -77,12 +80,19 @@ namespace RGM
         public void PickModes()
         {
             ModeVote.Clear();
+            SubModeVote.Clear();
 
             for (int i = 1; i < 4; i++)
             {
                 var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
                 var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
                 ModeVote.Add(mode, new List<Player>());
+
+                if (UnityEngine.Random.Range(1, 11) == 1)
+                    SubModeVote.Add(Tools.GetRandomValue(ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x) && !Tools.GetGameSetsList().Contains(x)).ToList()));
+
+                else
+                    SubModeVote.Add(null);
             }
 
             List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
@@ -235,6 +245,7 @@ namespace RGM
                     var longestKeys = ModeVote.Keys.Where(key => ModeVote[key].Count == maxLength).ToList();
                     var randomKey = longestKeys[UnityEngine.Random.Range(0, longestKeys.Count)];
                     CurrentMode = randomKey;
+                    CurrentSubMode = SubModeVote[ModeVote.Keys.ToList().IndexOf(randomKey)];
 
                     if (SelectMode == "SimpleSelect")
                     {
@@ -276,6 +287,7 @@ namespace RGM
             string Message = Notions.StartModeDescription
                 .Replace("{ModeColor}", ModeColor)
                 .Replace("{CurrentMode}", CurrentMode)
+                .Replace("{CurrentSubMode}", CurrentSubMode != null ? $"<size=16>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode][0]}>{CurrentSubMode}</color></size>\n" : "")
                 .Replace("{ModeDescription}", ModeDescription);
 
             foreach (var player in Player.List)
@@ -428,6 +440,7 @@ namespace RGM
                 string Message = Notions.LateJoinModeDescription
                 .Replace("{ModeColor}", ModeColor)
                 .Replace("{CurrentMode}", CurrentMode)
+                .Replace("{CurrentSubMode}", CurrentSubMode != null ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode][0]}>{CurrentSubMode}</color></size>\n" : "")
                 .Replace("{ModeDescription}", ModeDescription);
 
                 ev.Player.AddBroadcast(10, Message);
@@ -479,21 +492,19 @@ namespace RGM
 
                 string iv(int num)
                 {
-                    if (CurrentMode != null)
-                        return CurrentMode;
-
-                    else
-                        return ModeVote.Keys.ToList()[num - 1];
+                    return $"{ModeVote.Keys.ToList()[num - 1]}";
                 }
 
                 while (!Round.IsStarted)
                 {
-                    if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 5f, (LayerMask)1))
+                    try
                     {
-                        if (hit.transform.name == "Credit")
+                        if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 5f, (LayerMask)1))
                         {
-                            ev.Player.ShowHint(
-"""
+                            if (hit.transform.name == "Credit")
+                            {
+                                ev.Player.ShowHint(
+    """
 <size=50><b>[ ⭐ 랜덤게임모드(RGM) 크레딧 ⭐ ]</b></size>
 
 <align=left><size=30>
@@ -516,112 +527,117 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 </size></align>
 \n\n\n\n\n\n\n\n
 """, 1.2f);
-                        }
-                        else if (hit.transform.name == "Mode")
-                        {
-                            List<string> Modes = new List<string>();
-                            
-                            foreach (var mode in ModeList)
-                            {
-                                string modeName = mode.Key;
-                                string color = mode.Value[0];
-                                bool IsPrivate = mode.Value[3] == "private";
-
-                                if (IsPrivate)
-                                    Modes.Add($"<s><color=#{color}>{modeName}</color></s>");
-
-                                else
-                                    Modes.Add($"<color=#{color}>{modeName}</color>");
                             }
-
-                            ev.Player.ShowHint($"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
-                        }
-                        else
-                        {
-                            string SelectedMode;
-                            string ModeColor;
-                            string ModeDescription;
-
-                            for (int i = 0; i < 3; i++)
+                            else if (hit.transform.name == "Mode")
                             {
-                                if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
-                                    ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
-                            }
+                                List<string> Modes = new List<string>();
 
-                            if (new List<string>() { "First", "Second", "Third" }.Contains(hit.collider.name))
-                            {
-                                if (hit.collider.name == "First")
+                                foreach (var mode in ModeList)
                                 {
-                                    SelectedMode = ModeVote.Keys.ToList()[0];
-                                    ModeVote[SelectedMode].Add(ev.Player);
-                                }
-                                else if (hit.collider.name == "Second")
-                                {
-                                    SelectedMode = ModeVote.Keys.ToList()[1];
-                                    ModeVote[SelectedMode].Add(ev.Player);
-                                }
-                                else
-                                {
-                                    SelectedMode = ModeVote.Keys.ToList()[2];
-                                    ModeVote[SelectedMode].Add(ev.Player);
+                                    string modeName = mode.Key;
+                                    string color = mode.Value[0];
+                                    bool IsPrivate = mode.Value[3] == "private";
+
+                                    if (IsPrivate)
+                                        Modes.Add($"<s><color=#{color}>{modeName}</color></s>");
+
+                                    else
+                                        Modes.Add($"<color=#{color}>{modeName}</color>");
                                 }
 
-                                ModeColor = ModeList[SelectedMode][0];
-                                ModeDescription = ModeList[SelectedMode][1];
+                                ev.Player.ShowHint($"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
                             }
                             else
                             {
-                                string FirstDesc()
+                                string SelectedMode;
+                                string ModeColor;
+                                string ModeDescription;
+
+                                for (int i = 0; i < 3; i++)
                                 {
-                                    if (SelectMode == "RandomSelect")
-                                        return "<b>[선택 모드 : 임의의 손길]</b> <color=#F8E0E0>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
-
-                                    else if (SelectMode == "SimpleSelect")
-                                        return "<b>[선택 모드 : 간이 셀렉트]</b> <color=#F5F6CE>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
-
-                                    else if (SelectMode == "MostVote")
-                                        return "<b>[선택 모드 : 다수 결정자]</b> <color=#E0F2F7>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
-
-                                    else
-                                        return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
+                                    if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
+                                        ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
                                 }
 
-                                SelectedMode = "<i>참고</i>";
-                                ModeColor = "ffffff";
-                                ModeDescription = $"{FirstDesc()}\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
-                            }
+                                if (new List<string>() { "First", "Second", "Third" }.Contains(hit.collider.name))
+                                {
+                                    if (hit.collider.name == "First")
+                                    {
+                                        SelectedMode = ModeVote.Keys.ToList()[0];
+                                        ModeVote[SelectedMode].Add(ev.Player);
+                                    }
+                                    else if (hit.collider.name == "Second")
+                                    {
+                                        SelectedMode = ModeVote.Keys.ToList()[1];
+                                        ModeVote[SelectedMode].Add(ev.Player);
+                                    }
+                                    else
+                                    {
+                                        SelectedMode = ModeVote.Keys.ToList()[2];
+                                        ModeVote[SelectedMode].Add(ev.Player);
+                                    }
 
-                            string IdeaBy()
-                            {
-                                if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode][4] == "")
-                                    return "";
+                                    ModeColor = ModeList[SelectedMode][0];
+                                    ModeDescription = ModeList[SelectedMode][1];
+                                }
                                 else
-                                    return $" <size=20><color=white>Idea by {ModeList[SelectedMode][4]}</color></size>";
+                                {
+                                    string FirstDesc()
+                                    {
+                                        if (SelectMode == "RandomSelect")
+                                            return "<b>[선택 모드 : 임의의 손길]</b> <color=#F8E0E0>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
+
+                                        else if (SelectMode == "SimpleSelect")
+                                            return "<b>[선택 모드 : 간이 셀렉트]</b> <color=#F5F6CE>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
+
+                                        else if (SelectMode == "MostVote")
+                                            return "<b>[선택 모드 : 다수 결정자]</b> <color=#E0F2F7>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
+
+                                        else
+                                            return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
+                                    }
+
+                                    SelectedMode = "<i>참고</i>";
+                                    ModeColor = "ffffff";
+                                    ModeDescription = $"{FirstDesc()}\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
+                                }
+
+                                string IdeaBy()
+                                {
+                                    if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode][4] == "")
+                                        return "";
+                                    else
+                                        return $" <size=20><color=white>Idea by {ModeList[SelectedMode][4]}</color></size>";
+                                }
+
+                                List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
+
+                                ev.Player.ShowHint(Notions.LobbyMessage
+                                    .Replace("{FirstMark}", ModeVote[iv(1)].Contains(ev.Player) ? "■" : "□")
+                                    .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
+                                    .Replace("{ThirdMark}", ModeVote[iv(3)].Contains(ev.Player) ? "■" : "□")
+                                    .Replace("{First}", CurrentMode != null ? CurrentMode : iv(1) + (SubModeVote[0] != null ? $" + <b><i> <size=20>{SubModeVote[0]}</size></i></b>" : ""))
+                                    .Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
+                                    .Replace("{Second}", CurrentMode != null ? CurrentMode : iv(2) + (SubModeVote[1] != null ? $" + <b><i><size=20>{SubModeVote[1]}</size></i></b>" : ""))
+                                    .Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
+                                    .Replace("{Third}", CurrentMode != null ? CurrentMode : iv(3) + (SubModeVote[2] != null ? $" + <b><i> <size=20>{SubModeVote[2]}</size></i></b>" : ""))
+                                    .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
+                                    .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}")
+                                    .Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
+                                    .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}")
+                                    .Replace("{Exp}", $"{uc[0]}")
+                                    .Replace("{RP}", $"{uc[1]}")
+                                    .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
+                                    .Replace("{Tip}", Tip)
+                                    .Replace("{Version}", $"{Version}")
+                                    .Replace("{Logo}", $"{Logo}")
+                                    , 1.2f);
                             }
-
-                            List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
-
-                            ev.Player.ShowHint(Notions.LobbyMessage
-                                .Replace("{FirstMark}", ModeVote[iv(1)].Contains(ev.Player) ? "■" : "□")
-                                .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
-                                .Replace("{ThirdMark}", ModeVote[iv(3)].Contains(ev.Player) ? "■" : "□")
-                                .Replace("{First}", iv(1))
-                                .Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
-                                .Replace("{Second}", iv(2))
-                                .Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
-                                .Replace("{Third}", iv(3))
-                                .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
-                                .Replace("{ModeName}", $"{SelectedMode}{IdeaBy()}")
-                                .Replace("{ModeColor}", $"{ModeColor}").Replace("{ModeDescription}", $"{ModeDescription}")
-                                .Replace("{Lines}", $"{(ModeDescription.Contains("\n") ? "\n" : "\n\n")}")
-                                .Replace("{Exp}", $"{uc[0]}")
-                                .Replace("{RP}", $"{uc[1]}")
-                                .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
-                                .Replace("{Tip}", Tip)
-                                .Replace("{Version}", $"{Version}")
-                                .Replace("{Logo}", $"{(UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔")}")
-                                , 1.2f);
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
                     }
 
                     await Task.Delay(500);
