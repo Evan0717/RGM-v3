@@ -23,6 +23,8 @@ using RGM.Interfaces;
 using RGM.Modes;
 using Exiled.Events.EventArgs.Scp096;
 
+using static RGM.Modes.ABattleFunctions.SpecificAbilities;
+
 namespace RGM
 {
     public class RGM : Plugin<Config>
@@ -230,7 +232,7 @@ namespace RGM
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
 
             if (StartupRandom == 3)
-                ABattle.Instance.CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
+                CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
             
             if (CurrentMode == null)
             {
