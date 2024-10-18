@@ -53,27 +53,6 @@ namespace RGM.Modes.ABattleIEnumerators
             }
         }
 
-        public static IEnumerator<float> Spirit()
-        {
-            while (true)
-            {
-                foreach (var player in Player.List.Where(x => !x.IsNPC))
-                {
-                    try
-                    {
-                        if (PlayerAbilities[player].Contains("[신화] 스피릿"))
-                            player.EnableEffect(EffectType.Invisible);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(2f);
-            }
-        }
-
         public static IEnumerator<float> FlashLight()
         {
             while (true)
@@ -136,7 +115,7 @@ namespace RGM.Modes.ABattleIEnumerators
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => !!x.IsNPC))
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
                     try
                     {
@@ -202,6 +181,27 @@ namespace RGM.Modes.ABattleIEnumerators
                 }
 
                 yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public static IEnumerator<float> Spirit()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(x => !x.IsNPC))
+                {
+                    try
+                    {
+                        if (PlayerAbilities[player].Contains("[신화] 스피릿"))
+                            player.EnableEffect(EffectType.Invisible);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(2f);
             }
         }
 
