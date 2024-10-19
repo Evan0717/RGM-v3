@@ -459,7 +459,7 @@ namespace RGM.Modes.ABattleEventArgs
                     {
                         for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
                         {
-                            List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam).ToList();
+                            List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.TargetOldRole.GetTeam()).ToList();
                             Player Get = null;
                             string Ability = null;
 
