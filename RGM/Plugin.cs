@@ -84,7 +84,7 @@ namespace RGM
 
             for (int i = 1; i < 4; i++)
             {
-                var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x)).ToList();
+                var StaticModeList = ModeList.Keys.Where(x => ModeList[x][3] == "public" && !ModeVote.ContainsKey(x)).ToList();
                 var mode = StaticModeList[UnityEngine.Random.Range(0, StaticModeList.Count())];
                 ModeVote.Add(mode, new List<Player>());
 
@@ -536,10 +536,13 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                 {
                                     string modeName = mode.Key;
                                     string color = mode.Value[0];
-                                    bool IsPrivate = mode.Value[3] == "private";
+                                    string flag = mode.Value[3];
 
-                                    if (IsPrivate)
+                                    if (flag == "private")
                                         Modes.Add($"<s><color=#{color}>{modeName}</color></s>");
+
+                                    else if (flag == "onlysub")
+                                        Modes.Add($"<mark=#FF000000><color=#{color}>{modeName}</color></s></mark>");
 
                                     else
                                         Modes.Add($"<color=#{color}>{modeName}</color>");

@@ -26,7 +26,7 @@ namespace RGM
 20% 확률로 피버 모드가 활성화됩니다.
 <b><i><color=#FF00EA>피</color><color=#EF00EB>버</color> <color=#CF00ED>모</color><color=#BF00EF>드</color></i></b> 활성화 시, 재단에 등장하는 워크스테이션의 수가 증가합니다.
 """ } },
-            { "블랙아웃", new List<string>() { "2A0A0A", "시설 곳곳이 정전됩니다.", "Blackout", "public", "", 
+            { "블랙아웃", new List<string>() { "2A0A0A", "시설 곳곳이 정전됩니다.", "Blackout", "onlysub", "", 
 """
 각 방마다 기믹이 적용될 수 있습니다.
 
@@ -76,10 +76,10 @@ namespace RGM
             { "GG 클럽", new List<string>() { "C8FE2E", "빠르게 황금색 플랫폼을 사수하세요!", "GGClub", "public", "", "" } },
             { "숨바꼭질", new List<string>() { "F5A9E1", "꼭꼭 숨으세요! 사냥개가 당신을 찾을 것입니다. 제한 시간동안 버티세요!", "HideAndSeek", "public", "", "" } },
             { "폭탄 돌리기", new List<string>() { "FA58D0", "폭탄이 터지기 전에 다른 유저에게 넘기세요!", "HotPotato", "public", "", "" } },
-            { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "public", "", "" } },
+            { "존 윅", new List<string>() { "2EFEF7", "권총류 무기의 데미지가 400% 상승합니다.", "JohnWick", "onlysub", "", "" } },
             { "저거너트", new List<string>() { "088A08", "모두 힘을 합쳐 외부의 적에 대항하세요. 10분에 자동핵이 작동됩니다.", "Juggernaut", "public", "", "" } },
             { "점프맵 라운지", new List<string>() { "A9D0F5", "5분 안에 최대한 멀리 가세요!", "JumpMap", "public", "", "" } },
-            { "한국인이 좋아하는 속도", new List<string>() { "5882FA", "이런 거 좋아하시죠?", "KoreanSpeed", "public", "", "" } },
+            { "한국인이 좋아하는 속도", new List<string>() { "5882FA", "이런 거 좋아하시죠?", "KoreanSpeed", "onlysub", "", "" } },
             { "미니 게임", new List<string>() { "6E6E6E", "미니 게임 중 하나가 랜덤으로 선택됩니다. 총 3개의 라운드로 진행됩니다.", "MiniGames", "private", "", "" } },
             { "무법자", new List<string>() { "9F81F7", "모두가 총기 하나를 가지고 시작합니다.", "Outlaw", "public", "", "" } },
             { "해적 룰렛", new List<string>() { "FFBF00", "폭탄을 잘 추려내야 합니다.", "PirateRoulette", "public", "", "" } },
@@ -100,7 +100,7 @@ namespace RGM
             { "꼬리 잡기", new List<string>() { "A9F5BC", "절대로 타깃이 아닌 유저를 쏘지 마세요! 꼬리가 잡히지 않도록 하십시오.", "TailCatcher", "public", "", "" } },
             { "무덤", new List<string>() { "000000", "살아남으려면 뭐라도 해야 합니다.", "Tomb", "public", "", "" } },
             { "트릭 오어 트릿", new List<string>() { "5F04B4", "사탕 4개를 가지고 시작합니다. 다른 이를 사살하면 사탕 1개를 더 받습니다.", "TrickorTreat", "public", "", "" } },
-            { "무제한", new List<string>() { "3F13AB", "무제한을 악용하지 않는 것을 추천합니다.", "Unlimited", "public", "", "" } },
+            { "무제한", new List<string>() { "3F13AB", "무제한을 악용하지 않는 것을 추천합니다.", "Unlimited", "onlysub", "", "" } },
             { "여긴 어디?", new List<string>() { "B40486", "랜덤한 곳에서 스폰됩니다.", "WhereamI", "public", "", "" } },
             { "나는 누구?", new List<string>() { "886A08", "1분마다 진영이 변경됩니다.", "WhoamI", "public", "몬키키", "" } },
         };
