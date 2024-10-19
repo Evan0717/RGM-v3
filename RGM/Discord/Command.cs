@@ -10,6 +10,8 @@ using System.Text;
 using Exiled.API.Features;
 using System.Linq;
 
+using static RGM.Variables.Protocol;
+
 namespace RGM.Discord
 {
     class Command
@@ -26,9 +28,9 @@ namespace RGM.Discord
             try
             {
                 var listener = new HttpListener();
-                listener.Prefixes.Add(RGM.BotAPIServer);
+                listener.Prefixes.Add(BotAPIServer);
                 listener.Start();
-                Log.Info($"Listening on {RGM.BotAPIServer}");
+                Log.Info($"Listening on {BotAPIServer}");
 
                 while (true)
                 {

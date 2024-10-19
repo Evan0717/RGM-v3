@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using RGM.API.DataBases;
 
+using static RGM.Variables.Protocol;
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Discord
 {
     public class Webhook
@@ -17,7 +20,7 @@ namespace RGM.Discord
         public static async void Send(string msg, string url = null)
         {
             if (url == null)
-                url = RGM.WebhookURL;
+                url = WebhookURL;
 
             await _send(msg, url);
         }
@@ -59,7 +62,7 @@ namespace RGM.Discord
 
         public void OnRoundStarted()
         {
-            Timing.CallDelayed(0.5f, () => Send($"[{_time}] :play_pause: **라운드**: 라운드 시작 - {RGM.Instance.CurrentMode}"));
+            Timing.CallDelayed(0.5f, () => Send($"[{_time}] :play_pause: **라운드**: 라운드 시작 - {CurrentMode}"));
         }
 
         public void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)

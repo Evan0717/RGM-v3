@@ -11,6 +11,9 @@ using PlayerRoles;
 using RGM.API.Components;
 using UnityEngine;
 
+using static RGM.Variables.Protocol;
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.API.Features
 {
     public class Tools
@@ -137,7 +140,7 @@ RP: {uc[1]}
 
 보유한 킬 이펙트: {GetJoinedInfo(3)}
 장착한 킬 이펙트: {(uc[4] == "0" ? "-" : uc[4])}
-<size=15>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬 이펙트를 장착할 수 있습니다." : RGM.Instance.KillEffects[uc[4]])}</size>
+<size=15>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬 이펙트를 장착할 수 있습니다." : KillEffects[uc[4]])}</size>
 
 보유한 커스텀: {GetJoinedInfo(7)}
 커스텀 닉네임: {(uc[5] == "0" ? "-" : uc[5])}
@@ -147,7 +150,7 @@ RP: {uc[1]}
 
 보유한 페인트: {GetJoinedInfo(8)}
 장착한 페인트: {(uc[9] == "0" ? "-" : uc[9])}
-<size=15>{(uc[9] == "0" ? "'.페인트 <페인트 이름>' 명령어를 사용하여 페인트를 장착할 수 있습니다." : RGM.Instance.Paints[uc[9]])}</size>
+<size=15>{(uc[9] == "0" ? "'.페인트 <페인트 이름>' 명령어를 사용하여 페인트를 장착할 수 있습니다." : Paints[uc[9]])}</size>
 """;
         }
 

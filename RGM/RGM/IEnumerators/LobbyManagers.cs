@@ -1,0 +1,137 @@
+﻿using MEC;
+using PlayerRoles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using Exiled.API.Features;
+
+using static RGM.Variables.Protocol;
+using static RGM.Variables.ServerManagers;
+
+using static RGM.Functions.ModeManagers;
+
+namespace RGM.IEnumerators
+{
+    public static class LobbyManagers
+    {
+        public static IEnumerator<float> GameStartButton()
+        {
+            int RemainingPress = 20;
+            bool ButtonPressed = false;
+            Transform redObject = null;
+
+            while (!ButtonPressed)
+            {
+                if (!FreezeGameStart)
+                {
+                    bool pressing = false;
+
+                    foreach (var player in Player.List)
+                    {
+                        if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
+                        {
+                            if (hit.transform.name == "GameStartRed")
+                            {
+                                if (Player.List.Count() > 1)
+                                {
+                                    if (RemainingPress <= 0)
+                                        ButtonPressed = true;
+                                }
+
+                                redObject = hit.transform;
+                                pressing = true;
+
+                                RemainingPress -= 1;
+
+                                redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.015f, redObject.transform.position.z);
+                            }
+                        }
+                    }
+
+                    if (!pressing)
+                    {
+                        if (RemainingPress < 20)
+                        {
+                            RemainingPress += 1;
+
+                            redObject.position = new Vector3(redObject.transform.position.x, redObject.transform.position.y + 0.015f, redObject.transform.position.z);
+                        }
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+
+            Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Spectator));
+            Round.Start();
+
+            yield break;
+        }
+
+        public static IEnumerator<float> RandomSelectMode()
+        {
+            while (!Round.IsStarted)
+            {
+                PickModes();
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public static IEnumerator<float> ModeResetButton()
+        {
+            float RemainingPress = 20;
+            bool ButtonPressed = false;
+            Transform redObject = null;
+
+            while (!ButtonPressed)
+            {
+                bool pressing = false;
+                RaycastHit hit;
+                int stack = 0;
+
+                foreach (var player in Player.List)
+                {
+                    if (Physics.Raycast(player.Position, Vector3.down, out hit, 1f, (LayerMask)1))
+                    {
+                        if (hit.transform.name == "ModeResetRed")
+                        {
+                            stack += 1;
+                            redObject = hit.transform;
+                            pressing = true;
+                        }
+                    }
+                }
+
+                if (Player.List.Count() > 1)
+                {
+                    if (RemainingPress <= 0)
+                        ButtonPressed = true;
+                }
+
+                if (pressing)
+                {
+                    RemainingPress -= 0.01f * stack;
+
+                    redObject.position = new Vector3(redObject.position.x, redObject.position.y - 0.0001f * stack, redObject.transform.position.z);
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+
+            PickModes();
+            Server.ExecuteCommand($"/cassie_sl <mark=#ffff00aa><color=#000000><color=#ffffff>모드 투표 리스트</color>가 초기화되었습니다.</color></mark>");
+
+            FreezeGameStart = true;
+
+            yield return Timing.WaitForSeconds(10f);
+
+            FreezeGameStart = false;
+
+            yield break;
+        }
+    }
+}

@@ -1,0 +1,113 @@
+﻿using MEC;
+using PlayerRoles.FirstPersonControl;
+using PlayerRoles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using Exiled.API.Features;
+using RGM.API.Interfaces;
+
+using static RGM.Variables.Protocol;
+using static RGM.Variables.ServerManagers;
+
+namespace RGM.IEnumerators
+{
+    public static class ServerManagers
+    {
+        public static IEnumerator<float> SendHeartbeat()
+        {
+            while (true)
+            {
+                Log.Info("heartbeat sent");
+
+                yield return Timing.WaitForSeconds(30);
+            }
+        }
+
+        public static IEnumerator<float> IsFallDown()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(x => x.IsAlive))
+                {
+                    if (OnGround.ContainsKey(player) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
+                    {
+                        if (FpcExtensionMethods.IsGrounded(player.ReferenceHub))
+                            OnGround[player] = 5;
+                        else
+                        {
+                            OnGround[player] -= 0.1f;
+
+                            if (OnGround[player] <= 0)
+                                player.Kill("공허에 빨려들어갔습니다. (5초 이상 낙하)");
+                        }
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public static IEnumerator<float> ChattingCooldown()
+        {
+            while (true)
+            {
+                ChatCooldown.Clear();
+
+                yield return Timing.WaitForSeconds(2f);
+            }
+        }
+
+        public static IEnumerator<float> Ball()
+        {
+            while (!Round.IsStarted)
+            {
+                foreach (Player player in Player.List.Where(x => x.IsAlive))
+                {
+                    foreach (Transform Ball in Balls)
+                    {
+                        GameObject _ball = Ball.gameObject;
+
+                        if (Vector3.Distance(_ball.transform.position, player.Position) < 2)
+                        {
+                            _ball.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rig);
+                            rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.01f, 0), ForceMode.Impulse);
+                        }
+
+                        /*
+                        else if (Vector3.Distance(_ball.transform.position, player.Position) > 45)
+                            _ball.transform.position = new Vector3(player.Position.x, player.Position.y + 2, player.Position.z);
+                        */
+                    }
+                }
+
+                yield return Timing.WaitForOneFrame;
+            }
+        }
+
+        public static IEnumerator<float> RenewalPlayersInfo()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(x => PlayersInfo.ContainsKey(x.UserId) && x.IsAlive))
+                {
+                    PlayersInfo[player.UserId] = new PlayerInfo
+                    {
+                        RoleType = player.Role.Type,
+                        MaxHealth = player.MaxHealth,
+                        Health = player.Health,
+                        ActiveEffects = player.ActiveEffects.ToList(),
+                        Items = player.Items.ToList(),
+                        CurrentItem = player.CurrentItem,
+                        Position = new Vector3(player.Position.x, player.Position.y, player.Position.z)
+                    };
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+    }
+}
