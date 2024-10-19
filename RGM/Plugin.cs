@@ -542,7 +542,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                                         Modes.Add($"<s><color=#{color}>{modeName}</color></s>");
 
                                     else if (flag == "onlysub")
-                                        Modes.Add($"<mark=#FF000000><color=#{color}>{modeName}</color></s></mark>");
+                                        Modes.Add($"<mark=#FFFF0080><color=#{color}>{modeName}</color></s></mark>");
 
                                     else
                                         Modes.Add($"<color=#{color}>{modeName}</color>");
@@ -1160,7 +1160,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(2, 12, 1);
+        public override Version Version { get; } = new(3, 5, 1);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
     }
 }
