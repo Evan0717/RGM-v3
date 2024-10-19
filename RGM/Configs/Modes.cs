@@ -66,7 +66,7 @@ namespace RGM
 <color=orange>D계급</color>의 경우, 목적지까지 빠르게 도달해야 합니다.
 목적지에 도달한 경우 <color=yellow>과학자</color>를 사살하여 승리할 수 있게 됩니다. 총을 얻게 되는 거죠!
 """ } },
-            { "사회적 거리두기", new List<string>() { "38610B", "최대한 다른 사람과 멀어지세요! 감염 예방이 최우선입니다!", "Distancing", "private", "", "" } },
+            { "사회적 거리두기", new List<string>() { "38610B", "최대한 다른 사람과 멀어지세요! 감염 예방이 최우선입니다!", "Distancing", "onlysub", "", "" } },
             { "더블업", new List<string>() { "5882FA", "모드 2개가 동시에 적용됩니다. <size=20>(모드셋은 최대 하나까지만 적용됩니다.)</size>", "DoubleUp", "public", "", "" } },
             { "개인전", new List<string>() { "FA58F4", "최후의 1인이 되세요!", "FreeForAll", "public", "", "" } },
             { "어제의 동지는 오늘의 적", new List<string>() { "F78181", "팀킬이 가능합니다, 이젠 아무도 믿지 마세요.", "FriendlyFire", "public", "", "" } },
@@ -87,7 +87,7 @@ namespace RGM
             { "빨간 불, 초록 불", new List<string>() { "F7D358", "빨간 불에는 움직이지 마세요.", "RedLightGreenLight", "public", "", "" } },
             { "로켓 런처", new List<string>() { "FA8258", "무슨 이유로든 피격당하면 5% 확률로 승천합니다.", "RocketLauncher", "public", "", "" } },
             { "SCP 러쉬", new List<string>() { "FE2E2E", "모든 SCP가 한 개체로 통일됩니다.", "SCPRUSH", "public", "", "" } },
-            { "시베리아", new List<string>() { "FAFAFA", "최대한 다른 자들과 붙어 온기를 나눠 가지세요!", "Siberia", "private", "몬키키", "" } },
+            { "시베리아", new List<string>() { "FAFAFA", "최대한 다른 자들과 붙어 온기를 나눠 가지세요!", "Siberia", "onlysub", "몬키키", "" } },
             { "소울메이트", new List<string>() { "FF00FF", "단짝 친구와 모든 것을 함께하세요!", "SoulMate", "public", "", "" } },
             { "스피드런", new List<string>() { "58FAAC", "누구보다 빠르게 시설에서 탈출하세요. 아, 그리고 핵을 중지하려 시도하지 마세요!", "SpeedRun", "public", "", "" } },
             { "스피릿", new List<string>() { "CED8F6", "죽으면 영혼 상태에 돌입합니다!", "Spirit", "public", "", 
