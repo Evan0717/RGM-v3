@@ -1160,7 +1160,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 5, 2);
+        public override Version Version { get; } = new(3, 5, 3);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
     }
 }
