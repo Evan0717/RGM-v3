@@ -303,8 +303,8 @@ namespace RGM
                     player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "white");
             }
 
-            var modeType = Type.GetType($"RGM.Modes.{ModeFileName}");
             Tools.TryInstallMode(ModeFileName);
+            Tools.TryInstallMode(CurrentSubMode);
 
             if (StartupRandom == 3)
                 CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());

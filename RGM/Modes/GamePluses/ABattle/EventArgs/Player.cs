@@ -166,6 +166,9 @@ namespace RGM.Modes.ABattleEventArgs
                 else if (ClockCoinSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.");
 
+                else if (ContractCoinSerials.Contains(ev.Item.Serial))
+                    ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.");
+
                 else if (CallSnakeHandsSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"우클릭하면 <b><color={RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력을 사용할 수 있습니다.");
 
@@ -239,6 +242,17 @@ namespace RGM.Modes.ABattleEventArgs
                     if (RGM.Instance.GodModePlayers.Contains(ev.Player))
                         RGM.Instance.GodModePlayers.Remove(ev.Player);
                 });
+            }
+            else if (ContractCoinSerials.Contains(Serial))
+            {
+                ev.Item.Destroy();
+
+                ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
+
+                Timing.WaitUntilTrue(() => !ev.Player.IsAlive);
+
+                for (int i = 1; i < 4; i++)
+                    AddAbility(ev.Player);
             }
             else if (ChaosCoinSerials.Contains(Serial))
             {

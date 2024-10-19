@@ -427,13 +427,6 @@ namespace RGM.Modes.ABattleFunctions
                         await Task.Delay(60 * 1000);
                     }
                     break;
-                case "계약":
-                    Item cc_1 = player.AddItem(ItemType.Coin);
-                    ContractCoinSerials.Add(cc_1.Serial);
-
-                    if (player.IsScp)
-                        player.CurrentItem = cc_1;
-                    break;
                 case "무기 전문가":
                     Item scp1853 = player.AddItem(ItemType.SCP1853);
 
@@ -445,6 +438,17 @@ namespace RGM.Modes.ABattleFunctions
 
                     if (player.IsScp)
                         player.CurrentItem = scp500;
+                    break;
+                case "불의 정령": player.CurrentRoom.Color = new Color(1, 0, 0); break;
+                case "물의 정령": player.CurrentRoom.Color = new Color(0, 0, 1); break;
+                case "흙의 정령": player.CurrentRoom.Color = new Color(0.5f, 0.25f, 0); break;
+                case "바람의 정령": player.CurrentRoom.Color = new Color(0, 1, 0); break;
+                case "계약":
+                    Item cc_1 = player.AddItem(ItemType.Coin);
+                    ContractCoinSerials.Add(cc_1.Serial);
+
+                    if (player.IsScp)
+                        player.CurrentItem = cc_1;
                     break;
                 case "테러리스트의 유품":
                     player.TryAddCandy(CandyKindID.Pink);
