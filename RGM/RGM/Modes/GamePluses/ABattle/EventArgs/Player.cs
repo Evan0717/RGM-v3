@@ -281,9 +281,6 @@ namespace RGM.Modes.ABattleEventArgs
 
         public static void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Unknown)
-                return;
-
             if (PlayerAbilities[ev.Player].Contains("[전용] RTX4090"))
             {
                 ev.IsAllowed = false;
@@ -302,7 +299,7 @@ namespace RGM.Modes.ABattleEventArgs
                 });
             }
 
-            if (ev.Attacker != null && ev.DamageHandler.Type != DamageType.Warhead)
+            if (ev.Attacker != null && !ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead)
             {
                 if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
                 {
@@ -450,11 +447,9 @@ namespace RGM.Modes.ABattleEventArgs
 
         public static void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Unknown)
-                return;
-
             try
             {
+
                 if (ev.Attacker != null)
                 {
                     if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
@@ -498,16 +493,18 @@ namespace RGM.Modes.ABattleEventArgs
                     }
                 }
             }
-            finally
+            catch (Exception e)
             {
-                PlayerWorkstation[ev.Player].Clear();
-                PlayerAbilities[ev.Player].Clear();
-                ev.Player.Scale = new Vector3(1, 1, 1);
-                Server.ExecuteCommand($"/speak {ev.Player.Id} disable");
-                ev.Player.IsUsingStamina = true;
-                if (GodModePlayers.Contains(ev.Player))
-                    GodModePlayers.Remove(ev.Player);
+                Log.Error(e);
             }
+
+            PlayerWorkstation[ev.Player].Clear();
+            PlayerAbilities[ev.Player].Clear();
+            ev.Player.Scale = new Vector3(1, 1, 1);
+            Server.ExecuteCommand($"/speak {ev.Player.Id} 0");
+            ev.Player.IsUsingStamina = true;
+            if (GodModePlayers.Contains(ev.Player))
+                GodModePlayers.Remove(ev.Player);
         }
 
         public static void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
