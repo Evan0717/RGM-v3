@@ -28,6 +28,7 @@ using static RGM.Modes.ABattleVariables.Serials;
 using static RGM.Modes.ABattleFunctions.AbilityManagers;
 using static RGM.Modes.ABattleFunctions.MainManagers;
 using static RGM.Modes.ABattleFunctions.SpecificAbilities;
+using RGM.Discord;
 
 namespace RGM.Modes.ABattleEventArgs
 {
@@ -42,7 +43,7 @@ namespace RGM.Modes.ABattleEventArgs
             }
         }
 
-        public static async void OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)
+        public static void OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)
         {
             if (!ev.Player.IsCuffed)
             {
@@ -56,8 +57,10 @@ namespace RGM.Modes.ABattleEventArgs
                             player.Hurt(12.05f * 3 * DuplicateCount(ev.Player, "[일반] 회축"), "무지성으로 구타당해 죽었습니다.");
 
                             MeleeCooldown.Add(ev.Player);
-                            await Task.Delay(1000);
-                            MeleeCooldown.Remove(ev.Player);
+                            Timing.CallDelayed(1f, () =>
+                            {
+                                MeleeCooldown.Remove(ev.Player);
+                            });
                         }
                     }
                 }
@@ -85,8 +88,10 @@ namespace RGM.Modes.ABattleEventArgs
                                     Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
 
                                     MeleeCooldown.Add(ev.Player);
-                                    await Task.Delay(60 * 1000);
-                                    MeleeCooldown.Remove(ev.Player);
+                                    Timing.CallDelayed(60, () =>
+                                    {
+                                        MeleeCooldown.Remove(ev.Player);
+                                    });
                                 }
                                 else
                                 {
@@ -283,6 +288,12 @@ namespace RGM.Modes.ABattleEventArgs
         {
             try
             {
+                if (ev.Attacker != null)
+                    Webhook.Send($"워업ㅣDying({ev.DamageHandler.Type}) 진행 - {ev.Attacker.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Attacker])}) -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
+
+                else
+                    Webhook.Send($"워업ㅣDying({ev.DamageHandler.Type}) 진행 - null -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
+
                 if (PlayerAbilities[ev.Player].Contains("[전용] RTX4090"))
                 {
                     ev.IsAllowed = false;
@@ -301,7 +312,7 @@ namespace RGM.Modes.ABattleEventArgs
                     });
                 }
 
-                if (ev.Attacker != null && !ev.Attacker.IsNPC && !ev.DamageHandler.IsSuicide && ev.DamageHandler.Type != DamageType.Warhead)
+                if (ev.Attacker != null && !ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead)
                 {
                     if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
                     {
@@ -439,6 +450,12 @@ namespace RGM.Modes.ABattleEventArgs
                         }
                     }
                 }
+
+                if (ev.Attacker != null)
+                    Webhook.Send($"워업ㅣDying({ev.DamageHandler.Type}) 완료 - {ev.Attacker.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Attacker])}) -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
+
+                else
+                    Webhook.Send($"워업ㅣDying({ev.DamageHandler.Type}) 완료 - null -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
             }
             catch (Exception e)
             {
@@ -450,7 +467,13 @@ namespace RGM.Modes.ABattleEventArgs
         {
             try
             {
-                if (ev.Attacker != null && !ev.Attacker.IsNPC && !ev.DamageHandler.IsSuicide)
+                if (ev.Attacker != null)
+                    Webhook.Send($"워업ㅣDied({ev.DamageHandler.Type}) 진행 - {ev.Attacker.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Attacker])}) -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
+
+                else
+                    Webhook.Send($"워업ㅣDied({ev.DamageHandler.Type}) 진행 - null -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
+
+                if (ev.Attacker != null && !ev.Attacker.IsNPC)
                 {
                     if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
                     {
@@ -492,6 +515,12 @@ namespace RGM.Modes.ABattleEventArgs
                         }
                     }
                 }
+
+                if (ev.Attacker != null)
+                    Webhook.Send($"워업ㅣDied({ev.DamageHandler.Type}) 완료 - {ev.Attacker.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Attacker])}) -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
+
+                else
+                    Webhook.Send($"워업ㅣDied({ev.DamageHandler.Type}) 완료 - null -> {ev.Player.DisplayNickname}({string.Join(", ", PlayerAbilities[ev.Player])})");
             }
             catch (Exception e)
             {
