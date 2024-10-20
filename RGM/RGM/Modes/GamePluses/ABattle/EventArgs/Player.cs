@@ -407,8 +407,11 @@ namespace RGM.Modes.ABattleEventArgs
                 ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 30;
                 ev.Player.Health = 12050;
 
-                if (ev.Player.IsAlive)
-                    ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
+                Timing.CallDelayed(5f, () =>
+                {
+                    if (ev.Player.IsAlive)
+                        ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
+                });
             }
 
             if (PlayerAbilities[ev.Player].Contains("[희귀] 순교"))
@@ -449,52 +452,52 @@ namespace RGM.Modes.ABattleEventArgs
 
         public static void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            if (ev.Player == null ||
-                ev.Player.ReferenceHub.isLocalPlayer ||
-                ev.Attacker == null ||
-                ev.Attacker.IsNPC ||
-                ev.DamageHandler.Type == DamageType.Warhead)
-                return;
-
             try
             {
-                if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
+                if (ev.Player != null &&
+                    !ev.Player.ReferenceHub.isLocalPlayer &&
+                    ev.Attacker != null &&
+                    !ev.Attacker.IsNPC &&
+                    ev.DamageHandler.Type != DamageType.Warhead)
                 {
-                    for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
+                    if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
                     {
-                        List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.TargetOldRole.GetTeam()).ToList();
-                        Player Get = null;
-                        string Ability = null;
-
-                        if (GetList.Count > 0)
+                        for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
                         {
-                            Get = Tools.GetRandomValue(GetList);
-                            Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
+                            List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.TargetOldRole.GetTeam()).ToList();
+                            Player Get = null;
+                            string Ability = null;
 
-                            if (PlayerAbilities.ContainsKey(Get))
-                                PlayerAbilities[Get].Add(Ability);
+                            if (GetList.Count > 0)
+                            {
+                                Get = Tools.GetRandomValue(GetList);
+                                Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
 
-                            ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
-                            Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
+                                if (PlayerAbilities.ContainsKey(Get))
+                                    PlayerAbilities[Get].Add(Ability);
+
+                                ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
+                                Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
+                            }
+                            else
+                                ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
                         }
-                        else
-                            ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
                     }
-                }
-                if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
-                {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
-                        AddAbilityVote(ev.Attacker);
-
-                    else
-                        AddAbility(ev.Attacker);
-                }
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
-                {
-                    foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
+                    if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
                     {
-                        if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                            player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
+                        if (UnityEngine.Random.Range(1, 3) == 1)
+                            AddAbilityVote(ev.Attacker);
+
+                        else
+                            AddAbility(ev.Attacker);
+                    }
+                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                    {
+                        foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
+                        {
+                            if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
+                                player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
+                        }
                     }
                 }
             }
