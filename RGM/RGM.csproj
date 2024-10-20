@@ -170,7 +170,7 @@
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyCustom.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyKillEffect.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Chat.cs" />
-    <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\CurrentMode.cs" />
+    <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\GetModeDescription.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyPaint.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\PlayerInfo.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Report.cs" />
