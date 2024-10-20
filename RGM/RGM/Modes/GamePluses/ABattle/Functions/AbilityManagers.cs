@@ -287,7 +287,13 @@ namespace RGM.Modes.ABattleFunctions
                         player.AddItem(Tools.GetRandomValue(Ammos));
                     break;
                 case "정화":
-                    player.TryAddCandy(CandyKindID.Green);
+                    if (!player.TryAddCandy(CandyKindID.Green))
+                    {
+                        Scp330 GreenCandy = (Scp330)Item.Create(ItemType.SCP330);
+                        GreenCandy.RemoveAllCandy();
+                        GreenCandy.AddCandy(CandyKindID.Green);
+                        player.AddItem(GreenCandy);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
@@ -316,7 +322,13 @@ namespace RGM.Modes.ABattleFunctions
                     break;
                 case "횃불":
                     player.AddItem(ItemType.Lantern);
-                    player.TryAddCandy(CandyKindID.Yellow);
+                    if (!player.TryAddCandy(CandyKindID.Yellow))
+                    {
+                        Scp330 YellowCandy = (Scp330)Item.Create(ItemType.SCP330);
+                        YellowCandy.RemoveAllCandy();
+                        YellowCandy.AddCandy(CandyKindID.Yellow);
+                        player.AddItem(YellowCandy);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
@@ -351,7 +363,13 @@ namespace RGM.Modes.ABattleFunctions
                     }
                     break;
                 case "무지개":
-                    player.TryAddCandy(CandyKindID.Rainbow);
+                    if (!player.TryAddCandy(CandyKindID.Rainbow))
+                    {
+                        Scp330 RainbowCandy = (Scp330)Item.Create(ItemType.SCP330);
+                        RainbowCandy.RemoveAllCandy();
+                        RainbowCandy.AddCandy(CandyKindID.Rainbow);
+                        player.AddItem(RainbowCandy);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
@@ -441,10 +459,46 @@ namespace RGM.Modes.ABattleFunctions
                     if (player.IsScp)
                         player.CurrentItem = scp500;
                     break;
-                case "불의 정령": player.CurrentRoom.Color = new Color(1, 0, 0); Timing.CallDelayed(10f, () => { player.CurrentRoom.Color = new Color(1, 1, 1); }); break;
-                case "물의 정령": player.CurrentRoom.Color = new Color(0, 0, 1); Timing.CallDelayed(10f, () => { player.CurrentRoom.Color = new Color(1, 1, 1); }); break;
-                case "흙의 정령": player.CurrentRoom.Color = new Color(0.5f, 0.25f, 0); Timing.CallDelayed(10f, () => { player.CurrentRoom.Color = new Color(1, 1, 1); }); break;
-                case "바람의 정령": player.CurrentRoom.Color = new Color(0, 1, 0); Timing.CallDelayed(10f, () => { player.CurrentRoom.Color = new Color(1, 1, 1); }); break;
+                case "불의 정령":
+                    Room room1 = player.CurrentRoom;
+
+                    room1.Color = new Color(1, 0, 0); 
+
+                    Timing.CallDelayed(10f, () => 
+                    { 
+                        room1.Color = new Color(1, 1, 1); 
+                    }); 
+                    break;
+                case "물의 정령":
+                    Room room2 = player.CurrentRoom;
+
+                    room2.Color = new Color(0, 0, 1); 
+
+                    Timing.CallDelayed(10f, () => 
+                    {
+                        room2.Color = new Color(1, 1, 1); 
+                    }); 
+                    break;
+                case "흙의 정령":
+                    Room room3 = player.CurrentRoom;
+
+                    player.CurrentRoom.Color = new Color(0.5f, 0.25f, 0); 
+
+                    Timing.CallDelayed(10f, () => 
+                    { 
+                        room3.Color = new Color(1, 1, 1); 
+                    }); 
+                    break;
+                case "바람의 정령":
+                    Room room4 = player.CurrentRoom;
+
+                    room4.Color = new Color(0, 1, 0); 
+
+                    Timing.CallDelayed(10f, () => 
+                    {
+                        room4.Color = new Color(1, 1, 1); 
+                    }); 
+                    break;
                 case "계약":
                     Item cc_1 = player.AddItem(ItemType.Coin);
                     ContractCoinSerials.Add(cc_1.Serial);
@@ -453,7 +507,13 @@ namespace RGM.Modes.ABattleFunctions
                         player.CurrentItem = cc_1;
                     break;
                 case "테러리스트의 유품":
-                    player.TryAddCandy(CandyKindID.Pink);
+                    if (!player.TryAddCandy(CandyKindID.Pink))
+                    {
+                        Scp330 PinkCandy = (Scp330)Item.Create(ItemType.SCP330);
+                        PinkCandy.RemoveAllCandy();
+                        PinkCandy.AddCandy(CandyKindID.Pink);
+                        player.AddItem(PinkCandy);
+                    }
 
                     if (player.IsScp)
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
@@ -591,16 +651,12 @@ namespace RGM.Modes.ABattleFunctions
                         player.CurrentItem = Ch;
                     break;
                 case "혼돈의 가방":
-                    List<ItemType> ChaosBag = Tools.EnumToList<ItemType>();
+                    int Count = player.Items.Where(x => !x.IsAmmo).ToList().Count;
 
-                    foreach (var cb in player.Items)
-                    {
-                        if (!cb.IsAmmo)
-                        {
-                            player.RemoveItem(cb);
-                            player.AddItem(Tools.GetRandomValue(ChaosBag));
-                        }
-                    }
+                    player.ClearInventory();
+
+                    for (int i = 1; i < Count + 1; i++)
+                        player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
                     break;
                 case "세치 혀":
                     Item Scp1576 = player.AddItem(ItemType.SCP1576);
