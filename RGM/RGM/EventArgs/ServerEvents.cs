@@ -53,6 +53,7 @@ namespace RGM.EventArgs
             Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
 
             Timing.RunCoroutine(SendHeartbeat());
+            Timing.RunCoroutine(SyncSpectatedHint());
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
             Timing.RunCoroutine(IsFallDown());

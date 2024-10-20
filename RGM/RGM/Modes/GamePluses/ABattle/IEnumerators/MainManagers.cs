@@ -55,15 +55,6 @@ namespace RGM.Modes.ABattleIEnumerators
                         {
                             if (player.IsAlive)
                                 ShowStatus(player);
-
-                            else
-                            {
-                                if (player.Role is SpectatorRole spectator)
-                                {
-                                    if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
-                                        player.ShowHint(spectator.SpectatedPlayer.CurrentHint.Content, 1.2f);
-                                }
-                            }
                         }
                     }
                     catch (Exception e)

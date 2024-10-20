@@ -12,6 +12,7 @@ using RGM.API.Interfaces;
 
 using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
+using Exiled.API.Features.Roles;
 
 namespace RGM.IEnumerators
 {
@@ -24,6 +25,23 @@ namespace RGM.IEnumerators
                 Log.Info("heartbeat sent");
 
                 yield return Timing.WaitForSeconds(30);
+            }
+        }
+
+        public static IEnumerator<float> SyncSpectatedHint()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (player.Role is SpectatorRole spectator)
+                    {
+                        if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
+                            player.ShowHint(spectator.SpectatedPlayer.CurrentHint.Content, 1.2f);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
