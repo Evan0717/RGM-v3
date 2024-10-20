@@ -456,53 +456,58 @@ namespace RGM.Modes.ABattleEventArgs
                 ev.DamageHandler.Type == DamageType.Warhead)
                 return;
 
-            if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
+            try
             {
-                for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
+                if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
                 {
-                    List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.TargetOldRole.GetTeam()).ToList();
-                    Player Get = null;
-                    string Ability = null;
-
-                    if (GetList.Count > 0)
+                    for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
                     {
-                        Get = Tools.GetRandomValue(GetList);
-                        Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
+                        List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.TargetOldRole.GetTeam()).ToList();
+                        Player Get = null;
+                        string Ability = null;
 
-                        if (PlayerAbilities.ContainsKey(Get))
-                            PlayerAbilities[Get].Add(Ability);
+                        if (GetList.Count > 0)
+                        {
+                            Get = Tools.GetRandomValue(GetList);
+                            Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
 
-                        ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
-                        Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
+                            if (PlayerAbilities.ContainsKey(Get))
+                                PlayerAbilities[Get].Add(Ability);
+
+                            ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
+                            Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
+                        }
+                        else
+                            ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
                     }
-                    else
-                        ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
                 }
-            }
-            if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
-            {
-                if (UnityEngine.Random.Range(1, 3) == 1)
-                    AddAbilityVote(ev.Attacker);
-
-                else
-                    AddAbility(ev.Attacker);
-            }
-            if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
-            {
-                foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
+                if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
                 {
-                    if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                        player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
+                    if (UnityEngine.Random.Range(1, 3) == 1)
+                        AddAbilityVote(ev.Attacker);
+
+                    else
+                        AddAbility(ev.Attacker);
+                }
+                if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                {
+                    foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
+                    {
+                        if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
+                            player.EnableEffect(EffectType.Ensnared, 1, 0.75f * DuplicateCount(ev.Attacker, "[전용] 공포"));
+                    }
                 }
             }
-
-            PlayerWorkstation[ev.Player].Clear();
-            PlayerAbilities[ev.Player].Clear();
-            ev.Player.Scale = new Vector3(1, 1, 1);
-            Server.ExecuteCommand($"/speak {ev.Player.Id} 0");
-            ev.Player.IsUsingStamina = true;
-            if (GodModePlayers.Contains(ev.Player))
-                GodModePlayers.Remove(ev.Player);
+            finally
+            {
+                PlayerWorkstation[ev.Player].Clear();
+                PlayerAbilities[ev.Player].Clear();
+                ev.Player.Scale = new Vector3(1, 1, 1);
+                Server.ExecuteCommand($"/speak {ev.Player.Id} 0");
+                ev.Player.IsUsingStamina = true;
+                if (GodModePlayers.Contains(ev.Player))
+                    GodModePlayers.Remove(ev.Player);
+            }
         }
 
         public static void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
@@ -560,98 +565,102 @@ namespace RGM.Modes.ABattleEventArgs
 
         public static void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Attacker != null)
+            if (ev.Player == null ||
+                ev.Player.ReferenceHub.isLocalPlayer ||
+                ev.Attacker == null ||
+                ev.Attacker.IsNPC ||
+                ev.DamageHandler.Type == DamageType.Warhead)
+                return;
+
+            if (PlayerAbilities[ev.Attacker].Contains("[일반] 단련"))
+                ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * DuplicateCount(ev.Player, "[일반] 단련"))));
+
+            if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                ev.Attacker.AddAhp((20 * DuplicateCount(ev.Player, "[희귀] 흡혈귀")) * (ev.DamageHandler.Damage / 100));
+
+            if (ev.Attacker.CurrentItem != null && FlamethrowerSerials.Contains(ev.Attacker.CurrentItem.Serial))
             {
-                if (PlayerAbilities[ev.Attacker].Contains("[일반] 단련"))
-                    ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * DuplicateCount(ev.Player, "[일반] 단련"))));
+                ev.DamageHandler.Damage /= 5;
 
-                if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
-                    ev.Attacker.AddAhp((20 * DuplicateCount(ev.Player, "[희귀] 흡혈귀")) * (ev.DamageHandler.Damage / 100));
+                ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
+            }
 
-                if (ev.Attacker.CurrentItem != null && FlamethrowerSerials.Contains(ev.Attacker.CurrentItem.Serial))
+            if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고"))
+            {
+                if (ev.Player.Health <= ev.Player.MaxHealth / 2)
                 {
-                    ev.DamageHandler.Damage /= 5;
+                    PlayerAbilities[ev.Player].Remove("[희귀] 반창고");
 
-                    ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
+                    ev.Player.Health = ev.Player.MaxHealth;
+                }
+            }
+
+            if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+            {
+                if (UnityEngine.Random.Range(1, 6) == 1)
+                    Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
+            }
+
+            if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+            {
+                int PowerCount = 0;
+
+                foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
+                {
+                    if (Vector3.Distance(player.Position, ev.Player.Position) < 11)
+                        PowerCount++;
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고"))
-                {
-                    if (ev.Player.Health <= ev.Player.MaxHealth / 2)
-                    {
-                        PlayerAbilities[ev.Player].Remove("[희귀] 반창고");
+                ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.1 * PowerCount)));
+            }
 
-                        ev.Player.Health = ev.Player.MaxHealth;
-                    }
+            if (PlayerAbilities[ev.Player].Contains("[전용] 신기루"))
+            {
+                if (UnityEngine.Random.Range(1, 21) == 1)
+                    ev.Player.EnableEffect(EffectType.Invisible, 1, 1.25f * DuplicateCount(ev.Player, "[전용] 신기루"));
+            }
+
+            if (PlayerAbilities[ev.Player].Contains("[전용] 격노"))
+            {
+                if (ev.Player.Role is Scp096Role Scp096)
+                {
+                    if (Scp096.RageManager.IsEnraged && ev.Attacker != null && ev.Attacker != ev.Player)
+                        ev.DamageHandler.Damage /= DuplicateCount(ev.Player, "[전용] 격노") + 1;
                 }
+            }
 
-                if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+            if (PlayerAbilities[ev.Attacker].Contains("[전용] 별자리 찢기"))
+            {
+                if (UnityEngine.Random.Range(1, 5) == 1)
+                    ev.DamageHandler.Damage = -1;
+            }
+
+            if (PlayerAbilities[ev.Attacker].Contains("[전용] 숙련된 암살자"))
+            {
+                if (ev.DamageHandler.Type == DamageType.Strangled)
+                    ev.DamageHandler.Damage *= 10;
+            }
+
+            if (PlayerAbilities[ev.Player].Contains("[전용] 반블럭"))
+            {
+                ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 25;
+
+                Timing.CallDelayed(3f, () =>
                 {
-                    if (UnityEngine.Random.Range(1, 6) == 1)
-                        Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
-                }
+                    if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 25)
+                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 25;
 
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                    else
+                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
+                });
+            }
+
+            if (PlayerAbilities[ev.Player].Contains("[시너지] 드루이드"))
+            {
+                if (UnityEngine.Random.Range(1, 3) == 1)
                 {
-                    int PowerCount = 0;
-
-                    foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
-                    {
-                        if (Vector3.Distance(player.Position, ev.Player.Position) < 11)
-                            PowerCount++;
-                    }
-
-                    ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.1 * PowerCount)));
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[전용] 신기루"))
-                {
-                    if (UnityEngine.Random.Range(1, 21) == 1)
-                        ev.Player.EnableEffect(EffectType.Invisible, 1, 1.25f * DuplicateCount(ev.Player, "[전용] 신기루"));
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[전용] 격노"))
-                {
-                    if (ev.Player.Role is Scp096Role Scp096)
-                    {
-                        if (Scp096.RageManager.IsEnraged && ev.Attacker != null && ev.Attacker != ev.Player)
-                            ev.DamageHandler.Damage /= DuplicateCount(ev.Player, "[전용] 격노") + 1;
-                    }
-                }
-
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 별자리 찢기"))
-                {
-                    if (UnityEngine.Random.Range(1, 5) == 1)
-                        ev.DamageHandler.Damage = -1;
-                }
-
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 숙련된 암살자"))
-                {
-                    if (ev.DamageHandler.Type == DamageType.Strangled)
-                        ev.DamageHandler.Damage *= 10;
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[전용] 반블럭"))
-                {
-                    ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 25;
-
-                    Timing.CallDelayed(3f, () =>
-                    {
-                        if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 25)
-                            ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 25;
-
-                        else
-                            ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
-                    });
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[시너지] 드루이드"))
-                {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
-                    {
-                        ev.IsAllowed = false;
-                        ev.Attacker.Hurt(ev.DamageHandler.Damage, $"{ev.Player.Nickname}의 정령의 가호에 의해 사망하였습니다.");
-                    }
+                    ev.IsAllowed = false;
+                    ev.Attacker.Hurt(ev.DamageHandler.Damage, $"{ev.Player.Nickname}의 정령의 가호에 의해 사망하였습니다.");
                 }
             }
         }
