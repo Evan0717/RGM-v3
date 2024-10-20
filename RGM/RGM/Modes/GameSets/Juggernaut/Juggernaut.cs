@@ -117,7 +117,7 @@ namespace RGM.Modes
             while (true)
             {
                 if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius))
-                    juggernaut.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius} ]</b>", 1.2f);
+                    juggernaut.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
 
                 else
                     juggernaut.ShowHint("당신은 임무를 완수하였습니다.", 1.2f);
