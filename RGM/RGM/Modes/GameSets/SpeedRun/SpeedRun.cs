@@ -56,8 +56,6 @@ namespace RGM.Modes
 
             Warhead.Start();
 
-            Player.List.ToList().ForEach(Spawned);
-
             foreach (var Item in Standards)
                 ItemsList.Add(Item);
 
@@ -71,6 +69,8 @@ namespace RGM.Modes
                 locker.IsOpen = true;
 
             Tools.TryInstallMode("FriendlyFire");
+
+            Player.List.ToList().ForEach(Spawned);
 
             yield break;
         }
@@ -86,8 +86,7 @@ namespace RGM.Modes
             {
                 if (player.Role.Type != RoleTypeId.ChaosConscript)
                 {
-                    if (player.Role.Type != RoleTypeId.ClassD)
-                        player.Role.Set(RoleTypeId.ClassD);
+                    player.Role.Set(RoleTypeId.ClassD);
 
                     foreach (var Item in ItemsList)
                         player.AddItem(Item);
