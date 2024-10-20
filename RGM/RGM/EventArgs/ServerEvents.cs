@@ -54,6 +54,7 @@ namespace RGM.EventArgs
 
             Timing.RunCoroutine(SendHeartbeat());
             Timing.RunCoroutine(SyncSpectatedHint());
+            Timing.RunCoroutine(ThrowawayBroadcast());
             Timing.RunCoroutine(GameStartButton());
             Timing.RunCoroutine(ModeResetButton());
             Timing.RunCoroutine(IsFallDown());

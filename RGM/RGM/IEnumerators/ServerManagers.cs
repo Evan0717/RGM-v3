@@ -13,6 +13,7 @@ using RGM.API.Interfaces;
 using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
 using Exiled.API.Features.Roles;
+using MultiBroadcast.API;
 
 namespace RGM.IEnumerators
 {
@@ -42,6 +43,17 @@ namespace RGM.IEnumerators
                 }
 
                 yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
+        public static IEnumerator<float> ThrowawayBroadcast()
+        {
+            while (true)
+            {
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60 * 10, 60 * 20 + 1));
+
+                foreach (var player in Player.List)
+                    player.AddBroadcast(10, $"<size=20><b><color=#7289da>Discord</color>에 가입하여 <color=#C8FE2E>실시간 업데이트 현황</color>을 확인하고, 서버에 대한 <color=#F781D8>아이디어</color>를 나누고, <color=#FF4000>상점</color>을 이용하세요!</b></size>");
             }
         }
 
