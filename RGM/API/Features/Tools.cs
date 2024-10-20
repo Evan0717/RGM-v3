@@ -60,7 +60,8 @@ namespace RGM.API.Features
                 "데스런",
                 "고문",
                 "숨바꼭질",
-                "점프맵 라운지"
+                "점프맵 라운지",
+                "스피드런"
             };
 
             return Mods;
