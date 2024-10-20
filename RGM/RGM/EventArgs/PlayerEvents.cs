@@ -363,6 +363,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             if (ev.Player.IsAlive)
             {
                 ev.Player.Scale = new Vector3(1, 1, 1);
+                ev.Player.EnableEffect(EffectType.FogControl);
 
                 if (Round.IsLobby || ev.Reason == SpawnReason.RoundStart)
                 {
