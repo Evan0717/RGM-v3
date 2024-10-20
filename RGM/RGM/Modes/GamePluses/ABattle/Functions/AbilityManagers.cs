@@ -182,8 +182,6 @@ namespace RGM.Modes.ABattleFunctions
 
         public static async void AddAbilityVote(Player player)
         {
-            Webhook.Send($"워업ㅣ{player.DisplayNickname} - 능력 선택창 오픈");
-
             List<string> AbilitesVote = new List<string>();
             List<string> DisplayVote = new List<string>();
             int SelectedAbilityNumber = 0;
@@ -229,14 +227,10 @@ namespace RGM.Modes.ABattleFunctions
 
         public static async void AddAbility(Player player, string force = null)
         {
-            Webhook.Send($"워업ㅣ{player.DisplayNickname} - 능력(미정) 지급 중");
-
             string abilityGrade = PickAbilityGrade(player, force);
             string abilityName = force == null ? Tools.GetRandomValue(AbilityList(player, abilityGrade).Keys.ToList()) : force;
 
             ApplyGiveAbility(player, abilityGrade, abilityName);
-
-            Webhook.Send($"워업ㅣ{player.DisplayNickname} - 능력({abilityName}) 지급 완료 (1/2)");
 
             string aT = abilityName.Replace("[전용] ", "").Replace("[일반] ", "").Replace("[희귀] ", "").Replace("[영웅] ", "").Replace("[전설] ", "").Replace("[신화] ", "").Replace("[시너지] ", "");
 
@@ -754,8 +748,6 @@ namespace RGM.Modes.ABattleFunctions
                     AddAbilityVote(player);
                     break;
             }
-
-            Webhook.Send($"워업ㅣ{player.DisplayNickname} - 능력({abilityName}) 적용 완료 (2/2)");
         }
     }
 }
