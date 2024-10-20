@@ -26,7 +26,7 @@ namespace RGM.Functions
                 ModeVote.Add(mode, new List<Player>());
 
                 if (UnityEngine.Random.Range(1, 11) == 1)
-                    SubModeVote.Add(Tools.GetRandomValue(ModeList.Keys.Where(x => ModeList[x][3] != "private" && !ModeVote.ContainsKey(x) && !Tools.GetGameSetsList().Contains(x)).ToList()));
+                    SubModeVote.Add(Tools.GetRandomValue(ModeList.Keys.Where(x => ModeList[x][3] != "private" && !Tools.GetGameSetsList().Contains(x) && !ModeVote.ContainsKey(x) && !Tools.GetGameSetsList().Contains(x)).ToList()));
 
                 else
                     SubModeVote.Add(null);
