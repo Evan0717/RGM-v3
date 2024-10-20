@@ -71,6 +71,7 @@ namespace RGM.Commands.ClientCommands
                     string Message = Notions.StartModeDescription
                         .Replace("{ModeColor}", ModeColor)
                         .Replace("{CurrentMode}", CurrentMode)
+                        .Replace("{CurrentSubMode}", CurrentSubMode != null ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode][0]}>{CurrentSubMode}</color></size>\n" : "")
                         .Replace("{ModeDescription}", ModeDescription);
 
                     response = $"성공적으로 모드 설명을 불러왔습니다.";
