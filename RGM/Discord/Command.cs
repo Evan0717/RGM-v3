@@ -80,11 +80,15 @@ namespace RGM.Discord
 
                 result = string.Join("\n", matches);
 
+                Server.ExecuteCommand($"{Value[1]}\n{result}");
+
+                /*
                 foreach (var player in Player.List)
                 {
                     player.AddBroadcast(10, $"<b><size=25>랜덤게임모드(RGM)의 새 릴리즈가 업데이트되었습니다!</size></b>\n<size=20>콘솔(` 또는 ~)을 열어 상세 내용을 확인하세요.</size>");
                     player.SendConsoleMessage($"\n<size=30>새로운 랜덤게임모드(RGM) 업데이트</size>\n<size=25>{result}</size>", "white");
                 }
+                */
             }
 
             response.ContentLength64 = result.Length;

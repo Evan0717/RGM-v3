@@ -288,11 +288,7 @@ namespace RGM.Modes.ABattleEventArgs
         {
             try
             {
-                if (ev.Player != null &&
-                    !ev.Player.ReferenceHub.isLocalPlayer &&
-                    ev.Attacker != null &&
-                    !ev.Attacker.IsNPC &&
-                    ev.DamageHandler.Type != DamageType.Warhead)
+                if (!ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead)
                 {
                     if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
                     {
@@ -301,30 +297,6 @@ namespace RGM.Modes.ABattleEventArgs
                         PlayerAbilities[ev.Player].Remove("[일반] 보험");
                         AddAbility(ev.Player, "[일반] 만료된 보험");
                         return;
-                    }
-
-                    if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
-                    {
-                        for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
-                        {
-                            List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.Player.Role.Team).ToList();
-                            Player Get = null;
-                            string Ability = null;
-
-                            if (GetList.Count > 0)
-                            {
-                                Get = Tools.GetRandomValue(GetList);
-                                Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
-
-                                if (PlayerAbilities.ContainsKey(Get))
-                                    PlayerAbilities[Get].Add(Ability);
-
-                                ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
-                                Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
-                            }
-                            else
-                                ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
-                        }
                     }
 
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 구사일생"))
@@ -354,7 +326,7 @@ namespace RGM.Modes.ABattleEventArgs
                         return;
                     }
 
-                    if (PlayerAbilities[ev.Player].Contains("[전설] 마술사"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Player].Contains("[전설] 마술사"))
                     {
                         ev.IsAllowed = false;
 
@@ -376,7 +348,7 @@ namespace RGM.Modes.ABattleEventArgs
                         return;
                     }
 
-                    if (PlayerAbilities[ev.Player].Contains("[신화] 조커"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Player].Contains("[신화] 조커"))
                     {
                         ev.IsAllowed = false;
 
@@ -410,6 +382,30 @@ namespace RGM.Modes.ABattleEventArgs
 
                     // 죽음이 확정된 상황
 
+                    if (PlayerAbilities[ev.Player].Contains("[일반] 대물림"))
+                    {
+                        for (int i = 1; i < DuplicateCount(ev.Player, "[일반] 대물림") + 1; i++)
+                        {
+                            List<Player> GetList = Player.List.Where(x => x != ev.Player && x.IsAlive && x.Role.Team == ev.Player.Role.Team).ToList();
+                            Player Get = null;
+                            string Ability = null;
+
+                            if (GetList.Count > 0)
+                            {
+                                Get = Tools.GetRandomValue(GetList);
+                                Ability = Tools.GetRandomValue(PlayerAbilities[ev.Player]);
+
+                                if (PlayerAbilities.ContainsKey(Get))
+                                    PlayerAbilities[Get].Add(Ability);
+
+                                ev.Player.ShowHint($"{Get.Nickname}(에)게 {Ability}(을)를 양도하였습니다.", 5);
+                                Get.ShowHint($"{ev.Player.Nickname}(으)로부터 {Ability}(을)를 양도받았습니다.", 5);
+                            }
+                            else
+                                ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
+                        }
+                    }
+
                     if (PlayerAbilities[ev.Player].Contains("[영웅] 최후의 발악"))
                     {
                         ev.IsAllowed = false;
@@ -438,21 +434,21 @@ namespace RGM.Modes.ABattleEventArgs
                         }
                     }
 
-                    if (PlayerAbilities[ev.Player].Contains("[영웅] 슈퍼 스타"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Player].Contains("[영웅] 슈퍼 스타"))
                     {
                         foreach (var player in Player.List.Where(x => !x.IsNPC))
                             player.AddBroadcast(10, $"<size=20><color={RatingColor["영웅"]}>슈퍼 스타</color>였던 {ev.Player.Nickname}(<color={ev.Player.Role.Color.ToHex()}>{Trans.Role[ev.Player.Role.Type]}</color>)(은)는 " +
                                 $"{ev.Attacker.Nickname}(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>)에 의해 <b>{ev.Player.CurrentRoom.Name}</b>에서 사망하였습니다.</size>");
                     }
 
-                    if (PlayerAbilities[ev.Player].Contains("[영웅] 극독"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Player].Contains("[영웅] 극독"))
                     {
                         ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 12 * DuplicateCount(ev.Player, "[영웅] 극독"));
 
                         ev.Attacker.ShowHint("극독에 당했습니다!");
                     }
 
-                    if (PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Attacker].Contains("[전설] 킬스트릭"))
                     {
                         if (UnityEngine.Random.Range(1, 3) == 1)
                             AddAbilityVote(ev.Attacker);
@@ -461,7 +457,7 @@ namespace RGM.Modes.ABattleEventArgs
                             AddAbility(ev.Attacker);
                     }
 
-                    if (PlayerAbilities[ev.Attacker].Contains("[신화] 차원 강탈자"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Attacker].Contains("[신화] 차원 강탈자"))
                     {
                         foreach (var Ability in PlayerAbilities[ev.Player])
                             PlayerAbilities[ev.Attacker].Add(Ability);
@@ -469,7 +465,7 @@ namespace RGM.Modes.ABattleEventArgs
                         ev.Player.ShowHint("능력을 강탈당했습니다!");
                     }
 
-                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
+                    if (ev.Attacker != null && PlayerAbilities[ev.Attacker].Contains("[전용] 공포"))
                     {
                         foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
                         {
@@ -479,16 +475,18 @@ namespace RGM.Modes.ABattleEventArgs
                     }
                 }
             }
-            finally
+            catch (Exception e)
             {
-                PlayerWorkstation[ev.Player].Clear();
-                PlayerAbilities[ev.Player].Clear();
-                ev.Player.Scale = new Vector3(1, 1, 1);
-                Server.ExecuteCommand($"/speak {ev.Player.Id} 0");
-                ev.Player.IsUsingStamina = true;
-                if (GodModePlayers.Contains(ev.Player))
-                    GodModePlayers.Remove(ev.Player);
+                Log.Error(e);
             }
+
+            PlayerWorkstation[ev.Player].Clear();
+            PlayerAbilities[ev.Player].Clear();
+            ev.Player.Scale = new Vector3(1, 1, 1);
+            Server.ExecuteCommand($"/speak {ev.Player.Id} 0");
+            ev.Player.IsUsingStamina = true;
+            if (GodModePlayers.Contains(ev.Player))
+                GodModePlayers.Remove(ev.Player);
         }
 
         public static void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
@@ -572,6 +570,8 @@ namespace RGM.Modes.ABattleEventArgs
                         PlayerAbilities[ev.Player].Remove("[희귀] 반창고");
 
                         ev.Player.Health = ev.Player.MaxHealth;
+
+                        AddAbility(ev.Player, "[희귀] 해진 반창고");
                     }
                 }
 
