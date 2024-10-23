@@ -74,7 +74,10 @@ namespace RGM.Discord
             {
                 string pattern = @"\)\s(.*?)\s-";
 
-                MatchCollection matches = Regex.Matches(Value[1], pattern);
+                List<string> matches = new List<string>();
+                foreach (Match match in Regex.Matches(Value[1], pattern))
+                    matches.Add(match.Value);
+
                 result = string.Join("\n", matches);
 
                 foreach (var player in Player.List)

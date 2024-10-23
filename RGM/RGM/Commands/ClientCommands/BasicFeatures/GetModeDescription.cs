@@ -61,16 +61,14 @@ namespace RGM.Commands.ClientCommands
 
                 if (ModeList.Keys.Contains(args))
                 {
-                    CurrentMode = args;
-
-                    string ModeColor = ModeList[CurrentMode][0];
-                    string ModeDescription = ModeList[CurrentMode][1];
-                    string ModeFileName = ModeList[CurrentMode][2];
-                    string ModeDescriptionDetail = ModeList[CurrentMode][5];
+                    string ModeColor = ModeList[args][0];
+                    string ModeDescription = ModeList[args][1];
+                    string ModeFileName = ModeList[args][2];
+                    string ModeDescriptionDetail = ModeList[args][5];
 
                     string Message = Notions.StartModeDescription
                         .Replace("{ModeColor}", ModeColor)
-                        .Replace("{CurrentMode}", CurrentMode)
+                        .Replace("{CurrentMode}", args)
                         .Replace("{CurrentSubMode}", CurrentSubMode != null ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode][0]}>{CurrentSubMode}</color></size>\n" : "")
                         .Replace("{ModeDescription}", ModeDescription);
 
