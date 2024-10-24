@@ -42,12 +42,12 @@ namespace RGM.EventArgs
             var donator = new Donator.Main();
             donator.OnEnabled();
 
-            First = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "First").ToList();
-            Second = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Second").ToList();
-            Third = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Third").ToList();
-            Numbers = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Number").ToList();
-            RandomColors = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "RandomColor").ToList();
-            Balls = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Ball").ToList();
+            First = Tools.GetObjectList("First");
+            Second = Tools.GetObjectList("Second");
+            Third = Tools.GetObjectList("Third");
+            Numbers = Tools.GetObjectList("Number");
+            RandomColors = Tools.GetObjectList("RandomColor");
+            Balls = Tools.GetObjectList("Ball");
 
             PickModes();
             Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());

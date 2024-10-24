@@ -78,8 +78,8 @@ namespace RGM.Modes
 
             GGUtils.Gtool.PlaySound("dj", "tothemoon", VoiceChat.VoiceChatChannel.Intercom, 25, true);
 
-            ClubLights = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "ClubLight").ToList();
-            Pads = GameObject.FindObjectsOfType<Transform>().Where(t => t.name == "Pad").ToList();
+            ClubLights = Tools.GetObjectList("ClubLight");
+            Pads = Tools.GetObjectList("Pad");
 
             while (Phase < 11)
             {
