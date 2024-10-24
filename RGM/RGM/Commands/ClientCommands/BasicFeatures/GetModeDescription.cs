@@ -35,14 +35,14 @@ namespace RGM.Commands.ClientCommands
                 {
                     List<string> ModeDesc = Tools.GetModeDesc(CurrentMode, CurrentSubMode);
 
-                    response = ModeDesc[0];
+                    response = ModeDesc[1];
 
-                    player.SendConsoleMessage(ModeDesc[1], "white");
-                    if (ModeDesc[2] == "")
-                        player.SendConsoleMessage($"\n{ModeDesc[1]}", "white");
+                    player.SendConsoleMessage(ModeDesc[0], "white");
+                    if (ModeDesc[3] == "")
+                        player.SendConsoleMessage($"\n{ModeDesc[2]}", "white");
 
                     else
-                        player.SendConsoleMessage($"\n{ModeDesc[2]}", "white");
+                        player.SendConsoleMessage($"\n{ModeDesc[3]}", "white");
 
                     return true;
                 }
@@ -55,14 +55,14 @@ namespace RGM.Commands.ClientCommands
                 {
                     List<string> ModeDesc = Tools.GetModeDesc(args);
 
-                    response = ModeDesc[0];
+                    response = ModeDesc[1];
 
-                    player.SendConsoleMessage(ModeDesc[1], "white");
-                    if (ModeDesc[2] == "")
-                        player.SendConsoleMessage($"\n{ModeDesc[1]}", "white");
+                    player.SendConsoleMessage(ModeDesc[0], "white");
+                    if (ModeDesc[3] == "")
+                        player.SendConsoleMessage($"\n{ModeDesc[2]}", "white");
 
                     else
-                        player.SendConsoleMessage($"\n{ModeDesc[2]}", "white");
+                        player.SendConsoleMessage($"\n{ModeDesc[3]}", "white");
 
                     return true;
                 }

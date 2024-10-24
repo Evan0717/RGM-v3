@@ -132,33 +132,22 @@ namespace RGM.EventArgs
                 }
             }
 
-            string ModeColor = ModeList[CurrentMode][0];
-            string ModeDescription = ModeList[CurrentMode][1];
-            string ModeFileName = ModeList[CurrentMode][2];
-            string ModeDescriptionDetail = ModeList[CurrentMode][5];
-
-            Log.Info($"이번 라운드의 모드 : [{CurrentMode}]");
-
-            string Message = Notions.StartModeDescription
-                .Replace("{ModeColor}", ModeColor)
-                .Replace("{CurrentMode}", CurrentMode)
-                .Replace("{CurrentSubMode}", CurrentSubMode != null ? $"<size=16>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode][0]}>{CurrentSubMode}</color></size>\n" : "")
-                .Replace("{ModeDescription}", ModeDescription);
+            List<string> ModeDesc = Tools.GetModeDesc(CurrentMode, CurrentSubMode);
 
             foreach (var player in Player.List)
             {
                 player.ClearPlayerBroadcasts();
-                player.AddBroadcast(10, Message);
+                player.AddBroadcast(10, ModeDesc[0]);
 
-                player.SendConsoleMessage($"\n{Message.Replace("\n", "\n")}", "white");
-                if (ModeDescriptionDetail == "")
-                    player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
+                player.SendConsoleMessage($"\n{ModeDesc[0].Replace("\n", "\n")}", "white");
+                if (ModeDesc[3] == "")
+                    player.SendConsoleMessage($"\n{ModeDesc[2]}", "white");
 
                 else
-                    player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "white");
+                    player.SendConsoleMessage($"\n{ModeDesc[3]}", "white");
             }
 
-            Tools.TryInstallMode(ModeFileName);
+            Tools.TryInstallMode(CurrentMode);
 
             if (CurrentSubMode != null)
                 Tools.TryInstallMode(CurrentSubMode);

@@ -59,6 +59,7 @@ namespace RGM.API.Features
 
             return new List<string>() 
             { 
+                Message,
                 "성공적으로 모드 설명을 불러왔습니다.",
                 "해당 모드에 대한 자세한 설명이 없습니다.", 
                 ModeDescriptionDetail 
@@ -260,6 +261,8 @@ RP: {uc[1]}
                 var modeInstance = Activator.CreateInstance(modeType);
                 var onEnabledMethod = modeType.GetMethod("OnEnabled");
                 onEnabledMethod?.Invoke(modeInstance, null);
+
+                EnabledModeList.Add(ModeName);
 
                 return true;
             }
