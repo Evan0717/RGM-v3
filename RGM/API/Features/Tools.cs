@@ -39,6 +39,32 @@ namespace RGM.API.Features
             return itemList;
         }
 
+        public static List<Transform> GetObjectList(string Name)
+        {
+            return GameObject.FindObjectsOfType<Transform>().Where(t => t.name == Name).ToList();
+        }
+
+        public static List<string> GetModeDesc(string ModeName, string SubModeName = null)
+        {
+            string ModeColor = ModeList[ModeName][0];
+            string ModeDescription = ModeList[ModeName][1];
+            string ModeFileName = ModeList[ModeName][2];
+            string ModeDescriptionDetail = ModeList[ModeName][5];
+
+            string Message = Notions.StartModeDescription
+                .Replace("{ModeColor}", ModeColor)
+                .Replace("{CurrentMode}", ModeName)
+                .Replace("{CurrentSubMode}", SubModeName != null ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[SubModeName][0]}>{SubModeName}</color></size>\n" : "")
+                .Replace("{ModeDescription}", ModeDescription);
+
+            return new List<string>() 
+            { 
+                "성공적으로 모드 설명을 불러왔습니다.",
+                "해당 모드에 대한 자세한 설명이 없습니다.", 
+                ModeDescriptionDetail 
+            };
+        }
+
         public static List<string> GetGameSetsList()
         {
             List<string> Mods = new List<string>()
