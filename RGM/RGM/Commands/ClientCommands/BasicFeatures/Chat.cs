@@ -71,7 +71,7 @@ namespace RGM.Commands.ClientCommands
                     {
                         $"<size=25>{BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
                         text,
-                        $"</color> ({player.Nickname}) <b> | </b>",
+                        $"</color> ({player.DisplayNickname}) <b> | </b>",
                         string.Join(" ", arguments),
                         "</size>"
                     });
@@ -89,7 +89,7 @@ namespace RGM.Commands.ClientCommands
                     {
                         $"<size=25>{BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
                         text,
-                        $"</color> ({player.Nickname}) <b> | </b>",
+                        $"</color> ({player.DisplayNickname}) <b> | </b>",
                         string.Join(" ", arguments),
                         "</size>"
                     });
@@ -107,7 +107,7 @@ namespace RGM.Commands.ClientCommands
                     {
                         $"<size=25>{BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
                         text,
-                        $"</color> ({player.Nickname}) <b> | </b>",
+                        $"</color> ({player.DisplayNickname}) <b> | </b>",
                         string.Join(" ", arguments),
                         "</size>"
                     });
