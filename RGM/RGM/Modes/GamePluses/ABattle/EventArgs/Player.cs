@@ -551,25 +551,8 @@ namespace RGM.Modes.ABattleEventArgs
 
         public static void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Player != null &&
-                    !ev.Player.ReferenceHub.isLocalPlayer &&
-                    ev.Attacker != null &&
-                    !ev.Attacker.IsNPC &&
-                    ev.DamageHandler.Type != DamageType.Warhead)
+            if (!ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead && !GodModePlayers.Contains(ev.Player))
             {
-                if (PlayerAbilities[ev.Attacker].Contains("[일반] 단련"))
-                    ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * DuplicateCount(ev.Player, "[일반] 단련"))));
-
-                if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
-                    ev.Attacker.AddAhp((20 * DuplicateCount(ev.Player, "[희귀] 흡혈귀")) * (ev.DamageHandler.Damage / 100));
-
-                if (ev.Attacker.CurrentItem != null && FlamethrowerSerials.Contains(ev.Attacker.CurrentItem.Serial))
-                {
-                    ev.DamageHandler.Damage /= 5;
-
-                    ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
-                }
-
                 if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고"))
                 {
                     if (ev.Player.Health <= ev.Player.MaxHealth / 2)
@@ -582,50 +565,10 @@ namespace RGM.Modes.ABattleEventArgs
                     }
                 }
 
-                if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
-                {
-                    if (UnityEngine.Random.Range(1, 6) == 1)
-                        Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
-                }
-
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
-                {
-                    int PowerCount = 0;
-
-                    foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
-                    {
-                        if (Vector3.Distance(player.Position, ev.Player.Position) < 11)
-                            PowerCount++;
-                    }
-
-                    ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.1 * PowerCount)));
-                }
-
                 if (PlayerAbilities[ev.Player].Contains("[전용] 신기루"))
                 {
                     if (UnityEngine.Random.Range(1, 21) == 1)
                         ev.Player.EnableEffect(EffectType.Invisible, 1, 1.25f * DuplicateCount(ev.Player, "[전용] 신기루"));
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[전용] 격노"))
-                {
-                    if (ev.Player.Role is Scp096Role Scp096)
-                    {
-                        if (Scp096.RageManager.IsEnraged && ev.Attacker != null && ev.Attacker != ev.Player)
-                            ev.DamageHandler.Damage /= DuplicateCount(ev.Player, "[전용] 격노") + 1;
-                    }
-                }
-
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 별자리 찢기"))
-                {
-                    if (UnityEngine.Random.Range(1, 5) == 1)
-                        ev.DamageHandler.Damage = -1;
-                }
-
-                if (PlayerAbilities[ev.Attacker].Contains("[전용] 숙련된 암살자"))
-                {
-                    if (ev.DamageHandler.Type == DamageType.Strangled)
-                        ev.DamageHandler.Damage *= 10;
                 }
 
                 if (PlayerAbilities[ev.Player].Contains("[전용] 반블럭"))
@@ -642,12 +585,68 @@ namespace RGM.Modes.ABattleEventArgs
                     });
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[시너지] 드루이드"))
+                if (ev.Attacker != null)
                 {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
+                    if (PlayerAbilities[ev.Attacker].Contains("[일반] 단련"))
+                        ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.2 * DuplicateCount(ev.Player, "[일반] 단련"))));
+
+                    if (PlayerAbilities[ev.Attacker].Contains("[희귀] 흡혈귀") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                        ev.Attacker.AddAhp((20 * DuplicateCount(ev.Player, "[희귀] 흡혈귀")) * (ev.DamageHandler.Damage / 100));
+
+                    if (ev.Attacker.CurrentItem != null && FlamethrowerSerials.Contains(ev.Attacker.CurrentItem.Serial))
                     {
-                        ev.IsAllowed = false;
-                        ev.Attacker.Hurt(ev.DamageHandler.Damage, $"{ev.Player.Nickname}의 정령의 가호에 의해 사망하였습니다.");
+                        ev.DamageHandler.Damage /= 5;
+
+                        ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
+                    }
+
+                    if (PlayerAbilities[ev.Attacker].Contains("[신화] 로켓 런처") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                    {
+                        if (UnityEngine.Random.Range(1, 6) == 1)
+                            Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
+                    }
+
+                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                    {
+                        int PowerCount = 0;
+
+                        foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
+                        {
+                            if (Vector3.Distance(player.Position, ev.Player.Position) < 11)
+                                PowerCount++;
+                        }
+
+                        ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.1 * PowerCount)));
+                    }
+
+                    if (PlayerAbilities[ev.Player].Contains("[전용] 격노"))
+                    {
+                        if (ev.Player.Role is Scp096Role Scp096)
+                        {
+                            if (Scp096.RageManager.IsEnraged && ev.Attacker != null && ev.Attacker != ev.Player)
+                                ev.DamageHandler.Damage /= DuplicateCount(ev.Player, "[전용] 격노") + 1;
+                        }
+                    }
+
+                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 별자리 찢기"))
+                    {
+                        if (UnityEngine.Random.Range(1, 5) == 1)
+                            ev.DamageHandler.Damage = -1;
+                    }
+
+                    if (PlayerAbilities[ev.Attacker].Contains("[전용] 숙련된 암살자"))
+                    {
+                        if (ev.DamageHandler.Type == DamageType.Strangled)
+                            ev.DamageHandler.Damage *= 10;
+                    }
+
+                    if (PlayerAbilities[ev.Player].Contains("[시너지] 드루이드"))
+                    {
+                        if (UnityEngine.Random.Range(1, 3) == 1)
+                        {
+                            ev.IsAllowed = false;
+                            ev.Attacker.Hurt(ev.DamageHandler.Damage, $"{ev.Player.Nickname}의 정령의 가호에 의해 사망하였습니다.");
+                        }
                     }
                 }
             }
