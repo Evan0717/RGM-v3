@@ -288,7 +288,7 @@ namespace RGM.Modes.ABattleEventArgs
         {
             try
             {
-                if (!ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead)
+                if (!ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead && !GodModePlayers.Contains(ev.Player))
                 {
                     if (PlayerAbilities[ev.Player].Contains("[일반] 보험"))
                     {
