@@ -30,12 +30,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
-                    if (!pl.Contains(player.UserId))
-                    {
-                        Server.ExecuteCommand($"/speak {player} enable");
-                        pl.Add(player.UserId);
-                    }
+                Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 1");
 
                 yield return Timing.WaitForSeconds(1f);
             }
