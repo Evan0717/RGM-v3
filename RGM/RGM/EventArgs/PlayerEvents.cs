@@ -512,7 +512,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
             string BadgeFormat(Player player)
             {
-                if (player.Group != null)
+                if (player.Group != null && !player.BadgeHidden)
                     return $"[<color={ColorFormat(player.Group.BadgeColor)}>{player.Group.BadgeText}</color>] ";
 
                 else
