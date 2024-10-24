@@ -48,7 +48,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
             Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
