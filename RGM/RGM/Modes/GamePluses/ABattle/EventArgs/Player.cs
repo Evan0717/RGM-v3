@@ -190,7 +190,7 @@ namespace RGM.Modes.ABattleEventArgs
             }
         }
 
-        public static void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
+        public static async void OnFlippingCoin(Exiled.Events.EventArgs.Player.FlippingCoinEventArgs ev)
         {
             ushort Serial = ev.Item.Serial;
 
@@ -256,7 +256,8 @@ namespace RGM.Modes.ABattleEventArgs
 
                 ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
 
-                Timing.WaitUntilTrue(() => ev.Player.IsAlive);
+                while (!ev.Player.IsAlive)
+                    await Task.Delay(1000);
 
                 for (int i = 1; i < 4; i++)
                     AddAbility(ev.Player);
