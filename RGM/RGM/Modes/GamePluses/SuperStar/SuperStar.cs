@@ -19,11 +19,9 @@ namespace RGM.Modes
     {
         public static SuperStar Instance;
 
-        public List<string> pl = new List<string>();
-
         public void OnEnabled()
         {
-            Exiled.Events.Handlers.Player.Left += OnLeft;
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -34,12 +32,6 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
-        }
-
-        public void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
-        {
-            if (pl.Contains(ev.Player.UserId))
-                pl.Remove(ev.Player.UserId);
         }
     }
 }
