@@ -15,6 +15,7 @@ using Exiled.API.Features;
 
 using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
+using MEC;
 
 namespace RGM.EventArgs
 {
@@ -358,6 +359,15 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                 ev.IsAllowed = false;
         }
 
+        public static void OnSpawnedRagdoll(Exiled.Events.EventArgs.Player.SpawnedRagdollEventArgs ev)
+        {
+            Timing.CallDelayed(5 * 60, () =>
+            {
+                if (ev.Ragdoll != null)
+                    ev.Ragdoll.Destroy();
+            });
+        }
+
         public static async void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive)
@@ -544,6 +554,27 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
             if (!ev.Player.IsNPC)
                 PlayersReport[ev.Player.UserId].Death += 1;
+        }
+
+        public static void OnDroppedItem(Exiled.Events.EventArgs.Player.DroppedItemEventArgs ev)
+        {
+            Timing.CallDelayed(5 * 60, () =>
+            {
+                if (ev.Pickup != null)
+                    ev.Pickup.Destroy();
+            });
+        }
+
+        public static void OnDroppedAmmo(Exiled.Events.EventArgs.Player.DroppedAmmoEventArgs ev)
+        {
+            Timing.CallDelayed(5 * 60, () =>
+            {
+                foreach (var ammo in ev.AmmoPickups)
+                {
+                    if (ammo != null)
+                        ammo.Destroy();
+                }
+            });
         }
     }
 }
