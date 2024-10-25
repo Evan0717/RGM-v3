@@ -193,6 +193,40 @@ namespace RGM.Modes.ABattleFunctions
                 AbilitesVote.Add(Tools.GetRandomValue(abilityList));
             }
 
+            if (PlayerAbilities[player].Contains("[희귀] 하급 변이"))
+            {
+                if (UnityEngine.Random.Range(1, 5) == 1)
+                {
+                    AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(EpicAbilities.Keys.ToList());
+
+                    AddAbility(player, "[희귀] 하급 변이 성공");
+                }
+                else
+                    AddAbility(player, "[희귀] 하급 변이 실패");
+            }
+            if (PlayerAbilities[player].Contains("[영웅] 변이"))
+            {
+                if (UnityEngine.Random.Range(1, 5) == 1)
+                {
+                    AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(LegendAbilities.Keys.ToList());
+
+                    AddAbility(player, "[영웅] 변이 성공");
+                }
+                else
+                    AddAbility(player, "[영웅] 변이 실패");
+            }
+            if (PlayerAbilities[player].Contains("[전설] 상급 변이"))
+            {
+                if (UnityEngine.Random.Range(1, 5) == 1)
+                {
+                    AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(MythicAbilities.Keys.ToList());
+
+                    AddAbility(player, "[전설] 상급 변이 성공");
+                }
+                else
+                    AddAbility(player, "[전설] 상급 변이 실패");
+            }
+
             for (int i = 1; i < 4; i++)
                 DisplayVote.Add($"[{i}] {ColorFormat(AbilitesVote[i - 1])}");
 
@@ -312,11 +346,18 @@ namespace RGM.Modes.ABattleFunctions
                         await Task.Delay(100);
                     }
 
+                    PlayerAbilities[player].Remove("[일반] 신내림");
+
                     if (Pass)
                     {
                         for (int i = 1; i < UnityEngine.Random.Range(3, 5); i++)
                             AddAbility(player);
+
+                        AddAbility(player, "[일반] 신내림 성공");
                     }
+                    else
+                        AddAbility(player, "[일반] 신내림 실패");
+
                     break;
                 case "횃불":
                     player.AddItem(ItemType.Lantern);
@@ -368,6 +409,33 @@ namespace RGM.Modes.ABattleFunctions
                         Server.ExecuteCommand($"/forceeq {player.Id} 42");
                     break;
                 case "바디백": player.GetEffect(EffectType.BodyshotReduction).Intensity += 6; break;
+                case "기도":
+                    bool Pass1 = false;
+
+                    for (int i = 1; i < 61; i++)
+                    {
+                        foreach (var xx in Player.List.Where(x => PlayerAbilities[x].Contains("[일반] 신내림")))
+                        {
+                            Timing.CallDelayed(1f, () => { xx.AddBroadcast(5, $"<size=25>누군가가 당신의 기도에 응답했습니다.</size>"); });
+                            Pass1 = true;
+                            break;
+                        }
+
+                        await Task.Delay(100);
+                    }
+
+                    PlayerAbilities[player].Remove("[일반] 기도");
+
+                    if (Pass1)
+                    {
+                        for (int i = 1; i < UnityEngine.Random.Range(3, 5); i++)
+                            AddAbility(player);
+
+                        AddAbility(player, "[일반] 기도 성공");
+                    }
+                    else
+                        AddAbility(player, "[일반] 기도 실패");
+                    break;
                 case "강철 껍질": player.GetEffect(EffectType.DamageReduction).Intensity += 10; break;
                 case "투명 망토": player.EnableEffect(EffectType.Invisible, 1, 25); break;
                 case "순간이동":
