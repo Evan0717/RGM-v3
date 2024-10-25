@@ -13,6 +13,7 @@ using RGM.Modes;
 using UnityEngine;
 
 using static RGM.Variables.ServerManagers;
+using RGM.Discord;
 
 namespace RGM.Commands.ClientCommands
 {
@@ -80,6 +81,7 @@ namespace RGM.Commands.ClientCommands
                         ply.AddBroadcast(6, text2);
                     }
                     response = $"'{text2}'";
+                    Webhook.Send($"**SCP 채팅**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({Trans.Role[player.Role.Type]}) - {string.Join(" ", arguments)}");
                     return true;
                 }
                 else if (player.IsDead)
@@ -98,6 +100,7 @@ namespace RGM.Commands.ClientCommands
                         ply.AddBroadcast(6, text2);
 
                     response = $"'{text2}'";
+                    Webhook.Send($"**관전자 채팅**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({Trans.Role[player.Role.Type]}) - {string.Join(" ", arguments)}");
                     return true;
                 }
                 else
@@ -119,6 +122,7 @@ namespace RGM.Commands.ClientCommands
                     }
 
                     response = $"'{text2}'";
+                    Webhook.Send($"**근거리 채팅**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({Trans.Role[player.Role.Type]}) - {string.Join(" ", arguments)}");
                     return true;
                 }
             }
