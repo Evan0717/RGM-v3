@@ -195,6 +195,8 @@ namespace RGM.Modes.ABattleFunctions
 
             if (PlayerAbilities[player].Contains("[희귀] 하급 변이"))
             {
+                PlayerAbilities[player].Remove("[희귀] 하급 변이");
+
                 if (UnityEngine.Random.Range(1, 5) == 1)
                 {
                     AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(EpicAbilities.Keys.ToList());
@@ -206,6 +208,8 @@ namespace RGM.Modes.ABattleFunctions
             }
             if (PlayerAbilities[player].Contains("[영웅] 변이"))
             {
+                PlayerAbilities[player].Remove("[영웅] 변이");
+
                 if (UnityEngine.Random.Range(1, 5) == 1)
                 {
                     AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(LegendAbilities.Keys.ToList());
@@ -217,6 +221,8 @@ namespace RGM.Modes.ABattleFunctions
             }
             if (PlayerAbilities[player].Contains("[전설] 상급 변이"))
             {
+                PlayerAbilities[player].Remove("[전설] 상급 변이");
+
                 if (UnityEngine.Random.Range(1, 5) == 1)
                 {
                     AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(MythicAbilities.Keys.ToList());
@@ -416,10 +422,13 @@ namespace RGM.Modes.ABattleFunctions
                     {
                         foreach (var xx in Player.List.Where(x => PlayerAbilities[x].Contains("[일반] 신내림")))
                         {
-                            Timing.CallDelayed(1f, () => { xx.AddBroadcast(5, $"<size=25>누군가가 당신의 기도에 응답했습니다.</size>"); });
+                            Timing.CallDelayed(1f, () => { player.AddBroadcast(5, $"<size=25>누군가가 당신의 기도에 응답했습니다.</size>"); });
                             Pass1 = true;
                             break;
                         }
+
+                        if (Pass1)
+                            break;
 
                         await Task.Delay(100);
                     }
