@@ -20,6 +20,7 @@ using static RGM.IEnumerators.LobbyManagers;
 using static RGM.IEnumerators.ServerManagers;
 
 using static RGM.Modes.ABattleFunctions.SpecificAbilities;
+using Exiled.API.Enums;
 
 namespace RGM.EventArgs
 {
@@ -200,6 +201,8 @@ namespace RGM.EventArgs
             {
                 foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
+                    player.EnableEffect(EffectType.SugarRush);
+
                     UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + 1).ToString();
                     UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + 1).ToString();
                 }
