@@ -374,6 +374,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 ev.Player.Scale = new Vector3(1, 1, 1);
                 ev.Player.EnableEffect(EffectType.FogControl);
+                ev.Player.DisableEffect(EffectType.Ghostly);
 
                 if (Round.IsLobby || ev.Reason == SpawnReason.RoundStart)
                 {
