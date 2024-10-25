@@ -27,6 +27,15 @@ namespace RGM
 20% 확률로 피버 모드가 활성화됩니다.
 <b><i><color=#FF00EA>피</color><color=#EF00EB>버</color> <color=#CF00ED>모</color><color=#BF00EF>드</color></i></b> 활성화 시, 재단에 등장하는 워크스테이션의 수가 증가합니다.
 """ } },
+            { "추가 지원", new List<string>() { "F5D0A9", "지원의 형태가 추가되고, 추가 아이템이 지급됩니다.", "", "onlysub", "AdditionalWave",
+"""
+[지원 형태]
+<color=#F781F3>뱀의 손</color>
+<color=red>SCP-049-2</color>
+
+[지원 아이템 목록]
+최대 3개까지 모든 아이템 중 랜덤으로 선택됨
+""" } },
             { "블랙아웃", new List<string>() { "2A0A0A", "시설 곳곳이 정전됩니다.", "Blackout", "onlysub", "",
 """
 각 방마다 <color=#FF00FF>기믹</color>이 적용될 수 있습니다.
@@ -228,6 +237,12 @@ COM-45
 무작위 아이템들이 동일한 확률로 지급됩니다.
 
 이후, 60초마다 무작위 아이템들을 하나 더 받습니다.
+""" } },
+            { "랜덤크기", new List<string>() { "BFFF00", "스폰 시 랜덤한 크기로 조정됩니다.", "RandomSize", "onlysub", "",
+"""
+x: 0.1 ~ 1.2
+y: 0.3 ~ 1.2
+z: 0.1 ~ 1.2
 """ } },
             { "빨간 불, 초록 불", new List<string>() { "F7D358", "빨간 불에는 움직이지 마세요.", "RedLightGreenLight", "public", "", 
 """

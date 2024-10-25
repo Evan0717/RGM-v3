@@ -244,9 +244,11 @@
     <Compile Include="RGM\Modes\GamePluses\ABattle\Variables\Cooldowns.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Variables\MainManagers.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Variables\Serials.cs" />
+    <Compile Include="RGM\Modes\GamePluses\AdditionalWave\AdditionalWave.cs" />
     <Compile Include="RGM\Modes\GamePluses\Blackout\Blackout.cs" />
     <Compile Include="RGM\Modes\GamePluses\Blessing\Blessing.cs" />
     <Compile Include="RGM\Modes\GamePluses\RandomEffect\RandomEffect.cs" />
+    <Compile Include="RGM\Modes\GamePluses\RandomSize\RandomSize.cs" />
     <Compile Include="RGM\Modes\GameSets\BombParty\BombParty.cs" />
     <Compile Include="RGM\Modes\GameSets\Cell\Cell.cs" />
     <Compile Include="RGM\Modes\GamePluses\Collector\Collector.cs" />
