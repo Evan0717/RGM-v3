@@ -201,7 +201,7 @@ namespace RGM.Modes.ABattleEventArgs
             {
                 ev.Item.Destroy();
 
-                if (UnityEngine.Random.Range(1, 11) == 1)
+                if (UnityEngine.Random.Range(1, 101) <= 15)
                 {
                     for (int i = 1; i < 4; i++)
                         AddAbility(ev.Player);
@@ -534,6 +534,16 @@ namespace RGM.Modes.ABattleEventArgs
         {
             if (ev.Attacker != null && !ev.Attacker.IsNPC && ev.DamageHandler.Type != DamageType.Warhead)
             {
+                if (PlayerAbilities[ev.Player].Contains("[일반] 도파민"))
+                {
+                    PlayerAbilities[ev.Player].Remove("[일반] 도파민");
+
+                    ev.IsAllowed = false;
+                    ev.Player.Health += ev.DamageHandler.Damage;
+
+                    AddAbility(ev.Player, "[일반] 도파민 분비");
+                }
+
                 if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고"))
                 {
                     if (ev.Player.Health <= ev.Player.MaxHealth / 2)
