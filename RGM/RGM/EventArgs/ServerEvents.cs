@@ -21,6 +21,7 @@ using static RGM.IEnumerators.ServerManagers;
 
 using static RGM.Modes.ABattleFunctions.SpecificAbilities;
 using Exiled.API.Enums;
+using RGM.API.DataBases;
 
 namespace RGM.EventArgs
 {
@@ -93,8 +94,16 @@ namespace RGM.EventArgs
 
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
 
-            if (UnityEngine.Random.Range(1, 21) == 1)
-                Tools.TryInstallMode("트릭 오어 트릿");
+            switch (UnityEngine.Random.Range(1, 41)) 
+            {
+                case 1:
+                    Tools.TryInstallMode("트릭 오어 트릿");
+                    break;
+
+                case 2:
+                    Tools.TryInstallMode("Spooky!");
+                    break;
+            }
 
             if (CurrentMode == null)
             {
@@ -203,22 +212,7 @@ namespace RGM.EventArgs
         {
             try
             {
-                List<EffectType> FunnyEffects = new List<EffectType>()
-                    {
-                        EffectType.SugarRush,
-                        EffectType.SugarHigh,
-                        EffectType.SugarCrave,
-                        EffectType.Spicy,
-                        EffectType.OrangeCandy,
-                        EffectType.OrangeWitness,
-                        EffectType.Metal,
-                        EffectType.Marshmallow,
-                        EffectType.InsufficientLighting,
-                        EffectType.Ghostly,
-                        EffectType.TemporaryBypass
-                    };
-
-                EffectType FunnyEffect = Tools.GetRandomValue(FunnyEffects);
+                EffectType FunnyEffect = Tools.GetRandomValue(Datas.FunnyEffects);
 
                 foreach (var player in Player.List.Where(x => !x.IsNPC))
                 {
