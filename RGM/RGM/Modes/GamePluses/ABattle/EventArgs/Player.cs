@@ -186,10 +186,10 @@ namespace RGM.Modes.ABattleEventArgs
                     ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
 
                 else if (FlamethrowerSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 마이크로 H.I.D 입니다!");
+                    ev.Player.ShowHint($"<b><color={RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
 
                 else if (LightWarriorSerials.Contains(ev.Item.Serial))
-                    ev.Player.ShowHint($"<b><color={RatingColor["신화"]}>광전사</color></b> 능력이 있는 제일버드 입니다!");
+                    ev.Player.ShowHint($"<b><color={RatingColor["신화"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
 
                 else if (ChaosCoinSerials.Contains(ev.Item.Serial))
                     ev.Player.ShowHint($"이 동전을 튕기면 <b><color={RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.");
@@ -598,10 +598,25 @@ namespace RGM.Modes.ABattleEventArgs
                         Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[신화] 광전사"))
+                if (PlayerAbilities[ev.Attacker].Contains("[신화] 광전사"))
                 {
-                    if (ev.Attacker == ev.Player && ev.Attacker.CurrentItem != null && LightWarriorSerials.Contains(ev.Attacker.CurrentItem.Serial))
-                        ev.IsAllowed = false;
+                    if (ev.Attacker.CurrentItem != null && LightWarriorSerials.Contains(ev.Attacker.CurrentItem.Serial))
+                    {
+                        if (ev.Attacker == ev.Player)
+                        {
+                            if (ev.DamageHandler.Type == DamageType.Explosion)
+                                ev.IsAllowed = false;
+                        }
+                        else if (ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                        {
+                            if (ev.Attacker.CurrentItem is Jailbird jailbird)
+                                jailbird.TotalCharges = 0;
+
+                            var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Attacker);
+                            g.FuseTime = 0.1f;
+                            g.SpawnActive(ev.Attacker.Position, ev.Attacker);
+                        }
+                    }
                 }
 
                 if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)

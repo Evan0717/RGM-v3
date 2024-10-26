@@ -655,9 +655,6 @@ namespace RGM.Modes.ABattleFunctions
                     Item jb = player.AddItem(ItemType.Jailbird);
                     LightWarriorSerials.Add(jb.Serial);
 
-                    if (jb is Jailbird jailbird)
-                        jailbird.TotalCharges = 5;
-
                     if (player.IsScp)
                         player.CurrentItem = jb;
                     break;
