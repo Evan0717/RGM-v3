@@ -19,7 +19,7 @@ namespace RGM.API.DataBases
             "Gun Game",
             "HIDE",
             "GG 클럽",
-            "미니 게임",
+            "미니게임",
             "해적 룰렛",
             "스플리프",
             "무덤",

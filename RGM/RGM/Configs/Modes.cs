@@ -95,7 +95,7 @@ namespace RGM
 
 <i>발 아래를 조심하세요!</i>
 """ } },
-            { "데스런", new List<string>() { "FF4000", "과학자는 죄수들의 접근을 막아야 합니다. 널리 퍼져 있는 함정들을 조심하십시오!", "DeathRun", "public", "",
+            { "데스런", new List<string>() { "FF4000", "과학자는 죄수들의 접근을 막아야 합니다. 널리 퍼져 있는 함정들을 조심하십시오!", "DeathRun", "private", "",
 """
 <color=yellow>과학자</color>의 경우, <color=red>빨간 버튼</color>을 눌러 함정을 발동시킬 수 있습니다.
 단, 함정은 1번만 작동시킬 수 있으므로, 한번에 최대한 많은 <color=orange>D계급</color>들을 죽이세요.
@@ -213,6 +213,34 @@ COM-45
 
 7 스테이지의 경우에는 고수만 해법을 찾을 수 있습니다.
 되도록이면 중앙으로 가거나, 넉백되어도 괜찮을 만큼 여유를 두십시오.
+""" } },
+            { "미니게임", new List<string>() { "A4A4A4", "간단한 게임들을 즐겨보세요! 총 3개의 라운드로 구성되어 있습니다.", "MiniGames", "public", "",
+"""
+등장하는 미니게임들의 목록입니다.
+
+airstrike
+dm
+escape
+battle
+versus
+cs
+glass
+deathrun
+line
+dodge
+fall
+football
+gungame
+knives
+puzzle
+race
+light
+spleef
+tag
+tdm
+lava
+zombie
+zombie2
 """ } },
             { "한국인이 좋아하는 속도", new List<string>() { "5882FA", "이런 거 좋아하시죠?", "KoreanSpeed", "onlysub", "",
 """

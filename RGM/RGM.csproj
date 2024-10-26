@@ -273,6 +273,7 @@
     <Compile Include="RGM\Modes\GameSets\JumpMap\JumpMap.cs" />
     <Compile Include="RGM\Modes\GamePluses\KoreanSpeed\KoreanSpeed.cs" />
     <Compile Include="RGM\Modes\GamePluses\Outlaw\Outlaw.cs" />
+    <Compile Include="RGM\Modes\GameSets\MiniGames\MiniGames.cs" />
     <Compile Include="RGM\Modes\GameSets\PirateRoulette\PirateRoulette.cs" />
     <Compile Include="RGM\Modes\GamePluses\RandomItem\RandomItem.cs" />
     <Compile Include="RGM\Modes\GamePluses\RedLightGreenLight\RedLightGreenLight.cs" />
