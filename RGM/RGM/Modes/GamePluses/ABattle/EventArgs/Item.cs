@@ -37,7 +37,13 @@ namespace RGM.Modes.ABattleEventArgs
         public static void OnSwinging(Exiled.Events.EventArgs.Item.SwingingEventArgs ev)
         {
             if (LightWarriorSerials.Contains(ev.Item.Serial))
+            {
                 ev.Jailbird.TotalCharges = 0;
+
+                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
+                g.FuseTime = 0.1f;
+                g.SpawnActive(ev.Player.Position, ev.Player);
+            }
         }
     }
 }
