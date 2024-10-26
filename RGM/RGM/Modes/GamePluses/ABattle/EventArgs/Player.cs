@@ -29,6 +29,7 @@ using static RGM.Modes.ABattleFunctions.AbilityManagers;
 using static RGM.Modes.ABattleFunctions.MainManagers;
 using static RGM.Modes.ABattleFunctions.SpecificAbilities;
 using RGM.Discord;
+using Exiled.API.Features.DamageHandlers;
 
 namespace RGM.Modes.ABattleEventArgs
 {
@@ -428,7 +429,7 @@ namespace RGM.Modes.ABattleEventArgs
                     Timing.CallDelayed(5f, () =>
                     {
                         if (ev.Player.IsAlive)
-                            ev.Player.Kill("최후의 발악의 효과로 사망하였습니다.");
+                            ev.Player.ReferenceHub.playerStats.KillPlayer(new CustomDamageHandler(ev.Player, ev.Attacker, -1, DamageType.Bleeding, "최후까지 저항하다 사망에 이르고 말았습니다."));
                     });
                 }
 
