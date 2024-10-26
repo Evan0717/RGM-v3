@@ -227,7 +227,7 @@ COM-45
 """
 운빨 싸움
 """ } },
-            { "랜덤효과", new List<string>() { "BFFF00", "60초마다 랜덤한 효과를 얻을 수 있습니다!", "RandomEffect", "public", "몬키키", 
+            { "랜덤효과", new List<string>() { "BFFF00", "60초마다 랜덤한 효과를 얻을 수 있습니다!", "RandomEffect", "onlysub", "몬키키", 
 """
 1분마다 랜덤한 효과를 지급받을 수 있습니다.
 최대 60만큼, 60초 동안 받습니다.
@@ -286,7 +286,7 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 죽으면 영혼 상태로 부활합니다. 이 상태에서 사망하면 성불됩니다.
 또한, 자살로 사망한 경우 곧바로 성불됩니다.
 """ } },
-            { "Spooky!", new List<string>() { "3104B4", "시작 시 영구적인, 랜덤한 할로윈 효과를 받으세요!", "Spooky", "public", "",
+            { "Spooky!", new List<string>() { "3104B4", "시작 시 영구적인, 랜덤한 할로윈 효과를 받으세요!", "Spooky", "onlysub", "",
 """
 댜음 효과 중 하나의 효과가 영구적으로 적용됩니다.
 
@@ -298,9 +298,9 @@ OrangeCandy
 OrangeWitness
 Metal
 Marshmallow
-InsufficientLighting
 Ghostly
-TemporaryBypass
+Prismatic
+OrangeWitness
 """ } },
             { "스플리프", new List<string>() { "BEF781", "떨어지지 않으려면 계속 움직이세요!", "Spleef", "public", "", 
 """
