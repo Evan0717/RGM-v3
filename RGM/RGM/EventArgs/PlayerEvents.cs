@@ -499,6 +499,9 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                     if (ev.Attacker != null && ev.Attacker != ev.Player && ev.DamageHandler.Type != DamageType.Warhead)
                         ev.IsAllowed = false;
                 }
+
+                if (ev.Player.LeadingTeam == ev.Attacker.LeadingTeam && ev.DamageHandler.Type == DamageType.Marshmallow)
+                    ev.IsAllowed = false;
             }
         }
 

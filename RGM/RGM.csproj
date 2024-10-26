@@ -224,6 +224,7 @@
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\ABattle.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\EventArgs\Item.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\EventArgs\Map.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\EventArgs\Player.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\EventArgs\Scps\Scp049.cs" />
