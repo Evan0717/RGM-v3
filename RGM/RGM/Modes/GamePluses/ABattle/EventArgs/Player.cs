@@ -334,6 +334,28 @@ namespace RGM.Modes.ABattleEventArgs
                         return;
                     }
 
+                    if (PlayerAbilities[ev.Player].Contains("[영웅] 최후의 발악"))
+                    {
+                        ev.IsAllowed = false;
+
+                        PlayerAbilities[ev.Player].Remove("[영웅] 최후의 발악");
+
+                        ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 30;
+                        ev.Player.Health = 12050;
+
+                        Timing.CallDelayed(5f, () =>
+                        {
+                            if (ev.Player.IsAlive)
+                            {
+                                CustomDamageHandler cdh = new CustomDamageHandler(ev.Player, ev.Attacker, -1, DamageType.Bleeding, "최후까지 저항하다 사망에 이르고 말았습니다.");
+                                ev.Player.Kill(cdh);
+                            }
+                        });
+
+                        AddAbility(ev.Player, "[영웅] 최후의 발악이다!!!!!!!!!!");
+                        return;
+                    }
+
                     if (PlayerAbilities[ev.Player].Contains("[전설] 마술사"))
                     {
                         ev.IsAllowed = false;
@@ -413,24 +435,6 @@ namespace RGM.Modes.ABattleEventArgs
                         else
                             ev.Player.ShowHint($"대물림 사용에 실패했습니다. 아군이 존재하지 않습니다.", 5);
                     }
-                }
-
-                if (PlayerAbilities[ev.Player].Contains("[영웅] 최후의 발악"))
-                {
-                    ev.IsAllowed = false;
-
-                    PlayerAbilities[ev.Player].Remove("[영웅] 최후의 발악");
-
-                    AddAbility(ev.Player, "[영웅] 최후의 발악이다!!!!!!!!!!");
-
-                    ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 30;
-                    ev.Player.Health = 12050;
-
-                    Timing.CallDelayed(5f, () =>
-                    {
-                        if (ev.Player.IsAlive)
-                            ev.Player.ReferenceHub.playerStats.KillPlayer(new CustomDamageHandler(ev.Player, ev.Attacker, -1, DamageType.Bleeding, "최후까지 저항하다 사망에 이르고 말았습니다."));
-                    });
                 }
 
                 if (PlayerAbilities[ev.Player].Contains("[희귀] 순교"))
