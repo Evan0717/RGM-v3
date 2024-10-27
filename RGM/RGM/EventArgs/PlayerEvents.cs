@@ -507,7 +507,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 if (GodModePlayers.Contains(ev.Player))
                 {
-                    if (ev.Attacker != null && ev.Attacker != ev.Player)
+                    if (ev.DamageHandler.Type != DamageType.Warhead && ev.DamageHandler.Type != DamageType.Falldown)
                         ev.IsAllowed = false;
                 }
 
@@ -526,7 +526,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 if (GodModePlayers.Contains(ev.Player))
                 {
-                    if (ev.Attacker != null && ev.Attacker != ev.Player && ev.DamageHandler.Type != DamageType.Warhead)
+                    if (ev.DamageHandler.Type != DamageType.Warhead && ev.DamageHandler.Type != DamageType.Falldown)
                         ev.IsAllowed = false;
                 }
             }
