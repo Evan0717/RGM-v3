@@ -55,6 +55,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
             Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
             Exiled.Events.Handlers.Scp173.Blinking += OnBlinking;
 
@@ -97,9 +98,11 @@ namespace RGM.Modes
 
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new AddAbility());
 
+            /*
             Harmony harmony = new Harmony($"ABattle - {DateTime.Now.Ticks}");
             harmony.Patch(Method(typeof(Inventory), nameof(Inventory.Update)),
                 transpiler: new HarmonyMethod(Method(typeof(InventoryUpdatePatch), nameof(InventoryUpdatePatch.Transpiler))));
+            */
         }
     }
 }

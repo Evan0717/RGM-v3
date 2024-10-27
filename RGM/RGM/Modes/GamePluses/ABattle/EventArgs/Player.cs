@@ -347,7 +347,7 @@ namespace RGM.Modes.ABattleEventArgs
                         {
                             if (ev.Player.IsAlive)
                             {
-                                ev.Player.Health = ev.Player.MaxHealth;
+                                ev.Player.Health = 100;
                                 ev.Player.EnableEffect(EffectType.PocketCorroding);
                             }
                         });
@@ -552,7 +552,7 @@ namespace RGM.Modes.ABattleEventArgs
                     AddAbility(ev.Player, "[일반] 도파민 분비");
                 }
 
-                if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고"))
+                if (PlayerAbilities[ev.Player].Contains("[희귀] 반창고") && ev.Player.IsAlive)
                 {
                     if (ev.Player.Health <= ev.Player.MaxHealth / 2)
                     {
@@ -603,16 +603,11 @@ namespace RGM.Modes.ABattleEventArgs
                         Server.ExecuteCommand($"/rocket {ev.Player.Id} 1");
                 }
 
-                if (PlayerAbilities[ev.Attacker].Contains("[신화] 광전사") && !LightWarrierCooldown.Contains(ev.Attacker))
+                if (ev.Attacker.CurrentItem != null && LightWarriorSerials.Contains(ev.Attacker.CurrentItem.Serial))
                 {
-                    if (ev.Attacker.CurrentItem != null && LightWarriorSerials.Contains(ev.Attacker.CurrentItem.Serial))
+                    if (!LightWarrierCooldown.Contains(ev.Attacker))
                     {
-                        if (ev.Attacker == ev.Player)
-                        {
-                            if (ev.DamageHandler.Type == DamageType.Explosion)
-                                ev.IsAllowed = false;
-                        }
-                        else if (ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
+                        if (ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
                         {
                             if (ev.Attacker.CurrentItem is Jailbird jailbird)
                                 jailbird.TotalCharges = 0;
@@ -630,6 +625,12 @@ namespace RGM.Modes.ABattleEventArgs
                                 LightWarrierCooldown.Remove(ev.Attacker);
                         });
                     }
+                }
+
+                if (PlayerAbilities[ev.Player].Contains("[신화] 광전사"))
+                {
+                    if (ev.DamageHandler.Type == DamageType.Explosion)
+                        ev.IsAllowed = false;
                 }
 
                 if (PlayerAbilities[ev.Attacker].Contains("[전용] 집단 지성") && ev.Attacker.LeadingTeam != ev.Player.LeadingTeam)
@@ -756,6 +757,12 @@ namespace RGM.Modes.ABattleEventArgs
                         player.EnableEffect(EffectType.Slowness, (byte)(25 * DuplicateCount(ev.Player, "[전용] 고대의 존재 압도")), 0.1f);
                 }
             }
+        }
+
+        public static void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
+        {
+            if (new List<RoleTypeId>() { RoleTypeId.ClassD, RoleTypeId.Scientist }.Contains(ev.Player.Role.Type))
+                PlayerAbilities[ev.Player].Clear();
         }
     }
 }
