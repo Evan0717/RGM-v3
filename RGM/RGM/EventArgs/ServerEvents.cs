@@ -31,7 +31,7 @@ namespace RGM.EventArgs
         {
             UsersManager.LoadUsers();
 
-            SkyboxHubert._singleton.NetworkHubert = true;
+
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Server.ExecuteCommand($"/mp load RGMLobby");
