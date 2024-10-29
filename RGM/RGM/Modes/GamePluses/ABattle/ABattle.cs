@@ -5,35 +5,42 @@ using System.Reflection;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using InventorySystem.Items.Firearms.Attachments;
 using MEC;
-using MultiBroadcast.API;
 using PlayerRoles;
-using RGM.API.Features;
-using UnityEngine;
+using RemoteAdmin;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes;
 
 public class ABattle
 {
-    public static ABattle Instance;
+    public static ABattle Instance { get; set; }
 
-    public static bool IsFeverModeEnabled = false;
+    public Dictionary<Player, List<WorkstationController>> PlayerWorkstations { get; set; }
+    public Dictionary<Player, List<Ability>> PlayerAbilities { get; set; }
+    public Dictionary<AbilityType, AbilityData> Abilities { get; set; }
 
-    public static Dictionary<AbilityType, Type> _abilities;
-    public static Dictionary<AbilityType, List<AbilityType>> _synergyAbilities;
-    public static Dictionary<Player, List<Ability>> _playerAbilities;
-    public static Dictionary<Player, List<Vector3>> _playerWorkstation;
-    public static Dictionary<Player, string> _playerVotes = new Dictionary<Player, string>();
+    private Dictionary<AbilityType, List<AbilityType>> _synergyAbilities;
+    private Dictionary<Player, List<AbilityType>> _selections;
+    private bool _isFeverModeEnabled;
+
+    private ABattleEventHandler _eventHandler;
 
     // 플러그인에 있는 모든 능력 검색
     public void OnEnabled()
     {
         Instance = this;
 
-        _playerAbilities = new Dictionary<Player, List<Ability>>();
-        _playerWorkstation = new Dictionary<Player, List<Vector3>>();
-        _abilities = new Dictionary<AbilityType, Type>();
+        _eventHandler = new ABattleEventHandler(this);
+        _eventHandler.RegisterEvents();
+
         _synergyAbilities = new Dictionary<AbilityType, List<AbilityType>>();
+        _selections = new Dictionary<Player, List<AbilityType>>();
+
+        PlayerWorkstations = new Dictionary<Player, List<WorkstationController>>();
+        PlayerAbilities = new Dictionary<Player, List<Ability>>();
+        Abilities = new Dictionary<AbilityType, AbilityData>();
 
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
         {
@@ -45,303 +52,141 @@ public class ABattle
             if (!typeof(Ability).IsAssignableFrom(type))
                 continue;
 
-            _abilities.Add(abilityAttribute.Type, type);
+            Abilities.Add(abilityAttribute.Type, new AbilityData
+            {
+                Type = type,
+                Name = abilityAttribute.Name,
+                Description = abilityAttribute.Description,
+                Category = abilityAttribute.Category,
+                AbilityType = abilityAttribute.Type,
+                Keep = abilityAttribute.Keep
+            });
 
             var requiresAbilityAttribute = type.GetCustomAttribute<RequiresAbilityAttribute>();
 
-            if (requiresAbilityAttribute != null)
+            if (requiresAbilityAttribute != null && requiresAbilityAttribute.Abilities.Length > 0)
+            {
                 _synergyAbilities.Add(abilityAttribute.Type, requiresAbilityAttribute.Abilities.ToList());
+
+                Abilities[abilityAttribute.Type].Category = AbilityCategory.Synergy;
+                Abilities[abilityAttribute.Type].Requires = requiresAbilityAttribute.Abilities.ToList();
+            }
         }
 
-        Exiled.Events.Handlers.Player.Verified += OnVerified;
-        Exiled.Events.Handlers.Player.Jumping += OnJumping;
+        QueryProcessor.DotCommandHandler.RegisterCommand(new VoteFirst());
+        QueryProcessor.DotCommandHandler.RegisterCommand(new VoteSecond());
+        QueryProcessor.DotCommandHandler.RegisterCommand(new VoteThird());
 
-        Timing.RunCoroutine(OnModeStarted());
-    }
+        CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new AddAbility());
 
-    public static IEnumerator<float> OnModeStarted()
-    {
-        foreach (var player in Player.List.Where(x => !x.IsNPC))
+        Timing.CallDelayed(Random.Range(1, 11), () =>
         {
-            _playerWorkstation.Add(player, new List<Vector3>());
-            _playerAbilities.Add(player, new List<Ability>());
-        }
+            if (Random.Range(1, 6) == 1)
+                _isFeverModeEnabled = true;
 
-        Timing.CallDelayed(UnityEngine.Random.Range(1, 11), () =>
-        {
-            if (UnityEngine.Random.Range(1, 6) == 1)
-                IsFeverModeEnabled = true;
-
-            if (IsFeverModeEnabled)
-                Server.ExecuteCommand($"/mp load ABattle");
+            if (_isFeverModeEnabled)
+                Server.ExecuteCommand("/mp load ABattle");
         });
 
+        foreach (var player in Player.List)
+        {
+            PlayerWorkstations.Add(player, new List<WorkstationController>());
+            PlayerAbilities.Add(player, new List<Ability>());
+        }
+
+        Timing.RunCoroutine(HintCoroutine());
+    }
+
+    private IEnumerator<float> HintCoroutine()
+    {
         while (true)
         {
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {
-                try
+                var CurrentHint = player.CurrentHint;
+                var isStatusHint = CurrentHint != null && (CurrentHint.Content.Contains("워크스테이션") || CurrentHint.Content.Contains("보유 업그레이드"));
+
+                if (CurrentHint == null || isStatusHint)
                 {
-                    Hint CurrentHint = player.CurrentHint;
-                    bool IsStatusHint = CurrentHint != null && (CurrentHint.Content.Contains("워크스테이션") || CurrentHint.Content.Contains("보유 업그레이드"));
-
-                    if (CurrentHint == null || IsStatusHint)
-                    {
-                        if (player.IsAlive)
-                            ShowStatus(player);
-                    }
+                    if (player.IsAlive)
+                        player.ShowHint(FormatHint(player), 1.2f);
                 }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-
-            yield return Timing.WaitForSeconds(0.5f);
-        }
-    }
-
-    public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
-    {
-        {"일반", "#A4A4A4"},
-        {"희귀", "#2ECCFA"},
-        {"영웅", "#FF00FF"},
-        {"전설", "#ffd700"},
-        {"신화", "#DF0101"},
-        {"전용", "#F7819F"},
-        {"시너지", "#DEEFED"}
-    };
-
-    public static string ColorFormat(string text)
-    {
-        return text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
-                    .Replace("[전용]", $"<color={RatingColor["전용"]}>[전용]</color>")
-                    .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
-                    .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
-                    .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
-                    .Replace("[희귀]", $"<color={RatingColor["희귀"]}>[희귀]</color>")
-                    .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
-    }
-
-    public static void ShowStatus(Player player)
-    {
-        if (_playerAbilities[player].Count() <= 0)
-        {
-            if (player.Role.Type == RoleTypeId.Scp079)
-                player.ShowHint($"<align=left><b><size=22>레벨이 오를 때마다 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
-
-            else
-                player.ShowHint($"<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);
-
-        }
-        else
-        {
-            string abilitiesText = string.Join(", ", _playerAbilities[player].Select(x => x.Data.Name));
-
-            abilitiesText = ColorFormat(abilitiesText);
-
-            player.ShowHint($"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>", 1.2f);
-        }
-    }
-
-    public static string PickAbilityGrade(Player player, string force = null)
-    {
-        int grade = UnityEngine.Random.Range(1, 10001);
-        string abilityGrade;
-        if (force != null)
-            abilityGrade = "[" + force.Substring(force.IndexOf('[') + 1, force.IndexOf(']') - force.IndexOf('[') - 1) + "]".Trim();
-
-        else if (player.Role.Type == RoleTypeId.Scp079)
-            abilityGrade = "[전용]";
-
-        else
-        {
-            if (grade <= 5) // 0.05%
-                abilityGrade = "[신화]";
-
-            else if (grade <= 40) // 0.35%
-                abilityGrade = "[전설]";
-
-            else if (grade <= 250) // 2.1%
-                abilityGrade = "[영웅]";
-
-            else if (grade <= 1500) // 12.5%
-                abilityGrade = "[희귀]";
-
-            else if (grade <= 2000) // 5%
-                abilityGrade = "[전용]";
-
-            else // 80%
-                abilityGrade = "[일반]";
-        }
-
-        return abilityGrade;
-    }
-
-    public static AbilityCategory GetAbilityCategory(Player player, string abilityGrade, bool get = true)
-    {
-        if (abilityGrade == "[일반]")
-            return AbilityCategory.Normal;
-
-        else if (abilityGrade == "[희귀]")
-            return AbilityCategory.Rare;
-
-        else if (abilityGrade == "[영웅]")
-        {
-            if (get)
-            {
-                Cassie.Clear();
-                Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color={RatingColor["영웅"]}>[영웅]</color> 업그레이드를 입수하였습니다.");
-            }
-            return AbilityCategory.Epic;
-        }
-        else if (abilityGrade == "[전설]")
-        {
-            if (get)
-            {
-                Cassie.Clear();
-                Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color={RatingColor["전설"]}>[전설]</color> 업그레이드를 입수하였습니다.");
-            }
-            return AbilityCategory.Legend;
-        }
-        else if (abilityGrade == "[신화]")
-        {
-            if (get)
-            {
-                Cassie.Clear();
-                Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color={RatingColor["신화"]}>[신화]</color> 업그레이드를 입수하였습니다.");
-            }
-            return AbilityCategory.Mythic;
-        }
-        else if (abilityGrade == "[전용]")
-        {
-            return AbilityCategory.Unique;
-        }
-        else
-        {
-            Cassie.Clear();
-            Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <color={RatingColor["시너지"]}>[시너지]</color> 효과를 입수하였습니다.");
-            return AbilityCategory.Synergy;
-        }
-    }
-
-    public static void ApplyGiveAbility(Player player, string abilityGrade, Ability ability)
-    {
-        _playerAbilities[player].Add(ability);
-        string styleName = ColorFormat($"[{ability.Data.Category}] {ability.Data.Name}");
-
-        string Message = $"<size=20>{styleName}</size>\n<size=15>{ability.Data.Description}</size>";
-        player.AddBroadcast(10, Message);
-        player.SendConsoleMessage($"\n{Message}", "white");
-    }
-
-    public static IEnumerator<float> AddAbilityVote(Player player)
-    {
-        List<AbilityType> AbilitesVote = new List<AbilityType>();
-        List<string> DisplayVote = new List<string>();
-        int SelectedAbilityNumber = 0;
-
-        for (int i = 1; i < 4; i++)
-        {
-            List<AbilityType> abilityList = AbilityCategoryExtensions.CategoryToAbilities(GetAbilityCategory(player, PickAbilityGrade(player), false));
-
-            AbilitesVote.Add(Tools.GetRandomValue(abilityList));
-        }
-
-        for (int i = 1; i < 4; i++)
-            DisplayVote.Add($"[{i}] {ColorFormat(_abilities[AbilitesVote[i - 1]].Name)}");
-
-
-        for (int i = 1; i < 21; i++)
-        {
-            if (player.IsDead)
-                yield break;
-
-            player.ShowHint(
-                $"<align=left><size=30>{string.Join("\n", DisplayVote)}</size>\n\n<size=25><b>{21 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n",
-                1.2f);
-
-            if (_playerVotes.ContainsKey(player))
-            {
-                SelectedAbilityNumber = int.Parse(_playerVotes[player]);
-                break;
             }
 
             yield return Timing.WaitForSeconds(1f);
         }
+    }
 
-        if (SelectedAbilityNumber == 0) SelectedAbilityNumber = UnityEngine.Random.Range(1, 4);
-
-        ABattleExtensions.AddAbility(player, AbilitesVote[SelectedAbilityNumber - 1]);
-
-        if (AbilitesVote.All(x => x == AbilitesVote[0]))
+    private string FormatHint(Player player)
+    {
+        if (!PlayerAbilities[player].Any())
         {
-            // Timing.RunCoroutine(AddAbility(player, "[시너지] 중복 기연"));
-
-            for (int i = 1; i < 3; i++)
-                ABattleExtensions.AddAbility(player, AbilitesVote[0]);
+            return player.Role.Type == RoleTypeId.Scp079
+                ? "<align=left><b><size=22>레벨이 오를 때마다 능력을 획득할 수 있습니다.</size></b></align>"
+                : "<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>";
         }
+
+        var abilitiesText = string.Join(", ",
+            PlayerAbilities[player]
+                .GroupBy(x => x)
+                .Select(g => g.Count() > 1
+                    ? $"{g.Key.Data.GetFormattedName()} ({g.Count()})"
+                    : g.Key.Data.GetFormattedName())
+                .ToList());
+
+        return $"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size></align>";
     }
 
     // 플레이어에게 특정 능력을 부여
     public void AddAbility(Player player, AbilityType type)
     {
-        if (!_abilities.ContainsKey(type))
+        if (!Abilities.ContainsKey(type))
             return;
 
-        if (!_playerAbilities.ContainsKey(player))
-            _playerAbilities.Add(player, []);
+        if (!PlayerAbilities.ContainsKey(player))
+            PlayerAbilities.Add(player, []);
 
-        if (_playerAbilities[player].Any(x => x.Data.Type == type))
-            return;
-
-        var abilityType = _abilities[type];
-        var abilityAttribute = abilityType.GetCustomAttribute<AbilityAttribute>();
-        var requiresAbilityAttribute = abilityType.GetCustomAttribute<RequiresAbilityAttribute>();
+        var abilityData = Abilities[type];
         Ability ability;
+
         try
         {
-             ability = Activator.CreateInstance(_abilities[type]) as Ability;
+             ability = Activator.CreateInstance(Abilities[type].Type) as Ability;
         }
         catch (Exception e)
         {
-            Log.Error($"An error occurred while trying to create an instance of {abilityType.Name}: {e}");
+            Log.Error($"An error occurred while trying to create an instance of {abilityData.Name}: {e}");
             return;
         }
 
         if (ability == null)
             return;
 
-        ability.Data = new AbilityData
-        {
-            Name = abilityAttribute.Name,
-            Description = abilityAttribute.Description,
-            Category = requiresAbilityAttribute != null && requiresAbilityAttribute.Abilities.Length > 0
-                ? AbilityCategory.Synergy
-                : abilityAttribute.Category,
-            Type = abilityAttribute.Type,
-        };
+        ability.Data = abilityData;
         ability.Owner = player;
         ability.OnEnabled();
 
-        _playerAbilities[player].Add(ability);
+        PlayerAbilities[player].Add(ability);
 
-        EnableSynergyAbility(_playerAbilities[player]);
+        EnableSynergyAbility(PlayerAbilities[player]);
     }
 
     // 플레이어에게 시너지 능력 부여
     private void EnableSynergyAbility(List<Ability> abilities)
     {
         foreach (var synergy in _synergyAbilities.Where(synergy =>
-                     synergy.Value.All(req => abilities.Any(a => a.Data.Type == req))))
+                     synergy.Value.All(req => abilities.Any(a => a.Data.AbilityType == req))))
         {
-            if (!_abilities.TryGetValue(synergy.Key, out var synergyAbilityType))
+            if (!Abilities.TryGetValue(synergy.Key, out var synergyAbilityType))
+                continue;
+
+            if (abilities.Any(a => a.Data.AbilityType == synergy.Key))
                 continue;
 
             Ability synergyAbility;
             try
             {
-                synergyAbility = Activator.CreateInstance(synergyAbilityType) as Ability;
+                synergyAbility = Activator.CreateInstance(synergyAbilityType.Type) as Ability;
             }
             catch (Exception e)
             {
@@ -360,17 +205,18 @@ public class ABattle
     // 플레이어로부터 특정 능력 제거
     public void RemoveAbility(Player player, AbilityType type)
     {
-        if (!_playerAbilities.TryGetValue(player, out var playerAbility))
+        if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
-        var ability = playerAbility.FirstOrDefault(x => x.Data.Type == type);
+        var ability = playerAbility.FirstOrDefault(x => x.Data.AbilityType == type);
 
         if (ability == null)
             return;
 
-        _playerAbilities[player].Remove(ability);
+        ability.OnDisabled();
+        PlayerAbilities[player].Remove(ability);
 
-        RemoveSynergyAbility(_playerAbilities[player]);
+        RemoveSynergyAbility(PlayerAbilities[player]);
     }
 
     public void RemoveAbility(Player player, Ability ability)
@@ -378,15 +224,16 @@ public class ABattle
         if (ability == null)
             return;
 
-        if (!_playerAbilities.TryGetValue(player, out var playerAbility))
+        if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
         if (!playerAbility.Contains(ability))
             return;
 
-        _playerAbilities[player].Remove(ability);
+        ability.OnDisabled();
+        PlayerAbilities[player].Remove(ability);
 
-        RemoveSynergyAbility(_playerAbilities[player]);
+        RemoveSynergyAbility(PlayerAbilities[player]);
     }
 
     // 플레이어로부터 시너지 능력 확인 후 제거
@@ -394,10 +241,11 @@ public class ABattle
     {
         foreach (var synergy in _synergyAbilities)
         {
-            if (!synergy.Value.All(req => abilities.Any(a => a.Data.Type == req)) &&
-                abilities.Any(a => a.Data.Type == synergy.Key))
+            if (!synergy.Value.All(req => abilities.Any(a => a.Data.AbilityType == req)) &&
+                abilities.Any(a => a.Data.AbilityType == synergy.Key))
             {
-                var ability = abilities.First(a => a.Data.Type == synergy.Key);
+                var ability = abilities.First(a => a.Data.AbilityType == synergy.Key);
+                ability.OnDisabled();
                 abilities.Remove(ability);
             }
         }
@@ -406,22 +254,30 @@ public class ABattle
     // 플레이어로부터 모든 능력 제거
     public void RemoveAllAbilities(Player player)
     {
-        if (!_playerAbilities.TryGetValue(player, out var playerAbility))
+        if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
-        _playerAbilities.Remove(player);
+        foreach (var ability in playerAbility)
+            ability.OnDisabled();
+
+        PlayerAbilities.Remove(player);
     }
 
     // 플레이어의 모든 능력 가져오기
     public List<Ability> GetAbilities(Player player)
     {
-        return _playerAbilities.TryGetValue(player, out var playerAbility) ? playerAbility : new List<Ability>();
+        return PlayerAbilities.TryGetValue(player, out var playerAbility) ? playerAbility : new List<Ability>();
+    }
+
+    public AbilityType FindAbility(string name)
+    {
+        return Abilities.FirstOrDefault(x => x.Value.Name == name).Key;
     }
 
     // 플레이어의 특정 능력 가져오기
     public Ability GetAbility(Player player, AbilityType type)
     {
-        return GetAbilities(player).FirstOrDefault(x => x.Data.Type == type);
+        return GetAbilities(player).FirstOrDefault(x => x.Data.AbilityType == type);
     }
 
     // 플레이어가 특정 능력을 가지고 있는지 확인
@@ -432,38 +288,251 @@ public class ABattle
 
     public List<AbilityType> GetRandomAbilities(AbilityCategory category, int count)
     {
-        var abilities = _abilities.Where(x => x.Value.GetCustomAttribute<AbilityAttribute>().Category == category).ToList();
+        var abilities = Abilities.Where(x => x.Value.Category == category).ToList();
+
+        if (category == AbilityCategory.None)
+            abilities = Abilities.ToList();
 
         abilities.ShuffleList();
 
         return abilities.Take(count).Select(x => x.Key).ToList();
     }
 
-    public static void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
+    public void StartSelect(Player player)
     {
-        if (!_playerAbilities.ContainsKey(ev.Player))
+        if (!_selections.ContainsKey(player))
+            _selections.Add(player, new List<AbilityType>());
+
+        var category = GetCategory(player);
+
+        if (category == AbilityCategory.None)
+            return;
+
+        var abilities = GetRandomAbilities(category, 3);
+        var ignoredIndexes = new List<int>();
+
+        if (abilities.Count == 0)
+            return;
+
+        if (player.HasAbility(AbilityType.RARE_TRANSITION))
         {
-            _playerWorkstation.Add(ev.Player, new List<Vector3>());
-            _playerAbilities.Add(ev.Player, new List<Ability>());
+            player.RemoveAbility(AbilityType.RARE_TRANSITION);
+
+            var transition = Random.Range(1, 5) == 1;
+
+            if (transition)
+            {
+                int index;
+
+                do
+                {
+                    index = Random.Range(0, 3);
+                } while (ignoredIndexes.Contains(index));
+
+                ignoredIndexes.Add(index);
+
+                var ability = GetRandomAbilities(AbilityCategory.Epic, 1).First();
+
+                abilities[index] = ability;
+            }
+        }
+
+        if (player.HasAbility(AbilityType.EPIC_TRANSITION))
+        {
+            player.RemoveAbility(AbilityType.EPIC_TRANSITION);
+
+            var transition = Random.Range(1, 5) == 1;
+
+            if (transition)
+            {
+                int index;
+
+                do
+                {
+                    index = Random.Range(0, 3);
+                } while (ignoredIndexes.Contains(index));
+
+                ignoredIndexes.Add(index);
+
+                var ability = GetRandomAbilities(AbilityCategory.Legend, 1).First();
+
+                abilities[index] = ability;
+            }
+        }
+
+        if (player.HasAbility(AbilityType.LEGEND_TRANSITION))
+        {
+            player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
+
+            var transition = Random.Range(1, 5) == 1;
+
+            if (transition)
+            {
+                int index;
+
+                do
+                {
+                    index = Random.Range(0, 3);
+                } while (ignoredIndexes.Contains(index));
+
+                ignoredIndexes.Add(index);
+
+                var ability = GetRandomAbilities(AbilityCategory.Mythic, 1).First();
+
+                abilities[index] = ability;
+            }
+        }
+
+        _selections[player] = abilities;
+
+        // 다음 타자, 코루틴!!!
+        Timing.RunCoroutine(SelectionCoroutine(player));
+    }
+
+    private IEnumerator<float> SelectionCoroutine(Player player)
+    {
+        var abilities = _selections[player];
+        var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}"));
+
+        for (var i = 0; i < 20; i++)
+        {
+            if (player.IsDead) yield break;
+            if (!_selections.ContainsKey(player)) yield break;
+
+            player.ShowHint(
+                $"<align=left><size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n",
+                1.2f);
+
+            yield return Timing.WaitForSeconds(1f);
+        }
+
+        if (!_selections.ContainsKey(player)) yield break;
+
+        if (abilities.All(x => x == abilities.First()))
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                player.AddAbility(abilities[i]);
+            }
+
+            _selections.Remove(player);
+
+            yield break;
+        }
+
+        var random = Random.Range(0, 3);
+
+        player.AddAbility(abilities[random]);
+
+        _selections.Remove(player);
+    }
+
+    private AbilityCategory GetCategory(Player player)
+    {
+        if (!player.IsAlive) return AbilityCategory.None;
+
+        if (player.Role == RoleTypeId.Scp079)
+            return AbilityCategory.Scp079;
+
+        var random = Random.Range(1, 10001);
+
+        switch (random)
+        {
+            case <= 5:
+                return AbilityCategory.Mythic;
+            case <= 40:
+                return AbilityCategory.Legend;
+            case <= 250:
+                return AbilityCategory.Epic;
+            case <= 1500:
+                return AbilityCategory.Rare;
+            case <= 2000 when player.Role.Type.ToString().StartsWith("Scp"):
+                return (AbilityCategory)Enum.Parse(typeof(AbilityCategory), player.Role.Type.ToString());
+            case <= 2000:
+                switch (player.Role.Type)
+                {
+                    case RoleTypeId.ClassD:
+                        return AbilityCategory.ClassD;
+                    case RoleTypeId.Scientist:
+                        return AbilityCategory.Scientist;
+                    case RoleTypeId.NtfSpecialist:
+                    case RoleTypeId.NtfSergeant:
+                    case RoleTypeId.NtfCaptain:
+                    case RoleTypeId.NtfPrivate:
+                        return AbilityCategory.Ntf;
+                    case RoleTypeId.ChaosConscript:
+                    case RoleTypeId.ChaosRifleman:
+                    case RoleTypeId.ChaosMarauder:
+                    case RoleTypeId.ChaosRepressor:
+                        return AbilityCategory.Chaos;
+                    case RoleTypeId.FacilityGuard:
+                        return AbilityCategory.Guard;
+                    case RoleTypeId.Tutorial:
+                        return AbilityCategory.Snake;
+                    case RoleTypeId.None:
+                    case RoleTypeId.Scp173:
+                    case RoleTypeId.Spectator:
+                    case RoleTypeId.Scp106:
+                    case RoleTypeId.Scp049:
+                    case RoleTypeId.Scp079:
+                    case RoleTypeId.Scp096:
+                    case RoleTypeId.Scp0492:
+                    case RoleTypeId.Scp939:
+                    case RoleTypeId.CustomRole:
+                    case RoleTypeId.Overwatch:
+                    case RoleTypeId.Filmmaker:
+                    case RoleTypeId.Scp3114:
+                    default:
+                        return AbilityCategory.Common;
+                }
+
+            default:
+                return AbilityCategory.Common;
         }
     }
 
-    public static void OnJumping(Exiled.Events.EventArgs.Player.JumpingEventArgs ev)
+    public bool Select(Player player, int index, out string response)
     {
-        if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 5, (LayerMask)1))
+        if (!_selections.ContainsKey(player))
         {
-            if (hit.transform != null)
-            {
-                Transform WorkStation = hit.transform.parent.parent;
-
-                if (WorkStation.name.Contains("Work Station") && !_playerWorkstation[ev.Player].Contains(WorkStation.position))
-                {
-                    _playerWorkstation[ev.Player].Add(WorkStation.position);
-
-                    Timing.RunCoroutine(AddAbilityVote(ev.Player));
-                }
-            }
+            response = "선택할 수 있는 능력이 없습니다.";
+            return false;
         }
+
+        if (index is < 1 or > 3)
+        {
+            response = "1 ~ 3 사이의 숫자를 입력해주세요.";
+            return false;
+        }
+
+        AbilityType ability;
+        if (_selections[player].All(x => x == _selections[player].First()))
+        {
+            ability = _selections[player].First();
+
+            for (var i = 0; i < 3; i++)
+            {
+                player.AddAbility(ability);
+            }
+
+            _selections.Remove(player);
+
+            player.ShowHint("", 0.1f);
+
+            response = $"{index}번 능력 선택 완료!";
+            return true;
+        }
+
+        ability = _selections[player][index - 1];
+
+        player.AddAbility(ability);
+
+        _selections.Remove(player);
+
+        player.ShowHint("", 0.1f);
+
+        response = $"{index}번 능력 선택 완료!";
+        return true;
     }
 }
 

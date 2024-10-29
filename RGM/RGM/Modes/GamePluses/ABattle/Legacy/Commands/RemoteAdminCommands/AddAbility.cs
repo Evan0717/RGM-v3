@@ -33,21 +33,17 @@ namespace RGM.Modes
 
                     return true;
                 }
-                else
-                {
-                    Requests.Add($"ABattle/{player.Id}/Add/{args}");
 
-                    response = "AddAbility Complete!";
+                Requests.Add($"ABattle/{player.Id}/Add/{args}");
 
-                    return true;
-                }
+                response = "AddAbility Complete!";
+
+                return true;
             }
-            else
-            {
-                response = "라운드 시작 전에는 사용할 수 없습니다.";
 
-                return false;
-            }
+            response = "라운드 시작 전에는 사용할 수 없습니다.";
+
+            return false;
         }
 
         public string Command { get; } = "addability";

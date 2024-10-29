@@ -225,11 +225,13 @@
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\ABattle.cs" />
-    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Mythic\Joker.cs" />
-    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Normal\Evolution.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\ABattleEventHandler.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Myth\Joker.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Normal\Swift.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Normal\Workout.cs" />
-    <Compile Include="RGM\Modes\GamePluses\ABattle\IAbility.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Ability.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Commands\AddAbility.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Commands\Select.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Legacy\ABattle.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Legacy\Commands\ClientCommands\Votes.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Legacy\Commands\RemoteAdminCommands\AddAbility.cs" />
@@ -314,7 +316,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Epic\" />
+    <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Hero\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Legend\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\" />

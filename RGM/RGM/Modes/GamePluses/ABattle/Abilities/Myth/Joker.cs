@@ -1,5 +1,4 @@
 ﻿using Exiled.API.Extensions;
-using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using UnityEngine;
@@ -14,15 +13,17 @@ public class Joker : Ability
         Exiled.Events.Handlers.Player.Dying += OnDying;
     }
 
+    public override void OnDisabled()
+    {
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
+    }
+
     private void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
         ev.IsAllowed = false;
-
-        foreach (var player in Player.List)
-            player.ShowHint("<b><i><color=#FF0000>조</color><color=#E70717>커</color><color=#D00F2E>를</color> <color=#A21E5C>건</color><color=#8B2673>들</color><color=#732E8B>인</color> <color=#453DB9>죄</color><color=#2E45D0>다</color><color=#174DE7>!</color></i></b>", 3);
 
         ev.Player.IsGodModeEnabled = true;
 

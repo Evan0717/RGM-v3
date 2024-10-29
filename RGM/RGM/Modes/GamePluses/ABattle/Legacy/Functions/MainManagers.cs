@@ -35,7 +35,7 @@ namespace RGM.Modes.ABattleFunctions
 
         public static void ShowStatus(Player player)
         {
-            if (PlayerAbilities[player].Count() <= 0)
+            if (!PlayerAbilities[player].Any())
             {
                 if (player.Role.Type == RoleTypeId.Scp079)
                     player.ShowHint($"<align=left><b><size=22>레벨이 오를 때마다 능력을 획득할 수 있습니다.</size></b></align>", 1.2f);

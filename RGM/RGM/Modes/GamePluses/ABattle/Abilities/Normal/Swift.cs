@@ -3,11 +3,11 @@ using Exiled.API.Enums;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("경공", "이동 속도가 25% 증가합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SWIFT)]
+[Ability("경공", "이동 속도가 25% 증가합니다.", AbilityCategory.Common, AbilityType.NORMAL_SWIFT)]
 public class Swift : EffectAbility
 {
-    public override void OnEnabled()
+    public override Dictionary<EffectType, byte> EffectTypes { get; } = new()
     {
-        Owner.GetEffect(EffectType.MovementBoost).Intensity += 10;
-    }
+        {EffectType.MovementBoost, 25}
+    };
 }

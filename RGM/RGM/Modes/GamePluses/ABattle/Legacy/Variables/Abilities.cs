@@ -134,7 +134,7 @@ namespace RGM.Modes.ABattleVariables
         public static Dictionary<string, string> SnakeAbilities = new Dictionary<string, string>()
         {
             {"[전용] 세치 혀", "SCP-1576을 지급받습니다."},
-            {"[전용] 제3세력", "뱀의 손 지원을 2명 Health Center Staff더 부릅니다."},
+            {"[전용] 제3세력", "뱀의 손 지원을 2명 더 부릅니다."},
             {"[전용] SCP 연구자", "SCP 아이템 중 하나를 지급받습니다."}
         };
         public static Dictionary<string, string> Scp173Abilities = new Dictionary<string, string>()

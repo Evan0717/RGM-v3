@@ -182,13 +182,13 @@ namespace RGM.Modes.ABattleFunctions
 
         public static IEnumerator<float> AddAbilityVote(Player player)
         {
-            List<string> AbilitesVote = new List<string>();
-            List<string> DisplayVote = new List<string>();
-            int SelectedAbilityNumber = 0;
+            var AbilitesVote = new List<string>();
+            var DisplayVote = new List<string>();
+            var SelectedAbilityNumber = 0;
 
-            for (int i = 1; i < 4; i++)
+            for (var i = 1; i < 4; i++)
             {
-                List<string> abilityList = AbilityList(player, PickAbilityGrade(player), false).Keys.ToList();
+                var abilityList = AbilityList(player, PickAbilityGrade(player), false).Keys.ToList();
 
                 AbilitesVote.Add(Tools.GetRandomValue(abilityList));
             }
@@ -197,47 +197,55 @@ namespace RGM.Modes.ABattleFunctions
             {
                 PlayerAbilities[player].Remove("[희귀] 하급 변이");
 
-                if (UnityEngine.Random.Range(1, 5) == 1)
+                if (Random.Range(1, 5) == 1)
                 {
-                    AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(EpicAbilities.Keys.ToList());
+                    AbilitesVote[Random.Range(0, 3)] = Tools.GetRandomValue(EpicAbilities.Keys.ToList());
 
-                     Timing.RunCoroutine(AddAbility(player, "[희귀] 하급 변이 성공"));
+                    Timing.RunCoroutine(AddAbility(player, "[희귀] 하급 변이 성공"));
                 }
                 else
-                     Timing.RunCoroutine(AddAbility(player, "[희귀] 하급 변이 실패"));
+                {
+                    Timing.RunCoroutine(AddAbility(player, "[희귀] 하급 변이 실패"));
+                }
             }
+
             if (PlayerAbilities[player].Contains("[영웅] 변이"))
             {
                 PlayerAbilities[player].Remove("[영웅] 변이");
 
-                if (UnityEngine.Random.Range(1, 5) == 1)
+                if (Random.Range(1, 5) == 1)
                 {
-                    AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(LegendAbilities.Keys.ToList());
+                    AbilitesVote[Random.Range(0, 3)] = Tools.GetRandomValue(LegendAbilities.Keys.ToList());
 
-                     Timing.RunCoroutine(AddAbility(player, "[영웅] 변이 성공"));
+                    Timing.RunCoroutine(AddAbility(player, "[영웅] 변이 성공"));
                 }
                 else
-                     Timing.RunCoroutine(AddAbility(player, "[영웅] 변이 실패"));
+                {
+                    Timing.RunCoroutine(AddAbility(player, "[영웅] 변이 실패"));
+                }
             }
+
             if (PlayerAbilities[player].Contains("[전설] 상급 변이"))
             {
                 PlayerAbilities[player].Remove("[전설] 상급 변이");
 
-                if (UnityEngine.Random.Range(1, 5) == 1)
+                if (Random.Range(1, 5) == 1)
                 {
-                    AbilitesVote[UnityEngine.Random.Range(0, 3)] = Tools.GetRandomValue(MythicAbilities.Keys.ToList());
+                    AbilitesVote[Random.Range(0, 3)] = Tools.GetRandomValue(MythicAbilities.Keys.ToList());
 
-                     Timing.RunCoroutine(AddAbility(player, "[전설] 상급 변이 성공"));
+                    Timing.RunCoroutine(AddAbility(player, "[전설] 상급 변이 성공"));
                 }
                 else
-                     Timing.RunCoroutine(AddAbility(player, "[전설] 상급 변이 실패"));
+                {
+                    Timing.RunCoroutine(AddAbility(player, "[전설] 상급 변이 실패"));
+                }
             }
 
-            for (int i = 1; i < 4; i++)
+            for (var i = 1; i < 4; i++)
                 DisplayVote.Add($"[{i}] {ColorFormat(AbilitesVote[i - 1])}");
 
 
-            for (int i = 1; i < 21; i++)
+            for (var i = 1; i < 21; i++)
             {
                 if (player.IsDead)
                     yield break;
@@ -255,15 +263,15 @@ namespace RGM.Modes.ABattleFunctions
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            if (SelectedAbilityNumber == 0) SelectedAbilityNumber = UnityEngine.Random.Range(1, 4);
+            if (SelectedAbilityNumber == 0) SelectedAbilityNumber = Random.Range(1, 4);
 
             AddAbility(player, AbilitesVote[SelectedAbilityNumber - 1]);
 
             if (AbilitesVote.All(x => x == AbilitesVote[0]))
             {
-                 Timing.RunCoroutine(AddAbility(player, "[시너지] 중복 기연"));
+                Timing.RunCoroutine(AddAbility(player, "[시너지] 중복 기연"));
 
-                for (int i = 1; i < 3; i++)
+                for (var i = 1; i < 3; i++)
                     AddAbility(player, AbilitesVote[0]);
             }
         }
