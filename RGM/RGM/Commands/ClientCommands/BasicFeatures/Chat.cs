@@ -90,7 +90,7 @@ namespace RGM.Commands.ClientCommands
                         else if (chatType == "관전자 채팅")
                             return p.IsDead;
 
-                        else
+                        else if (chatType == "근거리 채팅")
                             return Vector3.Distance(p.Position, p.Position) <= 10 || p.IsDead;
                     }
 
