@@ -34,11 +34,12 @@ namespace RGM.Modes
 
             while (true)
             {
+                List<Player> Players = Player.List.ToList();
                 List<Player> PassPlayers = new List<Player>();
 
-                foreach (var p1 in Player.List.Where(x => x.IsAlive && !PassPlayers.Contains(x)))
+                foreach (var p1 in Players)
                 {
-                    foreach (var p2 in Player.List.Where(x => x.IsAlive))
+                    foreach (var p2 in Player.List.Where(x => !PassPlayers.Contains(x)))
                     {
                         if (p1 != p2 && Vector3.Distance(p1.Position, p2.Position) <= 3f)
                         {
@@ -47,8 +48,6 @@ namespace RGM.Modes
 
                             if (!PassPlayers.Contains(p2))
                                 PassPlayers.Add(p2);
-
-                            break;
                         }
                     }
                 }
