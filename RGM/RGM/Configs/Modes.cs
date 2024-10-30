@@ -16,11 +16,11 @@ namespace RGM
 <color=red>SCP-079</color>일 경우, 레벨이 올라갈 때마다 능력을 1개 얻습니다.
 
 각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
-• <color=#A4A4A4>일반</color> - 80%
-• <color=#2ECCFA>희귀</color> - 12.5%
-• <color=#FF00FF>영웅</color> - 2.1%
-• <color=#ffd700>전설</color> - 0.35%
-• <color=#DF0101>신화</color> - 0.05%
+• <color=#A4A4A4>일반</color> - 70%
+• <color=#2ECCFA>희귀</color> - 24.5%
+• <color=#FF00FF>영웅</color> - 5%
+• <color=#ffd700>전설</color> - 0.4%
+• <color=#DF0101>신화</color> - 0.1%
 • <color=#F7819F>전용</color> - 5%
 • <color=##DEEFED>시너지</color> - ???
 

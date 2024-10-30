@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.Usables.Scp330;
+using MEC;
+using RGM.API.Features;
+using UnityEngine;
+
+using static RGM.Variables.ServerManagers;
+
+namespace RGM.Modes.Abilities.Epic;
+
+[Ability("구사일생", "사망 판정을 받을 경우, 1번 버텨내며 3초간 투명 상태와 무적이 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_SURVIVOR)]
+public class Survivor : Ability
+{
+    public override void OnEnabled()
+    {
+        Exiled.Events.Handlers.Player.Dying += OnDying;
+    }
+
+    public override void OnDisabled()
+    {
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
+    }
+
+    public void OnDying(DyingEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+
+        ev.Player.RemoveAbility(this);
+
+        ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
+        ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
+        ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 20;
+
+        GodModePlayers.Add(ev.Player);
+
+        Timing.CallDelayed(3f, () =>
+        {
+            if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 20)
+                ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
+
+            else
+                ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
+
+            if (GodModePlayers.Contains(ev.Player))
+                GodModePlayers.Remove(ev.Player);
+        });
+    }
+}

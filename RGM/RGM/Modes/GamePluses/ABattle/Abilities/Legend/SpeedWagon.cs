@@ -7,22 +7,21 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
-using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Rare;
+namespace RGM.Modes.Abilities.Legend;
 
-[Ability("갈고리", "랜덤한 1인을 끌어옵니다.", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
-public class GrapplingHook : Ability
+[Ability("스피드왜건", "속도가 크게 증가합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SPEEDWAGON)]
+public class SpeedWagon : Ability
 {
     public override void OnEnabled()
     {
-        Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != Owner && x.Role.Type != RoleTypeId.Scp079).ToList());
-        target1.Position = Owner.Position;
+        Owner.GetEffect(EffectType.MovementBoost).Intensity += 100;
     }
 
     public override void OnDisabled()
     {
+        Owner.GetEffect(EffectType.MovementBoost).Intensity -= 100;
     }
 }

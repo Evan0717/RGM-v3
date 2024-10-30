@@ -7,22 +7,21 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
-using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Rare;
+namespace RGM.Modes.Abilities.Epic;
 
-[Ability("갈고리", "랜덤한 1인을 끌어옵니다.", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
-public class GrapplingHook : Ability
+[Ability("슈퍼 스타", "자신의 마이크가 모두에게 공유되고, 사망 시 사망한 사실이 모두에게 공개됩니다.", AbilityCategory.Epic, AbilityType.EPIC_SUPERSTAR)]
+public class SuperStar : Ability
 {
     public override void OnEnabled()
     {
-        Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != Owner && x.Role.Type != RoleTypeId.Scp079).ToList());
-        target1.Position = Owner.Position;
+        Server.ExecuteCommand($"/speak {Owner.Id} 1");
     }
 
     public override void OnDisabled()
     {
+        Server.ExecuteCommand($"/speak {Owner.Id} 0");
     }
 }

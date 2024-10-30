@@ -7,19 +7,17 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
-using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Rare;
+namespace RGM.Modes.Abilities.Epic;
 
-[Ability("갈고리", "랜덤한 1인을 끌어옵니다.", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
-public class GrapplingHook : Ability
+[Ability("럭키비키", "이전에 방문했던 워크스테이션에서 다시 한번 더 능력을 획득할 수 있습니다.", AbilityCategory.Epic, AbilityType.EPIC_LUCKYVIKEY)]
+public class LuckyVicky : Ability
 {
     public override void OnEnabled()
     {
-        Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != Owner && x.Role.Type != RoleTypeId.Scp079).ToList());
-        target1.Position = Owner.Position;
+        ABattle.Instance.PlayerWorkstations[Owner].Clear();
     }
 
     public override void OnDisabled()

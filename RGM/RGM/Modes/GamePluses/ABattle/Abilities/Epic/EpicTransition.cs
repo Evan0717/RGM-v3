@@ -7,19 +7,16 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
-using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Rare;
+namespace RGM.Modes.Abilities.Epic;
 
-[Ability("갈고리", "랜덤한 1인을 끌어옵니다.", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
-public class GrapplingHook : Ability
+[Ability("변이", "다음 능력 선택창에서 <color=#ffd700>전설</color> 능력 등장 확률이 25%로 조정됩니다.", AbilityCategory.Epic, AbilityType.EPIC_TRANSITION)]
+public class EpicTransition : Ability
 {
     public override void OnEnabled()
     {
-        Player target1 = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != Owner && x.Role.Type != RoleTypeId.Scp079).ToList());
-        target1.Position = Owner.Position;
     }
 
     public override void OnDisabled()

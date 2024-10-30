@@ -12,20 +12,11 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("노움", "웅장한 대지의 기운! 불, 물, 바람의 정령을 모으면..?", AbilityCategory.Rare, AbilityType.RARE_GNOME)]
-public class Gnome : Ability
+[Ability("하급 변이", "다음 능력 선택창에서 <color=#FF00FF>영웅</color> 능력 등장 확률이 25%로 조정됩니다.", AbilityCategory.Rare, AbilityType.RARE_TRANSITION)]
+public class RareTransition : Ability
 {
     public override void OnEnabled()
     {
-        Room Room = Owner.CurrentRoom;
-        Color RoomColor = Owner.CurrentRoom.Color;
-
-        Room.Color = new Color(0.5f, 0.25f, 0);
-
-        Timing.CallDelayed(10f, () =>
-        {
-            Room.Color = RoomColor;
-        });
     }
 
     public override void OnDisabled()

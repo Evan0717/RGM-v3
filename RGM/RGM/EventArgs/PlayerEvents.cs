@@ -526,7 +526,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 if (GodModePlayers.Contains(ev.Player))
                 {
-                    if (ev.DamageHandler.Type != DamageType.Warhead && ev.DamageHandler.Type != DamageType.Falldown)
+                    if (ev.DamageHandler.Type != DamageType.Warhead && ev.DamageHandler.Type != DamageType.Crushed)
                         ev.IsAllowed = false;
                 }
             }

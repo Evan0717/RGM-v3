@@ -29,12 +29,17 @@ public class Dopamine : Ability
         if (ev.Player != Owner)
             return;
 
+        if (ev.Attacker != null)
+        {
+            if (ev.Attacker.LeadingTeam == ev.Player.LeadingTeam)
+                return;
+        }
+
         ev.IsAllowed = false;
+        ev.Player.RemoveAbility(this);
+
         ev.Player.Health += ev.DamageHandler.Damage;
 
         ev.Attacker.ShowHint($"<color={ABattle.RatingColor["일반"]}>도파민</color> 효과로 인해 데미지를 무시하고 체력으로 흡수했습니다.");
-
-        OnDisabled();
-        ev.Player.RemoveAbility(AbilityType.NORMAL_DOPAMINE);
     }
 }

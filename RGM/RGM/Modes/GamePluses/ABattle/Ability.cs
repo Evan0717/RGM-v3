@@ -228,24 +228,22 @@ public enum AbilityType
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
-    EPIC_PINKCANDY, // [영웅] 핑크 사탕
     EPIC_GAMBLER, // [영웅] 도박꾼
     EPIC_RANDOMCHEST, // [영웅] 랜덤상자
-    EPIC_REPAIRKNIGHT, // [영웅] 수리 기사
+    EPIC_REPAIRMAN, // [영웅] 수리 기사
     EPIC_SUPERSTAR, // [영웅] 슈퍼 스타
-    EPIC_LUCKYKEY, // [영웅] 럭키비키
-    EPIC_EXTREME, // [영웅] 극독
+    EPIC_LUCKYVIKEY, // [영웅] 럭키비키
+    EPIC_EXTREMEPOISON, // [영웅] 극독
     EPIC_SURVIVOR, // [영웅] 구사일생
-    EPIC_LASTSTAND, // [영웅] 최후의 발악
     EPIC_REGENERATION, // [영웅] 초재생
-    EPIC_GHOSTRULE, // [영웅] 고스트룰
-    EPIC_DIVER, // [영웅] 잠수부
-    EPIC_BLINK, // [영웅] 점멸
+    // EPIC_GHOSTRULE, // [영웅] 고스트룰
+    // EPIC_DIVER, // [영웅] 잠수부
+    // EPIC_BLINK, // [영웅] 점멸
     EPIC_TRANSITION, // [영웅] 변이
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
-    LEGEND_SNAKEHAND_RADIO, // [전설] 뱀의 손 무전기
+    LEGEND_SNAKEHANDRADIO, // [전설] 뱀의 손 무전기
     LEGEND_RANDOMPACKAGE, // [전설] 랜덤택배
     LEGEND_MAGICIAN, // [전설] 마술사
     LEGEND_FLASHLIGHT, // [전설] 플래시라이트
@@ -258,10 +256,10 @@ public enum AbilityType
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
     MYTHIC_SPIRIT, // [신화] 스피릿
-    MYTHIC_EYEMAN, // [신화] 눈빛맨
-    MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
+    // MYTHIC_EYEMAN, // [신화] 눈빛맨
+    // MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
     MYTHIC_JOKER, // [신화] 조커
-    MYTHIC_WARGOD, // [신화] 광전사
+    // MYTHIC_WARGOD, // [신화] 광전사
 
     // 전용 //
     // D계급

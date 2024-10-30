@@ -3,7 +3,9 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Myth;
+using static RGM.Variables.ServerManagers;
+
+namespace RGM.Modes.Abilities.Mythic;
 
 [Ability("조커", "사망할 경우 3초간 무적이 되고, 최대 체력이 1~3배로 조정되고, 상대방의 능력 1개를 삭제시키고, 전설 능력 2개를 얻습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_JOKER)]
 public class Joker : Ability
@@ -25,11 +27,12 @@ public class Joker : Ability
 
         ev.IsAllowed = false;
 
-        ev.Player.IsGodModeEnabled = true;
+        GodModePlayers.Add(ev.Player);
 
         Timing.CallDelayed(3f, () =>
         {
-            ev.Player.IsGodModeEnabled = false;
+            if (GodModePlayers.Contains(ev.Player))
+                GodModePlayers.Remove(ev.Player);
         });
 
         ev.Player.MaxHealth = Random.Range(1, 4) * ev.Player.MaxHealth;

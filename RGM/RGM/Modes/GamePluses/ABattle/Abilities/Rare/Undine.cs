@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("물의 정령, 운디네", "청량한 바다의 기운! 불, 흙, 바람의 정령을 모으면..?", AbilityCategory.Rare, AbilityType.RARE_UNDINE)]
+[Ability("운디네", "청량한 바다의 기운! 불, 흙, 바람의 정령을 모으면..?", AbilityCategory.Rare, AbilityType.RARE_UNDINE)]
 public class Undine : Ability
 {
     public override void OnEnabled()

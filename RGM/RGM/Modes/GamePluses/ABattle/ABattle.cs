@@ -91,16 +91,25 @@ public class ABattle
 
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new Commands.AddAbility());
 
-        Timing.CallDelayed(Random.Range(1, 11), () =>
-        {
-            if (Random.Range(1, 6) == 1)
-                IsFeverModeEnabled = true;
-
-            if (IsFeverModeEnabled)
-                Server.ExecuteCommand("/mp load ABattle");
-        });
-
+        Timing.RunCoroutine(OnModeStarted());
         Timing.RunCoroutine(HintCoroutine());
+    }
+
+    private IEnumerator<float> OnModeStarted()
+    {
+        if (Random.Range(1, 6) == 1)
+            IsFeverModeEnabled = true;
+
+        if (IsFeverModeEnabled)
+            Server.ExecuteCommand("/mp load ABattle");
+
+        foreach (var player in Player.List)
+        {
+            PlayerWorkstations.Add(player, new List<WorkstationController>());
+            PlayerAbilities.Add(player, new List<Ability>());
+        }
+
+        yield break;
     }
 
     private IEnumerator<float> HintCoroutine()
@@ -417,7 +426,7 @@ public class ABattle
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
         var abilities = Selections[player];
-        var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}\n<size=20>{Abilities[x].Description}</size>"));
+        var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}\n<size=20>{Abilities[x].Description}</size>\n"));
 
         for (var i = 0; i < 20; i++)
         {
@@ -425,7 +434,7 @@ public class ABattle
             if (!Selections.ContainsKey(player)) yield break;
 
             player.ShowHint(
-                $"<align=left><size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n",
+                $"<align=left><size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n\n\n\n",
                 1.2f);
 
             yield return Timing.WaitForSeconds(1f);
@@ -459,58 +468,18 @@ public class ABattle
         if (player.Role == RoleTypeId.Scp079)
             return AbilityCategory.Scp079;
 
-        var random = Random.Range(1, 10001);
+        var random = Random.Range(1, 1001);
 
         switch (random)
         {
-            case <= 5:
+            case <= 1:
                 return AbilityCategory.Mythic;
-            case <= 40:
+            case <= 5:
                 return AbilityCategory.Legend;
-            case <= 250:
+            case <= 55:
                 return AbilityCategory.Epic;
-            case <= 1500:
+            case <= 295:
                 return AbilityCategory.Rare;
-            case <= 2000 when player.Role.Type.ToString().StartsWith("Scp"):
-                return (AbilityCategory)Enum.Parse(typeof(AbilityCategory), player.Role.Type.ToString());
-            case <= 2000:
-                switch (player.Role.Type)
-                {
-                    case RoleTypeId.ClassD:
-                        return AbilityCategory.ClassD;
-                    case RoleTypeId.Scientist:
-                        return AbilityCategory.Scientist;
-                    case RoleTypeId.NtfSpecialist:
-                    case RoleTypeId.NtfSergeant:
-                    case RoleTypeId.NtfCaptain:
-                    case RoleTypeId.NtfPrivate:
-                        return AbilityCategory.Ntf;
-                    case RoleTypeId.ChaosConscript:
-                    case RoleTypeId.ChaosRifleman:
-                    case RoleTypeId.ChaosMarauder:
-                    case RoleTypeId.ChaosRepressor:
-                        return AbilityCategory.Chaos;
-                    case RoleTypeId.FacilityGuard:
-                        return AbilityCategory.Guard;
-                    case RoleTypeId.Tutorial:
-                        return AbilityCategory.Snake;
-                    case RoleTypeId.None:
-                    case RoleTypeId.Scp173:
-                    case RoleTypeId.Spectator:
-                    case RoleTypeId.Scp106:
-                    case RoleTypeId.Scp049:
-                    case RoleTypeId.Scp079:
-                    case RoleTypeId.Scp096:
-                    case RoleTypeId.Scp0492:
-                    case RoleTypeId.Scp939:
-                    case RoleTypeId.CustomRole:
-                    case RoleTypeId.Overwatch:
-                    case RoleTypeId.Filmmaker:
-                    case RoleTypeId.Scp3114:
-                    default:
-                        return AbilityCategory.Common;
-                }
-
             default:
                 return AbilityCategory.Common;
         }

@@ -28,9 +28,8 @@ public class Insurance : Ability
             return;
 
         ev.IsAllowed = false;
-        Owner.ShowHint($"사망 판정을 받았지만 <color={ABattle.RatingColor["일반"]}>보험</color>으로 인해 1번 버텨냅니다.");
+        ev.Player.RemoveAbility(this);
 
-        OnDisabled();
-        ev.Player.RemoveAbility(AbilityType.NORMAL_INSURANCE);
+        Owner.ShowHint($"사망 판정을 받았지만 <color={ABattle.RatingColor["일반"]}>보험</color>으로 인해 1번 버텨냅니다.");
     }
 }

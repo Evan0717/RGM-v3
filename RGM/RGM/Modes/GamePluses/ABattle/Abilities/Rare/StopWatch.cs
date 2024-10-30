@@ -12,6 +12,8 @@ using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes.Abilities.Rare;
 
 [Ability("회중시계", "지급된 동전을 튕기면 3초간 움직일 수 없는 대신에 무적 상태가 됩니다.", AbilityCategory.Rare, AbilityType.RARE_STOPWATCH)]
@@ -56,9 +58,13 @@ public class StopWatch : Ability
 
             ev.Player.EnableEffect(EffectType.Ensnared, 1, 3);
 
-            ev.Player.IsGodModeEnabled = true;
+            GodModePlayers.Add(ev.Player);
 
-            Timing.CallDelayed(3, () => { ev.Player.IsGodModeEnabled = false; });
+            Timing.CallDelayed(3, () => 
+            { 
+                if (GodModePlayers.Contains(ev.Player)) 
+                    GodModePlayers.Remove(ev.Player); 
+            });
         }
     }
 }

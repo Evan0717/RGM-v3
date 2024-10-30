@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("정화", "초록 사탕이 포함된 SCP-330을 지급받습니다.", AbilityCategory.Common, AbilityType.NORMAL_TORCH)]
+[Ability("횃불", "랜턴과 노란 사탕이 포함된 SCP-330을 지급받습니다.", AbilityCategory.Common, AbilityType.NORMAL_TORCH)]
 public class Torch : Ability
 {
     public override void OnEnabled()

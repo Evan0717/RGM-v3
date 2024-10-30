@@ -16,10 +16,10 @@ public class Rainbow : Ability
 {
     public override void OnEnabled()
     {
-        Scp330 GreenCandy = (Scp330)Item.Create(ItemType.SCP330);
-        GreenCandy.RemoveAllCandy();
-        GreenCandy.AddCandy(CandyKindID.Green);
-        Owner.AddItem(GreenCandy);
+        Scp330 RainbowCandy = (Scp330)Item.Create(ItemType.SCP330);
+        RainbowCandy.RemoveAllCandy();
+        RainbowCandy.AddCandy(CandyKindID.Rainbow);
+        Owner.AddItem(RainbowCandy);
 
         if (Owner.IsScp)
             Server.ExecuteCommand($"/forceeq {Owner.Id} 42");
