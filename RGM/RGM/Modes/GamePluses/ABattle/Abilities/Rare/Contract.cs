@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -15,16 +17,55 @@ namespace RGM.Modes.Abilities.Rare;
 [Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다.", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
 public class Contract : Ability
 {
+    ushort ContractCoinSerial = 0;
+
     public override void OnEnabled()
     {
-        Item cc = player.AddItem(ItemType.Coin);
-        ContractCoinSerials.Add(cc.Serial);
+        Item cc = Owner.AddItem(ItemType.Coin);
+        ContractCoinSerial = cc.Serial;
 
         if (Owner.IsScp)
             Owner.CurrentItem = cc;
+
+        Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
+        Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
+        Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
+    }
+
+    public void OnChangedItem(ChangedItemEventArgs ev)
+    {
+        if (ev.Item != null)
+        {
+            if (ContractCoinSerial == ev.Item.Serial)
+                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.");
+        }
+    }
+
+    public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
+    {
+        ushort Serial = ev.Item.Serial;
+
+        if (ContractCoinSerial == Serial)
+        {
+            ev.Item.Destroy();
+
+            ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
+
+            while (!ev.Player.IsAlive)
+                yield return Timing.WaitForSeconds(0.1f);
+
+            for (int i = 1; i < 4; i++)
+            {
+                ABattle.Instance.StartSelect(ev.Player);
+
+                while (!ABattle.Instance.Selections.ContainsKey(ev.Player))
+                    yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
     }
 }
