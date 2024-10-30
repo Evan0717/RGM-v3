@@ -236,9 +236,9 @@ public enum AbilityType
     EPIC_EXTREMEPOISON, // [영웅] 극독
     EPIC_SURVIVOR, // [영웅] 구사일생
     EPIC_REGENERATION, // [영웅] 초재생
-    // EPIC_GHOSTRULE, // [영웅] 고스트룰
-    // EPIC_DIVER, // [영웅] 잠수부
-    // EPIC_BLINK, // [영웅] 점멸
+    EPIC_GHOSTRULE, // [영웅] 고스트룰
+    EPIC_DIVER, // [영웅] 잠수부
+    EPIC_BLINK, // [영웅] 점멸
     EPIC_TRANSITION, // [영웅] 변이
 
     // 전설 //
@@ -248,9 +248,9 @@ public enum AbilityType
     LEGEND_MAGICIAN, // [전설] 마술사
     LEGEND_FLASHLIGHT, // [전설] 플래시라이트
     LEGEND_KILLSTREAK, // [전설] 킬스트릭
-    LEGEND_FLAMETHROWER, // [전설] 화염 방사기
-    LEGEND_SPIRIT, // [전설] 영매
-    LEGEND_SCREAM, // [전설] 괴성
+    // LEGEND_FLAMETHROWER, // [전설] 화염 방사기
+    // LEGEND_PSYCHICS, // [전설] 영매
+    // LEGEND_SCREAM, // [전설] 괴성
     LEGEND_TRANSITION, // [전설] 상급 변이
 
     // 신화 //

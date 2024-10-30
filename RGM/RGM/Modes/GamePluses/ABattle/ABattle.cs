@@ -23,21 +23,32 @@ public class ABattle
     public Dictionary<AbilityType, List<AbilityType>> SynergyAbilities;
     public Dictionary<Player, List<Ability>> PlayerAbilities;
     public Dictionary<Player, List<AbilityType>> Selections;
+    public Dictionary<Player, bool> IsSelecting;
+    public Dictionary<Player, bool> IsLifeUsed;
 
     public bool IsFeverModeEnabled;
 
     private ABattleEventHandler _eventHandler;
 
     public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
-        {
-            {"일반", "#A4A4A4"},
-            {"희귀", "#2ECCFA"},
-            {"영웅", "#FF00FF"},
-            {"전설", "#ffd700"},
-            {"신화", "#DF0101"},
-            {"전용", "#F7819F"},
-            {"시너지", "#DEEFED"}
-        };
+    {
+        {"일반", "#A4A4A4"},
+        {"희귀", "#2ECCFA"},
+        {"영웅", "#FF00FF"},
+        {"전설", "#ffd700"},
+        {"신화", "#DF0101"},
+        {"전용", "#F7819F"},
+        {"시너지", "#DEEFED"}
+    };
+    public static Dictionary<string, string> SelectFormat = new Dictionary<string, string>()
+    {
+        {"일반", "<b><i><color=#404040>일</color><color=#474747>반</color> <color=#555555>(</color><color=#5C5C5C>C</color><color=#636363>o</color><color=#6B6B6B>m</color><color=#727272>m</color><color=#797979>o</color><color=#808080>n</color><color=#878787>)</color></i></b>"},
+        {"희귀", "<b><i><color=#47DAFF>희</color><color=#47D4FC>귀</color> <color=#47C8F7>(</color><color=#47C2F5>R</color><color=#48BCF2>a</color><color=#48B6F0>r</color><color=#48B0ED>e</color><color=#48AAEB>)</color></i></b>"},
+        {"영웅", "<b><i><color=#F185FF>영</color><color=#F27DFC>웅</color> <color=#F56EF6>(</color><color=#F767F3>E</color><color=#F85FF1>p</color><color=#FA58EE>i</color><color=#FB50EB>c</color><color=#FD49E8>)</color></i></b>"},
+        {"전설", "<b><i><color=#FFF70A>전</color><color=#FFF40B>설</color> <color=#FFEE0E>(</color><color=#FFEC0F>L</color><color=#FFE911>e</color><color=#FFE612>g</color><color=#FFE314>e</color><color=#FFE115>n</color><color=#FFDE17>d</color><color=#FFDB18>)</color></i></b>"},
+        {"신화", "<b><i><color=#F52500>신</color><color=#F12604>화</color> <color=#E9280D>(</color><color=#E52911>M</color><color=#E12A16>y</color><color=#DD2B1A>t</color><color=#D92C1F>h</color><color=#D52D23>i</color><color=#D12E28>c</color><color=#CD2F2C>)</color></i></b>"},
+        {"알 수 없음", "<b><i><color=#000000>알</color> <color=#555555>수</color> <color=#AAAAAA>없</color><color=#D4D4D4>음</color></i></b>"}
+    };
 
     // 플러그인에 있는 모든 능력 검색
     public void OnEnabled()
@@ -50,6 +61,8 @@ public class ABattle
         PlayerAbilities = new Dictionary<Player, List<Ability>>();
         SynergyAbilities = new Dictionary<AbilityType, List<AbilityType>>();
         Selections = new Dictionary<Player, List<AbilityType>>();
+        IsSelecting = new Dictionary<Player, bool>();
+        IsLifeUsed = new Dictionary<Player, bool>();
 
         Abilities = new Dictionary<AbilityType, AbilityData>();
         PlayerWorkstations = new Dictionary<Player, List<WorkstationController>>();
@@ -107,6 +120,8 @@ public class ABattle
         {
             PlayerWorkstations.Add(player, new List<WorkstationController>());
             PlayerAbilities.Add(player, new List<Ability>());
+            IsSelecting.Add(player, false);
+            IsLifeUsed.Add(player, false);
         }
 
         yield break;
@@ -337,6 +352,8 @@ public class ABattle
         if (!Selections.ContainsKey(player))
             Selections.Add(player, new List<AbilityType>());
 
+        IsSelecting[player] = true;
+
         var category = GetCategory(player);
 
         if (category == AbilityCategory.None)
@@ -428,17 +445,34 @@ public class ABattle
         var abilities = Selections[player];
         var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}\n<size=20>{Abilities[x].Description}</size>\n"));
 
+        string CheckAbilityGrade()
+        {
+            if (text.Contains("일반")) return "일반";
+            else if (text.Contains("희귀")) return "희귀";
+            else if (text.Contains("영웅")) return "영웅";
+            else if (text.Contains("전설")) return "전설";
+            else if (text.Contains("신화")) return "신화";
+
+            else return "알 수 없음";
+        }
+
         for (var i = 0; i < 20; i++)
         {
-            if (player.IsDead) yield break;
-            if (!Selections.ContainsKey(player)) yield break;
+            if (player.IsDead || !Selections.ContainsKey(player))
+            {
+                IsSelecting[player] = false;
+
+                yield break;
+            }
 
             player.ShowHint(
-                $"<align=left><size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n\n\n\n",
-                1.2f);
+            $"<align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade()]}</b></size>\n\n<size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n\n\n\n",
+            1.2f);
 
             yield return Timing.WaitForSeconds(1f);
         }
+
+        IsSelecting[player] = false;
 
         if (!Selections.ContainsKey(player)) yield break;
 

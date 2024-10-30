@@ -12,6 +12,8 @@ using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes.Abilities.Rare;
 
 [Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다.", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
@@ -39,6 +41,9 @@ public class Contract : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
+        if (ev.Player != Owner)
+            return;
+
         if (ev.Item != null)
         {
             if (ContractCoinSerial == ev.Item.Serial)
@@ -48,11 +53,17 @@ public class Contract : Ability
 
     public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
     {
+        if (ev.Player != Owner)
+            yield break;
+
         ushort Serial = ev.Item.Serial;
 
         if (ContractCoinSerial == Serial)
         {
             ev.Item.Destroy();
+
+            if (GodModePlayers.Contains(Owner))
+                GodModePlayers.Remove(Owner);
 
             ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
 
@@ -63,7 +74,7 @@ public class Contract : Ability
             {
                 ABattle.Instance.StartSelect(ev.Player);
 
-                while (!ABattle.Instance.Selections.ContainsKey(ev.Player))
+                while (ABattle.Instance.IsSelecting[ev.Player])
                     yield return Timing.WaitForSeconds(0.1f);
             }
         }

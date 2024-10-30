@@ -29,9 +29,10 @@ public class Survivor : Ability
 
     public void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner)
+        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner])
             return;
 
+        ev.IsAllowed = false;
         ev.Player.RemoveAbility(this);
 
         ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
@@ -50,6 +51,15 @@ public class Survivor : Ability
 
             if (GodModePlayers.Contains(ev.Player))
                 GodModePlayers.Remove(ev.Player);
+        });
+
+        ev.Attacker.ShowHint($"<color={ABattle.RatingColor["영웅"]}>구사일생</color> 능력으로 인해 3초간 죽음을 피합니다.");
+
+        ABattle.Instance.IsLifeUsed[Owner] = true;
+
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+        {
+            ABattle.Instance.IsLifeUsed[Owner] = false;
         });
     }
 }
