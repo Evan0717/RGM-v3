@@ -16,15 +16,15 @@ namespace RGM.Modes;
 
 public class ABattle
 {
-    public static ABattle Instance { get; private set; }
+    public static ABattle Instance { get; set; }
 
-    public Dictionary<Player, List<WorkstationController>> PlayerWorkstations { get; private set; }
-    public Dictionary<AbilityType, AbilityData> Abilities { get; private set; }
+    public Dictionary<Player, List<WorkstationController>> PlayerWorkstations { get; set; }
+    public Dictionary<AbilityType, AbilityData> Abilities { get; set; }
+    public Dictionary<AbilityType, List<AbilityType>> SynergyAbilities;
+    public Dictionary<Player, List<Ability>> PlayerAbilities;
+    public Dictionary<Player, List<AbilityType>> Selections;
 
-    private Dictionary<AbilityType, List<AbilityType>> _synergyAbilities;
-    private Dictionary<Player, List<Ability>> _playerAbilities;
-    private Dictionary<Player, List<AbilityType>> _selections;
-    private bool _isFeverModeEnabled;
+    public bool IsFeverModeEnabled;
 
     private ABattleEventHandler _eventHandler;
 
@@ -47,9 +47,9 @@ public class ABattle
         _eventHandler = new ABattleEventHandler(this);
         _eventHandler.RegisterEvents();
 
-        _playerAbilities = new Dictionary<Player, List<Ability>>();
-        _synergyAbilities = new Dictionary<AbilityType, List<AbilityType>>();
-        _selections = new Dictionary<Player, List<AbilityType>>();
+        PlayerAbilities = new Dictionary<Player, List<Ability>>();
+        SynergyAbilities = new Dictionary<AbilityType, List<AbilityType>>();
+        Selections = new Dictionary<Player, List<AbilityType>>();
 
         Abilities = new Dictionary<AbilityType, AbilityData>();
         PlayerWorkstations = new Dictionary<Player, List<WorkstationController>>();
@@ -78,7 +78,7 @@ public class ABattle
 
             if (requiresAbilityAttribute != null && requiresAbilityAttribute.Abilities.Length > 0)
             {
-                _synergyAbilities.Add(abilityAttribute.Type, requiresAbilityAttribute.Abilities.ToList());
+                SynergyAbilities.Add(abilityAttribute.Type, requiresAbilityAttribute.Abilities.ToList());
 
                 Abilities[abilityAttribute.Type].Category = AbilityCategory.Synergy;
                 Abilities[abilityAttribute.Type].Requires = requiresAbilityAttribute.Abilities.ToList();
@@ -94,9 +94,9 @@ public class ABattle
         Timing.CallDelayed(Random.Range(1, 11), () =>
         {
             if (Random.Range(1, 6) == 1)
-                _isFeverModeEnabled = true;
+                IsFeverModeEnabled = true;
 
-            if (_isFeverModeEnabled)
+            if (IsFeverModeEnabled)
                 Server.ExecuteCommand("/mp load ABattle");
         });
 
@@ -125,7 +125,7 @@ public class ABattle
 
     private string FormatHint(Player player)
     {
-        if (!_playerAbilities.TryGetValue(player, out var ability))
+        if (!PlayerAbilities.TryGetValue(player, out var ability))
         {
             return player.Role.Type == RoleTypeId.Scp079
                 ? "<align=left><b><size=22>레벨이 오를 때마다 능력을 획득할 수 있습니다.</size></b></align>"
@@ -140,7 +140,7 @@ public class ABattle
         }
 
         var abilitiesText = string.Join(", ",
-            _playerAbilities[player]
+            PlayerAbilities[player]
                 .GroupBy(x => x.Data.AbilityType)
                 .Select(g => g.Count() > 1
                     ? $"{g.First().Data.GetFormattedName()} x{g.Count()}"
@@ -162,10 +162,10 @@ public class ABattle
             return;
         }
 
-        if (!_playerAbilities.ContainsKey(player))
+        if (!PlayerAbilities.ContainsKey(player))
         {
             Log.Info("No key");
-            _playerAbilities.Add(player, []);
+            PlayerAbilities.Add(player, []);
         }
 
         var abilityData = Abilities[type];
@@ -191,15 +191,15 @@ public class ABattle
         ability.Owner = player;
         ability.OnEnabled();
 
-        _playerAbilities[player].Add(ability);
+        PlayerAbilities[player].Add(ability);
 
-        EnableSynergyAbility(_playerAbilities[player]);
+        EnableSynergyAbility(PlayerAbilities[player]);
     }
 
     // 플레이어에게 시너지 능력 부여
     private void EnableSynergyAbility(List<Ability> abilities)
     {
-        foreach (var synergy in _synergyAbilities.Where(synergy =>
+        foreach (var synergy in SynergyAbilities.Where(synergy =>
                      synergy.Value.All(req => abilities.Any(a => a.Data.AbilityType == req))))
         {
             if (!Abilities.TryGetValue(synergy.Key, out var synergyAbilityType))
@@ -230,7 +230,7 @@ public class ABattle
     // 플레이어로부터 특정 능력 제거
     public void RemoveAbility(Player player, AbilityType type)
     {
-        if (!_playerAbilities.TryGetValue(player, out var playerAbility))
+        if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
         var ability = playerAbility.FirstOrDefault(x => x.Data.AbilityType == type);
@@ -239,9 +239,9 @@ public class ABattle
             return;
 
         ability.OnDisabled();
-        _playerAbilities[player].Remove(ability);
+        PlayerAbilities[player].Remove(ability);
 
-        RemoveSynergyAbility(_playerAbilities[player]);
+        RemoveSynergyAbility(PlayerAbilities[player]);
     }
 
     public void RemoveAbility(Player player, Ability ability)
@@ -249,22 +249,22 @@ public class ABattle
         if (ability == null)
             return;
 
-        if (!_playerAbilities.TryGetValue(player, out var playerAbility))
+        if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
         if (!playerAbility.Contains(ability))
             return;
 
         ability.OnDisabled();
-        _playerAbilities[player].Remove(ability);
+        PlayerAbilities[player].Remove(ability);
 
-        RemoveSynergyAbility(_playerAbilities[player]);
+        RemoveSynergyAbility(PlayerAbilities[player]);
     }
 
     // 플레이어로부터 시너지 능력 확인 후 제거
     private void RemoveSynergyAbility(List<Ability> abilities)
     {
-        foreach (var synergy in _synergyAbilities)
+        foreach (var synergy in SynergyAbilities)
         {
             if (!synergy.Value.All(req => abilities.Any(a => a.Data.AbilityType == req)) &&
                 abilities.Any(a => a.Data.AbilityType == synergy.Key))
@@ -279,19 +279,19 @@ public class ABattle
     // 플레이어로부터 모든 능력 제거
     public void RemoveAllAbilities(Player player)
     {
-        if (!_playerAbilities.TryGetValue(player, out var playerAbility))
+        if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
         foreach (var ability in playerAbility)
             ability.OnDisabled();
 
-        _playerAbilities.Remove(player);
+        PlayerAbilities.Remove(player);
     }
 
     // 플레이어의 모든 능력 가져오기
     public List<Ability> GetAbilities(Player player)
     {
-        return _playerAbilities.TryGetValue(player, out var playerAbility) ? playerAbility : new List<Ability>();
+        return PlayerAbilities.TryGetValue(player, out var playerAbility) ? playerAbility : new List<Ability>();
     }
 
     public AbilityType FindAbility(string name)
@@ -325,8 +325,8 @@ public class ABattle
 
     public void StartSelect(Player player)
     {
-        if (!_selections.ContainsKey(player))
-            _selections.Add(player, new List<AbilityType>());
+        if (!Selections.ContainsKey(player))
+            Selections.Add(player, new List<AbilityType>());
 
         var category = GetCategory(player);
 
@@ -408,7 +408,7 @@ public class ABattle
             }
         }
 
-        _selections[player] = abilities;
+        Selections[player] = abilities;
 
         // 다음 타자, 코루틴!!!
         Timing.RunCoroutine(SelectionCoroutine(player));
@@ -416,13 +416,13 @@ public class ABattle
 
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
-        var abilities = _selections[player];
-        var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}"));
+        var abilities = Selections[player];
+        var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}\n<size=20>{Abilities[x].Description}</size>"));
 
         for (var i = 0; i < 20; i++)
         {
             if (player.IsDead) yield break;
-            if (!_selections.ContainsKey(player)) yield break;
+            if (!Selections.ContainsKey(player)) yield break;
 
             player.ShowHint(
                 $"<align=left><size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n",
@@ -431,7 +431,7 @@ public class ABattle
             yield return Timing.WaitForSeconds(1f);
         }
 
-        if (!_selections.ContainsKey(player)) yield break;
+        if (!Selections.ContainsKey(player)) yield break;
 
         if (abilities.All(x => x == abilities.First()))
         {
@@ -440,7 +440,7 @@ public class ABattle
                 player.AddAbility(abilities[i]);
             }
 
-            _selections.Remove(player);
+            Selections.Remove(player);
 
             yield break;
         }
@@ -449,7 +449,7 @@ public class ABattle
 
         player.AddAbility(abilities[random]);
 
-        _selections.Remove(player);
+        Selections.Remove(player);
     }
 
     private AbilityCategory GetCategory(Player player)
@@ -518,7 +518,7 @@ public class ABattle
 
     public bool Select(Player player, int index, out string response)
     {
-        if (!_selections.ContainsKey(player))
+        if (!Selections.ContainsKey(player))
         {
             response = "선택할 수 있는 능력이 없습니다.";
             return false;
@@ -533,18 +533,18 @@ public class ABattle
         Log.Info("Select called with " + player.Nickname + " and " + index);
 
         AbilityType ability;
-        if (_selections[player].All(x => x == _selections[player].First()))
+        if (Selections[player].All(x => x == Selections[player].First()))
         {
             Log.Info("All abilities are the same");
 
-            ability = _selections[player].First();
+            ability = Selections[player].First();
 
             for (var i = 0; i < 3; i++)
             {
                 player.AddAbility(ability);
             }
 
-            _selections.Remove(player);
+            Selections.Remove(player);
 
             player.ShowHint("", 0.1f);
 
@@ -554,11 +554,11 @@ public class ABattle
 
         Log.Info("All abilities are not the same");
 
-        ability = _selections[player][index - 1];
+        ability = Selections[player][index - 1];
 
         player.AddAbility(ability);
 
-        _selections.Remove(player);
+        Selections.Remove(player);
 
         player.ShowHint("", 0.1f);
 
