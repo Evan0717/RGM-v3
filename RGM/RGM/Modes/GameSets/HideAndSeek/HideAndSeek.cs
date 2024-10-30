@@ -24,6 +24,7 @@ namespace RGM.Modes
 
         public void OnEnabled()
         {
+            Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -36,7 +37,7 @@ namespace RGM.Modes
             for (float i = 1; i < Player.List.Count / 10 + 2; i++)
                 Finders.Add(Tools.GetRandomValue(Player.List.Where(x => !Finders.Contains(x)).ToList()));
 
-            Player.List.ToList().ForEach(x => Server.ExecuteCommand($"/god {x.Id} 1"));
+            Player.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
 
             foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
             {
@@ -65,7 +66,8 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1f);
 
-            Player.List.ToList().ForEach(x => Server.ExecuteCommand($"/god {x.Id} 0"));
+            Player.List.ToList().ForEach(x => x.IsGodModeEnabled = false);
+            Round.IsLocked = false;
 
             for (int i = 1; i < Remaining; i++)
             {
