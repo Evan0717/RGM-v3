@@ -48,6 +48,7 @@ namespace RGM.Modes
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.Left += OnLeft;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(ScoreBoard());
@@ -58,6 +59,7 @@ namespace RGM.Modes
             Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
+
             foreach (var Door in Door.List.Where(x => x.Zone == ZoneType.HeavyContainment))
             {
                 if (Door.IsCheckpoint || Door.IsElevator)
@@ -67,8 +69,7 @@ namespace RGM.Modes
                     Door.IsOpen = true;
             }
 
-            foreach (var player in Player.List)
-                PlayerSpawn(player);
+            Server.ExecuteCommand("/atkill all");
 
             while (!IsEnd)
             {
@@ -129,9 +130,7 @@ namespace RGM.Modes
             Door SelectedDoor = Tools.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
             !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList());
 
-            if (player.Role.Type != RoleTypeId.ClassD)
-                player.Role.Set(RoleTypeId.ClassD);
-
+            player.Role.Set(RoleTypeId.ClassD);
             player.Health = player.MaxHealth;
             player.EnableEffect(EffectType.Flashed, 1, 0.1f);
             player.ClearInventory();
@@ -158,13 +157,18 @@ namespace RGM.Modes
         {
             if (Stage.ContainsKey(ev.Player))
             {
-
                 Stage[ev.Attacker]++;
                 ev.Attacker.ClearInventory();
                 ev.Attacker.AddItem(GunsList[Stage[ev.Attacker]]);
                 PlayerSpawn(ev.Player);
                 ev.IsAllowed = false;
             }
+        }
+
+        public void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
+        {
+            if (Server.PlayerCount < 2)
+                Round.IsLocked = false;
         }
     }
 }
