@@ -246,6 +246,27 @@
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Normal\Torch.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Normal\Training.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Normal\Workout.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\AdhesivePlaster.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Alchemy.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\BomberMan.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Contract.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Gnome.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\GrapplingHook.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Hypass.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Martyrdom.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Panacea.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\PhysicalStrengthening.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Salamandra.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\SteelShell.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Steroid.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\StopWatch.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Sylph.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Teleportation.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\TransparentCloak.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Tripleaxel.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Undine.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Vampire.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\WeaponExpert.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Ability.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Commands\AddAbility.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Commands\Select.cs" />
@@ -335,7 +356,6 @@
   <ItemGroup>
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Hero\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Legend\" />
-    <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Unique\" />
   </ItemGroup>

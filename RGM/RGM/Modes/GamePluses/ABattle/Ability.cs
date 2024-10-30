@@ -216,13 +216,13 @@ public enum AbilityType
     RARE_HYPASS, // [희귀] 하이패스
     RARE_TRIPLEAXEL, // [희귀] 트리플악셀
     RARE_ALCHEMY, // [희귀] 연금
-    RARE_SWITCHBLADE, // [희귀] 반창고
+    RARE_ADHESIVEPLASTER, // [희귀] 반창고
     RARE_WEAPONEXPERT, // [희귀] 무기 전문가
     RARE_PANACEA, // [희귀] 만병통치약
-    RARE_FIREELEMENTAL, // [희귀] 불의 정령
-    RARE_WATERSPIRIT, // [희귀] 물의 정령
-    RARE_EARTHELEMENTAL, // [희귀] 흙의 정령
-    RARE_AIRELEMENTAL, // [희귀] 바람의 정령
+    RARE_SALAMANDRA, // [희귀] 불의 정령, 살라만드라
+    RARE_UNDINE, // [희귀] 물의 정령, 운디네
+    RARE_GNOME, // [희귀] 흙의 정령, 노움
+    RARE_SYLPH, // [희귀] 바람의 정령, 실프
     RARE_CONTRACT, // [희귀] 계약
     RARE_TRANSITION, // [희귀] 하급 변이
 

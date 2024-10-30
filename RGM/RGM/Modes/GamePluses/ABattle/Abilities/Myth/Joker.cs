@@ -23,9 +23,6 @@ public class Joker : Ability
         if (ev.Player != Owner)
             return;
 
-        if (ev.Attacker == null)
-            return;
-
         ev.IsAllowed = false;
 
         ev.Player.IsGodModeEnabled = true;
@@ -37,11 +34,12 @@ public class Joker : Ability
 
         ev.Player.MaxHealth = Random.Range(1, 4) * ev.Player.MaxHealth;
 
-        ev.Attacker.RemoveAbility(ev.Attacker.GetAbilities().GetRandomValue());
+        if (ev.Attacker != null)
+            ev.Attacker.RemoveAbility(ev.Attacker.GetAbilities().GetRandomValue());
 
         foreach (var ability in ABattle.Instance.GetRandomAbilities(AbilityCategory.Legend, 2))
-        {
             ev.Player.AddAbility(ability);
-        }
+
+        OnDisabled();
     }
 }

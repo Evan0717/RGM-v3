@@ -17,7 +17,7 @@ namespace RGM.Modes.Abilities.Normal;
 [Ability("위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다.", AbilityCategory.Common, AbilityType.NORMAL_ESCAPE)]
 public class Escape : Ability
 {
-    public static ushort EscapeCoinSerial = 0;
+    ushort EscapeCoinSerial = 0;
 
     public override void OnEnabled()
     {
