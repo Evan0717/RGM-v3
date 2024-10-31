@@ -248,18 +248,18 @@ public enum AbilityType
     LEGEND_MAGICIAN, // [전설] 마술사
     LEGEND_FLASHLIGHT, // [전설] 플래시라이트
     LEGEND_KILLSTREAK, // [전설] 킬스트릭
-    // LEGEND_FLAMETHROWER, // [전설] 화염 방사기
-    // LEGEND_PSYCHICS, // [전설] 영매
-    // LEGEND_SCREAM, // [전설] 괴성
+    LEGEND_FLAMETHROWER, // [전설] 화염 방사기
+    LEGEND_PSYCHICS, // [전설] 영매
+    LEGEND_SCREAM, // [전설] 괴성
     LEGEND_TRANSITION, // [전설] 상급 변이
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
     MYTHIC_SPIRIT, // [신화] 스피릿
-    // MYTHIC_EYEMAN, // [신화] 눈빛맨
-    // MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
+    MYTHIC_EYEMAN, // [신화] 눈빛맨
+    MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
     MYTHIC_JOKER, // [신화] 조커
-    // MYTHIC_WARGOD, // [신화] 광전사
+    MYTHIC_WARGOD, // [신화] 광전사
 
     // 전용 //
     // D계급

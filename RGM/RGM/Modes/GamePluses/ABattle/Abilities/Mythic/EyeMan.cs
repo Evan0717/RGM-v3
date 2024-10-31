@@ -1,0 +1,58 @@
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using MEC;
+using RGM.API.Features;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using UnityEngine;
+using Exiled.API.Enums;
+
+namespace RGM.Modes.Abilities.Mythic;
+
+[Ability("눈빛맨", "상대는 눈에 띄거나 근처에 있는 것만으로도 압도당할 것입니다!", AbilityCategory.Mythic, AbilityType.MYTHIC_EYEMAN)]
+public class EyeMan : Ability
+{
+    CoroutineHandle _twinkle;
+
+    public override void OnEnabled()
+    {
+        _twinkle = Timing.RunCoroutine(Twinkle());
+    }
+
+    public override void OnDisabled()
+    {
+        Timing.KillCoroutines(_twinkle);
+    }
+
+    public IEnumerator<float> Twinkle()
+    {
+        while (true)
+        {
+            foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
+            {
+                if (Owner != near && Owner.LeadingTeam != near.LeadingTeam)
+                {
+                    near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                    near.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                    near.Hurt(Owner.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
+                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
+                }
+            }
+
+            if (Tools.TryGetLookPlayer(Owner, 100f, out Player target))
+            {
+                if (Owner != target && Owner.LeadingTeam != target.LeadingTeam)
+                {
+                    target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                    target.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                    target.Hurt(Owner.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
+                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
+                }
+            }
+
+            yield return Timing.WaitForSeconds(0.1f);
+        }
+    }
+}
