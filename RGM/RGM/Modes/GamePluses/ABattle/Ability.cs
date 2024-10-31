@@ -338,12 +338,10 @@ public enum AbilityType
 
     // 시너지 //
     SYNERGY_SURVIVALEXPERT, // [시너지] 생존 전문가
-    SYNERGY_SPACETIMECROSSER, // [시너지] 시공간 초월자
     SYNERGY_GLORY, // [시너지] 광휘
-    SYNERGY_BORNHUNTER, // [시너지] 타고난 사냥꾼
     SYNERGY_RANDOMCOLLECTION, // [시너지] 랜덤 컬렉션
     SYNERGY_FOURMAJOREXERCISES, // [시너지] 4대 운동
-    SYNERGY_DUPLICATE_FATE, // [시너지] 중복 기연
+    SYNERGY_DUPLICATEFATE, // [시너지] 중복 기연
     SYNERGY_DRUID, // [시너지] 드루이드
 }
 

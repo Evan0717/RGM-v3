@@ -295,6 +295,11 @@
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Undine.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\Vampire.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Rare\WeaponExpert.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\DuplicateFate.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\FourMajorExercises.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\Glory.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\RandomCollection.cs" />
+    <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\SurvivalExpert.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Ability.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Commands\AddAbility.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Commands\Select.cs" />
@@ -382,7 +387,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Synergy\" />
     <Folder Include="RGM\Modes\GamePluses\ABattle\Abilities\Unique\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

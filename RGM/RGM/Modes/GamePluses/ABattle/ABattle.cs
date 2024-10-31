@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using InventorySystem.Items.Firearms.Attachments;
 using MEC;
+using MultiBroadcast.API;
 using PlayerRoles;
 using RemoteAdmin;
 using RGM.Modes.Commands;
@@ -49,6 +51,17 @@ public class ABattle
         {"신화", "<b><i><color=#F52500>신</color><color=#F12604>화</color> <color=#E9280D>(</color><color=#E52911>M</color><color=#E12A16>y</color><color=#DD2B1A>t</color><color=#D92C1F>h</color><color=#D52D23>i</color><color=#D12E28>c</color><color=#CD2F2C>)</color></i></b>"},
         {"알 수 없음", "<b><i><color=#000000>알</color> <color=#555555>수</color> <color=#AAAAAA>없</color><color=#D4D4D4>음</color></i></b>"}
     };
+
+    public static string ColorFormat(string text)
+    {
+        return text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
+                    .Replace("[전용]", $"<color={RatingColor["전용"]}>[전용]</color>")
+                    .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
+                    .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
+                    .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
+                    .Replace("[희귀]", $"<color={RatingColor["희귀"]}>[희귀]</color>")
+                    .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
+    }
 
     // 플러그인에 있는 모든 능력 검색
     public void OnEnabled()
@@ -216,8 +229,13 @@ public class ABattle
         ability.OnEnabled();
 
         PlayerAbilities[player].Add(ability);
-
         EnableSynergyAbility(PlayerAbilities[player]);
+
+        string styleName = ColorFormat(abilityData.GetFormattedName());
+
+        string Message = $"<size=20>{styleName}</size>\n<size=15>{abilityData.Description}</size>";
+        player.AddBroadcast(10, Message);
+        player.SendConsoleMessage($"\n{Message}", "white");
     }
 
     // 플레이어에게 시너지 능력 부여
@@ -478,10 +496,10 @@ public class ABattle
 
         if (abilities.All(x => x == abilities.First()))
         {
+            player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
+
             for (var i = 0; i < 3; i++)
-            {
                 player.AddAbility(abilities[i]);
-            }
 
             Selections.Remove(player);
 
