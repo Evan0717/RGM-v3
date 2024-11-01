@@ -50,7 +50,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
                     if (aBattle.Selections.ContainsKey(ev.Player))
                     {
-                        ev.Player.ShowHint("<size=20>이미 능력 선택창이 열려 있습니다.\n이전 선택을 먼저 완료해주세요.</size>", 1.2f);
+                        ev.Player.ShowHint("<size=20>이미 능력 선택창이 열려 있습니다.\n버그에 걸린 경우 아무 능력이나 선택해보세요.</size>", 1.2f);
                         return;
                     }
 

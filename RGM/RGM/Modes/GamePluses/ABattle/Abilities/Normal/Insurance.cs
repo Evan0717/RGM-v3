@@ -24,7 +24,7 @@ public class Insurance : Ability
 
     public void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner]) 
+        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner] || ev.DamageHandler.Type == DamageType.Warhead) 
             return;
 
         ev.IsAllowed = false;

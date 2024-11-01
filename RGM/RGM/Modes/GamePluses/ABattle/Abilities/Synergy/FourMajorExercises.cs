@@ -18,7 +18,10 @@ public class FourMajorExercises : Ability
 {
     public override void OnEnabled()
     {
-        ABattle.Instance.StartSelect(Owner);
+        Timing.CallDelayed(0.1f, () =>
+        {
+            ABattle.Instance.StartSelect(Owner);
+        });
     }
 
     public override void OnDisabled()

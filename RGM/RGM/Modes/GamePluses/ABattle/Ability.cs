@@ -174,7 +174,7 @@ public static class AbilityCategoryExtensions
             AbilityCategory.Scp3114 => "전용",
             AbilityCategory.Scp079 => "전용",
             AbilityCategory.Synergy => "시너지",
-            _ => "알 수 없음"
+            _ => "?"
         };
     }
     
@@ -396,7 +396,7 @@ public static class AbilityTypeExtensions
         var aBattle = ABattle.Instance;
 
         if (!aBattle.Abilities.TryGetValue(type, out var ability))
-            return "알 수 없음";
+            return "?";
 
         return ability.GetFormattedName();
     }

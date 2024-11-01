@@ -26,7 +26,7 @@ public class Dopamine : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam)
+        if (ev.Player != Owner || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.DamageHandler.Type == DamageType.Warhead)
             return;
 
         ev.IsAllowed = false;
