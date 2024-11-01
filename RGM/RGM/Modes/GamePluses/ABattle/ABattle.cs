@@ -505,7 +505,7 @@ public class ABattle
         IsSelecting[player] = false;
 
         if (!Selections.ContainsKey(player))
-                yield break;
+            yield break;
 
         if (abilities.All(x => x == abilities.First()))
         {
