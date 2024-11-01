@@ -36,12 +36,15 @@ public class Lucky : Ability
             return;
         }
 
-        ev.IsAllowed = false;
+        if (Random.Range(1, 21) == 1)
+        {
+            ev.IsAllowed = false;
 
-        if (ev.Door.IsOpen)
-            ev.Door.IsOpen = false;
+            if (ev.Door.IsOpen)
+                ev.Door.IsOpen = false;
 
-        else
-            ev.Door.IsOpen = true;
+            else
+                ev.Door.IsOpen = true;
+        }
     }
 }

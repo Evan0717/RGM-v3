@@ -6,6 +6,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class Dopamine : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || ev.DamageHandler.Type == DamageType.Warhead)
+        if (ev.Player != Owner || ev.Player.LeadingTeam == ev.Attacker.LeadingTeam || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
         ev.IsAllowed = false;

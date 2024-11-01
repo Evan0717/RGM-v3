@@ -81,5 +81,11 @@ namespace RGM.API.DataBases
             EffectType.Prismatic,
             EffectType.OrangeWitness
         };
+
+        public static List<DamageType> BlockDamageTypes = new List<DamageType>()
+        {
+            DamageType.Warhead,
+            DamageType.Crushed
+        };
     }
 }
