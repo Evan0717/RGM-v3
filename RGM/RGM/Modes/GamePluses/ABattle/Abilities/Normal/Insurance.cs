@@ -4,6 +4,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class Insurance : Ability
 
     public void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner] || ev.DamageHandler.Type == DamageType.Warhead) 
+        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner] || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type)) 
             return;
 
         ev.IsAllowed = false;

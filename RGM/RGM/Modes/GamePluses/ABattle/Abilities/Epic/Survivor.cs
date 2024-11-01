@@ -7,6 +7,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ public class Survivor : Ability
 
     public void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner])
+        if (ev.Player != Owner || ABattle.Instance.IsLifeUsed[Owner] || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
         ev.IsAllowed = false;
