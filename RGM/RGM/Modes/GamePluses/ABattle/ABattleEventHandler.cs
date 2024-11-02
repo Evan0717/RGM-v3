@@ -26,7 +26,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnVerified(VerifiedEventArgs ev)
     {
-        if (aBattle.PlayerWorkstations.ContainsKey(ev.Player))
+        if (!aBattle.PlayerWorkstations.ContainsKey(ev.Player))
         {
             aBattle.PlayerWorkstations.Add(ev.Player, new List<WorkstationController>());
             aBattle.PlayerAbilities.Add(ev.Player, new List<Ability>());

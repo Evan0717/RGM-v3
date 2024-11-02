@@ -244,5 +244,23 @@ RP: {uc[1]}
 
             return Player.Get(dj);
         }
+
+
+        public static List<Vector3> GetCirclePoints(Vector3 center, float radius, int pointCount)
+        {
+            List<Vector3> points = new List<Vector3>();
+            float angleStep = 360f / pointCount;
+
+            for (int i = 0; i < pointCount; i++)
+            {
+                float angle = i * angleStep;
+                float radian = angle * Mathf.Deg2Rad;
+                float x = center.x + radius * Mathf.Cos(radian);
+                float z = center.z + radius * Mathf.Sin(radian);
+                points.Add(new Vector3(x, center.y, z));
+            }
+
+            return points;
+        }
     }
 }
