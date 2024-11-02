@@ -22,7 +22,7 @@ namespace RGM.Modes
         public List<Player> pl = new List<Player>();
         List<ItemType> Standards = new List<ItemType>()
         {
-            ItemType.Flashlight,
+            ItemType.Flashlight
         };
         List<ItemType> Extensions = new List<ItemType>()
         {
@@ -65,12 +65,10 @@ namespace RGM.Modes
                     ItemsList.Add(Item);
             }
 
-            foreach (var locker in Recontainer.LockedDoors.ToList())
-                locker.IsOpen = true;
-
             Tools.TryInstallMode("FriendlyFire");
 
-            Player.List.ToList().ForEach(Spawned);
+            foreach (var player in Player.List)
+                Spawned(player);
 
             yield break;
         }
@@ -84,13 +82,14 @@ namespace RGM.Modes
         {
             if (pl.Contains(player))
             {
-                if (player.Role.Type != RoleTypeId.ChaosConscript)
-                {
+                if (player.Role.Type == RoleTypeId.ChaosConscript)
+                    return;
+
+                if (player.Role.Type != RoleTypeId.ClassD)
                     player.Role.Set(RoleTypeId.ClassD);
 
-                    foreach (var Item in ItemsList)
-                        player.AddItem(Item);
-                }
+                foreach (var Item in ItemsList)
+                    player.AddItem(Item);
             }
         }
 
