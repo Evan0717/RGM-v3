@@ -274,7 +274,7 @@ zㅣ1
 
 <i>* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.</i>
 """ } },
-            { "러시안 룰렛", new List<string>() { "F5ECCE", "", "RussianRoulette", "public", "",
+            { "러시안 룰렛", new List<string>() { "F5ECCE", "", "RussianRoulette", "private", "",
 """
 최대 7개의 그룹으로 나뉘어 각 5명씩 예선전을 치릅니다.
 

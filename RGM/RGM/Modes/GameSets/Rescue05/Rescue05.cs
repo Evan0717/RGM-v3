@@ -19,6 +19,7 @@ using RGM.API.Features;
 
 using static RGM.Variables.ServerManagers;
 using RGM.API.DataBases;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -34,7 +35,7 @@ namespace RGM.Modes
         {
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(AutoWarhead());
@@ -127,7 +128,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
