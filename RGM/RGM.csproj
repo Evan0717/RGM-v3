@@ -416,6 +416,7 @@
     <Compile Include="RGM\Modes\GamePluses\Siberia\Siberia.cs" />
     <Compile Include="RGM\Modes\GamePluses\SoulMate\SoulMate.cs" />
     <Compile Include="RGM\Modes\GameSets\Rescue05\Rescue05.cs" />
+    <Compile Include="RGM\Modes\GameSets\RussianRoulette\RussianRoulette.cs" />
     <Compile Include="RGM\Modes\GameSets\SpeedRun\SpeedRun.cs" />
     <Compile Include="RGM\Modes\GamePluses\Spirit\Spirit.cs" />
     <Compile Include="RGM\Modes\GameSets\Spleef\Spleef.cs" />
