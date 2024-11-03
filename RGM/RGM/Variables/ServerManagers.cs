@@ -22,6 +22,7 @@ namespace RGM.Variables
         public static bool FreezeGameStart = false;
         public static bool AutoNuke = false;
         public static bool IsScp3114Enabled = false;
+        public static bool IsBugVoteProcessing = false;
 
         public static Dictionary<string, List<string>> ModeList = new Dictionary<string, List<string>>();
         public static Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
@@ -52,9 +53,10 @@ namespace RGM.Variables
 
         public static List<string> EnabledModeList = new List<string>();
         public static List<string> SubModeVote = new List<string>();
+        public static List<string> Requests = new List<string>();
         public static List<Player> GodModePlayers = new List<Player>();
         public static List<Player> ChatCooldown = new List<Player>();
-        public static List<string> Requests = new List<string>();
+        public static List<Player> BugVotePlayers = new List<Player>();
 
         public static List<Transform> First;
         public static List<Transform> Second;

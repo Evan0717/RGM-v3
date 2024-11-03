@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.Events.Commands.Reload;
+using MEC;
+using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API.Components;
 using RGM.API.DataBases;
@@ -260,6 +262,44 @@ RP: {uc[1]}
             }
 
             return points;
+        }
+
+        public static IEnumerator<float> BugVote(Player host)
+        {
+            int RequiredCount = Player.List.Count / 2;
+            bool IsSuccess = false;
+
+            for (int i = 1; i<21; i++)
+            {
+                if (BugVotePlayers.Count >= RequiredCount)
+                {
+                    IsSuccess = true;
+                    break;
+                }
+
+                foreach (var player in Player.List)
+                    player.ShowHint($"<size=25>{host.DisplayNickname}(이)가 <b><color=#FFBF00>버그 투표</color></b>를 개설하였습니다.\n라운드를 강제로 종료해야 한다면 <b>.찬성</b> 명령어를 입력하세요.</size>\n<size=20>투표 종료까지 {21 - i}초 남음 ({BugVotePlayers.Count}/{RequiredCount})</size>", 1.2f);
+
+                yield return Timing.WaitForSeconds(1);
+            }
+
+            if (IsSuccess)
+            {
+                foreach (var player in Player.List)
+                    player.AddBroadcast(5, $"버그 투표가 <b><color=#9AFE2E>가결</color></b>되었습니다. 곧 서버가 재시작됩니다.");
+
+                yield return Timing.WaitForSeconds(5);
+
+                Server.ExecuteCommand($"sr");
+            }
+            else
+            {
+                foreach (var player in Player.List)
+                    player.AddBroadcast(5, $"버그 투표가 <b><color=#FE2E2E>부결</color></b>되었습니다.");
+            }
+
+            IsBugVoteProcessing = false;
+            BugVotePlayers.Clear();
         }
     }
 }

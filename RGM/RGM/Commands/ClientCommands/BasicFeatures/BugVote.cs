@@ -1,0 +1,87 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using CommandSystem;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using MEC;
+using MultiBroadcast.API;
+using PlayerRoles;
+using RGM.API;
+using RGM.API.Components;
+using RGM.API.Features;
+using RGM.Modes;
+using UnityEngine;
+
+using static RGM.Variables.ServerManagers;
+
+namespace RGM.Commands.ClientCommands
+{
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class BugVote : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (IsBugVoteProcessing)
+            {
+                response = "이미 버그 투표가 진행중입니다.";
+                return false;
+            }
+            else
+            {
+                IsBugVoteProcessing = true;
+
+                Player player = Player.Get(sender);
+
+                Timing.RunCoroutine(Tools.BugVote(player));
+
+                response = "버그 투표를 성공적으로 개설하였습니다.";
+                return true;
+            }
+        }
+
+        public string Command { get; } = "bugvote";
+
+        public string[] Aliases { get; } = { "bug", "버그투표", "버그" };
+
+        public string Description { get; } = "[RGM] 버그 상황이 일어났을 경우, 라운드를 강제로 종료하기 위해 사용할 수 있습니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Yes : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(sender);
+
+            if (!IsBugVoteProcessing)
+            {
+                response = "버그 투표가 진행중이 아닙니다.";
+                return false;
+            }
+            else if (BugVotePlayers.Contains(player))
+            {
+                response = "이미 버그 투표에 찬성하였습니다.";
+                return false;
+            }
+            else
+            {
+                BugVotePlayers.Add(player);
+
+                response = "버그 투표에 찬성하였습니다.";
+                return true;
+            }
+        }
+
+        public string Command { get; } = "yes";
+
+        public string[] Aliases { get; } = { "찬성" };
+
+        public string Description { get; } = "[RGM] 버그 투표에서 찬성할 때 사용하세요.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+}
