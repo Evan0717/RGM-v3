@@ -116,13 +116,12 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            List<Player> players1 = Finals;
             List<Vector3> seats1 = Tools.GetCirclePoints(TablePositions.Keys.ToList()[0], 2, Finals.Count);
 
-            foreach (var player in players1)
+            foreach (var player in Finals)
             {
                 player.Role.Set(RoleTypeId.ClassD);
-                player.Position = seats1[players1.IndexOf(player)];
+                player.Position = seats1[Finals.IndexOf(player)];
                 player.EnableEffect(EffectType.Ensnared);
             }
 
