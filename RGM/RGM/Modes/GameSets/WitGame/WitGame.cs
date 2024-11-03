@@ -84,6 +84,10 @@ namespace RGM.Modes
                         foreach (var player in Player.List)
                             player.AddBroadcast(3, $"<size=25>마음이 너무 잘 맞았던 {JumpingPlayers.Where(x => x.IsAlive && x != null).ToList().Count}명({string.Join(", ", JumpingPlayers.Where(x => x.IsAlive && x != null).Select(x => x.DisplayNickname))})은 사이좋게 하늘로 갔습니다.</size>");
 
+                        Remain = Player.List.Where(x => x.IsAlive && !JumpingPlayers.Contains(x)).ToList().Count;
+
+                        SetPlayerLocation();
+
                         for (int i = 1; i < 4; i++)
                         {
                             foreach (var player in Player.List) player.AddBroadcast(1, $"<b>{i}</b>");
@@ -112,6 +116,10 @@ namespace RGM.Modes
 
                         foreach (var player in Player.List)
                             player.AddBroadcast(3, $"<size=25>눈치가 느린 {Cowards[0].DisplayNickname}은(는) 하늘로 갔습니다.</size>");
+
+                        Remain = Player.List.Where(x => x.IsAlive && !Cowards.Contains(x)).ToList().Count;
+
+                        SetPlayerLocation();
 
                         for (int i = 1; i < 4; i++)
                         {
