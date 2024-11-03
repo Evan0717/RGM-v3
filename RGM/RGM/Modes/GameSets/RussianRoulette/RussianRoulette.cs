@@ -42,6 +42,7 @@ namespace RGM.Modes
             Respawn.TimeUntilNextPhase = 10000;
 
             Exiled.Events.Handlers.Player.Shot += OnShot;
+            Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -116,13 +117,20 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            List<Vector3> seats1 = Tools.GetCirclePoints(TablePositions.Keys.ToList()[0], 2, Finals.Count);
+            List<Vector3> seats1 = Tools.GetCirclePoints(TablePositions.Keys.ToList()[0], 2, Finals.Where(x => x != null).ToList().Count);
 
-            foreach (var player in Finals)
+            foreach (var player in Finals.Where(x => x != null))
             {
-                player.Role.Set(RoleTypeId.ClassD);
-                player.Position = seats1[Finals.IndexOf(player)];
-                player.EnableEffect(EffectType.Ensnared);
+                try
+                {
+                    player.Role.Set(RoleTypeId.ClassD);
+                    player.Position = seats1[Finals.Where(x => x != null).ToList().IndexOf(player)];
+                    player.EnableEffect(EffectType.Ensnared);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
             }
 
             Timing.RunCoroutine(Process("결승전", Vector3.zero));
@@ -215,7 +223,7 @@ namespace RGM.Modes
                 Round.IsLocked = false;
 
                 foreach (var player in Player.List)
-                    player.AddBroadcast(20, $"<size=25>🎉 축하합니다, {Finals[0].DisplayNickname}(이)가 <b><color=#{ModeManager.Modes["러시안 룰렛"][0]}>러시안 룰렛</color></b>에서 우승하였습니다! 🎉</size>");
+                    player.AddBroadcast(20, $"<size=25>🎉 축하합니다, <b><color=yellow>{Finals[0].DisplayNickname}</color></b>(이)가 <b><color=#{ModeManager.Modes["러시안 룰렛"][0]}>러시안 룰렛</color></b>에서 우승하였습니다! 🎉</size>");
             }
             else
             {
@@ -229,6 +237,11 @@ namespace RGM.Modes
         public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
         {
             ShotChecks.Add(ev.Player, ev.Target);
+        }
+
+        public void OnSearchingPickup(Exiled.Events.EventArgs.Player.SearchingPickupEventArgs ev)
+        {
+            ev.IsAllowed = false;
         }
 
         public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
