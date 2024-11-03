@@ -34,6 +34,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -133,6 +134,12 @@ namespace RGM.Modes
         public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
         {
             ev.IsAllowed = false;
+        }
+
+        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        {
+            if (ev.Reason.ToLower().Contains("afk"))
+                ev.IsAllowed = false;
         }
     }
 }

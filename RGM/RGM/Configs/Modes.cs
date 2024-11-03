@@ -260,7 +260,7 @@ yㅣ1
 zㅣ1
 의 몸을 가졌습니다!
 """ } },
-            { "해적 룰렛", new List<string>() { "FFBF00", "폭탄을 잘 추려내야 합니다.", "PirateRoulette", "private", "", 
+            { "해적 룰렛", new List<string>() { "FFBF00", "폭탄을 잘 추려내야 합니다.", "PirateRoulette", "public", "", 
 """
 운빨 싸움
 """ } },

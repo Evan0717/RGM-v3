@@ -37,6 +37,7 @@ namespace RGM.Modes
             Respawn.TimeUntilNextPhase = 10000;
 
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
+            Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(JumpHint());
@@ -164,6 +165,12 @@ namespace RGM.Modes
         {
             if (!PassPlayers.Contains(ev.Player))
                 JumpingPlayers.Add(ev.Player);
+        }
+
+        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        {
+            if (ev.Reason.ToLower().Contains("afk"))
+                ev.IsAllowed = false;
         }
     }
 }

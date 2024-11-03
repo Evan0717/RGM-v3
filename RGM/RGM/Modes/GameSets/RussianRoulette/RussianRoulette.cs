@@ -44,6 +44,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -224,6 +225,8 @@ namespace RGM.Modes
 
                 foreach (var player in Player.List)
                     player.AddBroadcast(20, $"<size=25>🎉 축하합니다, <b><color=yellow>{Finals[0].DisplayNickname}</color></b>(이)가 <b><color=#{ModeManager.Modes["러시안 룰렛"][0]}>러시안 룰렛</color></b>에서 우승하였습니다! 🎉</size>");
+                
+                Finals[0].DisableEffect(EffectType.Ensnared);
             }
             else
             {
@@ -247,6 +250,12 @@ namespace RGM.Modes
         public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
+        }
+
+        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        {
+            if (ev.Reason.ToLower().Contains("afk"))
+                ev.IsAllowed = false;
         }
     }
 }

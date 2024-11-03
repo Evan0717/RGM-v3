@@ -36,6 +36,8 @@ namespace RGM.Commands.ClientCommands
 
                 Timing.RunCoroutine(Tools.BugVote(player));
 
+                BugVotePlayers.Add(player);
+
                 response = "버그 투표를 성공적으로 개설하였습니다.";
                 return true;
             }
