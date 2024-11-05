@@ -13,8 +13,8 @@ namespace RGM.Variables
 {
     public static class ServerManagers
     {
-        public static string CurrentMode = null;
-        public static string CurrentSubMode = null;
+        public static ModeType CurrentMode = ModeType.None;
+        public static ModeType CurrentSubMode = ModeType.None;
         public static string SelectMode = null;
         public static string Tip = Tools.GetRandomValue(Tips.LobbyTips);
         public static string Logo = UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔";
@@ -24,8 +24,8 @@ namespace RGM.Variables
         public static bool IsScp3114Enabled = false;
         public static bool IsBugVoteProcessing = false;
 
-        public static Dictionary<string, List<string>> ModeList = new Dictionary<string, List<string>>();
-        public static Dictionary<string, List<Player>> ModeVote = new Dictionary<string, List<Player>>();
+        public static Dictionary<ModeType, Mode> ModeList = new Dictionary<ModeType, Mode>();
+        public static Dictionary<ModeType, List<Player>> ModeVote = new Dictionary<ModeType, List<Player>>();
         public static Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public static Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
         public static Dictionary<string, PlayerInfo> PlayersInfo = new Dictionary<string, PlayerInfo>();
@@ -51,8 +51,8 @@ namespace RGM.Variables
             {"레인보우", "R.A.I.N.B.O.W."}
         };
 
-        public static List<string> EnabledModeList = new List<string>();
-        public static List<string> SubModeVote = new List<string>();
+        public static List<ModeType> EnabledModeList = new List<ModeType>();
+        public static List<ModeType> SubModeVote = new List<ModeType>();
         public static List<string> Requests = new List<string>();
         public static List<Player> GodModePlayers = new List<Player>();
         public static List<Player> ChatCooldown = new List<Player>();

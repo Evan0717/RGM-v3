@@ -225,6 +225,7 @@
     <Compile Include="API\Components\TagComponent.cs" />
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
+    <Compile Include="Interfaces.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\GamePluses\ABattle\Abilities\Epic\Blink.cs" />

@@ -25,6 +25,9 @@ using static RGM.EventArgs.WarheadEvents;
 using static RGM.EventArgs.Scp330Events;
 using static RGM.EventArgs.Scp244Events;
 using static RGM.EventArgs.Scp079Events;
+using RGM.Modes.ABattleVariables;
+using RGM.Modes;
+using System.Reflection;
 
 namespace RGM
 {
@@ -44,7 +47,35 @@ namespace RGM
 
             WebhookURL = Config.WebhookURL;
             BotAPIServer = Config.BotAPIServer;
-            ModeList = ModeManager.Modes;
+            ModeList = ;
+
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                var abilityAttribute = type.GetCustomAttribute<AbilityAttribute>();
+
+                if (abilityAttribute == null)
+                    continue;
+
+                if (!typeof(Ability).IsAssignableFrom(type))
+                    continue;
+
+                Modes.Add(abilityAttribute.Type, new AbilityData
+                {
+                    Type = type,
+                    Name = abilityAttribute.Name,
+                    Description = abilityAttribute.Description,
+                    Category = abilityAttribute.Category,
+                    AbilityType = abilityAttribute.Type,
+                    Keep = abilityAttribute.Keep
+                });
+
+                var requiresAbilityAttribute = type.GetCustomAttribute<RequiresAbilityAttribute>();
+
+                if (requiresAbilityAttribute != null && requiresAbilityAttribute.Abilities.Length > 0)
+                {
+                    ModeList = 
+                }
+            }
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
