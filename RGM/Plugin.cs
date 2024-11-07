@@ -47,34 +47,30 @@ namespace RGM
 
             WebhookURL = Config.WebhookURL;
             BotAPIServer = Config.BotAPIServer;
-            ModeList = ;
+            ModeList = new Dictionary<ModeType, ModeData>();
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                var abilityAttribute = type.GetCustomAttribute<AbilityAttribute>();
+                var modeAttribute = type.GetCustomAttribute<ModeAttribute>();
 
-                if (abilityAttribute == null)
+                if (modeAttribute == null)
                     continue;
 
                 if (!typeof(Ability).IsAssignableFrom(type))
                     continue;
 
-                Modes.Add(abilityAttribute.Type, new AbilityData
+                ModeList.Add(modeAttribute.Type, new ModeData
                 {
-                    Type = type,
-                    Name = abilityAttribute.Name,
-                    Description = abilityAttribute.Description,
-                    Category = abilityAttribute.Category,
-                    AbilityType = abilityAttribute.Type,
-                    Keep = abilityAttribute.Keep
+                    Category = modeAttribute.Category,
+                    Info = modeAttribute.Info,
+                    Type = modeAttribute.Type,
+                    Author = modeAttribute.Author,
+                    Name = modeAttribute.Name,
+                    Description = modeAttribute.Description,
+                    Detail = modeAttribute.Detail,
+                    Color = modeAttribute.Color,
+                    Suggester = modeAttribute.Suggester
                 });
-
-                var requiresAbilityAttribute = type.GetCustomAttribute<RequiresAbilityAttribute>();
-
-                if (requiresAbilityAttribute != null && requiresAbilityAttribute.Abilities.Length > 0)
-                {
-                    ModeList = 
-                }
             }
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;

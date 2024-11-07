@@ -39,9 +39,9 @@ namespace RGM.Commands.RemoteAdminCommands
                 response = $"<b><size=30>[ 모드 리스트 ]</b></size>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
                 return false;
             }
-            else if (ModeList.Keys.Contains(args))
+            else if (ModeList.Keys.Select(x => x.GetModeData().Name).Contains(args))
             {
-                CurrentMode = args;
+                CurrentMode = ModeList.Keys.FirstOrDefault(x => x.GetModeData().Name == args);
 
                 if (player != null)
                     Server.ExecuteCommand($"/cassie_sl <mark=#ffff00cc><color=#000000>운영진(<color=#ffffff>{player.Nickname}</color>)에 의하여 이번 라운드의 모드가 <b>{args}</b>으로 확정되었습니다.</color></mark>");
@@ -101,7 +101,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 response = $"<b><size=30>[ 모드 리스트 ]</b></size>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
                 return false;
             }
-            else if (Tools.TryInstallMode(args))
+            else if (Tools.TryInstallMode(ModeList.Keys.FirstOrDefault(x => x.GetModeData().Name == args)))
             {
                 response = $"모드 <b>{args}</b>(을)를 강제로 시작했습니다.\nSending Command Complete!";
                 return true;

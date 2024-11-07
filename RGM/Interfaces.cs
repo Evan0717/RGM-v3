@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM;
 
 public abstract class Mode
@@ -13,15 +15,39 @@ public abstract class Mode
 
     public abstract void OnDisabled();
 
-    public abstract ModeCategory ModeCategory { get; set; }
-    public abstract ModeInfo ModeInfo { get; set; }
-    public abstract ModeType ModeType { get; set; }
+    public ModeData Data { get; set; }
+}
 
-    public abstract string ModeName { get; set; }
-    public abstract string ModeDescription { get; set; }
-    public abstract string ModeColor { get; set; }
-    public abstract string ModeAuthor { get; set; }
-    public string ModeSuggester { get; set; } = "";
+public class ModeData
+{
+    public ModeCategory Category { get; set; }
+    public ModeInfo Info { get; set; }
+    public ModeType Type { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string Detail { get; set; }
+    public string Color { get; set; }
+    public string Author { get; set; }
+    public string Suggester { get; set; } = "";
+}
+
+[AttributeUsage(AttributeTargets.Class)]
+public class ModeAttribute(ModeCategory category, ModeInfo info, ModeType type, string name, string description, string detail, string color, string author, string suggester) : Attribute
+{
+    public ModeCategory Category { get; } = category;
+    public ModeInfo Info { get; } = info;
+    public ModeType Type { get; } = type;
+    public string Name { get; } = name;
+    public string Description { get; } = description;
+    public string Detail { get; } = detail;
+    public string Color { get; } = color;
+    public string Author { get; } = author;
+    public string Suggester { get; } = suggester;
+}
+
+public static class ModeExtensions 
+{
+    public static ModeData GetModeData(this ModeType modeType) => ModeList[modeType];
 }
 
 public enum ModeCategory 

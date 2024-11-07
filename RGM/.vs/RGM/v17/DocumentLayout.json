@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\eventargs\\playerevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\eventargs\\playerevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\modes\\gamepluses\\abattle\\abattle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\modes\\gamepluses\\abattle\\abattle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\commands\\remoteadmincommands\\adminfeatures\\managemodes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\commands\\remoteadmincommands\\adminfeatures\\managemodes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\interfaces.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\interfaces.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:interfaces.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\rgm\\configs\\modes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 195,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,15 +38,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ABattle.cs",
-              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\GamePluses\\ABattle\\ABattle.cs",
-              "RelativeDocumentMoniker": "RGM\\Modes\\GamePluses\\ABattle\\ABattle.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\GamePluses\\ABattle\\ABattle.cs",
-              "RelativeToolTip": "RGM\\Modes\\GamePluses\\ABattle\\ABattle.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAcwFMAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "PlayerEvents.cs",
+              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\PlayerEvents.cs",
+              "RelativeDocumentMoniker": "RGM\\EventArgs\\PlayerEvents.cs",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\PlayerEvents.cs",
+              "RelativeToolTip": "RGM\\EventArgs\\PlayerEvents.cs",
+              "ViewState": "AgIAAKUAAAAAAAAAAADgv78AAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-05T04:33:48.759Z",
+              "WhenOpened": "2024-11-07T06:31:03.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ManageModes.cs",
+              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Commands\\RemoteAdminCommands\\AdminFeatures\\ManageModes.cs",
+              "RelativeDocumentMoniker": "RGM\\Commands\\RemoteAdminCommands\\AdminFeatures\\ManageModes.cs",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Commands\\RemoteAdminCommands\\AdminFeatures\\ManageModes.cs",
+              "RelativeToolTip": "RGM\\Commands\\RemoteAdminCommands\\AdminFeatures\\ManageModes.cs",
+              "ViewState": "AgIAAFkAAAAAAAAAAIA9wGoAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-07T06:29:48.943Z",
               "EditorCaption": ""
             },
             {
@@ -53,36 +70,34 @@
               "RelativeDocumentMoniker": "Interfaces.cs",
               "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Interfaces.cs",
               "RelativeToolTip": "Interfaces.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBEAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAABwAAAAAAAAAAAAmwEMAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-05T04:18:36.23Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Plugin.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
               "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeToolTip": "Plugin.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAAADkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADMAAAAAAAAAAAAYwEUAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-01T09:25:54.901Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-01T09:25:54.901Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Modes.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Configs\\Modes.cs",
               "RelativeDocumentMoniker": "RGM\\Configs\\Modes.cs",
               "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Configs\\Modes.cs",
               "RelativeToolTip": "RGM\\Configs\\Modes.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAAwJIBAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAwJIBAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-01T09:27:57.041Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-01T09:27:57.041Z"
             }
           ]
         }

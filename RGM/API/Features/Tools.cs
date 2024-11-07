@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Exiled.API.Features;
 using Exiled.Events.Commands.Reload;
 using MEC;
@@ -49,25 +50,25 @@ namespace RGM.API.Features
             return GameObject.FindObjectsOfType<Transform>().Where(t => t.name == Name).ToList();
         }
 
-        public static List<string> GetModeDesc(string ModeName, string SubModeName = null)
+        public static List<string> GetModeDesc(ModeType ModeType, ModeType SubModeType)
         {
-            string ModeColor = ModeList[ModeName][0];
-            string ModeDescription = ModeList[ModeName][1];
-            string ModeFileName = ModeList[ModeName][2];
-            string ModeDescriptionDetail = ModeList[ModeName][5];
+            string Color = ModeList[ModeType].Color;
+            string Name = ModeList[ModeType].Name;
+            string Description = ModeList[ModeType].Description;
+            string Detail = ModeList[ModeType].Detail;
 
             string Message = Notions.StartModeDescription
-                .Replace("{ModeColor}", ModeColor)
-                .Replace("{CurrentMode}", ModeName)
-                .Replace("{CurrentSubMode}", SubModeName != null ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[SubModeName][0]}>{SubModeName}</color></size>\n" : "")
-                .Replace("{ModeDescription}", ModeDescription);
+                .Replace("{ModeColor}", Color)
+                .Replace("{CurrentMode}", Name)
+                .Replace("{CurrentSubMode}", SubModeType != ModeType.None ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[SubModeType].Color}>{ModeList[SubModeType].Name}</color></size>\n" : "")
+                .Replace("{ModeDescription}", Description);
 
             return new List<string>() 
             { 
                 Message,
                 "성공적으로 모드 설명을 불러왔습니다.",
                 "해당 모드에 대한 자세한 설명이 없습니다.", 
-                ModeDescriptionDetail 
+                Detail 
             };
         }
 
@@ -184,14 +185,14 @@ RP: {uc[1]}
             return false;
         }
 
-        public static bool TryInstallMode(string ModeName)
+        public static bool TryInstallMode(ModeType ModeType)
         {
-            var modeType = Type.GetType($"RGM.Modes.{ModeName}");
+            var modeType = Type.GetType($"RGM.Modes.{ModeType}");
 
             if (modeType == null)
             {
-                if (ModeManager.Modes.ContainsKey(ModeName))
-                    modeType = Type.GetType($"RGM.Modes.{ModeManager.Modes[ModeName][2]}");
+                if (ModeList.ContainsKey(ModeType.GetModeData().Type))
+                    modeType = Type.GetType($"RGM.Modes.{modeType}");
             }
 
             if (modeType != null)
@@ -200,7 +201,7 @@ RP: {uc[1]}
                 var onEnabledMethod = modeType.GetMethod("OnEnabled");
                 onEnabledMethod?.Invoke(modeInstance, null);
 
-                EnabledModeList.Add(ModeName);
+                EnabledModeList.Add(ModeType);
 
                 return true;
             }

@@ -26,7 +26,7 @@ namespace RGM.Commands.ClientCommands
 
             if (arguments.Count == 0)
             {
-                if (CurrentMode == null)
+                if (CurrentMode == ModeType.None)
                 {
                     response = "현재 모드가 설정되지 않았습니다.";
                     return false;
@@ -50,10 +50,11 @@ namespace RGM.Commands.ClientCommands
             else
             {
                 string args = string.Join(" ", arguments).Trim();
+                ModeData modeData = ModeList.Keys.FirstOrDefault(x => x.GetModeData().Name == args).GetModeData();
 
-                if (ModeList.Keys.Contains(args))
+                if (ModeList.Keys.Select(x => x.GetModeData().Name).Contains(args))
                 {
-                    List<string> ModeDesc = Tools.GetModeDesc(args);
+                    List<string> ModeDesc = Tools.GetModeDesc(modeData.Type, ModeType.None);
 
                     response = ModeDesc[1];
 

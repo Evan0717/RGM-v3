@@ -24,7 +24,7 @@ namespace RGM.Variables
         public static bool IsScp3114Enabled = false;
         public static bool IsBugVoteProcessing = false;
 
-        public static Dictionary<ModeType, Mode> ModeList = new Dictionary<ModeType, Mode>();
+        public static Dictionary<ModeType, ModeData> ModeList = new Dictionary<ModeType, ModeData>();
         public static Dictionary<ModeType, List<Player>> ModeVote = new Dictionary<ModeType, List<Player>>();
         public static Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
         public static Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();

@@ -80,25 +80,26 @@ namespace RGM.EventArgs
 
             if (Round.IsStarted)
             {
-                string ModeColor = ModeList[CurrentMode][0];
-                string ModeDescription = ModeList[CurrentMode][1];
-                string ModeFileName = ModeList[CurrentMode][2];
-                string ModeDescriptionDetail = ModeList[CurrentMode][5];
+                string Name = ModeList[CurrentMode].Name;
+                string Color = ModeList[CurrentMode].Color;
+                string Description = ModeList[CurrentMode].Description;
+                string FileName = ModeList[CurrentMode].ToString();
+                string Detail = ModeList[CurrentMode].Detail;
 
                 string Message = Notions.LateJoinModeDescription
-                .Replace("{ModeColor}", ModeColor)
-                .Replace("{CurrentMode}", CurrentMode)
-                .Replace("{CurrentSubMode}", CurrentSubMode != null ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode][0]}>{CurrentSubMode}</color></size>\n" : "")
-                .Replace("{ModeDescription}", ModeDescription);
+                .Replace("{ModeColor}", Color)
+                .Replace("{CurrentMode}", Name)
+                .Replace("{CurrentSubMode}", CurrentSubMode != ModeType.None ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode].Color}>{CurrentSubMode}</color></size>\n" : "")
+                .Replace("{ModeDescription}", Description);
 
                 ev.Player.AddBroadcast(10, Message);
 
                 ev.Player.SendConsoleMessage($"\n{Message.Replace("\n", "\n")}", "white");
-                if (ModeDescriptionDetail == "")
+                if (Detail == "")
                     ev.Player.SendConsoleMessage($"\n해당 모드에 대한 자세한 설명이 없습니다.", "white");
 
                 else
-                    ev.Player.SendConsoleMessage($"\n{ModeDescriptionDetail}", "white");
+                    ev.Player.SendConsoleMessage($"\n{Detail}", "white");
             }
             else
             {
@@ -182,11 +183,13 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
 
                                 foreach (var mode in ModeList)
                                 {
-                                    string modeName = mode.Key;
-                                    string color = mode.Value[0];
-                                    string flag = mode.Value[3];
+                                    ModeData modeData = mode.Key.GetModeData();
 
-                                    if (flag == "private")
+                                    string Name = modeData.Name;
+                                    string Color = modeData.Color;
+                                    ModeInfo flag = modeData.Info;
+
+                                    if (flag == )
                                         Modes.Add($"<s><color=#{color}>{modeName}</color></s>");
 
                                     else if (flag == "onlysub")
