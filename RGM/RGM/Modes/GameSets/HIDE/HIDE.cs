@@ -73,6 +73,7 @@ namespace RGM.Modes
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
+                    monster.EnableEffect(EffectType.MovementBoost, 50);
 
                     foreach (var player in Player.List)
                     {
