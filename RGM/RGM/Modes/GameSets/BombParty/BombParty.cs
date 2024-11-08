@@ -43,7 +43,6 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
