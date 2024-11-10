@@ -93,17 +93,6 @@ namespace RGM.EventArgs
 
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
 
-            switch (UnityEngine.Random.Range(1, 41)) 
-            {
-                case 1:
-                    Tools.TryInstallMode(ModeType.TrickorTreat);
-                    break;
-
-                case 2:
-                    Tools.TryInstallMode(ModeType.Spooky);
-                    break;
-            }
-
             if (CurrentMode == ModeType.None)
             {
                 try

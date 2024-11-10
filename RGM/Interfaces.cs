@@ -100,7 +100,6 @@ public enum ModeType
     Siberia,
     SoulMate,
     Spirit,
-    Spooky,
     SuperStar,
     TrickorTreat,
     Unlimited,
