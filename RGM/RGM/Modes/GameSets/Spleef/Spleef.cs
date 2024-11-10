@@ -41,7 +41,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = new List<ItemType>();
-        public Door door = Tools.GetRandomValue(Door.List.ToList());
+        public Door door;
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
 
         public override void OnEnabled()
@@ -61,6 +61,8 @@ namespace RGM.Modes
             MapUtils.LoadMap("Spleef");
 
             Player.List.ToList().CopyTo(pl);
+
+            door = Tools.GetRandomValue(Door.List.ToList());
 
             foreach (var player in Player.List)
             {

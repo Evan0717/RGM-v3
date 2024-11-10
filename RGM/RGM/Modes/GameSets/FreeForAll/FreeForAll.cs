@@ -34,7 +34,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = new List<ItemType>();
-        public Door door = Tools.GetRandomValue(Door.List.ToList());
+        public Door door;
 
         public override void OnEnabled()
         {
@@ -77,6 +77,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            door = Tools.GetRandomValue(Door.List.ToList());
             StartupItems = Items();
 
             Player.List.ToList().CopyTo(pl);
