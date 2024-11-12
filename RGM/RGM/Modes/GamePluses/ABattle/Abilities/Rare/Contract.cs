@@ -16,7 +16,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다.", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
+// [Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다.", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
 public class Contract : Ability
 {
     ushort ContractCoinSerial = 0;
