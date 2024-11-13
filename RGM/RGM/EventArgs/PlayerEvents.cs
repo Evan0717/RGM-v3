@@ -622,6 +622,8 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         {
             if (ev.Player.IsScp)
             {
+                ev.Player.CurrentItem = ev.Item;
+
                 foreach (var item in ev.Player.Items)
                 {
                     if (item != ev.Item)
