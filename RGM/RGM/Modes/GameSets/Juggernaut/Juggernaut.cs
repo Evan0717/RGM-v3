@@ -55,7 +55,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
@@ -205,7 +204,7 @@ namespace RGM.Modes
                             RoleTypeId.Scp939
                         };
 
-                        if (Scps.Contains(ev.Attacker.Role.Type) && !ScpAttackCooldown.Contains(ev.Attacker))
+                        if (ev.IsInstantKill || (Scps.Contains(ev.Attacker.Role.Type) && !ScpAttackCooldown.Contains(ev.Attacker)))
                         {
                             ev.IsAllowed = false;
                             ev.Player.Hurt(120.5f, DamageType.Scp);
@@ -221,15 +220,6 @@ namespace RGM.Modes
                 {
                     ev.IsAllowed = false;
                 }
-            }
-        }
-
-        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
-        {
-            if (ev.Attacker != null)
-            {
-                if (ev.Player == juggernaut && ev.Attacker.Role.Type == RoleTypeId.Scp173)
-                    ev.DamageHandler.Damage = 120.5f;
             }
         }
 
