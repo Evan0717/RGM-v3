@@ -13,7 +13,7 @@ namespace RGM
         public static string WelcomeMessage { get; set; } = "<size=25><b>랜덤게임모드</b>에 오신 것을 환영합니다!</size>";
         public static string LobbyMessage { get; set; } =
 """
-<size=120><b>💀 ({Logo}) 💀</b></size>
+<size=120><b>💾 ({Logo}) ⚔️</b></size>
 <size=80><b>[RGM] 랜덤게임모드</b></size> <size=25>(ver. {Version})</size>
 <align=right><size=20><b><i><color=#00FA8E>랜</color><color=#13FA96>덤</color><color=#26FA9F>의</color> <color=#4DFAB0>세</color><color=#60FAB9>계</color><color=#73FAC1>에</color> <color=#9AFAD2>빠</color><color=#ADFADB>져</color><color=#C1FAE4>보</color><color=#D4FAEC>세</color><color=#E7FAF5>요</color></i></b></size></align>
 <align=left>
