@@ -472,10 +472,21 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
         {
             if (ev.Player.IsScp)
             {
-                if (ev.Door.IsCheckpoint)
-                    ev.Door.IsOpen = true;
+                if (ev.Door.Type.ToString().Contains("Checkpoint"))
+                {
+                    if (ev.Player.CurrentItem != null)
+                        ev.Door.IsOpen = false;
 
-                if (ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Door.IsOpen && !ev.Door.Type.ToString().Contains("Scp079"))
+                    if (ev.Door.IsFullyClosed)
+                    {
+                        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                        {
+                            ev.Door.IsOpen = true;
+                        });
+                    }
+                }
+
+                else if (ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Door.IsOpen && !ev.Door.Type.ToString().Contains("Scp079"))
                 {
                     Timing.CallDelayed(0.1f, () =>
                     {

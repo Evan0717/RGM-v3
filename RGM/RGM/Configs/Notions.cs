@@ -15,7 +15,7 @@ namespace RGM
 """
 <size=120><b>💀 ({Logo}) 💀</b></size>
 <size=80><b>[RGM] 랜덤게임모드</b></size> <size=25>(ver. {Version})</size>
-<align=right><size=20><b><i><color=#FA7000>두</color><color=#DE6302>근</color><color=#C25705>두</color><color=#A64A08>근</color> <color=#6F310D>할</color><color=#532510>로</color><color=#371813>윈</color><color=#1B0C16>!</color></i></b></size></align>
+<align=right><size=20><b><i><color=#00FA8E>랜</color><color=#13FA96>덤</color><color=#26FA9F>의</color> <color=#4DFAB0>세</color><color=#60FAB9>계</color><color=#73FAC1>에</color> <color=#9AFAD2>빠</color><color=#ADFADB>져</color><color=#C1FAE4>보</color><color=#D4FAEC>세</color><color=#E7FAF5>요</color></i></b></size></align>
 <align=left>
 Exp: {Exp}
 RP: {RP}
