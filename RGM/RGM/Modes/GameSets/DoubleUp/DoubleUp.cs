@@ -50,7 +50,7 @@ namespace RGM.Modes
 
         public List<string> pl = new List<string>();
 
-        public static string Desc = $"<size=25><b>[<color=#{Mods[mod1].Color}>{mod1}</color> + <color=#{Mods[mod2].Color}>{mod2}</color>]</b></size>";
+        public static string Desc = $"<size=25><b>[<color=#{Mods[mod1].Color}>{mod1.GetModeData().Name}</color> + <color=#{Mods[mod2].Color}>{mod2.GetModeData().Name}</color>]</b></size>";
 
         public override void OnEnabled()
         {
