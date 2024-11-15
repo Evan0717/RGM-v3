@@ -31,7 +31,7 @@ public class MedicalOfficer : Ability
     {
         while (true)
         {
-            foreach (var team in Player.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x != Owner))
+            foreach (var team in Player.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x != Owner && Vector3.Distance(x.Position, Owner.Position) < 6))
             {
                 if (team.Health < team.MaxHealth)
                     team.Health += 0.5f;

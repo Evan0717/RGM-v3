@@ -12,8 +12,8 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("극독", "죽인 자에게 영구적인 심장 마비 효과를 부여합니다.", AbilityCategory.Epic, AbilityType.EPIC_EXTREMEPOISON)]
-public class ExtremePoison : Ability
+[Ability("수어사이드 봄버맨", "사망할 경우 즉시 폭발합니다.", AbilityCategory.Epic, AbilityType.EPIC_SUICIDEBOMBER)]
+public class SuicideBomber : Ability
 {
     public override void OnEnabled()
     {
@@ -27,9 +27,11 @@ public class ExtremePoison : Ability
 
     public void OnDied(DiedEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Attacker == null)
+        if (ev.Player != Owner)
             return;
 
-        ev.Attacker.EnableEffect(EffectType.CardiacArrest);
+        var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
+        g.FuseTime = 0.1f;
+        g.SpawnActive(Tools.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != Owner.Role.Team && Owner != x).ToList()).Position, Owner);
     }
 }

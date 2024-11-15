@@ -286,6 +286,7 @@ public enum AbilityType
     EPIC_DIVER, // [영웅] 잠수부
     EPIC_BLINK, // [영웅] 점멸
     EPIC_TRANSITION, // [영웅] 변이
+    EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -387,6 +388,7 @@ public enum AbilityType
     SYNERGY_FOURMAJOREXERCISES, // [시너지] 4대 운동
     SYNERGY_DUPLICATEFATE, // [시너지] 중복 기연
     SYNERGY_DRUID, // [시너지] 드루이드
+    SYNERGY_SUICIDESQUAD, // [시너지] 수어사이드 스쿼드
 }
 
 public static class AbilityTypeExtensions
