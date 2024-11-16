@@ -81,6 +81,7 @@ namespace RGM.Modes
                 {
                     ev.Player.MaxHealth = 1;
                     ev.Player.Health = ev.Player.MaxHealth;
+                    ev.Player.EnableEffect(EffectType.Ghostly);
                 });
 
                 spirits.Add(ev.Player);
