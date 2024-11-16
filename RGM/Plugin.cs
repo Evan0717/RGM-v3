@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
@@ -11,12 +12,12 @@ using MultiBroadcast.API;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 
+using RGM.Modes;
 using RGM.API.Features;
 using RGM.API.Components;
 using RGM.API.Interfaces;
 using RGM.API.DataBases;
 
-using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
 
 using static RGM.EventArgs.ServerEvents;
@@ -25,8 +26,6 @@ using static RGM.EventArgs.WarheadEvents;
 using static RGM.EventArgs.Scp330Events;
 using static RGM.EventArgs.Scp244Events;
 using static RGM.EventArgs.Scp079Events;
-using RGM.Modes;
-using System.Reflection;
 
 namespace RGM
 {
@@ -36,7 +35,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 7, 25);
+        public override Version Version { get; } = new(3, 7, 26);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -44,8 +43,6 @@ namespace RGM
             Instance = this;
             base.OnEnabled();
 
-            WebhookURL = Config.WebhookURL;
-            BotAPIServer = Config.BotAPIServer;
             ModeList = new Dictionary<ModeType, ModeData>();
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
