@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Exiled.API.Features;
 
-using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
 
 using static RGM.Functions.ModeManagers;

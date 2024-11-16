@@ -13,7 +13,8 @@ using RGM.Modes;
 using UnityEngine;
 
 using static RGM.Variables.ServerManagers;
-using RGM.Discord;
+using DiscordInteraction.Discord;
+
 using CustomPlayerEffects;
 using Exiled.API.Features.Items;
 

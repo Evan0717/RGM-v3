@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 
-using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
 
 namespace RGM.EventArgs

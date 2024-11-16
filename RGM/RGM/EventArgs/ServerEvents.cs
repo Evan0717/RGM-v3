@@ -11,7 +11,6 @@ using UnityEngine;
 using Exiled.API.Features;
 using MultiBroadcast.API;
 
-using static RGM.Variables.Protocol;
 using static RGM.Variables.ServerManagers;
 
 using static RGM.Functions.ModeManagers;
@@ -33,12 +32,6 @@ namespace RGM.EventArgs
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Server.ExecuteCommand($"/mp load RGMLobby");
-
-            var webhook = new Discord.Webhook();
-            webhook.OnEnabled();
-
-            var command = new Discord.Command();
-            command.OnEnabled();
 
             var donator = new Donator.Main();
             donator.OnEnabled();
@@ -156,6 +149,8 @@ namespace RGM.EventArgs
 
             if (StartupRandom == 3)
                 Tools.CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
+
+            DiscordInteraction.Discord.Webhook.Send($"시작된 모드 : {CurrentMode.GetModeData().Name}");
 
             await Task.Delay(20 * 60 * 1000);
 
