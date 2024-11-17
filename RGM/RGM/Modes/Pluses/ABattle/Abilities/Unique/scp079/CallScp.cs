@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("SCP 지원 호출기", "A.I. 지능이 탑재된 SCP를 1개체 부릅니다.", AbilityCategory.Scp079, AbilityType.SCP079_CALLSCP)]
+[Ability("SCP 지원 호출기", "A.I. 지능이 탑재된 SCP를 1개체 부릅니다. 이 개체는 모든 데미지를 10%만 받습니다.", AbilityCategory.Scp079, AbilityType.SCP079_CALLSCP)]
 public class CallScp : Ability
 {
     public override void OnEnabled()
@@ -26,9 +26,18 @@ public class CallScp : Ability
         RoleTypeId _role = Tools.GetRandomValue(Datas.AIRoles.Where(x => !Player.List.ToList().Where(x => x.IsNPC).Select(x1 => x1.Role.Type).ToList().Contains(x)).ToList());
 
         Server.ExecuteCommand($"/spawnai {_role.ToString()}");
+
+        Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+    }
+
+    public void OnHurting(HurtingEventArgs ev)
+    {
+        if (ev.Player.IsScp && ev.Player.IsNPC)
+            ev.DamageHandler.Damage /= 10;
     }
 }
