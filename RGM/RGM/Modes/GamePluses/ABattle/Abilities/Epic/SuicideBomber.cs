@@ -17,21 +17,29 @@ public class SuicideBomber : Ability
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Dying += OnDying;
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    public void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
-        g.FuseTime = 0.1f;
-        g.SpawnActive(Tools.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != Owner.Role.Team && Owner != x).ToList()).Position, Owner);
+        Vector3 pos = Owner.Position;
+
+        Timing.CallDelayed(0.1f, () => 
+        {
+            if (ev.Player.IsDead)
+            {
+                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
+                g.FuseTime = 0.1f;
+                g.SpawnActive(pos, Owner);
+            }
+        });
     }
 }

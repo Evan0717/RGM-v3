@@ -19,23 +19,31 @@ public class SuicideSquad : Ability
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Dying += OnDying;
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    public void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        for (int i = 0; i < 3; i++)
+        Vector3 pos = Owner.Position;
+
+        Timing.CallDelayed(0.1f, () =>
         {
-            var scp018 = Pickup.Create(ItemType.SCP018);
-            scp018.Spawn(Owner.Position, Quaternion.identity);
-        }
+            if (Owner.IsDead)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Pickup item = Pickup.Create(ItemType.SCP018);
+                    item.Spawn(pos, Quaternion.identity);
+                }
+            }
+        });
     }
 }
