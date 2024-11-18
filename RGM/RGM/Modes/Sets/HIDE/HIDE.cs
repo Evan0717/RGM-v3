@@ -149,7 +149,7 @@ namespace RGM.Modes
                 ev.Player.DisableEffect(EffectType.Invisible);
         }
 
-        public async void OnJumping(Exiled.Events.EventArgs.Player.JumpingEventArgs ev)
+        public IEnumerator<float> OnJumping(Exiled.Events.EventArgs.Player.JumpingEventArgs ev)
         {
             if (ev.Player == monster)
             {
@@ -159,7 +159,7 @@ namespace RGM.Modes
                         break;
 
                     ev.Player.Position += new Vector3(0, 0.3f, 0);
-                    await Task.Delay(10);
+                    yield return Timing.WaitForSeconds(0.01f);
                 }
             }
         }

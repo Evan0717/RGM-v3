@@ -3,15 +3,23 @@
   "WorkspaceRootPath": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\modes\\gamepluses\\abattle\\abilities\\synergy\\suicidesquad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\modes\\gamepluses\\abattle\\abilities\\synergy\\suicidesquad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\modes\\pluses\\friendlyfire\\friendlyfire.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\modes\\pluses\\friendlyfire\\friendlyfire.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\rgm\\modes\\gamepluses\\abattle\\ability.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\modes\\gamepluses\\abattle\\ability.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\eventargs\\serverevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\eventargs\\serverevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\eventargs\\scp244events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\eventargs\\scp244events.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\rgm\\eventargs\\playerevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:rgm\\eventargs\\playerevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|c:\\goldenpig1205\\visual studio 2022\\rgm\\rgm\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE4A6CC5-C16A-4E1D-9512-9CB02625B72B}|RGM.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -31,39 +39,67 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SuicideSquad.cs",
-              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\GamePluses\\ABattle\\Abilities\\Synergy\\SuicideSquad.cs",
-              "RelativeDocumentMoniker": "RGM\\Modes\\GamePluses\\ABattle\\Abilities\\Synergy\\SuicideSquad.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\GamePluses\\ABattle\\Abilities\\Synergy\\SuicideSquad.cs",
-              "RelativeToolTip": "RGM\\Modes\\GamePluses\\ABattle\\Abilities\\Synergy\\SuicideSquad.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Title": "FriendlyFire.cs",
+              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\Pluses\\FriendlyFire\\FriendlyFire.cs",
+              "RelativeDocumentMoniker": "RGM\\Modes\\Pluses\\FriendlyFire\\FriendlyFire.cs",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\Pluses\\FriendlyFire\\FriendlyFire.cs",
+              "RelativeToolTip": "RGM\\Modes\\Pluses\\FriendlyFire\\FriendlyFire.cs",
+              "ViewState": "AgIAAKoAAAAAAAAAAADgv7sAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-15T05:27:27.831Z",
+              "WhenOpened": "2024-11-18T03:34:37.717Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Ability.cs",
-              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\GamePluses\\ABattle\\Ability.cs",
-              "RelativeDocumentMoniker": "RGM\\Modes\\GamePluses\\ABattle\\Ability.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\Modes\\GamePluses\\ABattle\\Ability.cs",
-              "RelativeToolTip": "RGM\\Modes\\GamePluses\\ABattle\\Ability.cs",
-              "ViewState": "AgIAAHABAAAAAAAAAAAgwIYBAAAsAAAAAAAAAA==",
+              "Title": "ServerEvents.cs",
+              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\ServerEvents.cs",
+              "RelativeDocumentMoniker": "RGM\\EventArgs\\ServerEvents.cs",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\ServerEvents.cs",
+              "RelativeToolTip": "RGM\\EventArgs\\ServerEvents.cs",
+              "ViewState": "AgIAAKsAAAAAAAAAAADgv74AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-15T05:15:27.053Z"
+              "WhenOpened": "2024-11-18T03:32:51.116Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Scp244Events.cs",
+              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\Scp244Events.cs",
+              "RelativeDocumentMoniker": "RGM\\EventArgs\\Scp244Events.cs",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\Scp244Events.cs",
+              "RelativeToolTip": "RGM\\EventArgs\\Scp244Events.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-18T03:32:16.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PlayerEvents.cs",
+              "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\PlayerEvents.cs",
+              "RelativeDocumentMoniker": "RGM\\EventArgs\\PlayerEvents.cs",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\RGM\\EventArgs\\PlayerEvents.cs",
+              "RelativeToolTip": "RGM\\EventArgs\\PlayerEvents.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAAwBYAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-18T03:30:05.277Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Plugin.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
               "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\RGM\\RGM\\Plugin.cs",
               "RelativeToolTip": "Plugin.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAA/AAAAAAAAAA==",
+              "ViewState": "AgIAADUAAAAAAAAAAAAuwFgAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T09:58:13.652Z"
+              "WhenOpened": "2024-11-08T09:58:13.652Z",
+              "EditorCaption": ""
             }
           ]
         }

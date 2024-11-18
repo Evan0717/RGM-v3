@@ -25,7 +25,7 @@ namespace RGM.Donator
     {
         public static Main Instance;
 
-        public async void KillEffect(List<string> PlayerData, Player Attacker, Player Player)
+        public IEnumerator<float> KillEffect(List<string> PlayerData, Player Attacker, Player Player)
         {
             Quaternion Rotation = new Quaternion(0, Attacker.CameraTransform.rotation.y + 180, 0, 0);
 
@@ -51,16 +51,16 @@ namespace RGM.Donator
                 {
                     Kerfus.Position += new Vector3(0, -2f, 0);
 
-                    await Task.Delay(50);
+                    yield return Timing.WaitForSeconds(0.05f);
                 }
 
-                await Task.Delay(1500);
+                yield return Timing.WaitForSeconds(1.5f);
 
                 for (int i = 1; i < 11; i++)
                 {
                     Kerfus.Position += new Vector3(0, 2f, 0);
 
-                    await Task.Delay(50);
+                    yield return Timing.WaitForSeconds(0.05f);
                 }
 
                 Kerfus.Destroy();

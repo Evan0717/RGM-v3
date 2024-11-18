@@ -20,7 +20,7 @@ namespace RGM.EventArgs
 {
     public static class PlayerEvents
     {
-        public static async void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
+        public static IEnumerator<float> OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
             if (!PlayersReport.ContainsKey(ev.Player.UserId))
             {
@@ -292,12 +292,12 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                         Log.Error(e);
                     }
 
-                    await Task.Delay(500);
+                    yield return Timing.WaitForSeconds(0.5f);
                 }
             }
         }
 
-        public static async void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
+        public static IEnumerator<float> OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
         {
             if (OnGround.ContainsKey(ev.Player))
                 OnGround.Remove(ev.Player);
@@ -315,7 +315,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             {
                 string UserId = ev.Player.UserId;
 
-                await Task.Delay(1000);
+                yield return Timing.WaitForSeconds(1f);
 
                 for (int i = 1; i < 181; i++)
                 {
@@ -345,11 +345,11 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
                             Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
 
                             PlayersInfo.Remove(player.UserId);
-                            return;
+                            yield break;
                         }
                     }
 
-                    await Task.Delay(1000);
+                    yield return Timing.WaitForSeconds(1f);
                 }
             }
         }
@@ -369,7 +369,7 @@ GoldenPig1205(@GoldenPig1205) - 메인 개발자
             });
         }
 
-        public static IEnumerator<float> OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        public static void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive)
             {

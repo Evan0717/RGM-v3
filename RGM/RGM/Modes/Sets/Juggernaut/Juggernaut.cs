@@ -183,7 +183,7 @@ namespace RGM.Modes
                 ev.Player.CurrentItem.As<Firearm>().Ammo = 250;
         }
 
-        public async void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        public IEnumerator<float> OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Attacker != null)
             {
@@ -211,7 +211,9 @@ namespace RGM.Modes
                             ev.Attacker.ShowHitMarker(1.5f);
 
                             ScpAttackCooldown.Add(ev.Attacker);
-                            await Task.Delay(1500);
+
+                            yield return Timing.WaitForSeconds(1.5f);
+
                             ScpAttackCooldown.Remove(ev.Attacker);
                         }
                     }

@@ -17,6 +17,7 @@ using PlayerRoles.Visibility;
 using GameCore;
 using RGM.Commands;
 using Utils;
+using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
@@ -62,7 +63,7 @@ namespace RGM.Modes
             }
         }
 
-        public async void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        public IEnumerator<float> OnDied(DiedEventArgs ev)
         {
             if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown)
             {
@@ -74,7 +75,8 @@ namespace RGM.Modes
                 for (int i = 1; i < 6; i++)
                 {
                     ev.Player.ShowHint($"{6 - i}초 뒤 영혼 상태에 돌입합니다.", 1.2f);
-                    await Task.Delay(1000);
+
+                    yield return Timing.WaitForSeconds(1f);
                 }
 
                 Timing.CallDelayed(1f, () =>
@@ -90,13 +92,13 @@ namespace RGM.Modes
             }
         }
 
-        public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+        public void OnShot(ShotEventArgs ev)
         {
             if (spirits.Contains(ev.Player))
                 ev.Player.DisableEffect(EffectType.Invisible);
         }
 
-        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        public void OnHurt(HurtEventArgs ev)
         {
             if (ev.Attacker != null && spirits.Contains(ev.Attacker))
                 ev.Attacker.DisableEffect(EffectType.Invisible);

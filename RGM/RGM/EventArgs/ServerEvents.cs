@@ -25,7 +25,7 @@ namespace RGM.EventArgs
 {
     public static class ServerEvents
     {
-        public static async void OnWaitingForPlayers()
+        public static IEnumerator<float> OnWaitingForPlayers()
         {
             UsersManager.LoadUsers();
 
@@ -76,11 +76,11 @@ namespace RGM.EventArgs
             {
                 UsersManager.LoadUsers();
 
-                await Task.Delay(1000);
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
-        public static async void OnRoundStarted()
+        public static IEnumerator<float> OnRoundStarted()
         {
             Server.ExecuteCommand("/mp unload RGMLobby");
 
@@ -152,7 +152,7 @@ namespace RGM.EventArgs
 
             DiscordInteraction.Discord.Webhook.Send($"시작된 모드 : {CurrentMode.GetModeData().Name}");
 
-            await Task.Delay(20 * 60 * 1000);
+            yield return Timing.WaitForSeconds(20 * 60);
 
             if (Warhead.IsDetonated)
             {
@@ -162,7 +162,8 @@ namespace RGM.EventArgs
                 while (true)
                 {
                     Player.List.ToList().ForEach(x => x.Health -= (x.MaxHealth / 100));
-                    await Task.Delay(1000);
+
+                    yield return Timing.WaitForSeconds(1);
                 }
             }
             else
@@ -172,7 +173,7 @@ namespace RGM.EventArgs
                 Server.ExecuteCommand("/cassie_sl <color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
             }
 
-            await Task.Delay(300 * 1000);
+            yield return Timing.WaitForSeconds(300);
 
             AutoNuke = true;
             Server.ExecuteCommand("/cassie_sl 시간이 너무 오래 걸립니다! 모두의 체력이 초당 1%씩 줄어듭니다!");
@@ -187,7 +188,7 @@ namespace RGM.EventArgs
                         player.Kill("게임을 질질 끌어서 죽었습니다.");
                 }
 
-                await Task.Delay(1000);
+                yield return Timing.WaitForSeconds(1);
             }
         }
 

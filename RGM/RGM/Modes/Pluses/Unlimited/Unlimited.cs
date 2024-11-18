@@ -84,27 +84,31 @@ namespace RGM.Modes
             ev.Player.MaxHealth = ev.Player.Health + ev.Amount;
         }
 
-        public async void OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
+        public IEnumerator<float> OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp106.RemainingSinkholeCooldown = 0;
         }
 
-        public async void OnStalking(Exiled.Events.EventArgs.Scp106.StalkingEventArgs ev)
+        public IEnumerator<float> OnStalking(Exiled.Events.EventArgs.Scp106.StalkingEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp106.RemainingSinkholeCooldown = 0;
         }
 
-        public async void OnScp106Attacking(Exiled.Events.EventArgs.Scp106.AttackingEventArgs ev)
+        public IEnumerator<float> OnScp106Attacking(Exiled.Events.EventArgs.Scp106.AttackingEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp106.CaptureCooldown = 0;
         }
 
-        public async void OnPlayingSound(Exiled.Events.EventArgs.Scp939.PlayingSoundEventArgs ev)
+        public IEnumerator<float> OnPlayingSound(Exiled.Events.EventArgs.Scp939.PlayingSoundEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp939.MimicryCooldown = 0;
         }
 
@@ -113,15 +117,17 @@ namespace RGM.Modes
             ev.Scp079.Energy = 100000;
         }
 
-        public async void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
+        public IEnumerator<float> OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp049.RemainingCallDuration = 0;
         }
 
-        public async void OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
+        public IEnumerator<float> OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp049.RemainingAttackCooldown = 0;
             ev.Scp049.RemainingGoodSenseDuration = 0;
         }
@@ -131,15 +137,16 @@ namespace RGM.Modes
             ev.Player.MaxHealth = ev.Player.MaxHealth + 100;
         }
 
-        public async void OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
+        public IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp096.EnrageCooldown = 0;
             ev.Scp096.EnragedTimeLeft = 99999;
             ev.Scp096.SprintingSpeed = 500;
         }
 
-        public async void OnPlacingTantrum(Exiled.Events.EventArgs.Scp173.PlacingTantrumEventArgs ev)
+        public IEnumerator<float> OnPlacingTantrum(Exiled.Events.EventArgs.Scp173.PlacingTantrumEventArgs ev)
         {
             if (Tantrum >= 10)
             {
@@ -149,16 +156,21 @@ namespace RGM.Modes
             else
             {
                 Tantrum += 1;
-                await Task.Delay(100);
+
+                yield return Timing.WaitForSeconds(0.1f);
+
                 ev.Cooldown.Remaining = 0;
-                await Task.Delay(180 * 1000);
+
+                yield return Timing.WaitForSeconds(180f);
+
                 Tantrum -= 1;
             }
         }
 
-        public async void OnUsingBreakneckSpeeds(Exiled.Events.EventArgs.Scp173.UsingBreakneckSpeedsEventArgs ev)
+        public IEnumerator<float> OnUsingBreakneckSpeeds(Exiled.Events.EventArgs.Scp173.UsingBreakneckSpeedsEventArgs ev)
         {
-            await Task.Delay(100);
+            yield return Timing.WaitForSeconds(0.1f);
+
             ev.Scp173.RemainingBreakneckCooldown = 0;
         }
 

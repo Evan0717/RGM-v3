@@ -76,9 +76,10 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
             Spawned(ev.Player);
         }
 
-        public async void Spawned(Player player)
+        public IEnumerator<float> Spawned(Player player)
         {
-            await Task.Delay(1000);
+            yield return Timing.WaitForSeconds(1f);
+
             player.EnableEffect(EffectType.FogControl, 7);
 
             if (player.Role.Type == RoleTypeId.Scp079)
