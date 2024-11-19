@@ -14,11 +14,10 @@ namespace RGM.Modes
     class Unlimited : Mode
     {
         public override string Name => "무제한";
-        public override string Description => "사탕 4개를 가지고 시작합니다. 다른 이를 사살하면 사탕 1개를 더 받습니다.";
+        public override string Description => "말 그대로 제한이 없습니다.";
         public override string Detail =>
 """
-<b><i><color=#E65000>무</color><color=#E5560F>작</color><color=#E55D1F>위</color> <color=#E46A3E>사</color><color=#E4714D>탕</color> <color=#E37E6C>4</color><color=#E3857C>개</color></i></b>를 획득합니다.
-<color=#FA58F4>핑크 캔디</color>도 다른 사탕과 동일한 확률로 등장합니다.
+몇몇 개의 기능들은 제한이 있습니다.
 """;
         public override string Color => "3F13AB";
 
