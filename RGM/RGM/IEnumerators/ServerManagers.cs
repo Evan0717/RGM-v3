@@ -71,7 +71,11 @@ namespace RGM.IEnumerators
                             OnGround[player] -= 0.1f;
 
                             if (OnGround[player] <= 0)
+                            {
                                 player.Kill("공허에 빨려들어갔습니다. (5초 이상 낙하)");
+
+                                OnGround[player] = 5;
+                            }
                         }
                     }
                 }
