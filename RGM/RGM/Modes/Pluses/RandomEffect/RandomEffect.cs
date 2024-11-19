@@ -15,7 +15,7 @@ using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.RandomEffect)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.RandomEffect)]
     class RandomEffect : Mode
     {
         public override string Name => "랜덤효과";
