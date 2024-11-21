@@ -13,6 +13,7 @@ using MEC;
 using RGM.API.Features;
 using UnityEngine;
 using RGM.API.DataBases;
+using Exiled.API.Features.DamageHandlers;
 
 namespace RGM.Modes.Abilities.Synergy;
 
@@ -32,14 +33,14 @@ public class Druid : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player != Owner && ev.Attacker == null || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+        if (ev.Player != Owner || ev.Attacker == null || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
         if (UnityEngine.Random.Range(1, 11) != 1)
         {
             ev.IsAllowed = false;
 
-            ev.Attacker.Hurt(ev.Player, ev.DamageHandler.Damage, ev.DamageHandler.Type, deathText: "정령의 힘에 의해 사망하였습니다.");
+            ev.Attacker.Hurt(ev.Player, ev.DamageHandler.Damage, ev.DamageHandler.Type, new DamageHandlerBase.CassieAnnouncement(null), deathText: "정령의 힘에 의해 사망하였습니다.");
             ev.Attacker.ShowHint("당신의 공격이 반사되었습니다.");
             ev.Player.ShowHint($"상대의 공격이 반사되었습니다.");
         }
