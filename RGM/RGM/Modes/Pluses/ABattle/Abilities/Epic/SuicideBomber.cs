@@ -7,6 +7,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -31,14 +32,19 @@ public class SuicideBomber : Ability
             return;
 
         Vector3 pos = Owner.Position;
+        RoleTypeId roleId = Owner.Role.Type;
 
         Timing.CallDelayed(0.1f, () => 
         {
-            if (ev.Player.IsDead)
+            if (Owner.IsDead)
             {
+                Owner.Role.Set(roleId);
+
                 var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
                 g.FuseTime = 0.1f;
                 g.SpawnActive(pos, Owner);
+
+                Owner.Kill(ev.DamageHandler);
             }
         });
     }
