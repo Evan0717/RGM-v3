@@ -18,16 +18,6 @@ namespace RGM.IEnumerators
 {
     public static class ServerManagers
     {
-        public static IEnumerator<float> SendHeartbeat()
-        {
-            while (true)
-            {
-                Log.Info("heartbeat sent");
-
-                yield return Timing.WaitForSeconds(30);
-            }
-        }
-
         public static IEnumerator<float> SyncSpectatedHint()
         {
             while (true)
