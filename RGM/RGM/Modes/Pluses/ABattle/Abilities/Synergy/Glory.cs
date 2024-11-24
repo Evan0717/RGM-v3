@@ -38,14 +38,17 @@ public class Glory : Ability
 
         while (true)
         {
-            if (Tools.TryGetLookPlayer(Owner, 45f, out Player target))
+            foreach (var player in Player.List)
             {
-                if (Owner != target && Owner.LeadingTeam != target.LeadingTeam)
+                if (Tools.TryGetLookPlayer(player, 45f, out Player target))
                 {
-                    Light.Position = target.Position;
+                    if (Owner == target && Owner.LeadingTeam != target.LeadingTeam)
+                    {
+                        Light.Position = Owner.Position;
 
-                    Hitmarker.SendHitmarkerDirectly(target.ReferenceHub, 0.8f);
-                    Owner.EnableEffect(EffectType.Flashed, 1, 1f);
+                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
+                        player.EnableEffect(EffectType.Flashed, 1, 1f);
+                    }
                 }
             }
 
