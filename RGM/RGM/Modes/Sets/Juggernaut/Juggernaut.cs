@@ -22,6 +22,15 @@ using RGM.API.DataBases;
 
 using static RGM.Variables.ServerManagers;
 using Exiled.Events.EventArgs.Server;
+using MapEditorReborn.API.Features;
+using MapEditorReborn.API.Features.Objects;
+using MapEditorReborn.API.Extensions;
+using Exiled.Events.Commands.Hub;
+using PlayerRoles.FirstPersonControl;
+using RelativePositioning;
+using SCPSLAudioApi.AudioCore;
+using AudioPlayer.Commands.SubCommands;
+using VoiceChat;
 
 namespace RGM.Modes
 {
@@ -44,6 +53,7 @@ namespace RGM.Modes
         public static Juggernaut Instance;
 
         public Player juggernaut;
+        public Player dj;
         public List<Player> ScpAttackCooldown = new List<Player>();
         public Dictionary<Player, float> PlayerDamages = new Dictionary<Player, float>();
 
@@ -51,6 +61,8 @@ namespace RGM.Modes
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
+
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
@@ -77,7 +89,7 @@ namespace RGM.Modes
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.2f, 1.1f, 1.2f);
-            juggernaut.MaxHealth = 300 * Player.List.Count() + 100 * Player.List.Count();
+            juggernaut.MaxHealth = 350 * Player.List.Count() + 120 * Player.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
@@ -90,13 +102,15 @@ namespace RGM.Modes
                 juggernaut.AddItem(Item);
 
             Timing.RunCoroutine(FindLocate());
+            Timing.RunCoroutine(ArmorAsync());
+            Timing.RunCoroutine(MusicAsync());
 
             bool IsEnd = false;
             while (!IsEnd)
             {
                 if (juggernaut.IsAlive)
                 {
-                    if (Player.List.Where(x => x.IsAlive).Count() <= 1)
+                    if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() <= 1)
                     {
                         Player.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
                         IsEnd = true;
@@ -135,9 +149,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> FindLocate()
         {
-            while (true)
+            while (!Round.IsEnded)
             {
-                if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius))
+                if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius, new List<Player>() { dj }))
                     juggernaut.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
 
                 else
@@ -145,6 +159,70 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
+        }
+
+        public IEnumerator<float> ArmorAsync()
+        {
+            SchematicObject Armor = ObjectSpawner.SpawnSchematic("JuggernautArmor", Vector3.zero, juggernaut.Rotation, new Vector3(1.2f, 1.1f, 1.2f), isStatic: false);
+
+            while (juggernaut.IsAlive)
+            {
+                Armor.Position = new Vector3(juggernaut.Position.x, juggernaut.Position.y - 1, juggernaut.Position.z);
+                Armor.Rotation = juggernaut.Rotation;
+
+                yield return Timing.WaitForOneFrame;
+            }
+
+            NetworkServer.Destroy(Armor.gameObject);
+        }
+
+        public IEnumerator<float> MusicAsync()
+        {
+            ReferenceHub hub = GGUtils.Gtool.Spawn(RoleTypeId.Tutorial, Vector3.zero);
+
+            Timing.CallDelayed(0.35f, delegate ()
+            {
+                hub.authManager.UserId = "ID_Dedicated";
+                try
+                {
+                    hub.authManager.NetworkSyncedUserId = "ID_Dedicated";
+                }
+                catch { }
+                hub.nicknameSync.DisplayName = "dj";
+                hub.characterClassManager.GodMode = true;
+                hub.transform.localScale = Vector3.one * -0.01f;
+                foreach (Player player in Player.List)
+                {
+                    Server.SendSpawnMessage.Invoke(null, new object[]
+                    {
+                    hub.netIdentity,
+                    player.Connection
+                    });
+                }
+                FirstPersonMovementModule fpcModule = (hub.roleManager.CurrentRole as FpcStandardRoleBase).FpcModule;
+                fpcModule.Position = hub.transform.position - Vector3.up * 0.1f;
+                fpcModule.Motor.ReceivedPosition = new RelativePosition(hub.transform.position - Vector3.up * 0.1f);
+                fpcModule.Noclip.IsActive = true;
+            });
+
+            AudioPlayerBase audioPlayer = AudioPlayerBase.Get(hub);
+
+            audioPlayer.BroadcastChannel = VoiceChatChannel.Proximity;
+            audioPlayer.CurrentPlay = GGUtils.Gtool.ConventToAudioPath("JuggernautTheme");
+            audioPlayer.Volume = 10;
+            audioPlayer.Loop = true;
+            audioPlayer.Play(-1);
+
+            dj = Player.Get(hub);
+
+            while (juggernaut.IsAlive)
+            {
+                dj.Position = juggernaut.Position;
+
+                yield return Timing.WaitForOneFrame;
+            }
+
+            NetworkServer.Destroy(dj.ReferenceHub.gameObject);
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
@@ -162,7 +240,7 @@ namespace RGM.Modes
 
             foreach (var player in Player.List)
             {
-                player.ShowHint($"<b>[ 저거너트 사살 기여도 순위 ]</b>\n{string.Join("\n", damageList)}", 20);
+                player.ShowHint($"<align=left><b><size=40>[ 저거너트 사살 기여도 순위 ]</size></b>\n{string.Join("\n", damageList)}</align>\n\n\n\n\n\n", 20);
             }
         }
 
