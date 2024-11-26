@@ -22,7 +22,7 @@ public class RocketLauncher : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player != Owner)
+        if (ev.Attacker == null || ev.Attacker != Owner)
             return;
 
         if (Random.Range(1, 6) == 1)
