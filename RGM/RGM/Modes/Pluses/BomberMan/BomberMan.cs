@@ -12,6 +12,7 @@ using Exiled.API.Enums;
 using RGM.API.Features;
 using MultiBroadcast.API;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp079;
 
 namespace RGM.Modes
 {
@@ -35,6 +36,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+
+            Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -72,6 +75,16 @@ namespace RGM.Modes
         {
             if (ev.Item.Type == ItemType.GrenadeHE)
                 ev.IsAllowed = false;
+        }
+
+        public void OnPinging(PingingEventArgs ev)
+        {
+            Timing.CallDelayed(0.1f, () =>
+            {
+                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
+                g.FuseTime = 3f;
+                g.SpawnActive(ev.Position, ev.Player);
+            });
         }
     }
 }
