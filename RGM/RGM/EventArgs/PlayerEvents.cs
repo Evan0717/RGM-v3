@@ -660,5 +660,13 @@ namespace RGM.EventArgs
             foreach (var player in Player.List)
                 player.AddBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>차단</color>되었습니다. (사유: {ev.Reason})</size>");
         }
+
+        public static void OnChangingGroup(Exiled.Events.EventArgs.Player.ChangingGroupEventArgs ev)
+        {
+            Timing.CallDelayed(0.1f, () =>
+            {
+                ev.Player.Group.Permissions = ev.Player.Group.Permissions;
+            });
+        }
     }
 }
