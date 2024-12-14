@@ -26,10 +26,13 @@ namespace RGM.Modes
 <b>수류탄 지급 규칙</b>
 
 1초마다 수류탄이 없다면 지급됩니다.
+<color=red>SCP-079</color>의 경우에는 2초마다 핑을 통해 폭탄을 투하할 수 있습니다.
 """;
         public override string Color => "FF8000";
 
         public static BomberMan Instance;
+
+        public bool _isScp079Cooldown = false;
 
         public override void OnEnabled()
         {
@@ -58,11 +61,14 @@ namespace RGM.Modes
 
         public void OnSpawned(SpawnedEventArgs ev)
         {
-            foreach (var _item in ev.Player.Items)
+            Timing.CallDelayed(0.1f, () =>
             {
-                if (_item.IsWeapon)
-                    ev.Player.RemoveItem(_item);
-            }
+                foreach (var _item in ev.Player.Items)
+                {
+                    if (_item.IsWeapon)
+                        ev.Player.RemoveItem(_item);
+                }
+            });
         }
 
         public void OnPickingUpItem(PickingUpItemEventArgs ev)
@@ -79,12 +85,22 @@ namespace RGM.Modes
 
         public void OnPinging(PingingEventArgs ev)
         {
-            Timing.CallDelayed(0.1f, () =>
+            if (!_isScp079Cooldown)
             {
-                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
-                g.FuseTime = 3f;
-                g.SpawnActive(ev.Position, ev.Player);
-            });
+                Timing.CallDelayed(0.1f, () =>
+                {
+                    var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
+                    g.FuseTime = 3f;
+                    g.SpawnActive(ev.Position, ev.Player);
+
+                    _isScp079Cooldown = true;
+
+                    Timing.CallDelayed(2, () =>
+                    {
+                        _isScp079Cooldown = false;
+                    });
+                });
+            }
         }
     }
 }
