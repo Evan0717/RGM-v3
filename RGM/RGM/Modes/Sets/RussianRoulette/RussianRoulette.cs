@@ -176,7 +176,7 @@ namespace RGM.Modes
                     Revolver.Ammo = 1;
 
                     Gunner.CurrentItem = Revolver;
-                    Gunner.ShowHint($"<size=25>당신의 차례입니다.\n쏠 유저를 신중하게 고르십시오.</size>");
+                    Gunner.ShowHint($"<size=25>당신의 차례입니다.\n다른 유저를 공격하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");
 
                     for (int i = 1; i < 11; i++)
                     {
@@ -203,7 +203,7 @@ namespace RGM.Modes
                     {
                         if (bullet)
                         {
-                            Player = Player == null ? Attacker : Player;
+                            Player = (Player == null || Attacker == Player) ? Attacker : Player;
 
                             Player.Kill("리볼버의 탄약이 당신을 꿰뚫었습니다.");
 
@@ -218,7 +218,7 @@ namespace RGM.Modes
                         {
                             foreach (var player in Players) player.AddBroadcast(1, $"아무 일도 일어나지 않았습니다. ({6 - Count}/6)");
 
-                            if (Player == null)
+                            if (Player == null || Attacker == Player)
                             {
                                 foreach (var player in Players) player.AddBroadcast(1, $"<size=25>자신을 쏘고 살아남았으므로 격발 기회를 한번 더 얻습니다.</size>");
                                 IsSelfShot = true;
