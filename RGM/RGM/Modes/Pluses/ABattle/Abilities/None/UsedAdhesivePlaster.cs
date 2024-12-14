@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Dummy;
 
-[Ability("방출된 도파민", "도파민이 방출되었습니다.", AbilityCategory.Dummy, AbilityType.NONE_DOPAMINERELEASED)]
-public class DopamineReleased : Ability
+[Ability("해진 반창고", "더 이상 사용할 수 없어 보이는 반창고군요.", AbilityCategory.Dummy, AbilityType.NONE_USEDADHESIVEPLASTER)]
+public class UsedAdhesivePlaster : Ability
 {
     public override void OnEnabled()
     {

@@ -98,6 +98,7 @@ public class RequiresAbilityAttribute(params AbilityType[] abilities) : Attribut
 public enum AbilityCategory
 {
     None,
+    Dummy,
     Common,
     Rare,
     Epic,
@@ -147,7 +148,7 @@ public static class AbilityCategoryExtensions
             RoleTypeId.Scp3114 => AbilityCategory.Scp3114,
             RoleTypeId.Scp079 => AbilityCategory.Scp079,
             RoleTypeId.Tutorial => AbilityCategory.Tutorial,
-            _ => AbilityCategory.None
+            _ => AbilityCategory.Dummy
         };
     }
 
@@ -220,6 +221,7 @@ public enum AbilityType
     NONE,
     NONE_EXPIREDINSURANCE, // [더미] 만료된 보험
     NONE_DOPAMINERELEASED, // [더미] 방출된 도파민
+    NONE_USEDADHESIVEPLASTER, // [더미] 해진 반창고
     NONE_RARETRANSITIONSUCCESS, // [더미] 하급 변이 성공
     NONE_RARETRANSITIONFAILURE, // [더미] 하급 변이 실패
     NONE_EPICTRANSITIONSUCCESS, // [더미] 변이 성공

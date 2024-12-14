@@ -367,7 +367,7 @@ public class ABattle : Mode
     {
         var abilities = Abilities.Where(x => x.Value.Category == category).ToList();
 
-        if (category == AbilityCategory.None)
+        if (category == AbilityCategory.Dummy)
             abilities = Abilities.ToList();
 
         abilities.ShuffleList();
@@ -384,7 +384,7 @@ public class ABattle : Mode
 
         var category = GetCategory(player);
 
-        if (category == AbilityCategory.None)
+        if (category == AbilityCategory.Dummy)
             return;
 
         var abilities = GetRandomAbilities(category, 3);
@@ -553,7 +553,7 @@ public class ABattle : Mode
 
     private AbilityCategory GetCategory(Player player)
     {
-        if (!player.IsAlive) return AbilityCategory.None;
+        if (!player.IsAlive) return AbilityCategory.Dummy;
 
         if (player.Role == RoleTypeId.Scp079)
             return AbilityCategory.Scp079;

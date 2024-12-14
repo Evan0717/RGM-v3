@@ -73,6 +73,7 @@ public enum ModeType
     AdditionalWave,
     Blackout,
     Blessing,
+    BomberMan,
     BombParty,
     Collector,
     Cell,

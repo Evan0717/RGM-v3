@@ -16,7 +16,7 @@ public class AddAbility : ICommand
 
             if (arguments.Count < 2)
             {
-                ABattle.Instance.AddAbility(player, ABattle.Instance.GetRandomAbilities(AbilityCategory.None, 1)[0]);
+                ABattle.Instance.AddAbility(player, ABattle.Instance.GetRandomAbilities(AbilityCategory.Dummy, 1)[0]);
             }
             else
             {
