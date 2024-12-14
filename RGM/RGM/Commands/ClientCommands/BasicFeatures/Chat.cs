@@ -84,7 +84,7 @@ namespace RGM.Commands.ClientCommands
                         if (player.VoiceChannel == VoiceChat.VoiceChatChannel.Intercom)
                             return true;
 
-                        if (p.CurrentItem is Scp1576 scp1576)
+                        if (player.IsDead && p.CurrentItem is Scp1576 scp1576)
                         {
                             if (scp1576.IsUsing)
                                 return true;
