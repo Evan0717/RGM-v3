@@ -244,6 +244,6 @@ D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\MultiBroadcast.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\GGUtils.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Site02.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\SLPlayerRotation.dll
-D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Assembly-CSharp-Publicized.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\DiscordInteraction.dll
 D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\AudioPlayer.dll
+D:\GoldenPig1205\Visual Studio 2022\RGM\RGM\bin\Debug\Assembly-CSharp-Publicized.dll
