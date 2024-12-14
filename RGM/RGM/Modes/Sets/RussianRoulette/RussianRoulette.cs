@@ -203,8 +203,9 @@ namespace RGM.Modes
                     {
                         if (bullet)
                         {
-                            if (Player != null)
-                                Player.Kill("리볼버의 탄약이 당신을 꿰뚫었습니다.");
+                            Player = Player == null ? Attacker : Player;
+
+                            Player.Kill("리볼버의 탄약이 당신을 꿰뚫었습니다.");
 
                             if (Players.Contains(Player))
                                 Players.Remove(Player);
@@ -227,11 +228,7 @@ namespace RGM.Modes
                         }
                     }
 
-                    if (Target != null)
-                        IsRoundEnd = ShotEvent(Gunner, Target);
-
-                    else
-                        IsRoundEnd = ShotEvent(Gunner, Gunner);
+                    IsRoundEnd = ShotEvent(Gunner, Target);
 
                     if (IsRoundEnd)
                         break;
