@@ -35,7 +35,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 foreach (var Mode in ModeList.Keys)
                     ModeList_.Add($"{Mode}");
 
-                response = $"<b><size=30>[ 모드 리스트 ]</b></size>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
+                response = $"<b><size=30>[ 모드 리스트 ]</size></b>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
                 return false;
             }
             else if (ModeList.Keys.Select(x => x.GetModeData().Name).Contains(args))

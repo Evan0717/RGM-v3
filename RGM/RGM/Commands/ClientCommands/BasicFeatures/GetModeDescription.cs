@@ -23,6 +23,7 @@ namespace RGM.Commands.ClientCommands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
+            string args = string.Join(" ", arguments).Trim();
 
             if (arguments.Count == 0)
             {
@@ -47,9 +48,18 @@ namespace RGM.Commands.ClientCommands
                     return true;
                 }
             }
+            else if (!ModeList.Keys.Select(x => x.GetModeData().Name).Contains(args))
+            {
+                List<string> ModeList_ = new List<string>();
+
+                foreach (var Mode in ModeList.Keys)
+                    ModeList_.Add($"{Mode}");
+
+                response = $"<b><size=30>[ 모드 리스트 ]</size></b>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
+                return false;
+            }
             else
             {
-                string args = string.Join(" ", arguments).Trim();
                 ModeData modeData = ModeList.Keys.FirstOrDefault(x => x.GetModeData().Name == args).GetModeData();
 
                 if (ModeList.Keys.Select(x => x.GetModeData().Name).Contains(args))
