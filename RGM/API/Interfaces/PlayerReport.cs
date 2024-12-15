@@ -17,5 +17,6 @@ namespace RGM.API.Interfaces
         public int Revive { get; set; }
         public int KillScp { get; set; }
         public int KillHuman { get; set; }
+        public float Damage { get; set; }
     }
 }
