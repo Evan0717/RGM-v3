@@ -11,6 +11,7 @@ using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
 using RGM.API.Features;
 using MultiBroadcast.API;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
@@ -114,6 +115,9 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
+            if (ev.Attacker.Role.Type == RoleTypeId.Scp173)
+                return;
+
             if (ev.Attacker != null)
             {
                 float s = ev.Attacker.CurrentSpectatingPlayers.Count();
