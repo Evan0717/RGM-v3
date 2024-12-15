@@ -49,10 +49,12 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Server.SelectingRespawnTeam += OnSelectingRespawnTeam;
+
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
+            Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(AutoWarhead());
@@ -120,6 +122,12 @@ namespace RGM.Modes
             Warhead.Start();
         }
 
+        public void OnSelectingRespawnTeam(Exiled.Events.EventArgs.Server.SelectingRespawnTeamEventArgs ev)
+        {
+            if (IsCHIEnabled)
+                ev.Team = SpawnableTeamType.ChaosInsurgency;
+        }
+
         public void OnEscaping(Exiled.Events.EventArgs.Player.EscapingEventArgs ev)
         {
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
@@ -156,10 +164,10 @@ namespace RGM.Modes
             }
         }
 
-        public void OnRespawningTeam(Exiled.Events.EventArgs.Server.RespawningTeamEventArgs ev)
+        public void OnHandcuffing(Exiled.Events.EventArgs.Player.HandcuffingEventArgs ev)
         {
-            if (IsCHIEnabled)
-                ev.NextKnownTeam = SpawnableTeamType.ChaosInsurgency;
+            if (ev.Target == Level05 && ev.Target.Role.Type == RoleTypeId.Scientist)
+                ev.IsAllowed = false;
         }
     }
 }
