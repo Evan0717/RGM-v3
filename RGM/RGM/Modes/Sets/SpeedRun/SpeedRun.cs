@@ -32,11 +32,11 @@ namespace RGM.Modes
         public static SpeedRun Instance;
 
         public List<Player> pl = new List<Player>();
-        List<ItemType> Standards = new List<ItemType>()
+        List<ItemType> _standards = new List<ItemType>()
         {
             ItemType.Flashlight
         };
-        List<ItemType> Extensions = new List<ItemType>()
+        List<ItemType> _extensions = new List<ItemType>()
         {
             ItemType.KeycardO5,
             ItemType.Adrenaline,
@@ -46,7 +46,7 @@ namespace RGM.Modes
             ItemType.Painkillers,
             ItemType.SCP330
         };
-        List<ItemType> ItemsList = new List<ItemType>();
+        List<ItemType> _itemsList = new List<ItemType>();
 
         public bool IsEnd = false;
 
@@ -68,13 +68,13 @@ namespace RGM.Modes
 
             Warhead.Start();
 
-            foreach (var Item in Standards)
-                ItemsList.Add(Item);
+            foreach (var Item in _standards)
+                _itemsList.Add(Item);
 
-            foreach (var Item in Extensions)
+            foreach (var Item in _extensions)
             {
                 if (UnityEngine.Random.Range(1, 3) == 1)
-                    ItemsList.Add(Item);
+                    _itemsList.Add(Item);
             }
 
             Tools.TryInstallMode(ModeType.FriendlyFire);
@@ -100,8 +100,11 @@ namespace RGM.Modes
                 if (player.Role.Type != RoleTypeId.ClassD)
                     player.Role.Set(RoleTypeId.ClassD);
 
-                foreach (var Item in ItemsList)
-                    player.AddItem(Item);
+                Timing.CallDelayed(0.1f, () =>
+                {
+                    foreach (var _item in _itemsList)
+                        player.AddItem(_item);
+                });
             }
         }
 
@@ -132,8 +135,9 @@ namespace RGM.Modes
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
         {
-            Warhead.Detonate();
-            Player.List.ToList().ForEach(x => x.AddBroadcast(10, $"<size=30>{ev.Player.DisplayNickname}(이)가 <color=red>핵</color>을 강제로 폭파시켰습니다!</size>"));
+            Player.List.ToList().ForEach(x => x.AddBroadcast(10, $"<size=30>{ev.Player.DisplayNickname}(으)로 인해 10초 뒤 <color=red>핵</color>이 강제로 폭파됩니다.</size>"));
+
+            Timing.CallDelayed(10, Warhead.Detonate);
         }
     }
 }
