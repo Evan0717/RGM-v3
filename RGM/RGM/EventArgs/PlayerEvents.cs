@@ -613,7 +613,7 @@ namespace RGM.EventArgs
 
         public static void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
         {
-            if (ev.Player.IsScp)
+            if (ev.Player.IsScp && CurrentMode != ModeType.SoulMate)
             {
                 if (!ev.Item.IsAmmo)
                 {
