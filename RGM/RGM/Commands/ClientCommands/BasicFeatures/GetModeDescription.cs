@@ -53,7 +53,7 @@ namespace RGM.Commands.ClientCommands
                 List<string> ModeList_ = new List<string>();
 
                 foreach (var Mode in ModeList.Keys)
-                    ModeList_.Add($"{Mode}");
+                    ModeList_.Add($"{Mode.GetModeData().Name}");
 
                 response = $"<b><size=30>[ 모드 리스트 ]</size></b>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
                 return false;
