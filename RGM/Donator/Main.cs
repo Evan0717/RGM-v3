@@ -20,6 +20,7 @@ using RGM.API.Interfaces;
 using static RGM.Variables.ServerManagers;
 using MultiBroadcast.API;
 using RGM.API.DataBases;
+using Exiled.API.Features.Roles;
 
 namespace RGM.Donator
 {
@@ -34,7 +35,7 @@ namespace RGM.Donator
             Timing.RunCoroutine(CustomermizingRotation());
         }
 
-        public IEnumerator<float> KillEffect(List<string> PlayerData, Player Attacker, Player Player)
+        public IEnumerator<float> KillEffect(List<string> PlayerData, Player Attacker, Player Player, Role _role, Vector3 _pos)
         {
             Quaternion Rotation = new Quaternion(0, Attacker.CameraTransform.rotation.y + 180, 0, 0);
 
@@ -42,19 +43,19 @@ namespace RGM.Donator
             {
                 DamageHandlerBase DisruptorDamage = new DisruptorDamageHandler(Attacker.Footprint, -1);
 
-                Ragdoll.CreateAndSpawn(Player.Role.Type, PlayerData[4], DisruptorDamage, Player.Position, Rotation);
+                Ragdoll.CreateAndSpawn(_role.Type, PlayerData[4], DisruptorDamage, _pos, Rotation);
             }
 
             if (PlayerData[4] == "솔라 테라")
             {
-                SchematicObject SolarTerra = ObjectSpawner.SpawnSchematic("SolarTerra", Player.Position, Rotation, isStatic: false);
+                SchematicObject SolarTerra = ObjectSpawner.SpawnSchematic("SolarTerra", _pos, Rotation, isStatic: false);
 
                 Timing.CallDelayed(1.5f, SolarTerra.Destroy);
             }
 
             if (PlayerData[4] == "Kerfus")
             {
-                SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", Player.Position + new Vector3(0, 19, 0), Rotation, isStatic: false);
+                SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", _pos + new Vector3(0, 19, 0), Rotation, isStatic: false);
 
                 for (int i = 1; i < 11; i++)
                 {
@@ -77,14 +78,14 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "은제 말뚝")
             {
-                SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", Player.Position, Rotation, isStatic: false);
+                SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", _pos, Rotation, isStatic: false);
 
                 Timing.CallDelayed(1.5f, SilverStake.Destroy);
             }
 
             if (PlayerData[4] == "KO 사인")
             {
-                SchematicObject KO = ObjectSpawner.SpawnSchematic("KO", Player.Position, Rotation, isStatic: false);
+                SchematicObject KO = ObjectSpawner.SpawnSchematic("KO", _pos, Rotation, isStatic: false);
 
                 Timing.CallDelayed(1.5f, KO.Destroy);
             }
@@ -92,17 +93,23 @@ namespace RGM.Donator
 
         public IEnumerator<float> OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
-            if (ev.Attacker != null && UsersManager.UsersCache.ContainsKey(ev.Attacker.UserId))
+            Role _role = ev.Player.Role;
+            Vector3 _pos = ev.Player.Position;
+
+            yield return Timing.WaitForOneFrame;
+
+            if (ev.Player.IsDead)
             {
-                List<string> AttackerData = UsersManager.UsersCache[ev.Attacker.UserId];
-
-                if (AttackerData[4] != "0")
+                if (ev.Attacker != null && UsersManager.UsersCache.ContainsKey(ev.Attacker.UserId))
                 {
-                    Timing.RunCoroutine(KillEffect(AttackerData, ev.Attacker, ev.Player));
+                    List<string> AttackerData = UsersManager.UsersCache[ev.Attacker.UserId];
 
-                    foreach (var _player in Player.List.Where(x => x.IsDead || x == ev.Attacker || x == ev.Player))
+                    if (AttackerData[4] != "0")
                     {
-                        _player.AddBroadcast(6, $"<size=25>{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5>{ev.Attacker.DisplayNickname}</color>(이)가 {Datas.KillEffectData[AttackerData[4]][0]}(으)로 {Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>(을)를 {Datas.KillEffectData[AttackerData[4]][1]}시켰습니다!</size>");
+                        Timing.RunCoroutine(KillEffect(AttackerData, ev.Attacker, ev.Player, _role, _pos));
+
+                        foreach (var _player in Player.List.Where(x => x.IsDead || x == ev.Attacker))
+                            _player.AddBroadcast(6, $"<size=25>{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5>{ev.Attacker.DisplayNickname}</color>(이)가 {Datas.KillEffectData[AttackerData[4]][0]}(으)로 {Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>(을)를 {Datas.KillEffectData[AttackerData[4]][1]}시켰습니다!</size>");
                     }
                 }
             }
@@ -137,6 +144,8 @@ namespace RGM.Donator
                                     .Replace("{max_health}", $"{player.MaxHealth}")
                                     .Replace("{health}", $"{player.Health}")
                                     .Replace("{items_count}", $"{player.Items.Count}")
+                                    .Replace("{role}", $"{Trans.Role[player.Role]}")
+                                    .Replace("{damage}", $"{pr[player.UserId].Damage}")
                                     ;
                             }
 
