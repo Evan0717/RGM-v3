@@ -114,7 +114,7 @@ namespace RGM.Modes
 
                 BomberMans.Clear();
 
-                if (pl.Count < 2)
+                if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                 {
                     Round.IsLocked = false;
 
@@ -183,7 +183,7 @@ namespace RGM.Modes
             {
                 pl.Remove(ev.Player);
 
-                if (pl.Count < 2)
+                if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                 {
                     Round.IsLocked = false;
 

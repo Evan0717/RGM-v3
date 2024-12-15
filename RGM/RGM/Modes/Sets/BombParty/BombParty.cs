@@ -124,7 +124,7 @@ namespace RGM.Modes
             {
                 pl.Remove(ev.Player);
 
-                if (pl.Count < 2)
+                if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                 {
                     Round.IsLocked = false;
 

@@ -77,7 +77,7 @@ namespace RGM.Modes
                             {
                                 pl.Remove(player);
 
-                                if (pl.Count < 2)
+                                if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                                     Round.IsLocked = false;
 
                                 player.Kill("선을 넘어버렸다네~");
@@ -128,7 +128,7 @@ namespace RGM.Modes
             {
                 pl.Remove(ev.Player);
 
-                if (pl.Count < 2)
+                if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                 {
                     Round.IsLocked = false;
 

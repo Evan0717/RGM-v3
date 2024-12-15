@@ -110,7 +110,7 @@ namespace RGM.Modes
             {
                 if (juggernaut.IsAlive)
                 {
-                    if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() <= 1)
+                    if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                     {
                         Player.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
                         IsEnd = true;
