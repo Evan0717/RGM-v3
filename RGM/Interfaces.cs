@@ -74,6 +74,7 @@ public enum ModeType
     Blackout,
     Blessing,
     BomberMan,
+    Builder,
     BombParty,
     Collector,
     Cell,
@@ -119,7 +120,6 @@ public enum ModeType
     WhereamI,
     WhoamI,
     WitGame
-
 }
 
 

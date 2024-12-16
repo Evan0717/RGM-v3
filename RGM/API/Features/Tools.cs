@@ -396,5 +396,22 @@ RP: {uc[1]}
                 .Replace("{damage}", $"{pr[player.UserId].Damage}")
                 ;
         }
+
+        public static bool TryGetRaycastPoint(Player player, float _distance, out Vector3 _point)
+        {
+            Vector3 forward = player.CameraTransform.forward;
+            RaycastHit raycastHit;
+
+            if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out raycastHit, _distance))
+            {
+                _point = Vector3.zero;
+                return false;
+            }
+            else
+            {
+                _point = raycastHit.point;
+                return true;
+            }
+        }
     }
 }
