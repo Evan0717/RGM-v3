@@ -30,7 +30,9 @@ namespace RGM.Modes
 엄폐물 짓기에 실패하면 스텍이 쌓입니다.
 스텍은 엄폐물을 짓거나, 가장 큰 엄폐물 스텍을 초과하면 초기화됩니다.
 
-* 발차기(ALT)로 엄폐물을 부술 수 있습니다. (데미지: 40)
+* 발차기(ALT)로 엄폐물을 부술 수 있습니다.
+인간 -> (데미지: 40, 쿨타임: 0.5초)
+SCP -> (데미지: 200, 쿨타임: 0.5초)
 """;
         public override string Color => "2EFEC8";
         public override string Suggester => "몬키키";
@@ -42,10 +44,10 @@ namespace RGM.Modes
 
         Dictionary<string, float> _objects = new Dictionary<string, float>()
         {
-            { "da_b2", 10 },
-            { "da_b1", 20 },
-            { "da_d1", 30 },
-            { "da_l1", 50 }
+            { "da_b2", 25 },
+            { "da_b1", 50 },
+            { "da_d1", 75 },
+            { "da_l1", 90 }
         };
         Dictionary<Player, int> _stacks = new Dictionary<Player, int>();
 
@@ -164,11 +166,11 @@ namespace RGM.Modes
             Vector3 _forward = ev.Player.CameraTransform.forward;
 
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, _forward, out RaycastHit hit, 3, (LayerMask)1))
-                GGUtils.HealthObject.DamageObject(ev.Player, 40, hit);
+                GGUtils.HealthObject.DamageObject(ev.Player, ev.Player.IsScp ? 200 : 40, hit);
 
             _cooldownPlayers.Add(ev.Player);
 
-            Timing.CallDelayed(1f, () =>
+            Timing.CallDelayed(0.5f, () =>
             {
                 _cooldownPlayers.Remove(ev.Player);
             });
