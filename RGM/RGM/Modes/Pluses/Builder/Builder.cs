@@ -15,6 +15,9 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
 using Exiled.Events.EventArgs.Item;
 using MapEditorReborn.API.Features;
+using MapEditorReborn.API.Features.Objects;
+using Mirror;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
@@ -73,7 +76,7 @@ SCP -> (데미지: 200, 쿨타임: 0.5초)
 
             while (true)
             {
-                foreach (var p in Player.List)
+                foreach (var p in Player.List.Where(x => x.IsAlive || x.Role.Type == RoleTypeId.Scp079))
                 {
                     if (_tools.Contains(p.CurrentItem))
                         p.ShowHint("<size=25><b>건축 도구</b>, 엄폐물을 생성하세요.</size>", 1.2f);
@@ -143,7 +146,13 @@ SCP -> (데미지: 200, 쿨타임: 0.5초)
                 int objectIndex = stackValue >= _objects.Count ? _objects.Count - 1 : stackValue;
                 string selectedObject = _objects.ElementAt(objectIndex).Key;
 
-                ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, isStatic: true);
+                SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, isStatic: true);
+
+                Timing.CallDelayed(180, () =>
+                {
+                    _object.Destroy();
+                    NetworkServer.Destroy(_object.gameObject);
+                });
 
                 ev.Player.Hurt(_objects[selectedObject], "고된 노동이 목숨을 앗아갔습니다.");
 
