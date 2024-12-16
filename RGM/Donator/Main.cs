@@ -127,36 +127,16 @@ namespace RGM.Donator
                     {
                         if (UsersManager.UsersCache.ContainsKey(player.UserId))
                         {
-                            Dictionary<string, PlayerReport> pr = PlayersReport;
-
                             List<string> userValues = UsersManager.UsersCache[player.UserId];
 
-                            string Formatter(string str)
-                            {
-                                return str
-                                    .Replace("\\n", "\n")
-                                    .Replace("{name}", player.Nickname)
-                                    .Replace("{kill}", $"{pr[player.UserId].Kill}")
-                                    .Replace("{death}", $"{pr[player.UserId].Death}")
-                                    .Replace("{revive}", $"{pr[player.UserId].Revive}")
-                                    .Replace("{kill_scp}", $"{pr[player.UserId].KillScp}")
-                                    .Replace("{kill_human}", $"{pr[player.UserId].KillHuman}")
-                                    .Replace("{max_health}", $"{player.MaxHealth}")
-                                    .Replace("{health}", $"{player.Health}")
-                                    .Replace("{items_count}", $"{player.Items.Count}")
-                                    .Replace("{role}", $"{Trans.Role[player.Role]}")
-                                    .Replace("{damage}", $"{pr[player.UserId].Damage}")
-                                    ;
-                            }
-
                             if (userValues[5] != "0")
-                                player.DisplayNickname = Formatter(userValues[5]);
+                                player.DisplayNickname = Tools.CustomFormatter(player, userValues[5]);
 
                             else
                                 player.DisplayNickname = "";
 
                             if (userValues[6] != "0")
-                                player.CustomInfo = Formatter(userValues[6]);
+                                player.CustomInfo = Tools.CustomFormatter(player, userValues[6]);
 
                             else
                                 player.CustomInfo = "";

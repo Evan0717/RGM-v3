@@ -535,7 +535,7 @@ namespace RGM.EventArgs
                 else
                 {
                     if (ev.IsAllowed)
-                        PlayersReport[ev.Attacker.UserId].Damage += ev.DamageHandler.Damage;
+                        PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
                 }
             }
         }

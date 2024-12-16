@@ -18,6 +18,7 @@ using UnityEngine;
 using DiscordInteraction.Discord;
 
 using static RGM.Variables.ServerManagers;
+using RGM.API.Interfaces;
 
 namespace RGM.API.Features
 {
@@ -111,9 +112,9 @@ RP: {uc[1]}
 
 보유한 커스텀: {GetJoinedInfo(7)}
 커스텀 닉네임: {(uc[5] == "0" ? "-" : uc[5])}
-<size=15>{(uc[5] == "0" ? "'.닉네임 <텍스트>' 명령어를 사용하여 커스텀 닉네임을 설정할 수 있습니다." : "이 멋진 닉네임이 모두에게 보입니다!")}</size>
+<size=15>{(uc[5] == "0" ? "'.닉네임 <텍스트>' 명령어를 사용하여 커스텀 닉네임을 설정할 수 있습니다." : $"미리 보기: {Tools.CustomFormatter(player, uc[5]).Replace("\n", "\\n")}")}</size>
 커스텀 인포: {(uc[6] == "0" ? "-" : uc[6])}
-<size=15>{(uc[6] == "0" ? "'.인포 <텍스트>' 명령어를 사용하여 커스텀 인포를 설정할 수 있습니다." : "이 아름다운 언포가 모두에게 보입니다!")}</size>
+<size=15>{(uc[6] == "0" ? "'.인포 <텍스트>' 명령어를 사용하여 커스텀 인포를 설정할 수 있습니다." : $"미리 보기: {Tools.CustomFormatter(player, uc[6]).Replace("\n", "\\n")}")}</size>
 
 보유한 페인트: {GetJoinedInfo(8)}
 장착한 페인트: {(uc[9] == "0" ? "-" : uc[9])}
@@ -374,6 +375,26 @@ RP: {uc[1]}
 
             else
                 return "";
+        }
+
+        public static string CustomFormatter(Player player, string str)
+        {
+            Dictionary<string, PlayerReport> pr = PlayersReport;
+
+            return str
+                .Replace("\\n", "\n")
+                .Replace("{name}", player.Nickname)
+                .Replace("{kill}", $"{pr[player.UserId].Kill}")
+                .Replace("{death}", $"{pr[player.UserId].Death}")
+                .Replace("{revive}", $"{pr[player.UserId].Revive}")
+                .Replace("{kill_scp}", $"{pr[player.UserId].KillScp}")
+                .Replace("{kill_human}", $"{pr[player.UserId].KillHuman}")
+                .Replace("{max_health}", $"{player.MaxHealth}")
+                .Replace("{health}", $"{player.Health}")
+                .Replace("{items_count}", $"{player.Items.Count}")
+                .Replace("{role}", $"{Trans.Role[player.Role]}")
+                .Replace("{damage}", $"{pr[player.UserId].Damage}")
+                ;
         }
     }
 }
