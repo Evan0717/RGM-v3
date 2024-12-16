@@ -14,7 +14,7 @@ using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Disguise)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Disguise)]
     public class Disguise : Mode
     {
         public override string Name => "변장";
@@ -31,7 +31,7 @@ SCP-079
 """;
         public override string Color => "F1F8E0";
 
-        public static JohnWick Instance;
+        public static Disguise Instance;
 
         static List<RoleTypeId> _blockedRoles = new List<RoleTypeId>()
         {
@@ -60,6 +60,9 @@ SCP-079
                 {
                     if (Tools.TryGetLookPlayer(p, 3, out Player t))
                         p.ShowHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1);
+
+                    else
+                        p.ShowHint($"<size=25><b>당신의 정체는 <color={p.Role.Color.ToHex()}>{Trans.Role[p.Role.Type]}</color>입니다.</b></size>", 1);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -73,7 +76,10 @@ SCP-079
 
         public void Spawned(Player player)
         {
-            Timing.CallDelayed(0.1f, () =>
+            if (_blockedRoles.Contains(player.Role))
+                return;
+
+            Timing.CallDelayed(1f, () =>
             {
                 player.ChangeAppearance(Tools.GetRandomValue(_roleList));
             });
