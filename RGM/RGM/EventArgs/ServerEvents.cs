@@ -177,6 +177,8 @@ namespace RGM.EventArgs
             AutoNuke = true;
             Server.ExecuteCommand("/cassie_sl 시간이 너무 오래 걸립니다! 모두의 체력이 초당 5%씩 줄어듭니다!");
 
+            Player.List.ToList().ForEach(x => x.EnableEffect(EffectType.PocketCorroding));
+
             while (true)
             {
                 foreach (var player in Player.List)
