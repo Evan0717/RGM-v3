@@ -29,6 +29,7 @@ namespace RGM.Modes
 <color=red>SCP-079</color>의 경우에는 핑을 통해 폭탄을 투하할 수 있습니다. (쿨타임 5초)
 """;
         public override string Color => "FF8000";
+        public override string Suggester => "몬키키";
 
         public static BomberMan Instance;
 

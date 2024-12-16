@@ -369,6 +369,7 @@
     <Compile Include="RGM\Modes\Pluses\Blackout\Blackout.cs" />
     <Compile Include="RGM\Modes\Pluses\Blessing\Blessing.cs" />
     <Compile Include="RGM\Modes\Pluses\BomberMan\BomberMan.cs" />
+    <Compile Include="RGM\Modes\Pluses\Disguise\Disguise.cs" />
     <Compile Include="RGM\Modes\Pluses\PaperMan\PaperMan.cs" />
     <Compile Include="RGM\Modes\Pluses\RandomEffect\RandomEffect.cs" />
     <Compile Include="RGM\Modes\Pluses\RandomSize\RandomSize.cs" />
