@@ -33,6 +33,8 @@ SCP-079
 
         public static Disguise Instance;
 
+        public static Dictionary<Player, RoleTypeId> _disguisedList = new Dictionary<Player, RoleTypeId>();
+
         static List<RoleTypeId> _blockedRoles = new List<RoleTypeId>()
         {
             RoleTypeId.Spectator,
@@ -52,21 +54,35 @@ SCP-079
         public IEnumerator<float> OnModeStarted()
         {
             foreach (var player in Player.List)
+            {
+                Verified(player);
                 Spawned(player);
+            }
 
             while (true)
             {
-                foreach (var p in Player.List)
+                foreach (var p in Player.List.Where(x => x.IsAlive && _disguisedList.ContainsKey(x)))
                 {
                     if (Tools.TryGetLookPlayer(p, 3, out Player t))
-                        p.ShowHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1);
+                        p.ShowHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1.2f);
 
                     else
-                        p.ShowHint($"<size=25><b>당신의 정체는 <color={p.Role.Color.ToHex()}>{Trans.Role[p.Role.Type]}</color>입니다.</b></size>", 1);
+                        p.ShowHint($"<size=25><b>당신의 정체는 <color={p.Role.Color.ToHex()}>{Trans.Role[p.Role.Type]}</color>이고, <color={_disguisedList[p].GetRoleBase().RoleColor.ToHex()}>{Trans.Role[_disguisedList[p]]}</color>(으)로 변장했습니다.</b></size>", 1.2f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
+        }
+
+        public void OnVerified(VerifiedEventArgs ev)
+        {
+            Verified(ev.Player);
+        }
+
+        public void Verified(Player player)
+        {
+            if (!_disguisedList.ContainsKey(player))
+                _disguisedList.Add(player, RoleTypeId.Spectator);
         }
 
         public void OnSpawned(SpawnedEventArgs ev)
@@ -81,7 +97,11 @@ SCP-079
 
             Timing.CallDelayed(1f, () =>
             {
-                player.ChangeAppearance(Tools.GetRandomValue(_roleList));
+                RoleTypeId _roleId = Tools.GetRandomValue(_roleList);
+
+                _disguisedList[player] = _roleId;
+
+                player.ChangeAppearance(_roleId);
             });
         }
     }
