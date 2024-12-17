@@ -308,6 +308,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Undine.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Vampire.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\WeaponExpert.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Assassin.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Druid.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\DuplicateFate.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\FourMajorExercises.cs" />

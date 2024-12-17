@@ -392,6 +392,7 @@ public enum AbilityType
     SYNERGY_DUPLICATEFATE, // [시너지] 중복 기연
     SYNERGY_DRUID, // [시너지] 드루이드
     SYNERGY_SUICIDESQUAD, // [시너지] 수어사이드 스쿼드
+    SYNERGY_ASSASSIN, // [시너지] 암살자
 }
 
 public static class AbilityTypeExtensions
