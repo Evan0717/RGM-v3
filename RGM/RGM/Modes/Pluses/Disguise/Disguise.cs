@@ -63,7 +63,7 @@ SCP-079
             {
                 foreach (var p in Player.List.Where(x => x.IsAlive && _disguisedList.ContainsKey(x)))
                 {
-                    if (Tools.TryGetLookPlayer(p, 3, out Player t))
+                    if (Tools.TryGetLookPlayer(p, 3, out Player t) && _disguisedList.ContainsKey(t))
                         p.ShowHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1.2f);
 
                     else
@@ -92,7 +92,7 @@ SCP-079
 
         public void Spawned(Player player)
         {
-            if (_blockedRoles.Contains(player.Role))
+            if (_blockedRoles.Contains(player.Role) || !_disguisedList.ContainsKey(player))
                 return;
 
             Timing.CallDelayed(1f, () =>
