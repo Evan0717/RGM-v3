@@ -20,13 +20,11 @@ namespace RGM.EventArgs
 
         public static void OnDetonating(Exiled.Events.EventArgs.Warhead.DetonatingEventArgs ev)
         {
-            Player.List.Where(x => x.Zone != ZoneType.Surface && x.IsAlive).ToList().ForEach(x =>
+            foreach (var player in Player.List)
             {
-                if (GodModePlayers.Contains(x))
-                    GodModePlayers.Remove(x);
-
-                x.Kill("핵폭발에 사망하였습니다.");
-            });
+                if (GodModePlayers.Contains(player))
+                    GodModePlayers.Remove(player);
+            }
         }
     }
 }
