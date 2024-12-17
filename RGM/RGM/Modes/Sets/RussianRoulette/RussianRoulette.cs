@@ -175,7 +175,7 @@ namespace RGM.Modes
                     Revolver.Ammo = 1;
 
                     Players[currentPlayerIndex].CurrentItem = Revolver;
-                    Players[currentPlayerIndex].ShowHint($"<size=25>당신의 차례입니다.\n다른 유저를 공격하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");
+                    Players[currentPlayerIndex].ShowHint($"<size=25>당신의 차례입니다.\n다른 유저를 사살하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");
 
                     for (int i = 1; i < 11; i++)
                     {
@@ -208,6 +208,7 @@ namespace RGM.Modes
                             if (Players.Contains(Player))
                                 Players.Remove(Player);
 
+                            foreach (var player in Players) player.AddBroadcast(1, $"<size=25>사살하는데 성공하였으므로 격발 기회를 한번 더 얻습니다.</size>");
                             foreach (var player in Players) player.AddBroadcast(1, $"누군가가 사망하였습니다. ({6 - Count}/6)");
 
                             return true;
@@ -236,6 +237,11 @@ namespace RGM.Modes
                         currentPlayerIndex = (currentPlayerIndex + 1) % Players.Count;
                     }
                 }
+
+                if (currentPlayerIndex >= Players.Count)
+                {
+                    currentPlayerIndex = 0;
+                }
             }
 
             if (roundName == "결승전")
@@ -255,8 +261,6 @@ namespace RGM.Modes
 
             yield break;
         }
-
-
         public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
         {
             ShotChecks.Add(ev.Player, ev.Target);
