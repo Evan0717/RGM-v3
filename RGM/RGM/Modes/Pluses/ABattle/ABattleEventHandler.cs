@@ -8,6 +8,8 @@ using MEC;
 using UnityEngine;
 using MultiBroadcast.API;
 using Exiled.Events.EventArgs.Scp079;
+using RGM.API.DataBases;
+using PlayerRoles;
 
 namespace RGM.Modes;
 
@@ -89,16 +91,19 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private IEnumerator<float> OnEscaping(EscapingEventArgs ev)
     {
-        List<AbilityType> _abilities = aBattle.PlayerAbilities[ev.Player].Select(x => x.Data.AbilityType).ToList();
+        if (ev.Player.Role.Type == RoleTypeId.ClassD || ev.Player.Role.Type == RoleTypeId.Scientist)
+        {
+            List<AbilityType> _abilities = aBattle.PlayerAbilities[ev.Player].Select(x => x.Data.AbilityType).ToList();
 
-        aBattle.Reset(ev.Player);
+            aBattle.Reset(ev.Player);
 
-        yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitForOneFrame;
 
-        foreach (var ability in _abilities)
-            ev.Player.AddAbility(ability);
+            foreach (var ability in _abilities)
+                ev.Player.AddAbility(ability);
 
-        ev.Player.AddBroadcast(10, $"<size=25><b>탈출하였으므로 모든 능력을 제거한 후, 수복하였습니다.</b></size>");
+            ev.Player.AddBroadcast(10, $"<size=25><b>탈출하였으므로 모든 능력을 제거한 후, 수복하였습니다.</b></size>");
+        }
     }
 
     private void OnGainingLevel(GainingLevelEventArgs ev)
