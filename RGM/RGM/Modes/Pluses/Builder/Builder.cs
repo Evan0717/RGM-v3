@@ -28,14 +28,17 @@ namespace RGM.Modes
         public override string Description => "건축하세요. 재료는 오직 건축가의 체력 뿐입니다.";
         public override string Detail =>
 """
-건축!
-
 엄폐물 짓기에 실패하면 스텍이 쌓입니다.
 스텍은 엄폐물을 짓거나, 가장 큰 엄폐물 스텍을 초과하면 초기화됩니다.
 
 * 발차기(ALT)로 엄폐물을 부술 수 있습니다.
 인간 -> (데미지: 40, 쿨타임: 0.5초)
-SCP -> (데미지: 200, 쿨타임: 0.5초)
+<color=red>SCP</color> -> (데미지: 200, 쿨타임: 0.5초)
+
+<b>[참고]</b>
+• 인간은 동전을 버릴 수 없지만, <color=red>SCP</color>는 동전을 버릴 수 있습니다.
+• 생성된 모든 엄폐물은 3분 뒤 자동으로 제거됩니다. (렉 방지)
+• 고레벨의 엄폐물일수록 노동의 대가(체력)도 높아집니다.
 """;
         public override string Color => "2EFEC8";
         public override string Suggester => "몬키키";
@@ -45,12 +48,14 @@ SCP -> (데미지: 200, 쿨타임: 0.5초)
         List<Item> _tools = new List<Item>();
         List<Player> _cooldownPlayers = new List<Player>();
 
-        Dictionary<string, float> _objects = new Dictionary<string, float>()
+        Dictionary<string, List<object>> _objects = new Dictionary<string, List<object>>()
         {
-            { "da_b2", 25 },
-            { "da_b1", 50 },
-            { "da_d1", 75 },
-            { "da_l1", 90 }
+            { "da_d2", new List<object>() { "<color=#FAAC58>더미</color>", 15 } },
+            { "da_b2", new List<object>() { "<color=#FAAC58>판자 Ⅰ</color>", 25 } },
+            { "da_b1", new List < object >() { "<color=#FE9A2E>판자 Ⅱ</color>", 35 } },
+            { "da_d1", new List < object >() { "<color=#BDBDBD>합금</color>", 50 } },
+            { "da_l1", new List < object >() { "<color=#F7D358>모래주머니</color>", 70 } },
+            { "da_o1", new List < object >() { "<color=#81F7F3>마공학 코어</color>", 120 } },
         };
         Dictionary<Player, int> _stacks = new Dictionary<Player, int>();
 
@@ -76,10 +81,16 @@ SCP -> (데미지: 200, 쿨타임: 0.5초)
 
             while (true)
             {
-                foreach (var p in Player.List.Where(x => x.IsAlive || x.Role.Type == RoleTypeId.Scp079))
+                foreach (var p in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 {
                     if (_tools.Contains(p.CurrentItem))
-                        p.ShowHint("<size=25><b>건축 도구</b>, 엄폐물을 생성하세요.</size>", 1.2f);
+                    {
+                        int stackValue = _stacks.ContainsKey(p) ? _stacks[p] : 0;
+                        int objectIndex = stackValue >= _objects.Count ? _objects.Count - 1 : stackValue;
+                        string selectedObject = _objects.ElementAt(objectIndex).Key;
+
+                        p.ShowHint($"<size=25><b>건축 도구</b>ㅣLvl {objectIndex + 1}. {(string)_objects[selectedObject][0]} (❤️ {(int)_objects[selectedObject][1]})</size>", 1.2f);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -132,7 +143,7 @@ SCP -> (데미지: 200, 쿨타임: 0.5초)
             if (ev.Player.CurrentItem == null)
                 return;
 
-            if (_tools.Contains(ev.Player.CurrentItem))
+            if (_tools.Contains(ev.Player.CurrentItem) && !ev.Player.IsScp)
             {
                 ev.IsAllowed = false;
             }
@@ -150,11 +161,10 @@ SCP -> (데미지: 200, 쿨타임: 0.5초)
 
                 Timing.CallDelayed(180, () =>
                 {
-                    _object.Destroy();
-                    NetworkServer.Destroy(_object.gameObject);
+                    UnityEngine.Object.Destroy(_object.gameObject);
                 });
 
-                ev.Player.Hurt(_objects[selectedObject], "고된 노동이 목숨을 앗아갔습니다.");
+                ev.Player.Hurt((int)_objects[selectedObject][1], "고된 노동이 목숨을 앗아갔습니다.");
 
                 _stacks[ev.Player] = 0;
             }
