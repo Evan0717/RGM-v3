@@ -33,7 +33,7 @@ namespace RGM.Modes
 
 * 발차기(ALT)로 엄폐물을 부술 수 있습니다.
 인간 -> (데미지: 40, 쿨타임: 0.5초)
-<color=red>SCP</color> -> (데미지: 200, 쿨타임: 0.5초)
+<color=red>SCP</color> -> (데미지: 100, 쿨타임: 0.5초)
 
 <b>[참고]</b>
 • 인간은 동전을 버릴 수 없지만, <color=red>SCP</color>는 동전을 버릴 수 있습니다.
@@ -175,6 +175,7 @@ namespace RGM.Modes
 
                         Timing.CallDelayed(180, () =>
                         {
+                            _object.Destroy();
                             UnityEngine.Object.Destroy(_object.gameObject);
                         });
                     }
@@ -199,7 +200,7 @@ namespace RGM.Modes
             Vector3 _forward = ev.Player.CameraTransform.forward;
 
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, _forward, out RaycastHit hit, 3, (LayerMask)1))
-                GGUtils.HealthObject.DamageObject(ev.Player, ev.Player.IsScp ? 200 : 40, hit);
+                GGUtils.HealthObject.DamageObject(ev.Player, ev.Player.IsScp ? 100 : 40, hit);
 
             _cooldownPlayers.Add(ev.Player);
 
