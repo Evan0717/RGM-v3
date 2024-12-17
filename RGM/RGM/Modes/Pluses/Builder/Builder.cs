@@ -73,6 +73,8 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            Server.ExecuteCommand($"/mp load bm");
+
             foreach (var player in Player.List)
             {
                 Verified(player);
@@ -89,7 +91,7 @@ namespace RGM.Modes
                         int objectIndex = stackValue >= _objects.Count ? _objects.Count - 1 : stackValue;
                         string selectedObject = _objects.ElementAt(objectIndex).Key;
 
-                        p.ShowHint($"<size=25><b>건축 도구</b>ㅣLvl {objectIndex + 1}. {(string)_objects[selectedObject][0]} (❤️ {(int)_objects[selectedObject][1]})</size>", 1.2f);
+                        p.ShowHint($"<size=25><b>건축 도구</b>ㅣLvl {objectIndex + 1}. {(string)_objects[selectedObject][0]} (❤️{(int)_objects[selectedObject][1]})</size>", 1.2f);
                     }
                 }
 
