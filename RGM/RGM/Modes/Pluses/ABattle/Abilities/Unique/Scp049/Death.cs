@@ -26,14 +26,13 @@ public class Death : Ability
         Exiled.Events.Handlers.Scp049.Attacking -= OnScp049Attacking;
     }
 
-    public void OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
+    public IEnumerator<float> OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
     {
         if (ev.Player != Owner)
-            return;
+            yield break;
 
-        Timing.CallDelayed(0.1f, () =>
-        {
-            ev.Scp049.RemainingAttackCooldown /= 2;
-        });
+        yield return Timing.WaitForOneFrame;
+
+        ev.Scp049.RemainingAttackCooldown /= 2;
     }
 }

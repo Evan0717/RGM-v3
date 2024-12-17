@@ -3,7 +3,9 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using System.Collections.Generic;
 using UnityEngine;
+using static PlayerList;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -12,22 +14,29 @@ public class DimensionThief : Ability
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Dying += OnDying;
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    public IEnumerator<float> OnDying(DyingEventArgs ev)
     {
         if (ev.Attacker == null || ev.Attacker != Owner)
-            return;
+            yield break;
 
-        foreach (var Ability in ABattle.Instance.PlayerAbilities[ev.Player])
-            ev.Attacker.AddAbility(Ability.Data.AbilityType);
+        List<Ability> _abilities = ABattle.Instance.PlayerAbilities[ev.Player];
 
-        ev.Player.ShowHint("능력을 강탈당했습니다!");
+        yield return Timing.WaitForOneFrame;
+
+        if (ev.Player.IsDead)
+        {
+            foreach (var _ability in _abilities)
+                ev.Attacker.AddAbility(_ability.Data.AbilityType);
+
+            ev.Player.ShowHint("능력을 강탈당했습니다!");
+        }
     }
 }
