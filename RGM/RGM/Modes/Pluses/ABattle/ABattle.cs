@@ -624,6 +624,15 @@ public class ABattle : Mode
         response = $"{index}번 능력 선택 완료!";
         return true;
     }
+
+    public void Reset(Player player)
+    {
+        player.RemoveAllAbilities();
+
+        PlayerWorkstations[player].Clear();
+        IsSelecting[player] = false;
+        IsLifeUsed[player] = false;
+    }
 }
 
 public static class ABattleExtensions

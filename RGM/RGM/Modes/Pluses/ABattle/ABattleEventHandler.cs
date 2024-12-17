@@ -20,6 +20,7 @@ public class ABattleEventHandler(ABattle aBattle)
         Exiled.Events.Handlers.Player.Verified += OnVerified;
         Exiled.Events.Handlers.Player.Jumping += OnJumping;
         Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
         Exiled.Events.Handlers.Scp079.GainingLevel += OnGainingLevel;
 
@@ -83,11 +84,21 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnDied(DiedEventArgs ev)
     {
-        ev.Player.RemoveAllAbilities();
+        aBattle.Reset(ev.Player);
+    }
 
-        aBattle.PlayerWorkstations[ev.Player].Clear();
-        aBattle.IsSelecting[ev.Player] = false;
-        aBattle.IsLifeUsed[ev.Player] = false;
+    private IEnumerator<float> OnEscaping(EscapingEventArgs ev)
+    {
+        List<AbilityType> _abilities = aBattle.PlayerAbilities[ev.Player].Select(x => x.Data.AbilityType).ToList();
+
+        aBattle.Reset(ev.Player);
+
+        yield return Timing.WaitForOneFrame;
+
+        foreach (var ability in _abilities)
+            ev.Player.AddAbility(ability);
+
+        ev.Player.AddBroadcast(10, $"<size=25><b>탈출하였으므로 모든 능력을 제거한 후, 수복하였습니다.</b></size>");
     }
 
     private void OnGainingLevel(GainingLevelEventArgs ev)
