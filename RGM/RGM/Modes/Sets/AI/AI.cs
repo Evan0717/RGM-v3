@@ -78,7 +78,7 @@ namespace RGM.Modes
         public void OnHurting(HurtingEventArgs ev)
         {
             if (ev.Player.IsScp)
-                ev.DamageHandler.Damage /= 20;
+                ev.DamageHandler.Damage /= 5;
         }
     }
 }
