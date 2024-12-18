@@ -37,10 +37,8 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(1f);
 
-            foreach (var player in Player.List)
-            {
+            foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
-            }
 
             yield break;
         }
@@ -52,7 +50,7 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            if (player.Role.Type != RoleTypeId.Scp079)
+            if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
             {
                 List<ItemType> FirearmList = new List<ItemType>()
                 {
