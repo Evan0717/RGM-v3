@@ -228,7 +228,7 @@ namespace RGM.Modes
                         }
                         else
                         {
-                            SendAlert("아무 일도 일어나지 않았습니다. ({6 - Count}/6)");
+                            SendAlert($"아무 일도 일어나지 않았습니다. ({6 - Count}/6)");
 
                             if (Player == null || Attacker == Player)
                             {
