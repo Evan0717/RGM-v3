@@ -19,6 +19,8 @@ using DiscordInteraction.Discord;
 
 using static RGM.Variables.ServerManagers;
 using RGM.API.Interfaces;
+using AdminToys;
+using MapEditorReborn.API.Features.Objects;
 
 namespace RGM.API.Features
 {
@@ -411,6 +413,23 @@ RP: {uc[1]}
             {
                 _point = raycastHit.point;
                 return true;
+            }
+        }
+
+        public void GetAllChildren(Transform parentTransform)
+        {
+            foreach (Transform childTransform in parentTransform)
+            {
+                Debug.Log(childTransform.name);
+
+                PrimitiveObject primitiveObject = childTransform.GetComponent<PrimitiveObject>();
+
+                if (primitiveObject != null)
+                {
+                    primitiveObject.Base.PrimitiveFlags = PrimitiveFlags.Visible;
+                }
+
+                GetAllChildren(childTransform);
             }
         }
     }
