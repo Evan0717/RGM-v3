@@ -171,13 +171,20 @@ namespace RGM.Modes
                 {
                     if (!ev.Player.IsDead)
                     {
-                        SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, isStatic: true);
-
-                        Timing.CallDelayed(180, () =>
+                        if (ev.Player.CurrentRoom.Type.ToString().Contains("Elevator") || Room.Get(pos).Type.ToString().Contains("Elevator"))
                         {
-                            _object.Destroy();
-                            UnityEngine.Object.Destroy(_object.gameObject);
-                        });
+                            ev.Player.ShowHint($"엘레베이터에는 엄폐물을 설치할 수 없습니다.", 1);
+                        }
+                        else
+                        {
+                            SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, isStatic: true);
+
+                            Timing.CallDelayed(180, () =>
+                            {
+                                _object.Destroy();
+                                UnityEngine.Object.Destroy(_object.gameObject);
+                            });
+                        }
                     }
                 });
 
