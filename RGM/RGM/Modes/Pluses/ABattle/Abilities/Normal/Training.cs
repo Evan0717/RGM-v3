@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("단련", "공격력이 20% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
+[Ability("단련", "공격력이 12% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
 public class Training : Ability
 {
     public override void OnEnabled()
@@ -24,6 +24,6 @@ public class Training : Ability
         if (ev.Attacker != Owner || ev.Attacker.Role.Type == RoleTypeId.Scp173)
             return;
 
-        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.2f;
+        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.12f;
     }
 }
