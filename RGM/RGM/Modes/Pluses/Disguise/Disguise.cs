@@ -14,7 +14,7 @@ using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Disguise)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Disguise)]
     public class Disguise : Mode
     {
         public override string Name => "변장";
@@ -58,6 +58,8 @@ SCP-079
                 Verified(player);
                 Spawned(player);
             }
+
+            yield return Timing.WaitForSeconds(2);
 
             while (true)
             {
