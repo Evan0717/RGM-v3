@@ -40,11 +40,11 @@ namespace RGM.Modes
             {
                 List<EffectType> Effects = Tools.EnumToList<EffectType>();
 
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
                     EffectType Effect = Tools.GetRandomValue(Effects);
-                    byte Intensity = (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(24, 61)));
-                    float Duration = UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(24, 61)));
+                    byte Intensity = (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(48, UnityEngine.Random.Range(64, UnityEngine.Random.Range(100, 255)))));
+                    float Duration = UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(24, UnityEngine.Random.Range(48, 61))));
 
                     player.EnableEffect(Effect, Intensity, Duration);
                     player.ShowHint($"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 {Duration}초 동안 적용되는 중입니다..", Duration);
