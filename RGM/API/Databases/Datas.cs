@@ -78,7 +78,9 @@ namespace RGM.API.DataBases
             {"솔라 테라", new List<string>() {"<b><color=#FD2626>솔</color><color=#FD411E>라</color> <color=#FE770F>테</color><color=#FE9207>라</color></b>", "멜트다운"}},
             {"Kerfus", new List<string>() {"<b><color=#6D8F97>K</color><color=#608294>e</color><color=#547592>r</color><color=#48698F>f</color><color=#3C5C8D>u</color><color=#304F8B>s</color></b>", "찌부"}},
             {"은제 말뚝", new List<string>() {"<b><color=#1A996E>은</color><color=#2B916F>제</color> <color=#4F8271>말</color><color=#617A72>뚝</color></b>", "관.통"}},
-            {"KO 사인", new List<string>() {"<b><color=#D6A624>K</color><color=#DBB729>O</color> <color=#E6DB33>사</color><color=#ECED38>인</color></b>", "<b>넉 다 운</b>"}}
+            {"KO 사인", new List<string>() {"<b><color=#D6A624>K</color><color=#DBB729>O</color> <color=#E6DB33>사</color><color=#ECED38>인</color></b>", "<b>넉 다 운</b>"}},
+            {"크리스마스 트리", new List<string>() { "<b><color=#FF0000>크</color><color=#FE3E3F>리</color><color=#FD7D7F>스</color><color=#FCBCBE>마</color><color=#FBFBFE>스</color> <color=#7DD77F>트</color><color=#3EC53F>리</color></b>", "<color=#FA5858>산타</color>"}},
+            {"크리스마스 볼", new List<string>() { "<b><color=#FF0000>크</color><color=#FD5354>리</color><color=#FCA7A9>스</color><color=#FAFBFE>마</color><color=#A7E3A9>스</color> <color=#00B300>볼</color></b>", "<color=#B45F04>루돌프</color>"}},
         };
 
         public static List<DamageType> BlockDamageTypes = new List<DamageType>()
