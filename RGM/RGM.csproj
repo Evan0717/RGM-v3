@@ -366,9 +366,10 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Tutorial\ThirdForce.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Tutorial\Tongue.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Ability.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\AddAbility.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\Select.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\SetExtraMode.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\ClientCommands\GetExtraModeDescription.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\RemoteAdminCommands\AddAbility.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\ClientCommands\Select.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Commands\RemoteAdminCommands\SetExtraMode.cs" />
     <Compile Include="RGM\Modes\Pluses\AdditionalWave\AdditionalWave.cs" />
     <Compile Include="RGM\Modes\Pluses\Blackout\Blackout.cs" />
     <Compile Include="RGM\Modes\Pluses\Blessing\Blessing.cs" />

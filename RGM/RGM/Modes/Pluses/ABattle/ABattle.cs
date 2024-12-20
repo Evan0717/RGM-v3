@@ -38,6 +38,10 @@ public class ABattle : Mode
 • <color=##DEEFED>시너지</color> - ???
 
 50% 확률로 추가 모드가 활성화됩니다.
+
+<size=25><b>모드 전용 명령어</b></size>
+<size=20>.(번호) - 1번부터 5번까지 있습니다. 능력을 선택할 때 사용됩니다.</size>
+<size=20>.추가모드 - 현재 워크스테이션 업그레이드 모드의 추가 모드를 확인합니다.</size>
 """;
     public override string Color => "00FFFF";
 
@@ -175,6 +179,7 @@ public class ABattle : Mode
         QueryProcessor.DotCommandHandler.RegisterCommand(new SelectThird());
         QueryProcessor.DotCommandHandler.RegisterCommand(new SelectFourth());
         QueryProcessor.DotCommandHandler.RegisterCommand(new SelectFifth());
+        QueryProcessor.DotCommandHandler.RegisterCommand(new GetExtraMode());
 
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new AddAbility());
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetExtraMode());
@@ -659,9 +664,9 @@ public class ABattle : Mode
             {
                 case <= 2:
                     return AbilityCategory.Mythic;
-                case <= 10:
+                case <= 4:
                     return AbilityCategory.Legend;
-                case <= 110:
+                case <= 85:
                     return AbilityCategory.Epic;
                 case <= 355:
                     return AbilityCategory.Rare;
