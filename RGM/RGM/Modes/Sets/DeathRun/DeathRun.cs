@@ -15,7 +15,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.DeathRun)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.DeathRun)]
     public class DeathRun : Mode
     {
         public override string Name => "데스런";
