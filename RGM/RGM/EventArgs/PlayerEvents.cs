@@ -573,7 +573,7 @@ namespace RGM.EventArgs
                     return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.DisplayNickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
             }
 
-            foreach (var player in Player.List.Where(x => x.IsDead))
+            foreach (var player in Player.List.Where(x => x.IsDead || x == ev.Attacker))
                 player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>");
 
             if (ev.Attacker != null && !ev.Attacker.IsNPC)
