@@ -30,26 +30,33 @@ public class EyeMan : Ability
     {
         while (true)
         {
-            foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
+            try
             {
-                if (Owner != near && Owner.LeadingTeam != near.LeadingTeam)
+                foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
                 {
-                    near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
-                    near.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                    near.Hurt(Owner.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
-                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
+                    if (Owner != near && Owner.LeadingTeam != near.LeadingTeam)
+                    {
+                        near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                        near.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                        near.Hurt(near.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
+                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
+                    }
+                }
+
+                if (Tools.TryGetLookPlayer(Owner, 100f, out Player target))
+                {
+                    if (Owner != target && Owner.LeadingTeam != target.LeadingTeam)
+                    {
+                        target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                        target.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                        target.Hurt(target.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
+                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
+                    }
                 }
             }
-
-            if (Tools.TryGetLookPlayer(Owner, 100f, out Player target))
+            catch (Exception e)
             {
-                if (Owner != target && Owner.LeadingTeam != target.LeadingTeam)
-                {
-                    target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
-                    target.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                    target.Hurt(Owner.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
-                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
-                }
+                Log.Error($"눈빛맨 오류: {e}");
             }
 
             yield return Timing.WaitForSeconds(0.1f);
