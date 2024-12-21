@@ -312,46 +312,48 @@ namespace RGM.EventArgs
                         ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
                 }
             }
-
-            if (PlayersInfo.ContainsKey(ev.Player.UserId))
+            else
             {
-                string UserId = ev.Player.UserId;
-
-                yield return Timing.WaitForSeconds(1f);
-
-                for (int i = 1; i < 181; i++)
+                if (PlayersInfo.ContainsKey(ev.Player.UserId))
                 {
-                    foreach (var player in Player.List.Where(x => !x.IsNPC))
-                    {
-                        if (UserId == player.UserId)
-                        {
-                            player.Role.Set(PlayersInfo[UserId].RoleType);
-                            player.MaxHealth = PlayersInfo[UserId].MaxHealth;
-                            player.Health = PlayersInfo[UserId].Health;
-
-                            foreach (var effect in PlayersInfo[UserId].ActiveEffects)
-                                player.EnableEffect(effect, effect.Intensity, effect.Duration);
-
-                            player.ClearItems();
-
-                            foreach (var item in PlayersInfo[UserId].Items)
-                                player.AddItem(item.Type);
-
-                            player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[UserId].CurrentItem.Type);
-
-                            player.Position = new Vector3(PlayersInfo[UserId].Position.x, PlayersInfo[UserId].Position.y, PlayersInfo[UserId].Position.z);
-
-                            if (PlayersInfo.ContainsKey(UserId))
-                                PlayersInfo.Remove(UserId);
-
-                            Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
-
-                            PlayersInfo.Remove(player.UserId);
-                            yield break;
-                        }
-                    }
+                    string UserId = ev.Player.UserId;
 
                     yield return Timing.WaitForSeconds(1f);
+
+                    for (int i = 1; i < 181; i++)
+                    {
+                        foreach (var player in Player.List.Where(x => !x.IsNPC))
+                        {
+                            if (UserId == player.UserId)
+                            {
+                                player.Role.Set(PlayersInfo[UserId].RoleType);
+                                player.MaxHealth = PlayersInfo[UserId].MaxHealth;
+                                player.Health = PlayersInfo[UserId].Health;
+
+                                foreach (var effect in PlayersInfo[UserId].ActiveEffects)
+                                    player.EnableEffect(effect, effect.Intensity, effect.Duration);
+
+                                player.ClearItems();
+
+                                foreach (var item in PlayersInfo[UserId].Items)
+                                    player.AddItem(item.Type);
+
+                                player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[UserId].CurrentItem.Type);
+
+                                player.Position = new Vector3(PlayersInfo[UserId].Position.x, PlayersInfo[UserId].Position.y, PlayersInfo[UserId].Position.z);
+
+                                if (PlayersInfo.ContainsKey(UserId))
+                                    PlayersInfo.Remove(UserId);
+
+                                Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
+
+                                PlayersInfo.Remove(player.UserId);
+                                yield break;
+                            }
+                        }
+
+                        yield return Timing.WaitForSeconds(1f);
+                    }
                 }
             }
         }
@@ -404,7 +406,7 @@ namespace RGM.EventArgs
                         IsScp3114Enabled = true;
                     }
 
-                    if (CurrentMode.GetModeData().Info == ModeInfo.Set)
+                    if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
                     {
                         PlayersInfo.Add(ev.Player.UserId, new PlayerInfo
                         {
@@ -533,7 +535,7 @@ namespace RGM.EventArgs
                 }
                 else
                 {
-                    if (ev.IsAllowed)
+                    if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player)
                         PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
                 }
             }
