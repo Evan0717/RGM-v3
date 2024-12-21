@@ -47,6 +47,7 @@ public class Magician : Ability
         if (GodModePlayers.Contains(ev.Attacker))
             GodModePlayers.Remove(ev.Attacker);
 
+        ev.Attacker.RemoveAllAbilities();
         ev.Attacker.Kill($"영혼이 교체되는 마술에 당했네요!");
 
         ABattle.Instance.IsLifeUsed[Owner] = true;
