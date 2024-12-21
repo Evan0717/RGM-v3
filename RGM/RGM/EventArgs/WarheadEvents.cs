@@ -21,7 +21,7 @@ namespace RGM.EventArgs
 
         public static void OnDetonating(Exiled.Events.EventArgs.Warhead.DetonatingEventArgs ev)
         {
-            foreach (var player in Player.List.Where(x => x.Zone != ZoneType.Surface || 
+            foreach (var player in Player.List.Where(x => x.IsAlive && x.Zone != ZoneType.Surface || 
             Physics.RaycastAll(x.Position, Vector3.down, 5, (LayerMask)1).Any(hit => hit.transform.parent != null && hit.transform.parent.name == "ElevatorChamber Gates(Clone)")
             ))
             {
