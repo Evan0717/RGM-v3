@@ -115,6 +115,9 @@ public class ABattle : Mode
             if (extraMode == "피버")
                 Server.ExecuteCommand("/mp load ABattle");
 
+            if (extraMode == "캐시 청소")
+                Timing.RunCoroutine(ABattle.Instance.ClearCache());
+
             return extraMode;
         }   
         else
@@ -185,9 +188,6 @@ public class ABattle : Mode
 
         Timing.RunCoroutine(OnModeStarted());
         Timing.RunCoroutine(HintCoroutine());
-
-        if (CurrentExtraMode == "캐시 청소")
-            Timing.RunCoroutine(ClearCache());
     }
 
     private IEnumerator<float> OnModeStarted()
