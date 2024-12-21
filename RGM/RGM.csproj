@@ -208,6 +208,7 @@
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Report.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\ScpList.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Suicide.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRP.cs" />
     <Compile Include="RGM\IEnumerators\LobbyManagers.cs" />
     <Compile Include="RGM\IEnumerators\ServerManagers.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Custom.cs" />

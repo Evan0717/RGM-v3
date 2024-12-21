@@ -27,6 +27,9 @@ namespace RGM.Modes
 """
 <b><i><color=#FF00DD>소</color><color=#EB01CD>울</color><color=#D702BD>메</color><color=#C404AD>이</color><color=#B0059D>트</color> <color=#89077D>메</color><color=#76096D>이</color><color=#620A5D>킹</color></i></b>을 시도할 때,
 체력이 높은 쪽으로 지정됩니다.
+
+<color=red>SCP</color>가 포함된 짝들만 살아남은 경우 반드시 서로를 죽여야 합니다.
+<color=red><b>이행하지 않으면 제재 대상에 해당됩니다.</b></color>
 """;
         public override string Color => "FF00FF";
 
@@ -43,11 +46,12 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.UsingItemCompleted += OnUsingItemCompleted;
-            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
+            Exiled.Events.Handlers.Player.Escaping += OnEscaping; 
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(SoulMateMatching());
             Timing.RunCoroutine(CurrentItemAsync());
+            Timing.RunCoroutine(CheckIfScpSoulMate());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -189,6 +193,23 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public IEnumerator<float> CheckIfScpSoulMate()
+        {
+            while (true)
+            {
+                int totalSoulMatePairs = soulMates.Count;
+                int scpSoulMatePairs = soulMates.Count(pair => pair.Key.IsScp || pair.Value.IsScp);
+
+                if (totalSoulMatePairs == scpSoulMatePairs)
+                {
+                    foreach (var player in Player.List.Where(x => x.IsAlive))
+                        player.ShowHint($"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
