@@ -148,6 +148,12 @@ namespace RGM.Modes
                 }
             }
 
+            foreach (var player in Finals)
+            {
+                if (!player.IsConnected)
+                    Finals.Remove(player);
+            }
+
             Timing.RunCoroutine(Process("결승전", Vector3.zero));
 
             yield break;
