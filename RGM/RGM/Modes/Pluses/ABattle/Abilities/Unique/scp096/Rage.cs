@@ -36,7 +36,9 @@ public class Rage : Ability
         if (Owner.Role is Scp096Role scp096)
         {
             if (scp096.RageManager.IsEnraged)
-                ev.DamageHandler.Damage *= 3 / 4;
+            {
+                ev.Amount *= 0.75f;
+            }
         }
     }
 }
