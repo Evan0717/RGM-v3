@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using MEC;
 using Mirror;
 using MultiBroadcast;
+using MultiBroadcast.API;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -133,7 +134,7 @@ zombie2
                         foreach (var player in Player.List)
                         {
                             player.ClearBroadcasts();
-                            player.Broadcast(2, $"<b><color=red>{10 - i}</color>초 후 <i><color=yellow>{RoundCount + 1}번째 라운드</color></i>가 시작됩니다.</b>");
+                            player.AddBroadcast(1, $"<b><color=red>{10 - i}</color>초 후 <i><color=yellow>{RoundCount + 1}번째 라운드</color></i>가 시작됩니다.</b>");
                         }
                         yield return Timing.WaitForSeconds(1f);
                     }

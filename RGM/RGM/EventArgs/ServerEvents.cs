@@ -212,6 +212,13 @@ namespace RGM.EventArgs
 
                 foreach (var player in Player.List)
                     Server.ExecuteCommand($"/speak {player.Id} 1");
+
+                if (CurrentMode.GetModeData().Info == ModeInfo.Plus || new List<ModeType>() 
+                {
+                    ModeType.DeathRun
+                }.Contains(CurrentMode.GetModeData().Type)
+                )
+                    Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.LeadingTeam == ev.LeadingTeam).ToList(), 1));
             }
             catch (Exception e)
             {

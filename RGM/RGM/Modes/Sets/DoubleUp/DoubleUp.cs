@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Server;
 using MEC;
 using MultiBroadcast;
 using MultiBroadcast.API;
@@ -56,6 +57,8 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
         {
             Exiled.Events.Handlers.Player.Verified += OnVerified;
 
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -77,6 +80,11 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
         {
             ev.Player.AddBroadcast(10, Desc);
             ev.Player.SendConsoleMessage($"\n{Desc}", "white");
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

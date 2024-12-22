@@ -147,6 +147,22 @@ RP: {uc[1]}
                 UnityEngine.Object.Destroy(rtc);
         }
 
+        public static IEnumerator<float> SetWinner(List<Player> playerList, int amount)
+        {
+            foreach (var player in playerList)
+            {
+                UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount).ToString();
+            }
+
+            while (true)
+            {
+                foreach (var player in Player.List)
+                    player.AddBroadcast(1, $"<size={50 - playerList.Count()}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.Nickname}</color>"))}</b>(이)가 <b>{amount}</b> RP를 획득하였습니다.</size>");
+
+                yield return Timing.WaitForSeconds(1);
+            }
+        }
+
         public static bool TryGetNearestPlayer(Player player, out Player nearestPlayer, out float radius, List<Player> exceptPlayers = null)
         {
             nearestPlayer = null;

@@ -6,11 +6,13 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Scp244;
+using Exiled.Events.EventArgs.Server;
 using Interactables.Interobjects.DoorUtils;
 using MEC;
 using PlayerRoles;
 using PlayerStatsSystem;
 using Respawning;
+using RGM.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +46,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
+
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -149,6 +153,15 @@ namespace RGM.Modes
         {
             if (ev.Reason.ToLower().Contains("afk"))
                 ev.IsAllowed = false;
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            if (Player.List.Where(x => x.IsAlive && !x.IsNPC).ToList()[0].Role.Type == RoleTypeId.Scp049)
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 15));
+
+            else
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

@@ -20,6 +20,7 @@ using RGM.API.Features;
 using static RGM.Variables.ServerManagers;
 using RGM.API.DataBases;
 using Respawning;
+using Exiled.Events.EventArgs.Server;
 
 namespace RGM.Modes
 {
@@ -50,6 +51,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.SelectingRespawnTeam += OnSelectingRespawnTeam;
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -168,6 +170,11 @@ namespace RGM.Modes
         {
             if (ev.Target == Level05 && ev.Target.Role.Type == RoleTypeId.Scientist)
                 ev.IsAllowed = false;
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

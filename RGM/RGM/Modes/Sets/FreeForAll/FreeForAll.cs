@@ -90,7 +90,7 @@ namespace RGM.Modes
             foreach (var player in Player.List)
             {
                 player.Position = BusterCall.Position;
-                player.Broadcast(5, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
+                player.AddBroadcast(5, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
             }
         }
 
@@ -116,6 +116,7 @@ namespace RGM.Modes
                     Round.IsLocked = false;
 
                     Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].Nickname}"));
+                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }
         }

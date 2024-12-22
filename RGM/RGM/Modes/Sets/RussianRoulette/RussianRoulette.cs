@@ -271,6 +271,7 @@ namespace RGM.Modes
                     player.AddBroadcast(20, $"<size=25>🎉 축하합니다, <b><color=yellow>{Finals[0].DisplayNickname}</color></b>(이)가 <b><color=#{ModeType.RussianRoulette.GetModeData().Color}>러시안 룰렛</color></b>에서 우승하였습니다! 🎉</size>");
 
                 Finals[0].DisableEffect(EffectType.Ensnared);
+                Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { Finals[0] }, 5));
             }
             else
             {

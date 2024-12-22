@@ -10,6 +10,7 @@ using MEC;
 using UnityEngine;
 using Exiled.API.Enums;
 using RGM.API.Features;
+using Exiled.Events.EventArgs.Server;
 
 namespace RGM.Modes
 {
@@ -28,6 +29,8 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -59,6 +62,11 @@ namespace RGM.Modes
                 SelectedDoor = Tools.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.Type.ToString().Contains("Scp079")).ToList());
 
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

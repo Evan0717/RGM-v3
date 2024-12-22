@@ -128,6 +128,7 @@ namespace RGM.Modes
                 if (!IsEnd)
                 {
                     Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><최초 탈출자 : {ev.Player.DisplayNickname}></size></b>"));
+                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { ev.Player }, 5));
                     IsEnd = true;
                 }
             }

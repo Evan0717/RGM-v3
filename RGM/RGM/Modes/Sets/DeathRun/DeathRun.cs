@@ -12,6 +12,8 @@ using Exiled.API.Enums;
 using PlayerRoles;
 using MultiBroadcast.API;
 using RGM.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
 
 namespace RGM.Modes
 {
@@ -38,6 +40,8 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Respawn.TimeUntilNextPhase = 10000;
+
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -97,6 +101,11 @@ namespace RGM.Modes
             Tagger.AddItem(ItemType.GunE11SR);
             for (int i=1; i<11; i++)
                 Tagger.AddItem(ItemType.Ammo556x45);
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

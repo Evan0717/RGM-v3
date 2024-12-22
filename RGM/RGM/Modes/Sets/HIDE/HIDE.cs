@@ -16,6 +16,8 @@ using PlayerRoles;
 using UnityEngine;
 using Exiled.API.Enums;
 using RGM.API.Features;
+using Exiled.Events.EventArgs.Server;
+using MultiBroadcast.API;
 
 namespace RGM.Modes
 {
@@ -47,6 +49,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
+
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(Timer());
@@ -109,7 +113,7 @@ namespace RGM.Modes
         {
             for (int i = 1; i < 180; i++)
             {
-                Player.List.ToList().ForEach(x => x.Broadcast(2, $"<size=25><color=#2ECCFA>NTF 승리</color>까지</color> {180 - i}초</size>", shouldClearPrevious: true));
+                Player.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color=#2ECCFA>NTF 승리</color>까지</color> {180 - i}초</size>"));
                 yield return Timing.WaitForSeconds(1f);
             }
 
@@ -162,6 +166,11 @@ namespace RGM.Modes
                     yield return Timing.WaitForSeconds(0.01f);
                 }
             }
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

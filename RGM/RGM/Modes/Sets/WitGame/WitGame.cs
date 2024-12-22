@@ -157,6 +157,7 @@ namespace RGM.Modes
             Round.IsLocked = false;
 
             Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<size=25>🎉 <b><color=yellow>{Player.List.Where(x => x.IsAlive).ToList()[0].Nickname}</color></b>(이)가 <color=#81F79F>눈치게임</color>에서 우승했습니다! 🎉</size>"));
+            Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { Player.List.Where(x => x.IsAlive).ToList()[0] }, 5));
 
             Player.List.Where(x => x.IsAlive).ToList()[0].DisableEffect(EffectType.Ensnared);
 

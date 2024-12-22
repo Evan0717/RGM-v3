@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using CustomRendering;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Server;
 using MEC;
 using Mirror;
 using MultiBroadcast;
+using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
@@ -38,6 +40,8 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.TimeUntilNextPhase = 10000;
 
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -61,7 +65,7 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     player.ClearBroadcasts();
-                    player.Broadcast(2, $"<size=25><b><color=red>{10 - i}초 뒤 술래가 출몰합니다.</color></b></size>");
+                    player.AddBroadcast(1, $"<size=25><b><color=red>{10 - i}초 뒤 술래가 출몰합니다.</color></b></size>");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -85,13 +89,18 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     player.ClearBroadcasts();
-                    player.Broadcast(2, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
+                    player.AddBroadcast(2, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
             Finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

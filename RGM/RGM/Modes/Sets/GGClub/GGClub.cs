@@ -19,6 +19,7 @@ using MultiBroadcast;
 using RGM.API.Features;
 using MultiBroadcast.API;
 using AudioPlayer.Commands.SubCommands;
+using Exiled.Events.EventArgs.Server;
 
 namespace RGM.Modes
 {
@@ -56,6 +57,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
+
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -274,6 +277,11 @@ namespace RGM.Modes
         public void OnSpawnedRagdoll(Exiled.Events.EventArgs.Player.SpawnedRagdollEventArgs ev)
         {
             ev.Ragdoll.Destroy();
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

@@ -15,6 +15,7 @@ using CustomPlayerEffects;
 using MultiBroadcast.API;
 using RGM.API.Interfaces;
 using RGM.API.Features;
+using Exiled.Events.EventArgs.Server;
 
 namespace RGM.Modes
 {
@@ -35,6 +36,8 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -112,6 +115,11 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(60f);
             }
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }
