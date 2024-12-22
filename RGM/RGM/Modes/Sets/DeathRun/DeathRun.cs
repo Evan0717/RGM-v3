@@ -69,7 +69,7 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     player.ClearPlayerBroadcasts();
-                    player.AddBroadcast(2, $"<size=30><b><color=red>{11 - i}</color>초 후 게임이 시작됩니다. 준비하세요!</b></size>");
+                    player.AddBroadcast(1, $"<size=30><b><color=red>{11 - i}</color>초 후 게임이 시작됩니다. 준비하세요!</b></size>");
                 }
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -87,7 +87,7 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     player.ClearPlayerBroadcasts();
-                    player.AddBroadcast(2, $"<size=25><b><color=yellow>과학자</color>가 총기를 입수하기까지 <color=red>{201 - i}</color>초 남았습니다.</b></size>");
+                    player.AddBroadcast(1, $"<size=25><b><color=yellow>과학자</color>가 총기를 입수하기까지 <color=red>{201 - i}</color>초 남았습니다.</b></size>");
                 }
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -105,7 +105,13 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
+            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }

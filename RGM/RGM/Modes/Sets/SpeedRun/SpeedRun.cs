@@ -136,7 +136,7 @@ namespace RGM.Modes
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
         {
-            Player.List.ToList().ForEach(x => x.AddBroadcast(10, $"<size=30>{ev.Player.DisplayNickname}(으)로 인해 10초 뒤 <color=red>핵</color>이 강제로 폭파됩니다.</size>"));
+            Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<size=30>{ev.Player.DisplayNickname}(으)로 인해 20초 뒤 <color=red>핵</color>이 강제로 폭파됩니다.</size>"));
 
             Timing.CallDelayed(10, Warhead.Detonate);
         }

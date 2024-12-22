@@ -243,7 +243,7 @@ namespace RGM.Modes
                 foreach (var player in Player.List)
                 {
                     player.ClearPlayerBroadcasts();
-                    player.AddBroadcast(2, $"<b><color=#FFF700>P</color><color=#FFC516>h</color><color=#FF942C>a</color><color=#FF6242>s</color><color=#FF3158>e</color></b> {Phase}");
+                    player.AddBroadcast(1, $"<b><color=#FFF700>P</color><color=#FFC516>h</color><color=#FF942C>a</color><color=#FF6242>s</color><color=#FF3158>e</color></b> {Phase}");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -281,7 +281,13 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
+            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }

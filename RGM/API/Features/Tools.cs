@@ -151,13 +151,16 @@ RP: {uc[1]}
         {
             foreach (var player in playerList)
             {
+                UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + amount).ToString();
                 UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount).ToString();
             }
+
+            UsersManager.SaveUsers();
 
             while (true)
             {
                 foreach (var player in Player.List)
-                    player.AddBroadcast(1, $"<size={50 - playerList.Count()}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.Nickname}</color>"))}</b>(이)가 <b>{amount}</b> RP를 획득하였습니다.</size>");
+                    player.AddBroadcast(1, $"<size={50 - playerList.Count()}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.Nickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, RP를 획득하였습니다.</size>");
 
                 yield return Timing.WaitForSeconds(1);
             }

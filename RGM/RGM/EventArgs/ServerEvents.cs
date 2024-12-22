@@ -198,31 +198,24 @@ namespace RGM.EventArgs
 
         public static void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
-            try
+            Tools.TryInstallMode(ModeType.FriendlyFire);
+
+            foreach (var player in Player.List)
+                Server.ExecuteCommand($"/speak {player.Id} 1");
+
+            if (CurrentMode.GetModeData().Info == ModeInfo.Plus || new List<ModeType>() 
             {
-                foreach (var player in Player.List.Where(x => !x.IsNPC))
-                {
-                    UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + 1).ToString();
-                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + 1).ToString();
-                }
-
-                UsersManager.SaveUsers();
-
-                Tools.TryInstallMode(ModeType.FriendlyFire);
-
-                foreach (var player in Player.List)
-                    Server.ExecuteCommand($"/speak {player.Id} 1");
-
-                if (CurrentMode.GetModeData().Info == ModeInfo.Plus || new List<ModeType>() 
-                {
-                    ModeType.DeathRun
-                }.Contains(CurrentMode.GetModeData().Type)
-                )
-                    Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.LeadingTeam == ev.LeadingTeam).ToList(), 1));
-            }
-            catch (Exception e)
+                ModeType.DeathRun
+            }.Contains(CurrentMode.GetModeData().Type)
+            )
             {
-                Log.Error(e);
+                IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+                if (players.Count() == 1)
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+                else if (players.Count() > 1)
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
             }
 
             Timing.CallDelayed(19f, () =>

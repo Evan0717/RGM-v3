@@ -54,7 +54,7 @@ namespace RGM.Modes
             for (int i = 0; i < 300; i++)
             {
                 Player.List.ToList().ForEach(x => x.ClearBroadcasts());
-                Player.List.ToList().ForEach(x => x.AddBroadcast(2, $"<b><size=25><color=green>{300 - i}초 후</color> 게임이 종료됩니다.</size></b>"));
+                Player.List.ToList().ForEach(x => x.AddBroadcast(1, $"<b><size=25><color=green>{300 - i}초 후</color> 게임이 종료됩니다.</size></b>"));
                 yield return Timing.WaitForSeconds(1f);
             }
 
@@ -63,7 +63,13 @@ namespace RGM.Modes
             string playerNames = string.Join(", ", farthestPlayers.Select(x => $"<color=#ffd700>{x.DisplayNickname}</color>(Stage {site02.Stage[x.UserId]})"));
 
             Player.List.ToList().ForEach(x => x.AddBroadcast(15, $"<b><size=35>가장 멀리 간 유저는 {playerNames}입니다!</size></b>"));
-            Timing.RunCoroutine(Tools.SetWinner(farthestPlayers.ToList(), 1));
+
+            if (farthestPlayers.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(farthestPlayers.ToList(), 5));
+
+            else if (farthestPlayers.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(farthestPlayers.ToList(), 1));
+
             Round.IsLocked = false;
         }
     }

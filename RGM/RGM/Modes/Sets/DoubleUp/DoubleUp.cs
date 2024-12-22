@@ -84,7 +84,13 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
+            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }

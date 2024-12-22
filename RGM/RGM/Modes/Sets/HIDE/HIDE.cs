@@ -170,7 +170,13 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
+            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }

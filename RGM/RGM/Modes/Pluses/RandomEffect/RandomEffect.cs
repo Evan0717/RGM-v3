@@ -42,7 +42,7 @@ namespace RGM.Modes
 
                 foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
-                    EffectType Effect = Tools.GetRandomValue(Effects);
+                    EffectType Effect = Tools.GetRandomValue(Effects.Where(x => x != EffectType.PocketCorroding).ToList());
                     byte Intensity = (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(48, UnityEngine.Random.Range(64, UnityEngine.Random.Range(100, 255)))));
                     float Duration = UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(24, UnityEngine.Random.Range(48, 61))));
 
