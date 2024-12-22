@@ -19,7 +19,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
+            string userId = Tools.TryGetUserId(arguments.At(0));
             int rp = int.Parse(arguments.At(1));
 
             if (rp < 0)
@@ -29,10 +29,10 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
+                List<string> uc = UsersManager.UsersCache[userId];
 
                 uc[1] = rp.ToString();
-                UsersManager.UsersCache[player.UserId] = uc;
+                UsersManager.UsersCache[userId] = uc;
                 response = "RP 설정 완료!\n-";
 
                 UsersManager.SaveUsers();

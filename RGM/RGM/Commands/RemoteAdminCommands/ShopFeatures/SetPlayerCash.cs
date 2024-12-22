@@ -19,7 +19,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(arguments.At(0));
+            string userId = Tools.TryGetUserId(arguments.At(0));
             int cash = int.Parse(arguments.At(1));
 
             if (cash < 0)
@@ -29,10 +29,10 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
+                List<string> uc = UsersManager.UsersCache[userId];
 
                 uc[2] = cash.ToString();
-                UsersManager.UsersCache[player.UserId] = uc;
+                UsersManager.UsersCache[userId] = uc;
                 response = "캐쉬 설정 완료!\n-";
 
                 UsersManager.SaveUsers();
