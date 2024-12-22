@@ -201,7 +201,11 @@ public class ABattle : Mode
 
                 ExtraModeNotion(player);
 
-                player.Role.Set(player.Role.Type, RoleSpawnFlags.None);
+                RoleTypeId roleTypeId = player.Role.Type;
+
+                if (roleTypeId == RoleTypeId.Scp106)
+                    player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
+                player.Role.Set(roleTypeId, RoleSpawnFlags.None);
             }
             catch (Exception e)
             {
