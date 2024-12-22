@@ -205,7 +205,11 @@ public class ABattle : Mode
 
                 if (roleTypeId == RoleTypeId.Scp106)
                     player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
-                player.Role.Set(roleTypeId, RoleSpawnFlags.None);
+
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
+                    player.Role.Set(roleTypeId, RoleSpawnFlags.None);
+                });
             }
             catch (Exception e)
             {
