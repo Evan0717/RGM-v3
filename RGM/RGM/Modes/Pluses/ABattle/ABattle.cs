@@ -200,7 +200,8 @@ public class ABattle : Mode
                 IsLifeUsed.Add(player, false);
 
                 ExtraModeNotion(player);
-                ABattleEventHandler.Instance.Spawned(player);
+
+                player.Role.Set(player.Role.Type, RoleSpawnFlags.None);
             }
             catch (Exception e)
             {

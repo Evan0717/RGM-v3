@@ -48,30 +48,25 @@ public class ABattleEventHandler(ABattle aBattle)
         }
     }
 
-    private void OnSpawned(SpawnedEventArgs ev)
+    private IEnumerator<float> OnSpawned(SpawnedEventArgs ev)
     {
-        Timing.RunCoroutine(Spawned(ev.Player));
-    }
-
-    public IEnumerator<float> Spawned(Player player)
-    {
-        if (player.IsDead)
+        if (ev.Player.IsDead)
             yield break;
 
         if (aBattle.CurrentExtraMode == "골드 전주곡")
         {
-            if (player.Role.Type == RoleTypeId.Scp079)
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
+            if (ev.Player.Role.Type == RoleTypeId.Scp079)
+                ev.Player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
 
             else
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Epic, 1).First());
+                ev.Player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Epic, 1).First());
         }
         else if (aBattle.CurrentExtraMode == "프리즘 전주곡")
         {
-            if (player.Role.Type == RoleTypeId.Scp079)
+            if (ev.Player.Role.Type == RoleTypeId.Scp079)
             {
                 for (int i = 0; i < Random.Range(1, 3); i++)
-                    player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
+                    ev.Player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
             }
 
             else
@@ -87,7 +82,7 @@ public class ABattleEventHandler(ABattle aBattle)
                     return AbilityCategory.Epic;
                 }
 
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(getRandom(), 1).First());
+                ev.Player.AddAbility(ABattle.Instance.GetRandomAbilities(getRandom(), 1).First());
             }
         }
     }
