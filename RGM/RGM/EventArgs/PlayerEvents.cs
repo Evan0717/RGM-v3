@@ -171,6 +171,7 @@ namespace RGM.EventArgs
 
 <b><size=35><color=#C8FE2E>개발진</color></size></b>
 @GoldenPig1205 - 메인 개발자
+@cocoa_1.19 - 서브? 개발자
 
 <b><size=35><color=#F79F81>후원자</color></size></b>
 <size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @suabwy_1059</size>
@@ -654,11 +655,6 @@ namespace RGM.EventArgs
             {
                 ev.Player.Group.Permissions = ev.Player.Group.Permissions;
             });
-        }
-
-        public static void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
-        {
-            Server.ExecuteCommand($"/pfx {ev.Effect}");
         }
     }
 }
