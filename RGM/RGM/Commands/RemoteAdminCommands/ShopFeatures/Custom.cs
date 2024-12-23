@@ -17,7 +17,7 @@ using static RGM.Variables.ServerManagers;
 namespace RGM.Commands.RemoteAdminCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class AddCustom : ICommand
+    public class AddCustomFeature : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -26,7 +26,7 @@ namespace RGM.Commands.RemoteAdminCommands
 
             if (arguments.Count < 2)
             {
-                response = "플레이어 이름과 커스텀 기능을 입력해주세요.\n-";
+                response = "acf <player> <custom feature name>";
                 return false;
             }
             else if (Customizations.ContainsKey(args))
@@ -37,7 +37,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 {
                     uc[7] = args;
                     UsersManager.UsersCache[UserId] = uc;
-                    response = "커스텀 기능 추가 완료!\n-";
+                    response = "Successfully add custom feature.";
 
                     UsersManager.SaveUsers();
                     return true;
@@ -46,14 +46,14 @@ namespace RGM.Commands.RemoteAdminCommands
                 {
                     if (uc[7].Contains(args))
                     {
-                        response = "이미 해당 커스텀 기능을 보유 중입니다.\n-";
+                        response = "This player already have this custom feature.";
                         return false;
                     }
                     else
                     {
                         uc[7] += $"/{args}";
                         UsersManager.UsersCache[UserId] = uc;
-                        response = "커스텀 기능 추가 완료!\n-";
+                        response = "Successfully add custom feature.";
 
                         UsersManager.SaveUsers();
                         return true;
@@ -62,14 +62,14 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                response = "존재하지 않는 커스텀 기능 이름입니다.\n-";
+                response = "This custom feature is not exist.";
                 return false;
             }
         }
 
         public string Command { get; } = "addcustomfeature";
 
-        public string[] Aliases { get; } = { "acf" };
+        public string[] Aliases { get; } = { "acf", "커스텀" };
 
         public string Description { get; } = "특정 유저에게 커스텀 기능을 지급합니다.";
 

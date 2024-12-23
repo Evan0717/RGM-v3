@@ -26,7 +26,7 @@ namespace RGM.Commands.RemoteAdminCommands
 
             if (arguments.Count < 2)
             {
-                response = "플레이어 이름과 페인트 이름을 입력해주세요.\n-";
+                response = "ap <player> <paint name>";
                 return false;
             }
             else if (Paints.ContainsKey(args))
@@ -37,7 +37,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 {
                     uc[8] = args;
                     UsersManager.UsersCache[UserId] = uc;
-                    response = "페인트 추가 완료!\n-";
+                    response = "Successfully add paint.";
 
                     UsersManager.SaveUsers();
                     return true;
@@ -46,14 +46,14 @@ namespace RGM.Commands.RemoteAdminCommands
                 {
                     if (uc[8].Contains(args))
                     {
-                        response = "이미 해당 페인트를 보유 중입니다.\n-";
+                        response = "This player already have this paint.";
                         return false;
                     }
                     else
                     {
                         uc[8] += $"/{args}";
                         UsersManager.UsersCache[UserId] = uc;
-                        response = "페인트 추가 완료!\n-";
+                        response = "Successfully add paint.";
 
                         UsersManager.SaveUsers();
                         return true;
@@ -62,14 +62,14 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                response = "존재하지 않는 페인트 이름입니다.\n-";
+                response = "This paint is not exist.";
                 return false;
             }
         }
 
         public string Command { get; } = "addpaint";
 
-        public string[] Aliases { get; } = { "ap" };
+        public string[] Aliases { get; } = { "ap", "페인트" };
 
         public string Description { get; } = "특정 유저에게 페인트를 지급합니다.";
 

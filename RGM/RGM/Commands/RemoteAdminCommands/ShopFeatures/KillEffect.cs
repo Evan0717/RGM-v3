@@ -26,7 +26,7 @@ namespace RGM.Commands.RemoteAdminCommands
 
             if (arguments.Count < 2)
             {
-                response = "플레이어 이름과 킬 이펙트 이름을 입력해주세요.\n-";
+                response = "ake <player> <kill effect name>";
                 return false;
             }
             else if (KillEffects.ContainsKey(args))
@@ -37,7 +37,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 {
                     uc[3] = args;
                     UsersManager.UsersCache[UserId] = uc;
-                    response = "킬 이펙트 추가 완료!\n-";
+                    response = "Successfully add kill effect.";
 
                     UsersManager.SaveUsers();
                     return true;
@@ -46,14 +46,14 @@ namespace RGM.Commands.RemoteAdminCommands
                 {
                     if (uc[3].Contains(args))
                     {
-                        response = "이미 해당 킬 이펙트를 보유 중입니다.\n-";
+                        response = "This player already have this kill effect.";
                         return false;
                     }
                     else
                     {
                         uc[3] += $"/{args}";
                         UsersManager.UsersCache[UserId] = uc;
-                        response = "킬 이펙트 추가 완료!\n-";
+                        response = "Successfully add kill effect.";
 
                         UsersManager.SaveUsers();
                         return true;
@@ -62,14 +62,14 @@ namespace RGM.Commands.RemoteAdminCommands
             }
             else
             {
-                response = "존재하지 않는 킬 이펙트 이름입니다.\n-";
+                response = "This kill effect is not exist.";
                 return false;
             }
         }
 
         public string Command { get; } = "addkilleffect";
 
-        public string[] Aliases { get; } = { "ake" };
+        public string[] Aliases { get; } = { "ake", "킬이펙트" };
 
         public string Description { get; } = "특정 유저에게 킬 이펙트를 지급합니다.";
 

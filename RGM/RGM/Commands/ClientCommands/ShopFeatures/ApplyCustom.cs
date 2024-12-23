@@ -94,9 +94,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "applychangecustominfo";
+        public string Command { get; } = "인포";
 
-        public string[] Aliases { get; } = { "acci", "인포" };
+        public string[] Aliases { get; } = { "acci" };
 
         public string Description { get; } = "[RGM] 다른 유저에게 보여지는 역할 설명을 수정합니다.";
 

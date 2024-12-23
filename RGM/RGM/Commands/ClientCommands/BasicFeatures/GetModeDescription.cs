@@ -85,9 +85,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "currentmode";
+        public string Command { get; } = "모드";
 
-        public string[] Aliases { get; } = { "모드", "mode", "mod" };
+        public string[] Aliases { get; } = { "mode", "mod" };
 
         public string Description { get; } = "[RGM] 현재 모드를 확인합니다.";
 

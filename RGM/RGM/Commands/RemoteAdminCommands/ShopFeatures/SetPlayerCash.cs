@@ -20,22 +20,29 @@ namespace RGM.Commands.RemoteAdminCommands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             string userId = Tools.TryGetUserId(arguments.At(0));
-            int cash = int.Parse(arguments.At(1));
+            bool result = int.TryParse(arguments.At(1), out int cash);
+            List<string> uc = UsersManager.UsersCache[userId];
 
-            if (cash < 0)
+            if (result)
             {
-                response = "0 이상의 값을 입력해주세요.\n-";
-                return false;
+                if (cash < 0)
+                {
+                    response = "0 upper";
+                    return false;
+                }
+                else
+                {
+                    uc[2] = cash.ToString();
+                    UsersManager.UsersCache[userId] = uc;
+                    response = "successfully set up Cash.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
             }
             else
             {
-                List<string> uc = UsersManager.UsersCache[userId];
-
-                uc[2] = cash.ToString();
-                UsersManager.UsersCache[userId] = uc;
-                response = "캐쉬 설정 완료!\n-";
-
-                UsersManager.SaveUsers();
+                response = $"{uc[2]}";
                 return true;
             }
         }

@@ -72,9 +72,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "applychangepaint";
+        public string Command { get; } = "페인트";
 
-        public string[] Aliases { get; } = { "acp", "페인트" };
+        public string[] Aliases { get; } = { "acp" };
 
         public string Description { get; } = "[RGM] 페인트 이름을 입력하여 장착을 변경합니다.";
 

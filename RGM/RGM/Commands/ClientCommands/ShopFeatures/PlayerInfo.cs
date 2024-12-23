@@ -28,9 +28,9 @@ namespace RGM.Commands.ClientCommands
             return true;
         }
 
-        public string Command { get; } = "playerinfo";
+        public string Command { get; } = "정보";
 
-        public string[] Aliases { get; } = { "stat", "스텟", "정보", "info" };
+        public string[] Aliases { get; } = { "stat", "info" };
 
         public string Description { get; } = "[RGM] 현재 자신의 정보를 확인합니다.";
 

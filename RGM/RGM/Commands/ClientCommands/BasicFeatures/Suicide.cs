@@ -34,9 +34,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "suicide";
+        public string Command { get; } = "자살";
 
-        public string[] Aliases { get; } = { "자살", "wktkf" };
+        public string[] Aliases { get; } = { "살자", "suicide" };
 
         public string Description { get; } = "[RGM] 스스로 생을 마감할 수 있습니다.";
 

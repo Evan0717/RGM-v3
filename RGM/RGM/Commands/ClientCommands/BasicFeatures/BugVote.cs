@@ -48,9 +48,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "bugvote";
+        public string Command { get; } = "버그투표";
 
-        public string[] Aliases { get; } = { "bug", "버그투표", "버그" };
+        public string[] Aliases { get; } = { "버그", "bugvote", "bug" };
 
         public string Description { get; } = "[RGM] 버그 상황이 일어났을 경우, 라운드를 강제로 종료하기 위해 사용할 수 있습니다.";
 
@@ -83,9 +83,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "yes";
+        public string Command { get; } = "찬성";
 
-        public string[] Aliases { get; } = { "찬성" };
+        public string[] Aliases { get; } = { "yes", "agree" };
 
         public string Description { get; } = "[RGM] 버그 투표에서 찬성할 때 사용하세요.";
 

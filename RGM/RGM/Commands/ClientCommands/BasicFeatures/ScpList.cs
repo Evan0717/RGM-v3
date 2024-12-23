@@ -33,9 +33,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "scplist";
+        public string Command { get; } = "scp리스트";
 
-        public string[] Aliases { get; } = { "sl", "scp", "니", "ㄴ체", "ㄴ체ㅣㅑㄴㅅ" };
+        public string[] Aliases { get; } = { "sl", "scp", "scplist" };
 
         public string Description { get; } = "[RGM] 존재하는 SCP 리스트를 나열합니다.";
 

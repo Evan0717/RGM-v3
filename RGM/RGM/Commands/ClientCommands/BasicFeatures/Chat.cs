@@ -111,8 +111,8 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "chat";
-        public string[] Aliases { get; } = new string[] { "챗", "채팅", "ㅊ", "c" };
+        public string Command { get; } = "ㅊ";
+        public string[] Aliases { get; } = new string[] { "챗", "채팅", "chat", "c" };
         public string Description { get; } = "[RGM] 텍스트 채팅을 사용할 수 있습니다.";
     }
 }

@@ -68,9 +68,9 @@ namespace RGM.Commands.ClientCommands
             }
         }
 
-        public string Command { get; } = "applykilleffect";
+        public string Command { get; } = "킬이펙트";
 
-        public string[] Aliases { get; } = { "킬이펙트장착", "킬이펙트" };
+        public string[] Aliases { get; } = { "ake" };
 
         public string Description { get; } = "[RGM] 킬 이펙트 이름을 입력하여 장착을 변경합니다.";
 
