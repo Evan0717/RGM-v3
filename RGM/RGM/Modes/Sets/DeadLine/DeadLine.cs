@@ -13,6 +13,7 @@ using PlayerRoles;
 using MultiBroadcast.API;
 using RGM.API.Features;
 using Mirror;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -38,7 +39,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnDied;
@@ -52,11 +53,11 @@ namespace RGM.Modes
 
             Player.List.CopyTo(pl);
 
-            dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(79.23709f, 1022.955f, -41.04944f), "dj");
+            // dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(79.23709f, 1022.955f, -41.04944f), "dj");
 
-            GGUtils.Gtool.PlaySound("dj", "LineLite", VoiceChat.VoiceChatChannel.Intercom, 25, true);
+            // GGUtils.Gtool.PlaySound("dj", "LineLite", VoiceChat.VoiceChatChannel.Intercom, 25, true);
 
-            Timing.RunCoroutine(DJHeadBanging());
+            // Timing.RunCoroutine(DJHeadBanging());
 
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {

@@ -18,6 +18,7 @@ using Exiled.API.Enums;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MultiBroadcast.API;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -41,7 +42,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
             Server.ExecuteCommand($"/el l all");
             Server.ExecuteCommand($"/close **");
             Server.ExecuteCommand($"/lock **");

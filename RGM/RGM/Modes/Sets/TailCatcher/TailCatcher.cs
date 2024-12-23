@@ -13,6 +13,7 @@ using PlayerRoles;
 using MultiBroadcast.API;
 using RGM.API.Features;
 using Mirror;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -47,7 +48,7 @@ namespace RGM.Modes
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
@@ -65,11 +66,11 @@ namespace RGM.Modes
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 
-            dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(82.51834f, 1014.692f, -50.10588f), "dj");
+            // dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(82.51834f, 1014.692f, -50.10588f), "dj");
 
-            GGUtils.Gtool.PlaySound("dj", "Initial_D_Dancing", VoiceChat.VoiceChatChannel.Intercom, 25, true);
+            // GGUtils.Gtool.PlaySound("dj", "Initial_D_Dancing", VoiceChat.VoiceChatChannel.Intercom, 25, true);
 
-            Timing.RunCoroutine(DJHeadBanging());
+            // Timing.RunCoroutine(DJHeadBanging());
 
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {

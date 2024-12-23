@@ -21,6 +21,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using MultiBroadcast.API;
 using MapEditorReborn.API.Features;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -47,7 +48,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
             Server.FriendlyFire = true;
 
             Timing.RunCoroutine(OnModeStarted());

@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using Exiled.API.Features.Items;
 
 using static RGM.Variables.ServerManagers;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -53,7 +54,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;

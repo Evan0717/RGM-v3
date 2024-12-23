@@ -20,6 +20,7 @@ using RGM.API.Features;
 using MultiBroadcast.API;
 using AudioPlayer.Commands.SubCommands;
 using Exiled.Events.EventArgs.Server;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -51,7 +52,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnDied;
@@ -67,7 +68,7 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load GGClub");
 
-            dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(76.17068f, 1015.741f, -46.65614f), "dj");
+            // dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(76.17068f, 1015.741f, -46.65614f), "dj");
 
             foreach (var player in Player.List.Where(x => !x.IsNPC).ToList())
             {
@@ -87,11 +88,11 @@ namespace RGM.Modes
             }
 
             // Timing.RunCoroutine(gingerbreadHint());
-            Timing.RunCoroutine(DJHeadBanging());
+            // Timing.RunCoroutine(DJHeadBanging());
             Timing.RunCoroutine(DJ());
             Timing.RunCoroutine(ShowPhase());
 
-            GGUtils.Gtool.PlaySound("dj", "tothemoon", VoiceChat.VoiceChatChannel.Intercom, 25, true);
+            // GGUtils.Gtool.PlaySound("dj", "tothemoon", VoiceChat.VoiceChatChannel.Intercom, 25, true);
 
             ClubLights = Tools.GetObjectList("ClubLight");
             Pads = Tools.GetObjectList("Pad");

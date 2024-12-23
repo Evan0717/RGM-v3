@@ -19,6 +19,7 @@ using RGM.API.Features;
 using MapEditorReborn.API.Features;
 
 using static RGM.Variables.ServerManagers;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -45,7 +46,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
@@ -56,7 +57,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            MapUtils.LoadMap("wg");
+            Server.ExecuteCommand($"/mp load wg");
 
             foreach (var player in Player.List)
             {

@@ -12,6 +12,7 @@ using MEC;
 using Mirror;
 using MultiBroadcast;
 using MultiBroadcast.API;
+using Respawning;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ namespace RGM.Modes
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
             Door.List.ToList().ForEach(x => x.Lock(1205, Exiled.API.Enums.DoorLockType.Lockdown079));
 
             Exiled.Events.Handlers.Player.Dying += OnDying;

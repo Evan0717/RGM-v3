@@ -13,6 +13,7 @@ using Mirror;
 using MultiBroadcast;
 using MultiBroadcast.API;
 using PlayerRoles;
+using Respawning;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 

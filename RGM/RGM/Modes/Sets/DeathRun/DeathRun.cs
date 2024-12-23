@@ -14,6 +14,7 @@ using MultiBroadcast.API;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -39,7 +40,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 

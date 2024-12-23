@@ -18,6 +18,7 @@ using MultiBroadcast.API;
 using RGM.API.Features;
 
 using static RGM.Variables.ServerManagers;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -73,7 +74,7 @@ COM-15
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Left += OnLeft;

@@ -12,6 +12,7 @@ using Exiled.API.Features.Items;
 using RGM.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -41,7 +42,7 @@ namespace RGM.Modes
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
-            Respawn.TimeUntilNextPhase = 10000;
+            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
 
             Exiled.Events.Handlers.Player.Died += OnDied;
 
