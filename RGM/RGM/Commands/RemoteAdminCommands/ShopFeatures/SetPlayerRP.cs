@@ -20,7 +20,7 @@ namespace RGM.Commands.RemoteAdminCommands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             string userId = Tools.TryGetUserId(arguments.At(0));
-            bool result = int.TryParse(arguments.At(1), out int rp);
+            bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int rp);
             List<string> uc = UsersManager.UsersCache[userId];
 
             if (result)
@@ -47,9 +47,9 @@ namespace RGM.Commands.RemoteAdminCommands
             }
         }
 
-        public string Command { get; } = "setplayerrp";
+        public string Command { get; } = "rp";
 
-        public string[] Aliases { get; } = { "spr", "rp" };
+        public string[] Aliases { get; } = { "알피" };
 
         public string Description { get; } = "특정 유저의 RP를 정합니다.";
 
