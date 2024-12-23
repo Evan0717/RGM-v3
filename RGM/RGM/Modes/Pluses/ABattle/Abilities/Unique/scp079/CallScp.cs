@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("SCP 지원 호출기", "A.I. 지능이 탑재된 SCP를 1개체 부릅니다. 이 개체는 모든 데미지를 50%만 받습니다.", AbilityCategory.Scp079, AbilityType.SCP079_CALLSCP)]
+// [Ability("SCP 지원 호출기", "A.I. 지능이 탑재된 SCP를 1개체 부릅니다. 이 개체는 모든 데미지를 50%만 받습니다.", AbilityCategory.Scp079, AbilityType.SCP079_CALLSCP)]
 public class CallScp : Ability
 {
     public override void OnEnabled()
