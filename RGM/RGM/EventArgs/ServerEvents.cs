@@ -27,6 +27,8 @@ namespace RGM.EventArgs
     {
         public static IEnumerator<float> OnWaitingForPlayers()
         {
+            yield return Timing.WaitForSeconds(1f);
+
             UsersManager.LoadUsers();
 
             Round.IsLobbyLocked = true;
