@@ -184,7 +184,7 @@ namespace RGM.Modes
 
                         else
                         {
-                            SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, isStatic: true);
+                            SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, null, null);
 
                             Timing.CallDelayed(180, () =>
                             {
