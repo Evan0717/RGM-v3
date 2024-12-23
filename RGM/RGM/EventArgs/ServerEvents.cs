@@ -156,10 +156,6 @@ namespace RGM.EventArgs
             DiscordInteraction.Discord.Webhook.Send($"시작된 모드 : {CurrentMode.GetModeData().Name}");
             Log.Info($"시작된 모드 : {CurrentMode.GetModeData().Name}");
 
-            // Ghostly 관련 버그 임시 수정
-            foreach (var player in Player.List)
-                player.DisableEffect(EffectType.Ghostly);
-
             yield return Timing.WaitForSeconds(20 * 60);
 
             if (Warhead.IsDetonated)

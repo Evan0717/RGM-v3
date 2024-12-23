@@ -115,7 +115,10 @@ namespace RGM.EventArgs
                     RoleTypeId.Scp0492,
                     RoleTypeId.Scp106,
                     RoleTypeId.Scp939,
-                    RoleTypeId.Scp3114
+                    // RoleTypeId.Scp3114,
+                    RoleTypeId.Flamingo,
+                    RoleTypeId.AlphaFlamingo,
+                    RoleTypeId.ZombieFlamingo,
                 };
 
                 List<RoleTypeId> Humans = new List<RoleTypeId>()
@@ -378,7 +381,8 @@ namespace RGM.EventArgs
             if (ev.Player.IsAlive)
             {
                 ev.Player.Scale = new Vector3(1, 1, 1);
-                ev.Player.EnableEffect(EffectType.FogControl);
+                Server.ExecuteCommand($"/pfx FogControl 1 0 {ev.Player.Id}");
+                Server.ExecuteCommand($"/pfx Ghostly 0 0 {ev.Player.Id}");
 
                 if (Round.IsLobby || ev.Reason == SpawnReason.RoundStart)
                 {
@@ -650,6 +654,11 @@ namespace RGM.EventArgs
             {
                 ev.Player.Group.Permissions = ev.Player.Group.Permissions;
             });
+        }
+
+        public static void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
+        {
+            Server.ExecuteCommand($"/pfx {ev.Effect}");
         }
     }
 }
