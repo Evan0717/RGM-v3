@@ -200,13 +200,20 @@ namespace RGM.Modes
         {
             while (true)
             {
-                int totalSoulMatePairs = soulMates.Count;
-                int scpSoulMatePairs = soulMates.Count(pair => pair.Key.IsScp || pair.Value.IsScp);
-
-                if (totalSoulMatePairs == scpSoulMatePairs)
+                try
                 {
-                    foreach (var player in Player.List.Where(x => x.IsAlive))
-                        player.ShowHint($"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
+                    int totalSoulMatePairs = soulMates.Count;
+                    int scpSoulMatePairs = soulMates.Count(pair => pair.Key.IsScp || pair.Value.IsScp);
+
+                    if (totalSoulMatePairs == scpSoulMatePairs)
+                    {
+                        foreach (var player in Player.List.Where(x => x.IsAlive))
+                            player.ShowHint($"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"CheckIfScpSoulMate: {e}");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
