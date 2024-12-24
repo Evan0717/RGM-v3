@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Cell)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Cell)]
     class Cell : Mode
     {
         public override string Name => "고문";
