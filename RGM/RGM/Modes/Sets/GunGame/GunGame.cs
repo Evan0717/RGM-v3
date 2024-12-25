@@ -124,7 +124,8 @@ COM-15
             Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
             Round.IsLocked = false;
 
-            Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><color=yellow>{topPlayer.Nickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!"));
+            Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><color=yellow>{topPlayer.DisplayNickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!"));
+            Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { topPlayer }, 5));
         }
 
         public IEnumerator<float> ScoreBoard()
