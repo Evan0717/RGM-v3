@@ -121,6 +121,7 @@ namespace RGM.Modes
 
                     pl[0].Role.Set(RoleTypeId.ClassD, SpawnReason.ForceClass, RoleSpawnFlags.None);
                     Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].Nickname}"));
+                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                     break;
                 }
 
