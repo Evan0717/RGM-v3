@@ -46,8 +46,7 @@ namespace RGM.IEnumerators
 
                 foreach (var player in Player.List)
                 {
-                    player.AddBroadcast(10, $"<size=20><b><color=#7289da>Discord</color>에 가입하여 <color=#C8FE2E>실시간 업데이트 현황</color>을 확인하고, 서버에 대한 <color=#F781D8>아이디어</color>를 나누고, <color=#FF4000>상점</color>을 이용하세요!</b></size>");
-                    player.AddBroadcast(15, $"<size=25>칭호를 무료로 획득할 수 있는 <b><color=#FF0000>크</color><color=#F13F00>리</color><color=#E37F00>스</color><color=#D5BF00>마</color><color=#C8FF00>스</color> <color=#64FF00>이</color><color=#32FF00>벤</color><color=#00FF00>트</color></b>(2024-12-25 ~ 2024-12-26)를 놓치지 마세요!</size>");
+                    player.AddBroadcast(20, $"<size=20><b><color=#7289da>Discord</color>에 가입하여 <color=#C8FE2E>실시간 업데이트 현황</color>을 확인하고, 서버에 대한 <color=#F781D8>아이디어</color>를 나누고, <color=#FF4000>상점</color>을 이용하세요!</b></size>");
                     player.AddBroadcast(20, $"<b><size=25>플라밍고를 소환하는 테이프가 재사용 가능해집니다.</size></b>");
                 }
             }

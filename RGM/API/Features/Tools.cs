@@ -191,20 +191,10 @@ $"""
 
             IsWinnerSelected = true;
 
-            if (amount >= 5)
-            {
-                Server.ExecuteCommand($"/칭호추가 {playerList[0].UserId} Merry Christmas");
-            }
-
             while (true)
             {
                 foreach (var player in Player.List)
-                {
                     player.AddBroadcast(1, $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.Nickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, RP를 획득하였습니다.</size>");
-
-                    if (amount >= 5)
-                        player.AddBroadcast(1, $"<color=yellow>🎄</color> <size=25>{playerList[0].DisplayNickname}님이 이벤트 성공 완료! <b>Merry Christmas</b> 칭호를 획득하였습니다.</size>");
-                }
 
                 yield return Timing.WaitForSeconds(1);
             }
