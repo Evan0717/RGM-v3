@@ -21,7 +21,21 @@ namespace RGM.Commands.RemoteAdminCommands
         {
             string userId = Tools.TryGetUserId(arguments.At(0));
             bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int cash);
-            List<string> uc = UsersManager.UsersCache[userId];
+            List<string> uc = UsersManager.UsersCache.ContainsKey(userId) ? UsersManager.UsersCache[userId] : new List<string>();
+
+            if (uc.Count == 0)
+            {
+                List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
+
+                if (!UsersManager.UsersCache.ContainsKey(userId))
+                {
+                    UsersManager.AddUser(userId, DefaultValues);
+
+                    UsersManager.SaveUsers();
+                }
+
+                uc = UsersManager.UsersCache[userId];
+            }
 
             if (result)
             {

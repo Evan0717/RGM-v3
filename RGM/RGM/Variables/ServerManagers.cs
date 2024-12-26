@@ -81,11 +81,19 @@ namespace RGM.Variables
         public static Dictionary<string, string> Badges = new Dictionary<string, string>()
         {
             {"호기심 많은 자", "상점에 칭호가 있어서 사봤어요!"},
-            {"Merry Christmas", "즐거운 크리스마스 보내세요."}
+            {"Merry Christmas", "즐거운 크리스마스 보내세요."},
+            {"1st Anniversary", "랜덤게임모드 1주년을 기념하는 이벤트 우승자"},
+            {"Adieu, Polaris", "초대 개발자의 마지막 이벤트 우승자"},
+            {"Adieu! 2023", "2023년의 마지막을 기념하며"},
+            {"2023 RGM Summer", "2023년도 여름에 진행되었던 이벤트 우승자"}
         };
         public static Dictionary<string, string> BadgeIcons = new Dictionary<string, string>()
         {
-            {"호기심 많은 자", "❓"}
+            {"호기심 많은 자", "❓"},
+            {"1st Anniversary", "⭐"},
+            {"Adieu, Polaris", "⭐"},
+            {"Adieu! 2023", "⭐"},
+            {"2023 RGM Summer", "⭐"}
         };
 
         public static List<ModeType> EnabledModeList = new List<ModeType>();
