@@ -79,7 +79,12 @@ namespace RGM.Modes
                                 pl.Remove(player);
 
                                 if (pl.Count() < 2)
+                                {
                                     Round.IsLocked = false;
+
+                                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
+                                }
 
                                 player.Kill("선을 넘어버렸다네~");
                             }
