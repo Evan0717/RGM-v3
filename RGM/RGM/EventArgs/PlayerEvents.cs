@@ -51,6 +51,12 @@ namespace RGM.EventArgs
 
                 try
                 {
+                    if (ev.Player.Group.Permissions > 0)
+                    {
+                        ev.Player.BadgeHidden = false;
+                        ev.Player.RankName = null;
+                    }
+
                     ev.Player.RankName = $"{(BadgeIcons.ContainsKey(uc[11]) ? $"{BadgeIcons[uc[11]]} " : "")}{(uc[11] != "0" ? uc[11] : "")}";
                     Tools.RemovePaint(ev.Player);
                     Tools.ChangePaint(ev.Player, uc[9]);
