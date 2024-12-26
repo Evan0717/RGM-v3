@@ -130,7 +130,7 @@ $"""
 
         public static void ChangePaint(Player player, string Color)
         {
-            if (player.Group != null && UsersManager.UsersCache[player.UserId][9] != "0")
+            if (UsersManager.UsersCache[player.UserId][9] != "0")
             {
                 Dictionary<string, string[]> ColorDictionary = new Dictionary<string, string[]>()
                 {
