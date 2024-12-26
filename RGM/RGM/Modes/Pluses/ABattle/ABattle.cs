@@ -38,7 +38,7 @@ public class ABattle : Mode
 • <color=#F7819F>전용</color> - 5% (능력 선택 옵션 독립)
 • <color=##DEEFED>시너지</color> - ???
 
-50% 확률로 추가 모드가 활성화됩니다.
+66.6% 확률로 추가 모드가 활성화됩니다.
 
 <size=25><b>모드 전용 명령어</b></size>
 <size=20>.(번호) - 1번부터 5번까지 있습니다. 능력을 선택할 때 사용됩니다.</size>
@@ -109,9 +109,14 @@ public class ABattle : Mode
             exceptModes = new List<string>();
         }
 
-        if (Random.Range(1, 3) == 1)
+        if (Random.Range(1, 4) == 1)
+        {
+            return "기본";
+        }   
+        else
         {
             string extraMode = Tools.GetRandomValue(ExtraModes.Keys.Where(x => !exceptModes.Contains(x)).ToList());
+
             Webhook.Send($"추가 모드: {extraMode}");
             Log.Info($"추가 모드: {extraMode}");
 
@@ -122,10 +127,6 @@ public class ABattle : Mode
                 Timing.RunCoroutine(Instance.ClearCache());
 
             return extraMode;
-        }   
-        else
-        {
-            return "기본";
         }
     }
 
