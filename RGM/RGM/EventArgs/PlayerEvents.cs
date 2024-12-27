@@ -16,6 +16,8 @@ using Exiled.API.Features;
 using static RGM.Variables.ServerManagers;
 using MEC;
 using Exiled.API.Features.Toys;
+using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
+using System.Runtime.Remoting.Messaging;
 
 namespace RGM.EventArgs
 {
@@ -667,6 +669,41 @@ namespace RGM.EventArgs
             {
                 ev.Player.Group.Permissions = permission;
             });
+        }
+
+        public static void OnChangedEmotion(Exiled.Events.EventArgs.Player.ChangedEmotionEventArgs ev)
+        {
+            if (ev.Player.IsDead || Round.IsLobby)
+                return;
+
+            string emotion()
+            {
+                EmotionPresetType type = ev.EmotionPresetType;
+
+                if (type == EmotionPresetType.Neutral)
+                    return "편안한 표정을 짓고 있습니다";
+
+                else if (type == EmotionPresetType.Happy)
+                    return "행복한 표정을 짓고 있습니다";
+
+                else if (type == EmotionPresetType.AwkwardSmile)
+                    return "뒤틀린 미소를 짓고 있습니다";
+
+                else if (type == EmotionPresetType.Scared)
+                    return "두려운 표정을 짓고 있습니다";
+
+                else if (type == EmotionPresetType.Angry)
+                    return "화가난 표정을 짓고 있습니다";
+
+                else if (type == EmotionPresetType.Chad)
+                    return "꼭 채드처럼 보이는군요";
+
+                else
+                    return "꼭 오우거같이 보이는군요";
+            }
+
+            foreach (var player in Player.List.Where(x => x.IsDead || Vector3.Distance(x.Position, ev.Player.Position) < 11))
+                player.AddBroadcast(10, $"<size=20>{Tools.BadgeFormat(ev.Player)}<color={ev.Player.Role.Color.ToHex()}>{ev.Player.DisplayNickname}</color>(은)는 {emotion()}.</size>");
         }
     }
 }
