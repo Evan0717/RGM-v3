@@ -16,7 +16,7 @@ using Respawning;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Tomb)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Tomb)]
     class Tomb : Mode
     {
         public override string Name => "무덤";
