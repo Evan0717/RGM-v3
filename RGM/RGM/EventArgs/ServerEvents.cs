@@ -31,6 +31,13 @@ namespace RGM.EventArgs
 
             UsersManager.LoadUsers();
 
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            {
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
+            });
+
+            audioPlayer.AddClip("LobbyTheme", 0.1f, true);
+
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Server.ExecuteCommand($"/mp load RGMLobby");
@@ -84,8 +91,10 @@ namespace RGM.EventArgs
         public static IEnumerator<float> OnRoundStarted()
         {
             Server.ExecuteCommand("/mp unload RGMLobby");
-
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
+
+            if (AudioPlayer.TryGet("Global AudioPlayer", out AudioPlayer ap))
+                ap.RemoveAllClips();
 
             MapEditorReborn.API.Features.ObjectSpawner.SpawnSchematic("glass", new Vector3(-39.88f, 990.92f, -36.14f), null, null, null);
 
