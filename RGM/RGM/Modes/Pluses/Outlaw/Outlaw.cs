@@ -56,18 +56,18 @@ namespace RGM.Modes
             {
                 if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
                 {
-                    Item CurrentItem = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.GetCategory() == ItemCategory.Firearm || x.GetCategory() == ItemCategory.SpecialWeapon).ToList()));
-                }
+                    Item Weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.GetCategory() == ItemCategory.Firearm || x.GetCategory() == ItemCategory.SpecialWeapon).ToList()));
 
-                if (player.CurrentItem is Firearm firearm)
-                {
-                    if (firearm.AmmoType != AmmoType.None)
+                    if (Weapon is Firearm firearm)
                     {
-                        for (int i = 0; i < 3; i++)
-                            player.AddAmmo(firearm.AmmoType, (ushort)firearm.MaxMagazineAmmo);
+                        if (firearm.AmmoType != AmmoType.None)
+                        {
+                            for (int i = 0; i < 3; i++)
+                                player.AddItem(firearm.AmmoType.GetItemType());
+                        }
                     }
                 }
-                });
+            });
         }
     }
 }
