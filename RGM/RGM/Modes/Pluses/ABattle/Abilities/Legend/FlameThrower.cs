@@ -27,7 +27,6 @@ public class FlameThrower : Ability
         FlamethrowerSerial = ft.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
-        Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
         _onStarted = Timing.RunCoroutine(OnStarted());
@@ -36,7 +35,6 @@ public class FlameThrower : Ability
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
-        Exiled.Events.Handlers.Player.ChangingMicroHIDState -= OnChangingMicroHIDState;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
         Timing.KillCoroutines(_onStarted);
@@ -53,7 +51,9 @@ public class FlameThrower : Ability
                     MicroHid MicroHID = (MicroHid)Item;
 
                     if (MicroHID.Energy < 1)
-                        MicroHID.Energy += 0.05f;
+                        MicroHID.Energy += 0.02f;
+
+                    Owner.ShowHint($"{MicroHID.Base.CycleController.Phase}");
                 }
             }
 
@@ -71,25 +71,6 @@ public class FlameThrower : Ability
             if (FlamethrowerSerial == ev.Item.Serial)
                 ev.Player.ShowHint($"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
         }
-    }
-
-    public void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
-    {
-        if (ev.Player != Owner)
-            return;
-
-        MicroHidPhase oldPhase = ev.MicroHID.State;
-
-        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-        {
-            if (FlamethrowerSerial == ev.Player.CurrentItem.Serial)
-            {
-                MicroHid microHid = (MicroHid)ev.Player.CurrentItem;
-
-                if (oldPhase == MicroHidPhase.Standby && ev.MicroHID.State == MicroHidPhase.WoundUpSustain)
-                    ev.MicroHID.State = MicroHidPhase.Firing;
-            }
-        });
     }
 
     public void OnHurting(HurtingEventArgs ev)
