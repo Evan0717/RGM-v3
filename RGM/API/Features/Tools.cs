@@ -425,7 +425,7 @@ $"""
 
         public static string BadgeFormat(Player player)
         {
-            if (player.Group != null && !player.BadgeHidden)
+            if (player.RankName != null && !player.BadgeHidden)
                 return $"[<color={ColorFormat(player.RankColor)}>{player.RankName}</color>] ";
 
             else
