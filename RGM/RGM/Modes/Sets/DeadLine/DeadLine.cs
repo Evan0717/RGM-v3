@@ -14,6 +14,7 @@ using MultiBroadcast.API;
 using RGM.API.Features;
 using Mirror;
 using Respawning;
+using Exiled.API.Features.Toys;
 
 namespace RGM.Modes
 {
@@ -52,12 +53,6 @@ namespace RGM.Modes
             Server.ExecuteCommand($"/mp load dl");
 
             Player.List.CopyTo(pl);
-
-            // dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(79.23709f, 1022.955f, -41.04944f), "dj");
-
-            // GGUtils.Gtool.PlaySound("dj", "LineLite", VoiceChat.VoiceChatChannel.Intercom, 25, true);
-
-            // Timing.RunCoroutine(DJHeadBanging());
 
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {

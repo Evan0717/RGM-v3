@@ -10,10 +10,11 @@ using RGM.API.Features;
 using PlayerRoles;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.Outlaw)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Outlaw)]
     public class Outlaw : Mode
     {
         public override string Name => "무법자";
@@ -51,19 +52,22 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                Item CurrentItem = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.GetCategory() == ItemCategory.Firearm || x.GetCategory() == ItemCategory.SpecialWeapon).ToList()));
+                if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
+                {
+                    Item CurrentItem = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.GetCategory() == ItemCategory.Firearm || x.GetCategory() == ItemCategory.SpecialWeapon).ToList()));
+                }
 
-                if (CurrentItem is Firearm firearm)
+                if (player.CurrentItem is Firearm firearm)
                 {
                     if (firearm.AmmoType != AmmoType.None)
                     {
                         for (int i = 0; i < 3; i++)
-                            player.AddAmmo(firearm.AmmoType, firearm.MaxAmmo);
+                            player.AddAmmo(firearm.AmmoType, (ushort)firearm.MaxMagazineAmmo);
                     }
                 }
-            }
+                });
         }
     }
 }

@@ -26,7 +26,7 @@ using Respawning;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.RussianRoulette)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.RussianRoulette)]
     class RussianRoulette : Mode
     {
         public override string Name => "러시안 룰렛";
@@ -179,7 +179,7 @@ namespace RGM.Modes
                 foreach (var bullet in Bullets)
                 {
                     Firearm Revolver = (Firearm)Players[currentPlayerIndex].AddItem(ItemType.GunRevolver);
-                    Revolver.Ammo = 1;
+                    Revolver.MagazineAmmo = 1;
 
                     Players[currentPlayerIndex].CurrentItem = Revolver;
                     Players[currentPlayerIndex].ShowHint($"<size=25>당신의 차례입니다.\n다른 유저를 사살하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");

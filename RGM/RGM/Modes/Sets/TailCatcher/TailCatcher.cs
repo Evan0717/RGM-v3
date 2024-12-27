@@ -138,7 +138,7 @@ namespace RGM.Modes
 
         public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
         {
-            ev.Firearm.Ammo += 1;
+            ev.Firearm.MagazineAmmo += 1;
         }
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)

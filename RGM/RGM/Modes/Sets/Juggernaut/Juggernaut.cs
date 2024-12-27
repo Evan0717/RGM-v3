@@ -283,7 +283,7 @@ namespace RGM.Modes
         public void OnShooting(Exiled.Events.EventArgs.Player.ShootingEventArgs ev)
         {
             if (ev.Player == juggernaut)
-                ev.Player.CurrentItem.As<Firearm>().Ammo = 250;
+                ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
         }
 
         public IEnumerator<float> OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)

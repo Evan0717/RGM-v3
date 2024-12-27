@@ -17,30 +17,32 @@ public class Gambler : Ability
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
+        Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
+        Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
     }
 
-    public void OnDroppedItem(DroppedItemEventArgs ev)
+    public void OnDroppingItem(DroppingItemEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (UnityEngine.Random.Range(1, 101) < 3)
-            ev.Player.EnableEffect(EffectType.SeveredHands);
+        List<ItemType> ItemList = Tools.EnumToList<ItemType>();
+        ItemType Item = Tools.GetRandomValue(ItemList);
 
+        int rand = UnityEngine.Random.Range(1, 101);
+        if (0 < rand && rand < 3)
+        {
+            ev.Player.EnableEffect(EffectType.SeveredHands);
+        }
         else
         {
-            ev.Pickup.Destroy();
-
-            List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
-
-            Item Item = Item.Create(Tools.GetRandomValue(ItemTypes));
-            Item.CreatePickup(ev.Player.Position);
+            ev.Item.Destroy();
+            Item CurrentItem = ev.Player.AddItem(Item);
+            ev.Player.DropItem(CurrentItem);
         }
     }
 }

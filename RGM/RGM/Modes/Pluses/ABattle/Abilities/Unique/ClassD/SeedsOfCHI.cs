@@ -7,6 +7,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class SeedsOfCHI : Ability
 {
     public override void OnEnabled()
     {
-        Respawn.ChaosTickets += (int)(Player.List.Count() * 0.2);
+        Respawn.GrantTokens(Faction.FoundationEnemy, (int)(Player.List.Count() * 0.2));
     }
 
     public override void OnDisabled()

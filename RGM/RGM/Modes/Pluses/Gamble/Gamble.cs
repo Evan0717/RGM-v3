@@ -39,7 +39,7 @@ namespace RGM.Modes
         public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
         {
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
-            ItemType Item = ItemList[UnityEngine.Random.Range(1, ItemList.Count())];
+            ItemType Item = Tools.GetRandomValue(ItemList);
 
             int rand = UnityEngine.Random.Range(1, 101);
             if (0 < rand && rand < 3)

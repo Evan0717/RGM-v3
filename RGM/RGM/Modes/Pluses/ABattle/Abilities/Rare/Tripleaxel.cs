@@ -18,8 +18,8 @@ public class TripleAxel : Ability
     public override void OnEnabled()
     {
         Item COM45 = Owner.AddItem(ItemType.GunCom45);
-        COM45.As<Firearm>().MaxAmmo /= 2;
-        COM45.As<Firearm>().Ammo = COM45.As<Firearm>().MaxAmmo;
+        COM45.As<Firearm>().MaxMagazineAmmo /= 2;
+        COM45.As<Firearm>().MagazineAmmo = COM45.As<Firearm>().MaxMagazineAmmo;
 
         Owner.AddItem(ItemType.Ammo9x19, 3);
     }

@@ -27,6 +27,7 @@ public class FlameThrower : Ability
         FlamethrowerSerial = ft.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
+        Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
         _onStarted = Timing.RunCoroutine(OnStarted());
@@ -35,6 +36,7 @@ public class FlameThrower : Ability
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
+        Exiled.Events.Handlers.Player.ChangingMicroHIDState -= OnChangingMicroHIDState;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
         Timing.KillCoroutines(_onStarted);
@@ -73,9 +75,18 @@ public class FlameThrower : Ability
         }
     }
 
+    public void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+
+        if (ev.NewPhase == MicroHidPhase.WindingUp)
+            ev.NewPhase = MicroHidPhase.Firing;
+    }
+
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || ev.Attacker != Owner)
+        if (ev.Attacker == null || ev.Attacker != Owner || ev.Player == ev.Attacker)
             return;
 
         if (ev.Attacker.CurrentItem != null && FlamethrowerSerial == ev.Attacker.CurrentItem.Serial)
