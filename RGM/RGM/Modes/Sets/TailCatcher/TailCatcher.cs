@@ -64,13 +64,14 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load hp");
 
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            {
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
+            });
+
+            audioPlayer.AddClip("TailCatcher", 1, true);
+
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
-
-            // dj = Tools.SpawnDJ("dj", RoleTypeId.Tutorial, new Vector3(82.51834f, 1014.692f, -50.10588f), "dj");
-
-            // GGUtils.Gtool.PlaySound("dj", "Initial_D_Dancing", VoiceChat.VoiceChatChannel.Intercom, 25, true);
-
-            // Timing.RunCoroutine(DJHeadBanging());
 
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {

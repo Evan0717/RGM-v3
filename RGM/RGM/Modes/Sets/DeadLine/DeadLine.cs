@@ -52,6 +52,13 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load dl");
 
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            {
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
+            });
+
+            audioPlayer.AddClip("DeadLine", 1, true);
+
             Player.List.CopyTo(pl);
 
             foreach (var player in Player.List.Where(x => !x.IsNPC))
