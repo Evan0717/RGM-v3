@@ -167,43 +167,11 @@ namespace RGM.EventArgs
 
             yield return Timing.WaitForSeconds(20 * 60);
 
-            if (Warhead.IsDetonated)
-            {
-                AutoNuke = true;
-                Server.ExecuteCommand("/cassie_sl 시간이 너무 오래 걸립니다! 모두의 체력이 초당 1%씩 줄어듭니다!");
-
-                while (true)
-                {
-                    Player.List.ToList().ForEach(x => x.Health -= (x.MaxHealth / 100));
-
-                    yield return Timing.WaitForSeconds(1);
-                }
-            }
-            else
+            if (!Warhead.IsDetonated)
             {
                 AutoNuke = true;
                 Warhead.Start();
                 Server.ExecuteCommand("/cassie_sl <color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
-            }
-
-            yield return Timing.WaitForSeconds(300);
-
-            AutoNuke = true;
-            Server.ExecuteCommand("/cassie_sl 시간이 너무 오래 걸립니다! 모두의 체력이 초당 5%씩 줄어듭니다!");
-
-            Player.List.ToList().ForEach(x => x.EnableEffect(EffectType.PocketCorroding));
-
-            while (true)
-            {
-                foreach (var player in Player.List)
-                {
-                    player.Health -= player.MaxHealth / 20;
-
-                    if (player.Health <= 0 && player.IsAlive)
-                        player.Kill("게임을 질질 끌어서 죽었습니다.");
-                }
-
-                yield return Timing.WaitForSeconds(1);
             }
         }
 
