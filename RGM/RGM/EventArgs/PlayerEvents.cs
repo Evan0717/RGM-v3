@@ -628,7 +628,7 @@ namespace RGM.EventArgs
 
         public static void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
         {
-            if (ev.Player.IsScp)
+            if (ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo"))
             {
                 if (!ev.Item.IsAmmo)
                 {
