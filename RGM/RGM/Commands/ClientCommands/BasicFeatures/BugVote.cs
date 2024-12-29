@@ -23,9 +23,16 @@ namespace RGM.Commands.ClientCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            Player player = Player.Get(sender);
+
             if (IsBugVoteProcessing)
             {
                 response = "이미 버그 투표가 진행중입니다.";
+                return false;
+            }
+            else if (BugVoteUsers.Contains(player))
+            {
+                response = "이미 버그 투표를 한번 사용했습니다.";
                 return false;
             }
             else if (arguments.Count < 1)
@@ -37,11 +44,10 @@ namespace RGM.Commands.ClientCommands
             {
                 IsBugVoteProcessing = true;
 
-                Player player = Player.Get(sender);
-
                 Timing.RunCoroutine(Tools.BugVote(player, string.Join(" ", arguments)));
 
                 BugVotePlayers.Add(player);
+                BugVoteUsers.Add(player);
 
                 response = "버그 투표를 성공적으로 개설하였습니다.";
                 return true;
