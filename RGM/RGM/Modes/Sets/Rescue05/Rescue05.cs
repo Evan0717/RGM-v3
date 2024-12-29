@@ -105,6 +105,7 @@ namespace RGM.Modes
             foreach (var player in Player.List.Where(x => x != Level05 && x != Assassin && !x.IsCHI))
             {
                 player.Role.Set(RoleTypeId.FacilityGuard);
+                player.Role.Set(RoleTypeId.NtfPrivate, RoleSpawnFlags.AssignInventory);
 
                 player.AddBroadcast(10, $"<size=25>당신은 <color=#A4A4A4>시설 경비</color>, <color=#000000><b>05 평의회</b></color>를 안전하게 탈출시키십시오.</size>");
             }
