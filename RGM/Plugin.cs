@@ -35,7 +35,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 9, 24);
+        public override Version Version { get; } = new(3, 9, 25);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -78,11 +78,8 @@ namespace RGM
                 }
             }
 
-            AudioClipStorage.LoadClip(GGUtils.Gtool.ConventToAudioPath("ChristmasRock"), "LobbyTheme");
-            AudioClipStorage.LoadClip(GGUtils.Gtool.ConventToAudioPath("LineLite"), "DeadLine");
-            AudioClipStorage.LoadClip(GGUtils.Gtool.ConventToAudioPath("tothemoon"), "GGClub");
-            AudioClipStorage.LoadClip(GGUtils.Gtool.ConventToAudioPath("Skeleton"), "HotPotato");
-            AudioClipStorage.LoadClip(GGUtils.Gtool.ConventToAudioPath("Initial_D_Dancing"), "TailCatcher");
+            foreach (var _audioClip in AudioClips)
+                AudioClipStorage.LoadClip(GGUtils.Gtool.ConventToAudioPath(_audioClip.Key), _audioClip.Value);
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
