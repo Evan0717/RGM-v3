@@ -632,7 +632,14 @@ public class ABattle : Mode
         for (var i = 0; i < 20; i++)
         {
             if (player.IsDead || !Selections.ContainsKey(player))
+            {
+                if (Selections.ContainsKey(player))
+                    Selections.Remove(player);
+
+                IsSelecting[player] = false;
+
                 yield break;
+            }
 
             player.ShowHint(
             $"<align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade()]}</b></size>\n\n<size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n\n\n\n",
