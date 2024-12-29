@@ -14,6 +14,8 @@ using static RGM.Variables.ServerManagers;
 using Exiled.API.Features.Roles;
 using MultiBroadcast.API;
 using Christmas.Scp2536.Gifts;
+using System.Diagnostics;
+using PlayerRoles.PlayableScps.Scp1507;
 
 namespace RGM.IEnumerators
 {
@@ -43,6 +45,7 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60 * 5, 60 * 15 + 1));
 
                 TapeGift._canSpawn = true;
+                Scp1507Spawner.CurState = Scp1507Spawner.State.Idle;
 
                 foreach (var player in Player.List)
                 {
