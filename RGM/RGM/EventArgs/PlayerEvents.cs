@@ -628,6 +628,17 @@ namespace RGM.EventArgs
 
         public static void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
         {
+            if (ev.Item.Type == ItemType.SCP1507Tape)
+            {
+                if (Round.UptimeRounds <= 60)
+                {
+                    ev.Player.RemoveItem(ev.Item);
+                    ev.Player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
+
+                    ev.Player.ShowHint("<size=25>플라밍고 테이프를 획득했지만, 버그를 방지하기 위해 다른 아이템으로 대체되었습니다.</size>", 5);
+                }
+            }
+
             if (ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo"))
             {
                 if (!ev.Item.IsAmmo)
