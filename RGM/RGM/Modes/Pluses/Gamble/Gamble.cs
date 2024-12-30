@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -18,6 +20,9 @@ namespace RGM.Modes
         public override string Detail =>
 """
 생각 없이 도박을 하다 보면 2%는 금방이랍니다.
+
+<i><b>* SCP 진영의 경우에도</b></i>
+[Space + ALT]ㅣ도박을 진행할 수 있습니다.
 """;
         public override string Color => "8A4B08";
 
@@ -27,6 +32,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -36,21 +42,40 @@ namespace RGM.Modes
             yield return 0f;
         }
 
-        public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
+        public void OnDroppingItem(DroppingItemEventArgs ev)
         {
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
             ItemType Item = Tools.GetRandomValue(ItemList);
 
             int rand = UnityEngine.Random.Range(1, 101);
+
             if (0 < rand && rand < 3)
-            {
-                ev.Player.EnableEffect(Exiled.API.Enums.EffectType.SeveredHands);
-            }
+                ev.Player.EnableEffect(EffectType.SeveredHands);
+
             else
             {
                 ev.Item.Destroy();
                 Item CurrentItem = ev.Player.AddItem(Item);
                 ev.Player.DropItem(CurrentItem);
+            }
+        }
+
+        public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+        {
+            if (!ev.Player.IsScp || !ev.Player.IsJumping)
+                return;
+
+            int rand = UnityEngine.Random.Range(1, 101);
+
+            if (0 < rand && rand < 3)
+                ev.Player.EnableEffect(EffectType.SeveredHands);
+
+            else
+            {
+                List<ItemType> ItemList = Tools.EnumToList<ItemType>();
+                ItemType Item = Tools.GetRandomValue(ItemList);
+
+                ev.Player.AddItem(Item);
             }
         }
     }
