@@ -31,6 +31,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
@@ -41,7 +42,14 @@ namespace RGM.Modes
         {
             yield return 0f;
         }
+        
+        public void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (ev.Player.IsHuman)
+                return;
 
+            ev.Player.ShowHint($"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
+        }
         public void OnDroppingItem(DroppingItemEventArgs ev)
         {
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
@@ -62,7 +70,7 @@ namespace RGM.Modes
 
         public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (!ev.Player.IsScp || !ev.Player.IsJumping)
+            if (ev.Player.IsHuman || !ev.Player.IsJumping)
                 return;
 
             int rand = UnityEngine.Random.Range(1, 101);
