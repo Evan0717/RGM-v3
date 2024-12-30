@@ -204,6 +204,7 @@
     <Compile Include="API\Features\Tools.cs" />
     <Compile Include="API\Databases\Translations.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\BugVote.cs" />
+    <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Emotion.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyBadge.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyCustom.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyKillEffect.cs" />
