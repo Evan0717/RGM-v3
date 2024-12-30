@@ -547,7 +547,7 @@ namespace RGM.EventArgs
                         ev.Player.Kill(ev.DamageHandler);
                     }
                 }
-                else
+                else if (ev.Attacker != null)
                 {
                     if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player)
                         PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
@@ -630,7 +630,7 @@ namespace RGM.EventArgs
         {
             if (ev.Item.Type == ItemType.SCP1507Tape)
             {
-                if (Round.UptimeRounds <= 60)
+                if (Round.ElapsedTime.TotalSeconds <= 60)
                     ev.Player.RemoveItem(ev.Item);
             }
 
