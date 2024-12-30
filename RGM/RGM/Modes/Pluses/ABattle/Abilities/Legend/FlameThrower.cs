@@ -54,8 +54,6 @@ public class FlameThrower : Ability
 
                     if (MicroHID.Energy < 1)
                         MicroHID.Energy += 0.02f;
-
-                    Owner.ShowHint($"{MicroHID.Base.CycleController.Phase}");
                 }
             }
 
