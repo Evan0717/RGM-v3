@@ -16,6 +16,7 @@ using MultiBroadcast.API;
 using Christmas.Scp2536.Gifts;
 using System.Diagnostics;
 using PlayerRoles.PlayableScps.Scp1507;
+using InventorySystem.Items.FlamingoTapePlayer;
 
 namespace RGM.IEnumerators
 {
@@ -45,7 +46,9 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60 * 5, 60 * 15 + 1));
 
                 TapeGift._canSpawn = true;
-                Scp1507Spawner.Restore();
+                Scp1507Spawner.CurState = Scp1507Spawner.State.Idle;
+                TapeItem tapeItem = new TapeItem();
+                tapeItem._using = false;
 
                 foreach (var player in Player.List)
                 {
