@@ -43,8 +43,7 @@ namespace RGM.Modes
             ItemType.Coin,
             ItemType.Lantern,
             ItemType.Medkit,
-            ItemType.Painkillers,
-            ItemType.SCP330
+            ItemType.Painkillers
         };
         List<ItemType> _itemsList = new List<ItemType>();
 
