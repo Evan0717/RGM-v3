@@ -41,7 +41,8 @@ namespace RGM.Variables
             {"tothemoon", "GGClub"},
             {"Skeleton", "HotPotato"},
             {"Initial_D_Dancing", "TailCatcher"},
-            {"JuggernautTheme", "Juggernaut"}
+            {"JuggernautTheme", "Juggernaut"},
+            {"GmanRoaringSound", "Scream"}
         };
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
@@ -89,6 +90,9 @@ namespace RGM.Variables
         };
         public static Dictionary<string, string> Badges = new Dictionary<string, string>()
         {
+            {"RGM Owner", "랜덤게임모드(RGM) 공식 운영자 칭호"},
+            {"RGM Administrator", "랜덤게임모드(RGM) 공식 관리자 칭호"},
+            {"RGM Developer", "랜덤게임모드(RGM) 공식 개발자 칭호"},
             {"호기심 많은 자", "상점에 칭호가 있어서 사봤어요!"},
             {"Merry Christmas", "즐거운 크리스마스 보내세요."},
             {"1st Anniversary", "랜덤게임모드 1주년을 기념하는 이벤트 우승자"},
@@ -105,6 +109,9 @@ namespace RGM.Variables
         };
         public static Dictionary<string, string> BadgeIcons = new Dictionary<string, string>()
         {
+            {"RGM Owner", "👑"},
+            {"RGM Administrator", "⚖️"},
+            {"RGM Developer", "🔧"},
             {"호기심 많은 자", "❓"},
             {"1st Anniversary", "⭐"},
             {"Adieu, Polaris", "⭐"},
