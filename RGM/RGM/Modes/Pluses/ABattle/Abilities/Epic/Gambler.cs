@@ -17,12 +17,17 @@ public class Gambler : Ability
 {
     public override void OnEnabled()
     {
+        if (Owner.IsScp || Owner.Role.Type.ToString().Contains("Flamingo"))
+            Owner.ShowHint($"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
+
         Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+        Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+        Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
     }
 
     public void OnDroppingItem(DroppingItemEventArgs ev)
@@ -36,13 +41,32 @@ public class Gambler : Ability
         int rand = UnityEngine.Random.Range(1, 101);
         if (0 < rand && rand < 3)
         {
-            ev.Player.EnableEffect(EffectType.SeveredHands);
+            Owner.EnableEffect(EffectType.SeveredHands);
         }
         else
         {
             ev.Item.Destroy();
-            Item CurrentItem = ev.Player.AddItem(Item);
-            ev.Player.DropItem(CurrentItem);
+            Item CurrentItem = Owner.AddItem(Item);
+            Owner.DropItem(CurrentItem);
+        }
+    }
+
+    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    {
+        if (!(Owner.IsScp || Owner.Role.Type.ToString().Contains("Flamingo")) || !Owner.IsJumping || Owner.GetEffect(EffectType.SeveredHands).IsEnabled)
+            return;
+
+        int rand = UnityEngine.Random.Range(1, 101);
+
+        if (0 < rand && rand < 3)
+            Owner.EnableEffect(EffectType.SeveredHands);
+
+        else
+        {
+            List<ItemType> ItemList = Tools.EnumToList<ItemType>();
+            ItemType Item = Tools.GetRandomValue(ItemList);
+
+            Owner.AddItem(Item);
         }
     }
 }
