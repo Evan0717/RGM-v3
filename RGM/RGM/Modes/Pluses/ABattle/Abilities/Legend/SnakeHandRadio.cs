@@ -23,12 +23,26 @@ public class SnakeHandRadio : Ability
         Item SH = Owner.AddItem(ItemType.Radio);
         CallSnakeHandsSerial = SH.Serial;
 
+        Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
     }
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
         Exiled.Events.Handlers.Player.TogglingRadio -= OnTogglingRadio;
+    }
+
+    public void OnChangedItem(ChangedItemEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+
+        if (ev.Item != null)
+        {
+            if (CallSnakeHandsSerial == ev.Item.Serial)
+                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력이 있는 <b>무전기</b>입니다!");
+        }
     }
 
     public void OnTogglingRadio(TogglingRadioEventArgs ev)
