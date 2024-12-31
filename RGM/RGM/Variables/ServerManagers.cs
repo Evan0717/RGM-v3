@@ -100,7 +100,8 @@ namespace RGM.Variables
             {"복면이 그리운 시설 경비", "이런! 한기가 느껴지는 재단에서는 복면이 참 좋았는데.."},
             {"무능한 구미호", "너무 무능하다고 하지 마세요. 그래도 총은 있잖.. 어?"},
             {"난동꾼 반란", "\"시설에 난입하여 그들만의 이익을 취합니다.\""},
-            {"동네북 뱀의 손", "너는 누구 팀이야? SCP? 인간?"}
+            {"동네북 뱀의 손", "너는 누구 팀이야? SCP? 인간?"},
+            {"Adieu! 2024", "2024년의 마지막을 기념하며"}
         };
         public static Dictionary<string, string> BadgeIcons = new Dictionary<string, string>()
         {
@@ -108,7 +109,8 @@ namespace RGM.Variables
             {"1st Anniversary", "⭐"},
             {"Adieu, Polaris", "⭐"},
             {"Adieu! 2023", "⭐"},
-            {"2023 RGM Summer", "⭐"}
+            {"2023 RGM Summer", "⭐"},
+            {"Adieu! 2024", "✿"}
         };
 
         public static List<ModeType> EnabledModeList = new List<ModeType>();
