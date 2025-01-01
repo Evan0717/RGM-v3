@@ -11,7 +11,7 @@ using Exiled.API.Features.Roles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.SCPRUSH)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SCPRUSH)]
     public class SCPRUSH : Mode
     {
         public override string Name => "SCP 러쉬";
