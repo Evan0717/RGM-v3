@@ -101,6 +101,7 @@ public enum ModeType
     RedLightGreenLight,
     RocketLauncher,
     SCPRUSH,
+    SnowBallFight,
     Siberia,
     SoulMate,
     Spirit,

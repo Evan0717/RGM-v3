@@ -31,6 +31,10 @@ namespace RGM.Modes
         public static RandomItem Instance;
 
         List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
+        List<ItemType> ignoreItemTypes = new List<ItemType>() 
+        { 
+            ItemType.SCP330
+        };
 
         public override void OnEnabled()
         {
@@ -50,7 +54,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 {
-                    Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes));
+                    Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItemTypes.Contains(x)).ToList()));
 
                     player.ShowHint($"<color=#F3F781>{Trans.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
                 }
@@ -70,7 +74,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 9; i++)
             {
-                Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes));
+                Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItemTypes.Contains(x)).ToList()));
             }
         }
     }
