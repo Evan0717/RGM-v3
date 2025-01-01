@@ -73,8 +73,6 @@ namespace RGM.Modes
             dummy.roleManager.ServerSetRole(RoleTypeId.Scp173, RoleChangeReason.RemoteAdmin);
             dummy.TryOverridePosition(new Vector3(-100, 1000, -100), Vector3.zero);
 
-            bot.IsGodModeEnabled = true;
-
             FirstPersonMovementModule fpcModule = (bot.ReferenceHub.roleManager.CurrentRole as FpcStandardRoleBase).FpcModule;
             fpcModule.Noclip.IsActive = true;
 
