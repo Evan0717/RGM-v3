@@ -26,6 +26,7 @@ namespace RGM.Modes
 최대 60만큼, 60초 동안 받습니다.
 """;
         public override string Color => "BFFF00";
+        public override string Suggester => "몬키키";
 
         public static RandomEffect Instance;
 
