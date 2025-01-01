@@ -224,7 +224,7 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            if (player.IsAlive)
+            if (player.IsAlive && player.IsScp)
             {
                 List<RoleTypeId> ScpsList = new List<RoleTypeId>()
                 {
