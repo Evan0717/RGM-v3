@@ -72,16 +72,7 @@ namespace RGM.API.Features
                 RoleTypeId.Tutorial
             };
 
-            List<RoleTypeId> SelectedRole()
-            {
-                if (UnityEngine.Random.Range(1, 11) == 1)
-                    return Scps;
-
-                else
-                    return Humans;
-            }
-
-            player.Role.Set(Tools.GetRandomValue(SelectedRole()));
+            player.Role.Set(Tools.GetRandomValue(Humans));
             player.ClearInventory();
             player.Position = GameObject.Find("LobbyStartPoint").transform.position;
 

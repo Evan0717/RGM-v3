@@ -538,21 +538,18 @@ namespace RGM.EventArgs
 
         public static void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
-            if (!Round.IsStarted)
-                ev.IsAllowed = false;
+            if (Round.IsLobby)
+                return;
 
-            else
+            if (GodModePlayers.Contains(ev.Player))
             {
-                if (GodModePlayers.Contains(ev.Player))
-                {
-                    if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
-                        ev.IsAllowed = false;
+                if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+                    ev.IsAllowed = false;
 
-                    else
-                    {
-                        GodModePlayers.Remove(ev.Player);
-                        ev.Player.Kill(ev.DamageHandler);
-                    }
+                else
+                {
+                    GodModePlayers.Remove(ev.Player);
+                    ev.Player.Kill(ev.DamageHandler);
                 }
             }
         }
