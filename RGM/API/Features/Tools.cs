@@ -47,6 +47,48 @@ namespace RGM.API.Features
             return itemList;
         }
 
+        public static void TeleportToLobby(Player player)
+        {
+            List<RoleTypeId> Scps = new List<RoleTypeId>()
+            {
+                RoleTypeId.Scp173,
+                RoleTypeId.Scp049,
+                RoleTypeId.Scp0492,
+                RoleTypeId.Scp106,
+                RoleTypeId.Scp939,
+                // RoleTypeId.Scp3114,
+                RoleTypeId.Flamingo,
+                RoleTypeId.AlphaFlamingo,
+                RoleTypeId.ZombieFlamingo,
+            };
+
+            List<RoleTypeId> Humans = new List<RoleTypeId>()
+            {
+                RoleTypeId.ClassD,
+                RoleTypeId.Scientist,
+                RoleTypeId.FacilityGuard,
+                RoleTypeId.ChaosConscript,
+                RoleTypeId.NtfSpecialist,
+                RoleTypeId.Tutorial
+            };
+
+            List<RoleTypeId> SelectedRole()
+            {
+                if (UnityEngine.Random.Range(1, 11) == 1)
+                    return Scps;
+
+                else
+                    return Humans;
+            }
+
+            player.Role.Set(Tools.GetRandomValue(SelectedRole()));
+            player.ClearInventory();
+            player.Position = GameObject.Find("LobbyStartPoint").transform.position;
+
+            if (SelectMode == "FightVote")
+                player.AddItem(ItemType.GunRevolver);
+        }
+
         public static List<Transform> GetObjectList(string Name)
         {
             return GameObject.FindObjectsOfType<Transform>().Where(t => t.name == Name).ToList();

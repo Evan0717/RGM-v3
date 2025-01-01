@@ -120,41 +120,10 @@ namespace RGM.EventArgs
             {
                 Server.ExecuteCommand($"/speak {ev.Player.Id} enable");
 
-                List<RoleTypeId> Scps = new List<RoleTypeId>()
-                {
-                    RoleTypeId.Scp173,
-                    RoleTypeId.Scp049,
-                    RoleTypeId.Scp0492,
-                    RoleTypeId.Scp106,
-                    RoleTypeId.Scp939,
-                    // RoleTypeId.Scp3114,
-                    RoleTypeId.Flamingo,
-                    RoleTypeId.AlphaFlamingo,
-                    RoleTypeId.ZombieFlamingo,
-                };
+                Tools.TeleportToLobby(ev.Player);
 
-                List<RoleTypeId> Humans = new List<RoleTypeId>()
-                {
-                    RoleTypeId.ClassD,
-                    RoleTypeId.Scientist,
-                    RoleTypeId.FacilityGuard,
-                    RoleTypeId.ChaosConscript,
-                    RoleTypeId.NtfSpecialist,
-                    RoleTypeId.Tutorial
-                };
-
-                List<RoleTypeId> SelectedRole()
-                {
-                    if (UnityEngine.Random.Range(1, 11) == 1)
-                        return Scps;
-
-                    else
-                        return Humans;
-                }
-
-                ev.Player.Role.Set(Tools.GetRandomValue(SelectedRole()));
-                ev.Player.ClearInventory();
-                ev.Player.Position = GameObject.Find("LobbyStartPoint").transform.position;
+                if (SelectMode == "SecretVote")
+                    ev.Player.EnableEffect(EffectType.Invisible);
 
                 ModeType iv(int num)
                 {
@@ -256,13 +225,19 @@ namespace RGM.EventArgs
                                     string FirstDesc()
                                     {
                                         if (SelectMode == "RandomSelect")
-                                            return "<b>[선택 모드 : 임의의 손길]</b> <color=#F8E0E0>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
+                                            return "<b>[선택 모드 : 무작위]</b> <color=#F8E0E0>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
 
                                         else if (SelectMode == "SimpleSelect")
-                                            return "<b>[선택 모드 : 간이 셀렉트]</b> <color=#F5F6CE>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
+                                            return "<b>[선택 모드 : 롤토체스]</b> <color=#F5F6CE>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
 
                                         else if (SelectMode == "MostVote")
-                                            return "<b>[선택 모드 : 다수 결정자]</b> <color=#E0F2F7>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
+                                            return "<b>[선택 모드 : 다수결]</b> <color=#E0F2F7>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
+
+                                        else if (SelectMode == "SecretVote")
+                                            return "<b>[선택 모드 : 비밀 선거]</b> <color=#E1F5A9>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
+
+                                        else if (SelectMode == "FightVote")
+                                            return "<b>[선택 모드 : 공포 정치]</b> <color=#E1F5A9>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
 
                                         else
                                             return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
@@ -280,6 +255,15 @@ namespace RGM.EventArgs
                                         return $" <size=20><color=white>Idea by {ModeList[SelectedMode].Suggester}</color></size>";
                                 }
 
+                                string s(int num)
+                                {
+                                    if (SelectMode == "SecretVote")
+                                        return "?";
+
+                                    else
+                                        return ModeVote[iv(num)].Count().ToString();
+                                }
+
                                 List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
 
                                 ev.Player.ShowHint(Notions.LobbyMessage
@@ -287,11 +271,11 @@ namespace RGM.EventArgs
                                     .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
                                     .Replace("{ThirdMark}", ModeVote[iv(3)].Contains(ev.Player) ? "■" : "□")
                                     .Replace("{First}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(1)].Color}>{iv(1).GetModeData().Name}</color>") + (SubModeVote[0] != ModeType.None ? $" + <b><i> <size=20><color=#{ModeList[SubModeVote[0]].Color}>{SubModeVote[0].GetModeData().Name}</color></size></i></b>" : ""))
-                                    .Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(1)].Count()}</color>" : ModeVote[iv(1)].Count().ToString())
+                                    .Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{s(1)}</color>" : s(1))
                                     .Replace("{Second}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(2)].Color}>{iv(2).GetModeData().Name}</color>") + (SubModeVote[1] != ModeType.None ? $" + <b><i><size=20><color=#{ModeList[SubModeVote[1]].Color}>{SubModeVote[1].GetModeData().Name}</color></size></i></b>" : ""))
-                                    .Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(2)].Count()}</color>" : ModeVote[iv(2)].Count().ToString())
+                                    .Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{s(2)}</color>" : s(2))
                                     .Replace("{Third}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(3)].Color}>{iv(3).GetModeData().Name}</color>") + (SubModeVote[2] != ModeType.None ? $" + <b><i> <size=20><color=#{ModeList[SubModeVote[2]].Color}>{SubModeVote[2].GetModeData().Name}</color></size></i></b>" : ""))
-                                    .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{ModeVote[iv(3)].Count()}</color>" : ModeVote[iv(3)].Count().ToString())
+                                    .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{s(3)}</color>" : s(3))
                                     .Replace("{ModeName}", $"{(SelectedMode == ModeType.None ? "<i>참고</i>" : SelectedMode.GetModeData().Name)}{IdeaBy()}")
                                     .Replace("{ModeColor}", $"{Color}").Replace("{ModeDescription}", $"{Description}")
                                     .Replace("{Lines}", $"{(Description.Contains("\n") ? "\n" : "\n\n")}")
@@ -531,27 +515,24 @@ namespace RGM.EventArgs
 
         public static void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (!Round.IsStarted)
-                ev.IsAllowed = false;
+            if (Round.IsLobby)
+                return;
 
-            else
+            if (GodModePlayers.Contains(ev.Player))
             {
-                if (GodModePlayers.Contains(ev.Player))
-                {
-                    if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
-                        ev.IsAllowed = false;
+                if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+                    ev.IsAllowed = false;
 
-                    else
-                    {
-                        GodModePlayers.Remove(ev.Player);
-                        ev.Player.Kill(ev.DamageHandler);
-                    }
-                }
-                else if (ev.Attacker != null)
+                else
                 {
-                    if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player)
-                        PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
+                    GodModePlayers.Remove(ev.Player);
+                    ev.Player.Kill(ev.DamageHandler);
                 }
+            }
+            else if (ev.Attacker != null)
+            {
+                if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player)
+                    PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
             }
         }
 
@@ -578,31 +559,38 @@ namespace RGM.EventArgs
 
         public static void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            string MessageFormat()
+            if (Round.IsLobby)
             {
-                if (ev.Attacker == null)
-                    return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
-
-                else
-                    return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.DisplayNickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                Tools.TeleportToLobby(ev.Player);
             }
-
-            foreach (var player in Player.List.Where(x => x.IsDead || x == ev.Attacker))
-                player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>");
-
-            if (ev.Attacker != null && !ev.Attacker.IsNPC)
+            else
             {
-                PlayersReport[ev.Attacker.UserId].Kill += 1;
+                string MessageFormat()
+                {
+                    if (ev.Attacker == null)
+                        return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
 
-                if (ev.Player.IsScp)
-                    PlayersReport[ev.Attacker.UserId].KillScp += 1;
+                    else
+                        return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.DisplayNickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                }
 
-                if (!ev.Player.IsScp)
-                    PlayersReport[ev.Attacker.UserId].KillHuman += 1;
+                foreach (var player in Player.List.Where(x => x.IsDead || x == ev.Attacker))
+                    player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>");
+
+                if (ev.Attacker != null && !ev.Attacker.IsNPC)
+                {
+                    PlayersReport[ev.Attacker.UserId].Kill += 1;
+
+                    if (ev.Player.IsScp)
+                        PlayersReport[ev.Attacker.UserId].KillScp += 1;
+
+                    if (!ev.Player.IsScp)
+                        PlayersReport[ev.Attacker.UserId].KillHuman += 1;
+                }
+
+                if (!ev.Player.IsNPC)
+                    PlayersReport[ev.Player.UserId].Death += 1;
             }
-
-            if (!ev.Player.IsNPC)
-                PlayersReport[ev.Player.UserId].Death += 1;
         }
 
         public static void OnDroppedItem(Exiled.Events.EventArgs.Player.DroppedItemEventArgs ev)
@@ -628,12 +616,6 @@ namespace RGM.EventArgs
 
         public static void OnItemAdded(Exiled.Events.EventArgs.Player.ItemAddedEventArgs ev)
         {
-            if (ev.Item.Type == ItemType.SCP1507Tape)
-            {
-                if (Round.ElapsedTime.TotalSeconds <= 60)
-                    ev.Player.RemoveItem(ev.Item);
-            }
-
             if (ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo"))
             {
                 if (!ev.Item.IsAmmo)

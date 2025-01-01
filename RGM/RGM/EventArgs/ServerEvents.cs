@@ -75,6 +75,14 @@ namespace RGM.EventArgs
             {
                 SelectMode = "SimpleSelect";
             }
+            else if (rn == 3)
+            {
+                SelectMode = "SecretVote";
+            }
+            else if (rn == 4)
+            {
+                SelectMode = "FightVote";
+            }
             else
             {
                 SelectMode = "MostVote";
