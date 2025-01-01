@@ -125,6 +125,7 @@ namespace RGM.Variables
         public static List<string> Requests = new List<string>();
         public static List<Player> GodModePlayers = new List<Player>();
         public static List<Player> ChatCooldown = new List<Player>();
+        public static List<Player> EmotionCooldown = new List<Player>();
         public static List<Player> BugVotePlayers = new List<Player>();
         public static List<Player> BugVoteUsers = new List<Player>();
 

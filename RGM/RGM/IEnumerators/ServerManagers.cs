@@ -86,11 +86,12 @@ namespace RGM.IEnumerators
             }
         }
 
-        public static IEnumerator<float> ChattingCooldown()
+        public static IEnumerator<float> InputCooldown()
         {
             while (true)
             {
                 ChatCooldown.Clear();
+                EmotionCooldown.Clear();
 
                 yield return Timing.WaitForSeconds(2f);
             }

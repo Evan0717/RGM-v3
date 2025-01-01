@@ -14,6 +14,8 @@ using RGM.API.Features;
 using RGM.Modes;
 using UnityEngine;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Commands.ClientCommands
 {
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -23,7 +25,12 @@ namespace RGM.Commands.ClientCommands
         {
             Player player = Player.Get(sender);
 
-            if (player.IsHuman)
+            if (EmotionCooldown.Contains(player))
+            {
+                response = "너무 빠른 간격으로 입력을 보내고 있습니다!";
+                return false;
+            }
+            else if (player.IsHuman)
             {
                 if (int.TryParse(arguments.At(0), out int num))
                 {
