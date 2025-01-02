@@ -14,7 +14,7 @@ using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Disguise)]
+    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.Disguise)]
     public class Disguise : Mode
     {
         public override string Name => "변장";
