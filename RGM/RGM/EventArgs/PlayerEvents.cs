@@ -55,6 +55,9 @@ namespace RGM.EventArgs
 
                 try
                 {
+                    UsersManager.UsersCache[ev.Player.UserId][12] = ev.Player.DisplayNickname;
+                    UsersManager.SaveUsers();
+
                     ev.Player.Group = null;
                     ev.Player.RankName = null;
                     ev.Player.BadgeHidden = false;
@@ -187,6 +190,38 @@ namespace RGM.EventArgs
                                 }
 
                                 ev.Player.ShowHint($"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
+                            }
+                            else if (hit.transform.name == "ExpLeaderBoard")
+                            {
+                                List<string> queue = new List<string>();
+
+                                string c(int num)
+                                {
+                                    switch (num)
+                                    {
+                                        case 1:
+                                            return $"<color=#ffd700>#{num}</color>";
+
+                                        case 2:
+                                            return $"<color=#c0c0c0>#{num}</color>";
+
+                                        case 3:
+                                            return $"<color=#cd7f32>#{num}</color>";
+
+                                        default:
+                                            return $"#{num}";
+                                    }
+                                }
+
+                                foreach (var user in UsersManager.UsersCache.OrderByDescending(x => int.Parse(x.Value[0])).Take(10))
+                                {
+                                    string Name = user.Value[12];
+                                    string Exp = user.Value[0];
+
+                                    queue.Add($"{c(queue.Count() + 1)} - <b>{Name}</b>(<color=yellow>{Exp}</color>)");
+                                }
+
+                                ev.Player.ShowHint($"<align=left><size=30><b>[ ⭐ 랜덤게임모드(RGM) EXP 순위표 ⭐ ]</b></size>\n\n<size=25>{string.Join("\n", queue)}</size></align>\n\n\n\n\n");
                             }
                             else
                             {
