@@ -54,8 +54,8 @@ namespace RGM.Modes
 
             for (int i = 0; i < 300; i++)
             {
-                Player.List.ToList().ForEach(x => x.ClearBroadcasts());
                 Player.List.ToList().ForEach(x => x.AddBroadcast(1, $"<b><size=25><color=green>{300 - i}초 후</color> 게임이 종료됩니다.</size></b>"));
+
                 yield return Timing.WaitForSeconds(1f);
             }
 

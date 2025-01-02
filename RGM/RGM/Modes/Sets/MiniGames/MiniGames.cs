@@ -132,10 +132,8 @@ zombie2
                     for (int i = 1; i < 10; i++)
                     {
                         foreach (var player in Player.List)
-                        {
-                            player.ClearBroadcasts();
                             player.AddBroadcast(1, $"<b><color=red>{10 - i}</color>초 후 <i><color=yellow>{RoundCount + 1}번째 라운드</color></i>가 시작됩니다.</b>");
-                        }
+
                         yield return Timing.WaitForSeconds(1f);
                     }
                 }

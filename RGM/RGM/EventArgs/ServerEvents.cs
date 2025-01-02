@@ -155,7 +155,6 @@ namespace RGM.EventArgs
 
             foreach (var player in Player.List)
             {
-                player.ClearPlayerBroadcasts();
                 player.AddBroadcast(10, ModeDesc[0]);
 
                 player.SendConsoleMessage($"\n{ModeDesc[0].Replace("\n", "\n")}", "white");

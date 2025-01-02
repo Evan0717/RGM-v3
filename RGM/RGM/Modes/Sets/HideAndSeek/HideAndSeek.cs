@@ -64,10 +64,7 @@ namespace RGM.Modes
             for (int i = 1; i < 10; i++)
             {
                 foreach (var player in Player.List)
-                {
-                    player.ClearBroadcasts();
                     player.AddBroadcast(1, $"<size=25><b><color=red>{10 - i}초 뒤 술래가 출몰합니다.</color></b></size>");
-                }
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -89,7 +86,6 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    player.ClearBroadcasts();
                     player.AddBroadcast(1, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
                 }
 

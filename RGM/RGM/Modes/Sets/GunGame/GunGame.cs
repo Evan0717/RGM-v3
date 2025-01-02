@@ -139,7 +139,6 @@ COM-15
                 {
                     if (Stage.ContainsKey(player))
                     {
-                        player.ClearPlayerBroadcasts();
                         Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
                         player.AddBroadcast(1, $"<size=25><b><color=yellow>선두주자(1st) 플레이어</color> - {topPlayer.Nickname}({Stage[topPlayer]}점)</b></size>\n" +
                             $"<size=20><i>우승까지 <color=red>{GunsList.Count - Stage[player] - 1}</color>킬({Stage[player]}점) 남았습니다.</i></size>");

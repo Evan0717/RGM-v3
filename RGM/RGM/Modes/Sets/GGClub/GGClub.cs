@@ -242,10 +242,7 @@ namespace RGM.Modes
             while (Phase < 11)
             {
                 foreach (var player in Player.List)
-                {
-                    player.ClearPlayerBroadcasts();
                     player.AddBroadcast(1, $"<b><color=#FFF700>P</color><color=#FFC516>h</color><color=#FF942C>a</color><color=#FF6242>s</color><color=#FF3158>e</color></b> {Phase}");
-                }
 
                 yield return Timing.WaitForSeconds(1f);
             }
