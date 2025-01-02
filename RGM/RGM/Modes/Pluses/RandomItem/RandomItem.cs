@@ -15,7 +15,7 @@ using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.RandomItem)]
+    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.RandomItem)]
     class RandomItem : Mode
     {
         public override string Name => "랜덤박스";
