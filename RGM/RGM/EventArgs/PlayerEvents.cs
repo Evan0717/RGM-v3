@@ -539,15 +539,22 @@ namespace RGM.EventArgs
 
         public static void OnDying(DyingEventArgs ev)
         {
-            if (GodModePlayers.Contains(ev.Player))
+            if (Round.IsLobby)
             {
-                if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
-                    ev.IsAllowed = false;
-
-                else
+                ev.Player.ClearInventory();
+            }
+            else
+            {
+                if (GodModePlayers.Contains(ev.Player))
                 {
-                    GodModePlayers.Remove(ev.Player);
-                    ev.Player.Kill(ev.DamageHandler);
+                    if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+                        ev.IsAllowed = false;
+
+                    else
+                    {
+                        GodModePlayers.Remove(ev.Player);
+                        ev.Player.Kill(ev.DamageHandler);
+                    }
                 }
             }
         }
