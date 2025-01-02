@@ -238,7 +238,7 @@ namespace RGM.EventArgs
                                             return "<b>[선택 모드 : 비밀 선거]</b> <color=#E6F8E0>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
 
                                         else if (SelectMode == "FightVote")
-                                            return "<b>[선택 모드 : 공포 정치]</b> <color=#FA5858>마음에 들지 않는 선택을 한 자를 쏴버리세요.</color>";
+                                            return "<b>[선택 모드 : 공포 정치]</b> <color=#FA5858>소수가 지배하는 모드 투표장이 되었습니다.</color>";
 
                                         else
                                             return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";

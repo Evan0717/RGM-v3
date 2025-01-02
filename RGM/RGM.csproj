@@ -61,7 +61,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="AiScp">
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\AiScp.dll</HintPath>
     </Reference>
     <Reference Include="AMERTAudioModule">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\AMERTAudioModule.dll</HintPath>
@@ -75,7 +78,7 @@
     </Reference>
     <Reference Include="AudioPlayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\AudioPlayer.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\AudioPlayer.dll</HintPath>
     </Reference>
     <Reference Include="CommandSystem.Core">
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
@@ -85,33 +88,33 @@
     </Reference>
     <Reference Include="Exiled.API, Version=9.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags, Version=9.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomItems, Version=9.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.CustomItems.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\Exiled.CustomItems.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomRoles, Version=9.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.CustomRoles.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\Exiled.CustomRoles.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=9.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=9.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="GGUtils">
       <HintPath>..\..\GGUtils\bin\Debug\GGUtils.dll</HintPath>
     </Reference>
     <Reference Include="MapEditorReborn">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\MapEditorReborn.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\MapEditorReborn.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -123,7 +126,7 @@
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\Mirror.dll</HintPath>
     </Reference>
     <Reference Include="MultiBroadcast">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\MultiBroadcast.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\MultiBroadcast.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -133,7 +136,7 @@
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="NVorbis">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\NVorbis.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\NVorbis.dll</HintPath>
     </Reference>
     <Reference Include="PluginAPI">
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\PluginAPI.dll</HintPath>
@@ -142,7 +145,7 @@
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\Pooling.dll</HintPath>
     </Reference>
     <Reference Include="SCPSLAudioApi">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
     </Reference>
     <Reference Include="Site02">
       <HintPath>..\..\Site02\bin\Debug\Site02.dll</HintPath>
