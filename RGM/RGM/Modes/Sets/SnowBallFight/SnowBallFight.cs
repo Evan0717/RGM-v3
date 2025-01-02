@@ -137,6 +137,8 @@ namespace RGM.Modes
 
                     Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {playerList[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { playerList[0] }, 5));
+
+                    yield break;
                 }
 
                 yield return Timing.WaitForSeconds(1);
