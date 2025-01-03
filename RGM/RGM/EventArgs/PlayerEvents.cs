@@ -55,6 +55,9 @@ namespace RGM.EventArgs
 
                 try
                 {
+                    UsersManager.UsersCache[ev.Player.UserId][12] = ev.Player.DisplayNickname;
+                    UsersManager.SaveUsers();
+
                     ev.Player.Group = null;
                     ev.Player.RankName = null;
                     ev.Player.BadgeHidden = false;
@@ -78,6 +81,8 @@ namespace RGM.EventArgs
 
                     for (int i = 0; i < diff; i++)
                         uc.Add("0");
+
+                    UsersManager.SaveUsers();
                 }
 
                 if (uc[5] != "0")
@@ -85,9 +90,6 @@ namespace RGM.EventArgs
 
                 if (uc[6] != "0")
                     ev.Player.CustomInfo = uc[6];
-
-                uc[12] = ev.Player.DisplayNickname;
-                UsersManager.SaveUsers();
             }
 
             OnGround.Add(ev.Player, 5);
