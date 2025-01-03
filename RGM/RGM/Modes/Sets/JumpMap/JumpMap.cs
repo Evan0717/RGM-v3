@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CustomRendering;
 using Exiled.API.Features;
+using JumpMap;
 using MEC;
 using Mirror;
 using MultiBroadcast.API;
@@ -16,8 +17,8 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.JumpMap)]
-    class JumpMap : Mode
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.JumpMap)]
+    class JumpMapLounge : Mode
     {
         public override string Name => "점프맵 라운지";
         public override string Description => "5분 안에 최대한 멀리 가세요!";
@@ -30,9 +31,9 @@ namespace RGM.Modes
 """;
         public override string Color => "A9D0F5";
 
-        public static JumpMap Instance;
+        public static JumpMapLounge Instance;
 
-        site02.site02 site02 = new site02.site02();
+        JumpMap.JumpMap site02 = new JumpMap.JumpMap();
 
         public override void OnEnabled()
         {
