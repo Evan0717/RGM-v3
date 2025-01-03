@@ -63,9 +63,6 @@
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="AiScp">
-      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\AiScp.dll</HintPath>
-    </Reference>
     <Reference Include="AMERTAudioModule">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\AMERTAudioModule.dll</HintPath>
     </Reference>
@@ -113,6 +110,9 @@
     <Reference Include="GGUtils">
       <HintPath>..\..\GGUtils\bin\Debug\GGUtils.dll</HintPath>
     </Reference>
+    <Reference Include="JumpMap">
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\JumpMap.dll</HintPath>
+    </Reference>
     <Reference Include="MapEditorReborn">
       <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\MapEditorReborn.dll</HintPath>
     </Reference>
@@ -146,9 +146,6 @@
     </Reference>
     <Reference Include="SCPSLAudioApi">
       <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Site02">
-      <HintPath>..\..\Site02\bin\Debug\Site02.dll</HintPath>
     </Reference>
     <Reference Include="SLPlayerRotation">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\SLPlayerRotation.dll</HintPath>
