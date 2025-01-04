@@ -36,7 +36,6 @@ line
 dodge
 fall
 football
-gungame
 knives
 puzzle
 race
@@ -67,7 +66,6 @@ zombie2
             "dodge",
             "fall",
             "football",
-            "gungame",
             "knives",
             "puzzle",
             "race",
