@@ -35,7 +35,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 10, 9);
+        public override Version Version { get; } = new(3, 10, 10);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -103,6 +103,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.Banning += OnBanning;
             Exiled.Events.Handlers.Player.ChangingGroup += OnChangingGroup;
             Exiled.Events.Handlers.Player.ChangedEmotion += OnChangedEmotion;
+            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
 
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
@@ -139,6 +140,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.Banning -= OnBanning;
             Exiled.Events.Handlers.Player.ChangingGroup -= OnChangingGroup;
             Exiled.Events.Handlers.Player.ChangedEmotion -= OnChangedEmotion;
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
 
             Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
