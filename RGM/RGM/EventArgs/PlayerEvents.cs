@@ -19,6 +19,7 @@ using Exiled.API.Features.Toys;
 using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
 using System.Runtime.Remoting.Messaging;
 using Exiled.Events.EventArgs.Player;
+using DiscordInteraction.Discord;
 
 namespace RGM.EventArgs
 {
@@ -340,7 +341,7 @@ namespace RGM.EventArgs
             if (OnGround.ContainsKey(ev.Player))
                 OnGround.Remove(ev.Player);
 
-            if (!Round.IsStarted)
+            if (Round.IsLobby)
             {
                 for (int i = 0; i < 3; i++)
                 {
@@ -352,36 +353,41 @@ namespace RGM.EventArgs
             {
                 if (PlayersInfo.ContainsKey(ev.Player.UserId))
                 {
-                    string UserId = ev.Player.UserId;
+                    string nickname = ev.Player.Nickname;
+                    string role = ev.Player.Role.Name;
+                    string userId = ev.Player.UserId;
 
                     yield return Timing.WaitForSeconds(1f);
 
+                    Webhook.Send($"**⚖️ 재접속 대기**ㅣ`{nickname}`({role}, {userId})");
+
                     for (int i = 1; i < 181; i++)
                     {
+                        Log.Info($"{nickname}({userId}) 재접속 대기 중.. ({181 - i})");
+
                         foreach (var player in Player.List.Where(x => !x.IsNPC))
                         {
-                            if (UserId == player.UserId)
+                            if (userId == player.UserId)
                             {
-                                player.Role.Set(PlayersInfo[UserId].RoleType);
-                                player.MaxHealth = PlayersInfo[UserId].MaxHealth;
-                                player.Health = PlayersInfo[UserId].Health;
+                                player.Role.Set(PlayersInfo[userId].RoleType);
+                                player.MaxHealth = PlayersInfo[userId].MaxHealth;
+                                player.Health = PlayersInfo[userId].Health;
 
-                                foreach (var effect in PlayersInfo[UserId].ActiveEffects)
+                                foreach (var effect in PlayersInfo[userId].ActiveEffects)
                                     player.EnableEffect(effect, effect.Intensity, effect.Duration);
 
-                                player.ClearItems();
-
-                                foreach (var item in PlayersInfo[UserId].Items)
+                                foreach (var item in PlayersInfo[userId].Items)
                                     player.AddItem(item.Type);
 
-                                player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[UserId].CurrentItem.Type);
+                                player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[userId].CurrentItem.Type);
 
-                                player.Position = new Vector3(PlayersInfo[UserId].Position.x, PlayersInfo[UserId].Position.y, PlayersInfo[UserId].Position.z);
+                                player.Position = new Vector3(PlayersInfo[userId].Position.x, PlayersInfo[userId].Position.y, PlayersInfo[userId].Position.z);
 
-                                if (PlayersInfo.ContainsKey(UserId))
-                                    PlayersInfo.Remove(UserId);
+                                if (PlayersInfo.ContainsKey(userId))
+                                    PlayersInfo.Remove(userId);
 
                                 Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
+                                Webhook.Send($"**✅ 재접속 완료**ㅣ`{nickname}`({role}, {userId})");
 
                                 PlayersInfo.Remove(player.UserId);
                                 yield break;
@@ -425,26 +431,26 @@ namespace RGM.EventArgs
                     PlayersReport[ev.Player.UserId].Revive += 1;
             }
 
-            if (ev.Reason == SpawnReason.RoundStart && ev.SpawnFlags == RoleSpawnFlags.All)
+            if (ev.Player.IsScp)
             {
-                if (ev.Player.IsScp)
+                if (ev.Player.Role.Type == RoleTypeId.Scp079)
                 {
-                    if (ev.Player.Role.Type == RoleTypeId.Scp079)
-                    {
-                        ev.Player.MaxHealth = 12050;
-                        ev.Player.Health = ev.Player.MaxHealth;
-                    }
+                    ev.Player.MaxHealth = 12050;
+                    ev.Player.Health = ev.Player.MaxHealth;
+                }
 
-                    /*
-                    if (UnityEngine.Random.Range(1, 21) == 1 && !IsScp3114Enabled)
-                    {
-                        ev.Player.Role.Set(RoleTypeId.Scp3114);
+                /*
+                if (UnityEngine.Random.Range(1, 21) == 1 && !IsScp3114Enabled)
+                {
+                    ev.Player.Role.Set(RoleTypeId.Scp3114);
 
-                        IsScp3114Enabled = true;
-                    }
-                    */
+                    IsScp3114Enabled = true;
+                }
+                */
 
-                    if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
+                if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
+                {
+                    if (!PlayersInfo.ContainsKey(ev.Player.UserId))
                     {
                         PlayersInfo.Add(ev.Player.UserId, new PlayerInfo
                         {
@@ -458,38 +464,38 @@ namespace RGM.EventArgs
                         });
                     }
                 }
-                else if (ev.Player.IsHuman)
+            }
+            else if (ev.Player.IsHuman)
+            {
+                if (StartupRandom == 1) // 시작 카오스
                 {
-                    if (StartupRandom == 1) // 시작 카오스
+                    if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
                     {
-                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
-                        {
-                            ev.Player.Role.Set(RoleTypeId.ChaosConscript);
-
-                        }
-                    }
-                    if (StartupRandom == 2) // 시작 NTF
-                    {
-                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
-                        {
-                            ev.Player.Role.Set(RoleTypeId.NtfPrivate);
-
-                        }
-                    }
-
-                    int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
-
-                    if (rand == 1)
-                    {
-                        ev.Player.Role.Set(RoleTypeId.Scp0492);
-                        ev.Player.MaxHealth = 1000;
-                        ev.Player.Health = ev.Player.MaxHealth;
+                        ev.Player.Role.Set(RoleTypeId.ChaosConscript);
 
                     }
-                    else if (rand == 2)
+                }
+                if (StartupRandom == 2) // 시작 NTF
+                {
+                    if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
                     {
-                        ev.Player.Scale = new Vector3(-1, -1, -1);
+                        ev.Player.Role.Set(RoleTypeId.NtfPrivate);
+
                     }
+                }
+
+                int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
+
+                if (rand == 1)
+                {
+                    ev.Player.Role.Set(RoleTypeId.Scp0492);
+                    ev.Player.MaxHealth = 1000;
+                    ev.Player.Health = ev.Player.MaxHealth;
+
+                }
+                else if (rand == 2)
+                {
+                    ev.Player.Scale = new Vector3(-1, -1, -1);
                 }
             }
 
@@ -710,6 +716,8 @@ namespace RGM.EventArgs
 
         public static void OnChangedEmotion(ChangedEmotionEventArgs ev)
         {
+            EmotionCooldown.Add(ev.Player);
+
             EmotionPresetType type = ev.EmotionPresetType;
 
             if (type == EmotionPresetType.Neutral)
