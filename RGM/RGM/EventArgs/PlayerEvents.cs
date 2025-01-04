@@ -739,5 +739,11 @@ namespace RGM.EventArgs
             foreach (var player in Player.List.Where(x => x.IsDead || Vector3.Distance(x.Position, ev.Player.Position) < 11))
                 player.AddBroadcast(5, $"<size=20>{Tools.BadgeFormat(ev.Player)}<color={ev.Player.Role.Color.ToHex()}>{ev.Player.DisplayNickname}</color>(은)는 {emotion()}.</size>");
         }
+
+        public static void OnVoiceChatting(VoiceChattingEventArgs ev)
+        {
+            if (SelectMode == "SecretVote" && Round.IsLobby)
+                ev.IsAllowed = false;
+        }
     }
 }
