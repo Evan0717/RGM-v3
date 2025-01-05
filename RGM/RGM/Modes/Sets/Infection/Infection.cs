@@ -65,7 +65,7 @@ namespace RGM.Modes
 
             Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            Timing.CallDelayed(1, () =>
             {
                 hostZombie.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
             });
@@ -75,7 +75,7 @@ namespace RGM.Modes
                 if (player != hostZombie)
                 {
                     player.Role.Set(RoleTypeId.NtfCaptain, RoleSpawnFlags.AssignInventory);
-                    player.AddItem(ItemType.Ammo556x45, 5);
+                    player.AddItem(ItemType.Ammo556x45, 10);
                 }
             }
 
@@ -85,6 +85,17 @@ namespace RGM.Modes
                     player.AddBroadcast(1, $"<b><size=25>{600 - i}초 뒤 인류가 승리합니다.</size></b>");
 
                 yield return Timing.WaitForSeconds(1);
+            }
+
+            Round.IsLocked = false;
+            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsHuman).ToList(), 1));
+
+            foreach (var player in Player.List)
+            {
+                player.AddBroadcast(20, $"<size=30><b>인류의 승리입니다. <color=#9AFE2E>좀비들은 해독제를 맞고 치료되었습니다.</color></b></size>");
+
+                if (player.Role.Type == RoleTypeId.Scp0492)
+                    player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
             }
         }
 
@@ -100,21 +111,6 @@ namespace RGM.Modes
                     foreach (var player in Player.List)
                     {
                         player.AddBroadcast(20, $"<size=30><b>숙주의 승리입니다. <color=red>남겨진 인류는 안타까운 결말을 맞이할 것입니다.</color></b></size>");
-                    }
-
-                    yield break;
-                }
-                else if (Round.ElapsedTime.TotalSeconds > 600)
-                {
-                    Round.IsLocked = false;
-                    Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsHuman).ToList(), 1));
-
-                    foreach (var player in Player.List)
-                    {
-                        player.AddBroadcast(20, $"<size=30><b>인류의 승리입니다. <color=#9AFE2E>좀비들은 해독제를 맞고 치료되었습니다.</color></b></size>");
-
-                        if (player.Role.Type == RoleTypeId.Scp0492)
-                            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
                     }
 
                     yield break;
