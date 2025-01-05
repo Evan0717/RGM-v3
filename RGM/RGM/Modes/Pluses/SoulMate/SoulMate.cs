@@ -228,8 +228,11 @@ namespace RGM.Modes
 
                 if (soulMate != null && soulMate.IsAlive)
                 {
-                    foreach (var player in Player.List.Where(x => x.IsDead))
-                        player.AddBroadcast(10, $"<size=20>{ev.Player.DisplayNickname}(와)과 {soulMate.DisplayNickname}(은)는 <color=#FE2EF7>소울메이트</color>였습니다.</size>");
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                    {
+                        foreach (var player in Player.List.Where(x => x.IsDead))
+                            player.AddBroadcast(10, $"<size=20>{ev.Player.DisplayNickname}(와)과 {soulMate.DisplayNickname}(은)는 <color=#FE2EF7>소울메이트</color>였습니다.</size>");
+                    });
 
                     soulMate.Kill(ev.DamageHandler);
 
