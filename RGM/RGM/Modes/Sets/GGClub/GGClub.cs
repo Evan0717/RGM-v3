@@ -21,6 +21,8 @@ using MultiBroadcast.API;
 using Exiled.Events.EventArgs.Server;
 using Respawning;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.GGClub)]
@@ -65,14 +67,14 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load GGClub");
+            Server.ExecuteCommand($"/mp load tothemoon");
 
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            audioPlayer.AddClip("GGClub", 1, true);
+            GlobalPlayer.AddClip("tothemoon", 1, true);
 
             Player.List.CopyTo(pl);
 

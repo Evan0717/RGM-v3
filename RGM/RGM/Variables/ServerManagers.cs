@@ -15,6 +15,7 @@ namespace RGM.Variables
     {
         public static ModeType CurrentMode = ModeType.None;
         public static ModeType CurrentSubMode = ModeType.None;
+        public static AudioPlayer GlobalPlayer;
         public static string SelectMode = null;
         public static string Tip = Tools.GetRandomValue(Tips.LobbyTips);
         public static string Logo = UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔";
@@ -34,17 +35,6 @@ namespace RGM.Variables
         public static Dictionary<string, PlayerInfo> PlayersInfo = new Dictionary<string, PlayerInfo>();
         public static Dictionary<string, PlayerReport> PlayersReport = new Dictionary<string, PlayerReport>();
         public static Dictionary<Door, int> InteractedDoors = new Dictionary<Door, int>();
-        public static Dictionary<string, string> AudioClips = new Dictionary<string, string>()
-        {
-            {"ChristmasRock", "LobbyTheme"},
-            {"LineLite", "DeadLine"},
-            {"tothemoon", "GGClub"},
-            {"Skeleton", "HotPotato"},
-            {"Initial_D_Dancing", "TailCatcher"},
-            {"JuggernautTheme", "Juggernaut"},
-            {"GmanRoaringSound", "Scream"},
-            {"Voices", "Infection"}
-        };
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},

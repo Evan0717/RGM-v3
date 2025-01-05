@@ -15,10 +15,12 @@ using RGM.API.Features;
 using Mirror;
 using Respawning;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.TailCatcher)]
-    public class TailCatcher : Mode
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.TailCatcter)]
+    public class TailCatcter : Mode
     {
         public override string Name => "꼬리 잡기";
         public override string Description => "절대로 타깃이 아닌 유저를 쏘지 마세요! 꼬리가 잡히지 않도록 하십시오.";
@@ -30,7 +32,7 @@ namespace RGM.Modes
 """;
         public override string Color => "A9F5BC";
 
-        public static TailCatcher Instance;
+        public static TailCatcter Instance;
 
         public List<Player> pl = new List<Player>();
 
@@ -64,12 +66,7 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load hp");
 
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-            {
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-            });
-
-            audioPlayer.AddClip("TailCatcher", 1, true);
+            GlobalPlayer.AddClip("Initial_D_Dancing", 1, true);
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 

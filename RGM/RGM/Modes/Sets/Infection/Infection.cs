@@ -28,7 +28,7 @@ using Exiled.API.Features.Doors;
 namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Infection)]
-    class Infection : Mode
+    class Voices : Mode
     {
         public override string Name => "감염";
         public override string Description => "모두를 감염시키려는 숙주와 살아남으려는 인류의 대립";
@@ -39,7 +39,7 @@ namespace RGM.Modes
 """;
         public override string Color => "FF0000";
 
-        public static Infection Instance;
+        public static Voices Instance;
 
         public override void OnEnabled()
         {
@@ -56,18 +56,19 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            audioPlayer.AddClip("Infection", 0.3f, true);
+            GlobalPlayer.AddClip("Voices", 0.3f, true);
 
             Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
             Timing.CallDelayed(1, () =>
             {
                 hostZombie.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
+                hostZombie.Position = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != hostZombie).Select(x => x.Position).ToList());
             });
 
             foreach (var player in Player.List)
@@ -87,15 +88,18 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1);
             }
 
-            Round.IsLocked = false;
-            Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsHuman).ToList(), 1));
-
-            foreach (var player in Player.List)
+            if (!Round.IsEnded)
             {
-                player.AddBroadcast(20, $"<size=30><b>인류의 승리입니다. <color=#9AFE2E>좀비들은 해독제를 맞고 치료되었습니다.</color></b></size>");
+                Round.IsLocked = false;
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsHuman).ToList(), 1));
 
-                if (player.Role.Type == RoleTypeId.Scp0492)
-                    player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+                foreach (var player in Player.List)
+                {
+                    player.AddBroadcast(20, $"<size=30><b>인류의 승리입니다. <color=#9AFE2E>좀비들은 해독제를 맞고 치료되었습니다.</color></b></size>");
+
+                    if (player.Role.Type == RoleTypeId.Scp0492)
+                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+                }
             }
         }
 

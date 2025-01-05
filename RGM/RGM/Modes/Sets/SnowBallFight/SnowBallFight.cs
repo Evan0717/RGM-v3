@@ -27,6 +27,8 @@ using GameCore;
 using Exiled.Events.Commands.Hub;
 using RelativePositioning;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SnowBallFight)]
@@ -59,12 +61,12 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand("/mp load SnowBallFight");
 
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            audioPlayer.AddClip("LobbyTheme", 0.3f, true);
+            GlobalPlayer.AddClip("ChristmasRock", 0.3f, true);
 
             ReferenceHub dummy = DummyUtils.SpawnDummy("귀여운 땅콩이 ❤️");
             Player bot = Player.Get(dummy);

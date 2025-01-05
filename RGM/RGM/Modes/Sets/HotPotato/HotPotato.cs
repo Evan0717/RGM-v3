@@ -15,10 +15,12 @@ using RGM.API.Features;
 using Mirror;
 using Respawning;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.HotPotato)]
-    public class HotPotato : Mode
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Skeleton)]
+    public class Skeleton : Mode
     {
         public override string Name => "폭탄 돌리기";
         public override string Description => "폭탄이 터지기 전에 다른 유저에게 넘기세요!";
@@ -30,7 +32,7 @@ namespace RGM.Modes
 """;
         public override string Color => "FA58D0";
 
-        public static HotPotato Instance;
+        public static Skeleton Instance;
 
         public List<Player> pl = new List<Player>();
         public List<Player> BomberMans = new List<Player>();
@@ -54,12 +56,12 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load hp");
 
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            audioPlayer.AddClip("HotPotato", 1, true);
+            GlobalPlayer.AddClip("Skeleton", 1, true);
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 

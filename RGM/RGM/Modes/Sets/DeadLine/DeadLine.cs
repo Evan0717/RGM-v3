@@ -16,6 +16,8 @@ using Mirror;
 using Respawning;
 using Exiled.API.Features.Toys;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.DeadLine)]
@@ -52,12 +54,12 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load dl");
 
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            audioPlayer.AddClip("DeadLine", 1, true);
+            GlobalPlayer.AddClip("LineLite", 1, true);
 
             Player.List.CopyTo(pl);
 

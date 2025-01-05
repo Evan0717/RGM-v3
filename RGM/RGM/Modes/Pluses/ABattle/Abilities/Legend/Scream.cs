@@ -13,10 +13,12 @@ using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("괴성", "적을 보고 있을 때 마이크를 키면 시설 내의 적들을 일시적으로 둔해지게 만듭니다. (쿨타임 100초)", AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
-public class Scream : Ability
+public class GmanRoaringSound : Ability
 {
     int RoaringSoundCooldown = 0;
 
@@ -41,12 +43,7 @@ public class Scream : Ability
             {
                 RoaringSoundCooldown = 180;
 
-                AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-                {
-                    Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-                });
-
-                audioPlayer.AddClip("Scream");
+                GlobalPlayer.AddClip("GmanRoaringSound");
 
                 foreach (var player in Player.List.Where(x => !x.IsNPC && x.LeadingTeam != ev.Player.LeadingTeam && x.IsAlive))
                 {

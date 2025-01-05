@@ -167,7 +167,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> ArmorAsync()
         {
-            SchematicObject Armor = ObjectSpawner.SpawnSchematic("JuggernautArmor", Vector3.zero, juggernaut.Rotation, new Vector3(1.2f, 1.1f, 1.2f), null);
+            SchematicObject Armor = ObjectSpawner.SpawnSchematic("JuggernautThemeArmor", Vector3.zero, juggernaut.Rotation, new Vector3(1.2f, 1.1f, 1.2f), null);
 
             while (juggernaut.IsAlive)
             {
@@ -193,7 +193,7 @@ namespace RGM.Modes
                 speaker.transform.localPosition = Vector3.zero;
             });
 
-            audioPlayer.AddClip("Juggernaut", loop: true);
+            audioPlayer.AddClip("JuggernautTheme", loop: true);
 
             yield return 0;
         }

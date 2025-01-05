@@ -31,12 +31,12 @@ namespace RGM.EventArgs
 
             UsersManager.LoadUsers();
 
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
             });
 
-            audioPlayer.AddClip("LobbyTheme", 0.1f, true);
+            GlobalPlayer.AddClip("ChristmasRock", 0.1f, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
