@@ -431,71 +431,74 @@ namespace RGM.EventArgs
                     PlayersReport[ev.Player.UserId].Revive += 1;
             }
 
-            if (ev.Player.IsScp)
+            if (ev.Reason == SpawnReason.RoundStart)
             {
-                if (ev.Player.Role.Type == RoleTypeId.Scp079)
+                if (ev.Player.IsScp)
                 {
-                    ev.Player.MaxHealth = 12050;
-                    ev.Player.Health = ev.Player.MaxHealth;
-                }
-
-                /*
-                if (UnityEngine.Random.Range(1, 21) == 1 && !IsScp3114Enabled)
-                {
-                    ev.Player.Role.Set(RoleTypeId.Scp3114);
-
-                    IsScp3114Enabled = true;
-                }
-                */
-
-                if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
-                {
-                    if (!PlayersInfo.ContainsKey(ev.Player.UserId))
+                    if (ev.Player.Role.Type == RoleTypeId.Scp079)
                     {
-                        PlayersInfo.Add(ev.Player.UserId, new PlayerInfo
+                        ev.Player.MaxHealth = 12050;
+                        ev.Player.Health = ev.Player.MaxHealth;
+                    }
+
+                    /*
+                    if (UnityEngine.Random.Range(1, 21) == 1 && !IsScp3114Enabled)
+                    {
+                        ev.Player.Role.Set(RoleTypeId.Scp3114);
+
+                        IsScp3114Enabled = true;
+                    }
+                    */
+
+                    if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
+                    {
+                        if (!PlayersInfo.ContainsKey(ev.Player.UserId))
                         {
-                            RoleType = ev.Player.Role.Type,
-                            MaxHealth = ev.Player.MaxHealth,
-                            Health = ev.Player.Health,
-                            ActiveEffects = ev.Player.ActiveEffects.ToList(),
-                            Items = ev.Player.Items.ToList(),
-                            CurrentItem = ev.Player.CurrentItem,
-                            Position = new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z)
-                        });
+                            PlayersInfo.Add(ev.Player.UserId, new PlayerInfo
+                            {
+                                RoleType = ev.Player.Role.Type,
+                                MaxHealth = ev.Player.MaxHealth,
+                                Health = ev.Player.Health,
+                                ActiveEffects = ev.Player.ActiveEffects.ToList(),
+                                Items = ev.Player.Items.ToList(),
+                                CurrentItem = ev.Player.CurrentItem,
+                                Position = new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z)
+                            });
+                        }
                     }
                 }
-            }
-            else if (ev.Player.IsHuman)
-            {
-                if (StartupRandom == 1) // 시작 카오스
+                else if (ev.Player.IsHuman)
                 {
-                    if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                    if (StartupRandom == 1) // 시작 카오스
                     {
-                        ev.Player.Role.Set(RoleTypeId.ChaosConscript);
+                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                        {
+                            ev.Player.Role.Set(RoleTypeId.ChaosConscript);
 
+                        }
                     }
-                }
-                if (StartupRandom == 2) // 시작 NTF
-                {
-                    if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                    if (StartupRandom == 2) // 시작 NTF
                     {
-                        ev.Player.Role.Set(RoleTypeId.NtfPrivate);
+                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                        {
+                            ev.Player.Role.Set(RoleTypeId.NtfPrivate);
+
+                        }
+                    }
+
+                    int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
+
+                    if (rand == 1)
+                    {
+                        ev.Player.Role.Set(RoleTypeId.Scp0492);
+                        ev.Player.MaxHealth = 1000;
+                        ev.Player.Health = ev.Player.MaxHealth;
 
                     }
-                }
-
-                int rand = UnityEngine.Random.Range(1, 101); // 시작 좀?비
-
-                if (rand == 1)
-                {
-                    ev.Player.Role.Set(RoleTypeId.Scp0492);
-                    ev.Player.MaxHealth = 1000;
-                    ev.Player.Health = ev.Player.MaxHealth;
-
-                }
-                else if (rand == 2)
-                {
-                    ev.Player.Scale = new Vector3(-1, -1, -1);
+                    else if (rand == 2)
+                    {
+                        ev.Player.Scale = new Vector3(-1, -1, -1);
+                    }
                 }
             }
 
