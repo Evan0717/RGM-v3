@@ -142,7 +142,7 @@ namespace RGM.Modes
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Attacker.IsScp && ev.DamageHandler.Type != DamageType.Strangled)
-                ev.DamageHandler.Damage += 35;
+                ev.DamageHandler.Damage += 60;
         }
 
         public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
