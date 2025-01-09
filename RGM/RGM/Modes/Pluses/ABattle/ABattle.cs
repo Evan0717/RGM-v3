@@ -248,7 +248,8 @@ public class ABattle : Mode
             {
                 PlayerWorkstations[player].Clear();
 
-                player.AddBroadcast(10, $"<size=20><b>캐시 청소</size>가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size>");
+                if (player != null && player.IsConnected)
+                    player.AddBroadcast(10, $"<b><size=20>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
             }
 
             yield return Timing.WaitForSeconds(420);
