@@ -74,14 +74,25 @@ namespace RGM.Modes
             {
                 if (player != hostZombie)
                 {
-                    player.Role.Set(RoleTypeId.NtfCaptain, RoleSpawnFlags.AssignInventory);
-                    player.AddItem(ItemType.Ammo556x45, 10);
-                    foreach (var item in player.Items)
+                    try
                     {
-                        if (item.Type == ItemType.KeycardMTFCaptain)
-                            player.RemoveItem(item);
+                        player.Role.Set(RoleTypeId.NtfCaptain, RoleSpawnFlags.AssignInventory);
+                        player.AddItem(ItemType.Ammo556x45, 10);
+
+                        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                        {
+                            foreach (var item in player.Items)
+                            {
+                                if (item.Type == ItemType.KeycardMTFCaptain)
+                                    player.RemoveItem(item);
+                            }
+                        });
+                        player.AddItem(ItemType.KeycardScientist);
                     }
-                    player.AddItem(ItemType.KeycardScientist);
+                    catch (Exception ex)
+                    {
+                        player.ShowHint($"Error: {ex}");
+                    }
                 }
             }
 
