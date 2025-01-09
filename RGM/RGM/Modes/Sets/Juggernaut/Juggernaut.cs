@@ -30,6 +30,8 @@ using PlayerRoles.FirstPersonControl;
 using RelativePositioning;
 using SCPSLAudioApi.AudioCore;
 using VoiceChat;
+using Respawning;
+using Exiled.API.Features.Waves;
 
 namespace RGM.Modes
 {
@@ -104,6 +106,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(FindLocate());
             // Timing.RunCoroutine(ArmorAsync());
             Timing.RunCoroutine(MusicAsync());
+            Timing.RunCoroutine(ReduceWaveTimer());
 
             bool IsEnd = false;
             while (!IsEnd)
@@ -196,6 +199,22 @@ namespace RGM.Modes
             audioPlayer.AddClip("JuggernautTheme", loop: true);
 
             yield return 0;
+        }
+
+        public IEnumerator<float> ReduceWaveTimer()
+        {
+            while (true)
+            {
+                foreach (var wave in WaveManager.Waves)
+                {
+                    bool flag = WaveTimer.TryGetWaveTimers(wave.TargetFaction, out List<WaveTimer> waves);
+
+                    foreach (var w in waves)
+                        w.AddTime(-2);
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
