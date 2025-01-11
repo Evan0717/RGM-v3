@@ -589,15 +589,20 @@ namespace RGM.EventArgs
 
                     else
                     {
-                        if (ev.DamageHandler.Type == DamageType.PocketDimension && ev.Attacker == null)
-                        {
-                            ev.IsAllowed = false;
-
-                            ev.Player.Kill(new CustomDamageHandler(ev.Player, Player.List.FirstOrDefault(x => x.Role.Type == RoleTypeId.Scp106), -1, DamageType.PocketDimension));
-                        }
-
                         GodModePlayers.Remove(ev.Player);
+
                         ev.Player.Kill(ev.DamageHandler);
+                    }
+                }
+                else
+                {
+                    if (ev.DamageHandler.Type == DamageType.PocketDimension && ev.Attacker == null)
+                    {
+                        ev.IsAllowed = false;
+
+                        Player scp106 = Player.List.FirstOrDefault(x => x.Role.Type == RoleTypeId.Scp106);
+
+                        ev.Player.Kill(new CustomDamageHandler(ev.Player, scp106 == null ? Player.List.ToList()[0] : scp106, -1, DamageType.PocketDimension));
                     }
                 }
             }
