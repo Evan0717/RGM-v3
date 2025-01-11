@@ -21,6 +21,8 @@ using System.Runtime.Remoting.Messaging;
 using Exiled.Events.EventArgs.Player;
 using DiscordInteraction.Discord;
 using Exiled.API.Features.DamageHandlers;
+using Achievements.Handlers;
+using PlayerStatsSystem;
 
 namespace RGM.EventArgs
 {
@@ -596,13 +598,11 @@ namespace RGM.EventArgs
                 }
                 else
                 {
-                    if (ev.DamageHandler.Type == DamageType.PocketDimension && ev.Attacker == null)
+                    if (ev.DamageHandler.Type == DamageType.PocketDimension)
                     {
-                        ev.IsAllowed = false;
-
                         Player scp106 = Player.List.FirstOrDefault(x => x.Role.Type == RoleTypeId.Scp106);
 
-                        ev.Player.Kill(new CustomDamageHandler(ev.Player, scp106 == null ? Player.List.ToList()[0] : scp106, -1, DamageType.PocketDimension));
+                        ev.DamageHandler.Attacker = scp106;
                     }
                 }
             }
