@@ -607,7 +607,10 @@ namespace RGM.EventArgs
         {
             if (Round.IsLobby)
             {
-                Tools.TeleportToLobby(ev.Player);
+                Timing.CallDelayed(5, () =>
+                {
+                    Tools.TeleportToLobby(ev.Player);
+                });
             }
             else
             {
