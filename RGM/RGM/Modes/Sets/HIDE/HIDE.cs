@@ -74,7 +74,7 @@ namespace RGM.Modes
                     monster.Position = new Vector3(-15.84375f, 1001.957f, 49.89063f);
                     Server.ExecuteCommand($"/open ESCAPE_PRIMARY");
 
-                    float health = 100 * Player.List.Count + 20 * Player.List.Count;
+                    float health = 50 * Player.List.Count + 10 * Player.List.Count;
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
@@ -142,7 +142,7 @@ namespace RGM.Modes
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Attacker.IsScp && ev.DamageHandler.Type != DamageType.Strangled)
-                ev.DamageHandler.Damage += 40;
+                ev.DamageHandler.Damage += 60;
         }
 
         public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
