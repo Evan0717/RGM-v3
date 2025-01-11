@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CustomPlayerEffects;
-using CustomRendering;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Roles;
-using MapEditorReborn.API.Features.Objects;
 using MEC;
-using Mirror;
 using MultiBroadcast.API;
 using PlayerRoles;
 using UnityEngine;
@@ -18,10 +10,9 @@ using Exiled.API.Enums;
 using RGM.API.Features;
 
 using static RGM.Variables.ServerManagers;
-using RGM.API.DataBases;
-using Respawning;
 using Exiled.Events.EventArgs.Server;
-using Respawning.Waves;
+using Exiled.API.Features.Waves;
+using Respawning;
 
 namespace RGM.Modes
 {
@@ -133,7 +124,10 @@ namespace RGM.Modes
                     player.AddBroadcast(10, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 탈출하여 <u><i>강화제 제작 방법</i>을 재단에 넘기는 데 성공하였습니다.</u></size>\n<size=25><b>이후로 시설에 지원한 <color=#0040FF>MTF</color>들이 강화되고, 10초 뒤 지원합니다.</b></size>");
 
                 IsMTFEnabled = true;
-                Respawn.AdvanceTimer(Faction.FoundationStaff, 10);
+                bool flag = WaveTimer.TryGetWaveTimers(Faction.FoundationStaff, out List<WaveTimer> waves);
+
+                foreach (var w in waves)
+                    w.SetTime(10);
             }
         }
 
@@ -159,7 +153,11 @@ namespace RGM.Modes
                     player.AddBroadcast(10, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 <color=red>사살당하였습니다.</color></size>\n<size=25><b><color=#04B404>혼돈의 반란</color> 세력이 10초 뒤 지원합니다.</b></size>");
 
                 IsCHIEnabled = true;
-                Respawn.AdvanceTimer(Faction.FoundationEnemy, 10);
+
+                bool flag = WaveTimer.TryGetWaveTimers(Faction.FoundationEnemy, out List<WaveTimer> waves);
+
+                foreach (var w in waves)
+                    w.SetTime(10);
             }
         }
 
