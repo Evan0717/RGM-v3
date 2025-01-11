@@ -68,7 +68,10 @@ namespace RGM.Modes
             Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
             hostZombie.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
-            hostZombie.Position = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != hostZombie).Select(x => x.Position).ToList());
+            Timing.CallDelayed(1, () =>
+            {
+                hostZombie.Position = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != hostZombie).Select(x => x.Position).ToList());
+            });
 
             foreach (var player in Player.List)
             {
