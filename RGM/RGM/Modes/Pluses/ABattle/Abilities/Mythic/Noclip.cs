@@ -12,7 +12,7 @@ using Exiled.API.Features.Roles;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("노클립", "[ALT]ㅣ유저와 붙어있지 않으면 초당 체력이 1%씩 감소하는 대신, 노클립을 사용할 수 있습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_NOCLIP)]
+[Ability("노클립", "[ALT]ㅣ유저와 붙어있지 않으면 초당 체력이 2%씩 감소하는 대신, 노클립을 사용할 수 있습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_NOCLIP)]
 public class Noclip : Ability
 {
     CoroutineHandle _noclip;
@@ -42,7 +42,7 @@ public class Noclip : Ability
                     if (Tools.TryGetNearestPlayer(Owner, out Player nearestPlayer, out float radius))
                     {
                         if (radius > 5f)
-                            Owner.Hurt(Owner.MaxHealth / 100, "육체가 신의 힘을 감당해내지 못했습니다.");
+                            Owner.Hurt(Owner.MaxHealth / 50, "육체가 신의 힘을 감당해내지 못했습니다.");
                     }
                 }
             }
