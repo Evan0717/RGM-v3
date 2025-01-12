@@ -24,7 +24,9 @@ public class SetExtraMode : ICommand
             {
                 ABattle.Instance.CurrentExtraMode = args;
                 string extraMode = $"<size=25><b><color=#fecdcd>{ABattle.Instance.CurrentExtraMode}</color></b></size>\n<size=20>{ABattle.ExtraModes[ABattle.Instance.CurrentExtraMode]}</size>";
-                player.AddBroadcast(10, extraMode);
+                
+                foreach (var p in Player.List)
+                    p.AddBroadcast(10, extraMode);
                 player.SendConsoleMessage(extraMode, "");
 
                 response = "SetExtraMode Complete!";
