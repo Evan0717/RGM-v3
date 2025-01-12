@@ -69,14 +69,11 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load tothemoon");
 
-            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-            {
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-            });
-
             GlobalPlayer.AddClip("tothemoon", 1, true);
 
             Player.List.CopyTo(pl);
+
+            yield return Timing.WaitForOneFrame;
 
             foreach (var player in Player.List.Where(x => !x.IsNPC).ToList())
             {
