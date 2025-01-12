@@ -79,10 +79,16 @@ namespace RGM.API.Features
 
             if (SelectMode == "FightVote")
             {
-                if (UnityEngine.Random.Range(1, 11) == 1)
+                switch (UnityEngine.Random.Range(1, 16)) 
                 {
-                    player.AddItem(ItemType.GunRevolver);
-                    player.AddAmmo(AmmoType.Ammo44Cal, 1205);
+                    case 1:
+                        player.AddItem(ItemType.GunRevolver);
+                        player.AddAmmo(AmmoType.Ammo44Cal, 1205);
+                        break;
+
+                    case 2:
+                        player.AddItem(ItemType.GrenadeHE);
+                        break;
                 }
             }
         }
