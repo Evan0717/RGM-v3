@@ -34,7 +34,10 @@ public class Ambush : Ability
         {
             ev.DamageHandler.Damage *= 2;
 
-            ev.Attacker.ShowHitMarker(2);
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                ev.Attacker.ShowHitMarker(2);
+            });
         }
     }
 }
