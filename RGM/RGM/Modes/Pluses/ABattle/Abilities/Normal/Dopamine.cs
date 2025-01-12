@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("도파민", "다음으로 맞는 첫 공격의 데미지를 무시하고 체력으로 흡수합니다.", AbilityCategory.Common, AbilityType.NORMAL_DOPAMINE)]
+[Ability("도파민", "다음으로 맞는 첫 공격의 데미지를 무시하고 체력으로 흡수합니다. (최대 200HP)", AbilityCategory.Common, AbilityType.NORMAL_DOPAMINE)]
 public class Dopamine : Ability
 {
     public override void OnEnabled()
@@ -33,7 +33,7 @@ public class Dopamine : Ability
         ev.IsAllowed = false;
         Owner.RemoveAbility(this);
 
-        Owner.Health += ev.DamageHandler.Damage;
+        Owner.Heal(ev.DamageHandler.Damage > 200 ? 200 : ev.DamageHandler.Damage);
 
         Owner.AddAbility(AbilityType.DUMMY_DOPAMINERELEASED);
         Owner.ShowHint($"<color={ABattle.RatingColor["일반"]}>도파민</color> 효과로 인해 데미지를 무시하고 체력으로 흡수했습니다.");
