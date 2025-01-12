@@ -30,6 +30,6 @@ public class ExtremePoison : Ability
         if (ev.Player != Owner || ev.Attacker == null)
             return;
 
-        ev.Attacker.EnableEffect(EffectType.CardiacArrest);
+        ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 15);
     }
 }

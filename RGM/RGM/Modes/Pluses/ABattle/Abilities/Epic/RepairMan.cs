@@ -18,18 +18,20 @@ public class RepairMan : Ability
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+        Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+        Exiled.Events.Handlers.Player.TriggeringTesla -= OnTriggeringTesla;
     }
 
     public void OnInteractingDoor(InteractingDoorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
-        
+
         if (ev.Door.Type == DoorType.Scp079First)
         {
             ev.Player.ShowHint("이 헤비도어는 능력으로 개폐가 불가능합니다.", 1.2f);
@@ -49,5 +51,13 @@ public class RepairMan : Ability
 
         else
             ev.Door.IsOpen = true;
+    }
+
+    public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+
+        ev.IsTriggerable = false;
     }
 }

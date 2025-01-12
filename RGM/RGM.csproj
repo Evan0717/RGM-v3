@@ -243,6 +243,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Blink.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Disguise.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Diver.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\EpicTransition.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\ExtremePoison.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\SuperStar.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Survivor.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\TerroristRemains.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlameThrower.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlashLight.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\KillStreak.cs" />
@@ -268,6 +270,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\DimensionThief.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\EyeMan.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Joker.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Noclip.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\RocketLauncher.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Spirit.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\WarGod.cs" />
@@ -296,11 +299,13 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\StaminaReplenishment.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Supply.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Swift.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Test.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Torch.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Training.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Workout.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\AdhesivePlaster.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Alchemy.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Ambush.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\BomberMan.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Contract.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Gnome.cs" />

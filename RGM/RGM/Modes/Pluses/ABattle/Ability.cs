@@ -250,6 +250,7 @@ public enum AbilityType
     NORMAL_RAINBOW, // [일반] 무지개
     NORMAL_BODYBACK, // [일반] 바디백
     NORMAL_DOPAMINE, // [일반] 도파민
+    NORMAL_TEST, // [일반] 시험
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -273,6 +274,7 @@ public enum AbilityType
     RARE_GNOME, // [희귀] 흙의 정령, 노움
     RARE_SYLPH, // [희귀] 바람의 정령, 실프
     RARE_CONTRACT, // [희귀] 계약
+    RARE_AMBUSH, // [희귀] 매복자
     RARE_TRANSITION, // [희귀] 하급 변이
 
     // 영웅 //
@@ -290,6 +292,7 @@ public enum AbilityType
     EPIC_BLINK, // [영웅] 점멸
     EPIC_TRANSITION, // [영웅] 변이
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
+    EPIC_DISGUISE, // [영웅] 위장술
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -302,6 +305,7 @@ public enum AbilityType
     LEGEND_PSYCHICS, // [전설] 영매
     LEGEND_SCREAM, // [전설] 괴성
     LEGEND_TRANSITION, // [전설] 상급 변이
+    LEGEND_CANDYADDICT, // [전설] 마약 중독자
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -310,6 +314,7 @@ public enum AbilityType
     MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
     MYTHIC_JOKER, // [신화] 조커
     MYTHIC_WARGOD, // [신화] 광전사
+    MYTHIC_NOCLIP, // [신화] 노클립
 
     // 전용 //
     // D계급

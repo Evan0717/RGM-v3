@@ -13,6 +13,8 @@ using PlayerRoles;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Scp1507;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes;
 
 public class ABattleEventHandler(ABattle aBattle)
@@ -102,11 +104,36 @@ public class ABattleEventHandler(ABattle aBattle)
 
                 if (controller != null)
                 {
-                    if (aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+                    if (aBattle.CurrentExtraMode != "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         return;
+
+                    if (aBattle.CurrentExtraMode == "대출")
+                    {
+                        if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 11) == 1)
+                        {
+                            IEnumerator<float> die()
+                            {
+                                while (ev.Player.IsAlive)
+                                {
+                                    if (GodModePlayers.Contains(ev.Player))
+                                        GodModePlayers.Remove(ev.Player);
+
+                                    ev.Player.Hurt(ev.Player.MaxHealth / 10, "욕심을 부리다가 아사했습니다.");
+
+                                    yield return Timing.WaitForOneFrame;
+                                }
+                            }
+
+                            Timing.RunCoroutine(die());
+                            return;
+                        }
+                    }
 
                     if (aBattle.Selections.ContainsKey(ev.Player))
                         aBattle.Selections[ev.Player].Clear();
+
+                    if (aBattle.CurrentExtraMode == "대출")
+                        aBattle.StartSelect(ev.Player);
 
                     if (!aBattle.PlayerWorkstations.TryGetValue(ev.Player, out var workstations))
                     {
