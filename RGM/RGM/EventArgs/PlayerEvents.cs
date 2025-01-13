@@ -571,7 +571,7 @@ namespace RGM.EventArgs
             }
             else if (ev.Attacker != null)
             {
-                if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player)
+                if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player && ev.DamageHandler.Damage < 10000)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
             }
         }
@@ -594,15 +594,6 @@ namespace RGM.EventArgs
                         GodModePlayers.Remove(ev.Player);
 
                         ev.Player.Kill(ev.DamageHandler);
-                    }
-                }
-                else
-                {
-                    if (ev.DamageHandler.Type == DamageType.PocketDimension)
-                    {
-                        Player scp106 = Player.List.FirstOrDefault(x => x.Role.Type == RoleTypeId.Scp106);
-
-                        ev.DamageHandler.Attacker = scp106;
                     }
                 }
             }
