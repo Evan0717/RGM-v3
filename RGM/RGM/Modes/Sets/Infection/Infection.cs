@@ -171,7 +171,11 @@ namespace RGM.Modes
                 ev.Player.Role.Set(RoleTypeId.Scp0492);
                 ev.Player.MaxHealth = 500;
                 ev.Player.Health = ev.Player.MaxHealth;
-                ev.Player.Position = Tools.GetRandomValue(Player.List.Where(x => x.Role.Type == RoleTypeId.Scp0492).Select(x => x.Position).ToList());
+
+                IEnumerable<Player> zombies = Player.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
+                Vector3 pos = Tools.GetRandomValue(zombies.Select(x => x.Position).ToList());
+
+                ev.Player.Position = zombies.Count() == 0 ? Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).Select(x => x.Position).ToList()) : pos;
             }
             else
                 ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
