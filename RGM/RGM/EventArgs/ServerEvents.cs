@@ -36,7 +36,7 @@ namespace RGM.EventArgs
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
             });
 
-            GlobalPlayer.AddClip("ChristmasRock", 0.1f, true);
+            GlobalPlayer.AddClip("Xmas-Remix", 0.3f, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
@@ -63,6 +63,7 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(InputCooldown());
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
+            Timing.RunCoroutine(HumanLoop());
 
             int rn = UnityEngine.Random.Range(1, 6);
 
