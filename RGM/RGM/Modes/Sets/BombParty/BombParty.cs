@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CustomRendering;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp244;
@@ -109,7 +110,7 @@ namespace RGM.Modes
                     }
                 }
 
-                Player.List.ToList().ForEach(x => x.DisableAllEffects());
+                Player.List.ToList().ForEach(x => x.DisableEffect(EffectType.Flashed));
                 yield return Timing.WaitForSeconds(3f);
             }
         }
