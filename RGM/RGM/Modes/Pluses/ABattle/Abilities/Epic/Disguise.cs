@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("위장술", "항상 게임에서 유리한 세력의 모습을 지니게 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_DISGUISE)]
+// [Ability("위장술", "항상 게임에서 유리한 세력의 모습을 지니게 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_DISGUISE)]
 public class Disguise : Ability
 {
     CoroutineHandle _disguise;
