@@ -120,6 +120,7 @@ namespace RGM.Variables
         public static List<Player> EmotionCooldown = new List<Player>();
         public static List<Player> BugVotePlayers = new List<Player>();
         public static List<Player> BugVoteUsers = new List<Player>();
+        public static List<Player> IntercomPlayers = new List<Player>();
 
         public static List<Transform> First;
         public static List<Transform> Second;

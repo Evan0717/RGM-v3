@@ -60,14 +60,14 @@ namespace RGM.Commands.ClientCommands
 
                     bool Check(Player p)
                     {
-                        if (player.VoiceChannel == VoiceChat.VoiceChatChannel.Intercom)
-                            return true;
-
                         if (player.IsDead && p.CurrentItem is Scp1576 scp1576)
                         {
                             if (scp1576.IsUsing)
                                 return true;
                         }
+
+                        if (chatType == "전체 채팅")
+                            return true;
 
                         if (chatType == "SCP 채팅")
                             return p.IsDead || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
@@ -104,7 +104,12 @@ namespace RGM.Commands.ClientCommands
                     return false;
                 }
 
-                if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
+                if (IntercomPlayers.Contains(player))
+                {
+                    response = ChatFormat("전체 채팅");
+                    return true;
+                }
+                else if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
                 {
                     response = ChatFormat("SCP 채팅");
                     return true;

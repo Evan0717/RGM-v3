@@ -126,7 +126,8 @@ namespace RGM.EventArgs
             }
             else
             {
-                Server.ExecuteCommand($"/speak {ev.Player.Id} enable");
+                Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
+                IntercomPlayers.Add(ev.Player);
 
                 Tools.TeleportToLobby(ev.Player);
 
