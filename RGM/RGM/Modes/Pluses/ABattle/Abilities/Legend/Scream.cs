@@ -39,7 +39,7 @@ public class GmanRoaringSound : Ability
 
         if (RoaringSoundCooldown <= 0)
         {
-            if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player target) && target.LeadingTeam != ev.Player.LeadingTeam)
+            if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player target, out RaycastHit? hit) && target.LeadingTeam != ev.Player.LeadingTeam)
             {
                 RoaringSoundCooldown = 180;
 

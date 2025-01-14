@@ -55,7 +55,7 @@ public class Escape : Ability
 
         if (EscapeCoinSerial == Serial)
         {
-            if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player player))
+            if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player player, out RaycastHit? hit))
             {
                 if (player.LeadingTeam != ev.Player.LeadingTeam)
                 {

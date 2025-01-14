@@ -29,12 +29,29 @@ public class Kick : Ability
         if (ev.Player != Owner)
             return;
 
-        if (Tools.TryGetLookPlayer(ev.Player, 4f, out Player player))
+        if (Tools.TryGetLookPlayer(ev.Player, 4f, out Player player, out RaycastHit? hit))
         {
             if (ev.Player != player && MeleeCooldown <= 0 && ev.Player.LeadingTeam != player.LeadingTeam)
             {
-                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
-                player.Hurt(12.05f, "무지성으로 뚜드려 맞았습니다.");
+                float damageCalcu(string pos)
+                {
+                    switch (pos)
+                    {
+                        case "Head":
+                            return 24.1f;
+
+                        case "Chest":
+                            return 14f;
+
+                        default:
+                            return 12.05f;
+                    }
+                }
+
+                float damage = damageCalcu(hit.Value.transform.name);
+
+                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / 2);
+                player.Hurt(damage, "무지성으로 뚜드려 맞았습니다.");
 
                 MeleeCooldown = 1;
 

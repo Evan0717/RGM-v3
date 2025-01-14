@@ -32,7 +32,7 @@ public class Larceny : Ability
         if (ev.Player != Owner || PickPocketCooldown > 0)
             return;
 
-        if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player))
+        if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
         {
             PickPocketCooldown = 60;
 

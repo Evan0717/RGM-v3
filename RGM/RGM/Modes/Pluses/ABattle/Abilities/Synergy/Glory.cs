@@ -40,7 +40,7 @@ public class Glory : Ability
         {
             foreach (var player in Player.List)
             {
-                if (Tools.TryGetLookPlayer(player, 45f, out Player target))
+                if (Tools.TryGetLookPlayer(player, 45f, out Player target, out RaycastHit? hit))
                 {
                     if (Owner == target && Owner.LeadingTeam != target.LeadingTeam)
                     {
