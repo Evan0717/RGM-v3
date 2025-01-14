@@ -13,6 +13,8 @@ using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes.Abilities.Epic;
 
 [Ability("슈퍼 스타", "자신의 마이크가 모두에게 공유되고, 사망 시 사망한 사실이 모두에게 공개됩니다.", AbilityCategory.Epic, AbilityType.EPIC_SUPERSTAR)]
@@ -21,6 +23,7 @@ public class SuperStar : Ability
     public override void OnEnabled()
     {
         Server.ExecuteCommand($"/speak {Owner.Id} 1");
+        IntercomPlayers.Add(Owner);
 
         Exiled.Events.Handlers.Player.Died += OnDied;
     }
@@ -28,6 +31,7 @@ public class SuperStar : Ability
     public override void OnDisabled()
     {
         Server.ExecuteCommand($"/speak {Owner.Id} 0");
+        IntercomPlayers.Remove(Owner);
 
         Exiled.Events.Handlers.Player.Died -= OnDied;
     }

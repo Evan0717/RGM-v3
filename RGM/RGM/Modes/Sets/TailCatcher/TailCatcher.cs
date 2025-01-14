@@ -122,6 +122,7 @@ namespace RGM.Modes
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
+            IntercomPlayers.Add(ev.Player);
         }
 
         public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)

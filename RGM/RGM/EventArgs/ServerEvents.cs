@@ -105,6 +105,7 @@ namespace RGM.EventArgs
 
             Server.ExecuteCommand("/mp unload RGMLobby");
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
+            IntercomPlayers.Clear();
 
             if (AudioPlayer.TryGet("Global AudioPlayer", out AudioPlayer ap))
                 ap.RemoveAllClips();
@@ -192,7 +193,10 @@ namespace RGM.EventArgs
             Tools.TryInstallMode(ModeType.FriendlyFire);
 
             foreach (var player in Player.List)
+            {
                 Server.ExecuteCommand($"/speak {player.Id} 1");
+                IntercomPlayers.Add(player);
+            }
 
             if (CurrentMode.GetModeData().Info == ModeInfo.Plus || new List<ModeType>() 
             {

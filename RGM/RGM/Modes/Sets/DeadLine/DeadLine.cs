@@ -130,6 +130,7 @@ namespace RGM.Modes
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
+            IntercomPlayers.Add(ev.Player);
         }
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)

@@ -164,6 +164,7 @@ namespace RGM.Modes
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
+            IntercomPlayers.Add(ev.Player);
 
             ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 50;
         }
