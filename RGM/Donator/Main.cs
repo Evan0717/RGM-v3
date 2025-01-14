@@ -38,12 +38,26 @@ namespace RGM.Donator
             Timing.RunCoroutine(CustomermizingRotation());
         }
 
+        public void PlaySound(Vector3 pos, string clip, float volume = 1)
+        {
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"{UnityEngine.Random.Range(1, 10000001)}", onIntialCreation: (p) =>
+            {
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 1, maxDistance: 5);
+
+                speaker.transform.position = pos;
+            });
+
+            audioPlayer.AddClip($"KillEffect_{clip}", volume: volume);
+        }
+
         public IEnumerator<float> KillEffect(List<string> PlayerData, Player Attacker, Player Player, Role _role, Vector3 _pos)
         {
             Quaternion rot = Attacker.Rotation;
 
             if (PlayerData[4] == "영혼 가출")
             {
+                PlaySound(_pos, "1", 4);
+
                 DamageHandlerBase DisruptorDamage = new DisruptorDamageHandler(new DisruptorShotEvent(ItemIdentifier.None, Attacker.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringSingle), Player.Position, -1);
 
                 Ragdoll.CreateAndSpawn(_role.Type, PlayerData[4], DisruptorDamage, _pos, rot);
@@ -51,6 +65,8 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "솔라 테라")
             {
+                PlaySound(_pos, "2", 10);
+
                 SchematicObject SolarTerra = ObjectSpawner.SpawnSchematic("SolarTerra", _pos, rot, null, null);
 
                 Timing.CallDelayed(1.5f, SolarTerra.Destroy);
@@ -58,6 +74,8 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "Kerfus")
             {
+                PlaySound(_pos, "3", 10);
+
                 SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", _pos + new Vector3(0, 19, 0), rot, null, null);
 
                 List<PrimitiveObject> primitiveObjects = new List<PrimitiveObject>();
@@ -101,6 +119,8 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "은제 말뚝")
             {
+                PlaySound(_pos, "4", 7.5f);
+
                 SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", _pos, rot, null, null);
 
                 Timing.CallDelayed(1.5f, SilverStake.Destroy);
@@ -108,6 +128,8 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "KO 사인")
             {
+                PlaySound(_pos, "5", 7.5f);
+
                 SchematicObject KO = ObjectSpawner.SpawnSchematic("KO", _pos, rot, null, null);
 
                 Timing.CallDelayed(1.5f, KO.Destroy);
@@ -115,6 +137,8 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "크리스마스 트리")
             {
+                PlaySound(_pos, "6", 2);
+
                 SchematicObject XmasTree = ObjectSpawner.SpawnSchematic("XmasTree", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
 
                 Timing.CallDelayed(1.9f, XmasTree.Destroy);
@@ -122,6 +146,8 @@ namespace RGM.Donator
 
             if (PlayerData[4] == "크리스마스 볼")
             {
+                PlaySound(_pos, "7", 2);
+
                 SchematicObject XmasTree = ObjectSpawner.SpawnSchematic("XmasBall", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
 
                 Timing.CallDelayed(1.9f, XmasTree.Destroy);
