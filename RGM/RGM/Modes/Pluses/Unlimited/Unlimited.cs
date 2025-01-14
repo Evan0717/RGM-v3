@@ -43,8 +43,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
             Exiled.Events.Handlers.Scp049.Attacking += OnScp049Attacking;
 
-            Exiled.Events.Handlers.Scp0492.ConsumedCorpse += OnConsumedCorpse;
-
             Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
 
             Exiled.Events.Handlers.Scp173.PlacingTantrum += OnPlacingTantrum;
@@ -71,16 +69,19 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            player.IsUsingStamina = false;
+            if (player.IsAlive)
+            {
+                player.IsUsingStamina = false;
 
-            if (player.Role.Type == RoleTypeId.Scp0492)
-                player.MaxHealth += 100;
+                if (player.Role.Type == RoleTypeId.Scp0492)
+                    player.MaxHealth += 100;
+            }
         }
 
 
         public void OnHealing(Exiled.Events.EventArgs.Player.HealingEventArgs ev)
         {
-            ev.Player.MaxHealth = ev.Player.Health + ev.Amount;
+            ev.Player.MaxHealth += ev.Amount;
         }
 
         public IEnumerator<float> OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
@@ -129,11 +130,6 @@ namespace RGM.Modes
 
             ev.Scp049.RemainingAttackCooldown = 0;
             ev.Scp049.RemainingGoodSenseDuration = 0;
-        }
-        
-        public void OnConsumedCorpse(Exiled.Events.EventArgs.Scp0492.ConsumedCorpseEventArgs ev)
-        {
-            ev.Player.MaxHealth = ev.Player.MaxHealth + 100;
         }
 
         public IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
