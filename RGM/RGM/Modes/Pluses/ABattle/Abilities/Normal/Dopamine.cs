@@ -32,6 +32,7 @@ public class Dopamine : Ability
 
         ev.IsAllowed = false;
         Owner.RemoveAbility(this);
+        OnDisabled();
 
         Owner.Heal(ev.DamageHandler.Damage > 200 ? 200 : ev.DamageHandler.Damage);
 

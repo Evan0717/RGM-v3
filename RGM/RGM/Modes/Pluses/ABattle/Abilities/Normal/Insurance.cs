@@ -41,7 +41,5 @@ public class Insurance : Ability
         {
             ABattle.Instance.IsLifeUsed[Owner] = false;
         });
-
-
     }
 }
