@@ -11,6 +11,7 @@ using Exiled.API.Extensions;
 using RGM.API.Features;
 using PlayerRoles;
 using RGM.API.DataBases;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -40,7 +41,10 @@ SCP-079
             RoleTypeId.Spectator,
             RoleTypeId.Scp079,
             RoleTypeId.Overwatch,
-            RoleTypeId.Filmmaker
+            RoleTypeId.Filmmaker,
+            RoleTypeId.CustomRole,
+            RoleTypeId.Destroyed,
+            RoleTypeId.Scp3114
         };
         List<RoleTypeId> _roleList = Tools.EnumToList<RoleTypeId>().Where(x => !_blockedRoles.Contains(x)).ToList();
 
@@ -65,7 +69,7 @@ SCP-079
             {
                 foreach (var p in Player.List.Where(x => x.IsAlive && _disguisedList.ContainsKey(x)))
                 {
-                    if (Tools.TryGetLookPlayer(p, 3, out Player t) && _disguisedList.ContainsKey(t))
+                    if (Tools.TryGetLookPlayer(p, 3, out Player t, out RaycastHit? hit) && _disguisedList.ContainsKey(t))
                         p.ShowHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1.2f);
 
                     else

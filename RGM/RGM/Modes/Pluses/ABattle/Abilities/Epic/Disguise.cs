@@ -28,6 +28,16 @@ public class Disguise : Ability
     public IEnumerator<float> disguise()
     {
         Team? currentTeam = null;
+        List<RoleTypeId> _blockedRoles = new List<RoleTypeId>()
+        {
+            RoleTypeId.Spectator,
+            RoleTypeId.Scp079,
+            RoleTypeId.Overwatch,
+            RoleTypeId.Filmmaker,
+            RoleTypeId.CustomRole,
+            RoleTypeId.Destroyed,
+            RoleTypeId.Scp3114
+        };
 
         while (Owner.IsAlive)
         {
@@ -50,7 +60,7 @@ public class Disguise : Ability
             {
                 currentTeam = mostCommonTeam;
 
-                Exiled.API.Extensions.MirrorExtensions.ChangeAppearance(Owner, Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => x.GetTeam() == mostCommonTeam).ToList()));
+                Exiled.API.Extensions.MirrorExtensions.ChangeAppearance(Owner, Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => x.GetTeam() == mostCommonTeam && !_blockedRoles.Contains(x)).ToList()));
             }
 
             yield return Timing.WaitForSeconds(1);
