@@ -50,7 +50,7 @@ public class Kick : Ability
 
                 float damage = damageCalcu(hit.Value.transform.name);
 
-                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / 2);
+                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / 14);
                 player.Hurt(damage, "무지성으로 뚜드려 맞았습니다.");
 
                 MeleeCooldown = 1;
