@@ -43,7 +43,7 @@ public class EyeMan : Ability
                     }
                 }
 
-                if (Tools.TryGetLookPlayer(Owner, 100f, out Player target))
+                if (Tools.TryGetLookPlayer(Owner, 100f, out Player target, out RaycastHit? hit))
                 {
                     if (Owner != target && Owner.LeadingTeam != target.LeadingTeam)
                     {

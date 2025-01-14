@@ -53,7 +53,7 @@ public class FlashLight : Ability
         {
             if (Owner.CurrentItem != null && FlashLightSerial == Owner.CurrentItem.Serial)
             {
-                if (Tools.TryGetLookPlayer(Owner, 45, out Player target))
+                if (Tools.TryGetLookPlayer(Owner, 45, out Player target, out RaycastHit? hit))
                 {
                     if (Owner != target && Owner.LeadingTeam != target.LeadingTeam)
                     {

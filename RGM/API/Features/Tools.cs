@@ -272,9 +272,10 @@ $"""
                 return false;
         }
 
-        public static bool TryGetLookPlayer(Player player, float Distance, out Player target)
+        public static bool TryGetLookPlayer(Player player, float Distance, out Player target, out RaycastHit? raycastHit)
         {
             target = null;
+            raycastHit = null;
 
             if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, Distance) &&
                     hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
@@ -282,6 +283,7 @@ $"""
                 if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>(), out Player t) && player != t)
                 {
                     target = t;
+                    raycastHit = hit;
 
                     return true;
                 }
