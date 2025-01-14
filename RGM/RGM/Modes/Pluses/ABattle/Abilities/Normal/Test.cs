@@ -21,17 +21,20 @@ public class Test : Ability
 
         Timing.CallDelayed(3.5f, () =>
         {
-            if (Random.Range(1, 101) <= 15)
+            if (Owner.IsAlive)
             {
-                Owner.ShowHint("<b>능력을 3개 더 얻었습니다!</b>");
+                if (Random.Range(1, 101) <= 15)
+                {
+                    Owner.ShowHint("<b>능력을 3개 더 얻었습니다!</b>");
 
-                for (int i = 0; i < 3; i++)
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+                    for (int i = 0; i < 3; i++)
+                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+                }
+                else
+                {
+                    Owner.ShowHint("다음 기회에..");
+                };
             }
-            else
-            {
-                Owner.ShowHint("다음 기회에..");
-            };
         });
     }
 
