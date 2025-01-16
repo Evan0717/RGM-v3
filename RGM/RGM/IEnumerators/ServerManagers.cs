@@ -191,5 +191,33 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForOneFrame;
             }
         }
+
+        public static IEnumerator<float> Scp079Broadcast()
+        {
+            yield return Timing.WaitUntilTrue(() => { return Round.IsStarted; });
+
+            while (!Round.IsEnded)
+            {
+                if (UnityEngine.Random.Range(1, 1001) == 1)
+                    GlobalPlayer.AddClip($"scp079-{UnityEngine.Random.Range(1, 3)}", volume: 1.5f);
+
+                int citizenCount = Player.List.Where(x => x.Role.Type == RoleTypeId.ClassD || x.Role.Type == RoleTypeId.Scientist).Count();
+
+                if (citizenCount == 1 && !IsWarningAlone)
+                {
+                    IsWarningAlone = true;
+
+                    GlobalPlayer.AddClip("scp079-4", volume: 1.5f);
+                }
+                if (citizenCount == 0 && !IsClearCitizen)
+                {
+                    IsClearCitizen = true;
+
+                    GlobalPlayer.AddClip("scp079-3", volume: 1.5f);
+                }
+
+                yield return Timing.WaitForSeconds(1);
+            }
+        }
     }
 }

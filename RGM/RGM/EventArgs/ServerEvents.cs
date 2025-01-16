@@ -29,6 +29,9 @@ namespace RGM.EventArgs
         {
             yield return Timing.WaitForSeconds(1f);
 
+            foreach (var _audioClip in System.IO.Directory.GetFiles(Paths.Plugins + "/audio/"))
+                AudioClipStorage.LoadClip(_audioClip, _audioClip.Replace(Paths.Plugins + "/audio/", "").Replace(".ogg", ""));
+
             UsersManager.LoadUsers();
 
             GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
@@ -64,6 +67,7 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
             Timing.RunCoroutine(HumanLoop());
+            Timing.RunCoroutine(Scp079Broadcast());
 
             int rn = UnityEngine.Random.Range(1, 6);
 
