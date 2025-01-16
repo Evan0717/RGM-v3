@@ -22,6 +22,8 @@ using MultiBroadcast.API;
 using MapEditorReborn.API.Features;
 using Respawning;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Spleef)]
@@ -41,6 +43,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = new List<ItemType>();
+        public List<Primitive> Transforms = new List<Primitive>();
         public Door door;
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
 
@@ -58,6 +61,8 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            GlobalPlayer.AddClip("Spleef", volume: 0.5f, loop: true);
+
             MapUtils.LoadMap("Spleef");
 
             Player.List.ToList().CopyTo(pl);
@@ -106,7 +111,12 @@ namespace RGM.Modes
                         {
                             Primitive Platform = hit.transform.gameObject.GetComponent<PrimitiveObject>().Primitive;
 
-                            Timing.RunCoroutine(RemovingPlatform(Platform));
+                            if (!Transforms.Contains(Platform))
+                            {
+                                Transforms.Add(Platform);
+
+                                Timing.RunCoroutine(RemovingPlatform(Platform));
+                            }
                         }
 
                         else if (hit.collider.name == "Lava")
