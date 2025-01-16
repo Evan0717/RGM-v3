@@ -35,7 +35,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 10, 23);
+        public override Version Version { get; } = new(3, 10, 24);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -77,9 +77,6 @@ namespace RGM
                     Log.Error($"Failed to create an instance of mode {type.Name}: {ex}");
                 }
             }
-
-            foreach (var _audioClip in System.IO.Directory.GetFiles(Paths.Plugins + "/audio/"))
-                AudioClipStorage.LoadClip(_audioClip, _audioClip.Replace(Paths.Plugins + "/audio/", "").Replace(".ogg", ""));
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
