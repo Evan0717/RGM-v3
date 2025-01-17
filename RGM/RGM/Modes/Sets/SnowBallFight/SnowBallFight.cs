@@ -31,7 +31,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SnowBallFight)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.SnowBallFight)]
     class SnowBallFight : Mode
     {
         public override string Name => "눈싸움";
