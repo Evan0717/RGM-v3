@@ -157,6 +157,8 @@ namespace RGM.EventArgs
                 }
             }
 
+            Server.Name = Server.Name.Replace("%CurrentMode%", $"{CurrentMode.GetModeData().Name}");
+
             List<string> ModeDesc = Tools.GetModeDesc(CurrentMode, CurrentSubMode);
 
             foreach (var player in Player.List)
