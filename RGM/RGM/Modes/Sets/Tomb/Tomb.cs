@@ -66,8 +66,14 @@ namespace RGM.Modes
 
             foreach (var player in Player.List)
             {
-                player.Role.Set(RoleTypeId.Tutorial);
-                player.Position = RandomPosition();
+                try
+                {
+                    player.Role.Set(RoleTypeId.Tutorial);
+                    player.Position = RandomPosition();
+                }
+                catch
+                {
+                }
             }
 
             yield return 0f;
