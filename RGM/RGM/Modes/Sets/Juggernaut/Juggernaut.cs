@@ -252,7 +252,7 @@ namespace RGM.Modes
                 };
 
                 if (ScpsList.Contains(player.Role))
-                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x)).ToList()));
+                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x) && x.IsScp()).ToList()));
             }
         }
 
@@ -332,7 +332,18 @@ namespace RGM.Modes
         public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
         {
             if (ev.Player == juggernaut && ev.Effect.GetEffectType() != EffectType.SinkHole)
-                ev.IsAllowed = false;
+            {
+                if (ev.Effect.GetEffectType() == EffectType.PocketCorroding)
+                    ev.IsAllowed = false;
+
+                else
+                {
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                    {
+                        ev.Player.DisableEffect(ev.Effect.GetEffectType());
+                    });
+                }
+            }
         }
 
         public void OnHandcuffing(Exiled.Events.EventArgs.Player.HandcuffingEventArgs ev)
