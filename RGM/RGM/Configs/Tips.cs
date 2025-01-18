@@ -48,7 +48,15 @@ namespace RGM
             "<b>러시안 룰렛</b>, <b>눈치게임</b>, <b>건축가</b> 등의 모드는 개발자에게 큰 도전이였다.",
             "지상 어딘가에는 유리가 존재합니다.",
             "칭호와 페인트는 분리된 개념입니다. 독립이라는 뜻이죠.",
-            "<b>상점</b>에서 RP를 사용해보세요."
+            "<b>상점</b>에서 RP를 사용해보세요.",
+            "대부분의 근접 공격 시스템은 부위별 차등 데미지가 적용됩니다.",
+            "랜덤게임모드 서버는 뉴비 친화적? 서버입니다.",
+            "가끔씩 좀비가 게임에 등장하는 이스터에그가 있는 것 같습니다.",
+            "로비에는 유용한 정보를 얻을 수 있는 3개의 추가 발판이 있다.",
+            "로비의 [재추첨] 버튼의 강도는 서버 내의 인원수에 비례한다.",
+            "서버 모드 중 가장 인기있는 모드는 <b>워크스테이션 업그레이드</b>이다.",
+            "<color=#FF0000>이</color> <color=#DF1F1D>글</color><color=#CF2F2C>을</color> <color=#AF4F4A>읽</color><color=#9F5F59>은</color> <color=#7F7F77>당</color><color=#6F8F85>신</color><color=#5F9F94>은</color> <color=#3FBFB2>오</color><color=#2FCFC1>늘</color> <color=#0FEFDF>하</color><color=#00FFEE>루</color> <color=#1FFED0>행</color><color=#2FFDC1>운</color><color=#3FFDB2>을</color> <color=#5FFC94>맛</color><color=#6FFB85>보</color><color=#7FFB77>게</color> <color=#9FFA59>될</color> <color=#BFF93B>것</color><color=#CFF82C>입</color><color=#DFF81D>니</color><color=#EFF70E>다</color><color=#FFF700>!</color>",
+            "이 편지는 영국으로부터 시작되어.."
         };
     }
 }
