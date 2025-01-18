@@ -86,6 +86,8 @@ public enum ModeType
     FriendlyFire,
     FreeForAll,
     Gamble,
+    Ghost,
+    GrandBow,
     GGClub,
     GunGame,
     JohnWick,
