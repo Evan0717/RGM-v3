@@ -3,6 +3,7 @@ using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class RandomBox : Ability
 {
     public override void OnEnabled()
     {
-        List<ItemType> RandomBox = Tools.EnumToList<ItemType>().Where(x => x != ItemType.SCP1507Tape).ToList();
+        List<ItemType> RandomBox = Tools.EnumToList<ItemType>().Where(x => x != ItemType.SCP1507Tape && !Datas.ExceptItems.Contains(x)).ToList();
 
         Item RandomBoxItem = Owner.AddItem(Tools.GetRandomValue(RandomBox));
     }

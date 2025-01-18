@@ -13,6 +13,7 @@ using RGM.API.Features;
 using MultiBroadcast.API;
 using PlayerRoles;
 using Respawning;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
@@ -55,11 +56,11 @@ namespace RGM.Modes
 
             Player.List.CopyTo(pl);
 
-            List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
+            List<ItemType> ItemTypes = Tools.EnumToList<ItemType>().Where(x => !Datas.ExceptItems.Contains(x)).ToList();
 
             for (int i = 1; i <= 1205; i++)
             {
-                Item Item = Item.Create(Tools.GetRandomValue(ItemTypes.Where(x => x != ItemType.SCP1507Tape).ToList()));
+                Item Item = Item.Create(Tools.GetRandomValue(ItemTypes.ToList()));
 
                 Item.CreatePickup(RandomPosition());
             }

@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
 using PlayerRoles;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
@@ -54,7 +55,7 @@ namespace RGM.Modes
                 return;
 
             for (int i=1; i<4; i++)
-                player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).ToList()));
+                player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP") && !Datas.ExceptItems.Contains(x)).ToList()));
         }
     }
 }

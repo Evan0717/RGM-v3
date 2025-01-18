@@ -98,5 +98,13 @@ namespace RGM.API.DataBases
             RoleTypeId.Scp106,
             RoleTypeId.Scp173
         };
+
+        public static List<ItemType> ExceptItems = new List<ItemType>()
+        {
+            ItemType.Snowball,
+            ItemType.Coal,
+            ItemType.SpecialCoal,
+            ItemType.SCP1507Tape
+        };
     }
 }

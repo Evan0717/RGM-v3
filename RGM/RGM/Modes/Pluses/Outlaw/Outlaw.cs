@@ -21,12 +21,19 @@ namespace RGM.Modes
         public override string Description => "모두가 총기 하나를 가지고 시작합니다.";
         public override string Detail =>
 """
-남에게 지속적으로 데미지를 입힐 수 있는,
-투사체가 아닌 아이템 중에서 랜덤으로 지급받습니다.
+무기 아이템 중에서 랜덤으로 지급받습니다.
 """;
         public override string Color => "9F81F7";
 
         public static Outlaw Instance;
+
+        public List<ItemType> SpecialWeapons = new List<ItemType>() 
+        { 
+            ItemType.MicroHID,
+            ItemType.ParticleDisruptor,
+            ItemType.Jailbird,
+            ItemType.GrenadeHE
+        };
 
         public override void OnEnabled()
         {
@@ -56,7 +63,10 @@ namespace RGM.Modes
             {
                 if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
                 {
-                    Item Weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.GetCategory() == ItemCategory.Firearm || x.GetCategory() == ItemCategory.SpecialWeapon).ToList()));
+                    Item Weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("Gun") || SpecialWeapons.Contains(x)).ToList()));
+
+                    if (Weapon.Type == ItemType.GrenadeHE)
+                        player.AddItem(ItemType.GrenadeHE, 2);
 
                     if (Weapon is Firearm firearm)
                     {
