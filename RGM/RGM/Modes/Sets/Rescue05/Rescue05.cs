@@ -24,10 +24,10 @@ namespace RGM.Modes
         public override string Detail =>
 """
 <color=#000000><b>05 평의회</b></color>가 탈출에 성공할 경우,
-<color=#2E9AFE>MTF</color> 진영은 <b>강화제 제작 방법</b>을 입수하게 됩니다.
+<color=#2E9AFE>MTF</color> 진영이 승리합니다.
 
-<color=#000000><b>05 평의회</b></color>가 사망할 경우,
-<color=#088A08>혼돈의 반란</color> 진영만 시설에 지원하게 됩니다.
+<color=#000000><b>05 평의회</b></color>가 사살될 경우,
+<color=#088A08>혼돈의 반란</color> 진영이 승리합니다.
 
 <i>* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.</i>
 """;
@@ -37,15 +37,12 @@ namespace RGM.Modes
 
         public Player Level05;
         public Player Assassin;
-        public bool IsMTFEnabled = false;
-        public bool IsCHIEnabled = false;
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
@@ -120,27 +117,15 @@ namespace RGM.Modes
         {
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
+                Round.IsLocked = false;
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsNTF).ToList(), 1));
+
                 foreach (var player in Player.List)
-                    player.AddBroadcast(10, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 탈출하여 <u><i>강화제 제작 방법</i>을 재단에 넘기는 데 성공하였습니다.</u></size>\n<size=25><b>이후로 시설에 지원한 <color=#0040FF>MTF</color>들이 강화되고, 10초 뒤 지원합니다.</b></size>");
-
-                IsMTFEnabled = true;
-                bool flag = WaveTimer.TryGetWaveTimers(Faction.FoundationStaff, out List<WaveTimer> waves);
-
-                foreach (var w in waves)
-                    w.SetTime(10);
-            }
-        }
-
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
-        {
-            if (IsMTFEnabled)
-            {
-                if (ev.Player.IsNTF)
                 {
-                    ev.Player.MaxHealth *= 2;
-                    ev.Player.Health = ev.Player.MaxHealth;
-                    ev.Player.Scale = new Vector3(1.2f, 1.1f, 1.2f);
-                    ev.Player.EnableEffect(EffectType.Scp1853, 5);
+                    player.AddBroadcast(20, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 탈출하여 <u><i>강화제 제작 방법</i>을 재단에 넘기는 데 성공하였습니다.</u></size>");
+
+                    if (player.IsCHI)
+                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
                 }
             }
         }
@@ -149,15 +134,16 @@ namespace RGM.Modes
         {
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
+                Round.IsLocked = false;
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsCHI).ToList(), 1));
+
                 foreach (var player in Player.List)
-                    player.AddBroadcast(10, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 <color=red>사살당하였습니다.</color></size>\n<size=25><b><color=#04B404>혼돈의 반란</color> 세력이 10초 뒤 지원합니다.</b></size>");
+                {
+                    player.AddBroadcast(20, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 <color=red>사살당하였습니다.</color></size>");
 
-                IsCHIEnabled = true;
-
-                bool flag = WaveTimer.TryGetWaveTimers(Faction.FoundationEnemy, out List<WaveTimer> waves);
-
-                foreach (var w in waves)
-                    w.SetTime(10);
+                    if (player.IsNTF)
+                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+                }
             }
         }
 
