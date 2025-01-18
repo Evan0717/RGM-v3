@@ -23,6 +23,8 @@ public class Test : Ability
         {
             if (Owner.IsAlive)
             {
+                Owner.RemoveAbility(this);
+
                 if (Random.Range(1, 101) <= 15)
                 {
                     Owner.ShowHint("<b>능력을 3개 더 얻었습니다!</b>");
