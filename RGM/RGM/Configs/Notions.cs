@@ -26,7 +26,7 @@ namespace RGM
 """
 <size=120><b><color=red>🎄</color> ({Logo}) <color=#31B404>🎄</color></b></size>
 <size=80><b>[RGM] 랜덤게임모드</b></size> <size=25>(ver. {Version})</size>
-<align=right><size=20><b><i><color=#FE8686>연</color><color=#FE868B>말</color><color=#FE8691>을</color> <color=#FE879C>맞</color><color=#FE88A2>이</color><color=#FE88A7>하</color><color=#FE89AD>세</color><color=#FE89B3>요</color></i></b></size></align>
+<align=right><size=20><b><i><color=#FE7C7C>3</color><color=#E1A4A7>주</color><color=#C5CCD2>년</color> <color=#C5ECA9>축</color><color=#E2E454>하</color><color=#FEDD02>!</color></i></b></size></align>
 <align=left>
 Exp: {Exp}
 RP: {RP}
