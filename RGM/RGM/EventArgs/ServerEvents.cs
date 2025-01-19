@@ -148,6 +148,9 @@ namespace RGM.EventArgs
                                     p.AddBroadcast(10, $"<size=25><b>롤토체스 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode.GetModeData().Name}(으)로 선택되었습니다.</size>");
                             });
                         }
+
+                        if (CurrentSubMode == ModeType.None)
+                            CurrentSubMode = ModeType.ABattle;
                     }
                 }
                 finally
