@@ -30,7 +30,7 @@ namespace RGM.Functions
                     SubModeVote.Add(Tools.GetRandomValue(ModeList.Keys.Where(x => ModeList[x].Category != ModeCategory.Private && !ModeVote.ContainsKey(x) && ModeList.Keys.Where(x => x.GetModeData().Info != ModeInfo.Set).Contains(x)).ToList()));
 
                 else
-                    SubModeVote.Add(ModeType.None);
+                    SubModeVote.Add(ModeType.ABattle);
             }
 
             List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third };
