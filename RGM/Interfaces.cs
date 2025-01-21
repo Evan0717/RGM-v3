@@ -112,6 +112,7 @@ public enum ModeType
     Unlimited,
     Juggernaut,
     JumpMap,
+    MeetingSquare,
     MiniGames,
     PirateRoulette,
     Infection,

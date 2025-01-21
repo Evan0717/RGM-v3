@@ -77,6 +77,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\AudioPlayer.dll</HintPath>
     </Reference>
+    <Reference Include="Castle, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\Castle.dll</HintPath>
+    </Reference>
     <Reference Include="CommandSystem.Core">
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
     </Reference>
@@ -102,6 +106,9 @@
     <Reference Include="Exiled.Events, Version=9.3.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.Loader">
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\SCP Secret Laboratory\PluginAPI\plugins\global\Exiled.Loader.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=9.3.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
@@ -422,6 +429,7 @@
     <Compile Include="RGM\Modes\Sets\JumpMap\JumpMap.cs" />
     <Compile Include="RGM\Modes\Pluses\KoreanSpeed\KoreanSpeed.cs" />
     <Compile Include="RGM\Modes\Pluses\Outlaw\Outlaw.cs" />
+    <Compile Include="RGM\Modes\Sets\MeetingSquare\MeetingSquare.cs" />
     <Compile Include="RGM\Modes\Sets\MiniGames\MiniGames.cs" />
     <Compile Include="RGM\Modes\Sets\AI\AI.cs" />
     <Compile Include="RGM\Modes\Sets\PirateRoulette\PirateRoulette.cs" />
