@@ -160,7 +160,7 @@ namespace RGM.EventArgs
                 }
             }
 
-            Server.Name = Server.Name.Replace("[라운드 시작 전 로비]", $"[현재 모드: <color=#{CurrentMode.GetModeData().Color}>{CurrentMode.GetModeData().Name}</color>] <b><i><color=#FE7C7C>3</color><color=#E1A4A7>주</color><color=#C5CCD2>년</color> <color=#C5ECA9>축</color><color=#E2E454>하</color><color=#FEDD02>!</color></i></b>");
+            Server.Name = Server.Name.Replace("[라운드 시작 전 로비]", $"[현재 모드: <color=#{CurrentMode.GetModeData().Color}>{CurrentMode.GetModeData().Name}</color>]");
 
             List<string> ModeDesc = Tools.GetModeDesc(CurrentMode, CurrentSubMode);
 
