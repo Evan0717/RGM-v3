@@ -60,28 +60,28 @@ namespace RGM.Commands.ClientCommands
 
                     bool Check(Player p)
                     {
-                        if (player.IsDead && p.CurrentItem is Scp1576 scp1576)
-                        {
-                            if (scp1576.IsUsing)
-                                return true;
-                        }
-
-                        if (chatType == "전체 채팅")
+                        if (chatType == "전체")
                             return true;
 
-                        if (chatType == "SCP 채팅")
+                        if (chatType == "SCP")
                             return p.IsDead || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
 
-                        if (chatType == "플라밍고 채팅")
+                        if (chatType == "플라밍고")
                             return p.IsDead || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
 
-                        if (chatType == "관전자 채팅")
+                        if (chatType == "관전자")
                             return p.IsDead;
 
-                        if (chatType == "근거리 + 무전기 채팅")
+                        if (chatType == "SCP-1576 + 무전기")
                             return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
 
-                        if (chatType == "근거리 채팅")
+                        if (chatType == "SCP-1576")
+                            return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
+
+                        if (chatType == "무전기")
+                            return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
+
+                        if (chatType == "근거리")
                             return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
 
                         return false;
@@ -106,34 +106,51 @@ namespace RGM.Commands.ClientCommands
 
                 if (IntercomPlayers.Contains(player))
                 {
-                    response = ChatFormat("전체 채팅");
+                    response = ChatFormat("전체");
                     return true;
                 }
                 else if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
                 {
-                    response = ChatFormat("SCP 채팅");
+                    response = ChatFormat("SCP");
                     return true;
                 }
                 else if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
                 {
-                    response = ChatFormat("플라밍고 채팅");
+                    response = ChatFormat("플라밍고");
                     return true;
                 }
                 else if (player.IsDead)
                 {
-                    response = ChatFormat("관전자 채팅");
+                    response = ChatFormat("관전자");
                     return true;
                 }
-                else if (player.HasItem(ItemType.Radio))
+                else if (player.CurrentItem is Scp1576 scp1576)
                 {
-                    response = ChatFormat("근거리 + 무전기 채팅");
-                    return true;
+                    if (scp1576.IsUsing)
+                    {
+                        if (player.HasItem(ItemType.Radio))
+                        {
+                            response = ChatFormat("SCP-1576 + 무전기");
+                            return true;
+                        }
+                        else
+                        {
+                            response = ChatFormat("SCP-1576");
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (player.HasItem(ItemType.Radio))
+                        {
+                            response = ChatFormat("무전기");
+                            return true;
+                        }
+                    }
                 }
-                else
-                {
-                    response = ChatFormat("근거리 채팅");
-                    return true;
-                }
+
+                response = ChatFormat("근거리");
+                return true;
             }
         }
 
