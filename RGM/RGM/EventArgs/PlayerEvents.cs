@@ -220,12 +220,23 @@ namespace RGM.EventArgs
                                     }
                                 }
 
-                                foreach (var user in UsersManager.UsersCache.OrderByDescending(x => int.Parse(x.Value[0])).Take(10))
+                                foreach (var user in UsersManager.UsersCache.OrderByDescending(x =>
                                 {
-                                    string Name = user.Value[12];
-                                    string Exp = user.Value[0];
+                                    int exp;
+                                    return int.TryParse(x.Value[0], out exp) ? exp : 0;
+                                }).Take(10))
+                                {
+                                    try
+                                    {
+                                        string Name = user.Value[12];
+                                        string Exp = user.Value[0];
 
-                                    queue.Add($"{c(queue.Count() + 1)} - <b>{Name}</b>(<color=yellow>{Exp}</color>)");
+                                        queue.Add($"{c(queue.Count() + 1)} - <b>{Name}</b>(<color=yellow>{Exp}</color>)");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Log.Error(e);
+                                    }
                                 }
 
                                 ev.Player.ShowHint($"<align=left><size=30><b>[ ⭐ 랜덤게임모드(RGM) EXP 순위표 ⭐ ]</b></size>\n\n<size=25>{string.Join("\n", queue)}</size></align>\n\n\n\n\n");
