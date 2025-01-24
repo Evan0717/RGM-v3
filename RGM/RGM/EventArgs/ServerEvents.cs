@@ -44,7 +44,7 @@ namespace RGM.EventArgs
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
             });
 
-            GlobalPlayer.AddClip("Xmas-Remix", 0.3f, true);
+            GlobalPlayer.AddClip("NewYear_Lobby", 0.3f, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
