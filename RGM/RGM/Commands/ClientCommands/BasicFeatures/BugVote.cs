@@ -58,7 +58,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "버그", "bugvote", "bug" };
 
-        public string Description { get; } = "[RGM] 버그 상황이 일어났을 경우, 라운드를 강제로 종료하기 위해 사용할 수 있습니다.";
+        public string Description { get; } = "[RGM] 게임 진행이 불가능한 경우, 라운드를 강제로 종료하기 위해 사용할 수 있습니다.";
 
         public bool SanitizeResponse { get; } = true;
     }
