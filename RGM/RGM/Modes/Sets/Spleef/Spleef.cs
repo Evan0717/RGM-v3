@@ -50,7 +50,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
+            Respawn.PauseWaves();
             Server.FriendlyFire = true;
 
             Timing.RunCoroutine(OnModeStarted());

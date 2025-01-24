@@ -74,7 +74,7 @@ COM-15
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
-            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
+            Respawn.PauseWaves();
 
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Left += OnLeft;

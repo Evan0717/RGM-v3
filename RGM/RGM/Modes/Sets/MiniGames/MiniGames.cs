@@ -71,7 +71,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
+            Respawn.PauseWaves();
 
             foreach (var player in Player.List)
             {

@@ -40,7 +40,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
+            Respawn.PauseWaves();
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 

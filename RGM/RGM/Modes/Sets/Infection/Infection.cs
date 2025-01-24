@@ -45,7 +45,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            foreach (var spawn in WaveManager.Waves) spawn.Destroy();
+            Respawn.PauseWaves();
             Round.IsLocked = true;
 
             Exiled.Events.Handlers.Player.Verified += OnVerified;
