@@ -109,22 +109,26 @@ namespace RGM.Commands.ClientCommands
                     response = ChatFormat("전체");
                     return true;
                 }
-                else if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
+                
+                if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
                 {
                     response = ChatFormat("SCP");
                     return true;
                 }
-                else if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
+                
+                if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
                 {
                     response = ChatFormat("플라밍고");
                     return true;
                 }
-                else if (player.IsDead)
+                
+                if (player.IsDead)
                 {
                     response = ChatFormat("관전자");
                     return true;
                 }
-                else if (player.CurrentItem is Scp1576 scp1576)
+                
+                if (player.CurrentItem is Scp1576 scp1576)
                 {
                     if (scp1576.IsUsing)
                     {
@@ -139,14 +143,12 @@ namespace RGM.Commands.ClientCommands
                             return true;
                         }
                     }
-                    else
-                    {
-                        if (player.HasItem(ItemType.Radio))
-                        {
-                            response = ChatFormat("무전기");
-                            return true;
-                        }
-                    }
+                }
+                
+                if (player.HasItem(ItemType.Radio))
+                {
+                    response = ChatFormat("무전기");
+                    return true;
                 }
 
                 response = ChatFormat("근거리");
