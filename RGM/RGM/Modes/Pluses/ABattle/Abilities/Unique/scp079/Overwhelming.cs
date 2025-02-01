@@ -38,7 +38,7 @@ public class Overwhelming : Ability
         foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp && x.IsAlive))
         {
             if (player.CurrentRoom == ev.Player.CurrentRoom)
-                player.EnableEffect(EffectType.Slowness, (byte)(25 * ev.Player.AbilityCount(AbilityType.SCP079_OVERWHELMING)), 0.1f);
+                player.EnableEffect(EffectType.Slowness, (byte)(15 * ev.Player.AbilityCount(AbilityType.SCP079_OVERWHELMING)), 0.1f);
         }
     }
 }
