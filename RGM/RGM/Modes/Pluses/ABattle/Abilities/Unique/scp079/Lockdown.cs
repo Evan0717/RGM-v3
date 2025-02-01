@@ -27,8 +27,14 @@ public class Lockdown : Ability
         foreach (var door in Door.List)
         {
             door.IsOpen = false;
-            door.Lock(10, DoorLockType.Lockdown079);
+            door.Lock(1205, DoorLockType.Lockdown079);
         }
+
+        Timing.CallDelayed(10, () =>
+        {
+            foreach (var door in Door.List)
+                door.Unlock();
+        });
 
         Map.TurnOffAllLights(10);
     }
