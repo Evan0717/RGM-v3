@@ -22,7 +22,7 @@ public class RocketLauncher : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || ev.Attacker != Owner)
+        if (ev.Attacker == null || ev.Attacker != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
         if (Random.Range(1, 6) == 1)
