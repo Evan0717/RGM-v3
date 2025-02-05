@@ -44,7 +44,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[8].Contains(args))
+                    if (uc[8].Split('/').Contains(args))
                     {
                         response = "This player already have this paint.";
                         return false;

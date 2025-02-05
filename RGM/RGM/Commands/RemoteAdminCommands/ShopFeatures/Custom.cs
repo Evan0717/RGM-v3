@@ -44,7 +44,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[7].Contains(args))
+                    if (uc[7].Split('/').Contains(args))
                     {
                         response = "This player already have this custom feature.";
                         return false;
@@ -100,7 +100,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[7].Contains(args))
+                    if (uc[7].Split('/').Contains(args))
                     {
                         List<string> Customs = uc[7].Split('/').ToList();
 

@@ -44,7 +44,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[10].Contains(args))
+                    if (uc[10].Split('/').Contains(args))
                     {
                         response = "This player already have this badge.";
                         return false;
@@ -100,7 +100,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[10].Contains(args))
+                    if (uc[10].Split('/').Contains(args))
                     {
                         List<string> Badges = uc[10].Split('/').ToList();
 

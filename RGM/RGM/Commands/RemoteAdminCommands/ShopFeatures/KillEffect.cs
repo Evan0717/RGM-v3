@@ -44,7 +44,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[3].Contains(args))
+                    if (uc[3].Split('/').Contains(args))
                     {
                         response = "This player already have this kill effect.";
                         return false;
@@ -100,7 +100,7 @@ namespace RGM.Commands.RemoteAdminCommands
                 }
                 else
                 {
-                    if (uc[3].Contains(args))
+                    if (uc[3].Split('/').Contains(args))
                     {
                         List<string> Effects = uc[3].Split('/').ToList();
 
