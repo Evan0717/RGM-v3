@@ -27,12 +27,12 @@ namespace RGM.Commands.ClientCommands
 
             if (IsBugVoteProcessing)
             {
-                response = "이미 버그 투표가 진행중입니다.";
+                response = "이미 게임 진행 불가 투표가 진행중입니다.";
                 return false;
             }
             else if (BugVoteUsers.Contains(player))
             {
-                response = "이미 버그 투표를 한번 사용했습니다.";
+                response = "이미 게임 진행 불가 투표를 한번 사용했습니다.";
                 return false;
             }
             else if (arguments.Count < 1)
@@ -49,14 +49,14 @@ namespace RGM.Commands.ClientCommands
                 BugVotePlayers.Add(player);
                 BugVoteUsers.Add(player);
 
-                response = "버그 투표를 성공적으로 개설하였습니다.";
+                response = "게임 진행 불가 투표를 성공적으로 개설하였습니다.";
                 return true;
             }
         }
 
-        public string Command { get; } = "버그투표";
+        public string Command { get; } = "게임진행불가투표";
 
-        public string[] Aliases { get; } = { "버그", "bugvote", "bug" };
+        public string[] Aliases { get; } = {};
 
         public string Description { get; } = "[RGM] 게임 진행이 불가능한 경우, 라운드를 강제로 종료하기 위해 사용할 수 있습니다.";
 
@@ -72,19 +72,19 @@ namespace RGM.Commands.ClientCommands
 
             if (!IsBugVoteProcessing)
             {
-                response = "버그 투표가 진행중이 아닙니다.";
+                response = "게임 진행 불가 투표가 진행중이 아닙니다.";
                 return false;
             }
             else if (BugVotePlayers.Contains(player))
             {
-                response = "이미 버그 투표에 찬성하였습니다.";
+                response = "이미 게임 진행 불가 투표에 찬성하였습니다.";
                 return false;
             }
             else
             {
                 BugVotePlayers.Add(player);
 
-                response = "버그 투표에 찬성하였습니다.";
+                response = "게임 진행 불가 투표에 찬성하였습니다.";
                 return true;
             }
         }
@@ -93,7 +93,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "yes", "agree" };
 
-        public string Description { get; } = "[RGM] 버그 투표에서 찬성할 때 사용하세요.";
+        public string Description { get; } = "[RGM] 게임 진행 불가 투표에서 찬성할 때 사용하세요.";
 
         public bool SanitizeResponse { get; } = true;
     }

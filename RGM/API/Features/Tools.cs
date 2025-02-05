@@ -378,7 +378,7 @@ $"""
             int RequiredCount = Player.List.Count / 2;
             bool IsSuccess = false;
 
-            Webhook.Send($"🗳️ **버그 투표**ㅣ{host.DisplayNickname}에 의해 시작됨 ({reason})");
+            Webhook.Send($"🗳️ **게임 진행 불가 투표**ㅣ{host.DisplayNickname}에 의해 시작됨 ({reason})");
 
             for (int i = 1; i<21; i++)
             {
@@ -389,7 +389,7 @@ $"""
                 }
 
                 foreach (var player in Player.List)
-                    player.ShowHint($"<size=25>{host.DisplayNickname}(이)가 <b><color=#FFBF00>버그 투표</color></b>를 개설하였습니다.\n라운드를 강제로 종료해야 한다면 <b>.찬성</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {21 - i}초 남음 ({BugVotePlayers.Count}/{RequiredCount})</size>", 1.2f);
+                    player.ShowHint($"<size=25>{host.DisplayNickname}(이)가 <b><color=#FFBF00>게임 진행 불가 투표</color></b>를 개설하였습니다.\n라운드를 강제로 종료해야 한다면 <b>.찬성</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {21 - i}초 남음 ({BugVotePlayers.Count}/{RequiredCount})</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1);
             }
@@ -397,9 +397,9 @@ $"""
             if (IsSuccess)
             {
                 foreach (var player in Player.List)
-                    player.AddBroadcast(5, $"버그 투표가 <b><color=#9AFE2E>가결</color></b>되었습니다. 곧 서버가 재시작됩니다.");
+                    player.AddBroadcast(5, $"게임 진행 불가 투표가 <b><color=#9AFE2E>가결</color></b>되었습니다. 곧 서버가 재시작됩니다.");
 
-                Webhook.Send($"🗳️ **버그 투표**ㅣ✅ 가결됨 (투표자: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})");
+                Webhook.Send($"🗳️ **게임 진행 불가 투표**ㅣ✅ 가결됨 (투표자: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})");
 
                 yield return Timing.WaitForSeconds(5);
 
@@ -408,9 +408,9 @@ $"""
             else
             {
                 foreach (var player in Player.List)
-                    player.AddBroadcast(5, $"버그 투표가 <b><color=#FE2E2E>부결</color></b>되었습니다.");
+                    player.AddBroadcast(5, $"게임 진행 불가 투표가 <b><color=#FE2E2E>부결</color></b>되었습니다.");
 
-                Webhook.Send($"🗳️ **버그 투표**ㅣ❌ 부결됨 (투표자: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})");
+                Webhook.Send($"🗳️ **게임 진행 불가 투표**ㅣ❌ 부결됨 (투표자: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})");
             }
 
             IsBugVoteProcessing = false;
