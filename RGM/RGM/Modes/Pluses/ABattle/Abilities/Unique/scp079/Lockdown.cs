@@ -24,7 +24,7 @@ public class Lockdown : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var door in Door.List)
+        foreach (var door in Door.List.Where(x => !x.IsElevator))
         {
             door.IsOpen = false;
             door.Lock(1205, DoorLockType.Lockdown079);
