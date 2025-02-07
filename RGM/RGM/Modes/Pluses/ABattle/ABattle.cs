@@ -86,7 +86,7 @@ public class ABattle : Mode
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
         {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
-        {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (5%)"},
+        {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+50)"},
         {"캐시 청소", "7분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 20% 확률로 아사합니다."}
     };
@@ -318,7 +318,7 @@ public class ABattle : Mode
     {
         if (CurrentExtraMode == "스펙업")
         {
-            player.MaxHealth = player.MaxHealth * 1.05f;
+            player.MaxHealth += 50;
             player.Health = player.MaxHealth;
         }
 
