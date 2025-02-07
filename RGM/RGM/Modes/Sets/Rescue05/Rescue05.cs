@@ -118,7 +118,7 @@ namespace RGM.Modes
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
                 Round.IsLocked = false;
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsNTF).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.LeadingTeam == LeadingTeam.FacilityForces).ToList(), 1));
 
                 foreach (var player in Player.List)
                 {
@@ -135,7 +135,7 @@ namespace RGM.Modes
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
                 Round.IsLocked = false;
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsCHI).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.LeadingTeam == LeadingTeam.ChaosInsurgency).ToList(), 1));
 
                 foreach (var player in Player.List)
                 {
