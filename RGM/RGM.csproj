@@ -267,6 +267,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Survivor.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\TerroristRemains.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CandyAddict.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CataclysmGenerator.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlameThrower.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlashLight.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\KillStreak.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\TransparentCloak.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Tripleaxel.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Undine.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Upgrade.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Vampire.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\WeaponExpert.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Assassin.cs" />

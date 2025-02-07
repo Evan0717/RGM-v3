@@ -281,6 +281,7 @@ public enum AbilityType
     RARE_CONTRACT, // [희귀] 계약
     RARE_AMBUSH, // [희귀] 매복자
     RARE_TRANSITION, // [희귀] 하급 변이
+    RARE_UPGRADE, // [희귀] 강화
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -312,6 +313,7 @@ public enum AbilityType
     LEGEND_TRANSITION, // [전설] 상급 변이
     LEGEND_CANDYADDICT, // [전설] 마약 중독자
     LEGEND_REFLECTOR, // [전설] 반사경
+    LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
