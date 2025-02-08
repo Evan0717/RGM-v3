@@ -18,7 +18,7 @@ public class CataclysmGenerator : Ability
 {
     public override void OnEnabled()
     {
-        Dictionary<AbilityCategory, AbilityCategory> upgradable = new()
+        Dictionary<AbilityCategory, AbilityCategory> upgradable = new Dictionary<AbilityCategory, AbilityCategory>
         {
             { AbilityCategory.Common, AbilityCategory.Rare },
             { AbilityCategory.Rare, AbilityCategory.Epic },
@@ -27,16 +27,18 @@ public class CataclysmGenerator : Ability
         };
         List<AbilityCategory> abilityList = new List<AbilityCategory>();
 
-        foreach (var a in Owner.GetAbilities())
+        foreach (var a in Owner.GetAbilities().ToList())
         {
             if (upgradable.ContainsKey(a.Data.Category) && a.Data.AbilityType != AbilityType.LEGEND_CATACLYSMGENERATOR)
+            {
                 abilityList.Add(upgradable[a.Data.Category]);
 
-            Owner.RemoveAbility(a);
+                Owner.RemoveAbility(a);
+            }
         }
 
         foreach (var ac in abilityList)
-            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ac, 1).Where(x => x != AbilityType.LEGEND_CATACLYSMGENERATOR).GetRandomValue());
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ac, 3).Where(x => x != AbilityType.LEGEND_CATACLYSMGENERATOR).GetRandomValue());
     }
 
     public override void OnDisabled()
