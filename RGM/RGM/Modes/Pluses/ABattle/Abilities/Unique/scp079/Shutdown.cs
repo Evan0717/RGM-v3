@@ -40,6 +40,11 @@ public class Shutdown : Ability
             {
                 door.IsOpen = false;
                 door.Lock(DoorLockType.Lockdown079);
+
+                Timing.CallDelayed(5f, () =>
+                {
+                    door.Unlock();
+                });
             }
         }
     }
