@@ -322,6 +322,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Ambush.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\BomberMan.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Contract.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Dnd.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Gnome.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\GrapplingHook.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Hypass.cs" />
