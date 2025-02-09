@@ -129,6 +129,7 @@ namespace RGM.Variables
         public static List<Transform> Third;
         public static List<Transform> Numbers;
         public static List<Transform> RandomColors;
+        public static List<Transform> RandomLights;
         public static List<Transform> Balls;
     }
 }
