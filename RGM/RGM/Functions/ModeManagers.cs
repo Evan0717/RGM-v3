@@ -45,6 +45,7 @@ namespace RGM.Functions
 
             Numbers.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = randomColor);
             RandomColors.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = randomColor);
+            RandomLights.ForEach(x => x.GetComponent<Light>().color = Tools.GetRandomColor());
             Balls.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = Tools.GetRandomColor(true));
         }
     }
