@@ -24,10 +24,13 @@ public class Dnd : Ability
     {
         IEnumerator<float> enumerator()
         {
+            Vector3 pos = Owner.Position;
+
             Owner.EnableEffect(EffectType.Ensnared, 1, 120);
 
             for (int i = 0; i < 120; i++)
             {
+                Owner.Position = pos;
                 Owner.CurrentItem = null;
 
                 yield return Timing.WaitForSeconds(1f);
