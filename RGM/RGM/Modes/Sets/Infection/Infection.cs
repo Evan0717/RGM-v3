@@ -67,11 +67,9 @@ namespace RGM.Modes
 
             Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
-            hostZombie.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
-            Timing.CallDelayed(1, () =>
-            {
-                hostZombie.Position = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && x != hostZombie).Select(x => x.Position).ToList());
-            });
+            yield return Timing.WaitForSeconds(1);
+
+            hostZombie.Role.Set(RoleTypeId.Scp0492);
 
             foreach (var player in Player.List)
             {
@@ -133,9 +131,7 @@ namespace RGM.Modes
                     Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.Role.Type == RoleTypeId.Scp0492).ToList(), 1));
 
                     foreach (var player in Player.List)
-                    {
                         player.AddBroadcast(20, $"<size=30><b>숙주의 승리입니다. <color=red>남겨진 인류는 안타까운 결말을 맞이할 것입니다.</color></b></size>");
-                    }
 
                     yield break;
                 }
