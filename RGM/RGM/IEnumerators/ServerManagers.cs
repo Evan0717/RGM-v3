@@ -17,6 +17,7 @@ using Christmas.Scp2536.Gifts;
 using System.Diagnostics;
 using PlayerRoles.PlayableScps.Scp1507;
 using InventorySystem.Items.FlamingoTapePlayer;
+using Exiled.API.Enums;
 
 namespace RGM.IEnumerators
 {
@@ -207,6 +208,28 @@ namespace RGM.IEnumerators
                     IsClearCitizen = true;
 
                     GlobalPlayer.AddClip("scp079-3", volume: 1.2f);
+                }
+
+                yield return Timing.WaitForSeconds(1);
+            }
+        }
+        
+        public static IEnumerator<float> Detonation()
+        {
+            while (!Round.IsEnded)
+            {
+                if (Warhead.IsDetonated)
+                {
+                    foreach (var player in Player.List)
+                    {
+                        if (player.CurrentRoom.Type != RoomType.Surface)
+                        {
+                            if (GodModePlayers.Contains(player))
+                                GodModePlayers.Remove(player);
+
+                            player.Kill("제한된 구역입니다.");
+                        }
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1);

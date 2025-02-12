@@ -72,6 +72,7 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(InputCooldown());
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
+            Timing.RunCoroutine(Detonation());
 
             int rn = UnityEngine.Random.Range(1, 6);
 
