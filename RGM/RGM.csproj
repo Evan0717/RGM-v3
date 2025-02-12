@@ -298,6 +298,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedAdhesivePlaster.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Agility.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Bodyback.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\BulletSupply.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Dopamine.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Escape.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Evolution.cs" />
@@ -309,9 +310,11 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Purification.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Rainbow.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\RandomBox.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\ReRoll.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Sneak.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\StaminaReplenishment.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Supply.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\SuspiciousStew.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Swift.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Test.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Torch.cs" />

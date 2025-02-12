@@ -256,6 +256,9 @@ public enum AbilityType
     NORMAL_DOPAMINE, // [일반] 도파민
     NORMAL_TEST, // [일반] 시험
     NORMAL_AGILITY, // [일반] 민첩
+    NORMAL_BULLETSUPPLY, // [일반] 잔탄 수급
+    NORMAL_REROLL, // [일반] 리롤
+    NORMAL_SUSPICIOUSSTEW, // [일반] 수상한 스튜
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
