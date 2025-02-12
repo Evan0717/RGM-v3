@@ -59,6 +59,8 @@ public class Contract : Ability
         {
             ev.Item.Destroy();
 
+            Owner.RemoveAllAbilities();
+
             if (GodModePlayers.Contains(Owner))
                 GodModePlayers.Remove(Owner);
 
