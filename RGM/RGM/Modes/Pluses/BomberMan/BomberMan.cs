@@ -51,6 +51,22 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            foreach (var player in Player.List)
+            {
+                try
+                {
+                    foreach (var item in player.Items)
+                    {
+                        if (item.IsFirearm)
+                            player.RemoveItem(item);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error on removing items: {e}");
+                }
+            }
+
             while (true)
             {
                 foreach (var player in Player.List)
