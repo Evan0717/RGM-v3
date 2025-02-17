@@ -57,10 +57,10 @@ namespace RGM.Modes
 
             List<ItemType> Level05Items = new List<ItemType>() 
             {
-                ItemType.KeycardScientist,
+                ItemType.KeycardO5,
                 ItemType.GrenadeFlash,
                 ItemType.Flashlight,
-                ItemType.Coin,
+                ItemType.GunCOM15,
                 ItemType.Medkit,
                 ItemType.Painkillers,
                 ItemType.SCP500,
