@@ -36,12 +36,20 @@ public class Spirit : Ability
         while (true)
         {
             Owner.EnableEffect(EffectType.Invisible);
+
             foreach (var player in Player.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 5))
             {
-                foreach (var item in player.Items)
+                try
                 {
-                    if (item.Type == ItemType.SCP1344)
-                        player.RemoveItem(item);
+                    foreach (var item in player.Items)
+                    {
+                        if (item.Type == ItemType.SCP1344)
+                            player.RemoveItem(item);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"An error occurred while removing SCP-1344 from {player.Nickname} ({player.UserId}): {e}");
                 }
             }
 
