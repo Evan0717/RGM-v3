@@ -41,25 +41,22 @@ public class Psychics : Ability
             if (Owner.Role is Scp079Role scp079)
                 scp079.Energy += 0.35f * s;
 
-            if (s > 5)
+            if (s >= 5)
                 Owner.IsUsingStamina = false;
 
             else
                 Owner.IsUsingStamina = true;
 
-            if (s > 10)
+            if (s >= 10)
                 Owner.IsBypassModeEnabled = true;
 
             else
                 Owner.IsBypassModeEnabled = false;
 
-            if (s > 15)
+            if (s >= 15)
                 Owner.EnableEffect(EffectType.Ghostly, 1, 1.2f);
 
-            if (s > 20)
-                Owner.EnableEffect(EffectType.Invisible, 1, 1.2f);
-
-            if (s > 25)
+            if (s >= 20)
             {
                 if (UnityEngine.Random.Range(1, 51) == 1)
                 {
@@ -67,13 +64,16 @@ public class Psychics : Ability
                 }
             }
 
-            if (s > 30)
+            if (s >= 25)
             {
                 if (!Owner.IsNoclipPermitted)
                     Owner.IsNoclipPermitted = true;
 
                 Owner.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
             }
+
+            if (s >= 30)
+                Owner.EnableEffect(EffectType.Invisible, 1, 1.2f);
 
             else
             {

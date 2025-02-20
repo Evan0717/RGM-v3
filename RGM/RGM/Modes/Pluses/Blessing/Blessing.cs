@@ -31,12 +31,12 @@ namespace RGM.Modes
 • (SCP-079) 전력 회복
 
 <b>관전자</b>의 수가 5명씩 넘어갈 때마다 특수한 효과가 적용됩니다.
-6명 이상 - 스테미나 무제한
-11명 이상 - 바이패스 활성화
-16명 이상 - 유령화 효과
-21명 이상 - <i><color=#A400F0>투</color><color=#B600EE>명</color> <color=#DA00EC>효</color><color=#EC00EB>과</color></i>
-26명 이상 - <b><color=#57F104>아</color><color=#5DEE03>이</color><color=#63EB03>템</color><color=#6AE803>이</color> <color=#76E202>지</color><color=#7DDF02>급</color><color=#83DD01>될</color> <color=#90D701>수</color> <color=#9DD100>있</color><color=#A3CE00>음</color></b>
-31명 이상 - <b><i><color=#2718F7>노</color><color=#222DEF>클</color><color=#1E42E7>립</color> <color=#156CD8>사</color><color=#1181D1>용</color> <color=#08ABC2>가</color><color=#04C0BA>능</color></i></b>
+5명 이상 - 스테미나 무제한
+10명 이상 - 바이패스 활성화
+15명 이상 - 유령화 효과
+20명 이상 - <i><color=#57F104>아</color><color=#5DEE03>이</color><color=#63EB03>템</color><color=#6AE803>이</color> <color=#76E202>지</color><color=#7DDF02>급</color><color=#83DD01>될</color> <color=#90D701>수</color> <color=#9DD100>있</color><color=#A3CE00>음</color></i>
+25명 이상 - <b><color=#2718F7>노</color><color=#222DEF>클</color><color=#1E42E7>립</color> <color=#156CD8>사</color><color=#1181D1>용</color> <color=#08ABC2>가</color><color=#04C0BA>능</color></b>
+30명 이상 - <i><b><color=#A400F0>투</color><color=#B600EE>명</color> <color=#DA00EC>효</color><color=#EC00EB>과</color></b></i>
 """;
         public override string Color => "F6D8CE";
 
@@ -67,25 +67,22 @@ namespace RGM.Modes
                         if (player.Role is Scp079Role scp079)
                             scp079.Energy += 0.35f * s;
 
-                        if (s > 5)
+                        if (s >= 5)
                             player.IsUsingStamina = false;
 
                         else
                             player.IsUsingStamina = true;
 
-                        if (s > 10)
+                        if (s >= 10)
                             player.IsBypassModeEnabled = true;
 
                         else
                             player.IsBypassModeEnabled = false;
 
-                        if (s > 15)
+                        if (s >= 15)
                             player.EnableEffect(EffectType.Ghostly, 1, 1.2f);
 
-                        if (s > 20)
-                            player.EnableEffect(EffectType.Invisible, 1, 1.2f);
-
-                        if (s > 25)
+                        if (s >= 20)
                         {
                             if (UnityEngine.Random.Range(1, 51) == 1)
                             {
@@ -93,13 +90,16 @@ namespace RGM.Modes
                             }
                         }
 
-                        if (s > 30)
+                        if (s >= 25)
                         {
                             if (!player.IsNoclipPermitted)
                                 player.IsNoclipPermitted = true;
 
                             player.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
                         }
+
+                        if (s >= 30)
+                            player.EnableEffect(EffectType.Invisible, 1, 1.2f);
 
                         else
                         {
