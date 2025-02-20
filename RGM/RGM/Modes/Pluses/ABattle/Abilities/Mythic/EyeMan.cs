@@ -38,7 +38,7 @@ public class EyeMan : Ability
                     {
                         near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         near.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                        near.Hurt(near.MaxHealth / 1200, "눈빛의 힘에 압도당했습니다.");
+                        near.Hurt(near.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
                     }
                 }
