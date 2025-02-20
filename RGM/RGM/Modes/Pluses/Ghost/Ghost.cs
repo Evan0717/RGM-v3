@@ -50,7 +50,8 @@ namespace RGM.Modes
                         break;
 
                     case 2:
-                        door.IsOpen = Random.Range(1, 3) == 1 ? true : false;
+                        if (!door.IsElevator)
+                            door.IsOpen = Random.Range(1, 3) == 1 ? true : false;
                         break;
 
                     case 3:
