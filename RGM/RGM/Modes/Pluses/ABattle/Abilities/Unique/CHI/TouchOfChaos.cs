@@ -33,7 +33,7 @@ public class TouchOfChaos : Ability
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (ev.Player != Owner)
+        if (ev.Player != Owner || ev.Player.CurrentItem.Serial != ChaosCoinSerial)
             return;
 
         ev.Item.Destroy();
