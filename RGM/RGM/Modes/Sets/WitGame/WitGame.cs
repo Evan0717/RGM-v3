@@ -20,6 +20,7 @@ using MapEditorReborn.API.Features;
 
 using static RGM.Variables.ServerManagers;
 using Respawning;
+using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
@@ -50,6 +51,7 @@ namespace RGM.Modes
             Server.FriendlyFire = true;
 
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -126,7 +128,7 @@ namespace RGM.Modes
 
                     if (Cowards.Count < 2)
                     {
-                        Server.ExecuteCommand($"/rocket {Cowards[0].Id} 0.5");
+                        Server.ExecuteCommand($"/rocket {Cowards[0].Id} 0.8");
 
                         foreach (var player in Player.List)
                             player.AddBroadcast(3, $"<size=25>눈치가 느린 {Cowards[0].DisplayNickname}은(는) 하늘로 갔습니다.</size>");
@@ -177,13 +179,19 @@ namespace RGM.Modes
             }
         }
 
-        public void OnJumping(Exiled.Events.EventArgs.Player.JumpingEventArgs ev)
+        public void OnJumping(JumpingEventArgs ev)
         {
             if (!PassPlayers.Contains(ev.Player))
                 JumpingPlayers.Add(ev.Player);
         }
 
-        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        public void OnHurting(HurtingEventArgs ev)
+        {
+            if (ev.Player != ev.Attacker && ev.DamageHandler.Type == DamageType.Explosion)
+                ev.IsAllowed = false;
+        }
+
+        public void OnKicking(KickingEventArgs ev)
         {
             if (ev.Reason.ToLower().Contains("afk"))
                 ev.IsAllowed = false;
