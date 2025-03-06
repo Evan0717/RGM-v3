@@ -10,7 +10,7 @@ using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Unlimited)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Unlimited)]
     class Unlimited : Mode
     {
         public override string Name => "무제한";

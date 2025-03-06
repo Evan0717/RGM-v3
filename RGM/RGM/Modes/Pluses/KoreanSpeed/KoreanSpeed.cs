@@ -11,7 +11,7 @@ using Exiled.API.Features.Roles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.KoreanSpeed)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.KoreanSpeed)]
     public class KoreanSpeed : Mode
     {
         public override string Name => "한국인이 좋아하는 속도";

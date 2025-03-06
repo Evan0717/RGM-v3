@@ -9,7 +9,7 @@ using MEC;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.JohnWick)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.JohnWick)]
     public class JohnWick : Mode
     {
         public override string Name => "존 윅";

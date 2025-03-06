@@ -14,7 +14,7 @@ using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Siberia)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Siberia)]
     public class Siberia : Mode
     {
         public override string Name => "시베리아";

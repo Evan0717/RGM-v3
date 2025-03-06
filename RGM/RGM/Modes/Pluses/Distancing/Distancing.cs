@@ -13,7 +13,7 @@ using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Distancing)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Distancing)]
     public class Distancing : Mode
     {
         public override string Name => "사회적 거리두기";
