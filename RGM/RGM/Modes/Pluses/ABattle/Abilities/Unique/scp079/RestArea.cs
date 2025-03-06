@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("휴게소", "[경험치 획득]ㅣ생존한 SCP의 체력이 획득한 경험치만큼 회복됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_RESTAREA)]
+[Ability("휴게소", "[경험치 획득]ㅣ생존한 SCP의 체력이 획득한 경험치의 10%만큼 회복됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_RESTAREA)]
 public class RestArea : Ability
 {
     public override void OnEnabled()
@@ -38,6 +38,11 @@ public class RestArea : Ability
             return;
 
         foreach (var scp in Player.List.Where(x => x.IsScp))
-            scp.Health += ev.Amount;
+        {
+            if (scp.Health >= scp.MaxHealth)
+                continue;
+
+            scp.Health += ev.Amount * 0.1f;
+        }
     }
 }
