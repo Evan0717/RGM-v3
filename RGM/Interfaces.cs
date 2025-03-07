@@ -69,6 +69,7 @@ public enum ModeType
 {
     None,
     AI,
+    Alone,
     ABattle,
     AdditionalWave,
     Blackout,

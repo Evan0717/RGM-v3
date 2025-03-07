@@ -432,6 +432,7 @@
     <Compile Include="RGM\Modes\Pluses\RandomEffect\RandomEffect.cs" />
     <Compile Include="RGM\Modes\Pluses\RandomSize\RandomSize.cs" />
     <Compile Include="RGM\Modes\Pluses\TripleAxel\TripleAxel.cs" />
+    <Compile Include="RGM\Modes\Sets\Alone\Alone.cs" />
     <Compile Include="RGM\Modes\Sets\BombParty\BombParty.cs" />
     <Compile Include="RGM\Modes\Sets\Cell\Cell.cs" />
     <Compile Include="RGM\Modes\Pluses\Collector\Collector.cs" />
@@ -496,6 +497,8 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="RGM\Modes\Pluses\NewFolder1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
