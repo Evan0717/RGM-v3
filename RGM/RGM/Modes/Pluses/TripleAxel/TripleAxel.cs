@@ -20,6 +20,7 @@ namespace RGM.Modes
         public override string Detail =>
 """
 총기를 습득하는 그 순간부터 COM-45로 변환됩니다.
+탄약을 습득하는 그 순간부터 9x19 탄약으로 변경됩니다.
 COM-45로 인한 데미지가 80%로 하향됩니다.
 """;
         public override string Color => "DF7401";
@@ -45,6 +46,11 @@ COM-45로 인한 데미지가 80%로 하향됩니다.
                         player.RemoveItem(item);
                         player.AddItem(ItemType.GunCom45);
                     }
+                    else if (item.IsAmmo && item.Type != ItemType.Ammo9x19)
+                    {
+                        player.RemoveItem(item);
+                        player.AddItem(ItemType.Ammo9x19);
+                    }
                 }
             }
 
@@ -57,6 +63,11 @@ COM-45로 인한 데미지가 80%로 하향됩니다.
             {
                 ev.Player.RemoveItem(ev.Item);
                 ev.Player.AddItem(ItemType.GunCom45);
+            }
+            else if (ev.Item.IsAmmo && ev.Item.Type != ItemType.Ammo9x19)
+            {
+                ev.Player.RemoveItem(ev.Item);
+                ev.Player.AddItem(ItemType.Ammo9x19);
             }
         }
 
