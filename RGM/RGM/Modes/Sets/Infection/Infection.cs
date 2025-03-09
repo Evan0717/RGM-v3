@@ -171,19 +171,10 @@ namespace RGM.Modes
                 IEnumerable<Player> zombies = Player.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
 
                 if (zombies.Count() < 1)
-                {
-                    if (Warhead.IsDetonated)
-                        Server.ExecuteCommand($"/doortp {ev.Player.Id} SURFACE_NUKE");
+                    ev.Player.Position = Player.List.Where(x => x.IsAlive && !x.IsScp && !x.IsNPC).GetRandomValue().Position;
 
-                    else
-                        ev.Player.Position = Player.List.Where(x => x.IsAlive).GetRandomValue().Position;
-                }
                 else
-                {
-                    Vector3 pos = Tools.GetRandomValue(zombies.Select(x => x.Position).ToList());
-
-                    ev.Player.Position = pos;
-                }
+                    ev.Player.Position = Tools.GetRandomValue(zombies.Select(x => x.Position).ToList());
             }
             else
                 ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
