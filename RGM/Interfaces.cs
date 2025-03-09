@@ -107,6 +107,7 @@ public enum ModeType
     SCPRUSH,
     SnowBallFight,
     Siberia,
+    Silent,
     SoulMate,
     Spirit,
     SuperStar,
