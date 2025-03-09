@@ -250,6 +250,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\BackedUp.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\EndOfGraveRobbery.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\TestFailure.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedPingHook.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Blink.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\ExtremePoison.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Gambler.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\GhostRule.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\GraveRobber.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\LuckyVicky.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\RandomChest.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\RepairMan.cs" />

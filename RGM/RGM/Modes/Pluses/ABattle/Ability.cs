@@ -233,6 +233,7 @@ public enum AbilityType
     DUMMY_LEGENDTRANSITIONFAILURE, // [더미] 상급 변이 실패
     DUMMY_USEDPINGHOOK, // [더미] 핑 갈?고리
     DUMMY_BACKEDUP, // [더미] 백업됨
+    DUMMY_ENDOFGRAVEROBBERY, // [더미] 도굴 끝!
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -303,6 +304,7 @@ public enum AbilityType
     EPIC_TRANSITION, // [영웅] 변이
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
     EPIC_DISGUISE, // [영웅] 위장술
+    EPIC_GRAVEROBBER, // [영웅] 도굴꾼
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
