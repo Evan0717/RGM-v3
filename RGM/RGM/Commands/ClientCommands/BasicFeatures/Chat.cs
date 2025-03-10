@@ -42,6 +42,21 @@ namespace RGM.Commands.ClientCommands
                 response = "비밀 선거 조항을 깨트리지 마십시오.";
                 return false;
             }
+            else if (CurrentMode == ModeType.Silent)
+            {
+                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
+                g.FuseTime = 0f;
+                g.BurnDuration = 0f;
+                g.SpawnActive(player.Position);
+
+                if (GodModePlayers.Contains(player))
+                    GodModePlayers.Remove(player);
+
+                player.Kill("입이 근질거리는 것을 참지 못했습니다.");
+
+                response = "쉿!";
+                return false;
+            }
             else
             {
                 ChatCooldown.Add(player);

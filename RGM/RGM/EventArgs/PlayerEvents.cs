@@ -640,11 +640,6 @@ namespace RGM.EventArgs
 
                         ev.Player.Kill(new PlayerStatsSystem.ScpDamageHandler(attacker.ReferenceHub, DeathTranslations.PocketDecay));
                     }
-                    else if (ev.DamageHandler.Type == DamageType.Explosion)
-                    {
-                        if (ev.Attacker == null)
-                            ev.IsAllowed = false;
-                    }
                 }
             }
         }

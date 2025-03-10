@@ -17,7 +17,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Silent)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Silent)]
     public class Silent : Mode
     {
         public override string Name => "사일런트";
@@ -25,6 +25,7 @@ namespace RGM.Modes
         public override string Detail =>
 """
 마이크(Q)를 사용할 수 없습니다.
+채팅(.ㅊ)도 사용할 수 없습니다.
 """;
         public override string Color => "9E82F5";
 
@@ -41,6 +42,7 @@ namespace RGM.Modes
             {
                 var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
                 g.FuseTime = 0f;
+                g.BurnDuration = 0f;
                 g.SpawnActive(ev.Player.Position, null);
 
                 if (GodModePlayers.Contains(ev.Player))
