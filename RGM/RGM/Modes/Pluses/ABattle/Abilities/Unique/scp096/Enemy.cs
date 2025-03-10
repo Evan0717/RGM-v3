@@ -33,6 +33,9 @@ public class Enemy : Ability
         if (ev.Player != Owner)
             return;
 
-        ev.Scp096.RemainingChargeDuration /= 2;
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+        {
+            ev.Scp096.RemainingChargeDuration /= 2;
+        });
     }
 }

@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp939;
 
-[Ability("민첩한 사냥 도구", "공격 속도가 50% 줄어듭니다.", AbilityCategory.Scp939, AbilityType.SCP939_AGILEHUNTINGTOOL)]
+[Ability("민첩한 사냥 도구", "공격 쿨타임이 50% 줄어듭니다.", AbilityCategory.Scp939, AbilityType.SCP939_AGILEHUNTINGTOOL)]
 public class AgileHuntingTool : Ability
 {
     public override void OnEnabled()

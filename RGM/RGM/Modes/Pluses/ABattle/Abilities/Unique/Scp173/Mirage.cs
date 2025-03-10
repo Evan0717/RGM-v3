@@ -32,6 +32,8 @@ public class Mirage : Ability
             return;
 
         if (UnityEngine.Random.Range(1, 21) == 1)
-            ev.Player.GetEffect(EffectType.Invisible).TimeLeft += 1.25f;
+        {
+            Owner.EnableEffect(EffectType.Invisible, 1, 1.25f * Owner.AbilityCount(AbilityType.SCP173_MIRAGE));
+        }
     }
 }

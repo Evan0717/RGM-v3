@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp096;
 
-[Ability("천리안", "분노 시에 30m 내의 인간들을 모두 목격자에 포함시킵니다.", AbilityCategory.Scp096, AbilityType.SCP096_SEER)]
+[Ability("천리안", "분노 시에 30m 내의 인간들을 목격자에 포함시킵니다. (최대 4명)", AbilityCategory.Scp096, AbilityType.SCP096_SEER)]
 public class Sear : Ability
 {
     public override void OnEnabled()
@@ -37,6 +37,9 @@ public class Sear : Ability
 
         foreach (var player in Player.List.Where(x => x.IsHuman))
         {
+            if (Stack == 4)
+                break;
+
             if (Vector3.Distance(player.Position, ev.Player.Position) < 31)
             {
                 Stack += 1;

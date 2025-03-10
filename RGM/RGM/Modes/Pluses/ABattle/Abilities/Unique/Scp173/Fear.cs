@@ -34,7 +34,9 @@ public class Fear : Ability
         foreach (var player in Player.List.Where(x => !x.IsNPC && !x.IsScp))
         {
             if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
-                player.GetEffect(EffectType.Ensnared).TimeLeft += 0.75f;
+            {
+                player.EnableEffect(EffectType.Ensnared, 1, 0.75f * Owner.AbilityCount(AbilityType.SCP173_FEAR));
+            }
         }
     }
 }

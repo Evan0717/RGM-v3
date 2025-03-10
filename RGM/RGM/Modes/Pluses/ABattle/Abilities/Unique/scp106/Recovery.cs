@@ -34,7 +34,7 @@ public class Recovery : Ability
         if (ev.Player != Owner)
             return;
 
-        Timing.CallDelayed(0.1f, () =>
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
             ev.Scp106.CaptureCooldown /= 2;
         });
