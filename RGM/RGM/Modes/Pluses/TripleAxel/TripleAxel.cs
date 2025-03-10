@@ -9,6 +9,7 @@ using MEC;
 using RGM.API.Features;
 using InventorySystem.Items.Usables.Scp330;
 using Exiled.Events.EventArgs.Player;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -21,7 +22,7 @@ namespace RGM.Modes
 """
 총기를 습득하는 그 순간부터 COM-45로 변환됩니다.
 탄약을 습득하는 그 순간부터 9x19 탄약으로 변경됩니다.
-COM-45로 인한 데미지가 80%로 하향됩니다.
+COM-45로 인한 데미지가 70%로 하향됩니다.
 """;
         public override string Color => "DF7401";
 
@@ -31,6 +32,7 @@ COM-45로 인한 데미지가 80%로 하향됩니다.
         {
             Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -46,12 +48,9 @@ COM-45로 인한 데미지가 80%로 하향됩니다.
                         player.RemoveItem(item);
                         player.AddItem(ItemType.GunCom45);
                     }
-                    else if (item.IsAmmo && item.Type != ItemType.Ammo9x19)
-                    {
-                        player.RemoveItem(item);
-                        player.AddItem(ItemType.Ammo9x19);
-                    }
                 }
+
+                Spawned(player);
             }
 
             yield break;
@@ -64,17 +63,31 @@ COM-45로 인한 데미지가 80%로 하향됩니다.
                 ev.Player.RemoveItem(ev.Item);
                 ev.Player.AddItem(ItemType.GunCom45);
             }
-            else if (ev.Item.IsAmmo && ev.Item.Type != ItemType.Ammo9x19)
-            {
-                ev.Player.RemoveItem(ev.Item);
-                ev.Player.AddItem(ItemType.Ammo9x19);
-            }
         }
 
         public void OnHurting(HurtingEventArgs ev)
         {
             if (ev.Attacker != null && ev.Attacker.CurrentItem.Type == ItemType.GunCom45)
-                ev.DamageHandler.Damage *= 0.8f;
+                ev.DamageHandler.Damage *= 0.7f;
+        }
+
+        public void OnSpawned(SpawnedEventArgs ev)
+        {
+            Spawned(ev.Player);
+        }
+
+        public void Spawned(Player player)
+        {
+            if (player.IsAlive)
+            {
+                ushort totalAmmo = 0;
+
+                foreach (var ammo in player.Ammo.Values)
+                    totalAmmo += ammo;
+
+                player.ClearAmmo();
+                player.AddAmmo(AmmoType.Nato9, totalAmmo);
+            }
         }
     }
 };
