@@ -72,6 +72,7 @@ public enum ModeType
     Alone,
     ABattle,
     AdditionalWave,
+    Ascension,
     Blackout,
     Blessing,
     BomberMan,
@@ -127,6 +128,7 @@ public enum ModeType
     Spleef,
     TailCatcter,
     Tomb,
+    TTT,
     WhereamI,
     WhoamI,
     WitGame

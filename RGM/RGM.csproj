@@ -423,6 +423,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Commands\ClientCommands\Select.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Commands\RemoteAdminCommands\SetExtraMode.cs" />
     <Compile Include="RGM\Modes\Pluses\AdditionalWave\AdditionalWave.cs" />
+    <Compile Include="RGM\Modes\Pluses\Ascension\Ascension.cs" />
     <Compile Include="RGM\Modes\Pluses\Blackout\Blackout.cs" />
     <Compile Include="RGM\Modes\Pluses\Blessing\Blessing.cs" />
     <Compile Include="RGM\Modes\Pluses\BomberMan\BomberMan.cs" />
@@ -480,6 +481,7 @@
     <Compile Include="RGM\Modes\Sets\Tomb\Tomb.cs" />
     <Compile Include="RGM\Modes\Pluses\TrickorTreat\TrickorTreat.cs" />
     <Compile Include="RGM\Modes\Pluses\Unlimited\Unlimited.cs" />
+    <Compile Include="RGM\Modes\Sets\TTT\TTT.cs" />
     <Compile Include="RGM\Modes\Sets\WhereamI\WhereamI.cs" />
     <Compile Include="RGM\Modes\Sets\WhoamI\WhoamI.cs" />
     <Compile Include="Plugin.cs" />
