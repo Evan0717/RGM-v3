@@ -160,7 +160,7 @@ namespace RGM.Variables
             new Product()
             {
                 Name = "모드 추천서",
-                Description = ".구매 모드 추천서 <모드 이름>ㅣ해당 모드가 투표 목록에 있다면 이름을 강조 처리합니다.",
+                Description = ".구매 모드 추천서/<모드 이름>ㅣ해당 모드가 투표 목록에 있다면 이름을 강조 처리합니다.",
                 Price = 10,
                 Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg); },
                 Script = (player, arg) =>
