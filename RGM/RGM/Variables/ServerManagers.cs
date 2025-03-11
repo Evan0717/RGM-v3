@@ -175,7 +175,7 @@ namespace RGM.Variables
                 Name = "휴대용 라디오",
                 Description = ".구매 휴대용 라디오ㅣ이 서버에 등록된 소리 파일 중 하나를 랜덤으로 재생합니다.",
                 Price = 15,
-                Check = (player, arg) => { return true; },
+                Check = (player, arg) => { return player.IsAlive; },
                 Script = (player, arg) =>
                 {
                     AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}", onIntialCreation: (p) =>
