@@ -63,6 +63,8 @@ namespace RGM.Commands.ClientCommands
                                 }
                             }
 
+                            Log.Info($"💰 구매ㅣ{player.Nickname}(`{player.Id}`, `{player.UserId}`, `{player.IPAddress}`) -> {product.Name} {product.Price}");
+
                             response = "구매 완료!";
                             return true;
                         }
