@@ -106,7 +106,7 @@ namespace RGM.Modes
             while (true)
             {
                 while (Light == "Green")
-                    yield return Timing.WaitForOneFrame;
+                    yield return Timing.WaitForSeconds(0.1f);
 
                 yield return Timing.WaitForSeconds(1f);
 
@@ -133,7 +133,7 @@ namespace RGM.Modes
                         }
                     }
 
-                    yield return Timing.WaitForOneFrame;
+                    yield return Timing.WaitForSeconds(0.1f);
                 }
             }
         }

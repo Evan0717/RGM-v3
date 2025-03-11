@@ -76,7 +76,7 @@ namespace RGM.IEnumerators
                     }
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
