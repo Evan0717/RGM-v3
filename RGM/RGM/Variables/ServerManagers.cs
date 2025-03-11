@@ -124,7 +124,6 @@ namespace RGM.Variables
         public static List<Transform> Balls;
         public static List<ModeType> EnabledModeList = new List<ModeType>();
         public static List<ModeType> SubModeVote = new List<ModeType>();
-        public static List<string> Requests = new List<string>();
         public static List<Player> JumpScareCooldown = new List<Player>();
         public static List<Player> GodModePlayers = new List<Player>();
         public static List<Player> ChatCooldown = new List<Player>();
@@ -133,6 +132,7 @@ namespace RGM.Variables
         public static List<Player> BugVoteUsers = new List<Player>();
         public static List<Player> IntercomPlayers = new List<Player>();
         public static List<Player> ShopCooldown = new List<Player>();
+        public static List<ModeType> highlightModes = new List<ModeType>();
         public static List<Product> Products = new List<Product>()
         {
             new Product()
@@ -140,7 +140,7 @@ namespace RGM.Variables
                 Name = "인형 소환",
                 Description = ".구매 인형ㅣ랜덤한 역할군의 인형을 소환합니다. 로비에서만 사용할 수 있습니다.",
                 Price = 3,
-                Check = (player) => { return Round.IsLobby; },
+                Check = (player, arg) => { return Round.IsLobby; },
                 Script = (player, arg) =>
                 {
                     Ragdoll.CreateAndSpawn(Tools.EnumToList<RoleTypeId>().Where(x => x.TryGetRoleBase(out PlayerRoleBase roleBase)).GetRandomValue(), "인형", "이 깜찍한 인형 좀 보세요.", player.Position);
@@ -151,12 +151,44 @@ namespace RGM.Variables
                 Name = "랜덤박스",
                 Description = ".구매 랜덤박스ㅣ랜덤한 아이템을 얻습니다. 라운드 종료 시에만 사용할 수 있습니다.",
                 Price = 3,
-                Check = (player) => { return Round.IsEnded; },
+                Check = (player, arg) => { return Round.IsEnded; },
                 Script = (player, arg) =>
                 {
                     player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
                 }
-            }
+            },
+            new Product()
+            {
+                Name = "모드 추천서",
+                Description = ".구매 모드 추천서 <모드 이름>ㅣ해당 모드가 투표 목록에 있다면 이름을 강조 처리합니다.",
+                Price = 10,
+                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg); },
+                Script = (player, arg) =>
+                {
+                    highlightModes.Add(ModeList.Keys.First(x => x.GetModeData().Name == arg));
+
+                    Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <b>{ModeList.Keys.First(x => x.GetModeData().Name == arg).GetModeData().Name}</b> 모드를 추천하였습니다.");
+                }
+            },
+            new Product()
+            {
+                Name = "휴대용 라디오",
+                Description = ".구매 휴대용 라디오ㅣ이 서버에 등록된 소리 파일 중 하나를 랜덤으로 재생합니다.",
+                Price = 15,
+                Check = (player, arg) => { return true; },
+                Script = (player, arg) =>
+                {
+                    AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}", onIntialCreation: (p) =>
+                    {        
+                        p.transform.parent = player.GameObject.transform;
+                        Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 5f, maxDistance: 15f);
+                        speaker.transform.parent = player.GameObject.transform;
+                        speaker.transform.localPosition = Vector3.zero;
+                    });
+
+                    radio.AddClip(AudioClipStorage.AudioClips.GetRandomValue().Key);
+                }
+            },
         };
     }
 }

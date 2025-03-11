@@ -13,6 +13,6 @@ namespace RGM.API.Interfaces
         public string Description { get; set; }
         public int Price { get; set; }
         public Action<Player, string> Script { get; set; }
-        public Func<Player, bool> Check { get; set; } = (player) => true;
+        public Func<Player, string, bool> Check { get; set; } = (player, arg) => true;
     }
 }

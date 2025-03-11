@@ -339,8 +339,7 @@ namespace RGM.EventArgs
                                 }
 
                                 List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
-
-                                ev.Player.ShowHint(Notions.LobbyMessage
+                                string formatted = Notions.LobbyMessage
                                     .Replace("{FirstMark}", ModeVote[iv(1)].Contains(ev.Player) ? "■" : "□")
                                     .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
                                     .Replace("{ThirdMark}", ModeVote[iv(3)].Contains(ev.Player) ? "■" : "□")
@@ -358,8 +357,14 @@ namespace RGM.EventArgs
                                     .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
                                     .Replace("{Tip}", Tip)
                                     .Replace("{Version}", $"{RGM.Instance.Version}")
-                                    .Replace("{Logo}", $"{Logo}")
-                                    , 1.2f);
+                                    .Replace("{Logo}", $"{Logo}");
+
+                                foreach (string name in highlightModes.Select(x => x.GetModeData().Name))
+                                {
+                                    formatted = formatted.Replace(name, $"<b>{name}</b>");
+                                }
+
+                                ev.Player.ShowHint(formatted, 1.2f);
                             }
                         }
                     }

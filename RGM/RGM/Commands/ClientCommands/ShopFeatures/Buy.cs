@@ -33,8 +33,9 @@ namespace RGM.Commands.ClientCommands
                 if (Products.Select(x => x.Name).Contains(input))
                 {
                     Product product = Products.FirstOrDefault(x => x.Name == input);
+                    string arg = input.Replace($"{product.Name}", "").Trim();
 
-                    if (product.Check(player))
+                    if (product.Check(player, arg))
                     {
                         int rp = int.Parse(UsersManager.UsersCache[player.UserId][1]);
 
@@ -52,7 +53,7 @@ namespace RGM.Commands.ClientCommands
 
                                 try
                                 {
-                                    product.Script.Invoke(player, $"{input.Replace($"{product.Name}", "").Trim()}");
+                                    product.Script.Invoke(player, $"{arg}");
                                     break;
                                 }
                                 catch (Exception ex)
