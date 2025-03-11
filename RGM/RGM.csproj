@@ -462,6 +462,7 @@
     <Compile Include="RGM\Modes\Sets\JumpMap\JumpMap.cs" />
     <Compile Include="RGM\Modes\Pluses\KoreanSpeed\KoreanSpeed.cs" />
     <Compile Include="RGM\Modes\Pluses\Outlaw\Outlaw.cs" />
+    <Compile Include="RGM\Modes\Sets\LastOne\LastOne.cs" />
     <Compile Include="RGM\Modes\Sets\MeetingSquare\MeetingSquare.cs" />
     <Compile Include="RGM\Modes\Sets\MiniGames\MiniGames.cs" />
     <Compile Include="RGM\Modes\Sets\AI\AI.cs" />
@@ -480,12 +481,13 @@
     <Compile Include="RGM\Modes\Sets\Spleef\Spleef.cs" />
     <Compile Include="RGM\Modes\Pluses\SuperStar\SuperStar.cs" />
     <Compile Include="RGM\Modes\Sets\TailCatcher\TailCatcher.cs" />
+    <Compile Include="RGM\Modes\Sets\TeamMatch\TeamMatch.cs" />
     <Compile Include="RGM\Modes\Sets\Tomb\Tomb.cs" />
     <Compile Include="RGM\Modes\Pluses\TrickorTreat\TrickorTreat.cs" />
     <Compile Include="RGM\Modes\Pluses\Unlimited\Unlimited.cs" />
     <Compile Include="RGM\Modes\Sets\TTT\TTT.cs" />
     <Compile Include="RGM\Modes\Sets\WhereamI\WhereamI.cs" />
-    <Compile Include="RGM\Modes\Sets\WhoamI\WhoamI.cs" />
+    <Compile Include="RGM\Modes\Sets\WhoamI1\WhoamI1.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RGM\EventArgs\PlayerEvents.cs" />
@@ -495,6 +497,7 @@
     <Compile Include="RGM\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Functions\ModeManagers.cs" />
+    <Compile Include="RGM\Modes\Sets\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Sets\WitGame\WitGame.cs" />
     <Compile Include="RGM\Variables\ServerManagers.cs" />
   </ItemGroup>
