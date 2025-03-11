@@ -19,6 +19,7 @@ using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MultiBroadcast.API;
 using Respawning;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
@@ -124,7 +125,12 @@ namespace RGM.Modes
             foreach (var player in Player.List)
             {
                 if (player.IsScp)
+                {
+                    if (GodModePlayers.Contains(player))
+                        GodModePlayers.Remove(player);
+
                     player.Kill("제한시간이 초과하였습니다.");
+                }
             }
         }
 
