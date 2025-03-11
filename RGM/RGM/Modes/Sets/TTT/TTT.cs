@@ -27,7 +27,7 @@ namespace RGM.Modes
     class TTT : Mode
     {
         public override string Name => "TTT";
-        public override string Description => "테러리스트 타운에서 일어난 마피아 게임";
+        public override string Description => "테러리스트 타운에서 일어난 마피아 게임 (반드시 자세한 설명을 읽으세요.)";
         public override string Detail =>
 $"""
 Trouble in Terrorist Town의 약자.
@@ -40,7 +40,7 @@ Trouble in Terrorist Town의 약자.
 • 탐정은 <color={RoleTypeId.FacilityGuard.GetColor().ToHex()}>시설 경비</color>의 모습을 하고 있습니다. <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>들은 가급적이면 그의 명령을 따라야 합니다.
 • <color=red>배신자</color>들에게는 무전기와 SCP-1853(이)가 추가로 지급됩니다.
 • 가끔씩 진통제, 고폭 수류탄, 섬광탄이 추가로 지급될 수 있습니다.
-• <b><i>절대로 아무나 쏴 죽이지 마십시오, 게임의 재미를 해칩니다!</i></b>
+• <b><i><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>은 잘못된 유저를 죽이면 심각한 피해를 입습니다!</i></b>
 """;
         public override string Color => "F78181";
 
@@ -169,11 +169,11 @@ Trouble in Terrorist Town의 약자.
                 }
                 else if (player == detective)
                 {
-                    player.ShowHint($"당신은 <color=cyan>탐정</color>입니다. <color=red>배신자</color>들을 처단하세요.", 10);
+                    player.ShowHint($"당신은 <color=#2ECCFA>탐정</color>입니다. <color=red>배신자</color>들을 처단하세요.", 10);
                 }
                 else
                 {
-                    player.ShowHint($"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=cyan>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 10);
+                    player.ShowHint($"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 10);
                 }
             }
 
@@ -207,6 +207,20 @@ Trouble in Terrorist Town의 약자.
 
         public void OnDied(DiedEventArgs ev)
         {
+            if (Round.IsEnded)
+                return;
+
+            if (ev.Attacker != null)
+            {
+                if (ev.Attacker != detective && !traitors.Contains(ev.Attacker))
+                {
+                    if (ev.Player != detective && !traitors.Contains(ev.Player))
+                    {
+                        ev.Attacker.Hurt(50, "같은 무죄인을 죽이는 실수를 범해서는 안됐습니다.");
+                    }
+                }
+            }
+
             if (traitors.Contains(ev.Player))
             {
                 ev.Player.RankName = "배신자";
@@ -223,7 +237,7 @@ Trouble in Terrorist Town의 약자.
                 Round.IsLocked = false;
 
                 if (detective != null && detective.IsAlive)
-                    detective.Role.Set(RoleTypeId.ClassD);
+                    detective.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
 
                 foreach (var player in Player.List)
                 {
