@@ -118,6 +118,7 @@ public enum ModeType
     Unlimited,
     Juggernaut,
     JumpMap,
+    LastOne,
     MeetingSquare,
     MiniGames,
     PirateRoulette,
@@ -127,10 +128,12 @@ public enum ModeType
     SpeedRun,
     Spleef,
     TailCatcter,
+    TeamMatch,
     Tomb,
     TTT,
     WhereamI,
-    WhoamI,
+    WhoamI1,
+    WhoamI2,
     WitGame
 }
 
