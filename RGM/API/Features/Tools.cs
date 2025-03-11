@@ -233,6 +233,8 @@ $"""
             if (IsWinnerSelected)
                 yield break;
 
+            IsWinnerSelected = true;
+
             if (Server.PlayerCount >= 15)
             {
                 foreach (var player in playerList)
@@ -242,8 +244,6 @@ $"""
                 }
 
                 UsersManager.SaveUsers();
-
-                IsWinnerSelected = true;
 
                 while (true)
                 {
