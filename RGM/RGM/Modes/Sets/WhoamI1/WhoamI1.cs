@@ -20,11 +20,11 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.WhoamI)]
-    public class WhoamI : Mode
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.WhoamI1)]
+    public class WhoamI1 : Mode
     {
         public override string Name => "나는 누구?";
-        public override string Description => "1분마다 진영이 변경됩니다.";
+        public override string Description => "1분마다 다른 플레이어와 몸이 바뀝니다.";
         public override string Detail =>
 """
 [] 나는 누구?
@@ -34,7 +34,7 @@ namespace RGM.Modes
 """;
         public override string Color => "886A08";
 
-        public static WhoamI Instance;
+        public static WhoamI1 Instance;
 
         public Dictionary<Player, PlayerInfo> PlayersInfo = new Dictionary<Player, PlayerInfo>();
 
