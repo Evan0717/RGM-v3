@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using PlayerRoles;
+using Exiled.API.Extensions;
 
 namespace RGM.Variables
 {
@@ -113,6 +115,13 @@ namespace RGM.Variables
             {"Adios! 2024", "✿"}
         };
 
+        public static List<Transform> First;
+        public static List<Transform> Second;
+        public static List<Transform> Third;
+        public static List<Transform> Numbers;
+        public static List<Transform> RandomColors;
+        public static List<Transform> RandomLights;
+        public static List<Transform> Balls;
         public static List<ModeType> EnabledModeList = new List<ModeType>();
         public static List<ModeType> SubModeVote = new List<ModeType>();
         public static List<string> Requests = new List<string>();
@@ -123,13 +132,20 @@ namespace RGM.Variables
         public static List<Player> BugVotePlayers = new List<Player>();
         public static List<Player> BugVoteUsers = new List<Player>();
         public static List<Player> IntercomPlayers = new List<Player>();
-
-        public static List<Transform> First;
-        public static List<Transform> Second;
-        public static List<Transform> Third;
-        public static List<Transform> Numbers;
-        public static List<Transform> RandomColors;
-        public static List<Transform> RandomLights;
-        public static List<Transform> Balls;
+        public static List<Player> ShopCooldown = new List<Player>();
+        public static List<Product> Products = new List<Product>()
+        {
+            new Product()
+            {
+                Name = "인형 소환",
+                Description = "랜덤한 역할군의 인형을 소환합니다. 로비에서만 사용할 수 있습니다.",
+                Price = 3,
+                Check = (player) => { return !Round.IsStarted; },
+                Script = (player) =>
+                {
+                    Ragdoll.CreateAndSpawn(Tools.EnumToList<RoleTypeId>().Where(x => x.TryGetRoleBase(out PlayerRoleBase roleBase)).GetRandomValue(), "인형", "이 깜찍한 인형 좀 보세요.", player.Position);
+                }
+            }
+        };
     }
 }
