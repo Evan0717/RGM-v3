@@ -138,12 +138,23 @@ namespace RGM.Variables
             new Product()
             {
                 Name = "인형 소환",
-                Description = "랜덤한 역할군의 인형을 소환합니다. 로비에서만 사용할 수 있습니다.",
+                Description = ".구매 인형ㅣ랜덤한 역할군의 인형을 소환합니다. 로비에서만 사용할 수 있습니다.",
                 Price = 3,
-                Check = (player) => { return !Round.IsStarted; },
-                Script = (player) =>
+                Check = (player) => { return Round.IsLobby; },
+                Script = (player, arg) =>
                 {
                     Ragdoll.CreateAndSpawn(Tools.EnumToList<RoleTypeId>().Where(x => x.TryGetRoleBase(out PlayerRoleBase roleBase)).GetRandomValue(), "인형", "이 깜찍한 인형 좀 보세요.", player.Position);
+                }
+            },
+            new Product()
+            {
+                Name = "랜덤박스",
+                Description = ".구매 랜덤박스ㅣ랜덤한 아이템을 얻습니다. 라운드 종료 시에만 사용할 수 있습니다.",
+                Price = 3,
+                Check = (player) => { return Round.IsEnded; },
+                Script = (player, arg) =>
+                {
+                    player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
                 }
             }
         };

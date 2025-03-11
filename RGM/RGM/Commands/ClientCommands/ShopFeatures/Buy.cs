@@ -43,13 +43,23 @@ namespace RGM.Commands.ClientCommands
                             UsersManager.UsersCache[player.UserId][1] = $"{rp - product.Price}";
                             UsersManager.SaveUsers();
 
-                            try
+                            int maxtries = 10;
+                            int tries = 0;
+
+                            while (maxtries > tries)
                             {
-                                product.Script.Invoke(player);
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error(ex);
+                                tries++;
+
+                                try
+                                {
+                                    product.Script.Invoke(player, $"{input.Replace($"{product.Name}", "").Trim()}");
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Log.Error(ex);
+                                    continue;
+                                }
                             }
 
                             response = "구매 완료!";
