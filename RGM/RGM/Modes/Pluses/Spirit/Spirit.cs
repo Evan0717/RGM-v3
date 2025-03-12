@@ -18,6 +18,7 @@ using GameCore;
 using RGM.Commands;
 using Utils;
 using Exiled.Events.EventArgs.Player;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
@@ -39,6 +40,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
@@ -60,6 +62,17 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(1.5f);
+            }
+        }
+
+        public void OnHurting(HurtingEventArgs ev)
+        {
+            if (spirits.Contains(ev.Player))
+            {
+                if (GodModePlayers.Contains(ev.Player))
+                    GodModePlayers.Remove(ev.Player);
+
+                ev.Player.Kill("유령은 퇴치당했습니다.");
             }
         }
 
