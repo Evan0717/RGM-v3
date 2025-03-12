@@ -38,9 +38,6 @@ public class Contract : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Player != Owner)
-            return;
-
         if (ev.Item != null)
         {
             if (ContractCoinSerial == ev.Item.Serial)
@@ -50,9 +47,6 @@ public class Contract : Ability
 
     public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (ev.Player != Owner)
-            yield break;
-
         ushort Serial = ev.Item.Serial;
 
         if (ContractCoinSerial == Serial)
