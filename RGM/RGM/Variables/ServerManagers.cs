@@ -133,12 +133,19 @@ namespace RGM.Variables
         public static List<Player> IntercomPlayers = new List<Player>();
         public static List<Player> ShopCooldown = new List<Player>();
         public static List<ModeType> highlightModes = new List<ModeType>();
+        public static List<string> Maps = new List<string>()
+        {
+            "BarotraumaWinterhalter3",
+            "City17v3",
+            "DeathInAir4",
+            "NoMercyCP1v1"
+        };
         public static List<Product> Products = new List<Product>()
         {
             new Product()
             {
                 Name = "인형 소환",
-                Description = ".구매 인형ㅣ랜덤한 역할군의 인형을 소환합니다. 로비에서만 사용할 수 있습니다.",
+                Description = ".구매 인형/0ㅣ랜덤한 역할군의 인형을 소환합니다. 로비에서만 사용할 수 있습니다.",
                 Price = 3,
                 Check = (player, arg) => { return Round.IsLobby; },
                 Script = (player, arg) =>
@@ -149,7 +156,7 @@ namespace RGM.Variables
             new Product()
             {
                 Name = "랜덤박스",
-                Description = ".구매 랜덤박스ㅣ랜덤한 아이템을 얻습니다. 라운드 종료 시에만 사용할 수 있습니다.",
+                Description = ".구매 랜덤박스/0ㅣ랜덤한 아이템을 얻습니다. 라운드 종료 시에만 사용할 수 있습니다.",
                 Price = 3,
                 Check = (player, arg) => { return Round.IsEnded; },
                 Script = (player, arg) =>
@@ -161,7 +168,7 @@ namespace RGM.Variables
             {
                 Name = "모드 추천서",
                 Description = ".구매 모드 추천서/<모드 이름>ㅣ해당 모드가 투표 목록에 있다면 이름을 강조 처리합니다.",
-                Price = 10,
+                Price = 5,
                 Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg); },
                 Script = (player, arg) =>
                 {
@@ -173,8 +180,8 @@ namespace RGM.Variables
             new Product()
             {
                 Name = "휴대용 라디오",
-                Description = ".구매 휴대용 라디오ㅣ이 서버에 등록된 소리 파일 중 하나를 랜덤으로 재생합니다.",
-                Price = 15,
+                Description = ".구매 휴대용 라디오/0ㅣ이 서버에 등록된 소리 파일 중 하나를 랜덤으로 재생합니다.",
+                Price = 5,
                 Check = (player, arg) => { return player.IsAlive; },
                 Script = (player, arg) =>
                 {

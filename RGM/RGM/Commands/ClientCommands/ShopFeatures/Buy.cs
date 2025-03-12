@@ -81,7 +81,7 @@ namespace RGM.Commands.ClientCommands
                 }
                 else
                 {
-                    response = $"\n<b>[상점 품목 목록]</b>\n\n{string.Join("\n", Products.Select(x => $"{x.Name}(${x.Price}) - {x.Description}"))}\n\n구매하려면 [.구매 (품목 이름)]을 입력합니다.";
+                    response = $"\n<b>[상점 품목 목록]</b>\n\n{string.Join("\n", Products.Select(x => $"{x.Name}(${x.Price}) - {x.Description}"))}\n\n구매하려면 [.구매 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
                     return false;
                 }
             }
@@ -90,7 +90,6 @@ namespace RGM.Commands.ClientCommands
                 response = "쿨다운 중입니다. 조금 있다가 이용해주세요.";
                 return false;
             }
-            
         }
 
         public string Command { get; } = "구매";
