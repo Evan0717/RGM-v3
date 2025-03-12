@@ -138,7 +138,13 @@ namespace RGM.Variables
             "BarotraumaWinterhalter3",
             "City17v3",
             "DeathInAir4",
-            "NoMercyCP1v1"
+            "NoMercyCP1v1",
+            "Airship",
+            "Lighthouse1",
+            "TarkovStreet",
+            "NowYoureACadet",
+            "InTheSea",
+            "City"
         };
         public static List<Product> Products = new List<Product>()
         {
