@@ -39,6 +39,7 @@ public class ABattle : Mode
 • <color=##DEEFED>시너지</color> - ???
 
 66.6% 확률로 추가 모드가 활성화됩니다.
+워크스테이션이 시설에 더 추가됩니다.
 
 <size=25><b>모드 전용 명령어</b></size>
 <size=20>.(번호) - 1번부터 5번까지 있습니다. 능력을 선택할 때 사용됩니다.</size>
@@ -80,7 +81,6 @@ public class ABattle : Mode
     public static Dictionary<string, string> ExtraModes = new Dictionary<string, string>()
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
-        {"피버", "재단에 등장하는 워크스테이션의 수가 증가합니다."},
         {"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
@@ -120,8 +120,7 @@ public class ABattle : Mode
             Webhook.Send($"추가 모드: {extraMode}");
             Log.Info($"추가 모드: {extraMode}");
 
-            if (extraMode == "피버")
-                Server.ExecuteCommand("/mp load ABattle");
+            Server.ExecuteCommand("/mp load ABattle");
 
             if (extraMode == "캐시 청소")
                 Timing.RunCoroutine(Instance.ClearCache());
