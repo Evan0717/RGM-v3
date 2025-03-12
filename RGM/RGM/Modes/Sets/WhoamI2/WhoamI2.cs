@@ -43,6 +43,7 @@ namespace RGM.Modes
             RoleTypeId.Flamingo,
             RoleTypeId.AlphaFlamingo,
             RoleTypeId.ZombieFlamingo,
+            RoleTypeId.Destroyed
         };
 
         public override void OnEnabled()

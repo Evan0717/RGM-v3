@@ -44,7 +44,8 @@ namespace RGM.API.Features
                 List<string> list = new List<string>() 
                 {
                     "None",
-                    "Unknown"
+                    "Unknown",
+                    "Destroyed"
                 };
 
                 if (!list.Contains(item.ToString()))
