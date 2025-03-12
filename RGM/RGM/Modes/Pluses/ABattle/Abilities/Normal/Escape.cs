@@ -36,9 +36,6 @@ public class Escape : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Player != Owner)
-            return;
-
         if (ev.Item != null)
         {
             if (EscapeCoinSerial == ev.Item.Serial)
@@ -48,9 +45,6 @@ public class Escape : Ability
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (ev.Player != Owner)
-            return;
-
         ushort Serial = ev.Item.Serial;
 
         if (EscapeCoinSerial == Serial)
