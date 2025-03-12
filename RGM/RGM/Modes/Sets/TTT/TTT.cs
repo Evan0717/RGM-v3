@@ -41,6 +41,9 @@ Trouble in Terrorist Town의 약자.
 • <color=red>배신자</color>들에게는 무전기와 SCP-1853(이)가 추가로 지급됩니다.
 • 가끔씩 진통제, 고폭 수류탄, 섬광탄이 추가로 지급될 수 있습니다.
 • <b><i><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>은 잘못된 유저를 죽이면 심각한 피해를 입습니다!</i></b>
+
+<b>[Map Credit]</b>
+@vasileii
 """;
         public override string Color => "F78181";
 
@@ -77,20 +80,16 @@ Trouble in Terrorist Town의 약자.
             Exiled.Events.Handlers.Player.Died += OnDied;
 
             Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(Timer());
         }
 
         void spawn(Player player)
         {
-            Door SelectedDoor = Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment &&
-            !new List<RoomType>() { RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).GetRandomValue();
-
             GodModePlayers.Add(player);
 
             player.Role.Set(RoleTypeId.ClassD);
             player.AddItem(main.GetRandomValue());
             player.AddItem(secondary.GetRandomValue());
-            player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
+            player.Position = Tools.GetObjectList("Spot Random").GetRandomValue().position;
             switch (Random.Range(1, 16)) 
             {
                 case 1:
@@ -109,14 +108,7 @@ Trouble in Terrorist Town의 약자.
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var Door in Door.List.Where(x => x.Zone == ZoneType.HeavyContainment))
-            {
-                if (Door.IsCheckpoint || Door.IsElevator)
-                    Door.Lock(1205, DoorLockType.Lockdown079);
-
-                else
-                    Door.IsOpen = true;
-            }
+            Server.ExecuteCommand($"/mp load {Maps.GetRandomValue()}");
 
             foreach (var player in Player.List)
             {
@@ -130,6 +122,8 @@ Trouble in Terrorist Town의 약자.
 
                 yield return Timing.WaitForSeconds(1f);
             }
+
+            Timing.RunCoroutine(Timer());
 
             foreach (var player in Player.List.Where(x => x.IsDead))
             {
@@ -185,6 +179,9 @@ Trouble in Terrorist Town의 약자.
         {
             for (int i = 1; i < 180; i++)
             {
+                if (Round.IsEnded)
+                    yield break;
+
                 Player.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인 팀 승리</color>까지</color> {180 - i}초</size>"));
 
                 yield return Timing.WaitForSeconds(1f);

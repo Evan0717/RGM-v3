@@ -32,6 +32,9 @@ namespace RGM.Modes
 """
 <color=red>SCP-3114</color>는 피격당하거나 공격하면 투명이 해제됩니다.
 또한, 평상시에도 반투명 상태로 존재합니다. 이 점을 잘 이용해보세요!
+
+<b>[Map Credit]</b>
+@vlrpfrjs
 """;
         public override string Color => "0489B1";
 

@@ -18,6 +18,7 @@ using PlayerRoles;
 using Respawning;
 using RGM.API.Features;
 using UnityEngine;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
@@ -31,16 +32,14 @@ namespace RGM.Modes
 랜덤한 맵에서, 팀 승리를 위해 상대 팀을 무찌르세요.
 
 제한 시간은 3분이며, 3분이 지나면 버스터콜이 발생합니다.
+
+<b>[Map Credit]</b>
+@vasileii
 """;
         public override string Color => "CEECF5";
 
         public static TeamMatch Instance;
 
-        public List<string> Maps = new List<string>()
-        {
-            "BarotraumaWinterhalter3",
-            "City17v3"
-        };
         public List<ItemType> StartupItems = new List<ItemType>();
         public List<Player> TeamA = new List<Player>();
         public List<Player> TeamB = new List<Player>();

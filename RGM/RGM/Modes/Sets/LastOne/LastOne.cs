@@ -18,6 +18,7 @@ using PlayerRoles;
 using Respawning;
 using RGM.API.Features;
 using UnityEngine;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
@@ -31,16 +32,14 @@ namespace RGM.Modes
 랜덤한 맵에서, 최후까지 살아남아 승리를 쟁취하세요.
 
 제한 시간은 3분이며, 3분이 지나면 버스터콜이 발생합니다.
+
+<b>[Map Credit]</b>
+@vasileii
 """;
         public override string Color => "F8E0E6";
 
         public static LastOne Instance;
 
-        public List<string> Maps = new List<string>() 
-        {
-            "BarotraumaWinterhalter3",
-            "City17v3"
-        };
         public List<ItemType> StartupItems = new List<ItemType>();
 
         public override void OnEnabled()
