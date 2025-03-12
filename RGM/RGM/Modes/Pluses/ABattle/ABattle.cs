@@ -120,8 +120,6 @@ public class ABattle : Mode
             Webhook.Send($"추가 모드: {extraMode}");
             Log.Info($"추가 모드: {extraMode}");
 
-            Server.ExecuteCommand("/mp load ABattle");
-
             if (extraMode == "캐시 청소")
                 Timing.RunCoroutine(Instance.ClearCache());
 
@@ -189,6 +187,8 @@ public class ABattle : Mode
     private IEnumerator<float> OnModeStarted()
     {
         yield return Timing.WaitForOneFrame;
+
+        Server.ExecuteCommand("/mp load ABattle");
 
         foreach (var player in Player.List)
         {
