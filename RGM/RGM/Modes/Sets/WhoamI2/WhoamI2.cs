@@ -55,10 +55,10 @@ namespace RGM.Modes
         {
             while (true)
             {
+                yield return Timing.WaitForSeconds(60f);
+
                 foreach (var player in Player.List.Where(x => !ignoredRoles.Contains(x.Role.Type)).ToList())
                     player.Role.Set(Tools.EnumToList<RoleTypeId>().Where(x => !ignoredRoles.Contains(x)).ToList().GetRandomValue(), RoleSpawnFlags.None);
-
-                yield return Timing.WaitForSeconds(60f);
             }
         }
     }
