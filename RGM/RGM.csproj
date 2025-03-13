@@ -228,6 +228,7 @@
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\ScpList.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Suicide.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayAudio.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRP.cs" />
     <Compile Include="RGM\IEnumerators\LobbyManagers.cs" />

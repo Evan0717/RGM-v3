@@ -131,7 +131,7 @@ namespace RGM.API.Features
         public static Color GetRandomColor(bool Transparency = false)
         {
             if (!Transparency)
-                return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+                return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
 
             else
                 return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
@@ -402,7 +402,7 @@ $"""
 
             for (int i = 1; i<21; i++)
             {
-                if (BugVotePlayers.Count >= RequiredCount)
+                if (BugVotePlayers.Count() >= RequiredCount)
                 {
                     IsSuccess = true;
                     break;
@@ -435,6 +435,46 @@ $"""
 
             IsBugVoteProcessing = false;
             BugVotePlayers.Clear();
+        }
+
+        public static IEnumerator<float> Suggest(Player host, string reason)
+        {
+            int RequiredCount = Player.List.Count / 2;
+            bool IsSuccess = false;
+
+            Webhook.Send($"🔐 **의문의 제안**ㅣ{host.DisplayNickname}에 의해 시작됨 ({reason})");
+
+            for (int i = 1; i < 21; i++)
+            {
+                if (SuggestPlayers.Count >= RequiredCount)
+                {
+                    IsSuccess = true;
+                    break;
+                }
+
+                foreach (var player in Player.List)
+                    player.ShowHint($"<size=25><b><color=#FFBF00>의문의 제안</color></b>이 개설되었습니다.\n제안을 수락하시려면 <b>.수락</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {21 - i}초 남음 ({SuggestPlayers.Count}/{RequiredCount})</size>", 1.2f);
+
+                yield return Timing.WaitForSeconds(1);
+            }
+
+            if (IsSuccess)
+            {
+                foreach (var player in Player.List)
+                    player.AddBroadcast(5, $"의문의 제안이 <b><color=#9AFE2E>가결</color></b>되었습니다.");
+
+                Webhook.Send($"🔐 **의문의 제안**ㅣ✅ 가결됨 (투표자: {string.Join(", ", SuggestPlayers.Select(x => x.Nickname))})");
+            }
+            else
+            {
+                foreach (var player in Player.List)
+                    player.AddBroadcast(5, $"의문의 제안이 <b><color=#FE2E2E>부결</color></b>되었습니다.");
+
+                Webhook.Send($"🔐 **의문의 제안**ㅣ❌ 부결됨 (투표자: {string.Join(", ", SuggestPlayers.Select(x => x.Nickname))})");
+            }
+
+            IsSuggestProcessing = false;
+            SuggestPlayers.Clear();
         }
 
         public static void CallSnakeHand(Player Convener, List<Player> PlayerList)
