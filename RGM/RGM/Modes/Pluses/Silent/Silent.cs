@@ -42,7 +42,7 @@ namespace RGM.Modes
             {
                 var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
                 g.FuseTime = 0f;
-                g.BurnDuration = 0f;
+                g.MaxRadius = 0;
                 g.SpawnActive(ev.Player.Position, null);
 
                 if (GodModePlayers.Contains(ev.Player))

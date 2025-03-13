@@ -44,131 +44,132 @@ namespace RGM.Commands.ClientCommands
             }
             else if (CurrentMode == ModeType.Silent)
             {
-                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
-                g.FuseTime = 0f;
-                g.BurnDuration = 0f;
-                g.SpawnActive(player.Position);
-
-                if (GodModePlayers.Contains(player))
-                    GodModePlayers.Remove(player);
-
-                player.Kill("입이 근질거리는 것을 참지 못했습니다.");
-
-                response = "쉿!";
-                return false;
-            }
-            else
-            {
-                ChatCooldown.Add(player);
-
-                string ChatFormat(string chatType)
+                if (player.IsAlive)
                 {
-                    string text = Trans.Role[player.Role.Type];
-                    string text2 = string.Concat(new string[]
-                    {
-                        $"<size=25><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
-                        text,
-                        $"</color> ({player.DisplayNickname}) <b> | </b>",
-                        string.Join(" ", arguments).Replace("=", "❤️"),
-                        "</size>"
-                    });
+                    var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
+                    g.FuseTime = 0f;
+                    g.BurnDuration = 0f;
+                    g.SpawnActive(player.Position);
 
-                    bool Check(Player p)
-                    {
-                        if (chatType == "전체")
-                            return true;
+                    if (GodModePlayers.Contains(player))
+                        GodModePlayers.Remove(player);
 
-                        if (chatType == "SCP")
-                            return p.IsDead || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
+                    player.Kill("입이 근질거리는 것을 참지 못했습니다.");
 
-                        if (chatType == "플라밍고")
-                            return p.IsDead || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
-
-                        if (chatType == "관전자")
-                            return p.IsDead;
-
-                        if (chatType == "SCP-1576 + 무전기")
-                            return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
-
-                        if (chatType == "SCP-1576")
-                            return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
-
-                        if (chatType == "무전기")
-                            return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
-
-                        if (chatType == "근거리")
-                            return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
-
-                        return false;
-                    }
-
-                    foreach (Player ply in Player.List)
-                    {
-                        if (Check(ply))
-                            ply.AddBroadcast(6, text2);
-                    }
-
-                    Webhook.Send($"**{chatType}**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({Trans.Role[player.Role.Type]}) - {string.Join(" ", arguments)}");
-
-                    return $"'{text2}'";
+                    response = "쉿!";
+                    return false;
                 }
+            }
 
-                if (arguments.Count == 0)
+            ChatCooldown.Add(player);
+
+            string ChatFormat(string chatType)
+            {
+                string text = Trans.Role[player.Role.Type];
+                string text2 = string.Concat(new string[]
                 {
-                    response = "보낼 메세지를 입력해주세요.";
+                    $"<size=25><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
+                    text,
+                    $"</color> ({player.DisplayNickname}) <b> | </b>",
+                    string.Join(" ", arguments).Replace("=", "❤️"),
+                    "</size>"
+                });
+
+                bool Check(Player p)
+                {
+                    if (chatType == "전체")
+                        return true;
+
+                    if (chatType == "SCP")
+                        return p.IsDead || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
+
+                    if (chatType == "플라밍고")
+                        return p.IsDead || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
+
+                    if (chatType == "관전자")
+                        return p.IsDead;
+
+                    if (chatType == "SCP-1576 + 무전기")
+                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
+
+                    if (chatType == "SCP-1576")
+                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
+
+                    if (chatType == "무전기")
+                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
+
+                    if (chatType == "근거리")
+                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
+
                     return false;
                 }
 
-                if (IntercomPlayers.Contains(player))
+                foreach (Player ply in Player.List)
                 {
-                    response = ChatFormat("전체");
-                    return true;
-                }
-                
-                if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
-                {
-                    response = ChatFormat("SCP");
-                    return true;
-                }
-                
-                if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
-                {
-                    response = ChatFormat("플라밍고");
-                    return true;
-                }
-                
-                if (player.IsDead)
-                {
-                    response = ChatFormat("관전자");
-                    return true;
-                }
-                
-                if (player.CurrentItem is Scp1576 scp1576)
-                {
-                    if (scp1576.IsUsing)
-                    {
-                        if (player.HasItem(ItemType.Radio))
-                        {
-                            response = ChatFormat("SCP-1576 + 무전기");
-                            return true;
-                        }
-                        else
-                        {
-                            response = ChatFormat("SCP-1576");
-                            return true;
-                        }
-                    }
-                }
-                
-                if (player.HasItem(ItemType.Radio))
-                {
-                    response = ChatFormat("무전기");
-                    return true;
+                    if (Check(ply))
+                        ply.AddBroadcast(6, text2);
                 }
 
-                response = ChatFormat("근거리");
+                Webhook.Send($"**{chatType}**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({Trans.Role[player.Role.Type]}) - {string.Join(" ", arguments)}");
+
+                return $"'{text2}'";
+            }
+
+            if (arguments.Count == 0)
+            {
+                response = "보낼 메세지를 입력해주세요.";
+                return false;
+            }
+
+            if (IntercomPlayers.Contains(player))
+            {
+                response = ChatFormat("전체");
                 return true;
             }
+                
+            if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
+            {
+                response = ChatFormat("SCP");
+                return true;
+            }
+                
+            if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
+            {
+                response = ChatFormat("플라밍고");
+                return true;
+            }
+                
+            if (player.IsDead)
+            {
+                response = ChatFormat("관전자");
+                return true;
+            }
+                
+            if (player.CurrentItem is Scp1576 scp1576)
+            {
+                if (scp1576.IsUsing)
+                {
+                    if (player.HasItem(ItemType.Radio))
+                    {
+                        response = ChatFormat("SCP-1576 + 무전기");
+                        return true;
+                    }
+                    else
+                    {
+                        response = ChatFormat("SCP-1576");
+                        return true;
+                    }
+                }
+            }
+                
+            if (player.HasItem(ItemType.Radio))
+            {
+                response = ChatFormat("무전기");
+                return true;
+            }
+
+            response = ChatFormat("근거리");
+            return true;
         }
 
         public string Command { get; } = "ㅊ";
