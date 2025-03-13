@@ -51,6 +51,7 @@ Trouble in Terrorist Town의 약자.
 
         Player detective;
         List<Player> traitors = new List<Player>();
+        List<Player> instantKillCooldown = new List<Player>();
         List<ItemType> main = new List<ItemType> 
         {
             ItemType.GunA7,
@@ -76,7 +77,8 @@ Trouble in Terrorist Town의 약자.
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Exiled.Events.Handlers.Player.Shooting += OnShooting;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
             Exiled.Events.Handlers.Player.Died += OnDied;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -132,7 +134,7 @@ Trouble in Terrorist Town의 약자.
 
             GodModePlayers.Clear();
 
-            for (float i = 1; i < Player.List.Count / 10 + 1; i++)
+            for (float i = 1; i < Player.List.Count / 10 + 2; i++)
             {
                 Player traitor = Player.List.Where(x => !traitors.Contains(x)).GetRandomValue();
                 traitor.AddItem(ItemType.Radio);
@@ -160,19 +162,31 @@ Trouble in Terrorist Town의 약자.
             {
                 if (traitors.Contains(player))
                 {
-                    player.ShowHint($"당신은 <color=red>배신자</color>입니다. <color=red>배신자</color>들을 제외한 나머지를 모두 사살하세요.", 10);
+                    player.ShowHint($"당신은 <color=red>배신자</color>입니다. <color=red>배신자</color>들을 제외한 나머지를 모두 사살하세요.\n<size=25>{traitors.Count()}명의 <color=red>배신자</color>가 존재합니다.\n<b>[ALT]ㅣ근접한 플레이어를 즉시 처형할 수 있습니다. (쿨다운 10초)</b></size>", 20);
                 }
                 else if (player == detective)
                 {
-                    player.ShowHint($"당신은 <color=#2ECCFA>탐정</color>입니다. <color=red>배신자</color>들을 처단하세요.", 10);
+                    player.ShowHint($"당신은 <color=#2ECCFA>탐정</color>입니다. <color=red>배신자</color>들을 처단하세요.", 20);
                 }
                 else
                 {
-                    player.ShowHint($"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 10);
+                    player.ShowHint($"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 20);
                 }
             }
 
-            yield break;
+            while (true)
+            {
+                foreach (var p in Player.List.Where(x => traitors.Contains(x)))
+                {
+                    if (Tools.TryGetLookPlayer(p, 100, out Player t, out RaycastHit? hit))
+                    {
+                        if (traitors.Contains(t))
+                            p.ShowHint($"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public IEnumerator<float> Timer()
@@ -216,12 +230,33 @@ Trouble in Terrorist Town의 약자.
             }
         }
 
-        public void OnShooting(ShootingEventArgs ev)
+        public void OnShot(ShotEventArgs ev)
         {
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
+        }
+
+        public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+        {
+            if (instantKillCooldown.Contains(ev.Player))
+                return;
+
+            instantKillCooldown.Add(ev.Player);
+
+            Timing.CallDelayed(10, () =>
             {
-                ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
+                instantKillCooldown.Remove(ev.Player);
             });
+
+            if (Tools.TryGetLookPlayer(ev.Player, 3, out Player t, out RaycastHit? hit))
+            {
+                if (traitors.Contains(ev.Player) && !traitors.Contains(t))
+                {
+                    if (GodModePlayers.Contains(t))
+                        GodModePlayers.Remove(t);
+
+                    t.Kill("배신자에 의해 처형되었습니다.");
+                }
+            }
         }
 
         public void OnDied(DiedEventArgs ev)

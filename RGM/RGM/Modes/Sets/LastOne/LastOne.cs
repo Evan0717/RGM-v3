@@ -51,7 +51,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
-            Exiled.Events.Handlers.Player.Shooting += OnShooting;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(CleanAll());
@@ -133,12 +133,9 @@ namespace RGM.Modes
             ev.IsAllowed = false;
         }
 
-        public void OnShooting(ShootingEventArgs ev)
+        public void OnShot(ShotEventArgs ev)
         {
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
-            });
+            ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }
     }
 }
