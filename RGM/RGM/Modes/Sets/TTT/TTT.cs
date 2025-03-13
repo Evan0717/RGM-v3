@@ -237,24 +237,24 @@ Trouble in Terrorist Town의 약자.
 
         public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (instantKillCooldown.Contains(ev.Player))
-                return;
-
-            instantKillCooldown.Add(ev.Player);
-
-            Timing.CallDelayed(10, () =>
+            if (!instantKillCooldown.Contains(ev.Player))
             {
-                instantKillCooldown.Remove(ev.Player);
-            });
-
-            if (Tools.TryGetLookPlayer(ev.Player, 3, out Player t, out RaycastHit? hit))
-            {
-                if (traitors.Contains(ev.Player) && !traitors.Contains(t))
+                if (Tools.TryGetLookPlayer(ev.Player, 3, out Player t, out RaycastHit? hit))
                 {
-                    if (GodModePlayers.Contains(t))
-                        GodModePlayers.Remove(t);
+                    if (traitors.Contains(ev.Player) && !traitors.Contains(t))
+                    {
+                        if (GodModePlayers.Contains(t))
+                            GodModePlayers.Remove(t);
 
-                    t.Kill("배신자에 의해 처형되었습니다.");
+                        t.Kill("배신자에 의해 처형되었습니다.");
+
+                        instantKillCooldown.Add(ev.Player);
+
+                        Timing.CallDelayed(10, () =>
+                        {
+                            instantKillCooldown.Remove(ev.Player);
+                        });
+                    }
                 }
             }
         }
