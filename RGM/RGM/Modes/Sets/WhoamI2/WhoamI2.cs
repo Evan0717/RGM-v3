@@ -49,6 +49,8 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -61,6 +63,17 @@ namespace RGM.Modes
                 foreach (var player in Player.List.Where(x => !ignoredRoles.Contains(x.Role.Type)).ToList())
                     player.Role.Set(Tools.EnumToList<RoleTypeId>().Where(x => !ignoredRoles.Contains(x)).ToList().GetRandomValue(), RoleSpawnFlags.None);
             }
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }
