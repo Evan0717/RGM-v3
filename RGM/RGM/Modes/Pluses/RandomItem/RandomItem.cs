@@ -15,7 +15,7 @@ using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.RandomItem)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.RandomItem)]
     class RandomItem : Mode
     {
         public override string Name => "랜덤박스";
@@ -31,10 +31,12 @@ namespace RGM.Modes
         public static RandomItem Instance;
 
         List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
-        List<ItemType> ignoreItemTypes = new List<ItemType>() 
+        List<ItemType> ignoreItems = new List<ItemType>() 
         { 
-            ItemType.SCP330,
-            ItemType.SCP1507Tape
+            ItemType.SCP1507Tape,
+            ItemType.Coal,
+            ItemType.Snowball,
+            ItemType.SpecialCoal
         };
 
         public override void OnEnabled()
@@ -55,7 +57,7 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 {
-                    Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItemTypes.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
+                    Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
 
                     player.ShowHint($"<color=#F3F781>{Trans.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
                 }
@@ -75,7 +77,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 9; i++)
             {
-                Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItemTypes.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
+                Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
             }
         }
     }
