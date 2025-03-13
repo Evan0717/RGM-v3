@@ -22,13 +22,13 @@ namespace RGM.Modes
     class MeetingSquare : Mode
     {
         public override string Name => "만남의 광장";
-        public override string Description => "만남의 광장에서 동전 4개를 가장 먼저 모으세요!";
+        public override string Description => "만남의 광장에서 동전 8개를 가장 먼저 모으세요!";
         public override string Detail =>
 """
 동전은 맵 곳곳에 스폰됩니다.
 하지만 주의하세요, 유저들은 서로를 공격할 수 있습니다!
 
-총 4개의 동전을 먼저 모은 유저가 우승합니다. 행운을 빌어요!
+총 8개의 동전을 먼저 모은 유저가 우승합니다. 행운을 빌어요!
 """;
         public override string Color => "F5D0A9";
 
@@ -69,7 +69,7 @@ namespace RGM.Modes
                     if (player.GetEffect(EffectType.Blinded).Intensity > 0)
                         player.GetEffect(EffectType.Blinded).Intensity = 0;
 
-                    if (player.Items.Where(x => x.Type == ItemType.Coin).Count() >= 4)
+                    if (player.Items.Where(x => x.Type == ItemType.Coin).Count() >= 8)
                     {
                         Timing.RunCoroutine(Tools.SetWinner(new List<Player> { player }, 7));
 
