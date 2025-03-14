@@ -156,7 +156,23 @@ Trouble in Terrorist Town의 약자.
 
             GodModePlayers.Clear();
 
-            for (float i = 1; i < Player.List.Count / 10 + 3; i++)
+            int traitorCount = 0;
+            int playerCount = Player.List.Count();
+
+            if (playerCount >= 2 && playerCount <= 5)
+                traitorCount = 1;
+            else if (playerCount >= 6 && playerCount <= 12)
+                traitorCount = 2;
+            else if (playerCount >= 13 && playerCount <= 19)
+                traitorCount = 3;
+            else if (playerCount >= 20 && playerCount <= 26)
+                traitorCount = 4;
+            else if (playerCount >= 27 && playerCount <= 30)
+                traitorCount = 5;
+            else if (playerCount >= 31 && playerCount <= 35)
+                traitorCount = 6;
+
+            for (int i = 0; i < traitorCount; i++)
             {
                 Player traitor = Player.List.Where(x => !traitors.Contains(x)).GetRandomValue();
                 traitor.AddItem(ItemType.Radio);
