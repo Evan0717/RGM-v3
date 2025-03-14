@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 using PlayerStatsSystem;
 using UserSettings.ServerSpecific;
 using Exiled.API.Features.Core.UserSettings;
+using Exiled.API.Features.Items;
 
 
 namespace RGM.EventArgs
@@ -153,7 +154,8 @@ namespace RGM.EventArgs
 
                 Tools.TeleportToLobby(ev.Player);
 
-                ev.Player.AddItem(ItemType.Lantern);
+                Item lantern = ev.Player.AddItem(ItemType.Lantern);
+                ev.Player.CurrentItem = lantern;
                 if (SelectMode == "SecretVote")
                     ev.Player.EnableEffect(EffectType.Invisible);
 
