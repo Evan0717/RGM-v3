@@ -55,14 +55,14 @@ namespace RGM.Modes
 
             while (true)
             {
+                yield return Timing.WaitForSeconds(60f);
+
                 foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 {
                     Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
 
                     player.ShowHint($"<color=#F3F781>{Trans.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
                 }
-
-                yield return Timing.WaitForSeconds(60f);
             }
         }
 
@@ -73,12 +73,15 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            player.ClearInventory();
-
-            for (int i = 1; i < 9; i++)
+            Timing.CallDelayed(1, () =>
             {
-                Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
-            }
+                player.ClearInventory();
+
+                for (int i = 1; i < 9; i++)
+                {
+                    player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
+                }
+            });
         }
     }
 }
