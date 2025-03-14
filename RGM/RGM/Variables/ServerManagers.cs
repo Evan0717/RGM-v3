@@ -147,7 +147,7 @@ namespace RGM.Variables
             "Airship",
             "Lighthouse1",
             "TarkovStreet",
-            "NowYoureACadet",
+            // "NowYoureACadet",
             "InTheSea",
             "City"
         };
