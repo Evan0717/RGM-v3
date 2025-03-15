@@ -29,7 +29,8 @@ public class RandomChest : Ability
             ItemType.AntiSCP207,
             ItemType.SCP268,
             ItemType.SCP500,
-            ItemType.KeycardO5
+            ItemType.KeycardO5,
+            ItemType.SCP1344
         };
 
         for (int i = 1; i < 3; i++)

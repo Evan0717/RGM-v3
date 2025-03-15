@@ -269,6 +269,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\LuckyVicky.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\RandomChest.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\RepairMan.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Scp1344.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\SuicideBomber.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\SuperStar.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Survivor.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Bodyback.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\BulletSupply.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Dopamine.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Milk.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Escape.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Evolution.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\FindLocation.cs" />

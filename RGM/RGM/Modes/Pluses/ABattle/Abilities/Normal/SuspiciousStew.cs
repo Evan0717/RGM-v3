@@ -28,7 +28,10 @@ public class SuspiciousStew : Ability
         byte Intensity = (byte)Random.Range(1, Random.Range(12, Random.Range(48, Random.Range(64, Random.Range(100, 255)))));
 
         Owner.EnableEffect(Effect, Intensity);
-        Owner.RemoveAbility(this);
+        Timing.CallDelayed(1, () =>
+        {
+            Owner.RemoveAbility(this);
+        });
         Owner.AddAbility(AbilityType.DUMMY_COLDSTEW);
     }
 

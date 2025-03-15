@@ -263,6 +263,7 @@ public enum AbilityType
     NORMAL_REROLL, // [일반] 리롤
     NORMAL_SUSPICIOUSSTEW, // [일반] 수상한 스튜
     NORMAL_HEALGUN, // [일반] 치유 사제
+    NORMAL_MILK, // [일반] 우유
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -309,6 +310,7 @@ public enum AbilityType
     EPIC_DISGUISE, // [영웅] 위장술
     EPIC_GRAVEROBBER, // [영웅] 도굴꾼
     EPIC_INFINITYGUN, // [영웅] 훌륭한 대화수단
+    EPIC_SCP1344, // [영웅] 투시
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건

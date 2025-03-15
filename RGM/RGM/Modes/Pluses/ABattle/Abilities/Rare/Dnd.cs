@@ -50,7 +50,10 @@ public class Dnd : Ability
                     try
                     {
                         Owner.AddAbility(ABattle.Instance.GetRandomAbilities(category, 3).ToList().Where(x => x != AbilityType.RARE_DND).GetRandomValue());
-                        Owner.RemoveAbility(this);
+                        Timing.CallDelayed(1, () =>
+                        {
+                            Owner.RemoveAbility(this);
+                        });
                         Owner.AddAbility(AbilityType.DUMMY_NOAFK);
                     }
                     catch (Exception e)
