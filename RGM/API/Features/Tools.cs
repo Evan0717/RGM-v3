@@ -453,7 +453,7 @@ $"""
                 }
 
                 foreach (var player in Player.List)
-                    player.ShowHint($"<size=25><b><color=#DA81F5>의문의 제안</color></b>이 개설되었습니다.\n제안을 수락하시려면 <b>.수락</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {31 - i}초 남음 ({SuggestPlayers.Count}/{RequiredCount})</size>", 1.2f);
+                    player.ShowHint($"<size=25><b><color=#DA81F5>의문의 제안</color></b>이 개설되었습니다.\n제안을 수락하시려면 <b>.수락</b> 명령어를 입력하세요.</size>\n{reason}\n<size=20>투표 종료까지 {31 - i}초 남음 ({SuggestPlayers.Count}/{RequiredCount})</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1);
             }

@@ -234,6 +234,8 @@ public enum AbilityType
     DUMMY_USEDPINGHOOK, // [더미] 핑 갈?고리
     DUMMY_BACKEDUP, // [더미] 백업됨
     DUMMY_ENDOFGRAVEROBBERY, // [더미] 도굴 끝!
+    DUMMY_COLDSTEW, // [더미] 식은 스튜
+    DUMMY_NOAFK, // [더미] 자리 다비움
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -260,6 +262,7 @@ public enum AbilityType
     NORMAL_BULLETSUPPLY, // [일반] 잔탄 수급
     NORMAL_REROLL, // [일반] 리롤
     NORMAL_SUSPICIOUSSTEW, // [일반] 수상한 스튜
+    NORMAL_HEALGUN, // [일반] 치유 사제
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -305,6 +308,7 @@ public enum AbilityType
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
     EPIC_DISGUISE, // [영웅] 위장술
     EPIC_GRAVEROBBER, // [영웅] 도굴꾼
+    EPIC_INFINITYGUN, // [영웅] 훌륭한 대화수단
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건

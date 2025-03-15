@@ -253,7 +253,9 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\BackedUp.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\EndOfGraveRobbery.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\NoAFK.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\TestFailure.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedPingHook.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Blink.cs" />
@@ -309,6 +311,8 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Evolution.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\FindLocation.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Friendship.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\InfinityGun.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\HealGun.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Insurance.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Kick.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Lucky.cs" />
