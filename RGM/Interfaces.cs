@@ -85,6 +85,7 @@ public enum ModeType
     ChangedFate,
     Disguise,
     Distancing,
+    DogFight,
     DeadLine,
     DeathRun,
     Develop,

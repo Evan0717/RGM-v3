@@ -440,6 +440,7 @@
     <Compile Include="RGM\Modes\Pluses\Builder\Builder.cs" />
     <Compile Include="RGM\Modes\Pluses\Clairvoyance\Clairvoyance.cs" />
     <Compile Include="RGM\Modes\Pluses\Disguise\Disguise.cs" />
+    <Compile Include="RGM\Modes\Pluses\DogFight\DogFight.cs" />
     <Compile Include="RGM\Modes\Pluses\Ghost\Ghost.cs" />
     <Compile Include="RGM\Modes\Pluses\GrandBow\GrandBow.cs" />
     <Compile Include="RGM\Modes\Pluses\ChupaChups\ChupaChups.cs" />
