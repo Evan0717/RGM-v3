@@ -110,23 +110,20 @@ public class ABattleEventHandler(ABattle aBattle)
                     if (aBattle.CurrentExtraMode != "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         return;
 
-                    if (aBattle.CurrentExtraMode == "대출")
+                    if (aBattle.CurrentExtraMode == "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 6) == 1)
                     {
-                        if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 6) == 1)
-                        {
-                            if (GodModePlayers.Contains(ev.Player))
-                                GodModePlayers.Remove(ev.Player);
+                        if (GodModePlayers.Contains(ev.Player))
+                            GodModePlayers.Remove(ev.Player);
 
-                            ev.Player.RemoveAllAbilities();
-                            ev.Player.Kill("욕심을 부리다가 아사했습니다.");
-                            return;
-                        }
+                        ev.Player.RemoveAllAbilities();
+                        ev.Player.Kill("욕심을 부리다가 아사했습니다.");
+                        return;
                     }
 
                     if (aBattle.Selections.ContainsKey(ev.Player))
                         aBattle.Selections[ev.Player].Clear();
 
-                    if (aBattle.CurrentExtraMode == "대출")
+                    if (aBattle.CurrentExtraMode == "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         aBattle.StartSelect(ev.Player);
 
                     if (!aBattle.PlayerWorkstations.TryGetValue(ev.Player, out var workstations))
