@@ -34,6 +34,7 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
@@ -54,7 +55,8 @@ namespace RGM.Modes
 
         public void OnSpawned(SpawnedEventArgs ev)
         {
-            Spawned(ev.Player);
+            if (ev.Player.IsAlive)
+                Spawned(ev.Player);
         }
 
         public void Spawned(Player player)
