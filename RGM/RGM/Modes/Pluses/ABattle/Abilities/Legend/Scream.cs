@@ -43,7 +43,7 @@ public class GmanRoaringSound : Ability
             {
                 RoaringSoundCooldown = 180;
 
-                GlobalPlayer.AddClip("GmanRoaringSound");
+                Tools.PlayGlobalAudio("GmanRoaringSound");
 
                 foreach (var player in Player.List.Where(x => !x.IsNPC && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub) && x.IsAlive))
                 {

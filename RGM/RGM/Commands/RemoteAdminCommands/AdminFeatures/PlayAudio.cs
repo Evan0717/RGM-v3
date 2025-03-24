@@ -23,7 +23,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            GlobalPlayer.AddClip(string.Join(" ", arguments));
+            Tools.PlayGlobalAudio(string.Join(" ", arguments));
 
             response = "Complete!";
 

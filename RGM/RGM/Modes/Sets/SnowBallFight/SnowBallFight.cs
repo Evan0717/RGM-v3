@@ -66,7 +66,7 @@ namespace RGM.Modes
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            GlobalPlayer.AddClip("ChristmasRock", 0.3f, true);
+            Tools.PlayGlobalAudio("ChristmasRock", 0.3f, true);
 
             ReferenceHub dummy = DummyUtils.SpawnDummy("귀여운 땅콩이 ❤️");
             Player bot = Player.Get(dummy);

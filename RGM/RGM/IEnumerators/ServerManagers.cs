@@ -19,6 +19,7 @@ using PlayerRoles.PlayableScps.Scp1507;
 using InventorySystem.Items.FlamingoTapePlayer;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using RGM.API.Features;
 
 namespace RGM.IEnumerators
 {
@@ -208,7 +209,7 @@ namespace RGM.IEnumerators
             while (!Round.IsEnded)
             {
                 if (UnityEngine.Random.Range(1, 1001) == 1)
-                    GlobalPlayer.AddClip($"scp079-{UnityEngine.Random.Range(1, 3)}", volume: 1.5f);
+                    Tools.PlayGlobalAudio($"scp079-{UnityEngine.Random.Range(1, 3)}", volume: 1.5f);
 
                 int citizenCount = Player.List.Where(x => x.Role.Type == RoleTypeId.ClassD || x.Role.Type == RoleTypeId.Scientist).Count();
 
@@ -216,13 +217,13 @@ namespace RGM.IEnumerators
                 {
                     IsWarningAlone = true;
 
-                    GlobalPlayer.AddClip("scp079-4", volume: 1.2f);
+                    Tools.PlayGlobalAudio("scp079-4", volume: 1.2f);
                 }
                 if (citizenCount == 0 && !IsClearCitizen)
                 {
                     IsClearCitizen = true;
 
-                    GlobalPlayer.AddClip("scp079-3", volume: 1.2f);
+                    Tools.PlayGlobalAudio("scp079-3", volume: 1.2f);
                 }
 
                 yield return Timing.WaitForSeconds(1);

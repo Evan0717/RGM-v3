@@ -578,7 +578,7 @@ $"""
             }
         }
 
-        public void GetAllChildren(Transform parentTransform)
+        public static void GetAllChildren(Transform parentTransform)
         {
             foreach (Transform childTransform in parentTransform)
             {
@@ -593,6 +593,16 @@ $"""
 
                 GetAllChildren(childTransform);
             }
+        }
+
+        public static void PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
+        {
+            foreach (var player in Player.List)
+            {
+                player.AddBroadcast(10, $"<size=20>로드된 오디오: {clipName}</size>");
+            }
+
+            GlobalPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
         }
     }
 }
