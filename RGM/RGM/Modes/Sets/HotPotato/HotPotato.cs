@@ -61,7 +61,7 @@ namespace RGM.Modes
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            GlobalPlayer.AddClip("Skeleton", 1, true);
+            Tools.PlayGlobalAudio("Skeleton", 1, true);
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 

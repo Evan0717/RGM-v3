@@ -70,7 +70,7 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load GGClub");
 
-            GlobalPlayer.AddClip("tothemoon", 1, true);
+            Tools.PlayGlobalAudio("tothemoon", 1, true);
 
             Player.List.CopyTo(pl);
 

@@ -66,7 +66,7 @@ namespace RGM.Modes
         {
             Server.ExecuteCommand($"/mp load hp");
 
-            GlobalPlayer.AddClip("Initial_D_Dancing", 1, true);
+            Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 

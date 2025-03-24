@@ -60,7 +60,7 @@ namespace RGM.Modes
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            GlobalPlayer.AddClip("LineLite", 1, true);
+            Tools.PlayGlobalAudio("LineLite", 1, true);
 
             Player.List.CopyTo(pl);
 

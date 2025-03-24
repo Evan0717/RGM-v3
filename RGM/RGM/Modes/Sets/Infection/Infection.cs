@@ -65,7 +65,7 @@ namespace RGM.Modes
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
             });
 
-            GlobalPlayer.AddClip("Voices", 0.3f, true);
+            Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
             Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 

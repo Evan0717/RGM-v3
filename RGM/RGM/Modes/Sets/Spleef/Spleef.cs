@@ -61,7 +61,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            GlobalPlayer.AddClip("Spleef", volume: 0.5f, loop: true);
+            Tools.PlayGlobalAudio("Spleef", volume: 0.5f, loop: true);
 
             MapUtils.LoadMap("Spleef");
 
