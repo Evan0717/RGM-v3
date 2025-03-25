@@ -36,7 +36,7 @@ public class ABattle : Mode
 • <color=#ffd700>전설</color> - 0.4%
 • <color=#DF0101>신화</color> - 0.1%
 • <color=#F7819F>전용</color> - 5% (능력 선택 옵션 독립)
-• <color=##DEEFED>시너지</color> - ???
+• <color=#DEEFED>시너지</color> - ???
 
 66.6% 확률로 추가 모드가 활성화됩니다.
 워크스테이션이 시설에 더 추가됩니다.
@@ -201,7 +201,7 @@ public class ABattle : Mode
 
                 ExtraModeNotion(player);
 
-                ABattleEventHandler.Instance.Spawned(player);
+                Timing.RunCoroutine(ABattleEventHandler.Instance.Spawned(player));
             }
             catch (Exception e)
             {
