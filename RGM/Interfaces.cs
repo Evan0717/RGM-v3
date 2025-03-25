@@ -104,6 +104,7 @@ public enum ModeType
     KoreanSpeed,
     Outlaw,
     PaperMan,
+    Radio,
     RandomEffect,
     RandomItem,
     RandomSize,
