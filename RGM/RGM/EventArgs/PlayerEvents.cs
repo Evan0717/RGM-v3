@@ -27,6 +27,7 @@ using PlayerStatsSystem;
 using UserSettings.ServerSpecific;
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Items;
+using RGM.UserSettings;
 
 
 namespace RGM.EventArgs
@@ -48,25 +49,7 @@ namespace RGM.EventArgs
                 });
             }
 
-            // --------------------------------------------------------------------
-
-            ButtonSetting button = new ButtonSetting(1, "나는", "매우", 0, "귀엽다", null, (pl, sb) =>
-            {
-                Log.Info($"Changed");
-            });
-            button.OnChanged = (pl, sb) =>
-            {
-                Log.Info($"1Changed");
-            };
-            List<ServerSpecificSettingBase> list = new List<ServerSpecificSettingBase>();
-            list.Add(button.Base);
-            ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub, list.ToArray());
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += (rh, sss) =>
-            {
-                Log.Info($"{Player.Get(rh).Nickname} {sss.Label} {sss.PlayerPrefsKey} {sss.DebugValue} {sss.SettingId}");
-            };
-
-            // --------------------------------------------------------------------
+            SSSBase.Refresh(ev.Player);
 
             List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
 

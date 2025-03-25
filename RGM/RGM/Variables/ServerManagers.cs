@@ -13,6 +13,7 @@ using Exiled.API.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 using RGM.API.DataBases;
 using MultiBroadcast.API;
+using UserSettings.ServerSpecific;
 
 namespace RGM.Variables
 {
@@ -36,13 +37,14 @@ namespace RGM.Variables
         public static bool IsClearCitizen = false;
         public static bool IsSuggestProcessing = false;
 
-        public static Dictionary<ModeType, ModeData> ModeList = new Dictionary<ModeType, ModeData>();
-        public static Dictionary<ModeType, List<Player>> ModeVote = new Dictionary<ModeType, List<Player>>();
-        public static Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
-        public static Dictionary<Player, Room> CurrentRoom = new Dictionary<Player, Room>();
-        public static Dictionary<string, PlayerInfo> PlayersInfo = new Dictionary<string, PlayerInfo>();
-        public static Dictionary<string, PlayerReport> PlayersReport = new Dictionary<string, PlayerReport>();
-        public static Dictionary<Door, int> InteractedDoors = new Dictionary<Door, int>();
+        public static Dictionary<ModeType, ModeData> ModeList = new();
+        public static Dictionary<ModeType, List<Player>> ModeVote = new();
+        public static Dictionary<Player, float> OnGround = new();
+        public static Dictionary<Player, Room> CurrentRoom = new();
+        public static Dictionary<string, PlayerInfo> PlayersInfo = new();
+        public static Dictionary<string, PlayerReport> PlayersReport = new();
+        public static Dictionary<Door, int> InteractedDoors = new();
+        public static Dictionary<Player, List<ServerSpecificSettingBase>> SSSBases = new();
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
@@ -127,19 +129,19 @@ namespace RGM.Variables
         public static List<Transform> RandomColors;
         public static List<Transform> RandomLights;
         public static List<Transform> Balls;
-        public static List<ModeType> EnabledModeList = new List<ModeType>();
-        public static List<ModeType> SubModeVote = new List<ModeType>();
-        public static List<Player> JumpScareCooldown = new List<Player>();
-        public static List<Player> GodModePlayers = new List<Player>();
-        public static List<Player> ChatCooldown = new List<Player>();
-        public static List<Player> EmotionCooldown = new List<Player>();
-        public static List<Player> BugVotePlayers = new List<Player>();
-        public static List<Player> BugVoteUsers = new List<Player>();
-        public static List<Player> IntercomPlayers = new List<Player>();
-        public static List<Player> ShopCooldown = new List<Player>();
-        public static List<ModeType> highlightModes = new List<ModeType>();
-        public static List<Player> SuggestPlayers = new List<Player>();
-        public static List<string> Maps = new List<string>()
+        public static List<ModeType> EnabledModeList = new();
+        public static List<ModeType> SubModeVote = new();
+        public static List<Player> JumpScareCooldown = new();
+        public static List<Player> GodModePlayers = new();
+        public static List<Player> ChatCooldown = new();
+        public static List<Player> EmotionCooldown = new();
+        public static List<Player> BugVotePlayers = new();
+        public static List<Player> BugVoteUsers = new();
+        public static List<Player> IntercomPlayers = new();
+        public static List<Player> ShopCooldown = new();
+        public static List<ModeType> highlightModes = new();
+        public static List<Player> SuggestPlayers = new();
+        public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",
             "City17v3",
@@ -152,7 +154,7 @@ namespace RGM.Variables
             "InTheSea",
             "City"
         };
-        public static List<Product> Products = new List<Product>()
+        public static List<Product> Products = new()
         {
             new Product()
             {

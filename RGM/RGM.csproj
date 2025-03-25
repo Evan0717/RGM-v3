@@ -198,6 +198,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RGM-v4\RandomGameMode\Depedencies\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -511,6 +515,7 @@
     <Compile Include="RGM\Functions\ModeManagers.cs" />
     <Compile Include="RGM\Modes\Sets\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Sets\WitGame\WitGame.cs" />
+    <Compile Include="RGM\UserSettings\SSSBase.cs" />
     <Compile Include="RGM\Variables\ServerManagers.cs" />
   </ItemGroup>
   <ItemGroup>
