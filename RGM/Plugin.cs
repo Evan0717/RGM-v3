@@ -18,6 +18,8 @@ using RGM.API.Components;
 using RGM.API.Interfaces;
 using RGM.API.DataBases;
 
+using static RGM.UserSettings.SSSBase;
+
 using static RGM.Variables.ServerManagers;
 
 using static RGM.EventArgs.MEREvents;
@@ -36,7 +38,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 12, 26);
+        public override Version Version { get; } = new(3, 12, 27);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
