@@ -80,7 +80,7 @@ namespace RGM.API.Features
 
                 foreach (var player in Player.List.Where(x => !x.IsHost))
                 {
-                    ServerSpecificSettings.Refresh(player.UserId);
+                    ServerSpecificSettings.Refresh(player);
                 }
             }
         }

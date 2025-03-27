@@ -45,6 +45,7 @@ namespace RGM.Variables
         public static Dictionary<string, PlayerInfo> PlayersInfo = new();
         public static Dictionary<string, PlayerReport> PlayersReport = new();
         public static Dictionary<Door, int> InteractedDoors = new();
+        public static Dictionary<string, (List<SettingBase>, List<SettingInfo>)> PlayerSettings = new();
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
@@ -121,13 +122,6 @@ namespace RGM.Variables
             {"Adios! 2024", "✿"}
         };
 
-        public static IEnumerable<HeaderSetting> headerSettings = new[] 
-        { 
-            new HeaderSetting("<align=left><size=110%>ⓘ 유저 정보</align></size>"),
-            new HeaderSetting("<align=left><size=110%>🎮 모드</align></size>"),
-            new HeaderSetting("<align=left><size=110%>⚙️ 기타</align></size>")
-        };
-
         public static List<Transform> First;
         public static List<Transform> Second;
         public static List<Transform> Third;
@@ -146,7 +140,7 @@ namespace RGM.Variables
         public static List<Player> BugVoteUsers = new();
         public static List<Player> IntercomPlayers = new();
         public static List<Player> ShopCooldown = new();
-        public static List<ModeType> highlightModes = new();
+        public static List<ModeType> HighlightModes = new();
         public static List<Player> SuggestPlayers = new();
         public static List<string> Maps = new()
         {
@@ -193,7 +187,7 @@ namespace RGM.Variables
                 Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg); },
                 Script = (player, arg) =>
                 {
-                    highlightModes.Add(ModeList.Keys.First(x => x.GetModeData().Name == arg));
+                    HighlightModes.Add(ModeList.Keys.First(x => x.GetModeData().Name == arg));
 
                     Server.ExecuteCommand($"/cassie_sl {player.DisplayNickname}(이)가 <b>{ModeList.Keys.First(x => x.GetModeData().Name == arg).GetModeData().Name}</b> 모드를 추천하였습니다.");
                 }

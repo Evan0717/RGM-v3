@@ -36,7 +36,10 @@ namespace RGM.EventArgs
     {
         public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
-            ServerSpecificSettings.RegisterSettings(ev.Player);
+            PlayerSettings.Add(ev.Player.UserId, (new List<SettingBase>(), new List<SettingInfo>()));
+            OnGround.Add(ev.Player.UserId, 5);
+
+            ServerSpecificSettings.RegisterCommonSettings(ev.Player);
 
             if (!PlayersReport.ContainsKey(ev.Player.UserId))
             {
@@ -102,7 +105,6 @@ namespace RGM.EventArgs
                     ev.Player.CustomInfo = uc[6];
             }
 
-            OnGround.Add(ev.Player.UserId, 5);
             ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
 
             if (Round.IsStarted)
@@ -308,7 +310,7 @@ namespace RGM.EventArgs
                                     }
 
                                     Color = "ffffff";
-                                    Description = $"{FirstDesc()}\n<size=25>콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.</size>";
+                                    Description = $"{FirstDesc()}\n<size=25>[ESC] -> [Settings] -> [Server-specific]에서 유용한 정보를 확인해보세요.</size>";
                                 }
 
                                 string IdeaBy()
@@ -352,7 +354,7 @@ namespace RGM.EventArgs
                                     .Replace("{Version}", $"{RGM.Instance.Version}")
                                     .Replace("{Logo}", $"{Logo}");
 
-                                foreach (string name in highlightModes.Select(x => x.GetModeData().Name))
+                                foreach (string name in HighlightModes.Select(x => x.GetModeData().Name))
                                 {
                                     formatted = formatted.Replace(name, $"<b>{name}</b>");
                                 }
@@ -373,7 +375,10 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnLeft(LeftEventArgs ev)
         {
-            ServerSpecificSettings.UnRegisterSettings(ev.Player);
+            ServerSpecificSettings.UnregisterSettings(ev.Player.UserId);
+
+            if (PlayerSettings.ContainsKey(ev.Player.UserId))
+                PlayerSettings.Remove(ev.Player.UserId);
 
             if (OnGround.ContainsKey(ev.Player.UserId))
                 OnGround.Remove(ev.Player.UserId);

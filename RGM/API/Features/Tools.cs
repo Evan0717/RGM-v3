@@ -333,7 +333,7 @@ $"""
 
                 foreach (var player in Player.List)
                 {
-                    ServerSpecificSettings.Refresh(player.UserId);
+                    ServerSpecificSettings.Refresh(player);
                 }
 
                 return true;
