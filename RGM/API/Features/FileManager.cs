@@ -78,10 +78,10 @@ namespace RGM.API.Features
 
                 FileManager.WriteFile(UsersFileName, text);
 
-                foreach (var player in Player.List.Where(x => !x.IsHost))
-                {
-                    ServerSpecificSettings.Refresh(player);
-                }
+                //foreach (var player in Player.List.Where(x => !x.IsHost))
+                //{
+                //    ServerSpecificSettings.Refresh(player);
+                //}
             }
         }
 
