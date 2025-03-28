@@ -22,7 +22,14 @@ namespace RGM.UserSettings
     {
         public static string GetValue(string debugValue)
         {
-            return debugValue.Split('(')[1].Trim();
+            try
+            {
+                return debugValue.Split('(')[1].Split(')')[0].Trim();
+            }
+            catch 
+            {
+                return debugValue;
+            }
         }
 
         public static void RegisterCommonSettings(Player player)
@@ -35,7 +42,7 @@ namespace RGM.UserSettings
             Refresh(player);
         }
 
-        public static void UnregisterSettings(string userId, List<string> headerNames = null)
+        public static void UnregisterHeader(string userId, List<string> headerNames = null)
         {
             if (headerNames == null)
             {
@@ -56,6 +63,7 @@ namespace RGM.UserSettings
                     {
                         PlayerSettings[userId].Item2.Remove(settings);
 
+                        SettingBase.Unregister((p) => { return p.UserId == userId; }, new SettingBase[] { settings.Header });
                         SettingBase.Unregister((p) => { return p.UserId == userId; }, settings.SettingBases);
                     }
                 }
@@ -113,7 +121,7 @@ $"""
 <size=25><align=center><color=#D0A9F5><link=https://www.randomsl.xyz/rule>| <b>규정 (클릭)</b> |</link></color></align></size>
 
 <size=25><align=center><color=#FA5858><link=https://www.youtube.com/@RandomGameMode>| <b>공식 유튜브 채널 (클릭)</b> |</link></color></align></size>
-""", header: header1);
+""", foldoutMode: SSTextArea.FoldoutMode.CollapsedByDefault, header: header1);
 
             var settingBases = new List<SettingBase> { text1 };
 
@@ -145,7 +153,7 @@ $"""
                 });
                 dropdown1.DefaultOption = uc[4] == "0" ? "-" : uc[4];
             }
-            TextInputSetting text5 = null;
+            UserTextInputSetting text5 = null;
             if (uc[7].Split('/').Contains("커스텀 닉네임"))
             {
                 string nick()
@@ -155,14 +163,12 @@ $"""
                     if (n == "0")
                         n = "";
 
-                    if (n != "")
-                        return uc[5];
-
-                    else
-                        return "";
+                    return n;
                 }
 
-                text5 = new TextInputSetting(6, $"🏷️ 커스텀 닉네임\n<size=20>[<color={}>{Tools.CustomFormatter(player, nick())}]</color></size>", hintDescription: nick(),  header: header1, onChanged: (p, sb) =>
+                text5 = new UserTextInputSetting(6, $"📘 커스텀 닉네임 [{Tools.CustomFormatter(player, nick())}]", nick());
+                text5.Header = header1;
+                text5.OnChanged = (p, sb) =>
                 {
                     string value = GetValue(sb.Base.DebugValue);
 
@@ -172,9 +178,11 @@ $"""
                     uc[5] = value;
                     UsersManager.UsersCache[player.UserId] = uc;
                     UsersManager.SaveUsers();
-                });
+
+                    text5.Label = $"📘 커스텀 닉네임 [{Tools.CustomFormatter(player, nick())}]";
+                };
             }
-            TextInputSetting text6 = null;
+            UserTextInputSetting text6 = null;
             if (uc[7].Split('/').Contains("커스텀 인포"))
             {
                 string info()
@@ -184,14 +192,12 @@ $"""
                     if (n == "0")
                         n = "";
 
-                    if (n != "")
-                        return uc[6];
-
-                    else
-                        return "";
+                    return n;
                 }
 
-                text6 = new TextInputSetting(7, $"🪧 커스텀 인포\n<size=20>[{Tools.CustomFormatter(player, info())}]</size>", hintDescription: info(), header: header1, onChanged: (p, sb) =>
+                text6 = new UserTextInputSetting(7, $"📙 커스텀 인포 [{Tools.CustomFormatter(player, info())}]", info());
+                text6.Header = header1;
+                text6.OnChanged = (p, sb) =>
                 {
                     string value = GetValue(sb.Base.DebugValue);
 
@@ -201,7 +207,9 @@ $"""
                     uc[6] = value;
                     UsersManager.UsersCache[player.UserId] = uc;
                     UsersManager.SaveUsers();
-                });
+
+                    text6.Label = $"📙 커스텀 인포 [{Tools.CustomFormatter(player, info())}]";
+                };
             }
             DropdownSetting dropdown2 = null;
             if (uc[8] != "0")

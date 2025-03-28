@@ -39,8 +39,6 @@ namespace RGM.EventArgs
             PlayerSettings.Add(ev.Player.UserId, (new List<SettingBase>(), new List<SettingInfo>()));
             OnGround.Add(ev.Player.UserId, 5);
 
-            ServerSpecificSettings.RegisterCommonSettings(ev.Player);
-
             if (!PlayersReport.ContainsKey(ev.Player.UserId))
             {
                 PlayersReport.Add(ev.Player.UserId, new PlayerReport()
@@ -53,6 +51,8 @@ namespace RGM.EventArgs
                     Damage = 0
                 });
             }
+
+            ServerSpecificSettings.RegisterCommonSettings(ev.Player);
 
             List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
 
@@ -104,7 +104,6 @@ namespace RGM.EventArgs
                 if (uc[6] != "0")
                     ev.Player.CustomInfo = uc[6];
             }
-
             ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
 
             if (Round.IsStarted)
@@ -173,7 +172,7 @@ namespace RGM.EventArgs
 @cocoa_1.19 - 서브? 개발자
 
 <b><size=35><color=#F79F81>후원자</color></size></b>
-<size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @suabwy_1059</size>
+<size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @solminb27, @LESI_2010, @handsome_dobby</size>
 
 <b><size=35><color=#F8E0F7>도움 주신 분들</color></size><b>
 <size=20>@cocoa_1.19, @leejihyuk, @mujishungplay</size>
@@ -375,7 +374,7 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnLeft(LeftEventArgs ev)
         {
-            ServerSpecificSettings.UnregisterSettings(ev.Player.UserId);
+            ServerSpecificSettings.UnregisterHeader(ev.Player.UserId);
 
             if (PlayerSettings.ContainsKey(ev.Player.UserId))
                 PlayerSettings.Remove(ev.Player.UserId);
