@@ -46,13 +46,7 @@ namespace RGM.UserSettings
         {
             if (headerNames == null)
             {
-                var settingsToRemove = PlayerSettings[userId].Item2.ToList();
-                foreach (var settings in settingsToRemove)
-                {
-                    PlayerSettings[userId].Item2.Remove(settings);
-
-                    SettingBase.Unregister((p) => { return p.UserId == userId; }, settings.SettingBases);
-                }
+                SettingBase.Unregister((p) => { return p.UserId == userId; });
             }
             else
             {
@@ -72,6 +66,9 @@ namespace RGM.UserSettings
 
         public static void Refresh(Player player)
         {
+            if (!PlayerSettings.ContainsKey(player.UserId))
+                PlayerSettings[player.UserId] = (new List<SettingBase>(), new List<SettingInfo>());
+
             PlayerSettings[player.UserId].Item1.Clear();
 
             var header = new HeaderSetting("-");
@@ -225,10 +222,16 @@ $"""
                     UsersManager.UsersCache[player.UserId] = uc;
                     UsersManager.SaveUsers();
 
-                    Tools.RemovePaint(player);
+                    try { Tools.RemovePaint(player); } catch { }
 
-                    if (value != "0")
-                        Tools.ChangePaint(player, uc[9]);
+                    try
+                    {
+                        if (value != "0")
+                            Tools.ChangePaint(player, uc[9]);
+                    }
+                    catch
+                    {
+                    }
                 });
                 dropdown2.DefaultOption = uc[9] == "0" ? "-" : uc[9];
             }
@@ -291,10 +294,11 @@ $"""
         public static List<SettingBase> EtcSetting(Player player)
         {
             var header1 = new HeaderSetting("<b>⚙️ 기타</b>");
-            var button1 = new ButtonSetting(200, "🔄 새로고침", "모든 정보를 새로고침합니다.", 1, header: header1, onChanged: (p, sb) =>
+            var button1 = new ButtonSetting(200, "🔄 새로고침", "모든 정보를 새로고침합니다.", 1, header: header1);
+            button1.OnChanged = (p, sb) =>
             {
                 Refresh(player);
-            });
+            };
 
             var settingBases = new List<SettingBase> { button1 };
 

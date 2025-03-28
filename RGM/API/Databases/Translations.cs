@@ -12,6 +12,7 @@ namespace RGM.API.DataBases
         public static Dictionary<RoleTypeId, string> Role = new Dictionary<RoleTypeId, string>
         {
             {RoleTypeId.None, "알 수 없음"},
+            {RoleTypeId.Destroyed, "손상됨"},
             {RoleTypeId.Scp049, "SCP-049"},
             {RoleTypeId.Scp0492, "SCP-049-2"},
             {RoleTypeId.Scp079, "SCP-079"},

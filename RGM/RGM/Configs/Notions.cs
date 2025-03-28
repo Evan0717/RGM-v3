@@ -8,18 +8,18 @@ namespace RGM
 {
     public class Notions
     {
-        public static string StartModeDescription { get; set; } = 
+        public static string StartModeDescription { get; set; } =
 """
 <size=30><b><color=#{ModeColor}>{CurrentMode}</color></b></size>
 <size=25>{ModeDescription}</size> <size=20>({ModeInfo})</size>
-{CurrentSubMode}<size=15>콘솔(~ 또는 `)을 열고 자세한 설명을 확인해보세요.</size>
+{CurrentSubMode}<size=15>[ESC] -> [Settings] -> [Server-specific]로 이동하여 자세한 설명을 확인해보세요.</size>
 """;
         public static string LateJoinModeDescription { get; set; } =
 """
 <size=20>현재 진행중인 모드</size>
 <size=30><b><color=#{ModeColor}>{CurrentMode}</color></b></size>
 <size=25>{ModeDescription}</size> <size=20>({ModeInfo})</size>
-{CurrentSubMode}<size=15>콘솔(~ 또는 `)을 열고 자세한 설명을 확인해보세요.</size>
+{CurrentSubMode}<size=15>[ESC] -> [Settings] -> [Server-specific]로 이동하여 자세한 설명을 확인해보세요.</size>
 """;
         public static string WelcomeMessage { get; set; } = "<size=25><b>랜덤게임모드 (RGM)</b>에 오신 것을 환영합니다!</size>";
         public static string LobbyMessage { get; set; } =

@@ -376,11 +376,8 @@ namespace RGM.EventArgs
         {
             ServerSpecificSettings.UnregisterHeader(ev.Player.UserId);
 
-            if (PlayerSettings.ContainsKey(ev.Player.UserId))
-                PlayerSettings.Remove(ev.Player.UserId);
-
-            if (OnGround.ContainsKey(ev.Player.UserId))
-                OnGround.Remove(ev.Player.UserId);
+            PlayerSettings.Remove(ev.Player.UserId);
+            OnGround.Remove(ev.Player.UserId);
 
             if (Round.IsLobby)
             {

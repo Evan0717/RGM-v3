@@ -216,6 +216,9 @@ $"""
                     {"호박색", new string[] { "pumpkin" } }
                 };
 
+                if (player.GameObject.TryGetComponent<TagController>(out TagController rtc))
+                    UnityEngine.Object.Destroy(rtc);
+
                 TagController rtController = player.GameObject.AddComponent<TagController>();
                 rtController.Colors = ColorDictionary[Color];
                 rtController.Interval = 1;
