@@ -8,6 +8,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using PlayerRoles;
 using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;
@@ -16,7 +17,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("성직자", "관전석에서 3명을 뽑아 아군으로 만들고, 자신의 위치로 소환합니다.", AbilityCategory.Epic, AbilityType.EPIC_PRIEST)]
+[Ability("성직자", "관전석에서 3명을 뽑아 아군으로 편입합니다. (SCP의 경우 SCP-049-2로 대체)", AbilityCategory.Epic, AbilityType.EPIC_PRIEST)]
 public class Priest : Ability
 {
     public override void OnEnabled()
@@ -29,7 +30,12 @@ public class Priest : Ability
             {
                 var revive = dead.GetRandomValue();
 
-                revive.Role.Set(Owner.Role.Type);
+                if (Owner.IsScp)
+                    revive.Role.Set(RoleTypeId.Scp0492);
+
+                else
+                    revive.Role.Set(Owner.Role.Type);
+
                 revive.Position = Owner.Position;
             }
         }
