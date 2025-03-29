@@ -42,7 +42,7 @@ namespace RGM.Commands.ClientCommands
                 response = "비밀 선거 조항을 깨트리지 마십시오.";
                 return false;
             }
-            else if (CurrentMode == ModeType.Silent)
+            else if (EnabledModeList.Contains(ModeType.Silent))
             {
                 if (player.IsAlive)
                 {
