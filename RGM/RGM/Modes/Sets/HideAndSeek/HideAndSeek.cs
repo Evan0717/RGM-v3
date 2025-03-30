@@ -49,7 +49,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load HideAndSeek");
+            Server.ExecuteCommand($"/mp load HideAndSeek1205");
 
             for (float i = 1; i < Player.List.Count / 10 + 2; i++)
                 Finders.Add(Tools.GetRandomValue(Player.List.Where(x => !Finders.Contains(x)).ToList()));
@@ -58,15 +58,8 @@ namespace RGM.Modes
 
             foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
             {
-                try
-                {
-                    player.Role.Set(RoleTypeId.ClassD);
-                    player.Position = GameObject.Find("StartPoint").transform.position;
-                }
-                catch (Exception ex)
-                {
-                    Log.Error($"Failed to set {player.Nickname} to ClassD: {ex}");
-                }
+                player.Role.Set(RoleTypeId.ClassD);
+                player.Position = GameObject.Find("StartPoint").transform.position;
             }
 
             for (int i = 1; i < 10; i++)
