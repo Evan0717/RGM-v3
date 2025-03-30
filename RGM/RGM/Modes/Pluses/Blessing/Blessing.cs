@@ -97,15 +97,14 @@ namespace RGM.Modes
 
                             player.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
                         }
-
-                        if (s >= 30)
-                            player.EnableEffect(EffectType.Invisible, 1, 1.2f);
-
                         else
                         {
                             if (player.IsNoclipPermitted)
                                 player.IsNoclipPermitted = false;
                         }
+
+                        if (s >= 30)
+                            player.EnableEffect(EffectType.Invisible, 1, 1.2f);
                     }
                 }
 

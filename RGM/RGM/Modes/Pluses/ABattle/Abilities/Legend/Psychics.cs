@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다.", AbilityCategory.Legend, AbilityType.LEGEND_PSYCHICS)]
+[Ability("영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다. (축복 모드의 효과와 동일)", AbilityCategory.Legend, AbilityType.LEGEND_PSYCHICS)]
 public class Psychics : Ability
 {
     CoroutineHandle _blessing;
@@ -71,15 +71,14 @@ public class Psychics : Ability
 
                 Owner.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
             }
-
-            if (s >= 30)
-                Owner.EnableEffect(EffectType.Invisible, 1, 1.2f);
-
             else
             {
                 if (Owner.IsNoclipPermitted)
                     Owner.IsNoclipPermitted = false;
             }
+
+            if (s >= 30)
+                Owner.EnableEffect(EffectType.Invisible, 1, 1.2f);
 
             yield return Timing.WaitForSeconds(1f);
         }
