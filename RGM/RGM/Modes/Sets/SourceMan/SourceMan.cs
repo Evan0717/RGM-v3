@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SourceMan)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.SourceMan)]
     class SourceMan : Mode
     {
         public override string Name => "소스맨";
