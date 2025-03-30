@@ -11,7 +11,7 @@ using Exiled.API.Enums;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("눈빛맨", "상대는 눈에 띄거나 근처에 있는 것만으로도 압도당할 것입니다!", AbilityCategory.Mythic, AbilityType.MYTHIC_EYEMAN)]
+[Ability("눈빛맨", "상대는 눈에 띄는 것만으로도 압도당할 것입니다!", AbilityCategory.Mythic, AbilityType.MYTHIC_EYEMAN)]
 public class EyeMan : Ability
 {
     CoroutineHandle _twinkle;
@@ -32,16 +32,16 @@ public class EyeMan : Ability
         {
             try
             {
-                foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
-                {
-                    if (Owner != near && HitboxIdentity.IsEnemy(Owner.ReferenceHub, near.ReferenceHub))
-                    {
-                        near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
-                        near.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                        near.Hurt(near.MaxHealth / 240, "눈빛의 힘에 압도당했습니다.");
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
-                    }
-                }
+                //foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
+                //{
+                //    if (Owner != near && HitboxIdentity.IsEnemy(Owner.ReferenceHub, near.ReferenceHub))
+                //    {
+                //        near.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                //        near.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                //        near.Hurt(near.MaxHealth / 240, "눈빛의 힘에 압도당했습니다.");
+                //        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
+                //    }
+                //}
 
                 if (Tools.TryGetLookPlayer(Owner, 100f, out Player target, out RaycastHit? hit))
                 {
