@@ -58,8 +58,15 @@ namespace RGM.Modes
 
             foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
             {
-                player.Role.Set(RoleTypeId.ClassD);
-                player.Position = GameObject.Find("StartPoint").transform.position;
+                try
+                {
+                    player.Role.Set(RoleTypeId.ClassD);
+                    player.Position = GameObject.Find("StartPoint").transform.position;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Failed to set {player.Nickname} to ClassD: {ex}");
+                }
             }
 
             for (int i = 1; i < 10; i++)
