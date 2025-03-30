@@ -15,8 +15,8 @@ public class InfinityGun : Ability
 
     public override void OnEnabled()
     {
-        Item ig = Owner.AddItem(ItemType.GunA7);
         Owner.AddItem(ItemType.GrenadeHE, 2);
+        Item ig = Owner.AddItem(ItemType.GunA7);
 
         InfinityGunSerial = ig.Serial;
 

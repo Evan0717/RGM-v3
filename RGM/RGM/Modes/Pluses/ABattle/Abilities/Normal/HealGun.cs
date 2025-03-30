@@ -15,8 +15,8 @@ public class HealGun : Ability
 
     public override void OnEnabled()
     {
-        Item hg = Owner.AddItem(ItemType.GunCOM18);
         Owner.AddItem(ItemType.Ammo9x19, 2);
+        Item hg = Owner.AddItem(ItemType.GunCOM18);
 
         HealGunSerial = hg.Serial;
 
