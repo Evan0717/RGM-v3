@@ -15,10 +15,10 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("도굴꾼", "사망한 아군의 능력 중 하나를 랜덤으로 획득합니다. (3회)", AbilityCategory.Epic, AbilityType.EPIC_GRAVEROBBER)]
+[Ability("도굴꾼", "사망한 아군의 능력 중 하나를 랜덤으로 획득합니다. (4회)", AbilityCategory.Epic, AbilityType.EPIC_GRAVEROBBER)]
 public class GraveRobber : Ability
 {
-    int count = 3;
+    int count = 4;
 
     public override void OnEnabled()
     {
