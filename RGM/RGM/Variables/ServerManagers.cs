@@ -152,7 +152,7 @@ namespace RGM.Variables
             "Lighthouse1",
             "TarkovStreet",
             // "NowYoureACadet",
-            "InTheSea",
+            // "InTheSea",
             "City"
         };
         public static List<Product> Products = new()
@@ -239,7 +239,7 @@ namespace RGM.Variables
                 Name = "모드 제안서",
                 Description = ".구매 모드 제안서/<모드 이름>ㅣ4번째 투표 목록에 있는 모드를 10% 확률로 해당 모드로 교체합니다. 한 라운드 당 한번만 구매할 수 있습니다.",
                 Price = 10,
-                Check = (player, arg) => { return Round.IsLobby || ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) || !IsModeSuggestUsed; },
+                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !IsModeSuggestUsed; },
                 Script = (player, arg) =>
                 {
                     IsModeSuggestUsed = true;
