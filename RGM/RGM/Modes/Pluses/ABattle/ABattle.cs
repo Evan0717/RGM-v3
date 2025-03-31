@@ -127,7 +127,7 @@ public class ABattle : Mode
         }
     }
 
-    public string CurrentExtraMode;
+    public static string CurrentExtraMode;
 
     // 플러그인에 있는 모든 능력 검색
     public override void OnEnabled()
@@ -200,8 +200,7 @@ public class ABattle : Mode
                 IsLifeUsed.Add(player, false);
 
                 ExtraModeNotion(player);
-
-                Timing.RunCoroutine(ABattleEventHandler.Instance.Spawned(player));
+                ApplyPrelude(player);
             }
             catch (Exception e)
             {
@@ -751,6 +750,42 @@ public class ABattle : Mode
         PlayerWorkstations[player].Clear();
         IsSelecting[player] = false;
         IsLifeUsed[player] = false;
+    }
+
+    public static void ApplyPrelude(Player player)
+    {
+        if (CurrentExtraMode == "골드 전주곡")
+        {
+            if (player.Role.Type == RoleTypeId.Scp079)
+                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
+
+            else
+                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Epic, 1).First());
+        }
+        else if (CurrentExtraMode == "프리즘 전주곡")
+        {
+            if (player.Role.Type == RoleTypeId.Scp079)
+            {
+                for (int i = 0; i < Random.Range(1, 3); i++)
+                    player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
+            }
+
+            else
+            {
+                AbilityCategory getRandom()
+                {
+                    if (Random.Range(1, 31) == 1)
+                        return AbilityCategory.Mythic;
+
+                    if (Random.Range(1, 21) == 1)
+                        return AbilityCategory.Legend;
+
+                    return AbilityCategory.Epic;
+                }
+
+                player.AddAbility(ABattle.Instance.GetRandomAbilities(getRandom(), 1).First());
+            }
+        }
     }
 }
 

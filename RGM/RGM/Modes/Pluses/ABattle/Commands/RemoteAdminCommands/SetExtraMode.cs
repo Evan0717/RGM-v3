@@ -22,8 +22,8 @@ public class SetExtraMode : ICommand
             }
             else
             {
-                ABattle.Instance.CurrentExtraMode = args;
-                string extraMode = $"<size=25><b><color=#fecdcd>{ABattle.Instance.CurrentExtraMode}</color></b></size>\n<size=20>{ABattle.ExtraModes[ABattle.Instance.CurrentExtraMode]}</size>";
+                ABattle.CurrentExtraMode = args;
+                string extraMode = $"<size=25><b><color=#fecdcd>{ABattle.CurrentExtraMode}</color></b></size>\n<size=20>{ABattle.ExtraModes[ABattle.CurrentExtraMode]}</size>";
                 
                 foreach (var p in Player.List)
                 {

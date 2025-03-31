@@ -58,42 +58,11 @@ public class ABattleEventHandler(ABattle aBattle)
 
     public IEnumerator<float> Spawned(Player player)
     {
-        if (player.IsDead)
-            yield break;
-
         yield return Timing.WaitForSeconds(1);
 
-        if (aBattle.CurrentExtraMode == "골드 전주곡")
+        if (player.IsAlive)
         {
-            if (player.Role.Type == RoleTypeId.Scp079)
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
-
-            else
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Epic, 1).First());
-        }
-        else if (aBattle.CurrentExtraMode == "프리즘 전주곡")
-        {
-            if (player.Role.Type == RoleTypeId.Scp079)
-            {
-                for (int i = 0; i < Random.Range(1, 3); i++)
-                    player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
-            }
-
-            else
-            {
-                AbilityCategory getRandom()
-                {
-                    if (Random.Range(1, 31) == 1)
-                        return AbilityCategory.Mythic;
-
-                    if (Random.Range(1, 21) == 1)
-                        return AbilityCategory.Legend;
-
-                    return AbilityCategory.Epic;
-                }
-
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(getRandom(), 1).First());
-            }
+            ABattle.ApplyPrelude(player);
         }
     }
 
@@ -107,10 +76,10 @@ public class ABattleEventHandler(ABattle aBattle)
 
                 if (controller != null)
                 {
-                    if (aBattle.CurrentExtraMode != "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+                    if (ABattle.CurrentExtraMode != "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         return;
 
-                    if (aBattle.CurrentExtraMode == "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 6) == 1)
+                    if (ABattle.CurrentExtraMode == "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 6) == 1)
                     {
                         if (GodModePlayers.Contains(ev.Player))
                             GodModePlayers.Remove(ev.Player);
@@ -123,7 +92,7 @@ public class ABattleEventHandler(ABattle aBattle)
                     if (aBattle.Selections.ContainsKey(ev.Player))
                         aBattle.Selections[ev.Player].Clear();
 
-                    if (aBattle.CurrentExtraMode == "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+                    if (ABattle.CurrentExtraMode == "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         aBattle.StartSelect(ev.Player);
 
                     if (!aBattle.PlayerWorkstations.TryGetValue(ev.Player, out var workstations))
@@ -173,10 +142,10 @@ public class ABattleEventHandler(ABattle aBattle)
 
                 if (controller != null)
                 {
-                    if (aBattle.CurrentExtraMode != "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+                    if (ABattle.CurrentExtraMode != "대출" && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         return;
 
-                    if (aBattle.CurrentExtraMode == "대출")
+                    if (ABattle.CurrentExtraMode == "대출")
                     {
                         if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 6) == 1)
                         {
@@ -192,7 +161,7 @@ public class ABattleEventHandler(ABattle aBattle)
                     if (aBattle.Selections.ContainsKey(ev.Player))
                         aBattle.Selections[ev.Player].Clear();
 
-                    if (aBattle.CurrentExtraMode == "대출")
+                    if (ABattle.CurrentExtraMode == "대출")
                         aBattle.StartSelect(ev.Player);
 
                     if (!aBattle.PlayerWorkstations.TryGetValue(ev.Player, out var workstations))
