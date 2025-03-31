@@ -63,7 +63,7 @@ namespace RGM.Modes
         {
             Tools.PlayGlobalAudio("Spleef", volume: 0.5f, loop: true);
 
-            MapUtils.LoadMap("Spleef");
+            MapUtils.LoadMap("Spleef1205");
 
             Player.List.ToList().CopyTo(pl);
 
