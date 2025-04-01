@@ -50,7 +50,6 @@ namespace RGM.EventArgs
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Server.ExecuteCommand($"/mp load Past_Lobby");
-            Respawn.PauseWaves();
 
             var donator = new Donator.Main();
             donator.OnEnabled();
