@@ -68,7 +68,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load GGClub");
+            Tools.LoadMap($"GGClub");
 
             Tools.PlayGlobalAudio("tothemoon", 1, true);
 

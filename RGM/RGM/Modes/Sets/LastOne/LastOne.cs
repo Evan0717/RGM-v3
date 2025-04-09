@@ -59,7 +59,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load {Maps.GetRandomValue()}");
+            Tools.LoadMap($"{Maps.GetRandomValue()}");
 
             StartupItems = Items();
 

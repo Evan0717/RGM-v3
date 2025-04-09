@@ -59,7 +59,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand("/mp load SnowBallFight");
+            Tools.LoadMap($"SnowBallFight");
 
             GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
             {

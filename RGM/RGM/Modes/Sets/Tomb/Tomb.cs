@@ -53,7 +53,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load plane");
+            Tools.LoadMap($"plane");
 
             Player.List.CopyTo(pl);
 

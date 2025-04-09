@@ -64,7 +64,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load hp");
+            Tools.LoadMap($"hp");
 
             Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
 

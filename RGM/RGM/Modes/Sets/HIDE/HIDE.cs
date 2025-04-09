@@ -64,7 +64,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load container");
+            Tools.LoadMap($"container");
 
             Player.List.ToList().CopyTo(pl);
             monster = Tools.GetRandomValue(Player.List.ToList());

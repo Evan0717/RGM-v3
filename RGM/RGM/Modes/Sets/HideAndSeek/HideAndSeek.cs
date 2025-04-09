@@ -49,7 +49,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load HideAndSeek1205");
+            Tools.LoadMap($"HideAndSeek1205");
 
             for (float i = 1; i < Player.List.Count / 10 + 2; i++)
                 Finders.Add(Tools.GetRandomValue(Player.List.Where(x => !Finders.Contains(x)).ToList()));

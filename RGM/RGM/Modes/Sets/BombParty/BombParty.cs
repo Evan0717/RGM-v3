@@ -56,7 +56,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load bp");
+            Tools.LoadMap($"bp");
 
             Player.List.ToList().CopyTo(pl);
 

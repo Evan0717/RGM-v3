@@ -50,7 +50,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand("/mp load DeathRun");
+            Tools.LoadMap($"DeathRun");
 
             Tagger = Tools.GetRandomValue(Player.List.ToList());
 

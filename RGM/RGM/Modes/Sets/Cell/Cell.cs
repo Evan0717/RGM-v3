@@ -43,7 +43,7 @@ namespace RGM.Modes
         public IEnumerator<float> OnModeStarted()
         {
             Server.FriendlyFire = true;
-            Server.ExecuteCommand("/mp load cell");
+            Tools.LoadMap($"cell");
             Player BadLucky = Tools.GetRandomValue(Player.List.ToList());
             Player.List.ToList().CopyTo(pl);
 

@@ -23,6 +23,13 @@ using AdminToys;
 using MapEditorReborn.API.Features.Objects;
 using Exiled.API.Enums;
 using RGM.UserSettings;
+using MapEditorReborn.API.Features.Objects.Vanilla;
+using MapEditorReborn.API.Features.Serializable.Vanilla;
+using MapEditorReborn.API.Features.Serializable;
+using MapEditorReborn.API.Features;
+using MapEditorReborn.Events.Handlers.Internal;
+using MapEditorReborn.API;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace RGM.API.Features
 {
@@ -612,6 +619,124 @@ $"""
             }
 
             GlobalPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
+        }
+
+        public static void LoadMap(string mapName)
+        {
+            MapSchematic map = MapUtils.GetMapByName(mapName);
+
+            if (map == null)
+            {
+                Log.Error($"맵 '{mapName}'을(를) 찾을 수 없습니다. 로드 실패.");
+                return;
+            }
+
+            if (map.Doors != null)
+            {
+                foreach (DoorSerializable doorSerializable in map.Doors)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnDoor(doorSerializable, null, null, null));
+                }
+            }
+
+            if (map.WorkStations != null)
+            {
+                foreach (WorkstationSerializable workstationSerializable in map.WorkStations)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstationSerializable, null, null, null));
+                }
+            }
+
+            if (map.ItemSpawnPoints != null)
+            {
+                foreach (ItemSpawnPointSerializable itemSpawnPointSerializable in map.ItemSpawnPoints)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPointSerializable, null, null, null));
+                }
+            }
+
+            if (map.PlayerSpawnPoints != null)
+            {
+                foreach (PlayerSpawnPointSerializable playerSpawnPointSerializable in map.PlayerSpawnPoints)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPointSerializable, null));
+                }
+            }
+
+            if (map.RagdollSpawnPoints != null)
+            {
+                foreach (RagdollSpawnPointSerializable ragdollSpawnPointSerializable in map.RagdollSpawnPoints)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPointSerializable, null, null));
+                }
+            }
+
+            if (map.ShootingTargets != null)
+            {
+                foreach (ShootingTargetSerializable shootingTargetSerializable in map.ShootingTargets)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetSerializable, null, null, null));
+                }
+            }
+
+            if (map.Primitives != null)
+            {
+                foreach (PrimitiveSerializable primitiveObject in map.Primitives)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject, null, null, null));
+                }
+            }
+
+            if (map.RoomLights != null)
+            {
+                foreach (RoomLightSerializable roomLightSerializable in map.RoomLights)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(roomLightSerializable));
+                }
+            }
+
+            if (map.LightSources != null)
+            {
+                foreach (LightSourceSerializable lightSourceObject in map.LightSources)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject, null));
+                }
+            }
+
+            if (map.Teleports != null)
+            {
+                foreach (SerializableTeleport serializableTeleport in map.Teleports)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(serializableTeleport));
+                }
+            }
+
+            if (map.Lockers != null)
+            {
+                foreach (LockerSerializable lockerSerializable in map.Lockers)
+                {
+                    MapEditorReborn.API.API.SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable, null, null, null));
+                }
+            }
+
+            if (map.Schematics != null)
+            {
+                foreach (SchematicSerializable schematicSerializable in map.Schematics)
+                {
+                    MapEditorObject mapEditorObject2 = ObjectSpawner.SpawnSchematic(schematicSerializable, null, null, null, null);
+                    if (mapEditorObject2 != null)
+                    {
+                        MapEditorReborn.API.API.SpawnedObjects.Add(mapEditorObject2);
+                    }
+                }
+            }
+
+            Log.Info($"로드된 맵: {mapName}");
+
+            foreach (var player in Player.List)
+            {
+                player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
+            }
         }
     }
 }

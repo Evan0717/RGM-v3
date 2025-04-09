@@ -111,7 +111,7 @@ Trouble in Terrorist Town의 약자.
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load {Maps.GetRandomValue()}");
+            Tools.LoadMap($"{Maps.GetRandomValue()}");
 
             foreach (var player in Player.List)
             {

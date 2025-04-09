@@ -60,7 +60,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.ExecuteCommand($"/mp load wg");
+            Tools.LoadMap($"wg");
 
             foreach (var player in Player.List)
             {

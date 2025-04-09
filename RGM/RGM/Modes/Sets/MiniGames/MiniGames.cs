@@ -67,7 +67,7 @@ namespace RGM.Modes
 
             Timing.RunCoroutine(OnModeStarted());
 
-            Server.ExecuteCommand($"/mp load ru");
+            Tools.LoadMap($"ru");
         }
 
         public IEnumerator<float> OnModeStarted()

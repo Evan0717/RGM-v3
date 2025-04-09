@@ -188,7 +188,7 @@ public class ABattle : Mode
     {
         yield return Timing.WaitForOneFrame;
 
-        Server.ExecuteCommand("/mp load ABattle");
+        Tools.LoadMap($"ABattle");
 
         foreach (var player in Player.List)
         {

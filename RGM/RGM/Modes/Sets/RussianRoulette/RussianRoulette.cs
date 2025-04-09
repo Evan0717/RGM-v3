@@ -66,7 +66,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            MapUtils.LoadMap("ru");
+            Tools.LoadMap("ru");
 
             foreach (var ply in Player.List)
             {
