@@ -53,7 +53,14 @@ namespace RGM.EventArgs
                 });
             }
 
-            ServerSpecificSettings.RegisterCommonSettings(ev.Player);
+            try
+            {
+                ServerSpecificSettings.RegisterCommonSettings(ev.Player);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
 
             List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
 
