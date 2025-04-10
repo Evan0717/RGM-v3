@@ -212,19 +212,7 @@ namespace RGM.EventArgs
 
         public static void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
-            Tools.TryInstallMode(ModeType.FriendlyFire);
-
-            foreach (var player in Player.List)
-            {
-                Server.ExecuteCommand($"/speak {player.Id} 1");
-                IntercomPlayers.Add(player);
-            }
-
-            if (CurrentMode.GetModeData().Info == ModeInfo.Plus || new List<ModeType>() 
-            {
-                ModeType.DeathRun
-            }.Contains(CurrentMode.GetModeData().Type)
-            )
+            if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
             {
                 IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
 
@@ -233,6 +221,14 @@ namespace RGM.EventArgs
 
                 else if (players.Count() > 1)
                     Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            }
+
+            Tools.TryInstallMode(ModeType.FriendlyFire);
+
+            foreach (var player in Player.List)
+            {
+                Server.ExecuteCommand($"/speak {player.Id} 1");
+                IntercomPlayers.Add(player);
             }
 
             Timing.CallDelayed(19f, () =>
