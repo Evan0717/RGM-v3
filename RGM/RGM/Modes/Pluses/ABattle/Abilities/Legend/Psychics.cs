@@ -66,15 +66,13 @@ public class Psychics : Ability
 
             if (s >= 25)
             {
-                if (!Owner.IsNoclipPermitted)
-                    Owner.IsNoclipPermitted = true;
+                Owner.IsNoclipPermitted = true;
 
                 Owner.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
             }
             else
             {
-                if (Owner.IsNoclipPermitted)
-                    Owner.IsNoclipPermitted = false;
+                Owner.IsNoclipPermitted = false;
             }
 
             if (s >= 30)

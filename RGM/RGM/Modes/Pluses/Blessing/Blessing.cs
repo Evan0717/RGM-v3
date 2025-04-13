@@ -92,15 +92,13 @@ namespace RGM.Modes
 
                         if (s >= 25)
                         {
-                            if (!player.IsNoclipPermitted)
-                                player.IsNoclipPermitted = true;
+                            player.IsNoclipPermitted = true;
 
                             player.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
                         }
                         else
                         {
-                            if (player.IsNoclipPermitted)
-                                player.IsNoclipPermitted = false;
+                            player.IsNoclipPermitted = false;
                         }
 
                         if (s >= 30)
