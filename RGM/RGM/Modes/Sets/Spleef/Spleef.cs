@@ -158,7 +158,7 @@ namespace RGM.Modes
                     }
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(1);
             }
         }
 
