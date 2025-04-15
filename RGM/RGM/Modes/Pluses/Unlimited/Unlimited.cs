@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using MEC;
 using MultiBroadcast;
 using PlayerRoles;
@@ -31,6 +32,8 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Healing += OnHealing;
+            Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
+            Exiled.Events.Handlers.Player.UsingRadioBattery += OnUsingRadioBattery;
 
             Exiled.Events.Handlers.Scp106.Teleporting += OnTeleporting;
             Exiled.Events.Handlers.Scp106.Stalking += OnStalking;
@@ -59,7 +62,52 @@ namespace RGM.Modes
         {
             Player.List.ToList().ForEach(Spawned);
 
-            yield return 1f;
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (player.Role is Scp049Role scp049)
+                    {
+                        scp049.CallCooldown = 0;
+                        scp049.GoodSenseCooldown = 0;
+                        scp049.RemainingAttackCooldown = 0;
+                    }
+                    else if (player.Role is Scp106Role scp106)
+                    {
+                        scp106.CaptureCooldown = 0;
+                        scp106.RemainingSinkholeCooldown = 0;
+                    }
+                    else if (player.Role is Scp173Role scp173)
+                    {
+                        scp173.BlinkCooldown = 1f;
+                        scp173.RemainingBreakneckCooldown = 1;
+                    }
+                    else if (player.Role is Scp096Role scp096)
+                    {
+                        scp096.EnrageCooldown = 0;
+                        scp096.ChargeCooldown = 0;
+                    }
+                    else if (player.Role is Scp939Role scp939)
+                    {
+                        scp939.MimicryCooldown = 0;
+                        scp939.AmnesticCloudCooldown = 0;
+                        scp939.AttackCooldown = 0;
+                    }
+                    else if (player.Role is Scp079Role scp079)
+                    {
+                        scp079.BlackoutZoneCooldown = 0;
+                        scp079.RoomLockdownCooldown = 0;
+                    }
+                    else if (player.Role is Scp0492Role scp0492)
+                    {
+                    }
+                    else if (player.Role is Scp3114Role scp3114)
+                    {
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
+            }
         }
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
@@ -82,6 +130,18 @@ namespace RGM.Modes
         public void OnHealing(Exiled.Events.EventArgs.Player.HealingEventArgs ev)
         {
             ev.Player.MaxHealth += ev.Amount;
+        }
+
+        public IEnumerator<float> OnUsingItem(Exiled.Events.EventArgs.Player.UsingItemEventArgs ev)
+        {
+            yield return Timing.WaitForOneFrame;
+
+            ev.Cooldown = 0;
+        }
+
+        public void OnUsingRadioBattery(Exiled.Events.EventArgs.Player.UsingRadioBatteryEventArgs ev)
+        {
+            ev.Drain = 0;
         }
 
         public IEnumerator<float> OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
@@ -167,6 +227,13 @@ namespace RGM.Modes
             yield return Timing.WaitForOneFrame;
 
             ev.Scp173.RemainingBreakneckCooldown = 0;
+        }
+
+        public IEnumerator<float> OnBlinking(Exiled.Events.EventArgs.Scp173.BlinkingEventArgs ev)
+        {
+            yield return Timing.WaitForOneFrame;
+
+            ev.BlinkCooldown = 0.1f;
         }
 
         public void OnShooting(Exiled.Events.EventArgs.Player.ShootingEventArgs ev)
