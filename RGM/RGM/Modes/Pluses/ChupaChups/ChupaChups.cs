@@ -50,8 +50,10 @@ namespace RGM.Modes
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        public IEnumerator<float> Spawned(Player player)
         {
+            yield return Timing.WaitForSeconds(1);
+
             player.AddItem(ItemType.Jailbird);
         }
     }
