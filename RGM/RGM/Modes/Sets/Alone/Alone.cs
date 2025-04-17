@@ -70,7 +70,7 @@ $"""
             };
 
             alone.Role.Set(RoleTypeId.ClassD);
-            alone.EnableEffect(EffectType.MovementBoost, Server.PlayerCount * 6);
+            alone.EnableEffect(EffectType.MovementBoost, 255);
 
             foreach (var item in items)
                 alone.AddItem(item);
