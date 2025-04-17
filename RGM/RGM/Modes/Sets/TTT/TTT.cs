@@ -249,6 +249,9 @@ Trouble in Terrorist Town의 약자.
                     {
                         if (traitors.Contains(t))
                             traitor.ShowHint($"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
+
+                        else
+                            traitor.ShowHint($"[ALT]ㅣ해당 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>을 일격에 즉사시키십시오.", 1.2f);
                     }
                     else if (Tools.TryGetNearestPlayer(traitor, out Player nearestPlayer, out float radius))
                         traitor.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
