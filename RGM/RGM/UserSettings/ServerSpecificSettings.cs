@@ -154,7 +154,7 @@ $"""
             }
             var text7 = new TextInputSetting(7, uc()[7].Split('/').Count() == 0 ? "보유한 커스터마이징이 없습니다." : $"{(uc()[7].Split('/').Contains("커스텀 닉네임") ? $"커스텀 닉네임: {uc()[5]}({Tools.CustomFormatter(player, nick(5))})" : "")}{(uc()[7].Split('/').Contains("커스텀 인포") ? $"\n커스텀 인포: {uc()[6]}({Tools.CustomFormatter(player, nick(6))})" : "")}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔧 커스터마이징", header: header1);
             var text8 = new TextInputSetting(8, uc()[8].Split('/').Count() == 0 ? "보유한 페인트가 없습니다." : $"{(uc()[9] == "0" ? "" : $"장착한 페인트: {uc()[9]}\n<size=15>{Paints[uc()[9]]}</size>\n")}보유한 페인트\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🎨 페인트", header: header1);
-            var text9 = new TextInputSetting(10, uc()[10].Split('/').Count() == 0 ? "보유한 칭호가 없습니다." : $"{(uc()[11] == "0" ? "" : $"장착한 칭호: {uc()[11]}\n<size=15>{Badges[uc()[11]]}</size>\n")}보유한 칭호\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔖 칭호", header: header1);
+            var text9 = new TextInputSetting(10, uc()[10].Split('/').Count() == 0 ? "보유한 칭호가 없습니다." : $"{(uc()[11] == "0" ? "" : $"장착한 칭호: {uc()[11]}\n<size=15>{Badges[uc()[11]]}</size>\n")}보유한 칭호\n{string.Join("\n", uc()[10].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔖 칭호", header: header1);
             TextInputSetting text10 = null;
             if (player.HasReservedSlot)
             {
