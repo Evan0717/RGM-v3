@@ -6,6 +6,7 @@ using RGM.API.Features;
 using RGM.API.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Runtime;
@@ -111,13 +112,16 @@ namespace RGM.UserSettings
 $"""
 • <b><color=#F6CECE>랜</color><color=#F6D8CE>덤</color><color=#F6E3CE>게</color><color=#F5ECCE>임</color><color=#F5F6CE>모</color><color=#ECF6CE>드</color></b>는 매 라운드마다 랜덤한 모드와 함께 라운드가 시작되는 한국 서버입니다.
 • 콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.
-• <b>🏪 상점</b>에서 다양한 아이템을 구매해보세요!
 
 <size=25><align=center><color=#81BEF7><link=https://discord.gg/NWSrVqmKsq>| <b>디스코드 (클릭)</b> |</link></color></align></size>
 
 <size=25><align=center><color=#D0A9F5><link=https://www.randomsl.xyz/rule>| <b>규정 (클릭)</b> |</link></color></align></size>
 
 <size=25><align=center><color=#FA5858><link=https://www.youtube.com/@RandomGameMode>| <b>공식 유튜브 채널 (클릭)</b> |</link></color></align></size>
+
+<size=25><align=center><color=#F7FE2E><link=https://discord.com/channels/930837847026585600/1224668947459084439/1295030194171547779>| <b>상점 (클릭)</b> |</link></color></align></size>
+
+<size=25><align=center><color=#58FAD0><link=https://discord.com/channels/930837847026585600/1295036812791906368/1295040425215791194>| <b>명령어 가이드 (클릭)</b> |</link></color></align></size>
 """, header: header1);
 
             var settingBases = new List<SettingBase> { text1 };
@@ -137,187 +141,28 @@ $"""
             var text2 = new TextInputSetting(2, $"⭐ EXP: {uc()[0]}", header: header1);
             var text3 = new TextInputSetting(3, $"💫 RP: {uc()[1]}", header: header1);
             var text4 = new TextInputSetting(4, $"💎 Cash: {uc()[2]}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://discord.gg/h4AKgks7VMV>ㅤ🏪 Cash 충전하기ㅤㅤ</link></mark></align>", header: header1);
-            var text5 = new TextInputSetting(5, uc()[13] == "0" ? $"디스코드에서 아래에 명시된 명령어를 사용하세요.\n'/rgm 연동 <Steam ID> <연동 코드>' (연동 코드: {uc()[14]})" : $"📎 연동된 Discord ID: {uc()[13]}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"클릭하여 Discord 연동 코드를 확인하세요.", header: header1);
-            /*
-            DropdownSetting dropdown1 = null;
-            if (uc()[3] != "0")
+            var text5 = new TextInputSetting(5, uc()[13] == "0" ? $"디스코드에서 아래에 명시된 명령어를 사용하세요.\n'/rgm 연동 <Steam ID> <연동 코드>' (연동 코드: {uc()[14]})" : $"📎 연동된 Discord ID: {uc()[13]}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: uc()[13] == "0" ? $"클릭하여 Discord 연동 코드를 확인하세요." : "✅ Discord와 Steam이 연동된 상태입니다.", header: header1);
+            var text6 = new TextInputSetting(6, uc()[3].Split('/').Count() == 0 ? "보유한 킬이펙트가 없습니다." : $"{(uc()[4] == "0" ? "" : $"장착한 킬이펙트: {uc()[4]}\n<size=15>{KillEffects[uc()[4]]}</size>\n")}보유한 킬이펙트\n{string.Join("\n", uc()[3].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"💀 킬이펙트", header: header1);
+            string nick(int num)
             {
-                dropdown1 = new DropdownSetting(5, "💀 킬이펙트", uc()[3].Split('/').Append("-"));
-                dropdown1.Header = header1;
-                dropdown1.OnChanged = (p, sb) =>
-                {
-                    try
-                    {
-                        string value = GetValue(sb.Base.DebugValue);
+                string n = uc()[num];
 
-                        if (value == "-")
-                            value = "0";
+                if (n == "0")
+                    n = "";
 
-                        uc()[4] = value;
-                        UsersManager.UsersCache[player.UserId] = uc();
-                        UsersManager.SaveUsers();
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                        player.SendConsoleMessage(e.ToString(), "red");
-                    }
-                };
-                dropdown1.DefaultOption = uc()[4] == "0" ? "-" : uc()[4];
+                return n;
             }
-            UserTextInputSetting text5 = null;
-            if (uc()[7].Split('/').Contains("커스텀 닉네임"))
-            {
-                string nick()
-                {
-                    string n = uc()[5];
-
-                    if (n == "0")
-                        n = "";
-
-                    return n;
-                }
-
-                text5 = new UserTextInputSetting(6, $"📘 커스텀 닉네임 [{Tools.CustomFormatter(player, nick())}]", nick());
-                text5.Header = header1;
-                text5.OnChanged = (p, sb) =>
-                {
-                    try
-                    {
-                        string value = GetValue(sb.Base.DebugValue);
-
-                        if (value == "")
-                            value = "0";
-
-                        uc()[5] = value;
-                        UsersManager.UsersCache[player.UserId] = uc();
-                        UsersManager.SaveUsers();
-
-                        text5.Label = $"📘 커스텀 닉네임 [{Tools.CustomFormatter(player, nick())}]";
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                        player.SendConsoleMessage(e.ToString(), "red");
-                    }
-                };
-            }
-            UserTextInputSetting text6 = null;
-            if (uc()[7].Split('/').Contains("커스텀 인포"))
-            {
-                string info()
-                {
-                    string n = uc()[6];
-
-                    if (n == "0")
-                        n = "";
-
-                    return n;
-                }
-
-                text6 = new UserTextInputSetting(7, $"📙 커스텀 인포 [{Tools.CustomFormatter(player, info())}]", info());
-                text6.Header = header1;
-                text6.OnChanged = (p, sb) =>
-                {
-                    try
-                    {
-                        string value = GetValue(sb.Base.DebugValue);
-
-                        if (value == "")
-                            value = "0";
-
-                        uc()[6] = value;
-                        UsersManager.UsersCache[player.UserId] = uc();
-                        UsersManager.SaveUsers();
-
-                        text6.Label = $"📙 커스텀 인포 [{Tools.CustomFormatter(player, info())}]";
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                        player.SendConsoleMessage(e.ToString(), "red");
-                    }
-                };
-            }
-            DropdownSetting dropdown2 = null;
-            if (uc()[8] != "0")
-            {
-                dropdown2 = new DropdownSetting(8, "🎨 페인트", uc()[8].Split('/').Append("-"));
-                dropdown2.Header = header1;
-                dropdown2.OnChanged = (p, sb) =>
-                {
-                    try
-                    {
-
-                        string value = GetValue(sb.Base.DebugValue);
-
-                        if (value == "-")
-                            value = "0";
-
-                        uc()[9] = value;
-                        UsersManager.UsersCache[player.UserId] = uc();
-                        UsersManager.SaveUsers();
-
-                        try { Tools.RemovePaint(player); } catch { }
-
-                        try
-                        {
-                            if (value != "0")
-                                Tools.ChangePaint(player, uc()[9]);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                        player.SendConsoleMessage(e.ToString(), "red");
-                    }
-                };
-                dropdown2.DefaultOption = uc()[9] == "0" ? "-" : uc()[9];
-            }
-            DropdownSetting dropdown3 = null;
-            if (uc()[10] != "0")
-            {
-                dropdown3 = new DropdownSetting(9, "🔖 칭호", uc()[10].Split('/').Append("-"));
-                dropdown3.Header = header1;
-                dropdown3.OnChanged = (p, sb) =>
-                {
-                    try
-                    {
-                        string value = GetValue(sb.Base.DebugValue);
-
-                        if (value == "-")
-                            value = "0";
-
-                        uc()[11] = value;
-                        UsersManager.UsersCache[player.UserId] = uc();
-                        UsersManager.SaveUsers();
-
-                        if (value != "0")
-                            player.RankName = $"{(BadgeIcons.ContainsKey(uc()[11]) ? $"{BadgeIcons[uc()[11]]} " : "")}{uc()[11]}";
-
-                        else
-                            player.RankName = null;
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                        player.SendConsoleMessage(e.ToString(), "red");
-                    }
-                };
-                dropdown3.DefaultOption = uc()[11] == "0" ? "-" : uc()[11];
-            }
-            */
-            TextInputSetting text7 = null;
+            var text7 = new TextInputSetting(7, uc()[7].Split('/').Count() == 0 ? "보유한 커스터마이징이 없습니다." : $"{(uc()[7].Split('/').Contains("커스텀 닉네임") ? $"커스텀 닉네임: {uc()[5]}({Tools.CustomFormatter(player, nick(5))})" : "")}{(uc()[7].Split('/').Contains("커스텀 인포") ? $"\n커스텀 인포: {uc()[6]}({Tools.CustomFormatter(player, nick(6))})" : "")}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔧 커스터마이징", header: header1);
+            var text8 = new TextInputSetting(8, uc()[8].Split('/').Count() == 0 ? "보유한 페인트가 없습니다." : $"{(uc()[9] == "0" ? "" : $"장착한 페인트: {uc()[9]}\n<size=15>{Paints[uc()[9]]}</size>\n")}보유한 페인트\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🎨 페인트", header: header1);
+            var text9 = new TextInputSetting(10, uc()[10].Split('/').Count() == 0 ? "보유한 칭호가 없습니다." : $"{(uc()[11] == "0" ? "" : $"장착한 칭호: {uc()[11]}\n<size=15>{Badges[uc()[11]]}</size>\n")}보유한 칭호\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔖 칭호", header: header1);
+            TextInputSetting text10 = null;
             if (player.HasReservedSlot)
             {
-                text7 = new TextInputSetting(10, $"<b>✨ 풀방 접속권 보유 중 ✨</b>");
-                text7.Header = header1;
+                text10 = new TextInputSetting(10, $"<b>✨ 풀방 접속권 보유 중 ✨</b>");
+                text10.Header = header1;
             }
 
-            var settingBases = new List<SettingBase> { text1, text2, text3, text4, text5, /*dropdown1, text5, text6, dropdown2, dropdown3,*/ text7 };
+            var settingBases = new List<SettingBase> { text1, text2, text3, text4, text5, text6, text7, text8, text9, text10 };
 
             return Save(player, header1, settingBases, (p) => { UserSetting(p); });
         }
