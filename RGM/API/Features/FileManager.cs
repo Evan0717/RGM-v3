@@ -50,6 +50,8 @@ namespace RGM.API.Features
         보유한 칭호 - 10
         장착한 칭호 - 11
         닉네임 - 12
+        연동된 디스코드 ID - 13
+        연동 코드 - 14
         */
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.txt");
@@ -78,10 +80,10 @@ namespace RGM.API.Features
 
                 FileManager.WriteFile(UsersFileName, text);
 
-                //foreach (var player in Player.List.Where(x => !x.IsHost))
-                //{
-                //    ServerSpecificSettings.Refresh(player);
-                //}
+                foreach (var player in Player.List.Where(x => !x.IsHost))
+                {
+                    ServerSpecificSettings.Refresh(player);
+                }
             }
         }
 

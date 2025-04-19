@@ -740,5 +740,13 @@ $"""
                 player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
             }
         }
+
+        public static string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            System.Random random = new System.Random();
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
     }
 }

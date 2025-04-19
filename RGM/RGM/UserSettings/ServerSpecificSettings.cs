@@ -35,10 +35,9 @@ namespace RGM.UserSettings
         public static void RegisterCommonSettings(Player player)
         {
             RGMSetting(player);
-            if (Server.Port == 7803)
-                UserSetting(player);
+            UserSetting(player);
             ModeSetting(player);
-            EtcSetting(player);
+            // EtcSetting(player);
 
             Refresh(player);
         }
@@ -134,10 +133,12 @@ $"""
             }
 
             var header1 = new HeaderSetting("<b>ⓘ 유저</b>");
-            var text1 = new TextInputSetting(1, $"👤 유저 ID: {player.UserId}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://steamcommunity.com/profiles/{player.RawUserId}>ㅤ자신의 스팀 프로필 보기ㅤㅤ</link></mark></align>", header: header1);
+            var text1 = new TextInputSetting(1, $"👤 Steam ID: {player.UserId}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://steamcommunity.com/profiles/{player.RawUserId}>ㅤ자신의 스팀 프로필 보기ㅤㅤ</link></mark></align>", header: header1);
             var text2 = new TextInputSetting(2, $"⭐ EXP: {uc()[0]}", header: header1);
             var text3 = new TextInputSetting(3, $"💫 RP: {uc()[1]}", header: header1);
             var text4 = new TextInputSetting(4, $"💎 Cash: {uc()[2]}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://discord.gg/h4AKgks7VMV>ㅤ🏪 Cash 충전하기ㅤㅤ</link></mark></align>", header: header1);
+            var text5 = new TextInputSetting(5, uc()[13] == "0" ? $"디스코드에서 아래에 명시된 명령어를 사용하세요.\n'/rgm 연동 <Steam ID> <연동 코드>' (연동 코드: {uc()[14]})" : $"📎 연동된 Discord ID: {uc()[13]}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"클릭하여 Discord 연동 코드를 확인하세요.", header: header1);
+            /*
             DropdownSetting dropdown1 = null;
             if (uc()[3] != "0")
             {
@@ -145,14 +146,22 @@ $"""
                 dropdown1.Header = header1;
                 dropdown1.OnChanged = (p, sb) =>
                 {
-                    string value = GetValue(sb.Base.DebugValue);
+                    try
+                    {
+                        string value = GetValue(sb.Base.DebugValue);
 
-                    if (value == "-")
-                        value = "0";
+                        if (value == "-")
+                            value = "0";
 
-                    uc()[4] = value;
-                    UsersManager.UsersCache[player.UserId] = uc();
-                    UsersManager.SaveUsers();
+                        uc()[4] = value;
+                        UsersManager.UsersCache[player.UserId] = uc();
+                        UsersManager.SaveUsers();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                        player.SendConsoleMessage(e.ToString(), "red");
+                    }
                 };
                 dropdown1.DefaultOption = uc()[4] == "0" ? "-" : uc()[4];
             }
@@ -173,16 +182,24 @@ $"""
                 text5.Header = header1;
                 text5.OnChanged = (p, sb) =>
                 {
-                    string value = GetValue(sb.Base.DebugValue);
+                    try
+                    {
+                        string value = GetValue(sb.Base.DebugValue);
 
-                    if (value == "")
-                        value = "0";
+                        if (value == "")
+                            value = "0";
 
-                    uc()[5] = value;
-                    UsersManager.UsersCache[player.UserId] = uc();
-                    UsersManager.SaveUsers();
+                        uc()[5] = value;
+                        UsersManager.UsersCache[player.UserId] = uc();
+                        UsersManager.SaveUsers();
 
-                    text5.Label = $"📘 커스텀 닉네임 [{Tools.CustomFormatter(player, nick())}]";
+                        text5.Label = $"📘 커스텀 닉네임 [{Tools.CustomFormatter(player, nick())}]";
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                        player.SendConsoleMessage(e.ToString(), "red");
+                    }
                 };
             }
             UserTextInputSetting text6 = null;
@@ -202,16 +219,24 @@ $"""
                 text6.Header = header1;
                 text6.OnChanged = (p, sb) =>
                 {
-                    string value = GetValue(sb.Base.DebugValue);
+                    try
+                    {
+                        string value = GetValue(sb.Base.DebugValue);
 
-                    if (value == "")
-                        value = "0";
+                        if (value == "")
+                            value = "0";
 
-                    uc()[6] = value;
-                    UsersManager.UsersCache[player.UserId] = uc();
-                    UsersManager.SaveUsers();
+                        uc()[6] = value;
+                        UsersManager.UsersCache[player.UserId] = uc();
+                        UsersManager.SaveUsers();
 
-                    text6.Label = $"📙 커스텀 인포 [{Tools.CustomFormatter(player, info())}]";
+                        text6.Label = $"📙 커스텀 인포 [{Tools.CustomFormatter(player, info())}]";
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                        player.SendConsoleMessage(e.ToString(), "red");
+                    }
                 };
             }
             DropdownSetting dropdown2 = null;
@@ -221,24 +246,33 @@ $"""
                 dropdown2.Header = header1;
                 dropdown2.OnChanged = (p, sb) =>
                 {
-                    string value = GetValue(sb.Base.DebugValue);
-
-                    if (value == "-")
-                        value = "0";
-
-                    uc()[9] = value;
-                    UsersManager.UsersCache[player.UserId] = uc();
-                    UsersManager.SaveUsers();
-
-                    try { Tools.RemovePaint(player); } catch { }
-
                     try
                     {
-                        if (value != "0")
-                            Tools.ChangePaint(player, uc()[9]);
+
+                        string value = GetValue(sb.Base.DebugValue);
+
+                        if (value == "-")
+                            value = "0";
+
+                        uc()[9] = value;
+                        UsersManager.UsersCache[player.UserId] = uc();
+                        UsersManager.SaveUsers();
+
+                        try { Tools.RemovePaint(player); } catch { }
+
+                        try
+                        {
+                            if (value != "0")
+                                Tools.ChangePaint(player, uc()[9]);
+                        }
+                        catch
+                        {
+                        }
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        Log.Error(e);
+                        player.SendConsoleMessage(e.ToString(), "red");
                     }
                 };
                 dropdown2.DefaultOption = uc()[9] == "0" ? "-" : uc()[9];
@@ -250,23 +284,32 @@ $"""
                 dropdown3.Header = header1;
                 dropdown3.OnChanged = (p, sb) =>
                 {
-                    string value = GetValue(sb.Base.DebugValue);
+                    try
+                    {
+                        string value = GetValue(sb.Base.DebugValue);
 
-                    if (value == "-")
-                        value = "0";
+                        if (value == "-")
+                            value = "0";
 
-                    uc()[11] = value;
-                    UsersManager.UsersCache[player.UserId] = uc();
-                    UsersManager.SaveUsers();
+                        uc()[11] = value;
+                        UsersManager.UsersCache[player.UserId] = uc();
+                        UsersManager.SaveUsers();
 
-                    if (value != "0")
-                        player.RankName = $"{(BadgeIcons.ContainsKey(uc()[11]) ? $"{BadgeIcons[uc()[11]]} " : "")}{uc()[11]}";
+                        if (value != "0")
+                            player.RankName = $"{(BadgeIcons.ContainsKey(uc()[11]) ? $"{BadgeIcons[uc()[11]]} " : "")}{uc()[11]}";
 
-                    else
-                        player.RankName = null;
+                        else
+                            player.RankName = null;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                        player.SendConsoleMessage(e.ToString(), "red");
+                    }
                 };
                 dropdown3.DefaultOption = uc()[11] == "0" ? "-" : uc()[11];
             }
+            */
             TextInputSetting text7 = null;
             if (player.HasReservedSlot)
             {
@@ -274,7 +317,7 @@ $"""
                 text7.Header = header1;
             }
 
-            var settingBases = new List<SettingBase> { text1, text2, text3, text4, dropdown1, text5, text6, dropdown2, dropdown3, text7 };
+            var settingBases = new List<SettingBase> { text1, text2, text3, text4, text5, /*dropdown1, text5, text6, dropdown2, dropdown3,*/ text7 };
 
             return Save(player, header1, settingBases, (p) => { UserSetting(p); });
         }
@@ -310,7 +353,15 @@ $"""
             var button1 = new ButtonSetting(200, "🔄 새로고침", "모든 정보를 새로고침합니다.", 1, header: header1);
             button1.OnChanged = (p, sb) =>
             {
-                Refresh(player);
+                try
+                {
+                    Refresh(player);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                    player.SendConsoleMessage(e.ToString(), "red");
+                }
             };
 
             var settingBases = new List<SettingBase> { button1 };

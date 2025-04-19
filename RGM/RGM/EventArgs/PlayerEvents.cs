@@ -62,7 +62,7 @@ namespace RGM.EventArgs
                 Log.Error(e);
             }
 
-            List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
+            List<string> DefaultValues = Enumerable.Repeat("0", 20).ToList();
 
             if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
             {
@@ -77,6 +77,7 @@ namespace RGM.EventArgs
                 try
                 {
                     UsersManager.UsersCache[ev.Player.UserId][12] = ev.Player.DisplayNickname;
+                    UsersManager.UsersCache[ev.Player.UserId][14] = $"{Tools.GenerateRandomString(6)}";
                     UsersManager.SaveUsers();
 
                     ev.Player.Group = null;
