@@ -283,7 +283,6 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\TerroristRemains.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CataclysmGenerator.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlameThrower.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlashLight.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\KillStreak.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\LegendTransition.cs" />
@@ -294,14 +293,15 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\Scream.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\SnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\SpeedWagon.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\WarGod.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\BombGun.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\DimensionThief.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\EyeMan.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\FlameThrower.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Joker.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Noclip.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\RocketLauncher.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Spirit.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\WarGod.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\DopamineReleased.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\ExpiredInsurance.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\EpicTransitionSuccess.cs" />

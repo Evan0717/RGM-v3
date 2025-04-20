@@ -6,9 +6,9 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Mythic;
+namespace RGM.Modes.Abilities.Legend;
 
-[Ability("광전사", "공격에 성공했을 때 누적된 차징이 초기화되는 제일버드를 받고, 폭발 데미지에 면역이 됩니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_WARGOD)]
+[Ability("광전사", "공격에 성공했을 때 누적된 차징이 초기화되는 제일버드를 받고, 폭발 데미지에 면역이 됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_WARGOD)]
 public class WarGod : Ability
 {
     ushort LightWarriorSerial = 0;

@@ -13,9 +13,9 @@ using MEC;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Legend;
+namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("화염 방사기", "위력은 33%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
+[Ability("화염 방사기", "위력은 33%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_FLAMETHROWER)]
 public class FlameThrower : Ability
 {
     ushort FlamethrowerSerial = 0;
