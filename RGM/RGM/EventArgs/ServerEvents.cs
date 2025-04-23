@@ -148,7 +148,7 @@ namespace RGM.EventArgs
                             Timing.CallDelayed(1f, () =>
                             {
                                 foreach (var p in Player.List)
-                                    p.AddBroadcast(10, $"<size=25><b>롤토체스 당첨자({player.Nickname})</b>에 의해 모드가 {CurrentMode.GetModeData().Name}(으)로 선택되었습니다.</size>");
+                                    p.AddBroadcast(10, $"<size=25><b>롤토체스 당첨자({player.DisplayNickname})</b>에 의해 모드가 {CurrentMode.GetModeData().Name}(으)로 선택되었습니다.</size>");
                             });
                         }
                     }

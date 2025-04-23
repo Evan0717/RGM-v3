@@ -224,7 +224,7 @@ namespace RGM.Modes
 
             foreach (var playerDamage in topDamages)
             {
-                string playerName = playerDamage.Key.Nickname;
+                string playerName = playerDamage.Key.DisplayNickname;
                 float damage = playerDamage.Value;
                 string damageInfo = $"{playerName} - {damage}";
                 damageList.Add(damageInfo);
