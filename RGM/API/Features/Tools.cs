@@ -168,7 +168,7 @@ $"""
 
 <size=15>SteamID: {player.UserId}</size>
 <size=15>Exp: {uc[0]}</size>
-<size=15>RP: {uc[1]}</size>
+<size=15>랜덤코인: {uc[1]}</size>
 <size=15><i>Cash</i>: ₩{int.Parse(uc[2]).ToString("N0")}</size>
 
 <size=15>보유한 킬 이펙트: {GetJoinedInfo(3)}</size>
@@ -262,7 +262,7 @@ $"""
                 while (true)
                 {
                     foreach (var player in Player.List)
-                        player.AddBroadcast(1, $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, RP를 획득하였습니다.</size>");
+                        player.AddBroadcast(1, $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다.</size>");
 
                     yield return Timing.WaitForSeconds(1);
                 }

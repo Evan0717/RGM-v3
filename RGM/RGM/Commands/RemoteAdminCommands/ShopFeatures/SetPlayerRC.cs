@@ -15,12 +15,12 @@ using UnityEngine;
 namespace RGM.Commands.RemoteAdminCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class SetPlayerPR : ICommand
+    public class SetPlayerRC : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             string player = Tools.TryGetUserId(arguments.At(0));
-            bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int rp);
+            bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int rc);
             List<string> uc = UsersManager.UsersCache.ContainsKey(player) ? UsersManager.UsersCache[player] : new List<string>();
 
             if (uc.Count == 0)
@@ -39,16 +39,16 @@ namespace RGM.Commands.RemoteAdminCommands
 
             if (result)
             {
-                if (rp < 0)
+                if (rc < 0)
                 {
                     response = "0 upper.";
                     return false;
                 }
                 else
                 {
-                    uc[1] = rp.ToString();
+                    uc[1] = rc.ToString();
                     UsersManager.UsersCache[player] = uc;
-                    response = "successfully set up RP.";
+                    response = "successfully set up Random Coin.";
 
                     UsersManager.SaveUsers();
                     return true;
@@ -61,11 +61,11 @@ namespace RGM.Commands.RemoteAdminCommands
             }
         }
 
-        public string Command { get; } = "rp";
+        public string Command { get; } = "rc";
 
         public string[] Aliases { get; } = { "알피" };
 
-        public string Description { get; } = "특정 유저의 RP를 정합니다.";
+        public string Description { get; } = "특정 유저의 랜덤코인을 정합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

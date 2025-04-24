@@ -39,7 +39,7 @@ namespace RGM.API.Features
     {
         /*
         Exp - 0
-        RP - 1
+        랜덤코인 - 1
         Cash - 2
         보유한 킬 이펙트 - 3
         장착한 킬 이펙트 - 4

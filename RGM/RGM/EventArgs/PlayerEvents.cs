@@ -356,7 +356,7 @@ namespace RGM.EventArgs
                                     .Replace("{ModeColor}", $"{Color}").Replace("{ModeDescription}", $"{Description}")
                                     .Replace("{Lines}", $"{(Description.Contains("\n") ? "\n" : "\n\n")}")
                                     .Replace("{Exp}", $"{uc[0]}")
-                                    .Replace("{RP}", $"{uc[1]}")
+                                    .Replace("{RC}", $"{uc[1]}")
                                     .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
                                     .Replace("{Tip}", Tip)
                                     .Replace("{Version}", $"{RGM.Instance.Version}")

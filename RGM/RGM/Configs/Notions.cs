@@ -29,7 +29,7 @@ namespace RGM
 <align=right><size=20><b><i><color=#FF8585>왠</color><color=#FE9C9C>지</color> <color=#FECACA>모</color><color=#FEE1E1>를</color> <color=#C9CFF0>그</color><color=#AEC6F7>리</color><color=#94BDFF>움</color></i></b></size></align>
 <align=left>
 Exp: {Exp}
-RP: {RP}
+랜덤코인: {RC}
 <b>Cash: ₩{Cash}</b>
 
 {FirstMark} [1] {First} | {FirstVote}

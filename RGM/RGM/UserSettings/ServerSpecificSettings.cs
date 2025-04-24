@@ -139,7 +139,7 @@ $"""
             var header1 = new HeaderSetting("<b>ⓘ 유저</b>");
             var text1 = new TextInputSetting(1, $"👤 Steam ID: {player.UserId}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://steamcommunity.com/profiles/{player.RawUserId}>ㅤ자신의 스팀 프로필 보기ㅤㅤ</link></mark></align>", header: header1);
             var text2 = new TextInputSetting(2, $"⭐ EXP: {uc()[0]}", header: header1);
-            var text3 = new TextInputSetting(3, $"💫 RP: {uc()[1]}", header: header1);
+            var text3 = new TextInputSetting(3, $"💫 랜덤코인: {uc()[1]}", header: header1);
             var text4 = new TextInputSetting(4, $"💎 Cash: {uc()[2]}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://discord.gg/h4AKgks7VMV>ㅤ🏪 Cash 충전하기ㅤㅤ</link></mark></align>", header: header1);
             var text5 = new TextInputSetting(5, uc()[13] == "0" ? $"디스코드에서 아래에 명시된 명령어를 사용하세요.\n'/rgm 연동 <Steam ID> <연동 코드>' (연동 코드: {uc()[14]})" : $"📎 연동된 Discord ID: {uc()[13]}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: uc()[13] == "0" ? $"클릭하여 Discord 연동 코드를 확인하세요." : "✅ Discord와 Steam이 연동된 상태입니다.", header: header1);
             var text6 = new TextInputSetting(6, uc()[3].Split('/').Count() == 0 ? "보유한 킬이펙트가 없습니다." : $"{(uc()[4] == "0" ? "" : $"장착한 킬이펙트: {uc()[4]}\n<size=15>{KillEffects[uc()[4]]}</size>\n")}보유한 킬이펙트\n{string.Join("\n", uc()[3].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"💀 킬이펙트", header: header1);

@@ -36,11 +36,11 @@ namespace RGM.Commands.ClientCommands
 
                     if (product.Check(player, input[1]))
                     {
-                        int rp = int.Parse(UsersManager.UsersCache[player.UserId][1]);
+                        int rc = int.Parse(UsersManager.UsersCache[player.UserId][1]);
 
-                        if (product.Price <= rp)
+                        if (product.Price <= rc)
                         {
-                            UsersManager.UsersCache[player.UserId][1] = $"{rp - product.Price}";
+                            UsersManager.UsersCache[player.UserId][1] = $"{rc - product.Price}";
                             UsersManager.SaveUsers();
 
                             int maxtries = 10;

@@ -25,7 +25,7 @@ namespace RGM.Modes
 """
 10개 이상의 미니게임들이 준비되어 있습니다.
 
-총 3개 라운드로 구성되어 있습니다. (이 모드에서는 EXP, RP 지급 안됨)
+총 3개 라운드로 구성되어 있습니다. (이 모드에서는 EXP, 랜덤코인 지급 안됨)
 """;
         public override string Color => "A4A4A4";
 
