@@ -69,6 +69,8 @@ namespace RGM.Modes
             if (ev.Item.Type == ItemType.GunRevolver)
             {
                 Throwable scp018 = (Throwable)ev.Player.AddItem(ItemType.SCP018);
+                Scp018 scp = (Scp018)scp018;
+                scp.ChangeItemOwner(ev.Player, null);
                 ev.Player.ThrowItem(scp018);
                 ev.Player.RemoveItem(scp018);
 
