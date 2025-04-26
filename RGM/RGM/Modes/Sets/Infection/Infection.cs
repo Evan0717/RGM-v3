@@ -43,6 +43,7 @@ namespace RGM.Modes
 
         public static Infection Instance;
 
+        public List<Player> HostZombies = new();
         public bool IsHumanEnd = false;
 
         public override void OnEnabled()
@@ -67,17 +68,23 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
-            Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+            for (int i = 0; i < Mathf.Min(1, Player.List.Count() / 7); i++)
+            {
+                Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && !HostZombies.Contains(x)).ToList());
 
-            yield return Timing.WaitForSeconds(1);
+                HostZombies.Add(hostZombie);
 
-            hostZombie.Role.Set(RoleTypeId.Scp0492);
+                Timing.CallDelayed(1, () =>
+                {
+                    hostZombie.Role.Set(RoleTypeId.Scp0492);
+                });
+            }
 
             foreach (var player in Player.List)
             {
                 try
                 {
-                    if (player != hostZombie)
+                    if (!HostZombies.Contains(player))
                     {
                         player.Role.Set(RoleTypeId.NtfCaptain, RoleSpawnFlags.AssignInventory);
                         player.AddItem(ItemType.Ammo556x45, 10);
