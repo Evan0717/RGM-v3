@@ -70,7 +70,7 @@ namespace RGM.Modes
             byte Intensity = (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(48, UnityEngine.Random.Range(64, UnityEngine.Random.Range(100, 255)))));
 
             player.EnableEffect(Effect, Intensity);
-            // player.ShowHint($"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.", 99999);
+            player.ShowHint($"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.", 99999);
         }
     }
 }
