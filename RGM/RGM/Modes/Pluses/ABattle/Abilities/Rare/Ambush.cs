@@ -27,7 +27,7 @@ public class Ambush : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || ev.Attacker != Owner)
+        if (ev.Attacker == null || ev.Attacker != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
         if (UnityEngine.Random.Range(1, 11) == 1)
