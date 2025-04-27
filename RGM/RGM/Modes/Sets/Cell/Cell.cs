@@ -22,6 +22,7 @@ namespace RGM.Modes
         public override string Detail =>
 """
 좁은 방에서 <color=#FE2E2E>SCP-018</color>이 던져집니다!
+60초마다 새로운 SCP-018이 스폰됩니다.
 
 최대한 잘 피해 보세요!
 """;
@@ -44,23 +45,26 @@ namespace RGM.Modes
         {
             Server.FriendlyFire = true;
             Tools.LoadMap($"cell");
-            Player BadLucky = Tools.GetRandomValue(Player.List.ToList());
             Player.List.ToList().CopyTo(pl);
 
             foreach (var player in Player.List)
             {
                 player.Role.Set(PlayerRoles.RoleTypeId.Tutorial);
-                player.Position = new Vector3(118.7332f, 1000.379f, -41.59417f);
-
-                if (player == BadLucky)
-                {
-                    Item Item = Item.Create(ItemType.SCP018);
-
-                    Item.CreatePickup(player.Position);
-                }
+                player.Position = GameObject.Find("[SP] Base").transform.position;
             }
 
-            yield break;
+            while (true)
+            {
+                Player badLucky = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+
+                Throwable scp018 = (Throwable)badLucky.AddItem(ItemType.SCP018);
+                Scp018 scp = (Scp018)scp018;
+                scp.ChangeItemOwner(badLucky, null);
+                badLucky.ThrowItem(scp018);
+                badLucky.RemoveItem(scp018);
+
+                yield return Timing.WaitForSeconds(60);
+            }
         }
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
