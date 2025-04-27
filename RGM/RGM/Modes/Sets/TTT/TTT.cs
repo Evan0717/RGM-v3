@@ -316,7 +316,6 @@ Trouble in Terrorist Town의 약자.
 
         public void OnDied(DiedEventArgs ev)
         {
-            if (Round.IsEnded)
             if (Round.IsEnded || !IsStarted)
                 return;
 
