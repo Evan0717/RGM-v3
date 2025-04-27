@@ -16,6 +16,7 @@ using Mirror;
 using Respawning;
 
 using static RGM.Variables.ServerManagers;
+using Exiled.API.Features.Doors;
 
 namespace RGM.Modes
 {
@@ -70,10 +71,15 @@ namespace RGM.Modes
 
             Player.List.Where(x => !x.IsNPC).CopyTo(pl);
 
+            foreach (var door in Door.List)
+            {
+                door.Lock(DoorLockType.Warhead);
+            }
+
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {
                 player.Role.Set(RoleTypeId.ClassD);
-                player.Position = new Vector3(83.91287f, 1014.692f, -37.13322f);
+                player.Position = GameObject.Find("[SP] Base").transform.position;
                 player.AddItem(ItemType.GunCrossvec);
             }
 
