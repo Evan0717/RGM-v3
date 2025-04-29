@@ -253,7 +253,8 @@ namespace RGM.Modes
 
         public void OnChargingJailbird(Exiled.Events.EventArgs.Item.ChargingJailbirdEventArgs ev)
         {
-            ev.Item.As<Exiled.API.Features.Items.Jailbird>().TotalCharges = 0;
+            ev.Jailbird.TotalCharges = 0;
+            ev.Jailbird.TotalDamageDealt = 0;
         }
     }
 }

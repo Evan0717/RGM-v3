@@ -50,7 +50,10 @@ public class WarGod : Ability
                 if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
                 {
                     if (ev.Attacker.CurrentItem is Jailbird jailbird)
+                    {
                         jailbird.TotalCharges = 0;
+                        jailbird.TotalDamageDealt = 0;
+                    } 
 
                     var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Attacker);
                     g.FuseTime = 0.1f;
