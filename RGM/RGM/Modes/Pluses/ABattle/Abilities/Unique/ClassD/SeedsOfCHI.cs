@@ -13,12 +13,12 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.ClassD;
 
-[Ability("반란의 씨앗", "카오스 티켓을 전체 인원 수의 20% 만큼 추가합니다.", AbilityCategory.ClassD, AbilityType.CLASSD_SEEDSOFCHI)]
+[Ability("반란의 씨앗", "CHI 스폰 영향력을 12 추가합니다.", AbilityCategory.ClassD, AbilityType.CLASSD_SEEDSOFCHI)]
 public class SeedsOfCHI : Ability
 {
     public override void OnEnabled()
     {
-        Respawn.GrantTokens(Faction.FoundationEnemy, (int)(Player.List.Count() * 0.2));
+        Respawn.GrantInfluence(Faction.FoundationEnemy, 12);
     }
 
     public override void OnDisabled()
