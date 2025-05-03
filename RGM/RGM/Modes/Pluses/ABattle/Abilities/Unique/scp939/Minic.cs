@@ -21,11 +21,21 @@ public class Minic : Ability
 {
     public override void OnEnabled()
     {
-        if (Owner.Role is Scp939Role Scp939)
-            Scp939.MimicryCooldown = 0;
+        Exiled.Events.Handlers.Scp939.PlayingSound += OnPlayingSound;
     }
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Scp939.PlayingSound -= OnPlayingSound;
+    }
+
+    public IEnumerator<float> OnPlayingSound(Exiled.Events.EventArgs.Scp939.PlayingSoundEventArgs ev)
+    {
+        if (Owner != ev.Player)
+            yield break;
+
+        yield return Timing.WaitForOneFrame;
+
+        ev.Scp939.MimicryCooldown = 0;
     }
 }

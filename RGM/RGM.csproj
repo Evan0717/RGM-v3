@@ -285,6 +285,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CataclysmGenerator.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlashLight.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\KillStreak.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\LavaChicken.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\LegendTransition.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\Magician.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\Psychics.cs" />
@@ -370,6 +371,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\DuplicateFate.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\FourMajorExercises.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Glory.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Gman.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Loser.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\RandomCollection.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\SuicideSquad.cs" />

@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.Usables.Scp330;
+using MapEditorReborn.API.Features.Objects;
+using MapEditorReborn.API.Features.Serializable;
+using MapEditorReborn.API.Features;
+using MEC;
+using RGM.API.Features;
+using UnityEngine;
+using RGM.API.DataBases;
+using Exiled.API.Features.DamageHandlers;
+
+namespace RGM.Modes.Abilities.Synergy;
+
+[RequiresAbility(AbilityType.LEGEND_SCREAM, AbilityType.MYTHIC_EYEMAN)]
+[Ability("G맨", "<괴성, 눈빛맨> G맨 토일렛을 연상캐 하는 조합입니다.", AbilityCategory.Synergy, AbilityType.SYNERGY_GMAN)]
+public class Gman : Ability
+{
+    public override void OnEnabled()
+    {
+    }
+
+    public override void OnDisabled()
+    {
+    }
+}

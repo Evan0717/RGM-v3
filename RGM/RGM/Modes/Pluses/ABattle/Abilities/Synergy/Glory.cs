@@ -12,6 +12,7 @@ using MapEditorReborn.API.Features;
 using MEC;
 using RGM.API.Features;
 using UnityEngine;
+using Mirror;
 
 namespace RGM.Modes.Abilities.Synergy;
 
@@ -36,7 +37,7 @@ public class Glory : Ability
         LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 100, 20, true);
         LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, Vector3.zero);
 
-        while (true)
+        while (Owner.IsAlive)
         {
             foreach (var player in Player.List)
             {
@@ -54,5 +55,8 @@ public class Glory : Ability
 
             yield return Timing.WaitForOneFrame;
         }
+
+        NetworkServer.Destroy(Light.gameObject);
+        Light.Destroy();
     }
 }
