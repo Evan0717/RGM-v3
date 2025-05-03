@@ -4,6 +4,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using MultiBroadcast.API;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ public class SuspiciousStew : Ability
 
         Owner.EnableEffect(Effect, Intensity);
         Owner.ShowHint($"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.", 5);
+        Owner.AddBroadcast(5, $"<size=20><color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.</size>");
         Timing.CallDelayed(1, () =>
         {
             Owner.RemoveAbility(this);
