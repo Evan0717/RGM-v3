@@ -13,12 +13,12 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scientist;
 
-[Ability("구미호의 씨앗", "NTF 티켓을 진체 인원 수의 20% 만큼 추가합니다.", AbilityCategory.Scientist, AbilityType.SCIENTIST_SEEDSOFMTF)]
+[Ability("구미호의 씨앗", "NTF 스폰 영향력을 12 추가합니다.", AbilityCategory.Scientist, AbilityType.SCIENTIST_SEEDSOFMTF)]
 public class SeedsOfMTF : Ability
 {
     public override void OnEnabled()
     {
-        Respawn.GrantTokens(Faction.FoundationStaff, (int)(Player.List.Count() * 0.2));
+        Respawn.GrantInfluence(Faction.FoundationStaff, 12);
     }
 
     public override void OnDisabled()
