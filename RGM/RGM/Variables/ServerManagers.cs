@@ -112,7 +112,8 @@ namespace RGM.Variables
             {"무능한 구미호", "너무 무능하다고 하지 마세요. 그래도 총은 있잖.. 어?"},
             {"난동꾼 반란", "\"시설에 난입하여 그들만의 이익을 취합니다.\""},
             {"동네북 뱀의 손", "너는 누구 팀이야? SCP? 인간?"},
-            {"Adios! 2024", "2024년의 마지막을 기념하며"}
+            {"Adios! 2024", "2024년의 마지막을 기념하며"},
+            {"Nostalgic Story", "2025년의 추억의 이야기"}
         };
         public static Dictionary<string, string> BadgeIcons = new Dictionary<string, string>()
         {
@@ -200,7 +201,7 @@ namespace RGM.Variables
             new Product()
             {
                 Name = "휴대용 라디오",
-                Description = ".구매 휴대용 라디오/0ㅣ이 서버에 등록된 소리 파일 중 하나를 랜덤으로 재생합니다.",
+                Description = ".구매 휴대용 라디오/<노래 이름>ㅣ이 서버에 등록된 소리 파일 중 하나를 랜덤으로 재생합니다.",
                 Price = 5,
                 Check = (player, arg) => { return player.IsAlive; },
                 Script = (player, arg) =>
@@ -213,7 +214,11 @@ namespace RGM.Variables
                         speaker.transform.localPosition = Vector3.zero;
                     });
 
-                    radio.AddClip(AudioClipStorage.AudioClips.GetRandomValue().Key);
+                    if (AudioClipStorage.AudioClips.ContainsKey(arg))
+                        radio.AddClip(AudioClipStorage.AudioClips[arg].Name);
+
+                    else
+                        radio.AddClip(AudioClipStorage.AudioClips.GetRandomValue().Key);
                 }
             },
             new Product()
