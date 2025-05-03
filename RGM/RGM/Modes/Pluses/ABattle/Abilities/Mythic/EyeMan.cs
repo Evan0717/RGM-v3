@@ -8,6 +8,9 @@ using System.Linq;
 using System;
 using UnityEngine;
 using Exiled.API.Enums;
+using MapEditorReborn.API.Features.Objects;
+using MapEditorReborn.API.Features;
+using Mirror;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -28,7 +31,9 @@ public class EyeMan : Ability
 
     public IEnumerator<float> Twinkle()
     {
-        while (true)
+        SchematicObject beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205), null, null, null);
+
+        while (Owner.IsAlive)
         {
             try
             {
@@ -49,10 +54,13 @@ public class EyeMan : Ability
                     {
                         target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                        target.Hurt(target.MaxHealth / 120, "눈빛의 힘에 압도당했습니다.");
+                        target.Hurt(target.MaxHealth / 60, "눈빛의 힘에 압도당했습니다.");
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
                 }
+
+                beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.2f;
+                beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
             }
             catch (Exception e)
             {
@@ -61,5 +69,8 @@ public class EyeMan : Ability
 
             yield return Timing.WaitForOneFrame;
         }
+
+        NetworkServer.Destroy(beam.gameObject);
+        beam.Destroy();
     }
 }

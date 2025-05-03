@@ -328,6 +328,7 @@ public enum AbilityType
     LEGEND_REFLECTOR, // [전설] 반사경
     LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기,
     LEGEND_WARGOD, // [전설] 광전사
+    LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -436,7 +437,8 @@ public enum AbilityType
     SYNERGY_ASSASSIN, // [시너지] 암살자
     SYNERGY_LOSER, // [시너지] 패배자
     SYNERGY_WINNER, // [시너지] 승리자
-    SYNERGY_VAMPIRE, // [시너지] 뱀파이어
+    SYNERGY_VAMPIRE, // [시너지] 뱀파이어,
+    SYNERGY_GMAN, // [시너지] G맨
 }
 
 public static class AbilityTypeExtensions
