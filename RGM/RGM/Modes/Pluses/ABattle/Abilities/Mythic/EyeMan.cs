@@ -32,6 +32,7 @@ public class EyeMan : Ability
     public IEnumerator<float> Twinkle()
     {
         SchematicObject beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205), null, null, null);
+        beam.GetComponentsInChildren<PrimitiveObject>().ToList().ForEach(x => x.Primitive.MovementSmoothing = 0);
 
         while (Owner.IsAlive)
         {
@@ -52,15 +53,19 @@ public class EyeMan : Ability
                 {
                     if (Owner != target && HitboxIdentity.IsEnemy(Owner.ReferenceHub, target.ReferenceHub))
                     {
+                        beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.3f;
+                        beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
                         target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                        target.Hurt(target.MaxHealth / 60, "눈빛의 힘에 압도당했습니다.");
+                        target.CurrentItem = null;
+                        target.Hurt(target.IsScp ? target.MaxHealth / 240 : target.MaxHealth / 60, "눈빛의 힘에 압도당했습니다.");
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
+                    else
+                        beam.Position = new Vector3(1205, 1205, 1205);
                 }
-
-                beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.2f;
-                beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
+                else
+                    beam.Position = new Vector3(1205, 1205, 1205);
             }
             catch (Exception e)
             {

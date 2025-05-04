@@ -13,6 +13,7 @@ using RGM.API.Features;
 using UnityEngine;
 using Mirror;
 using PlayerRoles;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -49,7 +50,7 @@ public class LavaChicken : Ability
                     if (Vector3.Distance(player.Position, Owner.Position) <= 10)
                     {
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
-                        player.Hurt(Owner, player.MaxHealth / 25, DamageType.Unknown, null, "바삭하게 구워졌습니다.");
+                        player.Hurt(Owner, player.IsScp ? player.MaxHealth / 100 : player.MaxHealth / 25, DamageType.Unknown, null, "바삭하게 구워졌습니다.");
                     }
                 }
             }
@@ -57,7 +58,6 @@ public class LavaChicken : Ability
             {
                 Log.Error($"LavaChicken 오류: {e}");
             }
-
             yield return Timing.WaitForSeconds(0.1f);
         }
 
