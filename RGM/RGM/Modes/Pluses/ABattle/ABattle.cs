@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 using DiscordInteraction.Discord;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
@@ -315,13 +316,15 @@ public class ABattle : Mode
 
         if (type.ToString().Contains("LEGEND"))
         {
-            if (GlobalPlayer.ClipsById.Where(x => x.Value.Clip == "abattle_legend").Count() < 1)
-                Tools.PlayGlobalAudio("누군가가 전설 능력을 획득하였습니다", 1.5f);
+            string name = "누군가가 전설 능력을 획득하였습니다";
+            if (GlobalPlayer.ClipsById.Where(x => x.Value.Clip == name).Count() < 1)
+                Tools.PlayGlobalAudio(name, 1.5f);
         }
         else if (type.ToString().Contains("MYTHIC"))
         {
-            if (GlobalPlayer.ClipsById.Where(x => x.Value.Clip == "abattle_mythic").Count() < 1)
-                Tools.PlayGlobalAudio("누군가가 신화 능력을 영접하였습니다", 2.5f);
+            string name = "누군가가 신화 능력을 영접하였습니다";
+            if (GlobalPlayer.ClipsById.Where(x => x.Value.Clip == name).Count() < 1)
+                Tools.PlayGlobalAudio(name, 2.5f);
         }
 
         if (player.HasAbility(AbilityType.LEGEND_REFLECTOR))
