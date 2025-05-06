@@ -1,5 +1,4 @@
 ﻿using Exiled.API.Features.Items;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,8 @@ using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
 using Exiled.API.Extensions;
+using Exiled.Events.EventArgs.Scp079;
+using Exiled.API.Features.Pickups;
 
 namespace RGM.Modes
 {
@@ -37,6 +38,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+
+            Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
             Timing.RunCoroutine(OnModeStarted());
         }
@@ -92,6 +95,11 @@ namespace RGM.Modes
             {
                 ev.IsAllowed = false;
             }
+        }
+
+        public void OnPinging(PingingEventArgs ev)
+        {
+            Pickup.CreateAndSpawn(ItemType.SCP018, ev.Position, new Quaternion(Random.Range(1, 180), Random.Range(1, 180), Random.Range(1, 180), Random.Range(1, 180)), ev.Player);
         }
     }
 }
