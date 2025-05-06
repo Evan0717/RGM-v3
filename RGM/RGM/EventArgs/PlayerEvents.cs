@@ -435,8 +435,6 @@ namespace RGM.EventArgs
 
                                 Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
                                 Webhook.Send($"**✅ 재접속 완료**ㅣ`{nickname}`({role}, {userId})");
-
-                                PlayersInfo.Remove(player.UserId);
                                 yield break;
                             }
                         }
