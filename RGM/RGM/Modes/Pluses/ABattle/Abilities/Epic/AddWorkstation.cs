@@ -22,9 +22,10 @@ public class AddWorkstation : Ability
         ObjectSpawner.SpawnWorkstation(new WorkstationSerializable
         {
             IsInteractable = true,
-            Position = new Vector3(Owner.Position.x, Owner.Position.y - 2, Owner.Position.z),
+            Position = new Vector3(Owner.Position.x, Owner.Position.y - 1.75f, Owner.Position.z),
             Rotation = new Vector3(Owner.Rotation.x, Owner.Rotation.y, Owner.Rotation.z),
             Scale = new Vector3(1, 1, 1),
+            RoomType = RoomType.Surface
         });
     }
 
