@@ -265,6 +265,7 @@ public enum AbilityType
     NORMAL_HEALGUN, // [일반] 치유 사제
     NORMAL_MILK, // [일반] 우유
     NORMAL_RUSH, // [일반] 황소
+    NORMAL_EXCHANGE, // [일반] 교환
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -313,6 +314,7 @@ public enum AbilityType
     EPIC_INFINITYGUN, // [영웅] 훌륭한 대화수단
     EPIC_SCP1344, // [영웅] 투시
     EPIC_PRIEST, // [영웅] 성직자
+    EPIC_ADDWORKSTATION, // [영웅] 업무 증가
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건

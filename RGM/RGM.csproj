@@ -264,6 +264,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\NoAFK.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\TestFailure.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedPingHook.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\AddWorkstation.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Blink.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Disguise.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Diver.cs" />
@@ -340,6 +341,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Test.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Torch.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Training.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Exchange.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Workout.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\AdhesivePlaster.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Alchemy.cs" />
