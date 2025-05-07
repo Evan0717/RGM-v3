@@ -293,6 +293,7 @@ public enum AbilityType
     RARE_TRANSITION, // [희귀] 하급 변이
     RARE_UPGRADE, // [희귀] 강화
     RARE_DND, // [희귀] 자리 비움
+    RARE_CLONE, // [희귀] 분신
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -316,6 +317,7 @@ public enum AbilityType
     EPIC_PRIEST, // [영웅] 성직자
     EPIC_ADDWORKSTATION, // [영웅] 업무 증가
     EPIC_MADSCIENTIST, // [영웅] 매드 사이언티스트
+    EPIC_FORWARDLOOKING, // [영웅] 전방주시태만
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
