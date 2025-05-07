@@ -36,8 +36,11 @@ public class MadScientist : Ability
         {
             ev.Player.Role.Set(ev.TargetOldRole, RoleSpawnFlags.AssignInventory);
 
-            for (int i = 0; i < 5; i++)
-                Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                for (int i = 0; i < 5; i++)
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+            });
         });
     }
 }
