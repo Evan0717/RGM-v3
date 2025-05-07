@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("위치 추적", "10초 간 랜덤한 1인의 위치를 확인합니다.", AbilityCategory.Common, AbilityType.NORMAL_FINDLOCATION)]
+[Ability("위치 추적", "10초 간 아군이 아닌 유저의 위치를 확인합니다.", AbilityCategory.Common, AbilityType.NORMAL_FINDLOCATION)]
 public class FindLocation : Ability
 {
     public override void OnEnabled()
     {
-        Timing.RunCoroutine(FindLocationCoroutine(Tools.GetRandomValue(Player.List.ToList())));
+        Timing.RunCoroutine(FindLocationCoroutine(Tools.GetRandomValue(Player.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)).ToList())));
     }
 
     public override void OnDisabled()
