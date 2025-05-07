@@ -38,7 +38,8 @@ namespace RGM.Modes
             EffectType.Poisoned,
             EffectType.SpawnProtected,
             EffectType.Ensnared,
-            EffectType.Flashed
+            EffectType.Flashed,
+            EffectType.SeveredHands
         };
 
         public override void OnEnabled()

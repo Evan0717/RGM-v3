@@ -24,7 +24,8 @@ public class SuspiciousStew : Ability
             EffectType.Poisoned,
             EffectType.SpawnProtected,
             EffectType.Ensnared,
-            EffectType.Flashed
+            EffectType.Flashed,
+            EffectType.SeveredHands
         };
 
         EffectType Effect = Tools.GetRandomValue(Effects.Where(x => !ignoredEffect.Contains(x)).ToList());
