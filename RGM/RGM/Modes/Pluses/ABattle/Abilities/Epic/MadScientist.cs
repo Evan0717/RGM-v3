@@ -32,9 +32,12 @@ public class MadScientist : Ability
 
     public void OnDied(DiedEventArgs ev)
     {
+        if (ev.Player != Owner)
+            return;
+
         Timing.CallDelayed(10, () =>
         {
-            ev.Player.Role.Set(ev.TargetOldRole, RoleSpawnFlags.AssignInventory);
+            Owner.Role.Set(ev.TargetOldRole, RoleSpawnFlags.AssignInventory);
 
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
