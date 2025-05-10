@@ -149,8 +149,6 @@ Trouble in Terrorist Town의 약자.
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            IsStarted = true;
-
             Timing.RunCoroutine(Timer());
             Timing.RunCoroutine(FindLocate());
 
@@ -216,6 +214,8 @@ Trouble in Terrorist Town의 약자.
                     player.ShowHint($"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 20);
                 }
             }
+
+            IsStarted = true;
         }
 
         public IEnumerator<float> Timer()
