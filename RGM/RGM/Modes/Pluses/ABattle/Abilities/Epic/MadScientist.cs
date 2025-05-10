@@ -35,15 +35,26 @@ public class MadScientist : Ability
         if (ev.Player != Owner)
             return;
 
-        Timing.CallDelayed(10, () =>
+        if (new List<DamageType> 
         {
-            Owner.Role.Set(ev.TargetOldRole, RoleSpawnFlags.AssignInventory);
-
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            DamageType.Falldown,
+            DamageType.PocketDimension
+        }.Contains(ev.DamageHandler.Type))
+        {
+            Owner.ShowHint($"<b><color={ABattle.RatingColor["영웅"]}>매드 사이언티스트</color></b> 능력을 발동시킬 수 없는 사망 원인입니다.");
+        }
+        else
+        {
+            Timing.CallDelayed(10, () =>
             {
-                for (int i = 0; i < 5; i++)
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+                Owner.Role.Set(ev.TargetOldRole, RoleSpawnFlags.AssignInventory);
+
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
+                    for (int i = 0; i < 5; i++)
+                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+                });
             });
-        });
+        }
     }
 }
