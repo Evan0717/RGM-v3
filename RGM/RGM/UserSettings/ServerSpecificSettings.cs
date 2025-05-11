@@ -143,6 +143,7 @@ $"""
             var text4 = new TextInputSetting(4, $"💎 Cash: {uc()[2]}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://discord.gg/h4AKgks7VMV>ㅤ🏪 Cash 충전하기ㅤㅤ</link></mark></align>", header: header1);
             var text5 = new TextInputSetting(5, uc()[13] == "0" ? $"디스코드에서 아래에 명시된 명령어를 사용하세요.\n'/rgm 연동 <Steam ID> <연동 코드>' (연동 코드: {uc()[14]})" : $"📎 연동된 Discord ID: {uc()[13]}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: uc()[13] == "0" ? $"클릭하여 Discord 연동 코드를 확인하세요." : "✅ Discord와 Steam이 연동된 상태입니다.", header: header1);
             var text6 = new TextInputSetting(6, uc()[3].Split('/').Count() == 0 ? "보유한 킬이펙트가 없습니다." : $"{(uc()[4] == "0" ? "" : $"장착한 킬이펙트: {uc()[4]}\n<size=15>{KillEffects[uc()[4]]}</size>\n")}보유한 킬이펙트\n{string.Join("\n", uc()[3].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"💀 킬이펙트", header: header1);
+            var text7 = new TextInputSetting(7, uc()[19].Split('/').Count() == 0 ? "보유한 스폰이펙트가 없습니다." : $"{(uc()[20] == "0" ? "" : $"장착한 스폰이펙트: {uc()[20]}\n<size=15>{SpawnEffects[uc()[20]]}</size>\n")}보유한 스폰이펙트\n{string.Join("\n", uc()[19].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"📥 스폰이펙트", header: header1);
             string nick(int num)
             {
                 string n = uc()[num];
@@ -152,17 +153,17 @@ $"""
 
                 return n;
             }
-            var text7 = new TextInputSetting(7, uc()[7].Split('/').Count() == 0 ? "보유한 커스터마이징이 없습니다." : $"{(uc()[7].Split('/').Contains("커스텀 닉네임") ? $"커스텀 닉네임: {uc()[5]}({Tools.CustomFormatter(player, nick(5))})" : "")}{(uc()[7].Split('/').Contains("커스텀 인포") ? $"\n커스텀 인포: {uc()[6]}({Tools.CustomFormatter(player, nick(6))})" : "")}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔧 커스터마이징", header: header1);
-            var text8 = new TextInputSetting(8, uc()[8].Split('/').Count() == 0 ? "보유한 페인트가 없습니다." : $"{(uc()[9] == "0" ? "" : $"장착한 페인트: {uc()[9]}\n<size=15>{Paints[uc()[9]]}</size>\n")}보유한 페인트\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🎨 페인트", header: header1);
-            var text9 = new TextInputSetting(10, uc()[10].Split('/').Count() == 0 ? "보유한 칭호가 없습니다." : $"{(uc()[11] == "0" ? "" : $"장착한 칭호: {uc()[11]}\n<size=15>{Badges[uc()[11]]}</size>\n")}보유한 칭호\n{string.Join("\n", uc()[10].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔖 칭호", header: header1);
-            TextInputSetting text10 = null;
+            var text8 = new TextInputSetting(8, uc()[7].Split('/').Count() == 0 ? "보유한 커스터마이징이 없습니다." : $"{(uc()[7].Split('/').Contains("커스텀 닉네임") ? $"커스텀 닉네임: {uc()[5]}({Tools.CustomFormatter(player, nick(5))})" : "")}{(uc()[7].Split('/').Contains("커스텀 인포") ? $"\n커스텀 인포: {uc()[6]}({Tools.CustomFormatter(player, nick(6))})" : "")}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔧 커스터마이징", header: header1);
+            var text9 = new TextInputSetting(9, uc()[8].Split('/').Count() == 0 ? "보유한 페인트가 없습니다." : $"{(uc()[9] == "0" ? "" : $"장착한 페인트: {uc()[9]}\n<size=15>{Paints[uc()[9]]}</size>\n")}보유한 페인트\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🎨 페인트", header: header1);
+            var text10 = new TextInputSetting(11, uc()[10].Split('/').Count() == 0 ? "보유한 칭호가 없습니다." : $"{(uc()[11] == "0" ? "" : $"장착한 칭호: {uc()[11]}\n<size=15>{Badges[uc()[11]]}</size>\n")}보유한 칭호\n{string.Join("\n", uc()[10].Split('/').Select(x => $"<size=15>{x}</size>"))}", SSTextArea.FoldoutMode.CollapsedByDefault, hintDescription: $"🔖 칭호", header: header1);
+            TextInputSetting text11 = null;
             if (player.HasReservedSlot)
             {
-                text10 = new TextInputSetting(10, $"<b>✨ 풀방 접속권 보유 중 ✨</b>");
-                text10.Header = header1;
+                text11 = new TextInputSetting(12, $"<b>✨ 풀방 접속권 보유 중 ✨</b>");
+                text11.Header = header1;
             }
 
-            var settingBases = new List<SettingBase> { text1, text2, text3, text4, text5, text6, text7, text8, text9, text10 };
+            var settingBases = new List<SettingBase> { text1, text2, text3, text4, text5, text6, text7, text8, text9, text10, text11 };
 
             return Save(player, header1, settingBases, (p) => { UserSetting(p); });
         }

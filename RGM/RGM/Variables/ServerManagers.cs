@@ -61,6 +61,10 @@ namespace RGM.Variables
             {"수렴형 레이저", "찰나의 순간, 아래에서 올라오는 빛을 보게 되겠죠."},
             {"5월 5일", "마음만큼은 어린이날에 머물러 있답니다."}
         };
+        public static Dictionary<string, string> SpawnEffects = new Dictionary<string, string>()
+        {
+            {"Connected", "연결되었습니다."}
+        };
         public static Dictionary<string, string> Customizations = new Dictionary<string, string>()
         {
             {"커스텀 닉네임", "표시되는 플레이어 이름을 수정합니다."},

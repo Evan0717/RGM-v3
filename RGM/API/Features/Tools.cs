@@ -172,9 +172,13 @@ $"""
 <size=15>랜덤코인: {uc[1]}</size>
 <size=15><i>Cash</i>: ₩{int.Parse(uc[2]).ToString("N0")}</size>
 
-<size=15>보유한 킬 이펙트: {GetJoinedInfo(3)}</size>
-<size=15>장착한 킬 이펙트: {(uc[4] == "0" ? "-" : uc[4])}</size>
-<size=10>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬 이펙트를 장착할 수 있습니다." : KillEffects[uc[4]])}</size>
+<size=15>보유한 킬이펙트: {GetJoinedInfo(3)}</size>
+<size=15>장착한 킬이펙트: {(uc[4] == "0" ? "-" : uc[4])}</size>
+<size=10>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬이펙트를 장착할 수 있습니다." : KillEffects[uc[4]])}</size>
+
+<size=15>보유한 스폰이펙트: {GetJoinedInfo(19)}</size>
+<size=15>장착한 스폰이펙트: {(uc[20] == "0" ? "-" : uc[20])}</size>
+<size=10>{(uc[20] == "0" ? "'.스폰이펙트 <스폰이펙트 이름>' 명령어를 사용하여 스폰이펙트를 장착할 수 있습니다." : SpawnEffects[uc[20]])}</size>
 
 <size=15>보유한 커스텀: {GetJoinedInfo(7)}</size>
 <size=15>커스텀 닉네임: {(uc[5] == "0" ? "-" : uc[5])}</size>

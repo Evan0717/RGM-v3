@@ -57,6 +57,9 @@ namespace RGM.API.Features
         페인트 랜덤 여부 - 16
         칭호 랜덤 여부 - 17
         보유한 아이템 - 18
+        보유한 스폰이펙트 - 19
+        장착한 스폰이펙트 - 20
+        스폰이펙트 랜덤 여부 - 21
         */
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.txt");

@@ -24,6 +24,7 @@ using AdminToys;
 using InventorySystem.Items.Firearms.ShotEvents;
 using InventorySystem.Items.Firearms;
 using InventorySystem.Items;
+using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Donator
 {
@@ -34,6 +35,7 @@ namespace RGM.Donator
         public void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             Timing.RunCoroutine(CustomermizingRotation());
         }
@@ -47,18 +49,18 @@ namespace RGM.Donator
                 speaker.transform.position = pos;
             });
 
-            audioPlayer.AddClip($"KillEffect_{clip}", volume: volume);
+            audioPlayer.AddClip($"Effect_{clip}", volume: volume);
         }
 
-        public IEnumerator<float> KillEffect(string kE, Player Attacker, Player Player, Role _role, Vector3 _pos)
+        public IEnumerator<float> KillEffect(string kE, Player attacker, Player player, Role _role, Vector3 _pos)
         {
-            Quaternion rot = Attacker.Rotation;
+            Quaternion rot = attacker.Rotation;
 
             if (kE == "영혼 가출")
             {
                 PlaySound(_pos, "1", 4);
 
-                DamageHandlerBase DisruptorDamage = new DisruptorDamageHandler(new DisruptorShotEvent(ItemIdentifier.None, Attacker.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringSingle), Player.Position, -1);
+                DamageHandlerBase DisruptorDamage = new DisruptorDamageHandler(new DisruptorShotEvent(ItemIdentifier.None, attacker.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringSingle), player.Position, -1);
 
                 Ragdoll.CreateAndSpawn(_role.Type, kE, DisruptorDamage, _pos, rot);
             }
@@ -179,7 +181,21 @@ namespace RGM.Donator
             }
         }
 
-        public IEnumerator<float> OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        public IEnumerator<float> SpawnEffect(string sE, Player player, Vector3 _pos)
+        {
+            if (sE == "Connected")
+            {
+                PlaySound(_pos, "10", 2);
+
+                SchematicObject Connected = ObjectSpawner.SpawnSchematic("Connected", _pos, null, null, null);
+
+                Timing.CallDelayed(1.5f, Connected.Destroy);
+            }
+
+            yield break;
+        }
+
+        public IEnumerator<float> OnDying(DyingEventArgs ev)
         {
             Role _role = ev.Player.Role;
             Vector3 _pos = ev.Player.Position;
@@ -208,6 +224,29 @@ namespace RGM.Donator
                                 _player.AddBroadcast(6, $"<size=25>{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5>{ev.Attacker.DisplayNickname}</color>(이)가 {Datas.KillEffectData[kE][0]}(으)로 {Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>(을)를 {Datas.KillEffectData[kE][1]}시켰습니다!</size>");
                         }
                     }
+                }
+            }
+
+            yield break;
+        }
+
+        public IEnumerator<float> OnSpawned(SpawnedEventArgs ev)
+        {
+            if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
+            {
+                Vector3 _pos = hit.point;
+
+                List<string> Data = UsersManager.UsersCache[ev.Player.UserId];
+                string sE = Data[20];
+
+                if (Data[21] == "1" && Data[19] != "0")
+                {
+                    sE = Data[19].Split('/').GetRandomValue();
+                }
+
+                if (sE != "0")
+                {
+                    Timing.RunCoroutine(SpawnEffect(sE, ev.Player, _pos));
                 }
             }
 

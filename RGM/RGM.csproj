@@ -223,6 +223,7 @@
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Emotion.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyBadge.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyCustom.cs" />
+    <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplySpawnEffect.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyKillEffect.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Chat.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\GetModeDescription.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Item.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SpawnEffect.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRC.cs" />
     <Compile Include="RGM\EventArgs\MEREvents.cs" />
     <Compile Include="RGM\IEnumerators\LobbyManagers.cs" />
