@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("뱀의 손 무전기", "무전기를 든 상태로 우클릭하면 뱀의 손 지원을 부르며, 자신도 뱀의 손 소속이 됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_SNAKEHANDRADIO)]
+[Ability("뱀의 손 무전기", "무전기를 든 상태로 우클릭하면 뱀의 손 지원을 부르며, 자신도 뱀의 손 소속이 됩니다. 이후 럭키비키를 획득합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SNAKEHANDRADIO)]
 public class SnakeHandRadio : Ability
 {
     ushort CallSnakeHandsSerial = 0;
@@ -56,6 +56,8 @@ public class SnakeHandRadio : Ability
             {
                 ev.Player.Position = deadPlayers.FirstOrDefault().Position;
             });
+
+            ev.Player.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
         }
     }
 }
