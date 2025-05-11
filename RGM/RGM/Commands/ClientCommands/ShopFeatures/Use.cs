@@ -41,7 +41,7 @@ namespace RGM.Commands.ClientCommands
 
                         if (input.Count() == 1)
                         {
-                            response = $"사용은 반드시 <아이템 이름>/{{매개 변수}} 양식을 지켜주십시오.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", uc[18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}\n\n구매하려면 [.구매 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
+                            response = $"사용은 반드시 <아이템 이름>/{{매개 변수}} 양식을 지켜주십시오.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", uc[18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}\n\n사용하려면 [.사용 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
                             return false;
                         }
                         else
@@ -72,6 +72,11 @@ namespace RGM.Commands.ClientCommands
                                 UsersManager.UsersCache[player.UserId][18] = string.Join("/", strings);
                                 UsersManager.SaveUsers();
 
+                                foreach (var p in Player.List.Where(x => x.IsDead || Vector3.Distance(x.Position, player.Position) < 11))
+                                    p.AddBroadcast(5, $"<size=20>{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color>(이)가 {product.Name}(을)를 사용하였습니다.</size>");
+
+                                Log.Info($"🔑 사용ㅣ{player.Nickname}(`{player.Id}`, `{player.UserId}`, `{player.IPAddress}`) -> {product.Name} {product.Price}");
+
                                 response = $"<b>{product.Name}</b> 사용 완료!";
                                 return true;
                             }
@@ -84,13 +89,13 @@ namespace RGM.Commands.ClientCommands
                     }
                     else
                     {
-                        response = $"보유하지 않은 아이템입니다.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", uc[18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}\n\n구매하려면 [.구매 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
+                        response = $"보유하지 않은 아이템입니다.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", uc[18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}\n\n사용하려면 [.사용 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
                         return false;
                     }
                 }
                 else
                 {
-                    response = $"존재하지 않는 아이템입니다.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", uc[18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}\n\n구매하려면 [.구매 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
+                    response = $"존재하지 않는 아이템입니다.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", uc[18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}\n\n사용하려면 [.사용 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
                     return false;
                 }
             }
