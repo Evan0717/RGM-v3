@@ -236,6 +236,7 @@ public enum AbilityType
     DUMMY_ENDOFGRAVEROBBERY, // [더미] 도굴 끝!
     DUMMY_COLDSTEW, // [더미] 식은 스튜
     DUMMY_NOAFK, // [더미] 자리 다비움
+    DUMMY_USEDSNAKEHANDRADIO, // [더미] 뱀의 손 수장
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동

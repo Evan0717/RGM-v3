@@ -46,6 +46,9 @@ public class SnakeHandRadio : Ability
         {
             ev.Item.Destroy();
 
+            ev.Player.RemoveAbility(this);
+            ev.Player.AddAbility(AbilityType.DUMMY_USEDSNAKEHANDRADIO);
+
             if (ev.Player.Role.Type != RoleTypeId.Tutorial)
                 ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
 
