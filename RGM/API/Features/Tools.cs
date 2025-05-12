@@ -330,6 +330,33 @@ $"""
             return false;
         }
 
+        public static bool TryGetLookPlayersWithFilter(Player player, float distance, out List<Player> targets, out RaycastHit? raycastHit, int count = 100)
+        {
+            targets = new List<Player>();
+            raycastHit = null;
+
+            var origin = player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f;
+            var direction = player.ReferenceHub.PlayerCameraReference.forward;
+            RaycastHit[] hits = Physics.RaycastAll(origin, direction, distance);
+
+            foreach (var hit in hits.OrderBy(h => h.distance))
+            {
+                if (hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
+                {
+                    if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>(), out Player t) && !targets.Contains(t))
+                    {
+                        targets.Add(t);
+                        if (targets.Count == 1)
+                            raycastHit = hit;
+                        if (targets.Count >= count)
+                            return true;
+                    }
+                }
+            }
+
+            return targets.Count > 0;
+        }
+
         public static bool TryInstallMode(ModeType ModeType)
         {
             var modeType = Type.GetType($"RGM.Modes.{ModeType}");

@@ -1,0 +1,86 @@
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.DamageHandlers;
+using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Player;
+using MEC;
+using PlayerStatsSystem;
+using RGM.API.Features;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace RGM.Modes.Abilities.Mythic;
+
+[Ability("발리스타 MP3", "탄알이 무제한이고, 벽을 관통하고, 반드시 한번에 적을 죽일 수 있는 입자 분열기를 받습니다. 투시 능력을 얻습니다. (사거리 75)", AbilityCategory.Mythic, AbilityType.MYTHIC_BALLISTAEM3)]
+public class BALLISTAEM3 : Ability
+{
+    ushort serial = 0;
+
+    public override void OnEnabled()
+    {
+        Owner.AddAbility(AbilityType.EPIC_SCP1344);
+
+        Item item = Owner.AddItem(ItemType.ParticleDisruptor);
+        serial = item.Serial;
+
+        Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
+        Exiled.Events.Handlers.Player.Shot += OnShot;
+
+        Timing.RunCoroutine(AddNewAmmo());
+    }
+
+    public override void OnDisabled()
+    {
+    }
+
+    public IEnumerator<float> AddNewAmmo()
+    {
+        while (true)
+        {
+            yield return Timing.WaitForSeconds(20f);
+            
+            Firearm firearm = (Firearm)Item.Get(serial);
+
+            firearm.MaxMagazineAmmo = 5;
+        }
+    }
+
+    public void OnChangedItem(ChangedItemEventArgs ev)
+    {
+        if (serial == ev.Player.CurrentItem.Serial && ev.Item != null)
+        {
+            if (serial == ev.Item.Serial)
+                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["신화"]}>발리스타 MP3</color></b> 능력이 있는 <b>입자 분열기</b>입니다!");
+        }
+    }
+
+    public void OnShot(ShotEventArgs ev)
+    {
+        if (serial == ev.Item.Serial)
+        {
+            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
+            {
+                bool enemy = false;
+
+                foreach (var player in players)
+                {
+                    if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
+                    {
+                        player.Hurt(new DisruptorDamageHandler(new InventorySystem.Items.Firearms.ShotEvents.DisruptorShotEvent(InventorySystem.Items.ItemIdentifier.None, ev.Player.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringRapid), player.Position, 1205));
+
+                        enemy = true;
+                    }
+                }
+
+                if (!enemy)
+                {
+                }
+                else
+                {
+                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 3f);
+                }
+            }
+        }
+    }
+}

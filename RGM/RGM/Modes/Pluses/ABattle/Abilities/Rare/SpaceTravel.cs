@@ -13,8 +13,8 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("갈고리", "지급된 동전을 튕기면 대상을 끌어옵니다. (사거리 100)", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
-public class GrapplingHook : Ability
+[Ability("공간이동", "지급된 동전을 튕기면 대상에게 이동합니다. (사거리 100)", AbilityCategory.Rare, AbilityType.RARE_SPACETRAVEL)]
+public class SpaceTravel : Ability
 {
     ushort serial = 0;
 
@@ -36,23 +36,23 @@ public class GrapplingHook : Ability
         if (ev.Item != null)
         {
             if (serial == ev.Item.Serial)
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>공간이동</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (Tools.TryGetLookPlayersWithFilter(ev.Player, 100f, out List<Player> players, out RaycastHit? hit))
+        if (serial == ev.Item.Serial)
         {
-            foreach (var player in players)
+            if (Tools.TryGetLookPlayer(ev.Player, 100f, out Player player, out RaycastHit? hit))
             {
-                player.Position = ev.Player.Position;
-            }
+                ev.Player.Position = player.Position;
 
-            ev.Item.Destroy();
-            Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
+                ev.Item.Destroy();
+                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
+            }
+            else
+                ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
         }
-        else
-            ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
     }
 }

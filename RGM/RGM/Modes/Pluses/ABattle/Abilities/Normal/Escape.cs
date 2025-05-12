@@ -14,15 +14,15 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다.", AbilityCategory.Common, AbilityType.NORMAL_ESCAPE)]
+[Ability("위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다. (사거리 15)", AbilityCategory.Common, AbilityType.NORMAL_ESCAPE)]
 public class Escape : Ability
 {
-    ushort EscapeCoinSerial = 0;
+    ushort serial = 0;
 
     public override void OnEnabled()
     {
-        Item ec = Owner.AddItem(ItemType.Coin);
-        EscapeCoinSerial = ec.Serial;
+        Item item = Owner.AddItem(ItemType.Coin);
+        serial = item.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -36,27 +36,38 @@ public class Escape : Ability
     {
         if (ev.Item != null)
         {
-            if (EscapeCoinSerial == ev.Item.Serial)
+            if (serial == ev.Item.Serial)
                 ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (EscapeCoinSerial == ev.Item.Serial)
+        if (serial == ev.Item.Serial)
         {
-            if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player player, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
             {
-                if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
+                bool enemy = false;
+
+                foreach (var player in players)
                 {
-                    ev.Item.Destroy();
+                    if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
+                    {
+                        player.EnableEffect(EffectType.Ensnared, 3f);
 
-                    player.EnableEffect(EffectType.Ensnared, 3f);
+                        enemy = true;
+                    }
+                }
 
-                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
+                if (!enemy)
+                {
+                    ev.Player.ShowHint("잘못된 대상입니다.");
                 }
                 else
-                    ev.Player.ShowHint("잘못된 대상입니다.");
+                {
+                    ev.Item.Destroy();
+                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
+                }
             }
             else
                 ev.Player.ShowHint("대상을 정확히 지정해 주세요.");

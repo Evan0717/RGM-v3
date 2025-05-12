@@ -6,9 +6,9 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Legend;
+namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("광전사", "공격에 성공했을 때 누적된 차징이 초기화되는 제일버드를 받고, 폭발 데미지에 면역이 됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_WARGOD)]
+[Ability("광전사", "공격에 성공했을 때 누적된 차징이 초기화되는 제일버드를 받고, 폭발 데미지에 면역이 됩니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_WARGOD)]
 public class WarGod : Ability
 {
     ushort LightWarriorSerial = 0;
@@ -32,7 +32,7 @@ public class WarGod : Ability
         if (LightWarriorSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (LightWarriorSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["전설"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
+                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["신화"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
         }
     }
 

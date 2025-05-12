@@ -294,6 +294,7 @@ public enum AbilityType
     RARE_UPGRADE, // [희귀] 강화
     RARE_DND, // [희귀] 자리 비움
     RARE_CLONE, // [희귀] 분신
+    RARE_SPACETRAVEL, // [희귀] 공간이동
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -331,8 +332,7 @@ public enum AbilityType
     LEGEND_TRANSITION, // [전설] 상급 변이
     LEGEND_CANDYADDICT, // [전설] 마약 중독자
     LEGEND_REFLECTOR, // [전설] 반사경
-    LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기,
-    LEGEND_WARGOD, // [전설] 광전사
+    LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
 
     // 신화 //
@@ -344,6 +344,8 @@ public enum AbilityType
     MYTHIC_NOCLIP, // [신화] 노클립
     MYTHIC_BOMBGUN, // [신화] 워 머신
     MYTHIC_FLAMETHROWER, // [신화] 화염 방사기
+    MYTHIC_WARGOD, // [신화] 광전사
+    MYTHIC_BALLISTAEM3, // [신화] 발리스타 MP3
 
     // 전용 //
     // D계급

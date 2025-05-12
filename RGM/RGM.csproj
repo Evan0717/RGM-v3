@@ -270,6 +270,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedPingHook.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\AddWorkstation.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Blink.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\BALLISTAEM3.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Clone.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Disguise.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Diver.cs" />
@@ -302,7 +303,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\Scream.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\SnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\SpeedWagon.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\WarGod.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\WarGod.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\BombGun.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\DimensionThief.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\EyeMan.cs" />
@@ -364,6 +365,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\PhysicalStrengthening.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\RareTransition.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Salamandra.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\SpaceTravel.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\SteelShell.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Steroid.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\StopWatch.cs" />
