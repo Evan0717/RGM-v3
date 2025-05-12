@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("발리스타 MP3", "탄알이 무제한이고, 벽을 관통하고, 반드시 한번에 적을 죽일 수 있는 입자 분열기를 받습니다. 투시 능력을 얻습니다. (사거리 75)", AbilityCategory.Mythic, AbilityType.MYTHIC_BALLISTAEM3)]
+[Ability("발리스타 MP3", "30초마다 탄약이 하나 추가되고, 벽을 관통하고, 500 데미지를 입히는 입자 분열기를 받습니다. 투시 능력을 얻습니다. (사거리 75)", AbilityCategory.Mythic, AbilityType.MYTHIC_BALLISTAEM3)]
 public class BALLISTAEM3 : Ability
 {
     ushort serial = 0;
@@ -38,11 +38,12 @@ public class BALLISTAEM3 : Ability
     {
         while (true)
         {
-            yield return Timing.WaitForSeconds(20f);
+            yield return Timing.WaitForSeconds(30f);
             
             Firearm firearm = (Firearm)Item.Get(serial);
 
-            firearm.MaxMagazineAmmo = 5;
+            if (firearm.MaxMagazineAmmo > firearm.MagazineAmmo)
+                firearm.MagazineAmmo += 1;
         }
     }
 
@@ -59,7 +60,7 @@ public class BALLISTAEM3 : Ability
     {
         if (serial == ev.Item.Serial)
         {
-            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 75f, out List<Player> players, out RaycastHit? hit))
             {
                 bool enemy = false;
 
@@ -67,7 +68,7 @@ public class BALLISTAEM3 : Ability
                 {
                     if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
                     {
-                        player.Hurt(new DisruptorDamageHandler(new InventorySystem.Items.Firearms.ShotEvents.DisruptorShotEvent(InventorySystem.Items.ItemIdentifier.None, ev.Player.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringRapid), player.Position, 1205));
+                        player.Hurt(new DisruptorDamageHandler(new InventorySystem.Items.Firearms.ShotEvents.DisruptorShotEvent(InventorySystem.Items.ItemIdentifier.None, ev.Player.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringRapid), player.Position, 500));
 
                         enemy = true;
                     }
