@@ -191,7 +191,7 @@ namespace RGM.EventArgs
 <size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @solminb27, @LESI_2010, @handsome_dobby</size>
 
 <b><size=35><color=#F8E0F7>도움 주신 분들</color></size><b>
-<size=20>@cocoa_1.19, @leejihyuk, @mujishungplay</size>
+<size=20>@cocoa_1.19, @leejihyuk, @mujishungplay, @changwonfirebird</size>
 </size></align>
 \n\n\n\n\n\n\n\n
 """, 1.2f);

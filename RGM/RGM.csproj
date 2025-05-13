@@ -266,6 +266,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\EndOfGraveRobbery.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\NoAFK.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\Teleported.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\TestFailure.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedPingHook.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Dummy\UsedSnakeHandRadio.cs" />

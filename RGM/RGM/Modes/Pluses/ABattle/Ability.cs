@@ -237,6 +237,7 @@ public enum AbilityType
     DUMMY_COLDSTEW, // [더미] 식은 스튜
     DUMMY_NOAFK, // [더미] 자리 다비움
     DUMMY_USEDSNAKEHANDRADIO, // [더미] 뱀의 손 수장
+    DUMMY_TELEPORTED, // [더미] 순간이동됨
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동

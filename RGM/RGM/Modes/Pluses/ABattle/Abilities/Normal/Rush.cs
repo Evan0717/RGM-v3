@@ -52,7 +52,7 @@ public class Rush : Ability
 
             ev.Player.EnableEffect(EffectType.MovementBoost, 255, 1.5f);
 
-            Timing.CallDelayed(1, () =>
+            Timing.CallDelayed(1.5f, () =>
             {
                 ev.Player.EnableEffect(EffectType.MovementBoost, intensity, duration);
             });
