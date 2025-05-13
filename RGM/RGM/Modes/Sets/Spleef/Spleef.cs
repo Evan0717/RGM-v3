@@ -77,7 +77,7 @@ namespace RGM.Modes
 
             for (int i=1; i<11; i++)
             {
-                Player.List.ToList().ForEach(x => x.ShowHint($"<b>{11 - i}초 뒤 게임이 시작됩니다.</b>", 1.2f));
+                Player.List.ToList().ForEach(x => x.AddHint($"<b>{11 - i}초 뒤 게임이 시작됩니다.</b>", 1.2f));
 
                 yield return Timing.WaitForSeconds(1f);
             }

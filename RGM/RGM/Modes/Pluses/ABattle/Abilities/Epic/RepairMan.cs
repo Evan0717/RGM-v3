@@ -40,13 +40,13 @@ public class RepairMan : Ability
 
         if (ev.Door.Type == DoorType.Scp079First)
         {
-            ev.Player.ShowHint("이 헤비도어는 능력으로 개폐가 불가능합니다.", 1.2f);
+            ev.Player.AddHint("이 헤비도어는 능력으로 개폐가 불가능합니다.", 1.2f);
             return;
         }
 
         if (Warhead.IsInProgress)
         {
-            ev.Player.ShowHint("알파 핵탄투가 작동 중일때는 문을 개폐할 수 없습니다.", 1.2f);
+            ev.Player.AddHint("알파 핵탄투가 작동 중일때는 문을 개폐할 수 없습니다.", 1.2f);
             return;
         }
 

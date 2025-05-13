@@ -38,7 +38,7 @@ public class TouchOfChaos : Ability
         if (ev.Item != null)
         {
             if (ChaosCoinSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.AddHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["전용"]}>혼돈의 손길</color></color></b> 능력을 사용할 수 있습니다.");
         }
     }
 

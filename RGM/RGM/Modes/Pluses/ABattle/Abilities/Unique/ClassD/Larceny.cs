@@ -41,16 +41,16 @@ public class Larceny : Ability
                 Item Item = Tools.GetRandomValue(player.Items.ToList());
 
                 player.RemoveItem(Item);
-                player.ShowHint("주머니가 허전합니다..", 1.2f);
+                player.AddHint("주머니가 허전합니다..", 1.2f);
                 Item I = ev.Player.AddItem(Item.Type);
-                ev.Player.ShowHint("소매치기에 성공했습니다.", 1.2f);
+                ev.Player.AddHint("소매치기에 성공했습니다.", 1.2f);
 
                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
             }
             else
             {
-                player.ShowHint("누군가가 소매치기를 하려고 시도했습니다.", 1.2f);
-                ev.Player.ShowHint("소매치기에 실패했습니다.\n대상은 아이템을 가지고 있지 않습니다.", 1.2f);
+                player.AddHint("누군가가 소매치기를 하려고 시도했습니다.", 1.2f);
+                ev.Player.AddHint("소매치기에 실패했습니다.\n대상은 아이템을 가지고 있지 않습니다.", 1.2f);
             }
 
             Timing.CallDelayed(60, () =>

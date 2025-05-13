@@ -159,10 +159,10 @@ namespace RGM.Modes
             while (!Round.IsEnded)
             {
                 if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius, new List<Player>() { dj }))
-                    juggernaut.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
+                    juggernaut.AddHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
 
                 else
-                    juggernaut.ShowHint("당신은 임무를 완수하였습니다.", 1.2f);
+                    juggernaut.AddHint("당신은 임무를 완수하였습니다.", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -232,7 +232,7 @@ namespace RGM.Modes
 
             foreach (var player in Player.List)
             {
-                player.ShowHint($"<align=left><b><size=40>[ 저거너트 사살 기여도 순위 ]</size></b>\n{string.Join("\n", damageList)}</align>\n\n\n\n\n\n", 20);
+                player.AddHint($"<align=left><b><size=40>[ 저거너트 사살 기여도 순위 ]</size></b>\n{string.Join("\n", damageList)}</align>\n\n\n\n\n\n", 20);
             }
         }
 

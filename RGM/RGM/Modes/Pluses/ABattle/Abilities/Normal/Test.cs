@@ -17,7 +17,7 @@ public class Test : Ability
 {
     public override void OnEnabled()
     {
-        Owner.ShowHint("과연 결과는..?");
+        Owner.AddHint("과연 결과는..?");
 
         Timing.CallDelayed(3.5f, () =>
         {
@@ -27,7 +27,7 @@ public class Test : Ability
 
                 if (Random.Range(1, 101) <= 15)
                 {
-                    Owner.ShowHint("<b>능력을 3개 더 얻었습니다!</b>");
+                    Owner.AddHint("<b>능력을 3개 더 얻었습니다!</b>");
 
                     for (int i = 0; i < 3; i++)
                         Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
@@ -36,7 +36,7 @@ public class Test : Ability
                 }
                 else
                 {
-                    Owner.ShowHint("다음 기회에..");
+                    Owner.AddHint("다음 기회에..");
                     Owner.AddAbility(AbilityType.DUMMY_TESTFAILURE);
                 };
             }

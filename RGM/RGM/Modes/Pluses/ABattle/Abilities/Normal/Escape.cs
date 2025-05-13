@@ -37,7 +37,7 @@ public class Escape : Ability
         if (ev.Item != null)
         {
             if (serial == ev.Item.Serial)
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.AddHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 
@@ -45,7 +45,7 @@ public class Escape : Ability
     {
         if (serial == ev.Item.Serial)
         {
-            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayers(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
             {
                 bool enemy = false;
 
@@ -61,7 +61,7 @@ public class Escape : Ability
 
                 if (!enemy)
                 {
-                    ev.Player.ShowHint("잘못된 대상입니다.");
+                    ev.Player.AddHint("잘못된 대상입니다.");
                 }
                 else
                 {
@@ -70,7 +70,7 @@ public class Escape : Ability
                 }
             }
             else
-                ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
+                ev.Player.AddHint("대상을 정확히 지정해 주세요.");
         }
     }
 }

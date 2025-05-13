@@ -87,7 +87,7 @@ namespace RGM.Modes
                         soulMates.Remove(soulMate);
                         soulMates.Remove(sm);
 
-                        sm.ShowHint("누군가와의 매칭이 해제되었습니다.", 1.2f);
+                        sm.AddHint("누군가와의 매칭이 해제되었습니다.", 1.2f);
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace RGM.Modes
                             if (!waitingPlayers.Contains(player))
                                 waitingPlayers.Add(player);
 
-                            player.ShowHint("누군가와 매칭되기를 기다리는 중입니다..", 1.2f);
+                            player.AddHint("누군가와 매칭되기를 기다리는 중입니다..", 1.2f);
                         }
                     }
                     else
@@ -112,8 +112,8 @@ namespace RGM.Modes
                             soulMates.Remove(soulMate);
                             soulMates.Remove(player);
 
-                            player.ShowHint("누군가와의 매칭이 해제되었습니다.", 1.2f);
-                            soulMate.ShowHint("누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            player.AddHint("누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            soulMate.AddHint("누군가와의 매칭이 해제되었습니다.", 1.2f);
                         }
                     }
                 }
@@ -145,8 +145,8 @@ namespace RGM.Modes
                     else
                         SetSoulMate(first, second);
 
-                    first.ShowHint("누군가와 새롭게 매칭되었습니다.", 5);
-                    second.ShowHint("누군가와 새롭게 매칭되었습니다.", 5);
+                    first.AddHint("누군가와 새롭게 매칭되었습니다.", 5);
+                    second.AddHint("누군가와 새롭게 매칭되었습니다.", 5);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -210,7 +210,7 @@ namespace RGM.Modes
                         Server.FriendlyFire = true;
 
                         foreach (var player in Player.List.Where(x => x.IsAlive))
-                            player.ShowHint($"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
+                            player.AddHint($"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
                     }
                     else
                         Server.FriendlyFire = false;

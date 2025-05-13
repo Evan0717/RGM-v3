@@ -19,6 +19,7 @@ using RGM.Commands;
 using Utils;
 using Exiled.Events.EventArgs.Player;
 using static RGM.Variables.ServerManagers;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -80,14 +81,14 @@ namespace RGM.Modes
         {
             if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown)
             {
-                ev.Player.ShowHint($"성불했습니다..", 3);
+                ev.Player.AddHint($"성불했습니다..", 3);
                 spirits.Remove(ev.Player);
             }
             else
             {
                 for (int i = 1; i < 6; i++)
                 {
-                    ev.Player.ShowHint($"{6 - i}초 뒤 영혼 상태에 돌입합니다.", 1.2f);
+                    ev.Player.AddHint($"{6 - i}초 뒤 영혼 상태에 돌입합니다.", 1.2f);
 
                     yield return Timing.WaitForSeconds(1f);
                 }

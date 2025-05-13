@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
@@ -33,7 +34,7 @@ public class InfinityGun : Ability
         if (InfinityGunSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (InfinityGunSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["영웅"]}>훌륭한 대화수단</color></b> 능력이 있는 A7입니다.");
+                ev.Player.AddHint($"<b><color={ABattle.RatingColor["영웅"]}>훌륭한 대화수단</color></b> 능력이 있는 A7입니다.");
         }
     }
 

@@ -93,7 +93,7 @@ namespace RGM.Modes
                 {
                     Player target = GetTarget(player);
 
-                    player.ShowHint($"당신의 타깃 : {target.DisplayNickname}", 1.2f);
+                    player.AddHint($"당신의 타깃 : {target.DisplayNickname}", 1.2f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);

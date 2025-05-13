@@ -87,7 +87,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 11; i++)
             {
-                Player.List.ToList().ForEach(x => x.ShowHint($"게임이 {11 - i}초 후에 시작됩니다.", 1.2f));
+                Player.List.ToList().ForEach(x => x.AddHint($"게임이 {11 - i}초 후에 시작됩니다.", 1.2f));
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -164,7 +164,7 @@ namespace RGM.Modes
             while (true)
             {
                 foreach (var player in Player.List)
-                    player.ShowHint($"<b>[TIP]</b> <i>gingerbread</i>를 입력하면 춤출 수 있습니다.", 1.2f);
+                    player.AddHint($"<b>[TIP]</b> <i>gingerbread</i>를 입력하면 춤출 수 있습니다.", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
             }

@@ -69,13 +69,13 @@ SCP-079
                 foreach (var p in Player.List.Where(x => x.IsAlive && _disguisedList.ContainsKey(x)))
                 {
                     if (Tools.TryGetLookPlayer(p, 3, out Player t, out RaycastHit? hit) && _disguisedList.ContainsKey(t))
-                        p.ShowHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1.2f);
+                        p.AddHint($"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{Trans.Role[t.Role.Type]}</color>(으)로 판별했습니다.</b></size>", 1.2f);
 
                     else if (p.Role.Type == _disguisedList[p])
-                        p.ShowHint($"<size=25><b>당신은 변장하지 않았습니다.</b></size>", 1.2f);
+                        p.AddHint($"<size=25><b>당신은 변장하지 않았습니다.</b></size>", 1.2f);
 
                     else
-                        p.ShowHint($"<size=25><b>당신의 정체는 <color={p.Role.Color.ToHex()}>{Trans.Role[p.Role.Type]}</color>이고, <color={_disguisedList[p].GetRoleBase().RoleColor.ToHex()}>{Trans.Role[_disguisedList[p]]}</color>(으)로 변장했습니다.</b></size>", 1.2f);
+                        p.AddHint($"<size=25><b>당신의 정체는 <color={p.Role.Color.ToHex()}>{Trans.Role[p.Role.Type]}</color>이고, <color={_disguisedList[p].GetRoleBase().RoleColor.ToHex()}>{Trans.Role[_disguisedList[p]]}</color>(으)로 변장했습니다.</b></size>", 1.2f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);

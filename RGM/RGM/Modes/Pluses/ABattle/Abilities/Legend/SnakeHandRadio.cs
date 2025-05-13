@@ -36,7 +36,7 @@ public class SnakeHandRadio : Ability
         if (ev.Item != null)
         {
             if (CallSnakeHandsSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력이 있는 <b>무전기</b>입니다!");
+                ev.Player.AddHint($"<b><color={ABattle.RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력이 있는 <b>무전기</b>입니다!");
         }
     }
 

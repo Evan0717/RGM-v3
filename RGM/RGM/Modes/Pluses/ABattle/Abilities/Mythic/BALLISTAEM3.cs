@@ -52,7 +52,7 @@ public class BALLISTAEM3 : Ability
         if (serial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (serial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["신화"]}>발리스타 MP3</color></b> 능력이 있는 <b>입자 분열기</b>입니다!");
+                ev.Player.AddHint($"<b><color={ABattle.RatingColor["신화"]}>발리스타 MP3</color></b> 능력이 있는 <b>입자 분열기</b>입니다!");
         }
     }
 
@@ -60,7 +60,7 @@ public class BALLISTAEM3 : Ability
     {
         if (serial == ev.Item.Serial)
         {
-            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 75f, out List<Player> players, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayers(ev.Player, 75f, out List<Player> players, out RaycastHit? hit))
             {
                 bool enemy = false;
 

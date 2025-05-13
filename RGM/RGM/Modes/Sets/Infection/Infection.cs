@@ -110,7 +110,7 @@ namespace RGM.Modes
                 }
                 catch (Exception ex)
                 {
-                    player.ShowHint($"Error: {ex}");
+                    player.AddHint($"Error: {ex}");
                 }
             }
 
@@ -174,7 +174,7 @@ namespace RGM.Modes
         {
             for (int i = 0; i < 11; i++)
             {
-                ev.Player.ShowHint($"<size=25>{11 - i}초 뒤 <color=red>동료</color> 근처에서 부활합니다.</size>", 1.2f);
+                ev.Player.AddHint($"<size=25>{11 - i}초 뒤 <color=red>동료</color> 근처에서 부활합니다.</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
             }

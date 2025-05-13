@@ -49,20 +49,30 @@ public class EyeMan : Ability
                 //    }
                 //}
 
-                if (Tools.TryGetLookPlayer(Owner, 100f, out Player target, out RaycastHit? hit))
+                if (Tools.TryGetLookPlayers(Owner, 100f, out List<Player> targets, out RaycastHit? hit))
                 {
-                    if (Owner != target && HitboxIdentity.IsEnemy(Owner.ReferenceHub, target.ReferenceHub))
+                    bool enemy = false;
+
+                    foreach (var target in targets)
                     {
-                        beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.3f;
-                        beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
-                        target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
-                        target.EnableEffect(EffectType.Blinded, 1, 0.2f);
-                        target.CurrentItem = null;
-                        target.Hurt(target.IsScp ? target.MaxHealth / 240 : target.MaxHealth / 60, "눈빛의 힘에 압도당했습니다.");
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
+                        if (Owner != target && HitboxIdentity.IsEnemy(Owner.ReferenceHub, target.ReferenceHub))
+                        {
+                            beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.3f;
+                            beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
+                            target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
+                            target.EnableEffect(EffectType.Blinded, 1, 0.2f);
+                            target.CurrentItem = null;
+                            target.Hurt(target.IsScp ? target.MaxHealth / 240 : target.MaxHealth / 100, "눈빛의 힘에 압도당했습니다.");
+                            Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
+
+                            enemy = true;
+                        }
                     }
-                    else
+
+                    if (!enemy)
+                    {
                         beam.Position = new Vector3(1205, 1205, 1205);
+                    }
                 }
                 else
                     beam.Position = new Vector3(1205, 1205, 1205);

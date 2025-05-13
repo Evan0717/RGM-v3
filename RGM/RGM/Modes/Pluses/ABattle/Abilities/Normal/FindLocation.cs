@@ -25,7 +25,7 @@ public class FindLocation : Ability
     {
         for (int i = 1; i < 11; i++)
         {
-            Owner.ShowHint($"소속이 <color={target.Role.Color.ToHex()}>{target.Role.Name}</color>인 ???은(는) <b>{target.CurrentRoom.Name}</b>에 있습니다.", 1.2f);
+            Owner.AddHint($"소속이 <color={target.Role.Color.ToHex()}>{target.Role.Name}</color>인 ???은(는) <b>{target.CurrentRoom.Name}</b>에 있습니다.", 1.2f);
             yield return Timing.WaitForSeconds(1f);
         }
     }

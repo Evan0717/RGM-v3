@@ -37,7 +37,7 @@ public class Milk : Ability
         if (ev.Item != null)
         {
             if (CoinSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>우유</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.AddHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>우유</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 

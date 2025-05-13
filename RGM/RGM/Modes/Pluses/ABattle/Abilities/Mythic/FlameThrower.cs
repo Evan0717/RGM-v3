@@ -61,7 +61,7 @@ public class FlameThrower : Ability
         if (ev.Item != null)
         {
             if (FlamethrowerSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
+                ev.Player.AddHint($"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
         }
     }
 

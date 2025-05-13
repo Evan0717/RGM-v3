@@ -18,7 +18,7 @@ public class Gambler : Ability
     public override void OnEnabled()
     {
         if (Owner.IsScp || Owner.Role.Type.ToString().Contains("Flamingo"))
-            Owner.ShowHint($"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
+            Owner.AddHint($"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
 
         Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
         Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;

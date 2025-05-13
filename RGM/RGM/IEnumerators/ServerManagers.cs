@@ -34,7 +34,7 @@ namespace RGM.IEnumerators
                     if (player.Role is SpectatorRole spectator)
                     {
                         if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
-                            player.ShowHint(spectator.SpectatedPlayer.CurrentHint.Content, 1.2f);
+                            player.AddHint(spectator.SpectatedPlayer.CurrentHint.Content, 1.2f);
                     }
                 }
 

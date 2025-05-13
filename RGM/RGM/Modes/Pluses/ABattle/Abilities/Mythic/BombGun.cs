@@ -33,7 +33,7 @@ public class BombGun : Ability
         if (itemSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (itemSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["신화"]}>워 머신</color></b> 능력이 있는 <b>리볼버</b>입니다!");
+                ev.Player.AddHint($"<b><color={ABattle.RatingColor["신화"]}>워 머신</color></b> 능력이 있는 <b>리볼버</b>입니다!");
         }
     }
 

@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
@@ -33,7 +34,7 @@ public class HealGun : Ability
         if (HealGunSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (HealGunSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["일반"]}>치유 사제</color></b> 능력이 있는 COM-18입니다.");
+                ev.Player.AddHint($"<b><color={ABattle.RatingColor["일반"]}>치유 사제</color></b> 능력이 있는 COM-18입니다.");
         }
     }
 

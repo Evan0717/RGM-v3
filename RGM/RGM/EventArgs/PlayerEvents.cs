@@ -171,7 +171,7 @@ namespace RGM.EventArgs
                         {
                             if (hit.transform.name == "Credit")
                             {
-                                ev.Player.ShowHint(
+                                ev.Player.AddHint(
     """
 <size=50><b>[ ⭐ 랜덤게임모드(RGM) 크레딧 ⭐ ]</b></size>
 
@@ -218,7 +218,7 @@ namespace RGM.EventArgs
                                         Modes.Add($"<color=#{Color}>{Name}</color>");
                                 }
 
-                                ev.Player.ShowHint($"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
+                                ev.Player.AddHint($"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
                             }
                             else if (hit.transform.name == "ExpLeaderBoard")
                             {
@@ -261,7 +261,7 @@ namespace RGM.EventArgs
                                     }
                                 }
 
-                                ev.Player.ShowHint($"<align=left><size=30><b>[ ⭐ 랜덤게임모드(RGM) EXP 순위표 ⭐ ]</b></size>\n\n<size=25>{string.Join("\n", queue)}</size></align>\n\n\n\n\n");
+                                ev.Player.AddHint($"<align=left><size=30><b>[ ⭐ 랜덤게임모드(RGM) EXP 순위표 ⭐ ]</b></size>\n\n<size=25>{string.Join("\n", queue)}</size></align>\n\n\n\n\n");
                             }
                             else
                             {
@@ -374,7 +374,7 @@ namespace RGM.EventArgs
                                     formatted = formatted.Replace(name, $"<b>{name}</b>");
                                 }
 
-                                ev.Player.ShowHint(formatted, 1.2f);
+                                ev.Player.AddHint(formatted, 1);
                             }
                         }
                     }
@@ -593,7 +593,7 @@ namespace RGM.EventArgs
                                 InteractedDoors.Remove(ev.Door);
                             }
                             else
-                                ev.Player.ShowHint($"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
+                                ev.Player.AddHint($"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
                         }
                     });
                 }

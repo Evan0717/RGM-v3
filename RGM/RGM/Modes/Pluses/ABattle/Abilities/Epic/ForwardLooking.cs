@@ -13,6 +13,7 @@ using Mirror;
 using RGM.API.Features;
 using UnityEngine;
 using Microsoft.Win32.SafeHandles;
+using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Epic;
 
@@ -34,6 +35,7 @@ public class ForwardLooking : Ability
     public IEnumerator<float> OnStarted()
     {
         SchematicObject schematic = ObjectSpawner.SpawnSchematic("전방주시태만", new Vector3(1205, 1205, 1205), null, null, null);
+        schematic.GetComponentsInChildren<PrimitiveObject>().ToList().ForEach(x => x.Primitive.MovementSmoothing = 0);
 
         while (Owner.IsAlive)
         {

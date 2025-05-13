@@ -95,7 +95,7 @@ namespace RGM.Modes
                         int objectIndex = stackValue >= _objects.Count ? _objects.Count - 1 : stackValue;
                         string selectedObject = _objects.ElementAt(objectIndex).Key;
 
-                        p.ShowHint($"<size=25><b>건축 도구</b>ㅣLvl {objectIndex + 1}. {(string)_objects[selectedObject][0]} (❤️{(int)_objects[selectedObject][1]})</size>", 1.2f);
+                        p.AddHint($"<size=25><b>건축 도구</b>ㅣLvl {objectIndex + 1}. {(string)_objects[selectedObject][0]} (❤️{(int)_objects[selectedObject][1]})</size>", 1.2f);
                     }
                 }
 
@@ -132,7 +132,7 @@ namespace RGM.Modes
 
                     _tools.Add(_tool);
 
-                    player.ShowHint($"<b>⚠️ 주의하세요</b>, <color=red>벽을 뚫거나, 아군의 경로를 막거나, 탑 쌓고 올라가는 행위는 제재 대상입니다.</color>", 10);
+                    player.AddHint($"<b>⚠️ 주의하세요</b>, <color=red>벽을 뚫거나, 아군의 경로를 막거나, 탑 쌓고 올라가는 행위는 제재 대상입니다.</color>", 10);
                 }
             });
         }
@@ -185,7 +185,7 @@ namespace RGM.Modes
                     if (!ev.Player.IsDead)
                     {
                         if (_isinElevator)
-                            ev.Player.ShowHint($"엘레베이터에는 엄폐물을 설치할 수 없습니다.", 1);
+                            ev.Player.AddHint($"엘레베이터에는 엄폐물을 설치할 수 없습니다.", 1);
 
                         else
                         {
