@@ -330,7 +330,7 @@ $"""
             return false;
         }
 
-        public static bool TryGetLookPlayersWithFilter(Player player, float distance, out List<Player> targets, out RaycastHit? raycastHit, int count = 100)
+        public static bool TryGetLookPlayers(Player player, float distance, out List<Player> targets, out RaycastHit? raycastHit, int count = 100)
         {
             targets = new List<Player>();
             raycastHit = null;

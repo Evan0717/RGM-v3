@@ -45,7 +45,7 @@ public class Escape : Ability
     {
         if (serial == ev.Item.Serial)
         {
-            if (Tools.TryGetLookPlayersWithFilter(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayers(ev.Player, 15f, out List<Player> players, out RaycastHit? hit))
             {
                 bool enemy = false;
 

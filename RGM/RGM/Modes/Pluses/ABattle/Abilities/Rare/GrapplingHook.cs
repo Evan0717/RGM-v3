@@ -42,17 +42,25 @@ public class GrapplingHook : Ability
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (Tools.TryGetLookPlayersWithFilter(ev.Player, 100f, out List<Player> players, out RaycastHit? hit))
+        if (ev.Item.Serial == serial)
         {
-            foreach (var player in players)
+            if (Tools.TryGetLookPlayers(ev.Player, 100f, out List<Player> players, out RaycastHit? hit))
             {
-                player.Position = ev.Player.Position;
-            }
+                foreach (var player in players)
+                {
+                    player.Position = ev.Player.Position;
+                }
 
-            ev.Item.Destroy();
-            Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
+                ev.Item.Destroy();
+                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
+            }
+            else
+                ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
         }
+<<<<<<< Updated upstream
         else
             ev.Player.AddHint("동전 사용 실패", "대상을 정확히 지정해 주세요.");
+=======
+>>>>>>> Stashed changes
     }
 }
