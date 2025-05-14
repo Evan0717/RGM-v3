@@ -136,7 +136,7 @@ namespace RGM.Modes
 
         public void OnSpawned(SpawnedEventArgs ev)
         {
-            ev.Player.ShowHint($"<b>⚠️ 주의하세요</b>, <color=red>죽어야 하는 장소에 스폰했을 때 [.자살] 명령어를 입력하지 않으면 제재 대상입니다.</color>", 10);
+            ev.Player.AddHint("나는 누구?", $"<b>⚠️ 주의하세요</b>, <color=red>죽어야 하는 장소에 스폰했을 때 [.자살] 명령어를 입력하지 않으면 제재 대상입니다.</color>", 10);
         }
     }
 }

@@ -215,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Databases\Datas.cs" />
+    <Compile Include="API\Features\HintManager.cs" />
     <Compile Include="API\Features\Tools.cs" />
     <Compile Include="API\Databases\Translations.cs" />
     <Compile Include="API\Interfaces\SettingInfo.cs" />

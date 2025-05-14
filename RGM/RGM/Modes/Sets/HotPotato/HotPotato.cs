@@ -105,7 +105,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < 11; i++)
                 {
-                    Player.List.ToList().ForEach(x => x.ShowHint($"현재 폭탄 : {string.Join(" & ", BomberMans.Select(b => b.DisplayNickname))}\n{11 - i}초 후 폭탄이 터집니다.", 1.2f));
+                    Player.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 폭탄 알림", $"현재 폭탄 : {string.Join(" & ", BomberMans.Select(b => b.DisplayNickname))}\n{11 - i}초 후 폭탄이 터집니다.", 1.2f));
 
                     yield return Timing.WaitForSeconds(1f);
                 }
@@ -144,7 +144,7 @@ namespace RGM.Modes
                     break;
                 }
 
-                Player.List.ToList().ForEach(x => x.ShowHint($"펑!", 2));
+                Player.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 펑", $"펑!", 2));
 
                 yield return Timing.WaitForSeconds(2f);
             }

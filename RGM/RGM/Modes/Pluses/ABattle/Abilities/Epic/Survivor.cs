@@ -59,7 +59,7 @@ public class Survivor : Ability
                 isEnabled = false;
             });
 
-            ev.Player.ShowHint($"<color={ABattle.RatingColor["영웅"]}>구사일생</color> 능력으로 인해 3초간 죽음을 피합니다. ({power - 1}번 남음)");
+            ev.Player.AddHint("구사일생", $"<color={ABattle.RatingColor["영웅"]}>구사일생</color> 능력으로 인해 3초간 죽음을 피합니다. ({power - 1}번 남음)");
 
             ABattle.Instance.IsLifeUsed[Owner] = true;
 

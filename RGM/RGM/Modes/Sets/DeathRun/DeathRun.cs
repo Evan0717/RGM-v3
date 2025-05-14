@@ -57,7 +57,7 @@ namespace RGM.Modes
             Tagger.Role.Set(RoleTypeId.Scientist);
             Tagger.Position = new Vector3(44.57422f, 999.7067f, 78.52734f);
             Tagger.ClearInventory();
-            Tagger.ShowHint("곧 <color=orange>D계급</color>이 데스런에 입장합니다.\n그들을 막기 위해 <color=red>빨간 버튼</color>을 눌러 일회용 함정을 발동시킬 수 있습니다.\n\n<size=40><b>절대로 그들이 목적지에 도착하지 않도록 하세요!</b></size>", 10);
+            Tagger.AddHint("데스런 D계급 입장 알림", "곧 <color=orange>D계급</color>이 데스런에 입장합니다.\n그들을 막기 위해 <color=red>빨간 버튼</color>을 눌러 일회용 함정을 발동시킬 수 있습니다.\n\n<size=40><b>절대로 그들이 목적지에 도착하지 않도록 하세요!</b></size>", 10);
 
             foreach (var player in Player.List.Where(x => x != Tagger))
             {

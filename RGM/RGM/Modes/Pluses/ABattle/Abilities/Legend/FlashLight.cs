@@ -37,7 +37,7 @@ public class FlashLight : Ability
         if (ev.Item != null)
         {
             if (FlashLightSerial == ev.Player.CurrentItem.Serial && FlashLightSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"손전등을 상대에게 비추면 <b><color={ABattle.RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.AddHint("플래시라이트", $"손전등을 상대에게 비추면 <b><color={ABattle.RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 

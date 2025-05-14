@@ -43,8 +43,8 @@ public class Druid : Ability
             ev.IsAllowed = false;
 
             ev.Attacker.Hurt(ev.Player, ev.DamageHandler.Damage, ev.DamageHandler.Type, new DamageHandlerBase.CassieAnnouncement(null), deathText: "정령의 힘에 의해 사망하였습니다.");
-            ev.Attacker.ShowHint("당신의 공격이 반사되었습니다.");
-            ev.Player.ShowHint($"상대의 공격이 반사되었습니다.");
+            ev.Attacker.AddHint("드루이드", "당신의 공격이 반사되었습니다.");
+            ev.Player.AddHint("드루이드", $"상대의 공격이 반사되었습니다.");
         }
     }
 }

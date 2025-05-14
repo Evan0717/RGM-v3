@@ -48,7 +48,7 @@ namespace RGM.Modes
             if (!(ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo")))
                 return;
 
-            ev.Player.ShowHint($"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
+            ev.Player.AddHint("도박 안내", $"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
         }
 
         public void OnDroppingItem(DroppingItemEventArgs ev)

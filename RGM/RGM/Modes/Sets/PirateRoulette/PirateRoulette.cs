@@ -76,7 +76,7 @@ namespace RGM.Modes
                         if (p == bomb)
                         {
                             Bomb = bomb;
-                            p.ShowHint($"<size=25>당신이 <color=#FA5858>폭탄</color>입니다.</size>\n<size=23>술래가 당신을 잡도록 유도해보세요.</size>\n", 20);
+                            p.AddHint("해적 룰렛", $"<size=25>당신이 <color=#FA5858>폭탄</color>입니다.</size>\n<size=23>술래가 당신을 잡도록 유도해보세요.</size>\n", 20);
                         }
                     });
                 }

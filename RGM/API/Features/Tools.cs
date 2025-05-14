@@ -459,7 +459,7 @@ $"""
                 }
 
                 foreach (var player in Player.List)
-                    player.ShowHint($"<size=25>{host.DisplayNickname}(이)가 <b><color=#FFBF00>게임 진행 불가 투표</color></b>를 개설하였습니다.\n라운드를 강제로 종료해야 한다면 <b>.찬성</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {21 - i}초 남음 ({BugVotePlayers.Count}/{RequiredCount})</size>", 1.2f);
+                    player.AddHint("게임진행불가투표", $"<size=25>{host.DisplayNickname}(이)가 <b><color=#FFBF00>게임 진행 불가 투표</color></b>를 개설하였습니다.\n라운드를 강제로 종료해야 한다면 <b>.찬성</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {21 - i}초 남음 ({BugVotePlayers.Count}/{RequiredCount})</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1);
             }
@@ -503,7 +503,7 @@ $"""
                 }
 
                 foreach (var player in Player.List)
-                    player.ShowHint($"<size=25><b><color=#DA81F5>의문의 제안</color></b>이 개설되었습니다.\n제안을 수락하시려면 <b>.수락</b> 명령어를 입력하세요.</size>\n{reason}\n<size=20>투표 종료까지 {31 - i}초 남음 ({SuggestPlayers.Count}/{RequiredCount})</size>", 1.2f);
+                    player.AddHint("의문의 제안", $"<size=25><b><color=#DA81F5>의문의 제안</color></b>이 개설되었습니다.\n제안을 수락하시려면 <b>.수락</b> 명령어를 입력하세요.</size>\n{reason}\n<size=20>투표 종료까지 {31 - i}초 남음 ({SuggestPlayers.Count}/{RequiredCount})</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1);
             }
@@ -562,7 +562,7 @@ $"""
             }
 
             if (Convener != null)
-                Convener.ShowHint($"<i>{SnakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..</i>", 5f);
+                Convener.AddHint("뱀의 손", $"<i>{SnakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..</i>", 5f);
         }
 
         public static string ColorFormat(string cn)

@@ -122,7 +122,7 @@ Trouble in Terrorist Town의 약자.
             for (int i = 0; i < 20; i++)
             {
                 foreach (var player in Player.List)
-                    player.ShowHint($"""
+                    player.AddHint("TTT 안내", $"""
 <align=left><size=25>
 Trouble in Terrorist Town의 약자.
 
@@ -203,15 +203,15 @@ Trouble in Terrorist Town의 약자.
             {
                 if (traitors.Contains(player))
                 {
-                    player.ShowHint($"당신은 <color=red>배신자</color>입니다. <color=red>배신자</color>들을 제외한 나머지를 모두 사살하세요.\n<size=25>{traitors.Count()}명의 <color=red>배신자</color>가 존재합니다.\n<b>[ALT]ㅣ근접한 플레이어를 즉시 처형할 수 있습니다. (쿨다운 10초)</b></size>", 20);
+                    player.AddHint("TTT 배신자", $"당신은 <color=red>배신자</color>입니다. <color=red>배신자</color>들을 제외한 나머지를 모두 사살하세요.\n<size=25>{traitors.Count()}명의 <color=red>배신자</color>가 존재합니다.\n<b>[ALT]ㅣ근접한 플레이어를 즉시 처형할 수 있습니다. (쿨다운 10초)</b></size>", 20);
                 }
                 else if (player == detective)
                 {
-                    player.ShowHint($"당신은 <color=#2ECCFA>탐정</color>입니다. <color=red>배신자</color>들을 처단하세요.", 20);
+                    player.AddHint("TTT 탐정", $"당신은 <color=#2ECCFA>탐정</color>입니다. <color=red>배신자</color>들을 처단하세요.", 20);
                 }
                 else
                 {
-                    player.ShowHint($"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 20);
+                    player.AddHint("TTT 무죄인", $"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 20);
                 }
             }
 
@@ -251,16 +251,16 @@ Trouble in Terrorist Town의 약자.
                     if (Tools.TryGetLookPlayer(traitor, 100, out Player t, out RaycastHit? hit))
                     {
                         if (traitors.Contains(t))
-                            traitor.ShowHint($"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
+                            traitor.AddHint("TTT 배신자 확인", $"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
 
                         else
-                            traitor.ShowHint($"[ALT]ㅣ해당 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>을 일격에 즉사시키십시오.", 1.2f);
+                            traitor.AddHint("TTT 무죄인 확인", $"[ALT]ㅣ해당 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>을 일격에 즉사시키십시오.", 1.2f);
                     }
                     else if (Tools.TryGetNearestPlayer(traitor, out Player nearestPlayer, out float radius))
-                        traitor.ShowHint($"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
+                        traitor.AddHint("TTT 생존자 거리 확인", $"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
 
                     else
-                        traitor.ShowHint("당신은 임무를 완수하였습니다.", 1.2f);
+                        traitor.AddHint("TTT 배신자 임무 완수", "당신은 임무를 완수하였습니다.", 1.2f);
                 }
 
                 yield return Timing.WaitForSeconds(1f);

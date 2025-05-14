@@ -224,7 +224,7 @@ public class ABattle : Mode
                 if (CurrentHint == null || isStatusHint)
                 {
                     if (player.IsAlive)
-                        player.ShowHint(FormatHint(player), 1.2f);
+                        player.AddHint("워크스테이션 힌트", FormatHint(player), 1.2f);
                 }
             }
 
@@ -672,7 +672,7 @@ public class ABattle : Mode
                 yield break;
             }
 
-            player.ShowHint(
+            player.AddHint("능력 선택창",
             $"<align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade()]}</b></size>\n\n<size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n\n\n\n",
             1.2f);
 
@@ -752,7 +752,7 @@ public class ABattle : Mode
 
         Selections.Remove(player);
 
-        player.ShowHint("", 0.1f);
+        player.AddHint("", "", 0.1f);
 
         response = $"{index}번 능력 선택 완료!";
         return true;

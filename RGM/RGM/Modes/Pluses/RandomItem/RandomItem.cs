@@ -61,7 +61,7 @@ namespace RGM.Modes
                 {
                     Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
 
-                    player.ShowHint($"<color=#F3F781>{Trans.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
+                    player.AddHint("랜덤박스", $"<color=#F3F781>{Trans.Item[Item.Type]}</color>(을)를 지급받았습니다.", 5);
                 }
             }
         }

@@ -182,7 +182,7 @@ namespace RGM.Modes
                     Revolver.BarrelAmmo = 1;
 
                     Players[currentPlayerIndex].CurrentItem = Revolver;
-                    Players[currentPlayerIndex].ShowHint($"<size=25>당신의 차례입니다.\n다른 유저를 사살하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");
+                    Players[currentPlayerIndex].AddHint("러시안 룰렛", $"<size=25>당신의 차례입니다.\n다른 유저를 사살하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");
 
                     for (int i = 1; i < 11; i++)
                     {

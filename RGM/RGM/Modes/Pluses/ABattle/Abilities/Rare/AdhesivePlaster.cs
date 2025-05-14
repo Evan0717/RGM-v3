@@ -37,7 +37,7 @@ public class AdhesivePlaster : Ability
             ev.Player.RemoveAbility(AbilityType.RARE_ADHESIVEPLASTER);
 
             Owner.AddAbility(AbilityType.DUMMY_USEDADHESIVEPLASTER);
-            Owner.ShowHint($"<color={ABattle.RatingColor["희귀"]}>반창고</color> 효과 덕에 체력을 120HP 회복했습니다.");
+            Owner.AddHint("반창고", $"<color={ABattle.RatingColor["희귀"]}>반창고</color> 효과 덕에 체력을 120HP 회복했습니다.");
         }
     }
 }

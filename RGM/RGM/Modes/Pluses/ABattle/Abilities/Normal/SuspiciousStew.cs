@@ -32,7 +32,7 @@ public class SuspiciousStew : Ability
         byte Intensity = (byte)Random.Range(1, Random.Range(12, Random.Range(48, Random.Range(64, Random.Range(100, 255)))));
 
         Owner.EnableEffect(Effect, Intensity);
-        Owner.ShowHint($"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.", 5);
+        Owner.AddHint("효과 알리미", $"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.", 5);
         Owner.AddBroadcast(5, $"<size=20><color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.</size>");
         Timing.CallDelayed(1, () =>
         {

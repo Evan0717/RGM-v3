@@ -8,6 +8,7 @@ using Exiled.API.Features.Roles;
 using MEC;
 using MultiBroadcast;
 using PlayerRoles;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -205,7 +206,7 @@ namespace RGM.Modes
         {
             if (Tantrum >= 10)
             {
-                ev.Player.ShowHint($"렉 방지를 위해 10개로 제한됩니다. (하나 당 180초)", 1);
+                ev.Player.AddHint("무제한 땅콩 똥 제한", $"렉 방지를 위해 10개로 제한됩니다. (하나 당 180초)", 1);
                 ev.IsAllowed = false;
             }
             else

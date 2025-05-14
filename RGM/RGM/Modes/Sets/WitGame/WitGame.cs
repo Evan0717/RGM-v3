@@ -173,7 +173,7 @@ namespace RGM.Modes
             while (true)
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive && !PassPlayers.Contains(x)))
-                    player.ShowHint("Spaceㅣ점프를 뛰어 눈치를 챙기세요.", 1.2f);
+                    player.AddHint("눈치 챙겨", "Spaceㅣ점프를 뛰어 눈치를 챙기세요.", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
             }

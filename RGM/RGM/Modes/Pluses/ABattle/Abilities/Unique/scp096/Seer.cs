@@ -46,10 +46,10 @@ public class Sear : Ability
 
                 ev.Scp096.AddTarget(player);
 
-                player.ShowHint($"<color={ABattle.RatingColor["전용"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
+                player.AddHint("천리안", $"<color={ABattle.RatingColor["전용"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
             }
         }
 
-        ev.Player.ShowHint($"<color={ABattle.RatingColor["전용"]}>천리안</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
+        ev.Player.AddHint("천리안", $"<color={ABattle.RatingColor["전용"]}>천리안</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
     }
 }

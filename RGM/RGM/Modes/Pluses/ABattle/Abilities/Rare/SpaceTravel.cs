@@ -36,7 +36,7 @@ public class SpaceTravel : Ability
         if (ev.Item != null)
         {
             if (serial == ev.Item.Serial)
-                ev.Player.ShowHint($"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>공간이동</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>공간이동</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 
@@ -52,7 +52,7 @@ public class SpaceTravel : Ability
                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);
             }
             else
-                ev.Player.ShowHint("대상을 정확히 지정해 주세요.");
+                ev.Player.AddHint("동전 사용 실패", "대상을 정확히 지정해 주세요.");
         }
     }
 }

@@ -34,8 +34,8 @@ public class Agility : Ability
         {
             ev.IsAllowed = false;
 
-            ev.Attacker.ShowHint($"이런, 미끄러져 버렸군요.", 1.2f);
-            ev.Player.ShowHint($"아슬아슬하게 회피했군요!", 1.2f);
+            ev.Attacker.AddHint("이런, 미끄러져 버렸군요.", $"이런, 미끄러져 버렸군요.", 1.2f);
+            ev.Player.AddHint("아슬아슬하게 회피했군요!", $"아슬아슬하게 회피했군요!", 1.2f);
         }
     }
 }

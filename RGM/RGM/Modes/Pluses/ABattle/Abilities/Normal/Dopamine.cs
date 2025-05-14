@@ -37,6 +37,6 @@ public class Dopamine : Ability
         Owner.Heal(ev.DamageHandler.Damage > 200 ? 200 : ev.DamageHandler.Damage);
 
         Owner.AddAbility(AbilityType.DUMMY_DOPAMINERELEASED);
-        Owner.ShowHint($"<color={ABattle.RatingColor["일반"]}>도파민</color> 효과로 인해 데미지를 무시하고 체력으로 흡수했습니다.");
+        Owner.AddHint("도파민", $"<color={ABattle.RatingColor["일반"]}>도파민</color> 효과로 인해 데미지를 무시하고 체력으로 흡수했습니다.");
     }
 }

@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
@@ -32,7 +33,7 @@ public class WarGod : Ability
         if (LightWarriorSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (LightWarriorSerial == ev.Item.Serial)
-                ev.Player.ShowHint($"<b><color={ABattle.RatingColor["신화"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
+                ev.Player.AddHint("광전사", $"<b><color={ABattle.RatingColor["신화"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
         }
     }
 
