@@ -57,7 +57,5 @@ public class GrapplingHook : Ability
             else
                 ev.Player.AddHint("동전 사용 실패", "대상을 정확히 지정해 주세요.");
         }
-        else
-            ev.Player.AddHint("동전 사용 실패", "대상을 정확히 지정해 주세요.");
     }
 }
