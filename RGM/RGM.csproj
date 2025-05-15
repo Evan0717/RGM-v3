@@ -389,6 +389,8 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Gman.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Loser.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\RandomCollection.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Rich1.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Rich2.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\SuicideSquad.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\SurvivalExpert.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Synergy\Vampire.cs" />

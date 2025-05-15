@@ -1,10 +1,13 @@
-﻿using Exiled.API.Features;
+﻿using Discord;
+using Exiled.API.Features;
 using PlayerStatsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.API.Features
 {
@@ -13,6 +16,280 @@ namespace RGM.API.Features
         public static void Hit(this Player player, Player attacker, float damage)
         {
             player.Hurt(new DisruptorDamageHandler(new InventorySystem.Items.Firearms.ShotEvents.DisruptorShotEvent(InventorySystem.Items.ItemIdentifier.None, attacker.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringRapid), player.Position, damage));
+        }
+
+        public static bool AddBadge(this Player player, string args, out string response, ArraySegment<string>? arguments = null)
+        {
+            string UserId = player.UserId;
+
+            if (arguments.HasValue && arguments.Value.Count < 2)
+            {
+                response = "칭호추가 <player> <badge name>";
+                return false;
+            }
+            else if (Badges.ContainsKey(args))
+            {
+                List<string> uc = UsersManager.UsersCache[UserId];
+
+                if (uc[10] == "0")
+                {
+                    uc[10] = args;
+                    UsersManager.UsersCache[UserId] = uc;
+                    response = "Successfully add badge.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+                else
+                {
+                    if (uc[10].Split('/').Contains(args))
+                    {
+                        response = "This player already have this badge.";
+                        return false;
+                    }
+                    else
+                    {
+                        uc[10] += $"/{args}";
+                        UsersManager.UsersCache[UserId] = uc;
+                        response = "Successfully add badge.";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                response = "This badge is not exist.";
+                return false;
+            }
+        }
+
+        public static bool AddCustom(this Player player, string args, out string response, ArraySegment<string>? arguments = null)
+        {
+            string UserId = player.UserId;
+
+            if (arguments.HasValue && arguments.Value.Count < 2)
+            {
+                response = "커스텀추가 <player> <custom feature name>";
+                return false;
+            }
+            else if (Customizations.ContainsKey(args))
+            {
+                List<string> uc = UsersManager.UsersCache[UserId];
+
+                if (uc[7] == "0")
+                {
+                    uc[7] = args;
+                    UsersManager.UsersCache[UserId] = uc;
+                    response = "Successfully add custom feature.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+                else
+                {
+                    if (uc[7].Split('/').Contains(args))
+                    {
+                        response = "This player already have this custom feature.";
+                        return false;
+                    }
+                    else
+                    {
+                        uc[7] += $"/{args}";
+                        UsersManager.UsersCache[UserId] = uc;
+                        response = "Successfully add custom feature.";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                response = "This custom feature is not exist.";
+                return false;
+            }
+        }
+
+        public static bool AddKillEffect(this Player player, string args, out string response, ArraySegment<string>? arguments = null)
+        {
+            string UserId = player.UserId;  
+
+            if (arguments.HasValue && arguments.Value.Count < 2)
+            {
+                response = "킬이펙트추가 <player> <kill effect name>";
+                return false;
+            }
+            else if (KillEffects.ContainsKey(args))
+            {
+                List<string> uc = UsersManager.UsersCache[UserId];
+
+                if (uc[3] == "0")
+                {
+                    uc[3] = args;
+                    UsersManager.UsersCache[UserId] = uc;
+                    response = "Successfully add kill effect.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+                else
+                {
+                    if (uc[3].Split('/').Contains(args))
+                    {
+                        response = "This player already have this kill effect.";
+                        return false;
+                    }
+                    else
+                    {
+                        uc[3] += $"/{args}";
+                        UsersManager.UsersCache[UserId] = uc;
+                        response = "Successfully add kill effect.";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                response = "This kill effect is not exist.";
+                return false;
+            }
+        }
+
+        public static bool AddPaint(this Player player, string args, out string response, ArraySegment<string>? arguments = null)
+        {
+            string UserId = player.UserId;
+
+            if (arguments.HasValue && arguments.Value.Count < 2)
+            {
+                response = "페인트추가 <player> <paint name>";
+                return false;
+            }
+            else if (Paints.ContainsKey(args))
+            {
+                List<string> uc = UsersManager.UsersCache[UserId];
+
+                if (uc[8] == "0")
+                {
+                    uc[8] = args;
+                    UsersManager.UsersCache[UserId] = uc;
+                    response = "Successfully add paint.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+                else
+                {
+                    if (uc[8].Split('/').Contains(args))
+                    {
+                        response = "This player already have this paint.";
+                        return false;
+                    }
+                    else
+                    {
+                        uc[8] += $"/{args}";
+                        UsersManager.UsersCache[UserId] = uc;
+                        response = "Successfully add paint.";
+
+                        UsersManager.SaveUsers();
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                response = "This paint is not exist.";
+                return false;
+            }
+        }
+
+        public static bool AddCash(this Player player, int cash, out string response, bool result = true)
+        {
+            string UserId = player.UserId;
+            List<string> uc = UsersManager.UsersCache.ContainsKey(UserId) ? UsersManager.UsersCache[UserId] : new List<string>();
+
+            if (uc.Count == 0)
+            {
+                List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
+
+                if (!UsersManager.UsersCache.ContainsKey(UserId))
+                {
+                    UsersManager.AddUser(UserId, DefaultValues);
+
+                    UsersManager.SaveUsers();
+                }
+
+                uc = UsersManager.UsersCache[UserId];
+            }
+
+            if (result)
+            {
+                if (cash < 0)
+                {
+                    response = "0 upper";
+                    return false;
+                }
+                else
+                {
+                    uc[2] = cash.ToString();
+                    UsersManager.UsersCache[UserId] = uc;
+                    response = "successfully set up Cash.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+            }
+            else
+            {
+                response = $"{uc[2]}";
+                return true;
+            }
+        }
+
+        public static bool AddRC(this Player player, int rc, out string response, bool result = true)
+        {
+            string UserId = player.UserId;
+            List<string> uc = UsersManager.UsersCache.ContainsKey(UserId) ? UsersManager.UsersCache[UserId] : new List<string>();
+
+            if (uc.Count == 0)
+            {
+                List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
+
+                if (!UsersManager.UsersCache.ContainsKey(UserId))
+                {
+                    UsersManager.AddUser(UserId, DefaultValues);
+
+                    UsersManager.SaveUsers();
+                }
+
+                uc = UsersManager.UsersCache[UserId];
+            }
+
+            if (result)
+            {
+                if (rc < 0)
+                {
+                    response = "0 upper.";
+                    return false;
+                }
+                else
+                {
+                    uc[1] = rc.ToString();
+                    UsersManager.UsersCache[UserId] = uc;
+                    response = "successfully set up Random Coin.";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+            }
+            else
+            {
+                response = $"{uc[1]}";
+                return false;
+            }
         }
     }
 }

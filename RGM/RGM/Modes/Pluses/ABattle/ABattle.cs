@@ -383,9 +383,24 @@ public class ABattle : Mode
     {
         List<Ability> abilities = PlayerAbilities[player];
 
-        foreach (var synergy in SynergyAbilities.Where(synergy =>
-                     synergy.Value.All(req => abilities.Any(a => a.Data.AbilityType == req))))
+        foreach (var synergy in SynergyAbilities)
         {
+            // 시너지 능력의 요구사항이 중복을 포함할 수 있도록, 각 요구 능력의 개수를 세서 비교
+            bool hasAllRequired = true;
+            foreach (var req in synergy.Value.GroupBy(x => x))
+            {
+                int requiredCount = req.Count();
+                int playerCount = abilities.Count(a => a.Data.AbilityType == req.Key);
+                if (playerCount < requiredCount)
+                {
+                    hasAllRequired = false;
+                    break;
+                }
+            }
+
+            if (!hasAllRequired)
+                continue;
+
             if (!Abilities.TryGetValue(synergy.Key, out var synergyAbilityType))
                 continue;
 

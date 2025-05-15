@@ -23,42 +23,8 @@ namespace RGM.Commands.RemoteAdminCommands
             bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int cash);
             List<string> uc = UsersManager.UsersCache.ContainsKey(player) ? UsersManager.UsersCache[player] : new List<string>();
 
-            if (uc.Count == 0)
-            {
-                List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
-
-                if (!UsersManager.UsersCache.ContainsKey(player))
-                {
-                    UsersManager.AddUser(player, DefaultValues);
-
-                    UsersManager.SaveUsers();
-                }
-
-                uc = UsersManager.UsersCache[player];
-            }
-
-            if (result)
-            {
-                if (cash < 0)
-                {
-                    response = "0 upper";
-                    return false;
-                }
-                else
-                {
-                    uc[2] = cash.ToString();
-                    UsersManager.UsersCache[player] = uc;
-                    response = "successfully set up Cash.";
-
-                    UsersManager.SaveUsers();
-                    return true;
-                }
-            }
-            else
-            {
-                response = $"{uc[2]}";
-                return true;
-            }
+            bool flag = Player.Get(sender).AddCash(cash, out response, result);
+            return flag;
         }
 
         public string Command { get; } = "캐쉬";

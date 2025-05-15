@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Windows.Forms;
 using CommandSystem;
 using Exiled.API.Extensions;
@@ -21,44 +22,9 @@ namespace RGM.Commands.RemoteAdminCommands
         {
             string player = Tools.TryGetUserId(arguments.At(0));
             bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int rc);
-            List<string> uc = UsersManager.UsersCache.ContainsKey(player) ? UsersManager.UsersCache[player] : new List<string>();
 
-            if (uc.Count == 0)
-            {
-                List<string> DefaultValues = Enumerable.Repeat("0", 15).ToList();
-
-                if (!UsersManager.UsersCache.ContainsKey(player))
-                {
-                    UsersManager.AddUser(player, DefaultValues);
-
-                    UsersManager.SaveUsers();
-                }
-
-                uc = UsersManager.UsersCache[player];
-            }
-
-            if (result)
-            {
-                if (rc < 0)
-                {
-                    response = "0 upper.";
-                    return false;
-                }
-                else
-                {
-                    uc[1] = rc.ToString();
-                    UsersManager.UsersCache[player] = uc;
-                    response = "successfully set up Random Coin.";
-
-                    UsersManager.SaveUsers();
-                    return true;
-                }
-            }
-            else
-            {
-                response = $"{uc[1]}";
-                return false;
-            }
+            bool flag = Player.Get(sender).AddCash(rc, out response, result);
+            return flag;
         }
 
         public string Command { get; } = "rc";
