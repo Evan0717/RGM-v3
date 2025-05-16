@@ -37,7 +37,7 @@ public class Escape : Ability
         if (ev.Item != null)
         {
             if (serial == ev.Item.Serial)
-                ev.Player.AddHint("위기 탈출", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
+                ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
         }
     }
 
