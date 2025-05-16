@@ -56,19 +56,19 @@ namespace RGM.Modes
             Timing.RunCoroutine(RecordPlayerInfo());
             Timing.RunCoroutine(CheckRedLight());
 
-            Player.List.ToList().ForEach(x => x.AddHint("초록 불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
+            Player.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
 
             while (true)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 51));
 
                 Light = "Red";
-                Player.List.ToList().ForEach(x => x.AddHint("빨간 불", $"<color=red>빨간 불</color>! 움직이지 마세요!", 250));
+                Player.List.ToList().ForEach(x => x.AddHint("불", $"<color=red>빨간 불</color>! 움직이지 마세요!", 250));
 
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 6));
 
                 Light = "Green";
-                Player.List.ToList().ForEach(x => x.AddHint("초록 불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
+                Player.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
             }
         }
 
