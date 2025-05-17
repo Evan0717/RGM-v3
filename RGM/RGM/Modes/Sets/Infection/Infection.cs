@@ -37,6 +37,7 @@ namespace RGM.Modes
 <b>인류</b>는 무슨 수를 써서라도 10분을 버텨야 합니다.
 <b><color=red>숙주</color></b>는 무슨 수를 써서라도 모든 인류를 감염시켜야 합니다.
 
+* <b><color=red>숙주</color></b>는 일반 감염자보다 더 강력합니다.
 * <color=red>SCP-079</color>는 <b><color=red>숙주</color></b>의 조력자로 탄생합니다.
 """;
         public override string Color => "FF0000";
@@ -99,14 +100,6 @@ namespace RGM.Modes
                         });
                         player.AddItem(ItemType.KeycardScientist);
                     }
-
-                    if (player.Role.Type == RoleTypeId.Scp079)
-                    {
-                        if (GodModePlayers.Contains(player))
-                            GodModePlayers.Remove(player);
-
-                        player.Kill("숙주 좀비의 조력자로 탄생할 것입니다.");
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -167,6 +160,25 @@ namespace RGM.Modes
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
                 ev.Player.EnableEffect(EffectType.FogControl, 7);
+
+                if (HostZombies.Contains(ev.Player))
+                {
+                    ev.Player.MaxHealth = 650;
+                    ev.Player.Health = ev.Player.MaxHealth;
+                    ev.Player.EnableEffect(EffectType.MovementBoost, 20);
+                    ev.Player.IsBypassModeEnabled = true;
+                }
+
+                if (ev.Player.Role.Type == RoleTypeId.Scp079)
+                {
+                    if (!HostZombies.Contains(ev.Player))
+                        HostZombies.Add(ev.Player);
+
+                    if (GodModePlayers.Contains(ev.Player))
+                        GodModePlayers.Remove(ev.Player);
+
+                    ev.Player.Kill("숙주 좀비가 될 것입니다.");
+                }
             });
         }
 
