@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("단련", "공격력이 12% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
+[Ability("단련", "공격력이 9% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
 public class Training : Ability
 {
     List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
@@ -31,6 +31,6 @@ public class Training : Ability
         if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
             return;
 
-        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.12f;
+        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.09f;
     }
 }
