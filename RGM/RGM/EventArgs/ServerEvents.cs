@@ -270,7 +270,7 @@ namespace RGM.EventArgs
 
                 if (Player.TryGet(userId, out Player player))
                 {
-                    sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {player.DisplayNickname} - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                    sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
                     rank++;
                 }
             }
