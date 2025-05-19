@@ -8,7 +8,7 @@ using CustomRendering;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features.Objects;
 using MEC;
 using Mirror;
 using MultiBroadcast;
@@ -20,6 +20,8 @@ using Exiled.Events.EventArgs.Server;
 using MultiBroadcast.API;
 using Respawning;
 using static RGM.Variables.ServerManagers;
+using ProjectMER.Features;
+using ProjectMER.Features.Serializable;
 
 namespace RGM.Modes
 {
@@ -64,7 +66,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"container");
+            MapSchematic map = Tools.LoadMap($"container");
 
             Player.List.ToList().CopyTo(pl);
             monster = Tools.GetRandomValue(Player.List.ToList());
@@ -106,10 +108,10 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var obj in MapEditorReborn.API.API.SpawnedObjects)
+                foreach (var obj in map.SpawnedObjects)
                 {
                     if (obj.name == "CustomSchematic-MonsterCapsule")
-                        obj.Position = monster.Position;
+                        obj.Base.Position = monster.Position;
                 }
 
                 yield return Timing.WaitForSeconds(0.01f);

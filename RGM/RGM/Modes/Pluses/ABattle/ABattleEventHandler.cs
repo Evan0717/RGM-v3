@@ -2,7 +2,6 @@
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using MapEditorReborn.Events.EventArgs;
 using InventorySystem.Items.Firearms.Attachments;
 using MEC;
 using UnityEngine;

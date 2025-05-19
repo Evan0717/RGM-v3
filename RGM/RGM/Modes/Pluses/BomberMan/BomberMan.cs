@@ -13,9 +13,9 @@ using RGM.API.Features;
 using MultiBroadcast.API;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
-using MapEditorReborn.API.Features.Serializable;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features.Serializable;
+using ProjectMER.Features.Objects;
+using ProjectMER.Features;
 
 namespace RGM.Modes
 {
@@ -111,7 +111,10 @@ namespace RGM.Modes
                     g.FuseTime = 4f;
                     g.SpawnActive(ev.Position, ev.Player);
 
-                    LightSourceObject light = ObjectSpawner.SpawnLightSource(new LightSourceSerializable("#9A2EFE", 10, 1, false), ev.Position);
+                    LabApi.Features.Wrappers.LightSourceToy light = LabApi.Features.Wrappers.LightSourceToy.Create(ev.Position);
+                    light.Color = new UnityEngine.Color();
+                    light.Intensity = 10;
+                    light.Range = 1;
 
                     Timing.CallDelayed(4, () =>
                     {

@@ -16,7 +16,7 @@ using Exiled.API.Enums;
 using PlayerRoles;
 using MultiBroadcast.API;
 using RGM.API.Features;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features;
 
 using static RGM.Variables.ServerManagers;
 using Respawning;

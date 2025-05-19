@@ -6,8 +6,8 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features.Objects;
+using ProjectMER.Features;
 using MEC;
 using RGM.API.Features;
 using UnityEngine;
@@ -35,7 +35,7 @@ public class LavaChicken : Ability
 
     public IEnumerator<float> OnStarted()
     {
-        SchematicObject lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205), null, null, null);
+        SchematicObject lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205));
 
         while (Owner.IsAlive)
         {

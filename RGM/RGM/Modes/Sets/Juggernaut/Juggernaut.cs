@@ -22,9 +22,8 @@ using RGM.API.DataBases;
 
 using static RGM.Variables.ServerManagers;
 using Exiled.Events.EventArgs.Server;
-using MapEditorReborn.API.Features;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Extensions;
+using ProjectMER.Features;
+using ProjectMER.Features.Objects;
 using PlayerRoles.FirstPersonControl;
 using RelativePositioning;
 using SCPSLAudioApi.AudioCore;
@@ -169,7 +168,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> ArmorAsync()
         {
-            SchematicObject Armor = ObjectSpawner.SpawnSchematic("JuggernautThemeArmor", Vector3.zero, juggernaut.Rotation, new Vector3(1.2f, 1.1f, 1.2f), null);
+            SchematicObject Armor = ObjectSpawner.SpawnSchematic("JuggernautThemeArmor", Vector3.zero, juggernaut.Rotation, new Vector3(1.2f, 1.1f, 1.2f));
 
             while (juggernaut.IsAlive)
             {

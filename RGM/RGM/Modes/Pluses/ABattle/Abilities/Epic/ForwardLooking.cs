@@ -6,13 +6,14 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features.Objects;
+using ProjectMER.Features;
 using MEC;
 using Mirror;
 using RGM.API.Features;
 using UnityEngine;
 using Microsoft.Win32.SafeHandles;
+using LabApi.Features.Wrappers;
 
 namespace RGM.Modes.Abilities.Epic;
 
@@ -33,7 +34,7 @@ public class ForwardLooking : Ability
 
     public IEnumerator<float> OnStarted()
     {
-        SchematicObject schematic = ObjectSpawner.SpawnSchematic("전방주시태만", new Vector3(1205, 1205, 1205), null, null, null);
+        SchematicObject schematic = ObjectSpawner.SpawnSchematic("전방주시태만", new Vector3(1205, 1205, 1205));
 
         while (Owner.IsAlive)
         {
@@ -44,7 +45,7 @@ public class ForwardLooking : Ability
 
                 bool isNear = false;
 
-                foreach (var player in Player.List.Where(x => x != Owner))
+                foreach (var player in Exiled.API.Features.Player.List.Where(x => x != Owner))
                 {
                     if (Vector3.Distance(player.Position, Owner.Position) < 3)
                     {
@@ -54,8 +55,8 @@ public class ForwardLooking : Ability
 
                 if (isNear)
                 {
-                    schematic.GetComponentsInChildren<PrimitiveObject>().ToList().ForEach(x => x.Primitive.Collidable = false);
-                    schematic.GetComponentsInChildren<PrimitiveObject>().ToList().ForEach(x => x.Primitive.Color = new Color(8.3f, 0, 16.1f, 10.0f));
+                    schematic.GetComponentsInChildren<PrimitiveObjectToy>().ToList().ForEach(x => x.Base.SetFlags(AdminToys.PrimitiveFlags.Visible, AdminToys.PrimitiveFlags.Visible));
+                    schematic.GetComponentsInChildren<PrimitiveObjectToy>().ToList().ForEach(x => x.Color = new Color(8.3f, 0, 16.1f, 10.0f));
                 }
             }
             catch (Exception e)

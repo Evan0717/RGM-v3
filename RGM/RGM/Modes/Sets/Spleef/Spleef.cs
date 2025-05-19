@@ -9,7 +9,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Toys;
 using HarmonyLib;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features.Objects;
 using MEC;
 using Mirror;
 using MultiBroadcast;
@@ -19,7 +19,7 @@ using PlayerRoles.FirstPersonControl;
 using PlayerRoles;
 using RGM.API.Features;
 using MultiBroadcast.API;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features;
 using Respawning;
 
 using static RGM.Variables.ServerManagers;
@@ -43,7 +43,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = new List<ItemType>();
-        public List<Primitive> Transforms = new List<Primitive>();
+        public List<LabApi.Features.Wrappers.PrimitiveObjectToy> Transforms = new List<LabApi.Features.Wrappers.PrimitiveObjectToy>();
         public Door door;
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
 
@@ -82,7 +82,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            IEnumerator<float> RemovingPlatform(Primitive Platform)
+            IEnumerator<float> RemovingPlatform(LabApi.Features.Wrappers.PrimitiveObjectToy Platform)
             {
                 Platform.Color = UnityEngine.Color.green;
 
@@ -109,7 +109,7 @@ namespace RGM.Modes
 
                         if (hit.transform.name == "Platform") 
                         {
-                            Primitive Platform = hit.transform.gameObject.GetComponent<PrimitiveObject>().Primitive;
+                            LabApi.Features.Wrappers.PrimitiveObjectToy Platform = hit.transform.gameObject.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>();
 
                             if (!Transforms.Contains(Platform))
                             {

@@ -6,13 +6,14 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features.Serializable;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features.Objects;
+using ProjectMER.Features.Serializable;
+using ProjectMER.Features;
 using MEC;
 using RGM.API.Features;
 using UnityEngine;
 using Mirror;
+using LabApi.Features.Wrappers;
 
 namespace RGM.Modes.Abilities.Synergy;
 
@@ -34,18 +35,20 @@ public class Glory : Ability
 
     public IEnumerator<float> Radiation()
     {
-        LightSourceSerializable LightSource = new LightSourceSerializable("#FFD700", 100, 20, true);
-        LightSourceObject Light = ObjectSpawner.SpawnLightSource(LightSource, Vector3.zero);
+        LightSourceToy lightSource = LightSourceToy.Create();
+        lightSource.Color = Color.yellow;
+        lightSource.Intensity = 100;
+        lightSource.Range = 20;
 
         while (Owner.IsAlive)
         {
-            foreach (var player in Player.List)
+            foreach (var player in Exiled.API.Features.Player.List)
             {
-                if (Tools.TryGetLookPlayer(player, 45f, out Player target, out RaycastHit? hit))
+                if (Tools.TryGetLookPlayer(player, 45f, out Exiled.API.Features.Player target, out RaycastHit? hit))
                 {
                     if (Owner == target && HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub))
                     {
-                        Light.Position = Owner.Position;
+                        lightSource.Position = Owner.Position;
 
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
                         player.EnableEffect(EffectType.Flashed, 1, 1f);
@@ -55,8 +58,5 @@ public class Glory : Ability
 
             yield return Timing.WaitForOneFrame;
         }
-
-        NetworkServer.Destroy(Light.gameObject);
-        Light.Destroy();
     }
 }

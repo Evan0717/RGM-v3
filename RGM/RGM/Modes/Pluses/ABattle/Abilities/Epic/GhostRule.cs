@@ -7,7 +7,7 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features.Objects;
 using MEC;
 using RGM.API.Features;
 using UnityEngine;

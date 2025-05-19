@@ -7,8 +7,8 @@ using CustomPlayerEffects;
 using CustomRendering;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features.Serializable;
+using ProjectMER.Features.Objects;
+using ProjectMER.Features.Serializable;
 using MEC;
 using Mirror;
 using PlayerRoles;
@@ -120,7 +120,7 @@ namespace RGM.Modes
                     {
                         try
                         {
-                            if (hit.transform.GetComponent<PrimitiveObject>().Primitive.Color != UnityEngine.Color.yellow)
+                            if (hit.transform.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>().Color != UnityEngine.Color.yellow)
                             {
                                 if (player.IsAlive && !player.IsNPC)
                                     player.Kill("황금색 발판을 밟지 못한 자여.");
@@ -141,8 +141,8 @@ namespace RGM.Modes
 
                 foreach (var Pad in Pads)
                 {
-                    if (Pad.GetComponent<PrimitiveObject>().Primitive.Color == UnityEngine.Color.white)
-                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = UnityEngine.Color.red;
+                    if (Pad.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>().Color == UnityEngine.Color.white)
+                        Pad.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>().Color = UnityEngine.Color.red;
                 }
 
                 yield return Timing.WaitForSeconds(1.25f);
@@ -208,7 +208,7 @@ namespace RGM.Modes
                 {
                     foreach (var Pad in Pads)
                     {
-                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+                        Pad.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>().Color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
                     }
 
                     foreach (var ClubLight in ClubLights)
@@ -220,12 +220,12 @@ namespace RGM.Modes
                 {
                     foreach (var Pad in Pads)
                     {
-                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = UnityEngine.Color.white;
+                        Pad.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>().Color = UnityEngine.Color.white;
                     }
 
                     foreach (var Pad in goldPads)
                     {
-                        Pad.GetComponent<PrimitiveObject>().Primitive.Color = UnityEngine.Color.yellow;
+                        Pad.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>().Color = UnityEngine.Color.yellow;
                     }
 
                     foreach (var ClubLight in ClubLights)

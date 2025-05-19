@@ -8,7 +8,7 @@ using CustomRendering;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features.Objects;
 using MEC;
 using Mirror;
 using MultiBroadcast.API;

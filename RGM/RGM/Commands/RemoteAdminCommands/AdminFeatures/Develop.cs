@@ -5,8 +5,8 @@ using System.Windows.Forms;
 using CommandSystem;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using MapEditorReborn.API.Features;
-using MapEditorReborn.API.Features.Serializable;
+using ProjectMER.Features;
+using ProjectMER.Features.Serializable;
 using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API;
@@ -53,11 +53,12 @@ namespace RGM.Commands.RemoteAdminCommands
 
             foreach (var point in Points)
             {
-                PrimitiveSerializable primitiveSerializable = new PrimitiveSerializable 
-                { 
-                    PrimitiveType = PrimitiveType.Sphere
+                SerializablePrimitive primitiveSerializable = new SerializablePrimitive
+                {
+                    PrimitiveType = PrimitiveType.Sphere,
+                    Position = point
                 };
-                ObjectSpawner.SpawnPrimitive(primitiveSerializable, point);
+                ObjectSpawner.SpawnPrimitive(primitiveSerializable);
             }    
 
             response = "Complete!";

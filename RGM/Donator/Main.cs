@@ -9,8 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PlayerStatsSystem;
-using MapEditorReborn.API.Features;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features;
+using ProjectMER.Features.Objects;
 using MEC;
 using UnityEngine;
 using Exiled.API.Features.Toys;
@@ -69,7 +69,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "2", 10);
 
-                SchematicObject SolarTerra = ObjectSpawner.SpawnSchematic("SolarTerra", _pos, rot, null, null);
+                SchematicObject SolarTerra = ObjectSpawner.SpawnSchematic("SolarTerra", _pos, rot);
 
                 Timing.CallDelayed(1.5f, SolarTerra.Destroy);
             }
@@ -78,20 +78,22 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "3", 10);
 
-                SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", _pos + new Vector3(0, 19, 0), rot, null, null);
+                SchematicObject Kerfus = ObjectSpawner.SpawnSchematic("Kerfusa", _pos + new Vector3(0, 19, 0), rot);
 
-                List<PrimitiveObject> primitiveObjects = new List<PrimitiveObject>();
+                List<PrimitiveObjectToy> primitiveObjects = new List<PrimitiveObjectToy>();
 
                 void applyPrimitiveFlags(Transform parentTransform)
                 {
                     foreach (Transform childTransform in parentTransform)
                     {
-                        PrimitiveObject primitiveObject = childTransform.GetComponent<PrimitiveObject>();
+                        PrimitiveObjectToy primitiveObject = childTransform.GetComponent<PrimitiveObjectToy>();
 
                         if (primitiveObject != null)
                         {
-                            primitiveObject.Base.PrimitiveFlags = PrimitiveFlags.Visible;
-                            primitiveObject.UpdateObject();
+                            primitiveObject.PrimitiveFlags = PrimitiveFlags.Visible;
+                            primitiveObject.UpdateParent();
+                            primitiveObject.UpdatePositionClient();
+                            primitiveObject.UpdatePositionServer();
                         }
 
                         applyPrimitiveFlags(childTransform);
@@ -123,7 +125,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "4", 7.5f);
 
-                SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", _pos, rot, null, null);
+                SchematicObject SilverStake = ObjectSpawner.SpawnSchematic("SilverStake", _pos, rot);
 
                 Timing.CallDelayed(1.5f, SilverStake.Destroy);
             }
@@ -132,7 +134,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "5", 7.5f);
 
-                SchematicObject KO = ObjectSpawner.SpawnSchematic("KO", _pos, rot, null, null);
+                SchematicObject KO = ObjectSpawner.SpawnSchematic("KO", _pos, rot);
 
                 Timing.CallDelayed(1.5f, KO.Destroy);
             }
@@ -141,7 +143,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "6", 2);
 
-                SchematicObject XmasTree = ObjectSpawner.SpawnSchematic("XmasTree", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
+                SchematicObject XmasTree = ObjectSpawner.SpawnSchematic("XmasTree", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot);
 
                 Timing.CallDelayed(1.9f, XmasTree.Destroy);
             }
@@ -150,7 +152,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "7", 2);
 
-                SchematicObject XmasTree = ObjectSpawner.SpawnSchematic("XmasBall", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
+                SchematicObject XmasTree = ObjectSpawner.SpawnSchematic("XmasBall", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot);
 
                 Timing.CallDelayed(1.9f, XmasTree.Destroy);
             }
@@ -159,7 +161,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "8", 10);
 
-                SchematicObject Hammer = ObjectSpawner.SpawnSchematic("Hammer", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
+                SchematicObject Hammer = ObjectSpawner.SpawnSchematic("Hammer", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot);
 
                 Timing.CallDelayed(1.5f, Hammer.Destroy);
             }
@@ -168,14 +170,14 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "9", 2);
 
-                SchematicObject Raser = ObjectSpawner.SpawnSchematic("Raser", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
+                SchematicObject Raser = ObjectSpawner.SpawnSchematic("Raser", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot);
 
                 Timing.CallDelayed(1.5f, Raser.Destroy);
             }
 
             if (kE == "5월 5일")
             {
-                SchematicObject ChildrenDay = ObjectSpawner.SpawnSchematic("ChildrenDay", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot, null, null);
+                SchematicObject ChildrenDay = ObjectSpawner.SpawnSchematic("ChildrenDay", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot);
 
                 Timing.CallDelayed(1.5f, ChildrenDay.Destroy);
             }
@@ -187,7 +189,7 @@ namespace RGM.Donator
             {
                 PlaySound(_pos, "10", 2);
 
-                SchematicObject Connected = ObjectSpawner.SpawnSchematic("Connected", _pos, null, null, null);
+                SchematicObject Connected = ObjectSpawner.SpawnSchematic("Connected", _pos);
 
                 Timing.CallDelayed(1.5f, Connected.Destroy);
             }

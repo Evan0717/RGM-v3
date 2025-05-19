@@ -8,9 +8,10 @@ using System.Linq;
 using System;
 using UnityEngine;
 using Exiled.API.Enums;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features;
+using ProjectMER.Features.Objects;
+using ProjectMER.Features;
 using Mirror;
+using LabApi.Features.Wrappers;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -31,8 +32,8 @@ public class EyeMan : Ability
 
     public IEnumerator<float> Twinkle()
     {
-        SchematicObject beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205), null, null, null);
-        beam.GetComponentsInChildren<PrimitiveObject>().ToList().ForEach(x => x.Primitive.MovementSmoothing = 0);
+        SchematicObject beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205));
+        beam.GetComponentsInChildren<PrimitiveObjectToy>().ToList().ForEach(x => x.MovementSmoothing = 0);
 
         while (Owner.IsAlive)
         {
@@ -49,7 +50,7 @@ public class EyeMan : Ability
                 //    }
                 //}
 
-                if (Tools.TryGetLookPlayer(Owner, 100f, out Player target, out RaycastHit? hit))
+                if (Tools.TryGetLookPlayer(Owner, 100f, out Exiled.API.Features.Player target, out RaycastHit? hit))
                 {
                     if (Owner != target && HitboxIdentity.IsEnemy(Owner.ReferenceHub, target.ReferenceHub))
                     {
@@ -58,7 +59,7 @@ public class EyeMan : Ability
                         target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.2f);
                         target.CurrentItem = null;
-                        target.Hurt(target.IsScp ? target.MaxHealth / 240 : target.MaxHealth / 60, "눈빛의 힘에 압도당했습니다.");
+                        target.Hit(Owner, target.IsScp ? target.MaxHealth / 240 : target.MaxHealth / 60);
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
                     else

@@ -14,11 +14,10 @@ using MultiBroadcast.API;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
 using Exiled.Events.EventArgs.Item;
-using MapEditorReborn.API.Features;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features;
+using ProjectMER.Features.Objects;
 using Mirror;
 using PlayerRoles;
-using MapEditorReborn.Commands.ToolgunCommands;
 
 namespace RGM.Modes
 {
@@ -189,7 +188,7 @@ namespace RGM.Modes
 
                         else
                         {
-                            SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation, null, null);
+                            SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, pos, ev.Player.Rotation);
 
                             Timing.CallDelayed(180, () =>
                             {
@@ -250,7 +249,7 @@ namespace RGM.Modes
 
                 ev.Scp079.Energy -= (int)_objects[selectedObject][1];
 
-                SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, ev.Position, ev.Player.Rotation, null, null);
+                SchematicObject _object = ObjectSpawner.SpawnSchematic(selectedObject, ev.Position, ev.Player.Rotation);
 
                 Timing.CallDelayed(180, () =>
                 {
