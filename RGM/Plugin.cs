@@ -7,7 +7,7 @@ using System.Reflection;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
-using MapEditorReborn.API.Features.Objects;
+using ProjectMER.Features.Objects;
 using MultiBroadcast.API;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
@@ -36,7 +36,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 14, 16);
+        public override Version Version { get; } = new(3, 14, 17);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -79,7 +79,7 @@ namespace RGM
                 }
             }
 
-            MapEditorReborn.Events.Handlers.Map.LoadingMap += OnLoadingMap;
+            //ProjectMER.Events.Handlers.Schematic.SchematicSpawned += OnLoadingMap;
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
@@ -119,7 +119,7 @@ namespace RGM
 
         public override void OnDisabled()
         {
-            MapEditorReborn.Events.Handlers.Map.LoadingMap -= OnLoadingMap;
+            //MapEditorReborn.Events.Handlers.Map.LoadingMap -= OnLoadingMap;
 
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
