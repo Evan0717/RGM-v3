@@ -546,7 +546,7 @@ $"""
             foreach (var p in SnakeHands)
             {
                 p.Role.Set(RoleTypeId.Tutorial);
-                p.Position = new Vector3(-0.08203125f, 1000.96f, 6.828125f);
+                p.Position = new Vector3(0.125f, 300.9572f, 4.960938f);
 
                 foreach (ItemType Item in Items)
                     p.AddItem(Item);
