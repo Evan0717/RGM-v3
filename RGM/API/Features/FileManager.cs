@@ -23,7 +23,17 @@ namespace RGM.API.Features
 
         public static void WriteFile(string fileName, string content)
         {
-            File.WriteAllText(Path.Combine(FolderPath, fileName), content);
+            string tempFile = Path.Combine(FolderPath, fileName + ".tmp");
+
+            File.WriteAllText(tempFile, content, Encoding.UTF8);
+
+            string backupFile = Path.Combine(FolderPath, fileName + ".bak");
+            if (File.Exists(Path.Combine(FolderPath, fileName)))
+            {
+                File.Copy(Path.Combine(FolderPath, fileName), backupFile, true);
+            }
+
+            File.Replace(tempFile, Path.Combine(FolderPath, fileName), backupFile, true);
         }
 
         public static string ReadFile(string fileName)
