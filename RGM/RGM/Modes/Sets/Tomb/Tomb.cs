@@ -37,7 +37,7 @@ namespace RGM.Modes
 
         public Vector3 RandomPosition()
         {
-            return new Vector3(UnityEngine.Random.Range(-44.59375f, 54.57981f), 1043f, UnityEngine.Random.Range(-95.16678f, 4.046875f));
+            return new Vector3(UnityEngine.Random.Range(-44.64675f, 54.59153f), 336, UnityEngine.Random.Range(-95.17068f, 3.98947f));
         }
 
         public override void OnEnabled()
