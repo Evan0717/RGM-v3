@@ -72,7 +72,7 @@ namespace RGM.API.Features
                 RoleTypeId.Scp0492,
                 RoleTypeId.Scp106,
                 RoleTypeId.Scp939,
-                // RoleTypeId.Scp3114,
+                RoleTypeId.Scp3114,
                 RoleTypeId.Flamingo,
                 RoleTypeId.AlphaFlamingo,
                 RoleTypeId.ZombieFlamingo,
@@ -697,7 +697,7 @@ $"""
                     ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, null);
                     grenade.FuseTime = 0.5f;
                     grenade.SpawnActive(player.Position, attacker);
-                    player.Kill("달에 갈끄니까!");
+                    player.Hit(attacker, player.MaxHealth);
                     grenade = null;
                 }
 
