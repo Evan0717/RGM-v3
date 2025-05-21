@@ -788,12 +788,15 @@ namespace RGM.EventArgs
 
         public static void OnChangingGroup(ChangingGroupEventArgs ev)
         {
-            ulong permission = ev.Player.Group.Permissions;
-
-            Timing.CallDelayed(1, () =>
+            if (ev.Player.Group != null)
             {
-                ev.Player.Group.Permissions = permission;
-            });
+                ulong permission = ev.Player.Group.Permissions;
+
+                Timing.CallDelayed(1, () =>
+                {
+                    ev.Player.Group.Permissions = permission;
+                });
+            }
         }
 
         public static void OnChangedEmotion(ChangedEmotionEventArgs ev)
