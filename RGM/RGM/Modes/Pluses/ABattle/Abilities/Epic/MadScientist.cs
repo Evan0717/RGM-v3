@@ -33,7 +33,7 @@ public class MadScientist : Ability
 
     public void OnDied(DiedEventArgs ev)
     {
-        if (ev.Player != Owner)
+        if (ev.Player != Owner || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
         Timing.CallDelayed(10, () =>
