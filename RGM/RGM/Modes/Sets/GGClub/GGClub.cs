@@ -25,7 +25,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.GGClub)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.GGClub)]
     class GGClub : Mode
     {
         public override string Name => "GG 클럽";
