@@ -24,6 +24,7 @@ using RGM.API.DataBases;
 using InventorySystem.Configs;
 using Respawning;
 using Exiled.Events.EventArgs.Server;
+using ProjectMER.Features;
 
 namespace RGM.EventArgs
 {
@@ -122,7 +123,7 @@ namespace RGM.EventArgs
         {
             Server.FriendlyFire = false;
 
-            Server.ExecuteCommand("/mp unload RGMLobby");
+            MapUtils.UnloadMap("Past_Lobby");
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
             IntercomPlayers.Clear();
             EnabledModeList.Clear();
