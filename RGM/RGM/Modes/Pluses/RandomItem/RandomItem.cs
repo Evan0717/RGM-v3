@@ -41,16 +41,16 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
-
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
             foreach (var player in Player.List)
             {
-                Spawned(player);
+                Timing.RunCoroutine(Spawned(player));
             }
 
             while (true)
@@ -68,20 +68,21 @@ namespace RGM.Modes
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
-            Spawned(ev.Player);
+            Timing.RunCoroutine(Spawned(ev.Player));
         }
 
-        public void Spawned(Player player)
+        public IEnumerator<float> Spawned(Player player)
         {
-            Timing.CallDelayed(1, () =>
-            {
-                player.ClearInventory();
+            yield return Timing.WaitForOneFrame;
 
-                for (int i = 1; i < 9; i++)
-                {
-                    player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
-                }
-            });
+            player.ClearInventory();
+
+            for (int i = 1; i < 9; i++)
+            {
+                player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
+
+                yield return Timing.WaitForOneFrame;
+            }
         }
     }
 }
