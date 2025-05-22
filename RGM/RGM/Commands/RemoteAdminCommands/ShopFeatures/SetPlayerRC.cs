@@ -24,7 +24,7 @@ namespace RGM.Commands.RemoteAdminCommands
             bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int rc);
             List<string> uc = UsersManager.UsersCache[userId];
 
-            bool flag = userId.SetRC(rc + int.Parse(uc[1]), out response, result);
+            bool flag = userId.SetRC(rc, out response, result);
             return flag;
         }
 

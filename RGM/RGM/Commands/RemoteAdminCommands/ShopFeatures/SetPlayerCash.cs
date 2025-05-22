@@ -23,7 +23,7 @@ namespace RGM.Commands.RemoteAdminCommands
             bool result = int.TryParse(arguments.Count() < 2 ? "dum" : arguments.At(1), out int cash);
             List<string> uc = UsersManager.UsersCache[userId];
 
-            bool flag = userId.SetCash(cash + int.Parse(uc[2]), out response, result);
+            bool flag = userId.SetCash(cash, out response, result);
             return flag;
         }
 
