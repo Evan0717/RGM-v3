@@ -317,7 +317,7 @@ public class ABattle : Mode
 
             switch (type) 
             {
-                case AbilityType.LEGEND_LAVACHICKEN: name = "LavaChicken"; return;
+                case AbilityType.LEGEND_LAVACHICKEN: name = "LavaChicken"; break;
                 default: name = "누군가가 전설 능력을 획득하였습니다"; break;
             }
 
