@@ -300,5 +300,37 @@ namespace RGM.API.Features
                 return false;
             }
         }
+
+        public static bool AddWarn(this string userId, string args, out string response, ArraySegment<string>? arguments = null)
+        {
+            List<string> uc = UsersManager.UsersCache[userId];
+
+            if (args == "")
+            {
+                response = $"{string.Join("\n", uc[22].Split('/'))}\n-";
+                return true;
+            }
+            else
+            {
+                if (uc[22] == "0")
+                {
+                    uc[22] = args;
+                    UsersManager.UsersCache[userId] = uc;
+                    response = $"Successfully add warn.\n\n{string.Join("\n", uc[22].Split('/'))}\n-";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+                else
+                {
+                    uc[22] += $"/{args}";
+                    UsersManager.UsersCache[userId] = uc;
+                    response = $"Successfully add warn.\n\n{string.Join("\n", uc[22].Split('/'))}\n-";
+
+                    UsersManager.SaveUsers();
+                    return true;
+                }
+            }
+        }
     }
 }

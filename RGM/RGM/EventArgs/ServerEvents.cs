@@ -53,7 +53,9 @@ namespace RGM.EventArgs
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Tools.LoadMap($"Past_Lobby");
-            
+            if (UnityEngine.Random.Range(1, 101) == 1) 
+                Tools.LoadMap($"capybara", false);
+
             var donator = new Donator.Main();
             donator.OnEnabled();
 
@@ -284,6 +286,20 @@ namespace RGM.EventArgs
             foreach (var player in Player.List)
             {
                 player.AddHint("라운드 요약", $"<align=left>{sb}</align>\n\n\n\n", 20);
+
+                List<string> uc = UsersManager.UsersCache[player.UserId];
+
+                if (uc[22] != "0")
+                {
+                    if (UnityEngine.Random.Range(1, 21) == 1)
+                    {
+                        uc[22] = "0";
+                        UsersManager.UsersCache[player.UserId] = uc;
+                        UsersManager.SaveUsers();
+
+                        player.AddHint($"경고 해제", "부여된 경고가 해제되었습니다. 행운을 빕니다.", 20);
+                    }
+                }
             }
 
             Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", $"{Paths.Configs}/RGM/Users.txt");

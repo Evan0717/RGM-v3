@@ -232,6 +232,7 @@
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\Use.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayAudio.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Warn.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Item.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SpawnEffect.cs" />
@@ -432,6 +433,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\RestArea.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\Shutdown.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\StartWarhead.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\CantManageAnger.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Enemy.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Rage.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Seer.cs" />

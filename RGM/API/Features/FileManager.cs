@@ -70,6 +70,7 @@ namespace RGM.API.Features
         보유한 스폰이펙트 - 19
         장착한 스폰이펙트 - 20
         스폰이펙트 랜덤 여부 - 21
+        경고 - 22
         */
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.txt");

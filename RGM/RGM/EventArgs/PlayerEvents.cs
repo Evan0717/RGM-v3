@@ -140,6 +140,16 @@ namespace RGM.EventArgs
 
                 if (uc[6] != "0")
                     ev.Player.CustomInfo = uc[6];
+
+                if (uc[22] != "0")
+                {
+                    string value = $"""
+<b><color=red>경고! 제재당할 위기입니다. 아래 내용을 확인해보세요.</color></b>
+{string.Join("\n", uc[22].Split('/'))}
+""";
+                    ev.Player.AddHint($"경고", $"{value}", 100);
+                    ev.Player.SendConsoleMessage($"\n{value}", "white");
+                }
             }
             ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
 
