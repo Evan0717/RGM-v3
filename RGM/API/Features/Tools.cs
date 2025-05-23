@@ -652,7 +652,7 @@ $"""
             GlobalPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
         }
 
-        public static MapSchematic LoadMap(string mapName)
+        public static MapSchematic LoadMap(string mapName, bool notice = true)
         {
             MapSchematic map = MapUtils.GetMapData(mapName);
 
@@ -666,9 +666,12 @@ $"""
 
             Log.Info($"로드된 맵: {mapName}");
 
-            foreach (var player in Player.List)
+            if (notice)
             {
-                player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
+                foreach (var player in Player.List)
+                {
+                    player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
+                }
             }
 
             return map;
