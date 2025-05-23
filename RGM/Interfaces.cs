@@ -126,6 +126,7 @@ public enum ModeType
     LastOne,
     MeetingSquare,
     MiniGames,
+    Original,
     PickMeUp,
     PirateRoulette,
     Infection,

@@ -498,6 +498,7 @@
     <Compile Include="RGM\Modes\Sets\MeetingSquare\MeetingSquare.cs" />
     <Compile Include="RGM\Modes\Sets\MiniGames\MiniGames.cs" />
     <Compile Include="RGM\Modes\Sets\AI\AI.cs" />
+    <Compile Include="RGM\Modes\Sets\Original\Original.cs" />
     <Compile Include="RGM\Modes\Sets\PickMeUp\PickMeUp.cs" />
     <Compile Include="RGM\Modes\Sets\PirateRoulette\PirateRoulette.cs" />
     <Compile Include="RGM\Modes\Pluses\RandomItem\RandomItem.cs" />
@@ -545,5 +546,6 @@
   <ItemGroup>
     <Analyzer Include="..\..\DiscordInteraction\bin\Debug\DiscordInteraction.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
