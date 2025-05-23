@@ -682,6 +682,13 @@ $"""
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        public static string GenerateRandomHexColor()
+        {
+            System.Random random = new System.Random();
+            int colorValue = random.Next(0x1000000);
+            return $"#{colorValue:X6}";
+        }
+
         public static IEnumerator<float> DoRocket(Player attacker, Player player, float speed)
         {
             int amnt = 0;

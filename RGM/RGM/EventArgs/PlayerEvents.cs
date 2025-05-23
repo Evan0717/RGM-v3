@@ -31,6 +31,7 @@ using RGM.UserSettings;
 using Exiled.API.Features.Roles;
 using Exiled.CustomItems.API.Features;
 using Exiled.API.Features.Pickups;
+using Random = UnityEngine.Random;
 
 
 namespace RGM.EventArgs
@@ -750,17 +751,35 @@ namespace RGM.EventArgs
 
             if (ev.Item.Type.ToString().Contains("KeycardCustom"))
             {
-                string info = $"ckeycard {ev.Player.Id} KeycardCustomTaskForce Deluxe_Private_Card 3 3 3 #EFC01A 000000 NAME 420 69 1";
-                string hint = $"<size=20><b>🎉 축하드립니다, 커스텀 키카드를 획득하셨군요!</b></size>\n<size=17>마음에 드는 디자인인 경우 스크린샷을 찍어두세요.</size>\n<size=15>{info}</size>";
+                if (ev.Item is Keycard kc)
+                {
+                    if (kc.Base.Name == string.Empty)
+                    {
+                        string keycard = $"{ev.Item.Type.ToString()}";
+                        string name = "커스텀_키카드";
+                        int level1 = Random.Range(0, 4);
+                        int level2 = Random.Range(0, 4);
+                        int level3 = Random.Range(0, 4);
+                        string permissionColor = Tools.GenerateRandomHexColor();
+                        string tintColor = Tools.GenerateRandomHexColor();
+                        string label = AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_");
+                        string labelColor = Tools.GenerateRandomHexColor();
+                        string holderName = "AudioClips";
+                        int serial = Random.Range(1, 10001);
 
-                ev.Player.AddHint("커스텀 키카드 획득", hint, 10);
-                ev.Player.SendConsoleMessage(hint, "white");
-                Webhook.Send(
-$"""
+                        string info = $"ckeycard (Id) {keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {label} {labelColor} {holderName} {serial}";
+                        string hint = $"<size=20><b>🎉 축하드립니다, 커스텀 키카드를 획득하셨군요!</b></size>\n<size=17>마음에 드는 디자인인 경우 스크린샷을 찍어두세요.</size>\n<size=15>{info}</size>";
+
+                        ev.Player.AddCustomKeycard($"{ev.Item.Type.ToString()}", $"커스텀_키카드", Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4), Tools.GenerateRandomHexColor(), Tools.GenerateRandomHexColor(), AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_"), Tools.GenerateRandomHexColor(), "AudioClips", Random.Range(1, 1206));
+                        ev.Player.AddHint("커스텀 키카드 획득", hint, 10);
+                        ev.Player.SendConsoleMessage(hint, "white");
+                        Webhook.Send(
+        $"""
 {ev.Player.DisplayNickname}(`{ev.Player.Nickname}, {ev.Player.UserId}`)(이)가 커스텀 키카드를 획득했습니다.
 {info}
 """);
-                        
+                    }
+                }     
             }
         }
 

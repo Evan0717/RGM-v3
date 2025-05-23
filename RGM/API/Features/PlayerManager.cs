@@ -21,7 +21,7 @@ namespace RGM.API.Features
             player.Hurt(new DisruptorDamageHandler(new InventorySystem.Items.Firearms.ShotEvents.DisruptorShotEvent(InventorySystem.Items.ItemIdentifier.None, attacker.Footprint, InventorySystem.Items.Firearms.Modules.DisruptorActionModule.FiringState.FiringRapid), player.Position, damage));
         }
 
-        public static void AddCustomKeycard(this Player player, string keycard, string name, string level1, string level2, string level3, string permissionColor, string tintColor, string label, string labelColor, string holderName, int serial)
+        public static void AddCustomKeycard(this Player player, string keycard, string name, int level1, int level2, int level3, string permissionColor, string tintColor, string label, string labelColor, string holderName, int serial)
         {
             Server.ExecuteCommand($"/ckeycard {player.Id} {keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {label} {labelColor} {holderName} {serial}");
         }
