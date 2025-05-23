@@ -15,7 +15,7 @@ using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.RandomItem)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.RandomItem)]
     class RandomItem : Mode
     {
         public override string Name => "랜덤박스";
@@ -73,6 +73,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> Spawned(Player player)
         {
+            if (!player.IsAlive)
+                yield break;
+
             yield return Timing.WaitForOneFrame;
 
             player.ClearInventory();
