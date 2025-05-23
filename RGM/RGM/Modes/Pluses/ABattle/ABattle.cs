@@ -517,7 +517,13 @@ public class ABattle : Mode
 
         abilities.ShuffleList();
 
-        return abilities.Take(count).Select(x => x.Key).ToList();
+        var result = new List<AbilityType>();
+        for (int i = 0; i < count; i++)
+        {
+            var picked = abilities.GetRandomValue().Key;
+            result.Add(picked);
+        }
+        return result;
     }
 
     public void StartSelect(Player player, List<AbilityType> abilities = null, int count = 3)
