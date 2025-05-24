@@ -271,19 +271,9 @@ public class Unlimited : Ability
         if (ev.Player != Owner)
             yield break;
 
-        yield return Timing.WaitForOneFrame;
+        yield return Timing.WaitForSeconds(0.5f);
 
         ev.Scp173.RemainingBreakneckCooldown = 0;
-    }
-
-    public IEnumerator<float> OnBlinking(Exiled.Events.EventArgs.Scp173.BlinkingEventArgs ev)
-    {
-        if (ev.Player != Owner)
-            yield break;
-
-        yield return Timing.WaitForOneFrame;
-
-        ev.BlinkCooldown = 0.4f;
     }
 
     public void OnShooting(ShootingEventArgs ev)
