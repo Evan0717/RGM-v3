@@ -264,7 +264,7 @@ $"""
                 while (true)
                 {
                     foreach (var player in Player.List)
-                        player.AddBroadcast(1, $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다.</size>");
+                        player.AddHint("라운드 보상 지급", $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다.</size>", 1);
 
                     yield return Timing.WaitForSeconds(1);
                 }
@@ -274,7 +274,7 @@ $"""
                 while (true)
                 {
                     foreach (var player in Player.List)
-                        player.AddBroadcast(1, $"<size=25>서버 인원이 15명 이하이므로 우승 보상은 지급되지 않습니다.</size>");
+                        player.AddHint("라운드 보상 지급", $"<size=25>서버 인원이 15명 이하이므로 우승 보상은 지급되지 않습니다.</size>", 1);
 
                     yield return Timing.WaitForSeconds(1);
                 }
