@@ -87,7 +87,7 @@ namespace RGM.Modes
                         soulMates.Remove(soulMate);
                         soulMates.Remove(sm);
 
-                        sm.AddHint("소울메이트 매칭 해제", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                        sm.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace RGM.Modes
                             if (!waitingPlayers.Contains(player))
                                 waitingPlayers.Add(player);
 
-                            player.AddHint("소울메이트 매칭 대기", "누군가와 매칭되기를 기다리는 중입니다..", 1.2f);
+                            player.AddHint("소울메이트 매칭", "누군가와 매칭되기를 기다리는 중입니다..", 1.2f);
                         }
                     }
                     else
@@ -112,8 +112,8 @@ namespace RGM.Modes
                             soulMates.Remove(soulMate);
                             soulMates.Remove(player);
 
-                            player.AddHint("소울메이트 매칭 성공", "누군가와의 매칭이 해제되었습니다.", 1.2f);
-                            soulMate.AddHint("소울메이트 매칭 해제", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            player.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            soulMate.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
                         }
                     }
                 }
@@ -145,8 +145,8 @@ namespace RGM.Modes
                     else
                         SetSoulMate(first, second);
 
-                    first.AddHint("소울메이트 매칭 성공", "누군가와 새롭게 매칭되었습니다.", 5);
-                    second.AddHint("소울메이트 매칭 성공", "누군가와 새롭게 매칭되었습니다.", 5);
+                    first.AddHint("소울메이트 매칭", "누군가와 새롭게 매칭되었습니다.", 5);
+                    second.AddHint("소울메이트 매칭", "누군가와 새롭게 매칭되었습니다.", 5);
                 }
 
                 yield return Timing.WaitForSeconds(1f);
