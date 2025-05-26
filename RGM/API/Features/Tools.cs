@@ -307,7 +307,7 @@ $"""
                 return false;
         }
 
-        public static bool TryGetLookPlayer(Player player, float Distance, out Player target, out RaycastHit? raycastHit)
+        public static bool TryGetLookPlayer(this Player player, float Distance, out Player target, out RaycastHit? raycastHit)
         {
             target = null;
             raycastHit = null;

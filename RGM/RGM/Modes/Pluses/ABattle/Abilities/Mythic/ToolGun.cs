@@ -3,14 +3,16 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
+using ProjectMER.Features.Extensions;
 using ProjectMER.Features.ToolGun;
 using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("툴건", "그저 권총을 얻습니다. (좌클릭 - 생성, 우클릭(홀드) - 선택, F(토글) - 삭제)", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
+[Ability("툴건", "아무 기능도 없는 권총을 얻습니다. 사용을 시도할 때마다 20%의 체력을 소실합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
 public class ToolGun : Ability
 {
     public override void OnEnabled()
@@ -18,9 +20,21 @@ public class ToolGun : Ability
         if (ToolGunItem.TryAdd(Owner))
         {
         }
+
+        LabApi.Events.Handlers.PlayerEvents.DryFiringWeapon += OnPlayerDryFiringWeapon;
     }
 
     public override void OnDisabled()
     {
+    }
+
+    public void OnPlayerDryFiringWeapon(PlayerDryFiringWeaponEventArgs ev)
+    {
+        if (ev.FirearmItem.IsToolGun(out ToolGunItem toolGun))
+        {
+            Player player = (Player)ev.Player;
+
+            player.Hit(player, player.MaxHealth / 5);
+        }
     }
 }

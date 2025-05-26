@@ -80,8 +80,8 @@ namespace RGM.Modes
                     }
                     else if (player.Role is Scp173Role scp173)
                     {
-                        scp173.BlinkCooldown = 0.2f;
-                        scp173.RemainingBreakneckCooldown = 0.2f;
+                        scp173.BlinkCooldown = 0.5f;
+                        scp173.RemainingBreakneckCooldown = 0.5f;
                     }
                     else if (player.Role is Scp096Role scp096)
                     {

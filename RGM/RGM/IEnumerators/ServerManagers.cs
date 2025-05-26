@@ -163,32 +163,25 @@ namespace RGM.IEnumerators
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List)
+                foreach (var player in Player.List.Where(x => x.IsHuman && !JumpScareCooldown.Contains(x)))
                 {
-                    if (player.IsHuman)
+                    if (player.TryGetLookPlayer(25, out Player target, out RaycastHit? hit))
                     {
-                        if (!JumpScareCooldown.Contains(player))
+                        if (target.IsScp)
                         {
-                            if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 25) &&
-                                hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
+                            JumpScareCooldown.Add(player);
+
+                            Timing.CallDelayed(60, () =>
                             {
-                                if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>().gameObject, out Player t) && player != t && t.IsScp)
-                                {
-                                    JumpScareCooldown.Add(player);
+                                JumpScareCooldown.Remove(player);
+                            });
 
-                                    Timing.CallDelayed(60, () =>
-                                    {
-                                        JumpScareCooldown.Remove(player);
-                                    });
-
-                                    PlayersAudio[player].AddClip($"facingScp-{UnityEngine.Random.Range(1, 7)}", volume: 2);
+                            PlayersAudio[player].AddClip($"facingScp-{UnityEngine.Random.Range(1, 7)}", volume: 2);
                                     
-                                    Timing.CallDelayed(3, () =>
-                                    {
-                                        PlayersAudio[player].AddClip("chase", volume: 2);
-                                    });
-                                }
-                            }
+                            Timing.CallDelayed(3, () =>
+                            {
+                                PlayersAudio[player].AddClip("chase", volume: 2);
+                            });
                         }
                     }
                 }
