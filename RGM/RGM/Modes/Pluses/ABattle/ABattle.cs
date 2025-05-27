@@ -32,10 +32,10 @@ public class ABattle : Mode
 
 각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
 • <color=#A4A4A4>일반</color> - 70%
-• <color=#2ECCFA>희귀</color> - 24.5%
-• <color=#FF00FF>영웅</color> - 5%
-• <color=#ffd700>전설</color> - 0.4%
-• <color=#DF0101>신화</color> - 0.1%
+• <color=#2ECCFA>희귀</color> - 24.7%
+• <color=#FF00FF>영웅</color> - 5.05%
+• <color=#ffd700>전설</color> - 0.2%
+• <color=#DF0101>신화</color> - 0.05%
 • <color=#F7819F>전용</color> - 5% (능력 선택 옵션 독립)
 • <color=#DEEFED>시너지</color> - ???
 
@@ -84,8 +84,8 @@ public class ABattle : Mode
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         {"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
-        {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
-        {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
+        //{"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
+        //{"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
         {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+10 (SCP의 경우 +50))"},
         {"캐시 청소", "9분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
@@ -729,19 +729,19 @@ public class ABattle : Mode
         if (player.Role == RoleTypeId.Scp079)
             return AbilityCategory.Scp079;
 
-        var random = Random.Range(1, 1001);
+        var random = Random.Range(1, 10001);
 
         if (CurrentExtraMode == "잔칫상")
         {
             switch (random)
             {
-                case <= 2:
+                case <= 10:
                     return AbilityCategory.Mythic;
-                case <= 8:
+                case <= 50:
                     return AbilityCategory.Legend;
-                case <= 85:
+                case <= 550:
                     return AbilityCategory.Epic;
-                case <= 355:
+                case <= 2950:
                     return AbilityCategory.Rare;
                 default:
                     return AbilityCategory.Common;
@@ -750,13 +750,13 @@ public class ABattle : Mode
         
         switch (random)
         {
-            case <= 1:
-                return AbilityCategory.Mythic;
             case <= 5:
+                return AbilityCategory.Mythic;
+            case <= 25:
                 return AbilityCategory.Legend;
-            case <= 55:
+            case <= 535:
                 return AbilityCategory.Epic;
-            case <= 295:
+            case <= 3005:
                 return AbilityCategory.Rare;
             default:
                 return AbilityCategory.Common;
