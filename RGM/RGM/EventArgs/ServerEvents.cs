@@ -210,7 +210,7 @@ namespace RGM.EventArgs
 
             Timing.RunCoroutine(Detonation());
 
-            DiscordInteraction.Discord.Webhook.Send($"시작된 모드 : {CurrentMode.GetModeData().Name}");
+            Webhook.Send($"시작된 모드 : {CurrentMode.GetModeData().Name}");
             Log.Info($"시작된 모드 : {CurrentMode.GetModeData().Name}");
 
             yield return Timing.WaitForSeconds(20 * 60);
@@ -221,6 +221,10 @@ namespace RGM.EventArgs
                 Warhead.Start();
                 Server.ExecuteCommand("/cassie_sl <color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
             }
+
+            yield return Timing.WaitForSeconds(2 * 60);
+
+            GlobalPlayer.AddClip("SCP - Breach");
         }
 
         public static IEnumerator<float> OnRoundEnded(RoundEndedEventArgs ev)
