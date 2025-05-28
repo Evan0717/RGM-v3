@@ -644,10 +644,14 @@ $"""
 
         public static void PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
         {
+            string notice = $"로드된 오디오: {clipName}";
+
             foreach (var player in Player.List)
             {
-                player.AddBroadcast(10, $"<size=20>로드된 오디오: {clipName}</size>");
+                player.AddBroadcast(10, $"<size=20>{notice}</size>");
             }
+
+            Log.Info(notice);
 
             GlobalPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
         }
