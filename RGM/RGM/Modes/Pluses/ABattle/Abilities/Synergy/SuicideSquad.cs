@@ -13,8 +13,8 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Synergy;
 
-[RequiresAbility(AbilityType.RARE_BOMBERMAN, AbilityType.EPIC_SUICIDEBOMBER)]
-[Ability("수어사이드 스쿼드", "<봄버맨, 수어사이드 봄버맨> 사망할 경우 SCP-018를 3개 떨어트립니다.", AbilityCategory.Synergy, AbilityType.SYNERGY_SUICIDESQUAD)]
+[RequiresAbility(AbilityType.RARE_BOMBERMAN, AbilityType.RARE_MARTYRDOM, AbilityType.EPIC_SUICIDEBOMBER)]
+[Ability("수어사이드 스쿼드", "<봄버맨, 순교, 수어사이드 봄버맨> 사망할 경우 SCP-018를 3개 떨어트립니다.", AbilityCategory.Synergy, AbilityType.SYNERGY_SUICIDESQUAD)]
 public class SuicideSquad : Ability
 {
     public override void OnEnabled()
