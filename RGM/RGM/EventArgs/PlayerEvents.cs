@@ -648,7 +648,9 @@ namespace RGM.EventArgs
             }
             else if (ev.Attacker != null)
             {
-                if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Attacker != ev.Player && ev.DamageHandler.Damage < 10000)
+                ev.DamageHandler.Damage = ev.IsInstantKill ? ev.Player.MaxHealth : ev.DamageHandler.Damage;
+
+                if ((HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || ev.Attacker.LeadingTeam != ev.Player.LeadingTeam) && ev.Attacker != ev.Player && ev.DamageHandler.Damage < 10000)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)ev.DamageHandler.Damage;
             }
         }

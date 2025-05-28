@@ -53,7 +53,7 @@ namespace RGM.EventArgs
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
-            Tools.LoadMap($"Past_Lobby");
+            Tools.LoadMap($"Past-Lobby");
             if (UnityEngine.Random.Range(1, 101) == 1) 
                 Tools.LoadMap(Surfaces.GetRandomValue(), false);
 
@@ -126,7 +126,7 @@ namespace RGM.EventArgs
         {
             Server.FriendlyFire = false;
 
-            MapUtils.UnloadMap("Past_Lobby");
+            MapUtils.UnloadMap("Past-Lobby");
             Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
             IntercomPlayers.Clear();
             EnabledModeList.Clear();
@@ -224,7 +224,7 @@ namespace RGM.EventArgs
 
             yield return Timing.WaitForSeconds(2 * 60);
 
-            GlobalPlayer.AddClip("SCP - Breach");
+            GlobalPlayer.AddClip("SCP - Breach", 1);
         }
 
         public static IEnumerator<float> OnRoundEnded(RoundEndedEventArgs ev)
