@@ -787,15 +787,15 @@ namespace RGM.EventArgs
                     if (kc.Permissions == KeycardPermissions.None)
                     {
                         string keycard = $"{ev.Item.Type.ToString()}";
-                        string name = $"커스텀_키카드";
+                        string name = AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_");
                         int level1 = UnityEngine.Random.Range(0, 4);
                         int level2 = UnityEngine.Random.Range(0, 4);
                         int level3 = UnityEngine.Random.Range(0, 4);
                         string permissionColor = Tools.GenerateRandomHexColor();
                         string tintColor = Tools.GenerateRandomHexColor();
-                        string label = AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_");
+                        string label = "커스텀_키카드";
                         string labelColor = Tools.GenerateRandomHexColor();
-                        string holderName = "AudioClips";
+                        string holderName = "커스텀_키카드";
                         int num1 = UnityEngine.Random.Range(1, 5);
 
                         string info;
@@ -813,6 +813,8 @@ namespace RGM.EventArgs
 
                         string hint = $"<size=20><b>🎉 축하드립니다, 커스텀 키카드를 획득하셨군요!</b></size>\n<size=17>마음에 드는 디자인인 경우 스크린샷을 찍어두세요.</size>\n<size=15>{info}</size>";
 
+                        LabApi.Features.Wrappers.Player player = (LabApi.Features.Wrappers.Player)ev.Player;
+                        player.AddItem(ItemType.KeycardCustomTaskForce);
                         ev.Player.AddCustomKeycard(info);
                         ev.Player.AddHint("커스텀 키카드 획득", hint, 10);
                         ev.Player.SendConsoleMessage(hint, "white");
@@ -849,7 +851,10 @@ $"""
         public static void OnKicking(KickingEventArgs ev)
         {
             if (ev.Player.IsNPC)
+            {
+                ev.IsAllowed = false;
                 return;
+            }
 
             foreach (var player in Player.List)
                 player.AddBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>추방</color>되었습니다. (사유: {ev.Reason})</size>");
@@ -858,7 +863,10 @@ $"""
         public static void OnBanning(BanningEventArgs ev)
         {
             if (ev.Player.IsNPC)
+            {
+                ev.IsAllowed = false;
                 return;
+            }
 
             foreach (var player in Player.List)
                 player.AddBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>차단</color>되었습니다. (사유: {ev.Reason})</size>");
