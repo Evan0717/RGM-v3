@@ -30,7 +30,7 @@ namespace RGM.Commands.RemoteAdminCommands
 
         public string Command { get; } = "rc";
 
-        public string[] Aliases { get; } = { "알피" };
+        public string[] Aliases { get; } = { "알피", "랜덤코인" };
 
         public string Description { get; } = "특정 유저의 랜덤코인을 정합니다.";
 
