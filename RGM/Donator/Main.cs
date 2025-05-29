@@ -49,7 +49,7 @@ namespace RGM.Donator
                 speaker.transform.position = pos;
             });
 
-            audioPlayer.AddClip($"Effect_{clip}", volume: volume);
+            audioPlayer.AddClip($"Effect-{clip}", volume: volume);
         }
 
         public IEnumerator<float> KillEffect(string kE, Player attacker, Player player, Role _role, Vector3 _pos)
