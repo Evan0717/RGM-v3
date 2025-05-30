@@ -15,6 +15,7 @@ using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
 using static RGM.Variables.ServerManagers;
 using VoiceChat.Codec;
+using InventorySystem.Items;
 
 namespace RGM.Modes
 {
@@ -25,7 +26,7 @@ namespace RGM.Modes
         public override string Description => "쉿! 조용히 이야기하세요!";
         public override string Detail =>
 """
-조용히 이야기해야 합니다. (0.2보다 작게)
+조용히 이야기해야 합니다. (0.4보다 작게)
 채팅(.ㅊ)은 사용할 수 없습니다.
 """;
         public override string Color => "9E82F5";
@@ -54,7 +55,7 @@ namespace RGM.Modes
         {
             if (ev.Player.IsAlive)
             {
-                if (GetLoudness(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength) > 0.2)
+                if (GetLoudness(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength) > 0.4)
                 {
                     var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
                     g.FuseTime = 0f;
