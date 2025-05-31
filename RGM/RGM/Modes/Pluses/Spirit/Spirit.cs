@@ -88,7 +88,7 @@ namespace RGM.Modes
             {
                 for (int i = 1; i < 6; i++)
                 {
-                    ev.Player.AddHint("스피릿 영혼 상태 돌입", $"{6 - i}초 뒤 영혼 상태에 돌입합니다.", 1.2f);
+                    ev.Player.ShowHint($"{6 - i}초 뒤 영혼 상태에 돌입합니다.", 1.2f);
 
                     yield return Timing.WaitForSeconds(1f);
                 }
@@ -102,7 +102,7 @@ namespace RGM.Modes
 
                 spirits.Add(ev.Player);
 
-                Server.ExecuteCommand($"/fc {ev.Player.Id} Tutorial 1");
+                ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
             }
         }
 
