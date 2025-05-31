@@ -780,52 +780,52 @@ namespace RGM.EventArgs
                 }
             }
 
-//            if (ev.Item.Type.ToString().Contains("KeycardCustom") && ev.Player.Id != 1)
-//            {
-//                if (ev.Item is Keycard kc)
-//                {
-//                    if (kc.Permissions == KeycardPermissions.None)
-//                    {
-//                        string keycard = $"{ev.Item.Type.ToString()}";
-//                        string name = AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_");
-//                        int level1 = UnityEngine.Random.Range(0, 4);
-//                        int level2 = UnityEngine.Random.Range(0, 4);
-//                        int level3 = UnityEngine.Random.Range(0, 4);
-//                        string permissionColor = Tools.GenerateRandomHexColor();
-//                        string tintColor = Tools.GenerateRandomHexColor();
-//                        string label = "커스텀_키카드";
-//                        string labelColor = Tools.GenerateRandomHexColor();
-//                        string holderName = "커스텀_키카드";
-//                        int num1 = UnityEngine.Random.Range(1, 5);
+            if (ev.Item.Type.ToString().Contains("KeycardCustom") && ev.Player.Id != 1)
+            {
+                if (ev.Item is Keycard kc)
+                {
+                    if (kc.Permissions == KeycardPermissions.None)
+                    {
+                        string keycard = $"{ev.Item.Type.ToString()}";
+                        string name = AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_");
+                        int level1 = UnityEngine.Random.Range(0, 4);
+                        int level2 = UnityEngine.Random.Range(0, 4);
+                        int level3 = UnityEngine.Random.Range(0, 4);
+                        string permissionColor = Tools.GenerateRandomHexColor();
+                        string tintColor = Tools.GenerateRandomHexColor();
+                        string label = "커스텀_키카드";
+                        string labelColor = Tools.GenerateRandomHexColor();
+                        string holderName = "커스텀_키카드";
+                        int num1 = UnityEngine.Random.Range(1, 5);
 
-//                        string info;
+                        string info;
 
-//                        switch (ev.Item.Type) 
-//                        {
-//                            case ItemType.KeycardCustomTaskForce:
-//                                info = $"{keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {holderName} {num1} {num1}";
-//                                break;
+                        switch (ev.Item.Type)
+                        {
+                            case ItemType.KeycardCustomTaskForce:
+                                info = $"{keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {holderName} {num1} {num1}";
+                                break;
 
-//                            default:
-//                                info = $"{keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {label} {labelColor} {holderName} {num1}";
-//                                break;
-//                        }
+                            default:
+                                info = $"{keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {label} {labelColor} {holderName} {num1}";
+                                break;
+                        }
 
-//                        string hint = $"<size=20><b>🎉 축하드립니다, 커스텀 키카드를 획득하셨군요!</b></size>\n<size=17>마음에 드는 디자인인 경우 스크린샷을 찍어두세요.</size>\n<size=15>{info}</size>";
+                        string hint = $"<size=20><b>🎉 축하드립니다, 커스텀 키카드를 획득하셨군요!</b></size>\n<size=17>마음에 드는 디자인인 경우 스크린샷을 찍어두세요.</size>\n<size=15>{info}</size>";
 
-//                        ev.Player.AddItem(ev.Item.Type);
-//                        ev.Player.AddCustomKeycard(info);
-//                        ev.Player.AddHint("커스텀 키카드 획득", hint, 10);
-//                        ev.Player.SendConsoleMessage(hint, "white");
-//                        Webhook.Send(
-//$"""
-//{ev.Player.DisplayNickname}(`{ev.Player.Nickname}, {ev.Player.UserId}`)(이)가 커스텀 키카드를 획득했습니다.
-//{info}
-//""");
-//                        ev.Item.Destroy();
-//                    }
-//                }     
-//            }
+                        ev.Player.AddItem(ev.Item.Type);
+                        ev.Player.AddCustomKeycard(info);
+                        ev.Player.AddHint("커스텀 키카드 획득", hint, 10);
+                        ev.Player.SendConsoleMessage(hint, "white");
+                        Webhook.Send(
+$"""
+{ev.Player.DisplayNickname}(`{ev.Player.Nickname}, {ev.Player.UserId}`)(이)가 커스텀 키카드를 획득했습니다.
+{info}
+""");
+                        ev.Item.Destroy();
+                    }
+                }
+            }
         }
 
         public static void OnShot(ShotEventArgs ev)
