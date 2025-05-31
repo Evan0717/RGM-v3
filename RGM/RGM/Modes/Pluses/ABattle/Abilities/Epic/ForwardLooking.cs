@@ -56,7 +56,7 @@ public class ForwardLooking : Ability
                 if (isNear)
                 {
                     schematic.GetComponentsInChildren<AdminToys.PrimitiveObjectToy>().ToList().ForEach(x => x.NetworkPrimitiveFlags = AdminToys.PrimitiveFlags.Visible);
-                    schematic.GetComponentsInChildren<AdminToys.PrimitiveObjectToy>().ToList().ForEach(x => x.NetworkMaterialColor = new Color(8.3f, 0, 16.1f, 10.0f));
+                    schematic.GetComponentsInChildren<AdminToys.LightSourceToy>().ToList().ForEach(x => x.NetworkLightColor = new Color(8.3f, 0, 16.1f, 10.0f));
                 }
             }
             catch (Exception e)
