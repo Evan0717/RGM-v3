@@ -300,7 +300,7 @@ Trouble in Terrorist Town의 약자.
                         if (GodModePlayers.Contains(t))
                             GodModePlayers.Remove(t);
 
-                        t.Kill("배신자에 의해 처형되었습니다.");
+                        t.Hit(ev.Player, ev.Player.MaxHealth);
                         ev.Player.ShowHitMarker();
 
                         instantKillCooldown.Add(ev.Player);
