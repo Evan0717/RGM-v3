@@ -93,7 +93,8 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            Finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
+            if (!Round.IsEnded)
+                Finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
