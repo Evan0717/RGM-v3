@@ -321,6 +321,7 @@ public enum AbilityType
     EPIC_ADDWORKSTATION, // [영웅] 업무 증가
     EPIC_MADSCIENTIST, // [영웅] 매드 사이언티스트
     EPIC_FORWARDLOOKING, // [영웅] 전방주시태만
+    EPIC_SCP127, // [영웅] 인생의 동반자
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
