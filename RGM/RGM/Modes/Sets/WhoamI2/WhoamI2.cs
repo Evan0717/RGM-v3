@@ -36,6 +36,7 @@ namespace RGM.Modes
 
         public List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
         {
+            RoleTypeId.Scp079,
             RoleTypeId.Spectator,
             RoleTypeId.Overwatch,
             RoleTypeId.Filmmaker,
