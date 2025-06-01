@@ -111,6 +111,9 @@
     <Reference Include="GGUtils">
       <HintPath>..\..\GGUtils\bin\Debug\GGUtils.dll</HintPath>
     </Reference>
+    <Reference Include="GPUtils">
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\GPUtils.dll</HintPath>
+    </Reference>
     <Reference Include="JumpMap">
       <HintPath>..\..\JumpMap\bin\Debug\JumpMap.dll</HintPath>
     </Reference>
@@ -231,7 +234,6 @@
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Suicide.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\Use.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayAudio.cs" />
-    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\ShowText.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Warn.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
