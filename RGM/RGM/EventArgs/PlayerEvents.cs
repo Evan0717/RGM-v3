@@ -525,13 +525,6 @@ namespace RGM.EventArgs
                         ev.Player.Health = ev.Player.MaxHealth;
                     }
 
-                    if (UnityEngine.Random.Range(1, 16) == 1 && !IsScp3114Enabled)
-                    {
-                        ev.Player.Role.Set(RoleTypeId.Scp3114);
-
-                        IsScp3114Enabled = true;
-                    }
-
                     if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
                     {
                         if (!PlayersInfo.ContainsKey(ev.Player.UserId))
@@ -569,7 +562,13 @@ namespace RGM.EventArgs
                         ev.Player.Role.Set(RoleTypeId.Scp0492);
                         ev.Player.MaxHealth = 1000;
                         ev.Player.Health = ev.Player.MaxHealth;
+                    }
 
+                    if (UnityEngine.Random.Range(1, 41) == 1 && !IsScp3114Enabled)
+                    {
+                        ev.Player.Role.Set(RoleTypeId.Scp3114);
+
+                        IsScp3114Enabled = true;
                     }
                 }
             }
