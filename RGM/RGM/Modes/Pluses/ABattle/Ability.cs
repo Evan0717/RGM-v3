@@ -396,6 +396,7 @@ public enum AbilityType
     SCP0492_HUNGER, // [전용] 허기
     SCP0492_MEALS, // [전용] 급식
     SCP0492_CONFUSION, // [전용] 당혹감
+    SCP_0492_INFECTION, // [전용] 감염
 
     // SCP-096
     SCP096_RAGE, // [전용] 격노

@@ -416,6 +416,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scientist\SeedsOfMTF.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp0492\Confusion.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp0492\Hurger.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp0492\Infection.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp0492\Meals.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp049\CompetentDoctor.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp049\Death.cs" />
