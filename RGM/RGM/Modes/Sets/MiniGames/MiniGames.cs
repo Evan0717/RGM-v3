@@ -48,7 +48,7 @@ namespace RGM.Modes
             "football",
             "gungame",
             "knives",
-            "chair",
+            //"chair",
             "puzzle",
             "race",
             "light",
