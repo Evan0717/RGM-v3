@@ -241,7 +241,7 @@ namespace RGM.EventArgs
                 Server.ExecuteCommand("/cassie_sl <color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
             }
 
-            yield return Timing.WaitForSeconds(3 * 60);
+            yield return Timing.WaitForSeconds(4 * 60);
 
             GlobalPlayer.AddClip("SCP - Breach", 1);
         }
