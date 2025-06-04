@@ -338,6 +338,7 @@ public enum AbilityType
     LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_UNLIMITED, // [전설] 무제한
+    LEGEND_FLAMETHROWER, // [전설] 화염 방사기
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -347,7 +348,6 @@ public enum AbilityType
     MYTHIC_JOKER, // [신화] 조커
     MYTHIC_NOCLIP, // [신화] 노클립
     MYTHIC_BOMBGUN, // [신화] 워 머신
-    MYTHIC_FLAMETHROWER, // [신화] 화염 방사기
     MYTHIC_WARGOD, // [신화] 광전사
     MYTHIC_BALLISTAEM3, // [신화] 발리스타 MP3
     MYTHIC_TOOLGUN, // [신화] 툴건

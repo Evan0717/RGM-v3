@@ -13,9 +13,9 @@ using MEC;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Mythic;
+namespace RGM.Modes.Abilities.Legend;
 
-[Ability("화염 방사기", "위력은 33%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_FLAMETHROWER)]
+[Ability("화염 방사기", "위력은 33%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
 public class FlameThrower : Ability
 {
     ushort FlamethrowerSerial = 0;
@@ -61,7 +61,7 @@ public class FlameThrower : Ability
         if (ev.Item != null)
         {
             if (FlamethrowerSerial == ev.Item.Serial)
-                ev.Player.AddHint("화염 방사기", $"<b><color={ABattle.RatingColor["신화"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
+                ev.Player.AddHint("화염 방사기", $"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
         }
     }
 

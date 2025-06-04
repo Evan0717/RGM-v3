@@ -311,7 +311,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\BombGun.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\DimensionThief.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\EyeMan.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\FlameThrower.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\FlameThrower.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Joker.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Noclip.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\RocketLauncher.cs" />
