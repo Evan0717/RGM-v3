@@ -17,6 +17,8 @@ using ProjectMER.Features.Serializable;
 using ProjectMER.Features.Objects;
 using ProjectMER.Features;
 
+using static RGM.Variables.ServerManagers;
+
 namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.BomberMan)]
@@ -30,6 +32,8 @@ namespace RGM.Modes
 
 7초마다 수류탄이 없다면 지급됩니다.
 <color=red>SCP-079</color>의 경우에는 핑을 통해 폭탄을 투하할 수 있습니다. (쿨타임 5초)
+
+10분에 자동핵이 작동됩니다.
 """;
         public override string Color => "FF8000";
         public override string Suggester => "monkiki";
@@ -47,6 +51,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
             Timing.RunCoroutine(OnModeStarted());
+            Timing.RunCoroutine(AutoWarhead());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -77,6 +82,24 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(7f);
             }
+        }
+
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(9 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Server.ExecuteCommand("/cassie_sl 1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            AutoNuke = true;
+            Warhead.Start();
         }
 
         public void OnItemAdded(ItemAddedEventArgs ev)
