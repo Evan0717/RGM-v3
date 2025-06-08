@@ -117,9 +117,11 @@ $"""
 
 <size=25><align=center><color=#D0A9F5><link=https://www.randomsl.xyz/rule>| <b>규정 (클릭)</b> |</link></color></align></size>
 
-<size=25><align=center><color=#FA5858><link=https://www.youtube.com/@RandomGameMode>| <b>공식 유튜브 채널 (클릭)</b> |</link></color></align></size>
+<size=25><align=center><color=#FFFFFF><link=https://www.youtube.com/@RandomGameMode>| <b>공식 유튜브 채널 (클릭)</b> |</link></color></align></size>
 
-<size=25><align=center><color=#F7FE2E><link=https://chzzk.naver.com/acb253a537e8a02632532a8f27fafcaa>| <b>개발자 치지직 채널 (클릭)</b> |</link></color></align></size>
+<size=25><align=center><color=#FA5858><link=https://www.youtube.com/@SL_GoldenPig1205>| <b>개발자 유튜브 채널 (클릭)</b> |</link></color></align></size>
+
+<size=25><align=center><color=#89d953><link=https://chzzk.naver.com/acb253a537e8a02632532a8f27fafcaa>| <b>개발자 치지직 채널 (클릭)</b> |</link></color></align></size>
 """, header: header1);
 
             var settingBases = new List<SettingBase> { text1 };
