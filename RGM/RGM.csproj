@@ -112,7 +112,7 @@
       <HintPath>..\..\GGUtils\bin\Debug\GGUtils.dll</HintPath>
     </Reference>
     <Reference Include="GPUtils">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\GPUtils.dll</HintPath>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\GPUtils.dll</HintPath>
     </Reference>
     <Reference Include="JumpMap">
       <HintPath>..\..\JumpMap\bin\Debug\JumpMap.dll</HintPath>
