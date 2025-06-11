@@ -119,8 +119,8 @@ namespace RGM.Modes
                     {
                         Round.IsLocked = false;
 
-                        Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><생존자 : {ev.Player.DisplayNickname}></size></b>"));
-                        Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { ev.Player }, 5));
+                        Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><생존자 : {pl[0].DisplayNickname}></size></b>"));
+                        Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                         IsEnd = true;
                     }
                 }
