@@ -36,7 +36,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 15, 18);
+        public override Version Version { get; } = new(3, 15, 19);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -79,8 +79,6 @@ namespace RGM
                 }
             }
 
-            //ProjectMER.Events.Handlers.Schematic.SchematicSpawned += OnLoadingMap;
-
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
@@ -119,8 +117,6 @@ namespace RGM
 
         public override void OnDisabled()
         {
-            //MapEditorReborn.Events.Handlers.Map.LoadingMap -= OnLoadingMap;
-
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;

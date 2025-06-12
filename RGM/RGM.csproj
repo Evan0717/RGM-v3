@@ -78,8 +78,9 @@
     <Reference Include="DiscordInteraction">
       <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\DiscordInteraction.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API">
-      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\SCP Secret Laboratory\LabAPI\dependencies\global\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.API, Version=9.6.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\SCP Secret Laboratory\LabAPI\dependencies\global\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags">
       <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
