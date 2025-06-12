@@ -59,7 +59,7 @@ public class Gambler : Ability
         int rand = UnityEngine.Random.Range(1, 101);
 
         if (0 < rand && rand < 3)
-            Owner.EnableEffect(EffectType.SeveredHands);
+            Owner.EnableEffect(EffectType.SeveredHands, 1, 50);
 
         else
         {
