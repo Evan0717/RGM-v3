@@ -46,20 +46,6 @@ namespace RGM.Commands.RemoteAdminCommands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
-            float radius = float.Parse(arguments.At(0));
-            int pointCount = int.Parse(arguments.At(1));
-
-            List<Vector3> Points = Tools.GetCirclePoints(player.Position, radius, pointCount);
-
-            foreach (var point in Points)
-            {
-                SerializablePrimitive primitiveSerializable = new SerializablePrimitive
-                {
-                    PrimitiveType = PrimitiveType.Sphere,
-                    Position = point
-                };
-                ObjectSpawner.SpawnPrimitive(primitiveSerializable);
-            }    
 
             response = "Complete!";
 
