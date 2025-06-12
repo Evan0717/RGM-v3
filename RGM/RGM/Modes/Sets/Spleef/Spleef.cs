@@ -43,7 +43,7 @@ namespace RGM.Modes
 
         public List<Player> pl = new List<Player>();
         public List<ItemType> StartupItems = new List<ItemType>();
-        public List<LabApi.Features.Wrappers.PrimitiveObjectToy> Transforms = new List<LabApi.Features.Wrappers.PrimitiveObjectToy>();
+        public List<AdminToys.PrimitiveObjectToy> Transforms = new List<AdminToys.PrimitiveObjectToy>();
         public Door door;
         public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
 
@@ -82,21 +82,21 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            IEnumerator<float> RemovingPlatform(LabApi.Features.Wrappers.PrimitiveObjectToy Platform)
+            IEnumerator<float> RemovingPlatform(AdminToys.PrimitiveObjectToy Platform)
             {
-                Platform.Color = UnityEngine.Color.green;
+                Platform.NetworkMaterialColor = UnityEngine.Color.green;
 
                 yield return Timing.WaitForSeconds(0.3f);
 
-                Platform.Color = UnityEngine.Color.yellow;
+                Platform.NetworkMaterialColor = UnityEngine.Color.yellow;
 
                 yield return Timing.WaitForSeconds(0.3f);
 
-                Platform.Color = UnityEngine.Color.red;
+                Platform.NetworkMaterialColor = UnityEngine.Color.red;
 
                 yield return Timing.WaitForSeconds(0.3f);
 
-                Platform.Destroy();
+                NetworkServer.Destroy(Platform.gameObject);
             }
 
             while (true)
@@ -109,7 +109,7 @@ namespace RGM.Modes
 
                         if (hit.transform.name == "Platform") 
                         {
-                            LabApi.Features.Wrappers.PrimitiveObjectToy Platform = hit.transform.gameObject.GetComponent<LabApi.Features.Wrappers.PrimitiveObjectToy>();
+                            AdminToys.PrimitiveObjectToy Platform = hit.transform.gameObject.GetComponent<AdminToys.PrimitiveObjectToy>();
 
                             if (!Transforms.Contains(Platform))
                             {
