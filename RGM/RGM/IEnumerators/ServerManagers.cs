@@ -176,11 +176,11 @@ namespace RGM.IEnumerators
                                 JumpScareCooldown.Remove(player);
                             });
 
-                            PlayersAudio[player].AddClip($"facingScp-{UnityEngine.Random.Range(1, 7)}", volume: 2);
+                            PlayersAudio[player].TryPlay($"facingScp-{UnityEngine.Random.Range(1, 7)}", volume: 2);
                                     
                             Timing.CallDelayed(3, () =>
                             {
-                                PlayersAudio[player].AddClip("chase", volume: 2);
+                                PlayersAudio[player].TryPlay("chase", volume: 2);
                             });
                         }
                     }

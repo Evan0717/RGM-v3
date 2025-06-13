@@ -195,7 +195,7 @@ namespace RGM.Modes
                 speaker.transform.localPosition = Vector3.zero;
             });
 
-            audioPlayer.AddClip("JuggernautTheme", loop: true);
+            audioPlayer.TryPlay("JuggernautTheme", loop: true);
 
             yield return 0;
         }

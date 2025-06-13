@@ -204,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Databases\Datas.cs" />
+    <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\HintManager.cs" />
     <Compile Include="API\Features\PlayerManager.cs" />
     <Compile Include="API\Features\Tools.cs" />

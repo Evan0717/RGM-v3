@@ -129,7 +129,7 @@ namespace RGM.Modes
                     Pickup.CreateAndSpawn(item, pos());
                 }
 
-                GlobalPlayer.AddClip($"PickMeUp", 2f);
+                GlobalPlayer.TryPlay($"PickMeUp", 2f);
 
                 for (int i = 1; i < 11; i++)
                 {

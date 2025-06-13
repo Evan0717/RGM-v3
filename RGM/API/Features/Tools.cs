@@ -653,7 +653,7 @@ $"""
 
             Log.Info(notice);
 
-            GlobalPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
+            GlobalPlayer.TryPlay(clipName, volume, loop, destroyOnEnd);
         }
 
         public static MapSchematic LoadMap(string mapName, bool notice = true)

@@ -117,7 +117,7 @@ namespace RGM.Modes
                             speaker.transform.position = door.Position;
                         });
 
-                        audioPlayer.AddClip(Tools.GetRandomValue(AudioClipStorage.AudioClips.Select(x => x.Key).ToList()));
+                        audioPlayer.TryPlay(Tools.GetRandomValue(AudioClipStorage.AudioClips.Select(x => x.Key).ToList()));
                         break;
 
                     case 12:
