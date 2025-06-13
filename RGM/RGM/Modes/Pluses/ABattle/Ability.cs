@@ -357,6 +357,7 @@ public enum AbilityType
     CLASSD_LARCENY, // [전용] 절도죄
     CLASSD_TRESPASSING, // [전용] 주거침입죄
     CLASSD_SEEDSOFCHI, // [전용] 반란의 씨앗
+    CLASSD_ILLEGALWEAPON, // [전용] 불법개조무기소지죄
 
     // 과학자
     SCIENTIST_05, // [전용] 05 평의회
