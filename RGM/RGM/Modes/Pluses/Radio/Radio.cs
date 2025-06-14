@@ -12,6 +12,7 @@ using Exiled.API.Extensions;
 using RGM.API.DataBases;
 using static RGM.Variables.ServerManagers;
 using UnityEngine;
+using System.IO;
 
 namespace RGM.Modes
 {
@@ -37,7 +38,10 @@ namespace RGM.Modes
         {
             while (true)
             {
-                AudioClipPlayback clip = GlobalPlayer.TryPlay(AudioClipStorage.AudioClips.Keys.GetRandomValue(), 1f, false);
+                string audioDir = Paths.Plugins + "/audio/";
+                string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
+
+                AudioClipPlayback clip = GlobalPlayer.TryPlay(audioFiles.GetRandomValue(), 1f, false);
 
                 yield return Timing.WaitForSeconds((int)clip.Duration.TotalSeconds + Random.Range(1, 21));
             }
