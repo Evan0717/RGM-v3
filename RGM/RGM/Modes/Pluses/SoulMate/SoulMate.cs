@@ -46,7 +46,9 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.UsingItemCompleted += OnUsingItemCompleted;
-            Exiled.Events.Handlers.Player.Escaping += OnEscaping; 
+            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
+
+            Exiled.Events.Handlers.Scp3114.Revealing += OnRevealing;
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(SoulMateMatching());
@@ -336,6 +338,11 @@ namespace RGM.Modes
                         soulMate.AddItem(Item.Type);
                 }
             });
+        }
+
+        public void OnRevealing(Exiled.Events.EventArgs.Scp3114.RevealingEventArgs ev)
+        {
+            ev.Player.DropItems();
         }
     }
 }
