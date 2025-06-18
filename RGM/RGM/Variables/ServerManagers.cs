@@ -14,6 +14,7 @@ using RGM.API.DataBases;
 using MultiBroadcast.API;
 using UserSettings.ServerSpecific;
 using Exiled.API.Features.Core.UserSettings;
+using System.IO;
 
 namespace RGM.Variables
 {
@@ -231,11 +232,12 @@ namespace RGM.Variables
                         speaker.transform.localPosition = Vector3.zero;
                     });
 
-                    if (AudioClipStorage.AudioClips.ContainsKey(arg))
-                        radio.TryPlay(AudioClipStorage.AudioClips[arg].Name, 0.5f);
+                    string audioDir = Paths.Plugins + "/audio/";
+                    string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
+                    string fileName = audioDir + $"{arg}.ogg";
 
-                    else
-                        radio.TryPlay(AudioClipStorage.AudioClips.GetRandomValue().Key, 0.5f);
+                    if (radio.TryPlay(arg, 0.5f) == null)
+                        radio.TryPlay(audioFiles.GetRandomValue().Replace(".ogg", "").Replace(audioDir, ""), 0.5f);
                 }
             },
             new Product()
