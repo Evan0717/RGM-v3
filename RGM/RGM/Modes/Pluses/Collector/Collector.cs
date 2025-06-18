@@ -38,7 +38,7 @@ namespace RGM.Modes
         {
             foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
             {
-                Spawned(player);
+                Timing.RunCoroutine(Spawned(player));
             }
 
             yield return 0;
@@ -46,7 +46,7 @@ namespace RGM.Modes
 
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
-            Spawned(ev.Player);
+            Timing.RunCoroutine(Spawned(ev.Player));
         }
 
         public IEnumerator<float> Spawned(Player player)
