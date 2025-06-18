@@ -81,7 +81,7 @@ namespace RGM.Modes
                     monster.Position = new Vector3(-0.6015625f, 332.9026f, -32.56641f);
                     Server.ExecuteCommand($"/open ESCAPE_PRIMARY");
 
-                    float health = 10 * Player.List.Count + 1 * Player.List.Count;
+                    float health = 11 * Player.List.Count + 3 * Player.List.Count;
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
