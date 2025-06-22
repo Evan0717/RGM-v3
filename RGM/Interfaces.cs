@@ -72,6 +72,7 @@ public enum ModeType
     Alone,
     ABattle,
     AdditionalWave,
+    AddNew,
     Ascension,
     Blackout,
     Blessing,
