@@ -46,6 +46,13 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
         }
 
+        public static IEnumerator<float> OnModeStarted()
+        {
+            Tools.LoadMap("vm");
+
+            yield return 0;
+        }
+
         public static IEnumerator<float> OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (ev.Pickup.Transform.name.StartsWith("Input"))
