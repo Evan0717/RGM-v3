@@ -17,6 +17,7 @@ using DiscordInteraction.Discord;
 
 using CustomPlayerEffects;
 using Exiled.API.Features.Items;
+using MEC;
 
 namespace RGM.Commands.ClientCommands
 {
@@ -26,6 +27,7 @@ namespace RGM.Commands.ClientCommands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
+            string args = string.Join(" ", arguments);
 
             if (ChatCooldown.Contains(player))
             {
@@ -72,8 +74,17 @@ namespace RGM.Commands.ClientCommands
                     $"<size=25><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
                     text,
                     $"</color> ({player.DisplayNickname}) <b> | </b>",
-                    string.Join(" ", arguments).Replace("=", "❤️"),
+                    args.Replace("=", "❤️"),
                     "</size>"
+                });
+
+                Chats[player].Add(args);
+
+                Tools.PlaySound(player.Transform, $"SCP Message Pop {UnityEngine.Random.Range(1, 3)}", 3f);
+
+                Timing.CallDelayed(10, () =>
+                {
+                    Chats[player].Remove(args);
                 });
 
                 bool Check(Player p)
