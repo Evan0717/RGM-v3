@@ -762,7 +762,8 @@ $"""
             textToy.DisplaySize = new Vector2(100000, 100000);
             textToy.TextFormat = text;
 
-            Timing.CallDelayed(time, textToy.Destroy);
+            if (time != 0)
+                Timing.CallDelayed(time, textToy.Destroy);
 
             return textToy;
         }
