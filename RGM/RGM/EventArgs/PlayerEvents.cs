@@ -39,6 +39,14 @@ namespace RGM.EventArgs
     {
         public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
+
+            Chats.Add(ev.Player, new List<string>());
+
+            var text = Tools.CreateText(Vector3.zero, new Quaternion(0, 180, 0, 0), "test", 0);
+            text.Parent = ev.Player.Transform;
+            text.Transform.localPosition = new Vector3(0, ev.Player.IsScp ? 1.1f : 0.7f, 0);
+            Texts.Add(ev.Player, text);
+
             PlayerSettings.Add(ev.Player.UserId, (new List<SettingBase>(), new List<SettingInfo>()));
             OnGround.Add(ev.Player.UserId, 5);
 
@@ -424,6 +432,11 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnLeft(LeftEventArgs ev)
         {
+            Chats.Remove(ev.Player);
+
+            Texts[ev.Player].Destroy();
+            Texts.Remove(ev.Player);
+
             PlayerSettings.Remove(ev.Player.UserId);
             OnGround.Remove(ev.Player.UserId);
             PlayersAudio.Remove(ev.Player);

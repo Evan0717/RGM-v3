@@ -121,11 +121,11 @@ namespace RGM.API.Features
             string Detail = ModeList[ModeType].Detail;
 
             string Message = Notions.StartModeDescription
-                .Replace("{ModeColor}", Color)
+                .Replace("{ModeColor}", SelectMode == "Secret2Vote" ? "ffffff" : Color)
                 .Replace("{CurrentMode}", SelectMode == "Secret2Vote" ? (en ? "whatisthismodeeeeee" : "이건무슨모드일까요다람쥐") : Name)
-                .Replace("{CurrentSubMode}", SelectMode == "Secret2Vote" ? (en ? "puhlol" : "풉ㅋ") : SubModeType != ModeType.None ? (en ? $"<size=20>Added submode: <color=#{ModeList[SubModeType].Color}>{ModeList[SubModeType].Name}</color></size>\n" : $"<size=20>추가된 서브 모드 : <color=#{ModeList[SubModeType].Color}>{ModeList[SubModeType].Name}</color></size>\n") : "")
-                .Replace("{ModeDescription}", Description)
-                .Replace("{ModeInfo}", ModeType.GetModeData().Info.ToString());
+                .Replace("{CurrentSubMode}", SelectMode == "Secret2Vote" ? (en ? "<size=20>puhlol</size>" : "<size=20>풉ㅋ</size>") : SubModeType != ModeType.None ? (en ? $"<size=20>Added submode: <color=#{ModeList[SubModeType].Color}>{ModeList[SubModeType].Name}</color></size>\n" : $"<size=20>추가된 서브 모드 : <color=#{ModeList[SubModeType].Color}>{ModeList[SubModeType].Name}</color></size>\n") : "")
+                .Replace("{ModeDescription}", SelectMode == "Secret2Vote" ? "heheheha" : Description)
+                .Replace("{ModeInfo}", SelectMode == "Secret2Vote" ? "asdf" : ModeType.GetModeData().Info.ToString());
 
             return new List<string>() 
             { 
@@ -765,6 +765,21 @@ $"""
             Timing.CallDelayed(time, textToy.Destroy);
 
             return textToy;
+        }
+
+        public static void PlaySound(Transform transform, string name, float volume = 1, bool loop = false, bool isSpatial = true, float minDistance = 1, float maxDistance = 10)
+        {
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform}", onIntialCreation: (p) =>
+            {
+                p.transform.parent = transform;
+
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: isSpatial, minDistance: minDistance, maxDistance: maxDistance);
+
+                speaker.transform.parent = transform;
+                speaker.transform.localPosition = Vector3.zero;
+            });
+
+            audioPlayer.TryPlay(name, volume, loop);
         }
     }
 }
