@@ -14,7 +14,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("하이패스", "25초 간 무적이 됩니다.", AbilityCategory.Rare, AbilityType.RARE_HYPASS)]
+[Ability("하이패스", "25초 간 무적이 됩니다. (SCP-106을 포함한 일부 공격 제외)", AbilityCategory.Rare, AbilityType.RARE_HYPASS)]
 public class Hypass : Ability
 {
     public override void OnEnabled()
