@@ -770,7 +770,7 @@ $"""
 
         public static void PlaySound(Transform transform, string name, float volume = 1, bool loop = false, bool isSpatial = true, float minDistance = 1, float maxDistance = 10)
         {
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform}", onIntialCreation: (p) =>
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform.position}", onIntialCreation: (p) =>
             {
                 p.transform.parent = transform;
 

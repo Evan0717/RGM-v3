@@ -43,7 +43,6 @@ namespace RGM.EventArgs
 
             var text = Tools.CreateText(Vector3.zero, new Quaternion(0, 180, 0, 0), "test", 0);
             text.Parent = ev.Player.Transform;
-            text.Transform.localPosition = new Vector3(0, ev.Player.IsScp ? 1.1f : 0.8f, 0);
             Texts.Add(ev.Player, text);
 
             PlayerSettings.Add(ev.Player.UserId, (new List<SettingBase>(), new List<SettingInfo>()));

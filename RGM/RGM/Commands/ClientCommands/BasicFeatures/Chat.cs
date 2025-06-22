@@ -29,7 +29,12 @@ namespace RGM.Commands.ClientCommands
             Player player = Player.Get(sender);
             string args = string.Join(" ", arguments);
 
-            if (ChatCooldown.Contains(player))
+            if (args == "")
+            {
+                response = en ? "Please enter the message you want to send." : "보낼 메세지를 입력해주세요.";
+                return false;
+            }
+            else if (ChatCooldown.Contains(player))
             {
                 response = en ? "You are sending input at too fast an interval!" : "너무 빠른 간격으로 입력을 보내고 있습니다!";
                 return false;
