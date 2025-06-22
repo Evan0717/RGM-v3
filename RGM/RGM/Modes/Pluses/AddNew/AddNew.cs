@@ -44,6 +44,8 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
+
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public static IEnumerator<float> OnModeStarted()

@@ -22,7 +22,7 @@ namespace RGM.API.Features
                     LabApi.Features.Wrappers.TextToy text = Texts[chat.Key];
 
                     text.TextFormat = $"<size=1>{string.Join("\n", Chats[chat.Key].Select(x => $"{chat.Key.DisplayNickname}: {x}"))}</size>";
-                    text.Transform.localPosition = new Vector3(0, (chat.Key.IsScp ? 1.1f : 0.7f) + 0.033f * Chats[chat.Key].Count(), 0);
+                    text.Transform.localPosition = new Vector3(0, (chat.Key.IsScp ? 1.1f : 0.8f) + 0.033f * Chats[chat.Key].Count(), 0);
                     
                 }
 
