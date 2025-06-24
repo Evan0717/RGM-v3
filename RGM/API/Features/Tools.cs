@@ -118,7 +118,7 @@ namespace RGM.API.Features
             string Color = ModeList[ModeType].Color;
             string Name = ModeList[ModeType].Name;
             string Description = ModeList[ModeType].Description;
-            string Detail = ModeList[ModeType].Detail;
+            string Detail = SelectMode == "Secret2Vote" ? "ddjfkldjflkdjflksdjfkljf" : ModeList[ModeType].Detail;
 
             string Message = Notions.StartModeDescription
                 .Replace("{ModeColor}", SelectMode == "Secret2Vote" ? "ffffff" : Color)
@@ -298,7 +298,7 @@ $"""
                 while (true)
                 {
                     foreach (var player in Player.List)
-                        player.AddHint("라운드 보상 지급", en ? $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b> has received <b>{amount}</b> EXP and random coins.</size>" : $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b> has received <b>{amount}</b> EXP and random coins.</size>", 1);
+                        player.AddHint("라운드 보상 지급", en ? $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b> has received <b>{amount}</b> EXP and random coins.</size>" : $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다", 1);
 
                     yield return Timing.WaitForSeconds(1);
                 }
