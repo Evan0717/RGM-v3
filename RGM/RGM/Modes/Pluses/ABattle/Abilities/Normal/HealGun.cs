@@ -43,7 +43,7 @@ public class HealGun : Ability
         if (ev.Attacker == null)
             return;
 
-        if (ev.Attacker.CurrentItem != null && ev.Attacker.CurrentItem.Serial == HealGunSerial)
+        if (ev.Attacker.CurrentItem != null && ev.Attacker.CurrentItem.Serial == HealGunSerial && ev.Attacker.MaxHealth > ev.Attacker.Health)
         {
             ev.IsAllowed = false;
 
