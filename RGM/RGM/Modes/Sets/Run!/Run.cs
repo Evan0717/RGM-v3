@@ -68,7 +68,6 @@ namespace RGM.Modes
 
         Vector3 pos;
         Vector3 finalDoor;
-        Vector3 border;
 
         public override void OnEnabled()
         {
@@ -101,7 +100,6 @@ namespace RGM.Modes
             lightSources = Tools.GetObjectList("LightSource");
             pos = GameObject.Find("[SP] Base").transform.position;
             finalDoor = GameObject.Find("Final Door").transform.position;
-            border = GameObject.Find("BorderForSomething").transform.position;
 
             foreach (var player in Player.List)
             {
@@ -123,7 +121,7 @@ namespace RGM.Modes
                 }
             }
 
-            GlobalPlayer.TryPlay("RUN FOR IT", 1.2f);
+            GlobalPlayer.TryPlay("RUN FOR IT");
 
             yield return Timing.WaitForSeconds(130);
 
@@ -177,7 +175,7 @@ namespace RGM.Modes
                     {
                         while (!Round.IsEnded)
                         {
-                            raser.Position += new Vector3(-0.075f, 0, 0);
+                            raser.Position += new Vector3(-0.05f, 0, 0);
 
                             yield return Timing.WaitForOneFrame;
                         }
@@ -198,7 +196,7 @@ namespace RGM.Modes
                 {
                     foreach (var vector in new List<Vector3> { Vector3.down, Vector3.forward, Vector3.back, Vector3.left, Vector3.right })
                     {
-                        if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 1.2f))
+                        if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 1))
                         {
                             if (new List<string> { "Oh no", "BorderForSomething" }.Contains(hit.transform.name))
                             {
@@ -223,12 +221,15 @@ namespace RGM.Modes
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            var players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
-
-            if (players.Count() == 0)
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                Round.IsLocked = false;
-            }    
+                var players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+                if (players.Count() == 0)
+                {
+                    Round.IsLocked = false;
+                }
+            });
         }
     }
 }
