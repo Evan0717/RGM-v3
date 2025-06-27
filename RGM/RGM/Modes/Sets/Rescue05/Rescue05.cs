@@ -124,7 +124,7 @@ namespace RGM.Modes
                 {
                     player.AddBroadcast(20, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 탈출하여 <u><i>강화제 제작 방법</i>을 재단에 넘기는 데 성공하였습니다.</u></size>");
 
-                    if (player.IsCHI)
+                    if (player.IsCHI || player.Role.Type == RoleTypeId.ClassD)
                         player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
                 }
             }
