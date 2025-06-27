@@ -198,7 +198,7 @@ namespace RGM.Modes
                 {
                     foreach (var vector in new List<Vector3> { Vector3.down, Vector3.forward, Vector3.back, Vector3.left, Vector3.right })
                     {
-                        if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 1.5f))
+                        if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 1.2f))
                         {
                             if (new List<string> { "Oh no", "BorderForSomething" }.Contains(hit.transform.name))
                             {
