@@ -59,7 +59,7 @@ namespace RGM.Modes
                     for (int i = 1; i < 4; i++)
                     {
                         var Candy = Tools.GetRandomValue(Tools.EnumToList<CandyKindID>());
-                        player.TryAddCandy(Candy);
+                        player.AddCandy(Candy);
                     }
                 });
             }
@@ -73,7 +73,7 @@ namespace RGM.Modes
             List<CandyKindID> CandyList = Tools.EnumToList<CandyKindID>();
             {
                 var toGive = Tools.GetRandomValue(CandyList);
-                ev.Attacker.TryAddCandy(toGive);
+                ev.Attacker.AddCandy(toGive);
 
                 if (ev.Player.IsScp)
                     Server.ExecuteCommand($"/forceeq {ev.Player.Id} 42");

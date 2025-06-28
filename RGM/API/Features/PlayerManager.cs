@@ -1,5 +1,7 @@
 ﻿using Discord;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using InventorySystem.Items.Usables.Scp330;
 using MEC;
 using PlayerStatsSystem;
 using RGM.API.Interfaces;
@@ -331,6 +333,15 @@ namespace RGM.API.Features
                     return true;
                 }
             }
+        }
+
+        public static Item AddCandy(this Player player, CandyKindID candyKindID)
+        {
+            Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
+            scp330.AddCandy(candyKindID);
+            scp330.RemoveCandy(scp330.Candies.ToList()[0]);
+            player.AddItem(scp330);
+            return scp330;
         }
     }
 }

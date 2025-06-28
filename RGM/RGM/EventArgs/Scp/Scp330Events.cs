@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Scp330;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
 using MultiBroadcast.API;
+using RGM.API.Features;
 using RGM.Modes;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace RGM.EventArgs
                 {
                     ev.Scp330.RemoveCandy(ev.Candy);
 
-                    ev.Player.TryAddCandy(CandyKindID.Pink);
+                    ev.Player.AddCandy(CandyKindID.Pink);
                 }
             });
         }

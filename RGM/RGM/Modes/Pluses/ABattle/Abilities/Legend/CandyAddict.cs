@@ -31,7 +31,7 @@ public class CandyAddict : Ability
     {
         while (true)
         {
-            Owner.TryAddCandy(Tools.GetRandomValue(Tools.EnumToList<CandyKindID>()));
+            Owner.AddCandy(Tools.GetRandomValue(Tools.EnumToList<CandyKindID>()));
 
             yield return Timing.WaitForSeconds(5f);
         } 
