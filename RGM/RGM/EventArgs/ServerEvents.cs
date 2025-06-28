@@ -53,27 +53,6 @@ namespace RGM.EventArgs
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Tools.LoadMap($"RGMLobby");
 
-            switch (UnityEngine.Random.Range(1, 101))
-            {
-                case 1:
-                    Tools.LoadMap(Surfaces.GetRandomValue(), false);
-                    break;
-
-                case 2:
-                    IEnumerator<float> paintText()
-                    {
-                        while (true)
-                        {
-                            PaintToTextMain.PlayVideo("A pig on a bed", new Vector3(0, 350, 0), new Quaternion(0, 0, 0, 0));
-
-                            yield return Timing.WaitForSeconds(4);
-                        }
-                    }
-
-                    Timing.RunCoroutine(paintText());
-                    break;
-            }
-
             var donator = new Donator.Main();
             donator.OnEnabled();
 
@@ -244,6 +223,30 @@ namespace RGM.EventArgs
 
             if (CurrentMode != ModeType.Develop)
             {
+                if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
+                {
+                    switch (UnityEngine.Random.Range(1, 101))
+                    {
+                        case 1:
+                            Tools.LoadMap(Surfaces.GetRandomValue(), false);
+                            break;
+
+                        case 2:
+                            IEnumerator<float> paintText()
+                            {
+                                while (true)
+                                {
+                                    PaintToTextMain.PlayVideo("A pig on a bed", new Vector3(0, 350, 0), new Quaternion(0, 0, 0, 0));
+
+                                    yield return Timing.WaitForSeconds(4);
+                                }
+                            }
+
+                            Timing.RunCoroutine(paintText());
+                            break;
+                    }
+                }
+
                 yield return Timing.WaitForSeconds(20 * 60);
 
                 if (!Warhead.IsDetonated && CurrentMode.GetModeData().Type != ModeType.Develop)
