@@ -184,7 +184,7 @@ namespace RGM.Modes
                     Timing.RunCoroutine(enumerator());
                 }
 
-                yield return Timing.WaitForSeconds(1);
+                yield return Timing.WaitForSeconds(2);
             }
         }
 
@@ -196,7 +196,7 @@ namespace RGM.Modes
                 {
                     foreach (var vector in new List<Vector3> { Vector3.down, Vector3.forward, Vector3.back, Vector3.left, Vector3.right })
                     {
-                        if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 1))
+                        if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 0.8f))
                         {
                             if (new List<string> { "Oh no", "BorderForSomething" }.Contains(hit.transform.name))
                             {
