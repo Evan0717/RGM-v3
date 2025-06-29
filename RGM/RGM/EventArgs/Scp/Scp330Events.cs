@@ -40,6 +40,7 @@ namespace RGM.EventArgs
 
                 ev.Player.AddEffect(EffectType.MovementBoost, 10, 10);
                 ev.Player.AddEffect(EffectType.Invigorated, 1, 10);
+                ev.Player.TryRemoveCandу(CandyKindID.Yellow);
             }
         }
     }
