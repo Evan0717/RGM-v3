@@ -852,20 +852,17 @@ namespace RGM.EventArgs
 //            }
         }
 
-        public static void OnShot(ShotEventArgs ev)
+        public static void OnShooting(ShootingEventArgs ev)
         {
-            if (ev.Target != null)
+            if (ev.ClaimedTarget != null)
             {
                 if (ev.Player.Role is Scp173Role scp173)
                 {
-                    if (Tools.TryGetLookPlayer(ev.Player, 255, out Player target, out RaycastHit? hit))
+                    if (scp173.IsObserved)
                     {
-                        if (scp173.IsObserved)
-                        {
-                            ev.Target.Hurt(ev.Player, ev.Damage, DamageType.Scp173, null);
+                        ev.ClaimedTarget.Hurt(new PlayerStatsSystem.ScpDamageHandler(ev.Player.ReferenceHub, ev.Firearm.Damage, DeathTranslations.Scp173));
 
-                            ev.Player.ShowHitMarker();
-                        }
+                        ev.Player.ShowHitMarker();
                     }
                 }
             }
