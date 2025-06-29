@@ -38,9 +38,12 @@ namespace RGM.EventArgs
             {
                 ev.IsAllowed = false;
 
-                ev.Player.AddEffect(EffectType.MovementBoost, 10, 10);
-                ev.Player.AddEffect(EffectType.Invigorated, 1, 10);
-                ev.Player.TryRemoveCandу(CandyKindID.Yellow);
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
+                    ev.Player.AddEffect(EffectType.MovementBoost, 10, 10);
+                    ev.Player.AddEffect(EffectType.Invigorated, 1, 10);
+                    ev.Player.TryRemoveCandу(CandyKindID.Yellow);
+                });
             }
         }
     }
