@@ -337,16 +337,39 @@ namespace RGM.API.Features
 
         public static void AddCandy(this Player player, CandyKindID candyKindID)
         {
-            if (player.HasItem(ItemType.SCP330))
-            {
-                player.TryAddCandy(candyKindID);
-            }
-            else
+            void add()
             {
                 Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
                 scp330.AddCandy(candyKindID);
                 scp330.RemoveCandy(scp330.Candies.ToList()[0]);
                 player.AddItem(scp330);
+            }
+
+            if (player.HasItem(ItemType.SCP330))
+            {
+                bool success = false;
+
+                foreach (var scp330 in player.Items.Where(x => x.Type == ItemType.SCP330).Select(x => (Scp330)x))
+                {
+                    if (scp330.Candies.Count() == 6)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        scp330.AddCandy(candyKindID);
+                        success = true;
+                    }
+                }
+
+                if (!success)
+                {
+                    add();
+                }
+            }
+            else
+            {
+                add();
             }
         }
     }

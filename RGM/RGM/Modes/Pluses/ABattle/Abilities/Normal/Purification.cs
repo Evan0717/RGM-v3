@@ -16,10 +16,7 @@ public class Purification : Ability
 {
     public override void OnEnabled()
     {
-        Scp330 GreenCandy = (Scp330)Item.Create(ItemType.SCP330);
-        GreenCandy.RemoveAllCandy();
-        GreenCandy.AddCandy(CandyKindID.Green);
-        Owner.AddItem(GreenCandy);
+        Owner.AddCandy(CandyKindID.Green);
     }
 
     public override void OnDisabled()

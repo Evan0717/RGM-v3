@@ -16,10 +16,7 @@ public class Rainbow : Ability
 {
     public override void OnEnabled()
     {
-        Scp330 RainbowCandy = (Scp330)Item.Create(ItemType.SCP330);
-        RainbowCandy.RemoveAllCandy();
-        RainbowCandy.AddCandy(CandyKindID.Rainbow);
-        Owner.AddItem(RainbowCandy);
+        Owner.AddCandy(CandyKindID.Rainbow);
     }
 
     public override void OnDisabled()
