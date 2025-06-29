@@ -49,9 +49,9 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
 
             Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(CleanAll());
         }
 
         public List<ItemType> Items()
@@ -63,12 +63,6 @@ namespace RGM.Modes
             List<ItemType> Items = new List<ItemType>();
 
             Items.Add(Tools.GetRandomValue(Guns));
-
-            foreach (var ammo in Ammos)
-            {
-                for (int i = 0; i < 20; i++)
-                    Items.Add(ammo);
-            }
 
             foreach (var item in CDItems)
             {
@@ -98,18 +92,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> CleanAll()
-        {
-            while (true)
-            {
-                Map.CleanAllItems();
-                Map.CleanAllRagdolls();
-
-                yield return Timing.WaitForSeconds(1f);
-            }
-        }
-
-        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        public void OnDying(DyingEventArgs ev)
         {
             if (pl.Contains(ev.Player))
             {
@@ -125,7 +108,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        public void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
@@ -155,6 +138,11 @@ namespace RGM.Modes
         public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
+        }
+
+        public void OnShot(ShotEventArgs ev)
+        {
+            ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }
     }
 }
