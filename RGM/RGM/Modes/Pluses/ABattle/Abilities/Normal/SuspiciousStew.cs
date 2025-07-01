@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -28,7 +29,7 @@ public class SuspiciousStew : Ability
             EffectType.SeveredHands
         };
 
-        EffectType Effect = Tools.GetRandomValue(Effects.Where(x => !ignoredEffect.Contains(x)).ToList());
+        EffectType Effect = Owner.HasAbility(AbilityType.EPIC_FOODRESEARCHER) ? Effects.Where(x => x.IsPositive()).GetRandomValue() : Effects.Where(x => !ignoredEffect.Contains(x)).GetRandomValue();
         byte Intensity = (byte)Random.Range(1, Random.Range(12, Random.Range(48, Random.Range(64, Random.Range(100, 255)))));
 
         Owner.EnableEffect(Effect, Intensity);
