@@ -794,12 +794,24 @@ namespace RGM.EventArgs
             {
                 if (!ev.Item.IsAmmo)
                 {
-                    ev.Player.CurrentItem = ev.Item;
-
-                    if (IsDropScpItemAllowed)
+                    try
                     {
-                        foreach (var item in ev.Player.Items.Where(x => x != ev.Item).ToList())
-                            ev.Player.DropItem(item);
+                        ev.Player.CurrentItem = ev.Item;
+
+                        if (IsDropScpItemAllowed)
+                        {
+                            foreach (var item in ev.Player.Items.Where(x => x != ev.Item).ToList())
+                                ev.Player.DropItem(item);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+
+                    if (ev.Player.CurrentItem == null)
+                    {
+                        ev.Player.ClearItems();
                     }
                 }
             }
