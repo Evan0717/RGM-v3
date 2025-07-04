@@ -143,6 +143,7 @@ public enum ModeType
     WitGame,
     PlanB,
     RUN,
+    AddScp,
 }
 
 

@@ -17,7 +17,8 @@ namespace RGM.API.Features
 
             if (System.IO.File.Exists(clipPath))
             {
-                AudioClipStorage.LoadClip(clipPath, clipName);
+                if (!AudioClipStorage.AudioClips.ContainsKey(clipName))
+                    AudioClipStorage.LoadClip(clipPath, clipName);
 
                 AudioClipPlayback audioClipPlayback = audioPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
 
