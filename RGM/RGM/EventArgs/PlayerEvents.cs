@@ -700,17 +700,6 @@ namespace RGM.EventArgs
 
                         ev.Player.Kill(new PlayerStatsSystem.ScpDamageHandler(attacker.ReferenceHub, DeathTranslations.PocketDecay));
                     }
-
-                    if (ev.DamageHandler.Type == DamageType.Tesla)
-                    {
-                        var attacker = Player.Get(RoleTypeId.Scp079).GetRandomValue();
-
-                        if (attacker == null) return;
-
-                        ev.IsAllowed = false;
-
-                        ev.Player.Kill(new PlayerStatsSystem.ScpDamageHandler(attacker.ReferenceHub, DeathTranslations.Tesla));
-                    }
                 }
             }
         }
