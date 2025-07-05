@@ -8,6 +8,7 @@ using ProjectMER.Events.Arguments;
 using ProjectMER.Features;
 using ProjectMER.Features.Objects;
 using RemoteAdmin;
+using RGM.API.Components;
 using RGM.API.Features;
 using RGM.Modes.Commands;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static RGM.Variables.ServerManagers;
 
-namespace RGM.Modes.Sets.AddScp.Scps.Scp999
+namespace RGM.Modes.Sets.AddScp.Scps
 {
     public static class Scp999
     {
@@ -31,9 +32,9 @@ namespace RGM.Modes.Sets.AddScp.Scps.Scp999
         public static Player CreateScp999(Player player)
         {
             player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.AssignInventory);
-            player.EnableEffect(EffectType.Ghostly);
+            player.EnableEffect(EffectType.Ghostly, 1);
             player.EnableEffect(EffectType.SilentWalk, 10);
-            player.EnableEffect(EffectType.Asphyxiated);
+            player.EnableEffect(EffectType.Asphyxiated, 1);
             player.MaxHealth = 999;
             player.Health = player.MaxHealth;
             Timing.CallDelayed(1, () =>
@@ -48,20 +49,26 @@ namespace RGM.Modes.Sets.AddScp.Scps.Scp999
             {
                 while (true)
                 {
-                    if (Tools.TryGetLookPlayer(player, 15, out Player target, out RaycastHit? hit))
+                    try
                     {
-                        player.DisableEffect(EffectType.Slowness);
-                        player.EnableEffect(EffectType.MovementBoost, 20);
+                        if (Tools.TryGetLookPlayer(player, 15, out Player target, out RaycastHit? hit))
+                        {
+                            player.DisableEffect(EffectType.Slowness);
+                            player.EnableEffect(EffectType.MovementBoost, 20);
 
-                        target.Heal(0.3f);
+                            target.Heal(0.1f);
+                        }
+                        else
+                        {
+                            player.DisableEffect(EffectType.MovementBoost);
+                            player.EnableEffect(EffectType.Slowness, 20);
+                        }
                     }
-                    else
+                    catch
                     {
-                        player.DisableEffect(EffectType.MovementBoost);
-                        player.EnableEffect(EffectType.Slowness, 20);
                     }
 
-                    player.Heal(0.3f);
+                    player.Heal(0.2f);
 
                     yield return Timing.WaitForOneFrame;
                 }
@@ -71,7 +78,7 @@ namespace RGM.Modes.Sets.AddScp.Scps.Scp999
             {
                 while (true)
                 {
-                    var audio = PlayersAudio[player].TryPlay("scp-999-moving");
+                    var audio = Tools.PlaySound(schematic.transform, "scp-999-moving");
 
                     yield return Timing.WaitForSeconds((float)audio.Duration.TotalSeconds);
                 }
@@ -81,16 +88,13 @@ namespace RGM.Modes.Sets.AddScp.Scps.Scp999
             {
                 while (true)
                 {
-                    if (cuteCooldown) 
+                    cuteCooldown = false;
+
+                    while (!cuteCooldown)
                     {
-                        cuteCooldown = false;
+                        player.AddHint("SCP-999 cute", "<size=20>[ALT]키를 눌러 애교 부리기</size>", 1);
 
-                        while (!cuteCooldown)
-                        {
-                            player.AddHint("SCP-999 cute", "<size=20>[ALT]키를 눌러 애교 부리기</size>", 1);
-
-                            yield return Timing.WaitForSeconds(1);
-                        }
+                        yield return Timing.WaitForSeconds(1);
                     }
 
                     yield return Timing.WaitForSeconds(Random.Range(3, 101));

@@ -13,7 +13,6 @@ using ProjectMER.Events.Arguments;
 using RGM.API.Features;
 using UnityEngine;
 using RGM.Modes.Sets.AddScp.Scps;
-using RGM.Modes.Sets.AddScp.Scps.Scp999;
 
 namespace RGM.Modes
 {
@@ -33,6 +32,7 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Scp999.OnEnabled();
+            Scp294.OnEnabled();
         }
 
         public IEnumerator<float> OnModeStarted()

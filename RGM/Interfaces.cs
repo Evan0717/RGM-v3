@@ -141,7 +141,6 @@ public enum ModeType
     WhoamI1,
     WhoamI2,
     WitGame,
-    PlanB,
     RUN,
     AddScp,
 }

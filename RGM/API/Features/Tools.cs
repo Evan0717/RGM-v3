@@ -768,7 +768,7 @@ $"""
             return textToy;
         }
 
-        public static void PlaySound(Transform transform, string name, float volume = 1, bool loop = false, bool isSpatial = true, float minDistance = 1, float maxDistance = 10)
+        public static AudioClipPlayback PlaySound(Transform transform, string name, float volume = 1, bool loop = false, bool isSpatial = true, float minDistance = 1, float maxDistance = 10)
         {
             AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform.position}", onIntialCreation: (p) =>
             {
@@ -780,7 +780,7 @@ $"""
                 speaker.transform.localPosition = Vector3.zero;
             });
 
-            audioPlayer.TryPlay(name, volume, loop);
+            return audioPlayer.TryPlay(name, volume, loop);
         }
     }
 }

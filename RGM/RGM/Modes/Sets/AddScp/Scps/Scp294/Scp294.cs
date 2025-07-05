@@ -18,22 +18,12 @@ using InventorySystem.Items.Usables.Scp330;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Enums;
 using static PlayerList;
+using RemoteAdmin;
 
-namespace RGM.Modes
+namespace RGM.Modes.Sets.AddScp.Scps
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.PlanB)]
-    class PlanB : Mode
+    public static class Scp294
     {
-        public override string Name => "플랜 B";
-        public override string Description => "기본 게임인데, 무언가가 더 추가됩니다.";
-        public override string Detail =>
-"""
-- 자판기
-""";
-        public override string Color => "c4ee06";
-
-        public static AdditionalWave Instance;
-
         static Dictionary<ItemType, float> vandingMachineChances { get; set; } = new()
         {
             { ItemType.SCP330, 85 },
@@ -43,16 +33,17 @@ namespace RGM.Modes
             { ItemType.MicroHID, 1 }
         };
 
-        public override void OnEnabled()
+        public static void OnEnabled()
         {
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
-            Exiled.Events.Handlers.Player.Dying += OnDying;
 
-            Timing.RunCoroutine(OnModeStarted());
+            Timing.RunCoroutine(OnStarted());
+
+            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetScp294());
         }
 
-        public static IEnumerator<float> OnModeStarted()
+        public static IEnumerator<float> OnStarted()
         {
             Tools.LoadMap("vm");
 
@@ -156,7 +147,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
+        static IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
         {
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 10))
             {
@@ -239,14 +230,6 @@ namespace RGM.Modes
                         Tools.PlaySound(sound, "vm_insert_fail", 2);
                     }
                 }
-            }
-        }
-
-        public void OnDying(DyingEventArgs ev)
-        {
-            if (ev.Attacker != null)
-            {
-                ev.Attacker.AddItem(ItemType.Coin, ev.Player.IsScp ? 5 : 1);
             }
         }
     }

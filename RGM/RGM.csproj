@@ -485,7 +485,6 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Commands\ClientCommands\Select.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Commands\RemoteAdminCommands\SetExtraMode.cs" />
     <Compile Include="RGM\Modes\Pluses\AdditionalWave\AdditionalWave.cs" />
-    <Compile Include="RGM\Modes\Pluses\PlanB\PlanB.cs" />
     <Compile Include="RGM\Modes\Pluses\Ascension\Ascension.cs" />
     <Compile Include="RGM\Modes\Pluses\Blackout\Blackout.cs" />
     <Compile Include="RGM\Modes\Pluses\Blessing\Blessing.cs" />
@@ -504,6 +503,8 @@
     <Compile Include="RGM\Modes\Pluses\Silent\Silent.cs" />
     <Compile Include="RGM\Modes\Pluses\TripleAxel\TripleAxel.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\AddScp.cs" />
+    <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp294\Commands.cs" />
+    <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp294\Scp294.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp999\Commands.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp999\Scp999.cs" />
     <Compile Include="RGM\Modes\Sets\Alone\Alone.cs" />
