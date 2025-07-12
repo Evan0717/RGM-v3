@@ -164,9 +164,9 @@ namespace RGM.Modes
 
                 if (HostZombies.Contains(ev.Player))
                 {
-                    ev.Player.MaxHealth = 650;
+                    ev.Player.MaxHealth = 500;
                     ev.Player.Health = ev.Player.MaxHealth;
-                    ev.Player.EnableEffect(EffectType.MovementBoost, 20);
+                    ev.Player.EnableEffect(EffectType.MovementBoost, 10);
                     ev.Player.IsBypassModeEnabled = true;
                 }
 
@@ -206,7 +206,7 @@ namespace RGM.Modes
             if (!IsHumanEnd)
             {
                 ev.Player.Role.Set(RoleTypeId.Scp0492);
-                ev.Player.MaxHealth = 500;
+                ev.Player.MaxHealth = 400;
                 ev.Player.Health = ev.Player.MaxHealth;
 
                 try
