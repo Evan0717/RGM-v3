@@ -69,35 +69,57 @@ namespace RGM.Modes
                 {
                     if (player.Role is Scp049Role scp049)
                     {
-                        scp049.CallCooldown = 0;
-                        scp049.GoodSenseCooldown = 0;
-                        scp049.RemainingAttackCooldown = 0;
+                        if (scp049.CallCooldown > 0)
+                            scp049.CallCooldown = 0;
+
+                        if (scp049.GoodSenseCooldown > 0)
+                            scp049.GoodSenseCooldown = 0;
+
+                        if (scp049.RemainingAttackCooldown > 0)
+                            scp049.RemainingAttackCooldown = 0;
                     }
                     else if (player.Role is Scp106Role scp106)
                     {
-                        scp106.CaptureCooldown = 0;
-                        scp106.RemainingSinkholeCooldown = 0;
+                        if (scp106.CaptureCooldown > 0)
+                            scp106.CaptureCooldown = 0;
+
+                        if (scp106.RemainingSinkholeCooldown > 0)
+                            scp106.RemainingSinkholeCooldown = 0;
                     }
                     else if (player.Role is Scp173Role scp173)
                     {
-                        scp173.BlinkCooldown = 0.5f;
-                        scp173.RemainingBreakneckCooldown = 0.5f;
+                        if (scp173.BlinkCooldown > 0.5f)
+                            scp173.BlinkCooldown = 0.5f;
+
+                        if (scp173.RemainingBreakneckCooldown > 0.5f)
+                            scp173.RemainingBreakneckCooldown = 0.5f;
                     }
                     else if (player.Role is Scp096Role scp096)
                     {
-                        scp096.EnrageCooldown = 0;
-                        scp096.ChargeCooldown = 0;
+                        if (scp096.EnrageCooldown > 0)
+                            scp096.EnrageCooldown = 0;
+
+                        if (scp096.ChargeCooldown > 0)
+                            scp096.ChargeCooldown = 0;
                     }
                     else if (player.Role is Scp939Role scp939)
                     {
-                        scp939.MimicryCooldown = 0;
-                        scp939.AmnesticCloudCooldown = 0;
-                        scp939.AttackCooldown = 0;
+                        if (scp939.MimicryCooldown > 0)
+                            scp939.MimicryCooldown = 0;
+
+                        if (scp939.AmnesticCloudCooldown > 0)
+                            scp939.AmnesticCloudCooldown = 0;
+
+                        if (scp939.AttackCooldown > 0)
+                            scp939.AttackCooldown = 0;
                     }
                     else if (player.Role is Scp079Role scp079)
                     {
-                        scp079.BlackoutZoneCooldown = 0;
-                        scp079.RoomLockdownCooldown = 0;
+                        if (scp079.BlackoutZoneCooldown > 0)
+                            scp079.BlackoutZoneCooldown = 0;
+
+                        if (scp079.RoomLockdownCooldown > 0)
+                            scp079.RoomLockdownCooldown = 0;
                     }
                     else if (player.Role is Scp0492Role scp0492)
                     {
