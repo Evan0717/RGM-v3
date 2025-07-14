@@ -24,11 +24,6 @@ namespace RGM.Modes.Sets.AddScp.Scps
     {
         static bool cuteCooldown = false;
 
-        public static void OnEnabled()
-        {
-            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetScp999());
-        }
-
         public static Player Create(Player player)
         {
             player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.AssignInventory);
@@ -41,7 +36,16 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 player.Scale = new Vector3(0.3f, 0.3f, 0.3f);
             });
-            player.AddHint("SCP-999 설명", "<size=25>당신은 <color=red>SCP-999</color>(<color=#a4fc16>Safe</color>)입니다.</size>\n<size=20>모두에게 중립이며, 그들에게 버프를 줄 수 있습니다.</size>", 20);
+            player.AddHint("SCP-999 설명",
+"""        
+<size=25>
+당신은 <co\lor=red>SCP-999</color>(<color=#a4fc16>Safe</color>)입니다.
+</size>
+<size=20>
+모두에게 중립이며, 그들에게 버프를 줄 수 있습니다.
+</size>
+""", 20);
+                
             SchematicObject schematic = ObjectSpawner.SpawnSchematic("SCP_999", new Vector3(player.Position.x, player.Position.y - 0.1f, player.Position.z), player.Rotation, new Vector3(3, 3, 3));
             schematic.transform.parent = player.Transform;
 

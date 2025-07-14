@@ -1,0 +1,106 @@
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Pickups;
+using Exiled.Events.EventArgs.Player;
+using MEC;
+using PlayerRoles;
+using ProjectMER.Events.Arguments;
+using ProjectMER.Features;
+using ProjectMER.Features.Objects;
+using RemoteAdmin;
+using RGM.API.Components;
+using RGM.API.Features;
+using RGM.Modes.Commands;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using static RGM.Variables.ServerManagers;
+
+namespace RGM.Modes.Sets.AddScp.Scps
+{
+    public static class Scp035
+    {
+        public static Player Create(Player player)
+        {
+            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+            player.MaxHealth = 250;
+            player.Health = player.MaxHealth;
+            player.EnableEffect(EffectType.Stained, 1);
+            player.EnableEffect(EffectType.MovementBoost, 25);
+            player.AddHint("SCP-035 설명", 
+"""
+<size=25>
+당신은 <color=red>SCP-035</color>(<color=red>Keter</color>)입니다.
+</size>
+<size=20>
+인간의 뇌를 지배한 가면
+</size>
+""", 20);
+            SchematicObject schematic = ObjectSpawner.SpawnSchematic("SCP_035", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), new Vector3(0.7f, 0.7f, 0.7f));
+            schematic.transform.parent = player.Transform;
+            schematic.transform.localPosition = new Vector3(0, 0.58f, 0.2f);
+            schematic.transform.localRotation = new Quaternion(0, -45, 0, 0);
+
+            IEnumerator<float> main()
+            {
+                while (true)
+                {
+                    player.Hurt(1, "SCP-035의 부식성 물질로 인해 사망했습니다.");
+
+                    yield return Timing.WaitForSeconds(3);
+                }
+            }
+
+            var main_c = Timing.RunCoroutine(main());
+
+            void OnDying(DyingEventArgs ev)
+            {
+                if (ev.Player == player)
+                {
+                    Vector3 pos = ev.Player.Position;
+
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                    {
+                        if (ev.Player.IsDead)
+                        {
+                            if (ev.Player == player)
+                            {
+                                Pickup pickup = Pickup.CreateAndSpawn(ItemType.KeycardO5, pos);
+
+                                SchematicObject scp035 = ObjectSpawner.SpawnSchematic("SCP_035", new Vector3(0, 0, 0), Quaternion.Euler(90, 90, 0), new Vector3(0.7f, 0.7f, 0.7f));
+                                scp035.transform.parent = pickup.Transform;
+                                scp035.transform.localPosition = Vector3.zero;
+
+                                void OnPickingUpItem(PickingUpItemEventArgs ev)
+                                {
+                                    if (ev.Pickup == pickup)
+                                    {
+                                        ev.IsAllowed = false;
+                                        ev.Pickup.Destroy();
+
+                                        Create(ev.Player);
+
+                                        Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+                                    }
+                                }
+
+                                Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
+
+                                schematic.Destroy();
+                                Timing.KillCoroutines(main_c);
+
+                                Exiled.Events.Handlers.Player.Dying -= OnDying;
+                            }
+                        }
+                    });
+                }
+            }
+
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+            return player;
+        }
+    }
+}

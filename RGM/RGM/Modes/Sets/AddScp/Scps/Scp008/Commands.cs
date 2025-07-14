@@ -6,21 +6,21 @@ using Exiled.API.Features;
 namespace RGM.Modes.Sets.AddScp.Scps;
 
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class SetScp457 : ICommand
+public class SetScp008 : ICommand
 {
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         Player player = Player.Get(arguments.At(0));
 
-        Scp457.Create(player);
+        Scp008.Create(player);
 
-        response = $"{player.DisplayNickname}을(를) SCP-457로 만드는데 성공했습니다.";
+        response = $"{player.DisplayNickname}을(를) SCP-008로 만드는데 성공했습니다.";
         return true;
     }
 
-    public string Command { get; } = "setscp457";
+    public string Command { get; } = "setscp008";
 
-    public string[] Aliases { get; } = { "scp457" };
+    public string[] Aliases { get; } = { "scp008" };
 
-    public string Description { get; } = "추가 SCPㅣ특정 유저를 SCP-457로 만듭니다.";
+    public string Description { get; } = "추가 SCPㅣ특정 유저를 SCP-008로 만듭니다.";
 }

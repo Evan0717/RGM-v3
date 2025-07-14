@@ -32,8 +32,6 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Scp294.OnEnabled();
-            Scp457.OnEnabled();
-            Scp999.OnEnabled();
         }
 
         public IEnumerator<float> OnModeStarted()
