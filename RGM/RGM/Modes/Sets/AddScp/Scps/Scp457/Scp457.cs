@@ -1,6 +1,9 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
@@ -24,6 +27,8 @@ namespace RGM.Modes.Sets.AddScp.Scps
 {
     public static class Scp457
     {
+        static bool abilityCooldown = false;
+
         public static void OnEnabled()
         {
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetScp457());
@@ -31,13 +36,11 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
         public static Player Create(Player player)
         {
-            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.AssignInventory);
+            player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.AssignInventory);
             player.EnableEffect(EffectType.SilentWalk, 10);
             player.EnableEffect(EffectType.Slowness, 10);
             player.MaxHealth = 1500;
             player.Health = player.MaxHealth;
-            player.VoiceChannel = VoiceChat.VoiceChatChannel.ScpChat;
-            player.IsBypassModeEnabled = true;
             Timing.CallDelayed(1, () =>
             {
                 player.Scale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -48,7 +51,23 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
             IEnumerator<float> main()
             {
-                yield break;
+                while (true)
+                {
+                    foreach (var pickup in Pickup.List)
+                    {
+                        if (Vector3.Distance(player.Position, pickup.Position) < 3)
+                        {
+                            if (player.Scale.x < 1.15f)
+                                player.Scale += new Vector3(0.002f * pickup.Weight, 0.002f * pickup.Weight, 0.002f * pickup.Weight);
+                            player.MaxHealth += pickup.Weight * 1.2f;
+                            player.Health += pickup.Weight * 1.2f;
+
+                            pickup.Destroy();
+                        }
+                    }
+
+                    yield return Timing.WaitForSeconds(1);
+                }
             }
 
             IEnumerator<float> makeSound()
@@ -75,9 +94,27 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 }
             }
 
+            IEnumerator<float> attack()
+            {
+                while (true)
+                {
+                    abilityCooldown = false;
+
+                    while (!abilityCooldown)
+                    {
+                        player.AddHint("SCP-457 공격 가능", "<size=20>[ALT]키를 눌러 원거리 공격</size>", 1);
+
+                        yield return Timing.WaitForSeconds(1);
+                    }
+
+                    yield return Timing.WaitForSeconds(60);
+                }
+            }
+
             var main_c = Timing.RunCoroutine(main());
             var makeSound_c = Timing.RunCoroutine(makeSound());
             var burn2_c = Timing.RunCoroutine(burn2());
+            var attack_c = Timing.RunCoroutine(attack());
 
             void OnHurting(HurtingEventArgs ev)
             {
@@ -90,26 +127,46 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 }
             }
 
-            void OnPickingUpItem(PickingUpItemEventArgs ev)
+            IEnumerator<float> OnTogglingNoClip(TogglingNoClipEventArgs ev)
             {
-                if (ev.Player != player)
-                    return;
+                if (ev.Player != player || abilityCooldown)
+                    yield break;
 
-                if (ev.Pickup.Type.IsWeapon())
+                Throwable throwable = ev.Player.ThrowGrenade(ProjectileType.FragGrenade);
+
+                abilityCooldown = true;
+
+                yield return Timing.WaitForSeconds(0.3f);
+
+                if (throwable.Projectile is ExplosionGrenadeProjectile grenade)
                 {
-                    ev.IsAllowed = false;
+                    while (!grenade.IsAlreadyDetonated)
+                    {
+                        if (Physics.OverlapSphere(grenade.Position, 0.3f).Count() > 4)
+                        {
+                            grenade.Base.Network_syncTargetTime = 0.1f;
 
-                    player.AddHint("SCP-457 제한", "<size=20>총기류는 태울 수 없습니다.</size>", 1);
-                }
-                else
-                {
-                    if (ev.Player.Scale.x < 1.15f)
-                        ev.Player.Scale += new Vector3(0.002f * ev.Pickup.Weight, 0.002f * ev.Pickup.Weight, 0.002f * ev.Pickup.Weight);
-                    ev.Player.MaxHealth += ev.Pickup.Weight * 1.2f;
-                    ev.Player.Health += ev.Pickup.Weight * 1.2f;
+                            Vector3 pos = grenade.Position;
 
-                    ev.IsAllowed = false;
-                    ev.Pickup.Destroy();
+                            IEnumerator<float> lava()
+                            {
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    foreach (var p in Player.List.Where(x => !x.IsScp && x != player && Vector3.Distance(x.Position, pos) < 4))
+                                    {
+                                        p.EnableEffect(EffectType.Burned, 1, 0.1f);
+                                        p.Hit(player, player.Scale.x * 10);
+                                    }
+
+                                    yield return Timing.WaitForSeconds(1);
+                                }
+                            }
+
+                            Timing.RunCoroutine(lava());
+                        }
+
+                        yield return Timing.WaitForOneFrame;
+                    }
                 }
             }
 
@@ -137,14 +194,19 @@ namespace RGM.Modes.Sets.AddScp.Scps
                     {
                         if (ev.Player == player)
                         {
+                            var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
+                            g.FuseTime = 0.1f;
+                            g.SpawnActive(pos, player);
+
                             Timing.KillCoroutines(main_c);
                             Timing.KillCoroutines(makeSound_c);
                             Timing.KillCoroutines(burn2_c);
+                            Timing.KillCoroutines(attack_c);
 
                             schematic.Destroy();
 
                             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-                            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+                            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
                             Exiled.Events.Handlers.Player.Died -= OnDied;
                             Exiled.Events.Handlers.Player.Dying -= OnDying;
                         }
@@ -153,7 +215,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             }
 
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             return player;
