@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CommandSystem;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
@@ -29,23 +30,27 @@ namespace RGM.Modes.Sets.AddScp.Scps
     {
         static bool abilityCooldown = false;
 
-        public static void OnEnabled()
-        {
-            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetScp457());
-        }
-
         public static Player Create(Player player)
         {
             player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.AssignInventory);
             player.EnableEffect(EffectType.SilentWalk, 10);
-            player.EnableEffect(EffectType.Slowness, 10);
+            player.EnableEffect(EffectType.Slowness, 30);
             player.MaxHealth = 1500;
             player.Health = player.MaxHealth;
             Timing.CallDelayed(1, () =>
             {
                 player.Scale = new Vector3(0.3f, 0.3f, 0.3f);
             });
-            player.AddHint("SCP-457 설명", "<size=25>당신은 <color=red>SCP-457</color>(<color=#f4fe48>Euclid</color>/<color=#fe4848>Potential Keter</color>)입니다.</size>\n<size=20>진영은 <color=red>SCP</color> 소속입니다.</size>", 20);
+            player.AddHint("SCP-457 설명",
+"""  
+<size=25>
+당신은 <color=red>SCP-457</color>(<color=#f4fe48>Euclid</color>/<color=#fe4848>Potential Keter</color>)입니다.
+</size>
+<size=20>
+진영은 <color=red>SCP</color> 소속입니다.
+</size>
+""", 20);
+                
             SchematicObject schematic = ObjectSpawner.SpawnSchematic("SCP_457", player.Position, player.Rotation, new Vector3(0.4f, 0.4f, 0.4f));
             schematic.transform.parent = player.Transform;
 
@@ -118,12 +123,12 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
             void OnHurting(HurtingEventArgs ev)
             {
-                if (ev.Player != player || ev.Attacker == null)
+                if (ev.Attacker == null || ev.Attacker != player)
                     return;
 
-                if (ev.Attacker.IsScp)
+                if (ev.DamageHandler.Type == DamageType.Explosion)
                 {
-                    ev.IsAllowed = false;
+                    ev.DamageHandler.Damage /= 5;
                 }
             }
 
@@ -133,6 +138,8 @@ namespace RGM.Modes.Sets.AddScp.Scps
                     yield break;
 
                 Throwable throwable = ev.Player.ThrowGrenade(ProjectileType.FragGrenade);
+                SchematicObject fireBall = ObjectSpawner.SpawnSchematic("FireBall", new Vector3(0, 0, 0));
+                fireBall.transform.parent = throwable.Projectile.Transform;
 
                 abilityCooldown = true;
 
@@ -146,11 +153,22 @@ namespace RGM.Modes.Sets.AddScp.Scps
                         {
                             grenade.Base.Network_syncTargetTime = 0.1f;
 
+                            fireBall.Destroy();
+
                             Vector3 pos = grenade.Position;
 
                             IEnumerator<float> lava()
                             {
-                                for (int i = 0; i < 10; i++)
+                                SchematicObject lava = ObjectSpawner.SpawnSchematic("LavaChicken", pos, new Quaternion(0, 0, 0, 0), new Vector3(0.4f, 0.4f, 0.4f));
+
+                                if (Physics.Raycast(new Vector3(pos.x, pos.y + 1, pos.z), Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
+                                {
+                                    lava.Position = hit.point;
+                                }
+
+                                var audio = Tools.PlaySound(lava.transform, "scp-457-burn");
+
+                                for (int i = 0; i < 20; i++)
                                 {
                                     foreach (var p in Player.List.Where(x => !x.IsScp && x != player && Vector3.Distance(x.Position, pos) < 4))
                                     {
@@ -160,6 +178,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
                                     yield return Timing.WaitForSeconds(1);
                                 }
+
+                                lava.Destroy();
+                                audio.IsPaused = true;
                             }
 
                             Timing.RunCoroutine(lava());
@@ -175,7 +196,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 if (ev.Attacker == null || ev.Attacker != player)
                     return;
 
-                if (ev.Player.Scale.x < 1.15f)
+                if (ev.Attacker.Scale.x < 1.15f)
                     ev.Attacker.Scale += new Vector3(0.03f, 0.03f, 0.03f);
                 ev.Attacker.MaxHealth += 25;
                 ev.Attacker.Health += 25;
