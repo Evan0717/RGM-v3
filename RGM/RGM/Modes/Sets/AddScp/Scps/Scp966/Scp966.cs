@@ -1,8 +1,10 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp3114;
 using MEC;
 using PlayerRoles;
 using ProjectMER.Events.Arguments;
@@ -28,7 +30,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             player.Role.Set(RoleTypeId.Scp3114, RoleSpawnFlags.None);
             player.MaxHealth = 966;
             player.Health = player.MaxHealth;
-            player.EnableEffect(EffectType.Slowness, 25);
+            player.EnableEffect(EffectType.Slowness, 30);
             player.AddHint("SCP-966 설명",
 """
 <size=25>
@@ -44,10 +46,44 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
             IEnumerator<float> main()
             {
-                yield break;
+                while (Player.List.Count(x => x.IsScp) > 1)
+                {
+                    if (!player.IsEffectActive<Invisible>())
+                    {
+                        player.EnableEffect(EffectType.Invisible, 1);
+                    }
+
+                    yield return Timing.WaitForOneFrame;
+                }
+
+                player.DisableEffect(EffectType.Invisible);
             }
 
             var main_c = Timing.RunCoroutine(main());
+
+            void OnStrangling(StranglingEventArgs ev)
+            {
+                if (ev.Player == player)
+                {
+                    ev.IsAllowed = false;
+                }
+            }
+
+            void OnDisguising(DisguisingEventArgs ev)
+            {
+                if (ev.Player == player)
+                {
+                    ev.IsAllowed = false;
+                }
+            }
+
+            void OnHurting(HurtingEventArgs ev)
+            {
+                if (ev.Attacker != null && ev.Attacker == player)
+                {
+                    ev.DamageHandler.Damage /= 3;
+                }
+            }
 
             void OnDying(DyingEventArgs ev)
             {
@@ -63,6 +99,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
                             {
                                 Timing.KillCoroutines(main_c);
 
+                                Exiled.Events.Handlers.Scp3114.Strangling -= OnStrangling;
+                                Exiled.Events.Handlers.Scp3114.Disguising -= OnDisguising;
+                                Exiled.Events.Handlers.Player.Hurting -= OnHurting;
                                 Exiled.Events.Handlers.Player.Dying -= OnDying;
                             }
                         }
@@ -70,6 +109,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 }
             }
 
+            Exiled.Events.Handlers.Scp3114.Strangling += OnStrangling;
+            Exiled.Events.Handlers.Scp3114.Disguising += OnDisguising;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             return player;
         }

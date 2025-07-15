@@ -5,6 +5,7 @@ using Exiled.API.Features;
 
 namespace RGM.Modes.Sets.AddScp.Scps;
 
+[CommandHandler(typeof(RemoteAdminCommandHandler))]
 public class SetScp294 : ICommand
 {
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

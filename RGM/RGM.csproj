@@ -505,6 +505,8 @@
     <Compile Include="RGM\Modes\Pluses\Silent\Silent.cs" />
     <Compile Include="RGM\Modes\Pluses\TripleAxel\TripleAxel.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\AddScp.cs" />
+    <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp1162\Commands.cs" />
+    <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp1162\Scp1162.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp966\Commands.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp966\Scp966.cs" />
     <Compile Include="RGM\Modes\Sets\AddScp\Scps\Scp035\Commands.cs" />

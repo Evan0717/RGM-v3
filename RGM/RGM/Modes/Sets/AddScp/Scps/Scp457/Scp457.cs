@@ -62,7 +62,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 while (true)
                 {
-                    foreach (var pickup in Pickup.List)
+                    foreach (var pickup in Pickup.List.Where(x => x.Type != ItemType.KeycardO5))
                     {
                         if (Vector3.Distance(player.Position, pickup.Position) < 3)
                         {
@@ -93,10 +93,12 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 while (true)
                 {
-                    foreach (var p in Player.List.Where(x => !x.IsScp && x != player && Vector3.Distance(x.Position, player.Position) < 4))
+                    foreach (var p in Player.List.Where(x => !x.IsScp && x != player && Vector3.Distance(x.Position, player.Position) < 3.5f))
                     {
                         p.EnableEffect(EffectType.Burned, 1, 0.1f);
-                        p.Hit(player, player.Scale.x * 10);
+                        p.Hit(player, player.Scale.x * 5);
+
+                        player.Heal(0.3f);
                     }
 
                     yield return Timing.WaitForSeconds(0.1f);

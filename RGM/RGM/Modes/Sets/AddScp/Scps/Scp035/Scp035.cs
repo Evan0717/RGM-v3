@@ -26,7 +26,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
         public static Player Create(Player player)
         {
             player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
-            player.MaxHealth = 350;
+            player.MaxHealth = 1350;
             player.Health = player.MaxHealth;
             player.EnableEffect(EffectType.Stained, 1);
             player.EnableEffect(EffectType.MovementBoost, 25);

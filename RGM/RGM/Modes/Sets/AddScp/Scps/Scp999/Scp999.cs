@@ -39,7 +39,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             player.AddHint("SCP-999 설명",
 """        
 <size=25>
-당신은 <co\lor=red>SCP-999</color>(<color=#a4fc16>Safe</color>)입니다.
+당신은 <color=red>SCP-999</color>(<color=#a4fc16>Safe</color>)입니다.
 </size>
 <size=20>
 모두에게 중립이며, 그들에게 버프를 줄 수 있습니다.
@@ -64,7 +64,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                             player.DisableEffect(EffectType.Slowness);
                             player.EnableEffect(EffectType.MovementBoost, 20);
 
-                            target.Heal(0.1f);
+                            target.Heal(0.05f);
                         }
                         else
                         {
@@ -145,6 +145,10 @@ namespace RGM.Modes.Sets.AddScp.Scps
                     ev.IsAllowed = false;
 
                     player.AddHint("SCP-999 무기 금지", "<size=20><color=red>SCP-999</color>은(는) 무기를 쥘 수 없습니다.</size>", 3);
+                }
+                else if (ev.Pickup.Type == ItemType.KeycardO5)
+                {
+                    ev.IsAllowed = false;
                 }
             }
 

@@ -39,13 +39,11 @@ namespace RGM.Modes.Sets.AddScp.Scps
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
 
             Timing.RunCoroutine(OnStarted());
-
-            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetScp294());
         }
 
         public static IEnumerator<float> OnStarted()
         {
-            Tools.LoadMap("vm");
+            Tools.LoadMap("vm", false);
 
             foreach (var pickup in Pickup.List)
             {
