@@ -545,6 +545,7 @@
     <Compile Include="RGM\Modes\Sets\LastOne\LastOne.cs" />
     <Compile Include="RGM\Modes\Sets\MiniGames\MiniGames.cs" />
     <Compile Include="RGM\Modes\Sets\AI\AI.cs" />
+    <Compile Include="RGM\Modes\Sets\ClassSociety\ClassSociety.cs" />
     <Compile Include="RGM\Modes\Sets\Original\Original.cs" />
     <Compile Include="RGM\Modes\Sets\PickMeUp\PickMeUp.cs" />
     <Compile Include="RGM\Modes\Sets\PirateRoulette\PirateRoulette.cs" />
