@@ -144,7 +144,8 @@ public enum ModeType
     RUN,
     AddScp,
     SitDown,
-    ClassSociety
+    ClassSociety,
+    Doppelganger
 }
 
 

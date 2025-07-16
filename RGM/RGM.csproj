@@ -497,6 +497,7 @@
     <Compile Include="RGM\Modes\Pluses\Ghost\Ghost.cs" />
     <Compile Include="RGM\Modes\Pluses\GrandBow\GrandBow.cs" />
     <Compile Include="RGM\Modes\Pluses\ChupaChups\ChupaChups.cs" />
+    <Compile Include="RGM\Modes\Pluses\Doppelganger\Doppelganger.cs" />
     <Compile Include="RGM\Modes\Pluses\SitDown\SitDown.cs" />
     <Compile Include="RGM\Modes\Pluses\Radio\Radio.cs" />
     <Compile Include="RGM\Modes\Pluses\PaperMan\PaperMan.cs" />

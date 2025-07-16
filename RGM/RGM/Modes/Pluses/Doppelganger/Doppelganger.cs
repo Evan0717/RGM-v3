@@ -1,0 +1,72 @@
+﻿using Exiled.API.Features.Items;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Exiled.API.Features;
+using MEC;
+using RGM.API.Features;
+using PlayerRoles;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using RGM.API.DataBases;
+using static RGM.Variables.ServerManagers;
+using UnityEngine;
+using System.IO;
+using Exiled.Events.EventArgs.Player;
+
+namespace RGM.Modes
+{
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Doppelganger)]
+    public class Doppelganger : Mode
+    {
+        public override string Name => "도플갱어";
+        public override string Description => "모두의 이름과 칭호가 살아있는 한 사람의 것으로 변경됩니다.";
+        public override string Detail =>
+"""
+도플갱어
+도플갱어
+
+모두의 이름과 칭호가 살아있는 한 사람의 것으로 변경됩니다.
+모두의 이름과 칭호가 살아있는 한 사람의 것으로 변경됩니다.
+""";
+        public override string Color => "9453d9";
+
+        public static Doppelganger Instance;
+
+        Player owner;
+
+        public override void OnEnabled()
+        {
+            Exiled.Events.Handlers.Player.Died += OnDied;
+
+            Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public IEnumerator<float> OnModeStarted()
+        {
+            owner = Player.List.GetRandomValue(x => x.IsAlive);
+
+            while (!Round.IsEnded)
+            {
+                foreach (var player in Player.List.Where(x => x != owner))
+                {
+                    player.DisplayNickname = owner.DisplayNickname;
+                    player.CustomInfo = owner.CustomInfo;
+                    player.RankName = owner.RankName;
+                    player.RankColor = owner.RankColor;
+                }
+
+                yield return Timing.WaitForOneFrame;
+            }
+        }
+
+        public void OnDied(DiedEventArgs ev)
+        {
+            if (ev.Player == owner)
+            {
+                owner = Player.List.GetRandomValue(x => x.IsAlive);
+            }
+        }
+    }
+}
