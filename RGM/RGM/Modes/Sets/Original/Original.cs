@@ -24,7 +24,7 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Original)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Original)]
     public class Orignal : Mode
     {
         public override string Name => "오리지널";
@@ -39,6 +39,12 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public IEnumerator<float> OnModeStarted()
+        {
+            yield return 0;
         }
     }
 }
