@@ -341,6 +341,7 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_UNLIMITED, // [전설] 무제한
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
+    LEGEND_ASYNC, // [전설] A-Sync Research
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
