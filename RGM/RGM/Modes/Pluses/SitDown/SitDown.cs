@@ -48,7 +48,20 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            foreach (var player in Player.List)
+            {
+                playerStatuses.Add(player, new PlayerStatus());
+            }
+
             yield break;
+        }
+
+        public void OnVerified(VerifiedEventArgs ev)
+        {
+            if (!playerStatuses.ContainsKey(ev.Player))
+            {
+                playerStatuses.Add(ev.Player, new PlayerStatus());
+            }
         }
 
         public static IEnumerator<float> OnTogglingNoClip(TogglingNoClipEventArgs ev)
