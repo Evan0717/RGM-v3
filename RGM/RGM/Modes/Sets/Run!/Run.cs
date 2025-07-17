@@ -171,11 +171,13 @@ namespace RGM.Modes
                         new Quaternion(0, new List<int> { 0, 180 }.GetRandomValue(), 0, 0)
                     );
 
+                    raser.AttachedBlocks.Where(x => x.name == "Oh no").ToList().ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = new Color(25, 0, 0));
+
                     IEnumerator<float> enumerator()
                     {
                         while (!Round.IsEnded)
                         {
-                            raser.Position += new Vector3(-0.05f, 0, 0);
+                            raser.Position += new Vector3(-0.075f, 0, 0);
 
                             yield return Timing.WaitForOneFrame;
                         }
