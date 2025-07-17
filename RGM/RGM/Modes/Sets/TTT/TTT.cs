@@ -137,6 +137,7 @@ Trouble in Terrorist Town의 약자.
 • <color=red>배신자</color>들에게는 무전기와 SCP-1853(이)가 추가로 지급됩니다.
 • 가끔씩 진통제, 고폭 수류탄, 섬광탄이 추가로 지급될 수 있습니다.
 • <b><i><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>은 잘못된 유저를 죽이면 심각한 피해를 입습니다!</i></b>
+• <color={RoleTypeId.ClassD.GetColor().ToHex()}>전과자</color>는 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color> 팀이지만 <color=red>배신자</color>에게는 <color=red>배신자</color>로 보입니다. 주의하세요!
 
 <b>[Map Credit]</b>
 @vasileii, @sleeplessbutter
