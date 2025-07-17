@@ -88,11 +88,11 @@ namespace RGM.Modes
                     }
                     else if (player.Role is Scp173Role scp173)
                     {
-                        if (scp173.BlinkCooldown > 0.5f)
-                            scp173.BlinkCooldown = 0.5f;
+                        if (scp173.BlinkCooldown > 1f)
+                            scp173.BlinkCooldown = 1f;
 
-                        if (scp173.RemainingBreakneckCooldown > 0.5f)
-                            scp173.RemainingBreakneckCooldown = 0.5f;
+                        if (scp173.RemainingBreakneckCooldown > 1f)
+                            scp173.RemainingBreakneckCooldown = 1f;
                     }
                     else if (player.Role is Scp096Role scp096)
                     {
@@ -247,7 +247,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnUsingBreakneckSpeeds(Exiled.Events.EventArgs.Scp173.UsingBreakneckSpeedsEventArgs ev)
         {
-            yield return Timing.WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(1f);
 
             ev.Scp173.RemainingBreakneckCooldown = 0;
         }
