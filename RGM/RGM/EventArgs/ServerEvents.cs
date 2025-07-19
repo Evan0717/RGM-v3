@@ -1,32 +1,29 @@
-﻿using MEC;
+﻿using DiscordInteraction.Discord;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Server;
+using GPUtils.Features.PaintToText.Core;
+using InventorySystem.Configs;
+using MEC;
+using MultiBroadcast.API;
 using PlayerRoles;
+using ProjectMER.Features;
+using Respawning;
 using RGM.API.Components;
+using RGM.API.DataBases;
 using RGM.API.Features;
+using RGM.Modes.Sets.AddScp.Scps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Exiled.API.Features;
-using MultiBroadcast.API;
-using DiscordInteraction.Discord;
-
-using static RGM.Variables.ServerManagers;
-
 using static RGM.Functions.ModeManagers;
-
 using static RGM.IEnumerators.LobbyManagers;
 using static RGM.IEnumerators.ServerManagers;
-
-using Exiled.API.Enums;
-using RGM.API.DataBases;
-using InventorySystem.Configs;
-using Respawning;
-using Exiled.Events.EventArgs.Server;
-using ProjectMER.Features;
-using Exiled.API.Extensions;
-using GPUtils.Features.PaintToText.Core;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.EventArgs
 {
@@ -214,6 +211,12 @@ namespace RGM.EventArgs
             {
                 Timing.RunCoroutine(HumanLoop());
                 Timing.RunCoroutine(Scp079Broadcast());
+
+                if (UnityEngine.Random.Range(1, 51) == 1)
+                    Scp294.OnEnabled();
+
+                if (UnityEngine.Random.Range(1, 51) == 1)
+                    Scp1162.OnEnabled();
             }
 
             Timing.RunCoroutine(Detonation());
@@ -285,7 +288,7 @@ namespace RGM.EventArgs
 
             Timing.CallDelayed(19, () =>
             {
-                Server.ExecuteCommand("sr");
+                Server.ExecuteCommand("/sr");
             });
 
             foreach (var player in Player.List)
