@@ -700,7 +700,8 @@ $"""
                 return null;
             }
 
-            MapUtils.LoadMap(mapName);
+            if (!MapUtils.LoadedMaps.ContainsKey(mapName))
+                MapUtils.LoadMap(mapName);
 
             Log.Info($"로드된 맵: {mapName}");
 
