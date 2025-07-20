@@ -103,7 +103,6 @@ namespace RGM.Modes
                 juggernaut.AddItem(Item);
 
             Timing.RunCoroutine(FindLocate());
-            // Timing.RunCoroutine(ArmorAsync());
             Timing.RunCoroutine(MusicAsync());
             Timing.RunCoroutine(ReduceWaveTimer());
 
@@ -165,21 +164,6 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
-        }
-
-        public IEnumerator<float> ArmorAsync()
-        {
-            SchematicObject Armor = ObjectSpawner.SpawnSchematic("JuggernautThemeArmor", Vector3.zero, juggernaut.Rotation, new Vector3(1.2f, 1.1f, 1.2f));
-
-            while (juggernaut.IsAlive)
-            {
-                Armor.Position = new Vector3(juggernaut.Position.x, juggernaut.Position.y - 1, juggernaut.Position.z);
-                Armor.Rotation = juggernaut.Rotation;
-
-                yield return Timing.WaitForOneFrame;
-            }
-
-            NetworkServer.Destroy(Armor.gameObject);
         }
 
         public IEnumerator<float> MusicAsync()
