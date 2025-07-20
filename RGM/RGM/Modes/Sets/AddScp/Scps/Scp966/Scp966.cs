@@ -30,7 +30,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             player.Role.Set(RoleTypeId.Scp3114, RoleSpawnFlags.None);
             player.MaxHealth = 966;
             player.Health = player.MaxHealth;
-            player.EnableEffect(EffectType.Slowness, 30);
+            player.EnableEffect(EffectType.Slowness, 20);
             player.AddHint("SCP-966 설명",
 """
 <size=25>
@@ -81,7 +81,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 if (ev.Attacker != null && ev.Attacker == player)
                 {
-                    ev.DamageHandler.Damage /= 3;
+                    ev.DamageHandler.Damage /= 2;
                 }
             }
 
