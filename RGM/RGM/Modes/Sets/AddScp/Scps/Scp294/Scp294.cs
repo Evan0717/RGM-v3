@@ -32,11 +32,88 @@ namespace RGM.Modes.Sets.AddScp.Scps
             { ItemType.AntiSCP207, 4 },
             { ItemType.MicroHID, 1 }
         };
+        
+        static IEnumerator<float> start(Player player, Transform transform)
+        {
+            Transform sound = transform.parent.parent.GetChild(3).GetChild(2);
+
+            if (player.CurrentItem != null && player.CurrentItem.Type == ItemType.Coin)
+            {
+                Tools.PlaySound(sound, "vm_insert_success", 2);
+
+                player.RemoveItem(player.CurrentItem);
+
+                Transform output = transform.parent.parent.GetChild(3).GetChild(0);
+
+                if (player.IsScp)
+                {
+                    yield return Timing.WaitForSeconds(0.5f);
+
+                    Tools.PlaySound(output, "vm_drop", 2);
+
+                    yield return Timing.WaitForSeconds(0.5f);
+
+                    List<EffectType> effects = new()
+                        {
+                            EffectType.MovementBoost,
+                            EffectType.Invisible,
+                            EffectType.AntiScp207,
+                            EffectType.Invigorated,
+                            EffectType.DamageReduction,
+                        };
+
+                    player.AddEffect
+                    (
+                        effects.GetRandomValue(),
+                        (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(10, 256)),
+                        UnityEngine.Random.Range(10, UnityEngine.Random.Range(31, 61)),
+                        true
+                    );
+                }
+                else
+                {
+                    List<ItemType> list = new();
+
+                    foreach (var chance in vandingMachineChances)
+                    {
+                        for (int i = 0; i < chance.Value; i++)
+                        {
+                            list.Add(chance.Key);
+                        }
+                    }
+
+                    yield return Timing.WaitForSeconds(0.5f);
+
+                    Tools.PlaySound(output, "vm_drop", 2);
+
+                    yield return Timing.WaitForSeconds(0.5f);
+
+                    ItemType itemType = list.GetRandomValue();
+                    if (itemType == ItemType.SCP330)
+                    {
+                        Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
+                        scp330.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
+                        scp330.RemoveCandy(scp330.Candies.ToList()[0]);
+
+                        scp330.CreatePickup(output.position);
+                    }
+                    else
+                    {
+                        Pickup.CreateAndSpawn(itemType, output.position);
+                    }
+                }
+            }
+            else
+            {
+                Tools.PlaySound(sound, "vm_insert_fail", 2);
+            }
+        }
 
         public static void OnEnabled()
         {
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
+            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
 
             Timing.RunCoroutine(OnStarted());
         }
@@ -64,88 +141,17 @@ namespace RGM.Modes.Sets.AddScp.Scps
             yield return 0;
         }
 
-        public static IEnumerator<float> OnSearchingPickup(SearchingPickupEventArgs ev)
+        static void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (ev.Pickup.Transform.name.StartsWith("Input"))
             {
                 ev.IsAllowed = false;
 
-                Transform sound = ev.Pickup.Transform.parent.parent.GetChild(3).GetChild(2);
-
-                if (ev.Player.CurrentItem != null && ev.Player.CurrentItem.Type == ItemType.Coin)
-                {
-                    Tools.PlaySound(sound, "vm_insert_success", 2);
-
-                    ev.Player.RemoveItem(ev.Player.CurrentItem);
-
-                    Transform output = ev.Pickup.Transform.parent.parent.GetChild(3).GetChild(0);
-
-                    if (ev.Player.IsScp)
-                    {
-                        yield return Timing.WaitForSeconds(0.5f);
-
-                        Tools.PlaySound(output, "vm_drop", 2);
-
-                        yield return Timing.WaitForSeconds(0.5f);
-
-                        List<EffectType> effects = new()
-                        {
-                            EffectType.MovementBoost,
-                            EffectType.Invisible,
-                            EffectType.AntiScp207,
-                            EffectType.Invigorated,
-                            EffectType.DamageReduction,
-                        };
-
-                        ev.Player.AddEffect
-                        (
-                            effects.GetRandomValue(), 
-                            (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(10, 256)), 
-                            UnityEngine.Random.Range(1, UnityEngine.Random.Range(10, 61)), 
-                            true
-                        );
-                    }
-                    else
-                    {
-                        List<ItemType> list = new();
-
-                        foreach (var chance in vandingMachineChances)
-                        {
-                            for (int i = 0; i < chance.Value; i++)
-                            {
-                                list.Add(chance.Key);
-                            }
-                        }
-
-                        yield return Timing.WaitForSeconds(0.5f);
-
-                        Tools.PlaySound(output, "vm_drop", 2);
-
-                        yield return Timing.WaitForSeconds(0.5f);
-
-                        ItemType itemType = list.GetRandomValue();
-                        if (itemType == ItemType.SCP330)
-                        {
-                            Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
-                            scp330.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
-                            scp330.RemoveCandy(scp330.Candies.ToList()[0]);
-
-                            scp330.CreatePickup(output.position);
-                        }
-                        else
-                        {
-                            Pickup.CreateAndSpawn(itemType, output.position);
-                        }
-                    }
-                }
-                else
-                {
-                    Tools.PlaySound(sound, "vm_insert_fail", 2);
-                }
+                Timing.RunCoroutine(start(ev.Player, ev.Pickup.Transform));
             }
         }
 
-        static IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
+        static void OnFlippingCoin(FlippingCoinEventArgs ev)
         {
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 10))
             {
@@ -155,78 +161,22 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 {
                     ev.IsAllowed = false;
 
-                    Transform sound = transform.parent.parent.GetChild(3).GetChild(2);
+                    Timing.RunCoroutine(start(ev.Player, transform));
+                }
+            }
+        }
 
-                    if (ev.Player.CurrentItem != null && ev.Player.CurrentItem.Type == ItemType.Coin)
-                    {
-                        Tools.PlaySound(sound, "vm_insert_success", 2);
+        static void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 10))
+            {
+                var transform = hit.transform;
 
-                        ev.Player.RemoveItem(ev.Player.CurrentItem);
+                if (transform.name.StartsWith("Input"))
+                {
+                    ev.IsAllowed = false;
 
-                        Transform output = transform.parent.parent.GetChild(3).GetChild(0);
-
-                        if (ev.Player.IsScp)
-                        {
-                            yield return Timing.WaitForSeconds(0.5f);
-
-                            Tools.PlaySound(output, "vm_drop", 2);
-
-                            yield return Timing.WaitForSeconds(0.5f);
-
-                            List<EffectType> effects = new()
-                        {
-                            EffectType.MovementBoost,
-                            EffectType.Invisible,
-                            EffectType.AntiScp207,
-                            EffectType.Invigorated,
-                            EffectType.DamageReduction,
-                        };
-
-                            ev.Player.AddEffect
-                            (
-                                effects.GetRandomValue(),
-                                (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(10, 256)),
-                                UnityEngine.Random.Range(1, UnityEngine.Random.Range(10, 61)),
-                                true
-                            );
-                        }
-                        else
-                        {
-                            List<ItemType> list = new();
-
-                            foreach (var chance in vandingMachineChances)
-                            {
-                                for (int i = 0; i < chance.Value; i++)
-                                {
-                                    list.Add(chance.Key);
-                                }
-                            }
-
-                            yield return Timing.WaitForSeconds(0.5f);
-
-                            Tools.PlaySound(output, "vm_drop", 2);
-
-                            yield return Timing.WaitForSeconds(0.5f);
-
-                            ItemType itemType = list.GetRandomValue();
-                            if (itemType == ItemType.SCP330)
-                            {
-                                Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
-                                scp330.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
-                                scp330.RemoveCandy(scp330.Candies.ToList()[0]);
-
-                                scp330.CreatePickup(output.position);
-                            }
-                            else
-                            {
-                                Pickup.CreateAndSpawn(itemType, output.position);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Tools.PlaySound(sound, "vm_insert_fail", 2);
-                    }
+                    Timing.RunCoroutine(start(ev.Player, transform));
                 }
             }
         }
