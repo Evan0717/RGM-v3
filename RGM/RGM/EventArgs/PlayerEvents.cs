@@ -31,6 +31,7 @@ using RGM.UserSettings;
 using Exiled.API.Features.Roles;
 using Exiled.CustomItems.API.Features;
 using Exiled.API.Features.Pickups;
+using System.Diagnostics.Eventing.Reader;
 
 
 namespace RGM.EventArgs
@@ -781,26 +782,32 @@ namespace RGM.EventArgs
         {
             if (ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo"))
             {
-                if (!ev.Item.IsAmmo)
+                if (ev.Player.Role is Scp3114Role scp3114 && scp3114.DisguiseStatus == PlayerRoles.PlayableScps.Scp3114.Scp3114Identity.DisguiseStatus.Active)
                 {
-                    try
+                }
+                else
+                {
+                    if (!ev.Item.IsAmmo)
                     {
-                        ev.Player.CurrentItem = ev.Item;
-
-                        if (IsDropScpItemAllowed)
+                        try
                         {
-                            foreach (var item in ev.Player.Items.Where(x => x != ev.Item).ToList())
-                                ev.Player.DropItem(item);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
+                            ev.Player.CurrentItem = ev.Item;
 
-                    if (ev.Player.CurrentItem == null)
-                    {
-                        ev.Player.ClearItems();
+                            if (IsDropScpItemAllowed)
+                            {
+                                foreach (var item in ev.Player.Items.Where(x => x != ev.Item).ToList())
+                                    ev.Player.DropItem(item);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e);
+                        }
+
+                        if (ev.Player.CurrentItem == null)
+                        {
+                            ev.Player.ClearItems();
+                        }
                     }
                 }
             }
