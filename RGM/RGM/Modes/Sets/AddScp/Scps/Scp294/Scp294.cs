@@ -45,7 +45,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
         {
             Tools.LoadMap("vm", false);
 
-            foreach (var pickup in Pickup.List)
+            foreach (var pickup in Pickup.List.ToList())
             {
                 try
                 {
