@@ -67,9 +67,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
                         if (Vector3.Distance(player.Position, pickup.Position) < 3)
                         {
                             if (player.Scale.x < 1.15f)
-                                player.Scale += new Vector3(0.002f * pickup.Weight, 0.002f * pickup.Weight, 0.002f * pickup.Weight);
-                            player.MaxHealth += pickup.Weight * 1.2f;
-                            player.Health += pickup.Weight * 1.2f;
+                                player.Scale += new Vector3(0.001f * pickup.Weight, 0.001f * pickup.Weight, 0.001f * pickup.Weight);
+                            player.MaxHealth += pickup.Weight * 1.1f;
+                            player.Health += pickup.Weight * 1.1f;
 
                             pickup.Destroy();
                         }
@@ -203,9 +203,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
                     return;
 
                 if (ev.Attacker.Scale.x < 1.15f)
-                    ev.Attacker.Scale += new Vector3(0.03f, 0.03f, 0.03f);
-                ev.Attacker.MaxHealth += 25;
-                ev.Attacker.Health += 25;
+                    ev.Attacker.Scale += new Vector3(0.02f, 0.02f, 0.02f);
+                ev.Attacker.MaxHealth += 15;
+                ev.Attacker.Health += 15;
             }
 
             void OnDying(DyingEventArgs ev)
