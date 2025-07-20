@@ -177,7 +177,7 @@ namespace RGM.Modes
                     {
                         while (!Round.IsEnded)
                         {
-                            raser.Position += new Vector3(-0.075f, 0, 0);
+                            raser.Position += new Vector3(-0.1f, 0, 0);
 
                             yield return Timing.WaitForOneFrame;
                         }
