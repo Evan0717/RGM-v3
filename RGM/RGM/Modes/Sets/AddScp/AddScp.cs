@@ -102,7 +102,7 @@ namespace RGM.Modes
         {
             if (ev.Player.IsAlive)
             {
-                if (Random.Range(1, 6) == 1)
+                if (Random.Range(1, 4) == 1)
                 {
                     ev.Player.AddItem(ItemType.Coin);
                 }
