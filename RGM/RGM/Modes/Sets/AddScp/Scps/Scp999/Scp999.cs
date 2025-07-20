@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using AdminToys;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -152,6 +153,14 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 }
             }
 
+            void OnSpawningRagdoll(SpawningRagdollEventArgs ev)
+            {
+                if (ev.Player == player)
+                {
+                    ev.IsAllowed = false;
+                }
+            }
+
             void OnDying(DyingEventArgs ev)
             {
                 if (ev.Player != player)
@@ -171,11 +180,34 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
                             schematic.Destroy();
 
-                            SchematicObject dead = ObjectSpawner.SpawnSchematic("SCP_999_Dead", new Vector3(pos.x, pos.y - 0.1f, pos.z), player.Rotation);
+                            SchematicObject dead = ObjectSpawner.SpawnSchematic("SCP_999_Dead", new Vector3(pos.x, pos.y + 0.1f, pos.z), player.Rotation);
+                            dead.gameObject.AddComponent<BallComponent>();
+
+                            IEnumerator<float> ball()
+                            {
+                                while (true)
+                                {
+                                    foreach (Player player in Player.List.Where(x => x.IsAlive))
+                                    {
+                                        GameObject _ball = dead.gameObject;
+
+                                        if (Vector3.Distance(_ball.transform.position, player.Position) < 2)
+                                        {
+                                            _ball.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rig);
+                                            rig.AddForce(player.GameObject.transform.forward + new Vector3(0, 0.001f, 0), ForceMode.Impulse);
+                                        }
+                                    }
+
+                                    yield return Timing.WaitForOneFrame;
+                                }
+                            }
+
+                            Timing.RunCoroutine(ball());
                             Tools.PlaySound(dead.transform, "scp-999-dead", 2);
 
                             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
                             Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+                            Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
                             Exiled.Events.Handlers.Player.Dying -= OnDying;
                         }
                     }
@@ -184,6 +216,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
+            Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             return player;
         }
