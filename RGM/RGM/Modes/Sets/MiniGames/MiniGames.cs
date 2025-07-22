@@ -34,7 +34,7 @@ namespace RGM.Modes
         public int RoundCount = 0;
         public List<string> Games = new List<string>()
         {
-            "jail",
+            //"jail",
             "airstrike",
             "dm",
             "escape",
