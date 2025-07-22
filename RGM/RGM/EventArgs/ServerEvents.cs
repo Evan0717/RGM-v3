@@ -316,60 +316,76 @@ namespace RGM.EventArgs
 
             while (true)
             {
-                try
-                {
-                    var top10 = PlayersReport
+                var top10 = PlayersReport
                     .OrderByDescending(kv => kv.Value.Damage)
                     .Take(10)
                     .ToList();
 
-                    StringBuilder sb = new StringBuilder();
-                    sb.AppendLine("<size=30><b>이번 라운드 TOP 10</b></size>");
-                    int rank = 1;
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("<size=30><b>이번 라운드 TOP 10</b></size>");
+                int rank = 1;
 
-                    string ranking(int rank)
+                string ranking(int r)
+                {
+                    if (r == 1)
+                        return "fffa66";
+                    else if (r == 2)
+                        return "808d8e";
+                    else if (r == 3)
+                        return "dfae4d";
+                    else
+                        return "ffffff";
+                }
+
+                foreach (var kv in top10)
+                {
+                    try
                     {
-                        if (rank == 1)
-                            return "fffa66";
+                        var userId = kv.Key;
+                        var report = kv.Value;
 
-                        else if (rank == 2)
-                            return "808d8e";
-
-                        else if (rank == 3)
-                            return "dfae4d";
-
-                        else
-                            return "ffffff";
-                    }
-
-                    foreach (var kv in top10)
-                    {
+                        Player player = null;
+                        bool found = false;
                         try
                         {
-                            var userId = kv.Key;
-                            var report = kv.Value;
-
-                            if (Player.TryGet(userId, out Player player))
-                            {
-                                sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
-                                rank++;
-                            }
+                            found = Player.TryGet(userId, out player);
                         }
                         catch (Exception e)
                         {
-                            Log.Error($"Error in generating round summary: {e}");
+                            Log.Error($"Player.TryGet 예외: {e}");
                         }
-                    }
 
-                    foreach (var player in Player.List)
+                        if (found && player != null)
+                        {
+                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> <color=#888888>알 수 없음</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                        }
+                        rank++;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Error in generating round summary: {e}");
+                    }
+                }
+
+                foreach (var player in Player.List)
+                {
+                    try
                     {
                         player.AddHint("라운드 요약", $"<align=left>{sb}</align>\n\n\n\n", 1);
                     }
-
+                    catch (Exception e)
+                    {
+                        Log.Error($"Error in AddHint: {e}");
+                    }
                 }
-                catch
-                {
 
+                foreach (var player in Player.List)
+                {
+                    player.AddHint("라운드 요약", $"<align=left>{sb}</align>\n\n\n\n", 1);
                 }
 
                 yield return Timing.WaitForSeconds(1);
