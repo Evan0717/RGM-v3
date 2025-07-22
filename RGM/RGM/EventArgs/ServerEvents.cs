@@ -316,52 +316,60 @@ namespace RGM.EventArgs
 
             while (true)
             {
-                var top10 = PlayersReport
-                .OrderByDescending(kv => kv.Value.Damage)
-                .Take(10)
-                .ToList();
-
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("<size=30><b>이번 라운드 TOP 10</b></size>");
-                int rank = 1;
-
-                string ranking(int rank)
+                try
                 {
-                    if (rank == 1)
-                        return "fffa66";
+                    var top10 = PlayersReport
+                    .OrderByDescending(kv => kv.Value.Damage)
+                    .Take(10)
+                    .ToList();
 
-                    else if (rank == 2)
-                        return "808d8e";
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("<size=30><b>이번 라운드 TOP 10</b></size>");
+                    int rank = 1;
 
-                    else if (rank == 3)
-                        return "dfae4d";
-
-                    else
-                        return "ffffff";
-                }
-
-                foreach (var kv in top10)
-                {
-                    try
+                    string ranking(int rank)
                     {
-                        var userId = kv.Key;
-                        var report = kv.Value;
+                        if (rank == 1)
+                            return "fffa66";
 
-                        if (Player.TryGet(userId, out Player player))
+                        else if (rank == 2)
+                            return "808d8e";
+
+                        else if (rank == 3)
+                            return "dfae4d";
+
+                        else
+                            return "ffffff";
+                    }
+
+                    foreach (var kv in top10)
+                    {
+                        try
                         {
-                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
-                            rank++;
+                            var userId = kv.Key;
+                            var report = kv.Value;
+
+                            if (Player.TryGet(userId, out Player player))
+                            {
+                                sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                                rank++;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"Error in generating round summary: {e}");
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Log.Error($"Error in generating round summary: {e}");
-                    }
-                }
 
-                foreach (var player in Player.List)
+                    foreach (var player in Player.List)
+                    {
+                        player.AddHint("라운드 요약", $"<align=left>{sb}</align>\n\n\n\n", 1);
+                    }
+
+                }
+                catch
                 {
-                    player.AddHint("라운드 요약", $"<align=left>{sb}</align>\n\n\n\n", 1);
+
                 }
 
                 yield return Timing.WaitForSeconds(1);
