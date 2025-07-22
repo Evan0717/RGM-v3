@@ -43,11 +43,12 @@ namespace RGM.Modes
 
         public void OnDied(DiedEventArgs ev)
         {
-            count++;
+            if (count != 125)
+                count++;
 
             foreach (var player in Player.List)
             {
-                player.EnableEffect(EffectType.MovementBoost, (byte)(count * 3));
+                player.EnableEffect(EffectType.MovementBoost, (byte)(count * 2));
             }
         }
 
