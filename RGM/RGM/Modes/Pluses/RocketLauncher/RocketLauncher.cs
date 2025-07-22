@@ -27,6 +27,8 @@ namespace RGM.Modes
 
         public static RocketLauncher Instance;
 
+        List<Player> queue = new();
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
@@ -43,22 +45,32 @@ namespace RGM.Modes
         {
             if (ev.Attacker != null && HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Player != ev.Attacker)
             {
-                int GetPercent()
+                if (!queue.Contains(ev.Player))
                 {
-                    if (ev.Attacker.IsScp)
-                        return UnityEngine.Random.Range(1, 3);
+                    queue.Add(ev.Player);
 
-                    else if (ev.Attacker.Role.Type == RoleTypeId.Tutorial)
-                        return 1;
+                    int GetPercent()
+                    {
+                        if (ev.Attacker.IsScp)
+                            return UnityEngine.Random.Range(1, 3);
 
-                    else
-                        return UnityEngine.Random.Range(1, 21);
-                }
+                        else if (ev.Attacker.Role.Type == RoleTypeId.Tutorial)
+                            return 1;
 
-                if (GetPercent() == 1)
-                {
-                    Server.ExecuteCommand($"/cassie_sl {ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{(en ? ev.Player.Role : Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
-                    Timing.RunCoroutine(Tools.DoRocket(ev.Attacker, ev.Player, 1f));
+                        else
+                            return UnityEngine.Random.Range(1, 21);
+                    }
+
+                    if (GetPercent() == 1)
+                    {
+                        Server.ExecuteCommand($"/cassie_sl {ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{(en ? ev.Player.Role : Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
+                        Timing.RunCoroutine(Tools.DoRocket(ev.Attacker, ev.Player, 1f));
+                    }
+
+                    Timing.CallDelayed(2, () =>
+                    {
+                        queue.Remove(ev.Player);
+                    });
                 }
             }
         }
