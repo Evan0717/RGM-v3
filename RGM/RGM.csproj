@@ -228,6 +228,7 @@
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
     <Compile Include="API\Features\HintManager.cs" />
+    <Compile Include="API\Features\PickupMachineManager.cs" />
     <Compile Include="API\Features\PlayerManager.cs" />
     <Compile Include="API\Features\Tools.cs" />
     <Compile Include="API\Databases\Translations.cs" />
