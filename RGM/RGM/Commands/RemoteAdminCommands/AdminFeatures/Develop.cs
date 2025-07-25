@@ -1,18 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+﻿using AdminToys;
 using CommandSystem;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using ProjectMER.Features;
-using ProjectMER.Features.Serializable;
 using MultiBroadcast.API;
 using PlayerRoles;
+using ProjectMER.Features;
+using ProjectMER.Features.Serializable;
 using RGM.API;
+using RGM.API.Components;
 using RGM.API.Features;
 using RGM.Modes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using UnityEngine;
+using static PlayerList;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Commands.RemoteAdminCommands
 {
@@ -47,9 +51,24 @@ namespace RGM.Commands.RemoteAdminCommands
         {
             Player player = Player.Get(sender);
 
-            response = "Complete!";
+            if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 100))
+            {
+                LabApi.Features.Wrappers.PrimitiveObjectToy toy = LabApi.Features.Wrappers.PrimitiveObjectToy.Create();
+                toy.Type = PrimitiveType.Sphere;
+                toy.Position = hit.point;
+                toy.Scale = new Vector3(0.3f, 0.3f, 0.3f);
+                toy.Color = Color.red;
+                toy.GameObject.AddComponent<BallComponent>();
+                toy.Spawn();
 
-            return true;
+                response = "Complete!";
+                return true;
+            }
+            else
+            {
+                response = "Raycast failed!";
+                return false;
+            }
         }
 
         public string Command { get; } = "test";
