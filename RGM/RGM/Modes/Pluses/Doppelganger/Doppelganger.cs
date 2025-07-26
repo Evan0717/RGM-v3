@@ -51,10 +51,17 @@ namespace RGM.Modes
             {
                 foreach (var player in Player.List)
                 {
-                    player.DisplayNickname = owner.DisplayNickname;
-                    player.CustomInfo = owner.CustomInfo;
-                    player.RankName = owner.RankName;
-                    player.RankColor = owner.RankColor;
+                    if (player == owner)
+                    {
+                        player.DisplayNickname = player.Nickname;
+                    }
+                    else
+                    {
+                        player.DisplayNickname = owner.Nickname;
+                        player.CustomInfo = owner.CustomInfo;
+                        player.RankName = owner.RankName;
+                        player.RankColor = owner.RankColor;
+                    }
                 }
 
                 yield return Timing.WaitForOneFrame;
