@@ -54,7 +54,6 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
             Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(CleanAll());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -98,17 +97,6 @@ namespace RGM.Modes
             }
 
             return Items;
-        }
-
-        public IEnumerator<float> CleanAll()
-        {
-            while (true)
-            {
-                Map.CleanAllItems();
-                Map.CleanAllRagdolls();
-
-                yield return Timing.WaitForSeconds(1f);
-            }
         }
 
         public void OnDied(DiedEventArgs ev)
