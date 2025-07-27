@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace RGM
             "'.구매 모드 제안서/어제의 동지는 오늘의 적'을 명령어로 입력하면 좋은 일이 일어날 수도 있다.",
             "가끔씩 의문의 제안이 서버에 나타날 수 있다.",
             "서버 개발자는 개인 치지직 방송 채널을 운영한다. 서버 개발에 대해 궁금하다면 방문하는 것도 좋다.",
-            $"[{AudioClipStorage.AudioClips.Keys.GetRandomValue()}] <- What is this?"
+        $"[{System.IO.Directory.GetFiles(Paths.Plugins + "/audio/").Select(System.IO.Path.GetFileNameWithoutExtension).ToList().GetRandomValue()}] <- What is this?"
         };
     }
 }
