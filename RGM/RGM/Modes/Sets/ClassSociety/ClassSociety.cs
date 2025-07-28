@@ -39,6 +39,7 @@ namespace RGM.Modes
 대신 1은 10을 처치할 수 있습니다. (10은 1 처치 불가)
 처치하면 신분이 한 단계 상승합니다.
 같은 격의 신분은 서로를 사살할 수 있습니다.
+2명만 남았을 경우 둘 다 10이 됩니다.
 """;
         public override string Color => "50eb7f";
 
@@ -151,6 +152,14 @@ namespace RGM.Modes
             }
 
             var players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 2)
+            {
+                foreach (var player in players)
+                {
+                    player.RankName = "10";
+                }
+            }
 
             if (players.Count() < 2)
             {
