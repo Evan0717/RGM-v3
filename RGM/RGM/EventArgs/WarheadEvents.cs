@@ -1,15 +1,15 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using MEC;
+using RGM.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Exiled.API.Features;
-
-using static RGM.Variables.ServerManagers;
 using UnityEngine;
-using MEC;
-using Exiled.API.Features.Doors;
+using static RGM.Variables.ServerManagers;
 
 namespace RGM.EventArgs
 {
@@ -38,6 +38,11 @@ namespace RGM.EventArgs
 
                 player.Kill(UnityEngine.Random.Range(1, 6) == 1 ? "핵폭발이 당신을 죽음으로 가는 KTX에 태웠습니다." : "핵폭발로 인해 사망하였습니다.");
             }
+
+            Timing.CallDelayed(2 * 60, () =>
+            {
+                GlobalPlayer.TryPlay("SCP - Breach", 1);
+            });
 
             yield return Timing.WaitForSeconds(300);
 
