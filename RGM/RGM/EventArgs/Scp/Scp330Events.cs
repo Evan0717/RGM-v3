@@ -29,20 +29,5 @@ namespace RGM.EventArgs
                 }
             });
         }
-
-        public static void OnEatingScp330(EatingScp330EventArgs ev)
-        {
-            if (ev.Candy.Kind == CandyKindID.Yellow)
-            {
-                ev.IsAllowed = false;
-
-                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-                {
-                    ev.Player.AddEffect(EffectType.MovementBoost, 10, 10);
-                    ev.Player.AddEffect(EffectType.Invigorated, 1, 10);
-                    ev.Player.TryRemoveCandу(CandyKindID.Yellow);
-                });
-            }
-        }
     }
 }

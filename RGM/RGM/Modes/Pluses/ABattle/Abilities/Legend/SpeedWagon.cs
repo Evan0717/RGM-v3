@@ -17,11 +17,10 @@ public class SpeedWagon : Ability
 {
     public override void OnEnabled()
     {
-        Owner.GetEffect(EffectType.MovementBoost).Intensity += 100;
+        Owner.AddEffect(EffectType.MovementBoost, 100);
     }
 
     public override void OnDisabled()
     {
-        Owner.GetEffect(EffectType.MovementBoost).Intensity -= 100;
     }
 }

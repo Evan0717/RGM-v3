@@ -8,11 +8,10 @@ public class Swift : Ability
 {
     public override void OnEnabled()
     {
-        Owner.GetEffect(EffectType.MovementBoost).Intensity += 6;
+        Owner.AddEffect(EffectType.MovementBoost, 6);
     }
 
     public override void OnDisabled()
     {
-        Owner.GetEffect(EffectType.MovementBoost).Intensity -= 6;
     }
 }
