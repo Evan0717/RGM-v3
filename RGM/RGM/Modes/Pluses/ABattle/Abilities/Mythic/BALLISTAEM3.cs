@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("발리스타 MP3", "30초마다 탄약이 하나 추가되고, 벽을 관통하고, 500 데미지를 입히는 입자 분열기를 받습니다. 투시 능력을 얻습니다. (사거리 75)", AbilityCategory.Mythic, AbilityType.MYTHIC_BALLISTAEM3)]
+[Ability("발리스타 MP3", "30초마다 탄약이 하나 추가되고, 벽을 관통하고, 1200 데미지를 입히는 입자 분열기를 받습니다. 투시 능력을 얻습니다. (사거리 75)", AbilityCategory.Mythic, AbilityType.MYTHIC_BALLISTAEM3)]
 public class BALLISTAEM3 : Ability
 {
     ushort serial = 0;
@@ -68,7 +68,7 @@ public class BALLISTAEM3 : Ability
                 {
                     if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
                     {
-                        player.Hit(ev.Player, 500);
+                        player.Hit(ev.Player, 1200);
                         
                         enemy = true;
                     }
