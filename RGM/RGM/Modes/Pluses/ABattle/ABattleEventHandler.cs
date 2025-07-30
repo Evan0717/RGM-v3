@@ -13,6 +13,7 @@ using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Scp1507;
 
 using static RGM.Variables.ServerManagers;
+using Exiled.API.Enums;
 
 namespace RGM.Modes;
 
@@ -124,7 +125,12 @@ public class ABattleEventHandler(ABattle aBattle)
             });
         }
         else
-            Timing.RunCoroutine(aBattle.RestoreAbilities(new List<Player>() { ev.Player }));
+        {
+            if (ev.Reason == SpawnReason.Escaped)
+            {
+                Timing.RunCoroutine(aBattle.RestoreAbilities(new List<Player>() { ev.Player }));
+            }
+        }
 
         yield break;
     }
