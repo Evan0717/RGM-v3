@@ -84,6 +84,8 @@ namespace RGM.Modes
                 door.Lock(DoorLockType.SpecialDoorFeature);
             }
 
+            yield return Timing.WaitForSeconds(1);
+
             Player BusterCall = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
 
             foreach (var player in Player.List)
