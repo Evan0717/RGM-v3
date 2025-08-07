@@ -54,16 +54,6 @@ public class MadScientist : Ability
                     }
                 }
             });
-
-            if (new List<DamageType>
-            {
-                DamageType.Falldown,
-                DamageType.PocketDimension,
-                DamageType.Scp106
-            }.Contains(ev.DamageHandler.Type))
-            {
-                Owner.RandomTeleport<Door>();
-            }
         });
     }
 }
