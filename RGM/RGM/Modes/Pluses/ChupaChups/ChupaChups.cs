@@ -1,18 +1,19 @@
-﻿using System;
+﻿using CustomRendering;
+using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
+using MEC;
+using Mirror;
+using PlayerRoles;
+using RGM.API.DataBases;
+using RGM.API.Features;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CustomRendering;
-using Exiled.API.Features;
-using MEC;
-using Mirror;
-using RGM.API.Features;
-using RGM.API.DataBases;
 using UnityEngine;
-using Exiled.API.Features.Items;
-using PlayerRoles;
-using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
@@ -32,6 +33,8 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Timing.RunCoroutine(OnModeStarted());
+
+            Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         }
@@ -56,6 +59,12 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(1);
 
             player.AddItem(ItemType.Jailbird);
+        }
+
+        public void OnRespawningTeam(RespawningTeamEventArgs ev)
+        {
+            foreach (var player in Player.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
+                Spawned(player);
         }
     }
 }
