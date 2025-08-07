@@ -532,6 +532,12 @@ namespace RGM.EventArgs
 
             if (ev.Reason == SpawnReason.RoundStart)
             {
+                if (ev.Player.Zone == ZoneType.Surface) //지상에 그대로 스폰되는 경우
+                {
+                    ev.Player.Role.Set(RoleTypeId.Tutorial);
+                    ev.Player.Position = Player.List.GetRandomValue(x => x.IsHuman && x != ev.Player).Position;
+                }
+
                 if (ev.Player.IsScp)
                 {
                     if (ev.Player.Role.Type == RoleTypeId.Scp079)
