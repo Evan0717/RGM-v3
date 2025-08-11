@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.CHI;
 
-//[Ability("혼돈의 손길", "지급된 동전을 튕기면 보유한 능력을 전부 삭제합니다.", AbilityCategory.CHI, AbilityType.CHI_TOUCHOFCHAOS)]
+[Ability("혼돈의 손길", "지급된 동전을 튕기면 보유한 능력을 전부 삭제합니다.", AbilityCategory.CHI, AbilityType.CHI_TOUCHOFCHAOS)]
 public class TouchOfChaos : Ability
 {
     ushort ChaosCoinSerial;
