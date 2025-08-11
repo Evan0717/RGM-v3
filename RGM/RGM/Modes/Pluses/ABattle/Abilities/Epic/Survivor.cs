@@ -44,15 +44,12 @@ public class Survivor : Ability
 
             ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
             ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
-            ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 20;
+            ev.Player.AddEffect(EffectType.MovementBoost, 20, 3);
 
             GodModePlayers.Add(ev.Player);
 
             Timing.CallDelayed(3f, () =>
             {
-                if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 20)
-                    ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 20;
-
                 if (GodModePlayers.Contains(ev.Player))
                     GodModePlayers.Remove(ev.Player);
 
