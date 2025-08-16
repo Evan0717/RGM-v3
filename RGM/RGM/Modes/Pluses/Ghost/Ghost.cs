@@ -33,11 +33,18 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
+            foreach (var player in Player.List)
+            {
+                Spawned(player);
+            }   
+
             while (true)
             {
                 int a = Random.Range(1, Random.Range(2, Random.Range(3, Random.Range(6, Random.Range(8, 13)))));
@@ -129,6 +136,17 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForOneFrame;
             }
+        }
+
+        void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (ev.Player.IsAlive)
+                Spawned(ev.Player);
+        }
+
+        void Spawned(Player player)
+        {
+            player.EnableEffect(EffectType.Fade, 100);
         }
     }
 }

@@ -61,7 +61,6 @@ namespace RGM.Modes
 
             Timing.RunCoroutine(OnModeStarted());
             Timing.RunCoroutine(Timer());
-            Timing.RunCoroutine(Invisible());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -86,6 +85,7 @@ namespace RGM.Modes
                     monster.Health = health;
                     monster.IsUsingStamina = false;
                     monster.EnableEffect(EffectType.MovementBoost, 50);
+                    monster.EnableEffect(EffectType.Fade, 222);
 
                     foreach (var player in Player.List)
                     {
@@ -136,20 +136,6 @@ namespace RGM.Modes
 
                     player.Kill("제한시간이 초과하였습니다.");
                 }
-            }
-        }
-
-        public IEnumerator<float> Invisible()
-        {
-            while (true)
-            {
-                foreach (var player in Player.List)
-                {
-                    if (player == monster)
-                        player.EnableEffect(EffectType.Invisible);
-                }
-
-                yield return Timing.WaitForSeconds(2f);
             }
         }
 

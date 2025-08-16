@@ -237,9 +237,8 @@ Trouble in Terrorist Town의 약자.
                 else if (player == O5)
                 {
                     player.AddHint("TTT O5", $"당신은 <color=#000000>O5 평의회</color>입니다. 끝까지 혼자 살아남으세요!", 20);
-                    player.MaxHealth = 250;
+                    player.MaxHealth = 350;
                     player.Health = player.MaxHealth;
-                    player.AddItem(ItemType.ArmorHeavy);
                     player.AddItem(ItemType.SCP330);
                 }
                 else

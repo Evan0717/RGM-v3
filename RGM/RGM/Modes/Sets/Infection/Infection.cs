@@ -24,6 +24,7 @@ using Exiled.Events.EventArgs.Server;
 using Respawning.Waves;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Doors;
+using Exiled.Events.EventArgs.Warhead;
 
 namespace RGM.Modes
 {
@@ -51,6 +52,8 @@ namespace RGM.Modes
         {
             Respawn.PauseWaves();
             Round.IsLocked = true;
+
+            Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
 
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -148,6 +151,16 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(1);
+            }
+        }
+
+        void OnDetonating(DetonatingEventArgs ev)
+        {
+            Door door = Door.Get(DoorType.NukeSurface);
+
+            foreach (var player in Player.List.Where(x => x.IsScp))
+            {
+                player.Position = door.Position + new Vector3(0, 2, 0);
             }
         }
 

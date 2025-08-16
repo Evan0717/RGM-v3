@@ -145,7 +145,8 @@ public enum ModeType
     AddScp,
     SitDown,
     ClassSociety,
-    Doppelganger
+    Doppelganger,
+    Moon
 }
 
 

@@ -268,6 +268,8 @@ public enum AbilityType
     NORMAL_MILK, // [일반] 우유
     NORMAL_RUSH, // [일반] 황소
     NORMAL_EXCHANGE, // [일반] 교환
+    NORMAL_RABBIT, // [일반] 토끼뜀
+    NORMAL_FADE, // [일반] 낮은 존재감
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
