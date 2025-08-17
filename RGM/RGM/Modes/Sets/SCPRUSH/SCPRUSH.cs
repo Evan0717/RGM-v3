@@ -10,6 +10,7 @@ using PlayerRoles;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Server;
 using RGM.API.Features;
+using Exiled.API.Extensions;
 
 namespace RGM.Modes
 {
@@ -45,9 +46,9 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
                 RoleTypeId.Scp079,
                 RoleTypeId.Scp3114
             };
-            RoleTypeId RandomScpRole = ScpRoles[UnityEngine.Random.Range(0, ScpRoles.Count)];
+            RoleTypeId RandomScpRole = ScpRoles.GetRandomValue();
 
-            foreach (var player in Player.List.Where(x => x.IsScp))
+            foreach (var player in Player.List.Where(x => x.IsScp && x.Role.Type != RandomScpRole))
             {
                 player.Role.Set(RandomScpRole);
 
