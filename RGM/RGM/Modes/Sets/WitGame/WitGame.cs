@@ -78,7 +78,10 @@ namespace RGM.Modes
                 List<Vector3> platforms = Tools.GetCirclePoints(new Vector3(77.1384f, 322.2464f, -42.116f), distance, playerCount);
 
                 foreach (var player in Player.List.Where(x => x.IsAlive))
+                {
                     player.Position = platforms[Player.List.Where(x => x.IsAlive).ToList().IndexOf(player)];
+                    player.Health = player.MaxHealth;
+                }
 
                 Stack = 0;
 
@@ -173,7 +176,10 @@ namespace RGM.Modes
             while (true)
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive && !PassPlayers.Contains(x)))
+                {
                     player.AddHint("눈치 챙겨", "Spaceㅣ점프를 뛰어 눈치를 챙기세요.", 1.2f);
+                    player.Hurt(2);
+                }
 
                 yield return Timing.WaitForSeconds(1f);
             }
