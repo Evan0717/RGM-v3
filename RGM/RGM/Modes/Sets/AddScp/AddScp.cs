@@ -29,6 +29,7 @@ namespace RGM.Modes
 """
 새로운 SCP..?
 
+<color=red>SCP-005</color> : 만능 열쇠 (10+)
 <color=red>SCP-008</color> : 좀비 전염병 (10+)
 <color=red>SCP-035</color> : 빙의 가면 (10+)
 <color=red>SCP-294</color> : 자판기
@@ -68,6 +69,10 @@ namespace RGM.Modes
 
             if (Server.PlayerCount >= 10)
             {
+                Item item = Scp005.Create();
+                Player lucky = Player.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !specialScps.Contains(x));
+                lucky.AddItem(item);
+
                 Player scp008 = Player.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !specialScps.Contains(x));
                 specialScps.Add(scp008);
 

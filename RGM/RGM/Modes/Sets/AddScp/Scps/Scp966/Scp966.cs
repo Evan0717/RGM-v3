@@ -57,6 +57,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 }
 
                 player.DisableEffect(EffectType.Invisible);
+                player.EnableEffect(EffectType.Fade, 230);
             }
 
             var main_c = Timing.RunCoroutine(main());
