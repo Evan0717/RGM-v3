@@ -65,7 +65,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                             player.DisableEffect(EffectType.Slowness);
                             player.EnableEffect(EffectType.MovementBoost, 20);
 
-                            target.Heal(0.05f);
+                            target.Heal(0.1f);
                         }
                         else
                         {
