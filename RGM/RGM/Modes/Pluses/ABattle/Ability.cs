@@ -458,6 +458,7 @@ public enum AbilityType
     SCP079_AIRSTRIKE, // [전용] 폭격
     SCP079_SYSTEMHACKING, // [전용] 시스템 해킹
     SCP079_CAMERAFLASH, // [전용] 카메라 플래시
+    SCP079_CASSIE, // [전용] C.A.S.S.I.E.
 
     // 시너지 //
     SYNERGY_SURVIVALEXPERT, // [시너지] 생존 전문가

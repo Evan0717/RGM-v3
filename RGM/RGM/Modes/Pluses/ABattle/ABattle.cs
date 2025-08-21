@@ -181,6 +181,7 @@ public class ABattle : Mode
         QueryProcessor.DotCommandHandler.RegisterCommand(new SelectFourth());
         QueryProcessor.DotCommandHandler.RegisterCommand(new SelectFifth());
         QueryProcessor.DotCommandHandler.RegisterCommand(new GetExtraMode());
+        QueryProcessor.DotCommandHandler.RegisterCommand(new CASSIE());
 
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new AddAbility());
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetExtraMode());
