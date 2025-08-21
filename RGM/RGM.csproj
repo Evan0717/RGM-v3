@@ -301,7 +301,6 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\BALLISTAEM3.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\KingsColor.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\ToolGun.cs" />
-    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Fade.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\Rabbit.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\Clone.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Disguise.cs" />
@@ -472,6 +471,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Enemy.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Rage.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Seer.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Outsider.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\StarTearing.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp106\HurtingPrey.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp106\Recovery.cs" />

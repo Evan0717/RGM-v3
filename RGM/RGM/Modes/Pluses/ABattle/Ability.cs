@@ -269,7 +269,6 @@ public enum AbilityType
     NORMAL_RUSH, // [일반] 황소
     NORMAL_EXCHANGE, // [일반] 교환
     NORMAL_RABBIT, // [일반] 토끼뜀
-    NORMAL_FADE, // [일반] 낮은 존재감
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -418,6 +417,7 @@ public enum AbilityType
     SCP096_SEER, // [전용] 천리안
     SCP096_ENEMY, // [전용] 원수
     SCP096_CANTMANAGEANGER, // [전용] 분노 조절 문제
+    SCP096_OUTSIDER, // [전용] 아웃사이더
 
     // SCP-106
     SCP106_RECOVERY, // [전용] 회춘
