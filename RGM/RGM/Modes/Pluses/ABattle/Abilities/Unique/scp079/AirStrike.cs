@@ -23,11 +23,9 @@ using ProjectMER.Commands.Modifying.Position;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("폭격", "핑이 찍힌 장소에 점화된 고폭 수류탄이 생성됩니다. (쿨타임 20초)", AbilityCategory.Scp079, AbilityType.SCP079_AIRSTRIKE)]
+[Ability("폭격", "다음 핑의 위치에 고폭 수류탄을 투척합니다.", AbilityCategory.Scp079, AbilityType.SCP079_AIRSTRIKE)]
 public class AirStrike : Ability
 {
-    bool _isScp079Cooldown = false;
-
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
@@ -43,33 +41,24 @@ public class AirStrike : Ability
         if (ev.Player != Owner)
             return;
 
-        if (!_isScp079Cooldown)
+        Timing.CallDelayed(0.1f, () =>
         {
-            Timing.CallDelayed(0.1f, () =>
+            var g = (ExplosiveGrenade)Exiled.API.Features.Items.Item.Create(ItemType.GrenadeHE, ev.Player);
+            g.SpawnActive(ev.Position, ev.Player);
+
+            LightSourceToy light = LightSourceToy.Create(ev.Position);
+            light.Position = ev.Position;
+            light.Range = 5;
+            light.Color = new Color(1, 0, 0, 1);
+            light.Rotation = Quaternion.Euler(0, 0, 0);
+
+
+            Timing.CallDelayed(5, () =>
             {
-                var g = (ExplosiveGrenade)Exiled.API.Features.Items.Item.Create(ItemType.GrenadeHE, ev.Player);
-                g.FuseTime = 5.5f;
-                g.SpawnActive(ev.Position, ev.Player);
-
-                LightSourceToy light = LightSourceToy.Create(ev.Position);
-                light.Position = ev.Position;
-                light.Range = 5;
-                light.Color = new Color(1, 0, 0, 1);
-                light.Rotation = Quaternion.Euler(0, 0, 0);
-
-
-                Timing.CallDelayed(5, () =>
-                {
-                    light.Destroy();
-                });
-
-                _isScp079Cooldown = true;
-
-                Timing.CallDelayed(20, () =>
-                {
-                    _isScp079Cooldown = false;
-                });
+                light.Destroy();
             });
-        }
+
+            OnDisabled();
+        });
     }
 }

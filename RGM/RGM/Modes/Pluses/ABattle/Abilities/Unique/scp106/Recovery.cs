@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp106;
 
-[Ability("회춘", "공격 쿨타임이 50% 줄어듭니다.", AbilityCategory.Scp106, AbilityType.SCP106_RECOVERY)]
+[Ability("회춘", "공격 쿨타임이 25% 줄어듭니다.", AbilityCategory.Scp106, AbilityType.SCP106_RECOVERY)]
 public class Recovery : Ability
 {
     public override void OnEnabled()
@@ -36,7 +36,7 @@ public class Recovery : Ability
 
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            ev.Scp106.CaptureCooldown /= 2;
+            ev.Scp106.CaptureCooldown /= 4;
         });
     }
 }
