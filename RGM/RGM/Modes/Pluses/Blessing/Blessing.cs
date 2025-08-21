@@ -25,8 +25,9 @@ namespace RGM.Modes
 플레이어는 자신을 바라보는 <b>관전자</b>의 수를 확인할 수 있습니다.
 <b>관전자</b>의 수에 비례해 다음 능력치가 상승합니다.
 • 이동 속도
+• 점프력 증가
 • 피해량 증가
-• 데미지 감소
+• 받는 피해량 감소
 • 초당 체력 회복
 • (SCP-079) 전력 회복
 
@@ -62,6 +63,7 @@ namespace RGM.Modes
 
                         player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(2.5 * s);
                         player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(2.5 * s);
+                        player.GetEffect(EffectType.Lightweight).Intensity = (byte)(2.5 * s);
                         player.Heal(0.35f * s);
 
                         if (player.Role is Scp079Role scp079)
@@ -99,7 +101,7 @@ namespace RGM.Modes
                         }
                         else
                         {
-                            if (player.IsNoclipPermitted)
+                            if (player.IsNoclipPermitted && (player.Group == null || player.Group.Permissions < 1))
                                 player.IsNoclipPermitted = false;
                         }
 
