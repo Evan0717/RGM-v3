@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp106;
 
-[Ability("끈적한 늪", "5m 내의 인간들을 느리게 만듭니다.", AbilityCategory.Scp106, AbilityType.SCP106_STICKYSWAMP)]
+[Ability("끈적한 늪", "4m 내의 인간들을 느리게 만듭니다.", AbilityCategory.Scp106, AbilityType.SCP106_STICKYSWAMP)]
 public class StickySwamp : Ability
 {
     CoroutineHandle _stickySwamp1;
@@ -35,7 +35,7 @@ public class StickySwamp : Ability
     {
         while (true)
         {
-            foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 6))
+            foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) <= 4))
             {
                 if (Owner != near && HitboxIdentity.IsEnemy(Owner.ReferenceHub, near.ReferenceHub))
                     near.EnableEffect(EffectType.SinkHole, 10, 0.5f);

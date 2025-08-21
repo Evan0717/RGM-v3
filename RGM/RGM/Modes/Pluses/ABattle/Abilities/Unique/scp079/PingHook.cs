@@ -36,7 +36,6 @@ public class PingHook : Ability
         if (ev.Player != Owner)
             return;
 
-        Owner.RemoveAbility(this);
         OnDisabled();
 
         Vector3 pos = ev.Position;

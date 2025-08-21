@@ -401,9 +401,10 @@ public enum AbilityType
     SCP173_MIRAGE, // [전용] 신기루
 
     // SCP-049
-    SCP049_DEATH, // [전용] 사자
+    SCP049_DEATH, // [전용] 사신
     SCP049_COMPETENTDOCTOR, // [전용] 유능한 의사
     SCP049_PROFICIENCY, // [전용] 능수능란
+    SCP049_MADDOCTOR, // [전용] 실험체
 
     // SCP-0492
     SCP0492_HUNGER, // [전용] 허기
@@ -455,6 +456,8 @@ public enum AbilityType
     SCP079_FREEDOM, // [전용] 자유
     SCP079_MOBILESTRIKEFORCE, // [전용] 기동타격대
     SCP079_AIRSTRIKE, // [전용] 폭격
+    SCP079_SYSTEMHACKING, // [전용] 시스템 해킹
+    SCP079_CAMERAFLASH, // [전용] 카메라 플래시
 
     // 시너지 //
     SYNERGY_SURVIVALEXPERT, // [시너지] 생존 전문가

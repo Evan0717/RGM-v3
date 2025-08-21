@@ -448,7 +448,9 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp0492\Meals.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp049\CompetentDoctor.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp049\Death.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp049\MadDoctor.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp049\Proficiency.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\CameraFlash.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\AirStrike.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\CallScp.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\Freedom.cs" />
@@ -467,6 +469,7 @@
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\RestArea.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\Shutdown.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\StartWarhead.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp079\SystemHacking.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\CantManageAnger.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Enemy.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Unique\Scp096\Rage.cs" />
