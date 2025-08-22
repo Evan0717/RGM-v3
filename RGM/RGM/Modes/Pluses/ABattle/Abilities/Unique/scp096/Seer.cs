@@ -7,6 +7,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp096;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
 using RGM.API.DataBases;
@@ -20,15 +21,15 @@ public class Sear : Ability
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Scp096.Charging += OnCharging;
+        Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Scp096.Charging -= OnCharging;
+        Exiled.Events.Handlers.Scp096.Enraging -= OnEnraging;
     }
 
-    public void OnCharging(Exiled.Events.EventArgs.Scp096.ChargingEventArgs ev)
+    public void OnEnraging(EnragingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
