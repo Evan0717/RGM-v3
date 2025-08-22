@@ -1,23 +1,23 @@
-﻿using Exiled.API.Features.Items;
+﻿using AFK;
+using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Roles;
+using Exiled.Events.EventArgs.Player;
+using MEC;
+using Mirror;
+using MultiBroadcast.API;
+using PlayerRoles;
+using Respawning;
+using RGM.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Exiled.API.Features;
-using MEC;
 using UnityEngine;
-using Exiled.API.Features.Roles;
-using Exiled.API.Enums;
-using PlayerRoles;
-using MultiBroadcast.API;
-using RGM.API.Features;
-using Mirror;
-using Respawning;
-
 using static RGM.Variables.ServerManagers;
-using Exiled.API.Features.Doors;
-using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
@@ -46,6 +46,7 @@ namespace RGM.Modes
             Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.PauseWaves();
+            AFKManager._kickTime = 120500;
 
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
