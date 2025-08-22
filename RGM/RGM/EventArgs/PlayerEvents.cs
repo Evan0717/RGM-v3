@@ -655,7 +655,10 @@ namespace RGM.EventArgs
 
             if (ev.DamageHandler.Type == DamageType.Falldown && ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase statusEffect))
             {
-                ev.IsAllowed = false;
+                if (statusEffect.IsEnabled)
+                {
+                    ev.IsAllowed = false;
+                }
             }
 
             if (GodModePlayers.Contains(ev.Player))
