@@ -63,8 +63,6 @@ namespace RGM.Modes
             Server.FriendlyFire = true;
             Round.IsLocked = true;
 
-            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
-
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
@@ -197,25 +195,6 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForSeconds(1f);
-            }
-        }
-
-        public void OnRoundEnded(RoundEndedEventArgs ev)
-        {
-            var topDamages = PlayerDamages.OrderByDescending(x => x.Value).Take(5);
-            List<string> damageList = new List<string>();
-
-            foreach (var playerDamage in topDamages)
-            {
-                string playerName = playerDamage.Key.DisplayNickname;
-                float damage = playerDamage.Value;
-                string damageInfo = $"{playerName} - {damage}";
-                damageList.Add(damageInfo);
-            }
-
-            foreach (var player in Player.List)
-            {
-                player.AddHint("저거너트 사살 기여도 순위", $"<align=left><b><size=40>[ 저거너트 사살 기여도 순위 ]</size></b>\n{string.Join("\n", damageList)}</align>\n\n\n\n\n\n", 20);
             }
         }
 
