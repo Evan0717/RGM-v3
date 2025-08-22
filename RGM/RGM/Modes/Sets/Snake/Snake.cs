@@ -19,10 +19,11 @@ using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Extensions;
 using Exiled.API.Features.Pickups;
+using RGM.Modes.SnakeSystem;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Snake)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Snake)]
     public class Snake : Mode
     {
         public override string Name => "스네이크";
@@ -37,26 +38,131 @@ namespace RGM.Modes
 
         public static Snake Instance;
 
+        Dictionary<Player, (int, int)> playerScore = new();
+        int time = 0;
+
         public override void OnEnabled()
         {
             Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.PauseWaves();
 
-            Timing.CallDelayed(1, () => 
-            {
-                Timing.RunCoroutine(OnModeStarted());
-            });
+            PlayerScoreManager.LoadScores();
+            SnakeEventManager.Initialize();
+            SnakeGameMonitor.StartMonitoring();
+
+            Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
+            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Player.Died += OnDied;
+
+            SnakeEventManager.OnSnakeGameEnd += OnSnakeGameEnd;
+            SnakeEventManager.OnSnakeScoreChanged += OnSnakeScoreChanged;
+
+            Timing.RunCoroutine(OnModeStarted());
         }
 
         public IEnumerator<float> OnModeStarted()
         {
+            Round.IsLocked = true;
+            Respawn.PauseWaves();
+            Server.FriendlyFire = true;
+
             foreach (var player in Player.List)
             {
+                playerScore.Add(player, (0, 0));
+
                 player.Role.Set(RoleTypeId.Tutorial);
+                Item item = player.AddItem(ItemType.KeycardChaosInsurgency);
+                player.CurrentItem = item;
             }
 
-            yield break;
+            while (true)
+            {
+                time++;
+
+                foreach (var player in playerScore.Keys.Where(x => x.IsAlive))
+                {
+                    int remain = 44 - (time - playerScore[player].Item2);
+
+                    if (remain <= 0)
+                    {
+                        player.Kill($"최종 점수: {playerScore[player].Item1}점");
+                    }
+                    else
+                    {
+                        player.AddBroadcast(1, $"<size=25><b>{remain}초 안에 다음 점수를 획득하세요.</b> <i>그렇지 않으면 <color=red>사망</color>합니다.</i></size>");
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1);
+            }
+        }
+
+        void OnChangingItem(ChangingItemEventArgs ev)
+        {
+            if (ev.Player.CurrentItem.Type == ItemType.KeycardChaosInsurgency)
+            {
+                ev.IsAllowed = false;
+            }
+        }
+        
+        void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            if (ev.Player.CurrentItem.Type == ItemType.KeycardChaosInsurgency)
+            {
+                ev.IsAllowed = false;
+            }
+        }
+
+        void OnDied(DiedEventArgs ev)
+        {
+            if (Player.List.Count(x => x.IsAlive) == 0)
+            {
+                Round.IsLocked = false;
+
+                List<Player> getResult()
+                {
+                    int maxScore = int.MinValue;
+                    var tops = new List<Player>();
+
+                    foreach (var entry in playerScore)
+                    {
+                        int score = entry.Value.Item1;
+                        if (score > maxScore)
+                        {
+                            maxScore = score;
+                            tops.Clear();
+                            tops.Add(entry.Key);
+                        }
+                        else if (score == maxScore)
+                        {
+                            tops.Add(entry.Key);
+                        }
+                    }
+
+                    return tops;
+                }
+
+                 List<Player> players = getResult();
+
+                if (players.Count() == 1)
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+                else if (players.Count() > 1)
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            }
+        }
+
+        void OnSnakeGameEnd(Player player, int score)
+        {
+            player.Kill($"최종 점수: {playerScore[player].Item1}점");
+        }
+
+        void OnSnakeScoreChanged(Player player, int score)
+        {
+            playerScore[player] = (score, time);
+
+            PlayersReport[player.UserId].Damage = score;
         }
     }
 }

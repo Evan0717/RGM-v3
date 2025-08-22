@@ -110,9 +110,6 @@
     <Reference Include="GPUtils">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\GPUtils.dll</HintPath>
     </Reference>
-    <Reference Include="HintServiceMeow-Exiled">
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\HintServiceMeow-Exiled.dll</HintPath>
-    </Reference>
     <Reference Include="LabApi">
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\LabApi.dll</HintPath>
     </Reference>
@@ -128,6 +125,10 @@
     </Reference>
     <Reference Include="netstandard">
       <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\netstandard.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Users\11010박경현\AppData\Roaming\EXILED\Plugins\dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NorthwoodLib">
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
@@ -146,6 +147,10 @@
     </Reference>
     <Reference Include="SCPSLAudioApi">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Snake, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\Snake.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -212,6 +217,10 @@
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SCPSL\SCPSL_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule">
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
@@ -556,6 +565,13 @@
     <Compile Include="RGM\Modes\Sets\GGClub\GGClub.cs" />
     <Compile Include="RGM\Modes\Sets\GunGame\GunGame.cs" />
     <Compile Include="RGM\Modes\Sets\HideAndSeek\HideAndSeek.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\Config.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\PlayerScoreManager.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\SnakeCommands.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\SnakeDisplayPatcher.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\SnakeEventHandler.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\SnakeGameMonitor.cs" />
+    <Compile Include="RGM\Modes\Sets\Snake\SnakeSystem\SnakeMarketSystem.cs" />
     <Compile Include="RGM\Modes\Sets\Tag\Tag.cs" />
     <Compile Include="RGM\Modes\Sets\HIDE\HIDE.cs" />
     <Compile Include="RGM\Modes\Sets\HotPotato\HotPotato.cs" />
