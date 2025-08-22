@@ -1,4 +1,5 @@
-﻿using CustomPlayerEffects;
+﻿using AFK;
+using CustomPlayerEffects;
 using CustomRendering;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -41,6 +42,7 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.PauseWaves(); 
             Server.FriendlyFire = true;
+            AFKManager._kickTime = 120500;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
@@ -73,7 +75,7 @@ namespace RGM.Modes
 
             Map.CleanAllItems();
 
-            for (float i = 1; i < Player.List.Count / 10 + 2; i++)
+            for (float i = 1; i < Player.List.Count / 6 + 2; i++)
             {
                 Finders.Add(Tools.GetRandomValue(Player.List.Where(x => !Finders.Contains(x)).ToList()));
             }
@@ -90,7 +92,7 @@ namespace RGM.Modes
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Scale = new Vector3(0.4f, 0.4f, 0.4f);
-                player.EnableEffect(EffectType.Lightweight, 255);
+                player.EnableEffect(EffectType.Lightweight, 100);
                 player.Position = Door.Get(DoorType.HIDLab).Position + new Vector3(0, 2, 0);
 
                 Server.ExecuteCommand($"/speak {player.Id} 1");
@@ -114,13 +116,16 @@ namespace RGM.Modes
             foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
             {
                 player.EnableEffect(EffectType.SinkHole);
+                player.DisableEffect(EffectType.Lightweight);
+                player.EnableEffect(EffectType.HeavyFooted, 100);
+                player.AddItem(ItemType.KeycardChaosInsurgency);
             }
 
             foreach (var Finder in Finders)
             {
                 Finder.Role.Set(RoleTypeId.FacilityGuard);
                 Finder.ClearInventory();
-                Finder.EnableEffect(EffectType.Lightweight, 255);
+                Finder.EnableEffect(EffectType.Lightweight, 100);
                 Finder.EnableEffect(EffectType.MovementBoost, 30);
                 foreach (var item in new List<ItemType>
                 {
