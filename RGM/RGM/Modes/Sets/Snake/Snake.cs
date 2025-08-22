@@ -29,11 +29,13 @@ namespace RGM.Modes
         public override string Name => "스네이크";
         public override string Description => "가장 높은 점수를 달성한 유저가 우승합니다.";
         public override string Detail =>
-    """
-    한번 죽으면 그 즉시 점수가 기록되고 기회가 주어지지 않습니다.
+"""
+한번 죽으면 그 즉시 점수가 기록되고 기회가 주어지지 않습니다.
     
-    행운을 빕니다.
-    """;
+행운을 빕니다.
+
++ "슈퍼 스타" 모드 추가
+""";
         public override string Color => "3EA724";
 
         public static Snake Instance;
@@ -59,6 +61,7 @@ namespace RGM.Modes
             SnakeEventManager.OnSnakeScoreChanged += OnSnakeScoreChanged;
 
             Timing.RunCoroutine(OnModeStarted());
+            Timing.RunCoroutine(blockAFK());
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -67,13 +70,19 @@ namespace RGM.Modes
             Respawn.PauseWaves();
             Server.FriendlyFire = true;
 
+            Tools.TryInstallMode(ModeType.SuperStar);
+
             foreach (var player in Player.List)
             {
                 playerScore.Add(player, (0, 0));
 
                 player.Role.Set(RoleTypeId.Tutorial);
-                Item item = player.AddItem(ItemType.KeycardChaosInsurgency);
-                player.CurrentItem = item;
+
+                Timing.CallDelayed(1, () =>
+                {
+                    Server.ExecuteCommand($"/fc {player.Id} tutorial 3");
+                    Server.ExecuteCommand($"/give {player.Id} 10");
+                });
             }
 
             while (true)
@@ -82,7 +91,7 @@ namespace RGM.Modes
 
                 foreach (var player in playerScore.Keys.Where(x => x.IsAlive))
                 {
-                    int remain = 44 - (time - playerScore[player].Item2);
+                    int remain = 30 - (time - playerScore[player].Item2);
 
                     if (remain <= 0)
                     {
@@ -90,7 +99,15 @@ namespace RGM.Modes
                     }
                     else
                     {
-                        player.AddBroadcast(1, $"<size=25><b>{remain}초 안에 다음 점수를 획득하세요.</b> <i>그렇지 않으면 <color=red>사망</color>합니다.</i></size>");
+                        player.AddBroadcast(1, $"<size=30>{180 - time}초 후 게임이 종료됩니다.</size>\n<size=25><b>{remain}초 안에 다음 점수를 획득하세요.</b> <i>그렇지 않으면 <color=red>사망</color>합니다.</i></size>");
+                    }
+                }
+                
+                if (time == 180)
+                {
+                    foreach (var player in Player.List.Where(x => x.IsAlive))
+                    {
+                        player.Kill($"제한 시간 초과! (최종 점수: {playerScore[player].Item1}점)");
                     }
                 }
 
@@ -98,9 +115,41 @@ namespace RGM.Modes
             }
         }
 
+        IEnumerator<float> blockAFK()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List.Where(x => x.IsAlive))
+                {
+                    IEnumerator<float> walk()
+                    {
+                        player.Position = player.Position + new Vector3(0.1f, 0, 0);
+
+                        yield return Timing.WaitForSeconds(0.1f);
+
+                        player.Position = player.Position + new Vector3(0, 0, 0.1f);
+
+                        yield return Timing.WaitForSeconds(0.1f);
+
+                        player.Position = player.Position + new Vector3(0, 0, -0.1f);
+
+                        yield return Timing.WaitForSeconds(0.1f);
+
+                        player.Position = player.Position + new Vector3(-0.1f, 0, 0);
+
+                        yield return Timing.WaitForSeconds(0.1f);
+                    }
+
+                    Timing.RunCoroutine(walk());
+                }
+
+                yield return Timing.WaitForSeconds(60);
+            }
+        }
+
         void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (ev.Player.CurrentItem.Type == ItemType.KeycardChaosInsurgency)
+            if (ev.Player.CurrentItem != null && ev.Player.CurrentItem.Type == ItemType.KeycardChaosInsurgency)
             {
                 ev.IsAllowed = false;
             }

@@ -10,7 +10,7 @@ namespace RGM.Modes.SnakeSystem
 
         // Market Settings
         public static bool EnableMarket { get; set; } = true;
-        public static int MarketCooldownAfterRoundStart { get; set; } = 180; // seconds (3 minutes)
+        public static int MarketCooldownAfterRoundStart { get; set; } = 0; // seconds (3 minutes)
 
         // Performance Settings
         public static int MaxPlayerDataAge { get; set; } = 60; // seconds
