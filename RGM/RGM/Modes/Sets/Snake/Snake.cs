@@ -99,11 +99,11 @@ namespace RGM.Modes
                     }
                     else
                     {
-                        player.AddBroadcast(1, $"<size=30>{180 - time}초 후 게임이 종료됩니다.</size>\n<size=25><b>{remain}초 안에 다음 점수를 획득하세요.</b> <i>그렇지 않으면 <color=red>사망</color>합니다.</i></size>");
+                        player.AddBroadcast(1, $"<size=30>{177 - time}초 후 게임이 종료됩니다.</size>\n<size=25><b>{remain}초 안에 다음 점수를 획득하세요.</b> <i>그렇지 않으면 <color=red>사망</color>합니다.</i></size>");
                     }
                 }
                 
-                if (time == 180)
+                if (time == 177)
                 {
                     foreach (var player in Player.List.Where(x => x.IsAlive))
                     {
@@ -198,7 +198,7 @@ namespace RGM.Modes
                     Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
 
                 else if (players.Count() > 1)
-                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
             }
         }
 
