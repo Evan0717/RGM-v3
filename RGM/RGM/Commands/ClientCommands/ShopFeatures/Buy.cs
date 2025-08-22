@@ -120,7 +120,7 @@ namespace RGM.Commands.ClientCommands
                 }
                 else
                 {
-                    response = $"\n<b>[상점 품목 목록]</b>\n\n{string.Join("\n", Products.Where(x => x.IsPubliced).Select(x => $"{x.Name}(${x.Price}) - {x.Description}"))}\n\n구매하려면 [.구매 <품목 이름>/<매개 변수>]을(를) 입력합니다.";
+                    response = $"\n<b>[상점 품목 목록]</b>\n\n{string.Join("\n", Products.Where(x => x.IsPubliced).Select(x => $"{x.Name}(${x.Price}) - {x.Description}"))}\n\n구매하려면 [.구매 <품목 이름>/<매개 변수>]을(를) 입력합니다.\n\n<b>[보유한 아이템]</b>\n\n{string.Join("\n", UsersManager.UsersCache[player.UserId][18].Split('/').GroupBy(item => item).Select(group => group.Count() > 1 ? $"{group.Key} x{group.Count()}" : group.Key))}";
                     return false;
                 }
             }

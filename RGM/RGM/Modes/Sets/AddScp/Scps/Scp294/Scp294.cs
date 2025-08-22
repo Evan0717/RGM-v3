@@ -45,50 +45,30 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
                 Transform output = transform.parent.parent.GetChild(3).GetChild(0);
 
+                List<ItemType> list = new();
+
+                foreach (var chance in vandingMachineChances)
+                {
+                    for (int i = 0; i < chance.Value; i++)
+                    {
+                        list.Add(chance.Key);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.5f);
+
+                Tools.PlaySound(output, "vm_drop", 2);
+
+                yield return Timing.WaitForSeconds(0.5f);
+
+                ItemType itemType = list.GetRandomValue();
+
                 if (player.IsScp)
                 {
-                    yield return Timing.WaitForSeconds(0.5f);
-
-                    Tools.PlaySound(output, "vm_drop", 2);
-
-                    yield return Timing.WaitForSeconds(0.5f);
-
-                    List<EffectType> effects = new()
-                        {
-                            EffectType.MovementBoost,
-                            EffectType.Invisible,
-                            EffectType.AntiScp207,
-                            EffectType.Invigorated,
-                            EffectType.DamageReduction,
-                        };
-
-                    player.AddEffect
-                    (
-                        effects.GetRandomValue(),
-                        (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(10, 256)),
-                        UnityEngine.Random.Range(10, UnityEngine.Random.Range(31, 61)),
-                        true
-                    );
+                    player.AddItem(itemType);
                 }
                 else
                 {
-                    List<ItemType> list = new();
-
-                    foreach (var chance in vandingMachineChances)
-                    {
-                        for (int i = 0; i < chance.Value; i++)
-                        {
-                            list.Add(chance.Key);
-                        }
-                    }
-
-                    yield return Timing.WaitForSeconds(0.5f);
-
-                    Tools.PlaySound(output, "vm_drop", 2);
-
-                    yield return Timing.WaitForSeconds(0.5f);
-
-                    ItemType itemType = list.GetRandomValue();
                     if (itemType == ItemType.SCP330)
                     {
                         Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
