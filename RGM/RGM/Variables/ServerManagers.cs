@@ -29,6 +29,7 @@ namespace RGM.Variables
         public static string SelectMode = null;
         public static string Tip = Tools.GetRandomValue(Tips.LobbyTips);
         public static string Logo = Random.Range(1, 3) == 1 ? "❓" : "❔";
+        public static string WinMessage = "";
         public static int StartupRandom = Random.Range(1, 31);
         public static bool FreezeGameStart = false;
         public static bool AutoNuke = false;

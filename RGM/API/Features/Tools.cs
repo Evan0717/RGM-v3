@@ -295,23 +295,11 @@ $"""
 
                 UsersManager.SaveUsers();
 
-                while (true)
-                {
-                    foreach (var player in Player.List)
-                        player.AddHint("라운드 보상 지급", en ? $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b> has received <b>{amount}</b> EXP and random coins.</size>" : $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다", 1);
-
-                    yield return Timing.WaitForSeconds(1);
-                }
+                WinMessage = en ? $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b> has received <b>{amount}</b> EXP and random coins.</size>" : $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다";
             }
             else
             {
-                while (true)
-                {
-                    foreach (var player in Player.List)
-                        player.AddHint("라운드 보상 지급", en ? $"<size=25>Since the server has less than 15 players, no prizes will be awarded.</size>" : $"<size=25>서버 인원이 15명 이하이므로 우승 보상은 지급되지 않습니다.</size>", 1);
-
-                    yield return Timing.WaitForSeconds(1);
-                }
+                WinMessage = en ? $"<size=25>Since the server has less than 15 players, no prizes will be awarded.</size>" : $"<size=25>서버 인원이 15명 이하이므로 우승 보상은 지급되지 않습니다.</size>";
             }
         }
 

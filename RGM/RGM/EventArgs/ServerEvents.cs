@@ -373,7 +373,7 @@ namespace RGM.EventArgs
                     try
                     {
                         string text = $"<align=left>{sb}</align>\n\n\n\n";
-                        player.ShowHint(text, 1);
+                        player.ShowHint($"{WinMessage}\n\n{text}", 1);
                     }
                     catch (Exception e)
                     {
