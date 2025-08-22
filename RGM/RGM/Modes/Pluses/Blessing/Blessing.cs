@@ -59,7 +59,7 @@ namespace RGM.Modes
                     if (player.IsAlive)
                     {
                         int s = player.CurrentSpectatingPlayers.Count();
-                        player.AddHint("축복", $"현재 {s}명이 당신을 관전하고 있습니다.", 1.2f);
+                        string t = "관전자들이 조용합니다. 박진감 넘치는 플레이를 보여줘야 할 것 같은데요..";
 
                         player.GetEffect(EffectType.MovementBoost).Intensity = (byte)(2.5 * s);
                         player.GetEffect(EffectType.DamageReduction).Intensity = (byte)(2.5 * s);
@@ -70,22 +70,30 @@ namespace RGM.Modes
                             scp079.Energy += 0.35f * s;
 
                         if (s >= 5)
+                        {
+                            t = "소수의 관전자들이 당신을 지켜봅니다.";
                             player.IsUsingStamina = false;
-
+                        }
                         else
                             player.IsUsingStamina = true;
 
                         if (s >= 10)
+                        {
+                            t = "더 많은 관전자들이 당신을 응원합니다.";
                             player.IsBypassModeEnabled = true;
-
+                        }
                         else
                             player.IsBypassModeEnabled = false;
 
                         if (s >= 15)
+                        {
+                            t = "많은 관전자들이 당신을 지지합니다.";
                             player.EnableEffect(EffectType.Ghostly, 1, 1.2f);
+                        }
 
                         if (s >= 20)
                         {
+                            t = "다수의 관전자들이 당신을 후원합니다.";
                             if (UnityEngine.Random.Range(1, 51) == 1)
                             {
                                 Item Item = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
@@ -94,10 +102,11 @@ namespace RGM.Modes
 
                         if (s >= 25)
                         {
+                            t = "대다수의 관전자들이 당신의 승리를 믿어 의심치 않습니다.";
                             if (!player.IsNoclipPermitted)
                                 player.IsNoclipPermitted = true;
 
-                            player.AddBroadcast(1, "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>");
+                            player.AddHint("신의 권능", "<b><i>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</i></b>", 1.2f);
                         }
                         else
                         {
@@ -106,7 +115,16 @@ namespace RGM.Modes
                         }
 
                         if (s >= 30)
+                        {
+                            t = "<b><color=#bbebe7>모든 관전자들이 당신의 앞길을 축복합니다.</color></b>";
                             player.EnableEffect(EffectType.Invisible, 1, 1.2f);
+                        }
+
+                        player.AddHint("축복",
+$"""
+<size=20>현재 {s}명이 당신을 관전하고 있습니다.</size>
+<size=25><i>{t}</i></size>
+""", 1.2f);
                     }
                 }
 
