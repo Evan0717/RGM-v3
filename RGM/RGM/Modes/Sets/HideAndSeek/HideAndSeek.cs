@@ -41,7 +41,6 @@ namespace RGM.Modes
         {
             Round.IsLocked = true;
             Respawn.PauseWaves(); 
-            Server.FriendlyFire = true;
             AFKManager._kickTime = 120500;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
@@ -124,6 +123,7 @@ namespace RGM.Modes
             foreach (var Finder in Finders)
             {
                 Finder.Role.Set(RoleTypeId.FacilityGuard);
+                Finder.Scale = new Vector3(0.4f, 0.4f, 0.4f);
                 Finder.ClearInventory();
                 Finder.EnableEffect(EffectType.Lightweight, 100);
                 Finder.EnableEffect(EffectType.MovementBoost, 30);
@@ -139,8 +139,6 @@ namespace RGM.Modes
             }
 
             yield return Timing.WaitForSeconds(1f);
-
-            Round.IsLocked = false;
 
             for (int i = 1; i < Remaining; i++)
             {
@@ -166,7 +164,14 @@ namespace RGM.Modes
             }
 
             if (!Round.IsEnded)
-                Finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
+            {
+                Round.IsLocked = false;
+
+                foreach (var player in Player.List.Where(x => x.Role.Type == RoleTypeId.FacilityGuard))
+                {
+                    player.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다.");
+                }
+            }
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
