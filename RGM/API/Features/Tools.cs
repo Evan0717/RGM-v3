@@ -680,6 +680,7 @@ $"""
 
         public static MapSchematic LoadMap(string mapName, bool notice = true)
         {
+            Log.Info($"로드 시도중인 맵: {mapName}");
             MapSchematic map = MapUtils.GetMapData(mapName);
 
             if (map == null)
