@@ -65,7 +65,7 @@ namespace RGM.IEnumerators
                     if (OnGround.ContainsKey(player.UserId) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
                     {
                         if (player.ReferenceHub.IsGrounded())
-                            OnGround[player.UserId] = 5;
+                            OnGround[player.UserId] = 6;
 
                         else
                         {
@@ -89,7 +89,7 @@ namespace RGM.IEnumerators
                                     player.Kill("공허에 빨려들어갔습니다. (5초 이상 낙하)");
                                 }
 
-                                OnGround[player.UserId] = 5;
+                                OnGround[player.UserId] = 6;
                             }
                         }
                     }
