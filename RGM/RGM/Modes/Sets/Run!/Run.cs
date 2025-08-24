@@ -19,6 +19,7 @@ using Exiled.API.Extensions;
 using ProjectMER.Features.Objects;
 using RGM.API.Components;
 using MultiBroadcast.API;
+using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
@@ -71,8 +72,6 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
-
             Exiled.Events.Handlers.Player.Died += OnDied;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -103,7 +102,9 @@ namespace RGM.Modes
 
             foreach (var player in Player.List)
             {
-                player.Role.Set(RoleTypeId.Scp096);
+                player.Role.Set(RoleTypeId.ClassD);
+                player.EnableEffect(EffectType.MovementBoost, 50);
+                player.EnableEffect(EffectType.Lightweight, 50);
                 player.Position = pos;
             }
 
@@ -210,15 +211,6 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForOneFrame;
             }
-        }
-
-        public IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
-        {
-            yield return Timing.WaitForOneFrame;
-
-            ev.Scp096.EnrageCooldown = 0;
-            ev.Scp096.EnragedTimeLeft = 99999;
-            ev.Scp096.SprintingSpeed = 500;
         }
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
