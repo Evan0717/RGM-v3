@@ -80,6 +80,7 @@ namespace RGM.Modes
         {
             while (true)
             {
+                // 매칭 해제 처리
                 foreach (var sm in soulMates.Keys.ToList())
                 {
                     if (soulMates[sm] == null)
@@ -93,6 +94,7 @@ namespace RGM.Modes
                     }
                 }
 
+                // 대기열 관리
                 foreach (var player in Player.List)
                 {
                     if (player.IsAlive)
@@ -120,36 +122,47 @@ namespace RGM.Modes
                     }
                 }
 
-                while (waitingPlayers.Count() > 1)
+                // SCP끼리, 인간끼리만 매칭
+                var scpWaiting = waitingPlayers.Where(x => x.IsScp).ToList();
+                var humanWaiting = waitingPlayers.Where(x => !x.IsScp).ToList();
+
+                void MatchSoulMates(List<Player> group)
                 {
-                    Player first = Tools.GetRandomValue(waitingPlayers);
-                    Player second = Tools.GetRandomValue(waitingPlayers.Where(x => x != first).ToList());
-
-                    waitingPlayers.Remove(first);
-                    waitingPlayers.Remove(second);
-
-                    soulMates.Add(first, second);
-                    soulMates.Add(second, first);
-
-                    void SetSoulMate(Player a, Player b)
+                    while (group.Count > 1)
                     {
-                        a.MaxHealth = b.MaxHealth;
-                        a.Health = b.Health;
+                        Player first = Tools.GetRandomValue(group);
+                        Player second = Tools.GetRandomValue(group.Where(x => x != first).ToList());
 
-                        a.ClearItems();
-                        foreach (var Item in b.Items)
-                            a.AddItem(Item.Type);
+                        group.Remove(first);
+                        group.Remove(second);
+                        waitingPlayers.Remove(first);
+                        waitingPlayers.Remove(second);
+
+                        soulMates.Add(first, second);
+                        soulMates.Add(second, first);
+
+                        void SetSoulMate(Player a, Player b)
+                        {
+                            a.MaxHealth = b.MaxHealth;
+                            a.Health = b.Health;
+
+                            a.ClearItems();
+                            foreach (var Item in b.Items)
+                                a.AddItem(Item.Type);
+                        }
+
+                        if (first.MaxHealth > second.MaxHealth)
+                            SetSoulMate(second, first);
+                        else
+                            SetSoulMate(first, second);
+
+                        first.AddHint("소울메이트 매칭", "누군가와 새롭게 매칭되었습니다.", 5);
+                        second.AddHint("소울메이트 매칭", "누군가와 새롭게 매칭되었습니다.", 5);
                     }
-
-                    if (first.MaxHealth > second.MaxHealth)
-                        SetSoulMate(second, first);
-
-                    else
-                        SetSoulMate(first, second);
-
-                    first.AddHint("소울메이트 매칭", "누군가와 새롭게 매칭되었습니다.", 5);
-                    second.AddHint("소울메이트 매칭", "누군가와 새롭게 매칭되었습니다.", 5);
                 }
+
+                MatchSoulMates(scpWaiting);
+                MatchSoulMates(humanWaiting);
 
                 yield return Timing.WaitForSeconds(1f);
             }
