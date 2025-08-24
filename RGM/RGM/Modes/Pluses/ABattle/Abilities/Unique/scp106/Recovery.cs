@@ -36,7 +36,7 @@ public class Recovery : Ability
 
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            ev.Scp106.CaptureCooldown /= 4;
+            ev.Scp106.CaptureCooldown *= 0.75f;
         });
     }
 }
