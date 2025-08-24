@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
@@ -20,12 +21,12 @@ public class Friendship : Ability
     {
         if (Tools.TryGetNearestPlayer(Owner, out Player nearestPlayer, out float radius))
         {
-            Item Own = Tools.GetRandomValue(Owner.Items.ToList());
+            Item own = Owner.Items.GetRandomValue();
 
-            nearestPlayer.AddItem(Own.Type);
+            nearestPlayer.AddItem(own.Type);
 
-            Owner.AddHint("우애", $"{nearestPlayer.DisplayNickname}(에)게 {(en ? Own.Type.ToString() : Trans.Item[Own.Type])}(을)를 나누어 주었습니다.");
-            nearestPlayer.AddHint("우애", $"{Owner.DisplayNickname}(으)로부터 {(en ? Own.Type.ToString() : Trans.Item[Own.Type])}(을)를 나누어 받았습니다.");
+            Owner.AddHint("우애", $"{nearestPlayer.DisplayNickname}(에)게 {(en ? own.Type.ToString() : Trans.Item[own.Type])}(을)를 나누어 주었습니다.");
+            nearestPlayer.AddHint("우애", $"{Owner.DisplayNickname}(으)로부터 {(en ? own.Type.ToString() : Trans.Item[own.Type])}(을)를 나누어 받았습니다.");
         }
     }
 
