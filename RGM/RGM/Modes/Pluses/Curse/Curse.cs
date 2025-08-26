@@ -40,7 +40,7 @@ namespace RGM.Modes
 30명 이상 - <b><i><color=#FF1F1F>손</color> <color=#EB335F>절</color><color=#E13D7F>단</color> <color=#CD51BF>효</color><color=#C35BDF>과</color></i></b>
 """;
         public override string Color => "000000";
-        public override string Suggester => "광대 (@yun_0n0)";
+        public override string Suggester => "idea by 광대(@yun_0n0)";
 
         public static Curse Instance;
 

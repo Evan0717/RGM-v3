@@ -371,7 +371,7 @@ namespace RGM.EventArgs
                                     if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode].Suggester == "")
                                         return "";
                                     else
-                                        return $" <size=20><color=white>Idea by {ModeList[SelectedMode].Suggester}</color></size>";
+                                        return $" <size=20><color=white>{ModeList[SelectedMode].Suggester}</color></size>";
                                 }
 
                                 string s(int num)

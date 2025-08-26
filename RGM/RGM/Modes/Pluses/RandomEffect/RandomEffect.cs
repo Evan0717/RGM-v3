@@ -26,7 +26,7 @@ namespace RGM.Modes
 효과의 종류와 세기는 랜덤입니다.
 """;
         public override string Color => "BFFF00";
-        public override string Suggester => "monkiki";
+        public override string Suggester => "idea by 몬키키(@monkiki)";
 
         public static RandomEffect Instance;
 

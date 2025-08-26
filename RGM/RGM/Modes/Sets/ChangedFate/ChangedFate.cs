@@ -31,7 +31,7 @@ $"""
 <color={RoleTypeId.NtfSergeant.GetColor().ToHex()}>NTF</color> <-> <color={RoleTypeId.ChaosMarauder.GetColor().ToHex()}>혼돈의 반란</color>
 """;
         public override string Color => "B40486";
-        public override string Suggester => "idk_9936";
+        public override string Suggester => "idea by A(@idk_9936)";
 
         public static ChangedFate Instance;
 

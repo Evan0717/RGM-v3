@@ -43,7 +43,7 @@ namespace RGM.Modes
 • <color=red>벽을 뚫거나, 아군의 경로를 막거나, 탑 쌓고 올라가는 행위는 제재 대상입니다.</color>
 """;
         public override string Color => "2EFEC8";
-        public override string Suggester => "monkiki";
+        public override string Suggester => "idea by 몬키키(@monkiki)";
 
         public static Builder Instance;
 
