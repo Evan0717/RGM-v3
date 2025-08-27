@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.PVE)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.PVE)]
     class PVE : Mode
     {
         public override string Name => "공성전";
