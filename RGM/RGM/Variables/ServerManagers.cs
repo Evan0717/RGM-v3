@@ -112,6 +112,7 @@ namespace RGM.Variables
             {"RGM Owner", "랜덤게임모드(RGM) 공식 운영자 칭호"},
             {"RGM Administrator", "랜덤게임모드(RGM) 공식 관리자 칭호"},
             {"RGM Developer", "랜덤게임모드(RGM) 공식 개발자 칭호"},
+            {"RGM Contributor", "랜덤게임모드(RGM) 공식 기여자 칭호" },
             {"호기심 많은 자", "상점에 칭호가 있어서 사봤어요!"},
             {"Merry Christmas", "즐거운 크리스마스 보내세요."},
             {"1st Anniversary", "랜덤게임모드 1주년을 기념하는 이벤트 우승자"},
