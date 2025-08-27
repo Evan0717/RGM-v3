@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using CommandSystem;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MultiBroadcast.API;
@@ -24,7 +25,8 @@ namespace RGM.Commands.ClientCommands
 
             if (player.IsAlive && Round.IsStarted)
             {
-                player.Kill(en ? "He died trying to avoid bugs." : "벌레를 피하다가 사망하였습니다.");
+                player.Kill(DamageType.Warhead);
+
                 response = en ? "Your prayers have reached the heavens." : "당신의 기도는 저 하늘에 닿았습니다.";
                 return true;
             }
