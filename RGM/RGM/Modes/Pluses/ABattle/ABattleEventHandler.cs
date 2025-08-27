@@ -27,6 +27,7 @@ public class ABattleEventHandler(ABattle aBattle)
         Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         Exiled.Events.Handlers.Player.Jumping += OnJumping;
         Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+        Exiled.Events.Handlers.Player.Died += OnDied;
 
         Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
@@ -133,6 +134,14 @@ public class ABattleEventHandler(ABattle aBattle)
         }
 
         yield break;
+    }
+
+    private void OnDied(DiedEventArgs ev)
+    {
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+        {
+            aBattle.Reset(ev.Player);
+        });
     }
 
     public void OnPinging(PingingEventArgs ev)
