@@ -573,7 +573,7 @@
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\SCP Secret Laboratory\LabAPI\plugins\global\ProjectMER.dll</HintPath>
     </Reference>
     <Reference Include="PveExiled">
-      <HintPath>C:\Users\GoldenPig1205\Downloads\PveExiled.dll</HintPath>
+      <HintPath>..\..\PveExiled\PveExiled\bin\Debug\PveExiled.dll</HintPath>
     </Reference>
     <Reference Include="SCPSLAudioApi, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.PVE)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.PVE)]
     class PVE : Mode
     {
         public override string Name => "공성전";
@@ -37,6 +37,8 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.PauseWaves(); 
 
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+
             Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -48,6 +50,17 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Server.EndingRound += roundHandler.OnEndingRound;
 
             yield return Timing.WaitForSeconds(1);
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }
