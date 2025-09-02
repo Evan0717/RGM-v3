@@ -19,7 +19,10 @@ public class Winner : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Mythic, 2).GetRandomValue());
+        Timing.CallDelayed(1, () =>
+        {
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Mythic, 2).GetRandomValue());
+        });
     }
 
     public override void OnDisabled()

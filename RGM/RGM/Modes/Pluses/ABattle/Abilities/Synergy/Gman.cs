@@ -23,7 +23,10 @@ public class Gman : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddAbility(AbilityType.MYTHIC_NOCLIP);
+        Timing.CallDelayed(1, () =>
+        {
+            Owner.AddAbility(AbilityType.MYTHIC_NOCLIP);
+        });
     }
 
     public override void OnDisabled()

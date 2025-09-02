@@ -19,7 +19,10 @@ public class Loser : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Legend, 1).GetRandomValue());
+        Timing.CallDelayed(1, () =>
+        {
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Legend, 1).GetRandomValue());
+        });
     }
 
     public override void OnDisabled()
