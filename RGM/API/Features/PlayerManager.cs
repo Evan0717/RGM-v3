@@ -409,5 +409,16 @@ namespace RGM.API.Features
                 target.Position = player.Position + throwVector;
             }
         }
+
+        public static void ApplyGodMode(this Player player, float time)
+        {
+            GodModePlayers.Add(player);
+
+            Timing.CallDelayed(time, () =>
+            {
+                if (GodModePlayers.Contains(player))
+                    GodModePlayers.Remove(player);
+            });
+        }
     }
 }

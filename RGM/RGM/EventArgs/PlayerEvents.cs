@@ -595,13 +595,8 @@ namespace RGM.EventArgs
                 (ev.Reason == SpawnReason.RoundStart || ev.Reason == SpawnReason.Respawn || ev.Reason == SpawnReason.ItemUsage || ev.Reason == SpawnReason.Escaped) &&
                 CurrentMode.GetModeData().Info == ModeInfo.Plus)
             {
-                GodModePlayers.Add(ev.Player);
-
-                Timing.CallDelayed(5, () =>
-                {
-                    if (GodModePlayers.Contains(ev.Player))
-                        GodModePlayers.Remove(ev.Player);
-                });
+                Log.Debug($"{ev.Player.DisplayNickname}({ev.Player.UserId}) - {ev.Reason}");
+                ev.Player.ApplyGodMode(5);
             }
         }
 
