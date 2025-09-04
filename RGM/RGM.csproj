@@ -464,9 +464,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\DiscordInteraction\bin\Debug\DiscordInteraction.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
@@ -493,7 +490,7 @@
     </Reference>
     <Reference Include="DiscordInteraction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DiscordInteraction\bin\Debug\DiscordInteraction.dll</HintPath>
+      <HintPath>..\..\..\Privacy\DiscordInteraction\bin\Debug\DiscordInteraction.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=9.7.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
