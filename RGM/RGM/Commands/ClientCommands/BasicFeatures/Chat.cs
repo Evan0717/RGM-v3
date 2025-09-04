@@ -76,7 +76,7 @@ namespace RGM.Commands.ClientCommands
                 string text = en ? player.Role.Name : Trans.Role[player.Role.Type];
                 string text2 = string.Concat(new string[]
                 {
-                    $"<size=25><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
+                    $"<size=20><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
                     text,
                     $"</color> ({player.DisplayNickname}) <b> | </b>",
                     args.Replace("=", "❤️"),
