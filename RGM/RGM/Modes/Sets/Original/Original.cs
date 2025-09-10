@@ -39,12 +39,6 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
-        }
-
-        public IEnumerator<float> OnModeStarted()
-        {
-            yield return 0;
         }
     }
 }
