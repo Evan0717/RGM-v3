@@ -43,7 +43,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
             Respawn.PauseWaves(); 
             Server.FriendlyFire = true;
 
-            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
+            // Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
