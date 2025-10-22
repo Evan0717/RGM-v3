@@ -192,7 +192,7 @@ namespace RGM.EventArgs
 
                 Tools.TeleportToLobby(ev.Player);
 
-                ev.Player.AddItem(ItemType.KeycardChaosInsurgency);
+                ev.Player.AddItem(ItemType.Lantern);
                 if (SelectMode.Contains("Secret"))
                     ev.Player.EnableEffect(EffectType.Invisible);
 
