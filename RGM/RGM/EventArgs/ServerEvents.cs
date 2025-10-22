@@ -46,7 +46,7 @@ namespace RGM.EventArgs
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
             });
 
-            Tools.PlayGlobalAudio("Obelatian by GoldenPig1205", 0.3f, true);
+            Tools.PlayGlobalAudio("SCP - Breach (GP Remix)", 0.5f, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
