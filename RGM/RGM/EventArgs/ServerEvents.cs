@@ -198,18 +198,6 @@ namespace RGM.EventArgs
             if (StartupRandom == 3)
                 Tools.CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
 
-            if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
-            {
-                Timing.RunCoroutine(HumanLoop());
-                Timing.RunCoroutine(Scp079Broadcast());
-
-                if (UnityEngine.Random.Range(1, 51) == 1)
-                    Scp294.OnEnabled();
-
-                if (UnityEngine.Random.Range(1, 51) == 1)
-                    Scp1162.OnEnabled();
-            }
-
             Timing.RunCoroutine(Detonation());
 
             Webhook.Send($"시작된 모드 : {CurrentMode.GetModeData().Name}");
@@ -219,6 +207,9 @@ namespace RGM.EventArgs
             {
                 if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
                 {
+                    Timing.RunCoroutine(HumanLoop());
+                    Timing.RunCoroutine(Scp079Broadcast());
+
                     int num = UnityEngine.Random.Range(1, 51);
 
                     if (num == 1)
@@ -230,6 +221,12 @@ namespace RGM.EventArgs
                                 Tools.LoadMap(special, false);
                             }
                         }
+
+                        if (UnityEngine.Random.Range(1, 3) == 1)
+                            Scp294.OnEnabled();
+
+                        if (UnityEngine.Random.Range(1, 3) == 1)
+                            Scp1162.OnEnabled();
                     }
                 }
 
