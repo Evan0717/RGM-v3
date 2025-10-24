@@ -212,7 +212,7 @@ namespace RGM.Modes
                         Server.FriendlyFire = true;
 
                         foreach (var player in Player.List.Where(x => x.IsAlive))
-                            player.AddHint("소울메이트 승리", $"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
+                            player.AddHint("소울메이트 경고", $"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 자신의 짝을 제외하고 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
                     }
                     else
                         Server.FriendlyFire = false;
