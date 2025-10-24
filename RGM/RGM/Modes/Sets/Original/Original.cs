@@ -24,8 +24,8 @@ using static RGM.Variables.ServerManagers;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Original)]
-    public class Orignal : Mode
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Original)]
+    public class Original : Mode
     {
         public override string Name => "오리지널";
         public override string Description => "가끔은 도파민이 없는 기본을 해보시는 건 어떠신지..?";
@@ -35,7 +35,7 @@ namespace RGM.Modes
 """;
         public override string Color => "FFFFFF";
 
-        public static Orignal Instance;
+        public static Original Instance;
 
         public override void OnEnabled()
         {
