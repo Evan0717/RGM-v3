@@ -20,7 +20,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.AddScp)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.AddScpMode)]
     class AddScpMode : Mode
     {
         public override string Name => "추가 SCP";
@@ -51,7 +51,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
         }
 
-        public IEnumerator<float> OnModeStarted()
+        IEnumerator<float> OnModeStarted()
         {
             Scp294.OnEnabled();
             Scp1162.OnEnabled();
@@ -65,11 +65,6 @@ namespace RGM.Modes
                 scp999.Position = door.Position + new Vector3(0, 2, 0);
 
                 Scp999.Create(scp999);
-                foreach (var player in Player.List) 
-                {
-                    player.AddBroadcast(1, "<size=20><color=red>SCP-999</color> 생성 완료</size>");
-                } 
-                yield return Timing.WaitForSeconds(1);
             }
 
             if (Server.PlayerCount >= 10)
@@ -82,11 +77,6 @@ namespace RGM.Modes
                 SpecialScps.Add(scp008);
 
                 Scp008.Create(scp008);
-                foreach (var player in Player.List)
-                {
-                    player.AddBroadcast(1, "<size=20><color=red>SCP-008</color> 생성 완료</size>");
-                }
-                yield return Timing.WaitForSeconds(1);
 
                 Player scp035 = Player.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp035);
@@ -95,11 +85,6 @@ namespace RGM.Modes
                 scp035.Position = door.Position + new Vector3(0, 2, 0);
 
                 Scp035.Create(scp035);
-                foreach (var player in Player.List)
-                {
-                    player.AddBroadcast(1, "<size=20><color=red>SCP-035</color> 생성 완료</size>");
-                }
-                yield return Timing.WaitForSeconds(1);
             }
 
             if (Server.PlayerCount >= 15)
@@ -108,24 +93,14 @@ namespace RGM.Modes
                 SpecialScps.Add(scp457);
 
                 Scp457.Create(scp457);
-                foreach (var player in Player.List)
-                {
-                    player.AddBroadcast(1, "<size=20><color=red>SCP-457</color> 생성 완료</size>");
-                }
-                yield return Timing.WaitForSeconds(1);
 
                 Player scp966 = Player.List.GetRandomValue(x => x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp966);
 
                 Scp966.Create(scp966);
-                foreach (var player in Player.List)
-                {
-                    player.AddBroadcast(1, "<size=20><color=red>SCP-966</color> 생성 완료</size>");
-                }
-                yield return Timing.WaitForSeconds(1);
             }
 
-            yield break;
+            yield return 0f;
         }
 
         public void OnSpawned(SpawnedEventArgs ev)

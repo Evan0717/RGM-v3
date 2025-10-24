@@ -141,7 +141,7 @@ public enum ModeType
     WhoamI2,
     WitGame,
     RUN,
-    AddScp,
+    AddScpMode,
     SitDown,
     ClassSociety,
     Doppelganger,
