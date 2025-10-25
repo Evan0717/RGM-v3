@@ -210,7 +210,7 @@ namespace RGM.EventArgs
                     Timing.RunCoroutine(HumanLoop());
                     Timing.RunCoroutine(Scp079Broadcast());
 
-                    int num = UnityEngine.Random.Range(1, 51);
+                    int num = UnityEngine.Random.Range(1, 26); //할로윈 이벤트 <- UnityEngine.Random.Range(1, 51);
 
                     if (num == 1)
                     {
@@ -222,7 +222,7 @@ namespace RGM.EventArgs
                             }
                         }
 
-                        if (UnityEngine.Random.Range(1, 3) == 1)
+                        if (UnityEngine.Random.Range(1, 2) == 1) //할로윈 이벤트 <- (UnityEngine.Random.Range(1, 3) == 1)
                             Scp294.OnEnabled();
 
                         if (UnityEngine.Random.Range(1, 3) == 1)
