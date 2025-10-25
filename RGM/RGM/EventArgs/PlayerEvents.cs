@@ -658,7 +658,7 @@ namespace RGM.EventArgs
             {
                 if (statusEffect.IsEnabled)
                 {
-                    ev.IsAllowed = false;
+                    ev.Player.Health += ev.DamageHandler.Damage;
                 }
             }
 
