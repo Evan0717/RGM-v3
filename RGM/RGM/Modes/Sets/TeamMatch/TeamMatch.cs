@@ -64,7 +64,10 @@ namespace RGM.Modes
             StartupItems = Items();
 
             yield return Timing.WaitForSeconds(1f);
+
             var players = Player.List.ToList();
+            players.ShuffleList();
+
             int halfCount = players.Count / 2;
 
             TeamA = players.Take(halfCount).ToList();

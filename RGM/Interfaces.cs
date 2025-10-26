@@ -150,7 +150,8 @@ public enum ModeType
     Tag,
     HideAndSeek,
     PVE,
-    LoLChess
+    LoLChess,
+    Agar
 }
 
 

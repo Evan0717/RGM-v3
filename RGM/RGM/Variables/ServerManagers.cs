@@ -185,7 +185,8 @@ namespace RGM.Variables
             "capybara",
             "Sky",
             "TRRBR",
-            "Moszka"
+            "Moszka",
+            "Agar"
         };
         public static List<Product> Products = new()
         {
