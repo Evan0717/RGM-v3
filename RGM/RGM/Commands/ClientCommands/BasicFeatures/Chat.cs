@@ -162,7 +162,7 @@ namespace RGM.Commands.ClientCommands
                 return true;
             }
                 
-            if (player.CurrentItem is Scp1576 scp1576)
+            if (player.CurrentItem is Exiled.API.Features.Items.Scp1576 scp1576)
             {
                 if (scp1576.IsUsing)
                 {
