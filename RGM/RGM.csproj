@@ -112,6 +112,13 @@
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Marshmellow.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Epic\Scp1509.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Legend\CandyPower.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Hammer.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Mythic\Rosehip.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Normal\RandomCandy.cs" />
+    <Compile Include="RGM\Modes\Pluses\ABattle\Abilities\Rare\CandyBag.cs" />
     <Compile Include="RGM\Modes\Pluses\LoLChess\LoLChess.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Pluses\ABattle\ABattleEventHandler.cs" />

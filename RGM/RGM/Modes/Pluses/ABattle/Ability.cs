@@ -269,6 +269,7 @@ public enum AbilityType
     NORMAL_RUSH, // [일반] 황소
     NORMAL_EXCHANGE, // [일반] 교환
     NORMAL_RABBIT, // [일반] 토끼뜀
+    NORMAL_RANDOMCANDY, // [일반] 트릭 오어 트릿
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -299,6 +300,7 @@ public enum AbilityType
     RARE_CLONE, // [희귀] 분신
     RARE_SPACETRAVEL, // [희귀] 공간이동
     RARE_ORGANICMILK, // [희귀] 유기농 우유
+    RARE_CANDYBAG, // [희귀] 사탕 봉지
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -325,7 +327,9 @@ public enum AbilityType
     EPIC_FORWARDLOOKING, // [영웅] 전방주시태만
     EPIC_SCP127, // [영웅] 인생의 동반자
     EPIC_ANTISCP207, // [영웅] 초재생
-    EPIC_FOODRESEARCHER, // [영웅] 요리 연구가
+    EPIC_FOODRESEARCHER, // [영웅] 요리 연구가,
+    EPIC_SCP1509, // [영웅] 마체테
+    EPIC_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -351,6 +355,7 @@ public enum AbilityType
     LEGEND_SCP457, // [전설] SCP-457, 불타는 남자
     LEGEND_SCP966, // [전설] SCP-966, 잠을 죽이는 자
     LEGEND_SCP999, // [전설] SCP-999, 간지럼 괴물
+    LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -364,6 +369,8 @@ public enum AbilityType
     MYTHIC_BALLISTAEM3, // [신화] 발리스타 MP3
     MYTHIC_TOOLGUN, // [신화] 툴건
     MYTHIC_KINGSCOLOR, // [신화] 패왕색 패기
+    MYTHIC_ROSEHIP, // [신화] 장미칼
+    MYTHIC_HAMMER, // [신화] 철퇴
 
     // 전용 //
     // D계급
