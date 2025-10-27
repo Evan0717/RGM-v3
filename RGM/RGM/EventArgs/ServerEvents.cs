@@ -362,7 +362,7 @@ namespace RGM.EventArgs
                     try
                     {
                         var report = PlayersReport[player.UserId];
-                        string text = $"<size=20>{player.DisplayNickname} - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>\n<align=left>{sb}</align>\n\n\n\n";
+                        string text = $"<align=left><size=20>{player.DisplayNickname} - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size></align>\n<align=left>{sb}</align>\n\n\n\n";
                         player.ShowHint($"{WinMessage}\n\n{text}", 1.2f);
                     }
                     catch (Exception e)
