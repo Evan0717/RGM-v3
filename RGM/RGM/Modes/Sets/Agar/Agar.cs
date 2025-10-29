@@ -119,6 +119,8 @@ namespace RGM.Modes
                 reviver.CurrentItem = item;
             }
 
+            Map.CleanAllItems();
+            Map.CleanAllRagdolls();
             foreach (var decal in new List<DecalPoolType> 
             { 
                 DecalPoolType.Bullet,
