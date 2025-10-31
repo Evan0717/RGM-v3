@@ -30,6 +30,7 @@ using SCPSLAudioApi.AudioCore;
 using VoiceChat;
 using Respawning;
 using Exiled.API.Features.Waves;
+using Exiled.API.Features.Doors;
 
 namespace RGM.Modes
 {
@@ -79,6 +80,8 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            Door.Get(DoorType.EscapeFinal).IsOpen = true;
+
             foreach (var player in Player.List)
             {
                 Spawned(player);
