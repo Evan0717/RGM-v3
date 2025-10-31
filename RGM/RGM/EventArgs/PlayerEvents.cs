@@ -33,6 +33,7 @@ using Exiled.CustomItems.API.Features;
 using Exiled.API.Features.Pickups;
 using System.Diagnostics.Eventing.Reader;
 using CustomPlayerEffects;
+using MapGeneration.Holidays;
 
 
 namespace RGM.EventArgs
@@ -582,7 +583,7 @@ namespace RGM.EventArgs
                         ev.Player.Health = ev.Player.MaxHealth;
                     }
 
-                    if (UnityEngine.Random.Range(1, 41) == 1 && !IsScp3114Enabled && !Player.List.Select(x => x.Role.Type).Contains(RoleTypeId.Scp3114)) // SCP-3114 추가
+                    if (UnityEngine.Random.Range(1, 41) == 1 && !IsScp3114Enabled && !HolidayUtils.IsHolidayActive(HolidayType.Halloween)) // SCP-3114 추가
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp3114);
 
