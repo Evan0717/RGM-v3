@@ -5,6 +5,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using GPUtils.Features.PaintToText.Core;
 using InventorySystem.Configs;
+using MapGeneration.Holidays;
 using MEC;
 using MultiBroadcast.API;
 using PlayerRoles;
@@ -13,6 +14,7 @@ using Respawning;
 using RGM.API.Components;
 using RGM.API.DataBases;
 using RGM.API.Features;
+using RGM.Modes;
 using RGM.Modes.Sets.AddScp.Scps;
 using System;
 using System.Collections.Generic;
@@ -243,135 +245,178 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnRoundEnded(RoundEndedEventArgs ev)
         {
-            if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
+            if (HolidayUtils.IsHolidayActive(HolidayType.Halloween))
             {
-                IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
-
-                if (players.Count() == 1)
-                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-                else if (players.Count() > 1)
-                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
-            }
-
-            Tools.TryInstallMode(ModeType.FriendlyFire);
-
-            foreach (var player in Player.List)
-            {
-                Server.ExecuteCommand($"/speak {player.Id} 1");
-                IntercomPlayers.Add(player);
-            }
-
-            foreach (var player in Player.List)
-            {
-                List<string> uc = UsersManager.UsersCache[player.UserId];
-
-                if (uc[22] != "0")
+                if (UnityEngine.Random.Range(1, 6) == 1)
                 {
-                    if (UnityEngine.Random.Range(1, 21) == 1)
+                    List<EffectType> effects = new()
                     {
-                        uc[22] = "0";
-                        UsersManager.UsersCache[player.UserId] = uc;
-                        UsersManager.SaveUsers();
+                        EffectType.Metal,
+                        EffectType.Lightweight,
+                        EffectType.MovementBoost,
+                        EffectType.SugarRush
+                    };
 
-                        player.AddHint($"경고 해제", "부여된 경고가 해제되었습니다. 행운을 빕니다.", 20);
+                    foreach (var player in Player.List)
+                    {
+                        foreach (var effect in effects)
+                        {
+                            player.AddEffect(effect, 255);
+                        }
                     }
                 }
-            }
-
-            try
-            {
-                string path = $"{Paths.Configs}/RGM/Users.txt";
-
-                if (System.IO.File.Exists(path) && new System.IO.FileInfo(path).Length == 0)
+                else
                 {
-                    string tmpPath = path + ".tmp";
-                    if (System.IO.File.Exists(tmpPath))
+                    List<EffectType> effects = new()
                     {
-                        System.IO.File.Delete(path);
-                        System.IO.File.Move(tmpPath, path);
+                        EffectType.Spicy,
+                        EffectType.OrangeCandy,
+                        EffectType.SugarCrave,
+                        EffectType.SugarHigh,
+                        EffectType.SugarRush,
+                        EffectType.Ghostly,
+                        EffectType.Prismatic,
+                        EffectType.WhiteCandy,
+                        EffectType.Metal
+                    };
+                    var effect = effects.GetRandomValue();
+
+                    foreach (var player in Player.List)
+                    {
+                        player.AddEffect(effect, 255);
                     }
                 }
 
-                Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", path);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error sending webhook: {e}");
-            }
-
-            while (true)
-            {
-                var top10 = PlayersReport
-                    .OrderByDescending(kv => kv.Value.Damage)
-                    .Take(10)
-                    .ToList();
-
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"<size=30><b>이번 라운드 TOP 10</b></size>");
-                int rank = 1;
-
-                string ranking(int r)
+                if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
                 {
-                    if (r == 1)
-                        return "fffa66";
-                    else if (r == 2)
-                        return "808d8e";
-                    else if (r == 3)
-                        return "dfae4d";
-                    else
-                        return "ffffff";
+                    IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+
+                    if (players.Count() == 1)
+                        Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+                    else if (players.Count() > 1)
+                        Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
                 }
 
-                foreach (var kv in top10)
+                Tools.TryInstallMode(ModeType.FriendlyFire);
+
+                foreach (var player in Player.List)
                 {
-                    try
-                    {
-                        var userId = kv.Key;
-                        var report = kv.Value;
-
-                        Player player = null;
-                        bool found = false;
-                        try
-                        {
-                            found = Player.TryGet(userId, out player);
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error($"Player.TryGet 예외: {e}");
-                        }
-
-                        if (found && player != null)
-                        {
-                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> <color=#888888>알 수 없음</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
-                        }
-                        rank++;
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error($"Error in generating round summary: {e}");
-                    }
+                    Server.ExecuteCommand($"/speak {player.Id} 1");
+                    IntercomPlayers.Add(player);
                 }
 
                 foreach (var player in Player.List)
                 {
-                    try
+                    List<string> uc = UsersManager.UsersCache[player.UserId];
+
+                    if (uc[22] != "0")
                     {
-                        var report = PlayersReport[player.UserId];
-                        string text = $"<align=left><size=20>{player.DisplayNickname} - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size></align>\n<align=left>{sb}</align>\n\n\n\n";
-                        player.ShowHint($"{WinMessage}\n\n{text}", 1.2f);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error($"Error in AddHint: {e}");
+                        if (UnityEngine.Random.Range(1, 21) == 1)
+                        {
+                            uc[22] = "0";
+                            UsersManager.UsersCache[player.UserId] = uc;
+                            UsersManager.SaveUsers();
+
+                            player.AddHint($"경고 해제", "부여된 경고가 해제되었습니다. 행운을 빕니다.", 20);
+                        }
                     }
                 }
 
-                yield return Timing.WaitForSeconds(1);
+                try
+                {
+                    string path = $"{Paths.Configs}/RGM/Users.txt";
+
+                    if (System.IO.File.Exists(path) && new System.IO.FileInfo(path).Length == 0)
+                    {
+                        string tmpPath = path + ".tmp";
+                        if (System.IO.File.Exists(tmpPath))
+                        {
+                            System.IO.File.Delete(path);
+                            System.IO.File.Move(tmpPath, path);
+                        }
+                    }
+
+                    Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", path);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error sending webhook: {e}");
+                }
+
+                while (true)
+                {
+                    var top10 = PlayersReport
+                        .OrderByDescending(kv => kv.Value.Damage)
+                        .Take(10)
+                        .ToList();
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine($"<size=30><b>이번 라운드 TOP 10</b></size>");
+                    int rank = 1;
+
+                    string ranking(int r)
+                    {
+                        if (r == 1)
+                            return "fffa66";
+                        else if (r == 2)
+                            return "808d8e";
+                        else if (r == 3)
+                            return "dfae4d";
+                        else
+                            return "ffffff";
+                    }
+
+                    foreach (var kv in top10)
+                    {
+                        try
+                        {
+                            var userId = kv.Key;
+                            var report = kv.Value;
+
+                            Player player = null;
+                            bool found = false;
+                            try
+                            {
+                                found = Player.TryGet(userId, out player);
+                            }
+                            catch (Exception e)
+                            {
+                                Log.Error($"Player.TryGet 예외: {e}");
+                            }
+
+                            if (found && player != null)
+                            {
+                                sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> <color=#888888>알 수 없음</color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                            }
+                            rank++;
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"Error in generating round summary: {e}");
+                        }
+                    }
+
+                    foreach (var player in Player.List)
+                    {
+                        try
+                        {
+                            var report = PlayersReport[player.UserId];
+                            string text = $"<align=left><size=20>{player.DisplayNickname} - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size></align>\n<align=left>{sb}</align>\n\n\n\n";
+                            player.ShowHint($"{WinMessage}\n\n{text}", 1.2f);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"Error in AddHint: {e}");
+                        }
+                    }
+
+                    yield return Timing.WaitForSeconds(1);
+                }
             }
         }
     }
