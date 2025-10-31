@@ -21,6 +21,7 @@ public class MarshMellow : Ability
         Owner.Health += 500;
         Owner.AddAbility(AbilityType.NORMAL_SWIFT);
         Owner.AddAbility(AbilityType.NORMAL_SWIFT);
+        Owner.AddItem(ItemType.MarshmallowItem);
     }
 
     public override void OnDisabled()
