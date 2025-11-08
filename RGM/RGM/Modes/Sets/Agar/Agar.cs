@@ -49,6 +49,11 @@ namespace RGM.Modes
             Respawn.PauseWaves();
             Door.List.ToList().ForEach(x => x.Lock(1205, DoorLockType.Lockdown079));
 
+            Timing.CallDelayed(10, () =>
+            {
+                Door.Get(DoorType.SurfaceGate).IsOpen = true;
+            });
+
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             Exiled.Events.Handlers.Player.Died += OnDied;
@@ -61,7 +66,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"Agar");
+            // Tools.LoadMap($"Agar");
 
             yield return Timing.WaitForSeconds(1f);
 
@@ -76,7 +81,7 @@ namespace RGM.Modes
             foreach (var player in TeamA)
             {
                 player.Role.Set(RoleTypeId.ClassD);
-                player.Position = Tools.GetObjectList("Spot A").GetRandomValue().position;
+                player.Position = new Vector3(127.6887f, 295.4557f, -43.39108f);
                 player.AddItem(ItemType.SCP1509);
             }
 
@@ -84,7 +89,7 @@ namespace RGM.Modes
             {
                 player.Role.Set(RoleTypeId.Scientist);
                 player.ClearInventory();
-                player.Position = Tools.GetObjectList("Spot B").GetRandomValue().position;
+                player.Position = new Vector3(-16.98438f, 291.6487f, -42.46094f);
                 player.AddItem(ItemType.SCP1509);
             }
 
