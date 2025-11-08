@@ -17,7 +17,7 @@ namespace RGM.Modes
     public class TripleAxel : Mode
     {
         public override string Name => "트리플악셀";
-        public override string Description => "획득한 총기는 COM-45로 변환됩니다. 대신 데미지가 80%로 하향됩니다.";
+        public override string Description => "획득한 총기는 COM-45로 변환됩니다. 대신 데미지가 70%로 하향됩니다.";
         public override string Detail =>
 """
 총기를 습득하는 그 순간부터 COM-45로 변환됩니다.
@@ -83,7 +83,7 @@ COM-45로 인한 데미지가 70%로 하향됩니다.
                 ushort totalAmmo = 0;
 
                 foreach (var ammo in player.Ammo.Values)
-                    totalAmmo += ammo;
+                    totalAmmo += (ushort)(ammo * 3);
 
                 player.ClearAmmo();
                 player.AddAmmo(AmmoType.Nato9, totalAmmo);
