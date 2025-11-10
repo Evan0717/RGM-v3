@@ -659,7 +659,13 @@ namespace RGM.EventArgs
             {
                 if (statusEffect.IsEnabled)
                 {
-                    ev.Player.Health += ev.Amount;
+                    if (ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase statusEffect1))
+                    {
+                        if (!statusEffect1.IsEnabled)
+                        {
+                            ev.IsAllowed = false;
+                        }
+                    }
                 }
             }
 
