@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("트릭 오어 트릿", "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>E</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b> 랜덤한 SCP-330을 받습니다. 운이 좋다면 더 받을수도 있겠죠..", AbilityCategory.Common, AbilityType.NORMAL_RANDOMCANDY)]
+//[Ability("트릭 오어 트릿", "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>E</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b> 랜덤한 SCP-330을 받습니다. 운이 좋다면 더 받을수도 있겠죠..", AbilityCategory.Common, AbilityType.NORMAL_RANDOMCANDY)]
 public class RandomCandy : Ability
 {
     public override void OnEnabled()
