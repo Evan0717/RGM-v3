@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("섬뜩한 힘", $"<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>E</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b> 모든 SCP-330의 효과가 일괄적으로 적용됩니다. 체력을 200 얻습니다.", AbilityCategory.Legend, AbilityType.LEGEND_CANDYPOWER)]
+//[Ability("섬뜩한 힘", $"<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>E</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b> 모든 SCP-330의 효과가 일괄적으로 적용됩니다. 체력을 200 얻습니다.", AbilityCategory.Legend, AbilityType.LEGEND_CANDYPOWER)]
 public class CandyPower : Ability
 {
     public override void OnEnabled()
