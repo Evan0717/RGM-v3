@@ -1,20 +1,21 @@
-﻿using RGM.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Core.UserSettings;
+using Exiled.API.Features.Doors;
+using InventorySystem.Items.Usables.Scp330;
+using MultiBroadcast.API;
+using PlayerRoles;
+using RGM.API.DataBases;
+using RGM.API.Features;
 using RGM.API.Interfaces;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Exiled.API.Features;
-using Exiled.API.Features.Doors;
-using PlayerRoles;
-using Exiled.API.Extensions;
-using static System.Net.Mime.MediaTypeNames;
-using RGM.API.DataBases;
-using MultiBroadcast.API;
 using UserSettings.ServerSpecific;
-using Exiled.API.Features.Core.UserSettings;
-using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RGM.Variables
 {
@@ -139,6 +140,15 @@ namespace RGM.Variables
             {"Adieu! 2023", "⭐"},
             {"2023 RGM Summer", "⭐"},
             {"Adios! 2024", "✿"}
+        };
+        public static Dictionary<CandyKindID, ICandy> CandyDataDict = new()
+        {
+            { CandyKindID.Brown, new HauntedCandyBrown() },
+            { CandyKindID.Gray, new HauntedCandyGray() },
+            { CandyKindID.Black, new HauntedCandyBlack() },
+            { CandyKindID.Evil, new HauntedCandyEvil() },
+            { CandyKindID.Orange, new HauntedCandyOrange() },
+            { CandyKindID.White, new HauntedCandyWhite() },
         };
 
         public static List<Transform> First;
