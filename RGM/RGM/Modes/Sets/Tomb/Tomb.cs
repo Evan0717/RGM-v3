@@ -62,19 +62,31 @@ namespace RGM.Modes
 
             for (int i = 1; i <= 1205; i++)
             {
-                Item item = Item.Create(Tools.GetRandomValue(ItemTypes));
+                try
+                {
+                    Item item = Item.Create(Tools.GetRandomValue(ItemTypes));
 
-                if (item is Firearm firearm)
-                    firearm.MagazineAmmo = firearm.MaxMagazineAmmo;
+                    if (item is Firearm firearm)
+                        firearm.MagazineAmmo = firearm.MaxMagazineAmmo;
 
-                item.CreatePickup(RandomPosition());
+                    item.CreatePickup(RandomPosition());
+                }
+                catch
+                {
+                }
             }
 
             for (int i = 1; i <= 400; i++)
             {
-                Item item = Item.Create(Tools.GetRandomValue(ammoTypes));
+                try
+                {
+                    Item item = Item.Create(Tools.GetRandomValue(ammoTypes));
 
-                item.CreatePickup(RandomPosition());
+                    item.CreatePickup(RandomPosition());
+                }
+                catch
+                {
+                }
             }
 
             foreach (var player in Player.List)
