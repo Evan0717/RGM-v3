@@ -193,7 +193,16 @@ namespace RGM.EventArgs
 
                 Tools.TeleportToLobby(ev.Player);
 
-                ev.Player.AddItem(ItemType.Lantern);
+                ItemType itemType = ItemType.Coin;
+
+                if (HolidayUtils.IsHolidayActive(HolidayType.Christmas))
+                    itemType = ItemType.Snowball;
+
+                else if (HolidayUtils.IsHolidayActive(HolidayType.Halloween))
+                    ev.Player.AddItem(ItemType.Lantern);
+
+                ev.Player.AddItem(itemType);
+
                 if (SelectMode.Contains("Secret"))
                     ev.Player.EnableEffect(EffectType.Invisible);
 
