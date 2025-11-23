@@ -5,6 +5,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using GPUtils.Features.PaintToText.Core;
 using InventorySystem.Configs;
+using InventorySystem.Items.Usables.Scp330;
 using MapGeneration.Holidays;
 using MEC;
 using MultiBroadcast.API;
@@ -40,6 +41,11 @@ namespace RGM.EventArgs
             InventoryLimits.StandardCategoryLimits[ItemCategory.SpecialWeapon] = 8;
             InventoryLimits.StandardCategoryLimits[ItemCategory.SCPItem] = 8;
             InventoryLimits.Config.RefreshCategoryLimits();
+
+            foreach (var data in CandyDataDict)
+            {
+                Scp330Candies.DictionarizedCandies.Add(data.Key, data.Value);
+            }
 
             UsersManager.LoadUsers();
 
