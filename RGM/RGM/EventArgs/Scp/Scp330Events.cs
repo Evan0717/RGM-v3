@@ -48,7 +48,8 @@ namespace RGM.EventArgs
 
                 if (ev.Candy.Kind == CandyKindID.White)
                 {
-                    ev.Player.AddEffect(EffectType.Invisible, 1, ev.Player.IsScp ? 4 : 8);
+                    ev.Player.AddEffect(EffectType.Fade, 240, 20);
+                    ev.Player.AddEffect(EffectType.Ghostly, 1, 20);
                 }
 
                 if (ev.Candy.Kind == CandyKindID.Orange)
