@@ -137,23 +137,25 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 }
             }
 
-            void OnItemAdded(ItemAddedEventArgs ev)
+            void OnPickingUpItem(PickingUpItemEventArgs ev)
             {
-                if (ev.Player != player)
-                    return;
-
-                if (ev.Pickup.Type.IsWeapon() || new List<ItemType> { 
-                    ItemType.GrenadeHE,
-                    ItemType.SCP018
-                }.Contains(ev.Item.Type))
+                if (ev.Player == player)
                 {
-                    ev.Player.DropItem(ev.Item);
+                    if (ev.Pickup.Type.IsWeapon() || new List<ItemType> {
+                        ItemType.GrenadeHE,
+                        ItemType.SCP018
+                    }.Contains(ev.Pickup.Type))
+                    {
+                        ev.IsAllowed = false;
 
-                    player.AddHint("SCP-999 무기 금지", "<size=20><color=red>SCP-999</color>은(는) 무기를 쥘 수 없습니다.</size>", 3);
-                }
-                else if (ev.Pickup.Type == ItemType.KeycardO5)
-                {
-                    ev.Player.DropItem(ev.Item);
+                        player.AddHint("SCP-999 무기 금지", "<size=20><color=red>SCP-999</color>은(는) 무기를 쥘 수 없습니다.</size>", 3);
+                    }
+                    else if (ev.Pickup.Type == ItemType.KeycardO5)
+                    {
+                        ev.IsAllowed = false;
+
+                        player.AddHint("SCP-999 O5 금지", "<size=20><color=red>SCP-999</color>은(는) O5 카드를 쥘 수 없습니다.</size>", 3);
+                    }
                 }
             }
 
@@ -209,7 +211,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                             Timing.RunCoroutine(ball());
                             Tools.PlaySound(dead.transform, "scp-999-dead", 2);
 
-                            Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
+                            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
                             Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
                             Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
                             Exiled.Events.Handlers.Player.Dying -= OnDying;
@@ -218,7 +220,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 });
             }
 
-            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
+            Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.Dying += OnDying;
