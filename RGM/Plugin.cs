@@ -36,7 +36,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 19, 7);
+        public override Version Version { get; } = new(3, 19, 8);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -104,7 +104,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
             Exiled.Events.Handlers.Player.Banning += OnBanning;
             Exiled.Events.Handlers.Player.ChangingGroup += OnChangingGroup;
-            Exiled.Events.Handlers.Player.ChangedEmotion += OnChangedEmotion;
+            //Exiled.Events.Handlers.Player.ChangedEmotion += OnChangedEmotion;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
 
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
@@ -116,47 +116,6 @@ namespace RGM
             Exiled.Events.Handlers.Scp244.OpeningScp244 += OnOpeningScp244;
 
             Exiled.Events.Handlers.Scp079.Recontained += OnRecontained;
-        }
-
-        public override void OnDisabled()
-        {
-            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
-            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
-
-            Exiled.Events.Handlers.Player.Verified -= OnVerified;
-            Exiled.Events.Handlers.Player.Left -= OnLeft;
-            Exiled.Events.Handlers.Player.SpawningRagdoll -= OnSpawningRagdoll;
-            Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
-            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
-            Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
-            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-            Exiled.Events.Handlers.Player.Dying -= OnDying;
-            Exiled.Events.Handlers.Player.Died -= OnDied;
-            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
-            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
-            Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
-            Exiled.Events.Handlers.Player.DroppedAmmo -= OnDroppedAmmo;
-            Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
-            Exiled.Events.Handlers.Player.Shooting -= OnShooting;
-            Exiled.Events.Handlers.Player.Kicking -= OnKicking;
-            Exiled.Events.Handlers.Player.Banning -= OnBanning;
-            Exiled.Events.Handlers.Player.ChangingGroup -= OnChangingGroup;
-            Exiled.Events.Handlers.Player.ChangedEmotion -= OnChangedEmotion;
-            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
-
-            Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
-            Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
-
-            Exiled.Events.Handlers.Scp330.InteractingScp330 -= OnInteractingScp330;
-
-            Exiled.Events.Handlers.Scp244.UsingScp244 -= OnUsingScp244;
-            Exiled.Events.Handlers.Scp244.OpeningScp244 -= OnOpeningScp244;
-
-            Exiled.Events.Handlers.Scp079.Recontained -= OnRecontained;
-
-            base.OnDisabled();
-            Instance = null;
         }
     }
 }
