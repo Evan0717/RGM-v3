@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Scp330;
 using InventorySystem.Items.Usables.Scp330;
@@ -23,10 +24,10 @@ namespace RGM.EventArgs
 
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                if (UnityEngine.Random.Range(1, 21) == 1)
+                if (UnityEngine.Random.Range(1, 6) == 1)
                 {
                     ev.Player.TryRemoveCandу(ev.Candy);
-                    ev.Player.AddCandy(CandyKindID.Pink);
+                    ev.Player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
                 }
             });
         }
