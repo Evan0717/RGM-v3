@@ -36,7 +36,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 19, 8);
+        public override Version Version { get; } = new(3, 19, 9);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -111,6 +111,7 @@ namespace RGM
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
 
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
+            Exiled.Events.Handlers.Scp330.EatingScp330 += OnEatingScp330;
 
             Exiled.Events.Handlers.Scp244.UsingScp244 += OnUsingScp244;
             Exiled.Events.Handlers.Scp244.OpeningScp244 += OnOpeningScp244;
