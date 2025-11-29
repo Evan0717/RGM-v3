@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
@@ -11,12 +12,13 @@ public class AddAbility : ICommand
     {
         if (Round.IsStarted)
         {
-            var player = Player.Get(arguments.At(0));
+            var players = arguments.At(0) == "all" ? Player.List : new List<Player> { Player.Get(arguments.At(0)) };
             var args = string.Join(" ", arguments.Skip(1));
 
             if (arguments.Count < 2)
             {
-                ABattle.Instance.AddAbility(player, ABattle.Instance.GetRandomAbilities(AbilityCategory.Dummy, 1)[0]);
+                foreach (var player in players)
+                    ABattle.Instance.AddAbility(player, ABattle.Instance.GetRandomAbilities(AbilityCategory.Dummy, 1)[0]);
             }
             else
             {
@@ -28,7 +30,8 @@ public class AddAbility : ICommand
                     return false;
                 }
 
-                ABattle.Instance.AddAbility(player, ability);
+                foreach (var player in players)
+                    ABattle.Instance.AddAbility(player, ability);
             }
 
             response = "AddAbility Complete!";
