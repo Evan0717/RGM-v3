@@ -22,7 +22,7 @@ using NetworkManagerUtils.Dummies;
 
 namespace RGM.Modes.Abilities.Rare;
 
-//[Ability("분신", "자신을 따라다니는 분신을 소환합니다. (SCP의 경우 SCP-049-2로 대체)", AbilityCategory.Rare, AbilityType.RARE_CLONE)]
+[Ability("분신", "자신을 따라다니는 분신을 소환합니다. (SCP의 경우 SCP-049-2로 대체)", AbilityCategory.Rare, AbilityType.RARE_CLONE)]
 public class Clone : Ability
 {
     CoroutineHandle _onStarted;
@@ -50,6 +50,11 @@ public class Clone : Ability
         while (Owner.IsAlive)
         {
             clone.gameObject.AddComponent<PlayerFollower>().Init(Owner.ReferenceHub, 125f, 1, 60f);
+
+            if (Vector3.Distance(Owner.Position, clone.transform.position) > 50f)
+            {
+                clone.transform.position = Owner.Position;
+            };
 
             yield return Timing.WaitForSeconds(2);
         }
