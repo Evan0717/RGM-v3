@@ -436,7 +436,7 @@ Trouble in Terrorist Town의 약자.
                 }
                 Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x == O5).ToList(), 5));
             }
-            else if (traitors.Where(x => x.IsAlive).Count() == 0 && !Player.List.Any(x => x == O5))
+            else if (traitors.Where(x => x.IsAlive).Count() == 0 && !Player.List.Any(x => x == O5 && x.IsAlive))
             {
                 Round.IsLocked = false;
 

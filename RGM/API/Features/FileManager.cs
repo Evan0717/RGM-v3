@@ -95,8 +95,6 @@ namespace RGM.API.Features
         {
             if (IsUsersFileLoaded)
             {
-                Timing.RunCoroutine(RefreshDiscordId());
-
                 var text = string.Join("\n", UsersCache.Select(x => $"{x.Key};{string.Join(";", x.Value)}"));
 
                 FileManager.WriteFile(UsersFileName, text);
@@ -110,8 +108,6 @@ namespace RGM.API.Features
 
         public static void LoadUsers()
         {
-            Timing.RunCoroutine(RefreshDiscordId());
-
             var text = FileManager.ReadFile(UsersFileName);
 
             if (string.IsNullOrWhiteSpace(text))
@@ -130,18 +126,6 @@ namespace RGM.API.Features
             }
 
             IsUsersFileLoaded = true;
-        }
-
-        public static IEnumerator<float> RefreshDiscordId()
-        {
-            var validUsers = UsersManager.UsersCache
-            .Where(x => x.Value.Count > 13 && x.Value[13] != "0")
-            .GroupBy(userData => userData.Value[13])
-            .ToDictionary(group => group.Key, group => group.First().Key);
-
-            DiscordIdToUserId = validUsers;
-
-            yield break;
         }
     }
 }
