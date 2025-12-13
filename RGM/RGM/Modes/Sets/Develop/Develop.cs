@@ -18,7 +18,7 @@ namespace RGM.Modes
     [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Develop)]
     class Develop : Mode
     {
-        public override string Name => "❓ 필독!";
+        public override string Name => "필독";
         public override string Description => "[📃 전체 모드] 드롭다운을 활용하여 모드 설명을 읽어 보세요!";
         public override string Detail =>
 """
