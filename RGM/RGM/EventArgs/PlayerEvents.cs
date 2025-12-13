@@ -34,6 +34,7 @@ using Exiled.API.Features.Pickups;
 using System.Diagnostics.Eventing.Reader;
 using CustomPlayerEffects;
 using MapGeneration.Holidays;
+using Respawning.Waves;
 
 
 namespace RGM.EventArgs
@@ -771,6 +772,17 @@ namespace RGM.EventArgs
 
                 if (!ev.Player.IsNPC)
                     PlayersReport[ev.Player.UserId].Death += 1;
+            }
+        }
+
+        public static void OnItemAdded(ItemAddedEventArgs ev)
+        {
+            if (ev.Player.IsScp)
+            {
+                if (ev.Player.CurrentItem == null)
+                {
+                    ev.Player.CurrentItem = ev.Item;
+                }
             }
         }
 

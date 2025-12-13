@@ -31,7 +31,12 @@ namespace RGM.IEnumerators
             {
                 foreach (var player in PlayerManager.List)
                 {
-                    if (player.Role is SpectatorRole spectator)
+                    if (player.Role is OverwatchRole overwatch)
+                    {
+                        if (overwatch.SpectatedPlayer != null && overwatch.SpectatedPlayer.CurrentHint != null)
+                            player.ShowHint(overwatch.SpectatedPlayer.CurrentHint.Content, 1.2f);
+                    }
+                    else if (player.Role is SpectatorRole spectator)
                     {
                         if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
                             player.ShowHint(spectator.SpectatedPlayer.CurrentHint.Content, 1.2f);

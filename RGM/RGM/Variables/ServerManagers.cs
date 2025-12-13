@@ -170,6 +170,7 @@ namespace RGM.Variables
         public static List<Player> ShopCooldown = new();
         public static List<ModeType> HighlightModes = new();
         public static List<Player> SuggestPlayers = new();
+        public static List<Player> NonePlayers = new();
         public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",

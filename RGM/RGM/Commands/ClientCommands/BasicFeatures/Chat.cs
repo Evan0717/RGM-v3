@@ -98,25 +98,25 @@ namespace RGM.Commands.ClientCommands
                         return true;
 
                     if (chatType == (en ? "SCP" : "SCP"))
-                        return p.IsDead || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
+                        return p.IsDead || NonePlayers.Contains(p) || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
 
                     if (chatType == (en ? "Flamingo" : "플라밍고"))
-                        return p.IsDead || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
+                        return p.IsDead || NonePlayers.Contains(p) || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
 
                     if (chatType == (en ? "Spectator" : "관전자"))
-                        return p.IsDead;
+                        return p.IsDead || NonePlayers.Contains(p);
 
                     if (chatType == (en ? "SCP-1576 + Radio" : "SCP-1576 + 무전기"))
-                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
+                        return p.IsDead || NonePlayers.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
 
                     if (chatType == (en ? "SCP-1576" : "SCP-1576"))
-                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
+                        return p.IsDead || NonePlayers.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10;
 
                     if (chatType == (en ? "Radio" : "무전기"))
-                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
+                        return p.IsDead || NonePlayers.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
 
                     if (chatType == (en ? "Close" : "근거리"))
-                        return p.IsDead || Vector3.Distance(p.Position, player.Position) <= 10;
+                        return p.IsDead || NonePlayers.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10;
 
                     return false;
                 }
@@ -156,7 +156,7 @@ namespace RGM.Commands.ClientCommands
                 return true;
             }
                 
-            if (player.IsDead)
+            if (player.IsDead || NonePlayers.Contains(player))
             {
                 response = ChatFormat(en ? "Spectator" : "관전자");
                 return true;

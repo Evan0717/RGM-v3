@@ -1,8 +1,10 @@
 ﻿using Discord;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using MEC;
 using MonoMod.Utils;
 using MultiBroadcast.API;
+using PlayerRoles;
 using RGM.API.Features;
 using RGM.API.Interfaces;
 using System;
@@ -25,45 +27,109 @@ namespace RGM.UserSettings
     {
         public static HeaderSetting RGM { get; private set; } = new HeaderSetting(19287, "[RGM] 랜덤게임모드");
         public static KeybindSetting ScpCanEquipRandomItem { get; private set; }
+        public static ButtonSetting SpectatorToNone { get; private set; }
+        public static ButtonSetting SwitchToSpectator { get; private set; }
 
         public static void RegisterSettings()
         {
             ScpCanEquipRandomItem = new KeybindSetting(
                 id: 12050,
-                label: "아이템 장착",
+                label: "SCP의 아이템 장착",
                 suggested: KeyCode.H,
                 hintDescription: "SCP가 보유한 아이템 중 무작위로 하나를 장착합니다.",
                 header: RGM,
                 allowSpectatorTrigger: false
             );
 
-            SettingBase.Register(new[] { ScpCanEquipRandomItem });
+            SpectatorToNone = new ButtonSetting(
+                id: 12051,
+                label: "사망자 <-> 훈련장",
+                buttonText: "꾹 눌러주세요 ❤️",
+                hintDescription: "관전석에서 훈련장으로 이동합니다. 사망자는 \"관전자\"와 \"오버워치\" 둘 다 포함합니다.",
+                header: RGM,
+                holdTime: 1
+            );
+
+            SwitchToSpectator = new ButtonSetting(
+                id: 12052,
+                label: "관전자 <-> 오버워치",
+                buttonText: "꾹꾹 ❤️❤️",
+                hintDescription: "관전자와 오버워치 상태를 변경합니다.",
+                header: RGM,
+                holdTime: 1
+            );
+
+            IEnumerable<SettingBase> settings = new SettingBase[]
+            {
+                ScpCanEquipRandomItem, 
+                SpectatorToNone, 
+                SwitchToSpectator
+            };
+
+            SettingBase.Register(settings);
         }
 
         public static void OnSSInput(ReferenceHub sender, ServerSpecificSettingBase setting)
         {
-            if (setting is SSKeybindSetting keybind)
+            Player player = Player.Get(sender);
+
+            // 키바인드인 경우
+            if (setting is SSKeybindSetting keybind && keybind.SyncIsPressed)
             {
-                if (keybind.SyncIsPressed)
+                if (setting.SettingId == 12050)
                 {
-                    Player player = Player.Get(sender);
-
-                    if (setting.SettingId == 12050)
+                    if (player.IsScp)
                     {
-                        if (player.IsScp)
-                        {
-                            var candidates = player.Items
-                                .Where(x => player.CurrentItem != x)
-                                .ToList();
+                        var candidates = player.Items
+                            .Where(x => player.CurrentItem != x)
+                            .ToList();
 
-                            if (candidates.Count == 0)
-                                return;
-
-                            var index = UnityEngine.Random.Range(0, candidates.Count);
-                            player.CurrentItem = candidates[index];
+                        if (candidates.Count == 0)
                             return;
-                        }
+
+                        var index = UnityEngine.Random.Range(0, candidates.Count);
+                        player.CurrentItem = candidates[index];
+                        return;
                     }
+                }
+            }
+
+            if (setting.SettingId == 12051)
+            {
+                if (NonePlayers.Contains(player))
+                {
+                    player.Role.Set(RoleTypeId.Spectator);
+                }
+                else if (player.IsDead)
+                {
+                    IEnumerator<float> none()
+                    {
+                        NonePlayers.Add(player);
+
+                        player.Role.Set(RoleTypeId.Tutorial);
+                        player.AddItem(ItemType.GrenadeHE);
+
+                        while (player.Role.Type == RoleTypeId.Tutorial)
+                        {
+                            yield return Timing.WaitForOneFrame;
+                        }
+
+                        NonePlayers.Remove(player);
+                    }
+
+                    Timing.RunCoroutine(none());
+                }
+            }
+
+            if (setting.SettingId == 12052)
+            {
+                if (player.Role.Type == RoleTypeId.Overwatch)
+                {
+                    player.Role.Set(RoleTypeId.Spectator);
+                }
+                else if (player.Role.Type == RoleTypeId.Spectator)
+                {
+                    player.Role.Set(RoleTypeId.Overwatch);
                 }
             }
         }

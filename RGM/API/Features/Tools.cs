@@ -65,9 +65,6 @@ namespace RGM.API.Features
 
         public static void TeleportToLobby(Player player)
         {
-            if (player.Role.Type == RoleTypeId.Overwatch)
-                return;
-
             List<RoleTypeId> Scps = new List<RoleTypeId>()
             {
                 RoleTypeId.Scp173,
