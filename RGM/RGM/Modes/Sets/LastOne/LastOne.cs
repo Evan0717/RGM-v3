@@ -62,7 +62,7 @@ namespace RGM.Modes
 
             StartupItems = Items();
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.Tutorial);
                 player.Position = Tools.GetObjectList("Spot Random").GetRandomValue().position;
@@ -72,9 +72,9 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(180f);
 
-            Player BusterCall = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Position = BusterCall.Position;
                 player.AddBroadcast(20, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
@@ -101,7 +101,7 @@ namespace RGM.Modes
 
         public void OnDied(DiedEventArgs ev)
         {
-            List<Player> pl = Player.List.Where(x => x.IsAlive).ToList();
+            List<Player> pl = PlayerManager.List.Where(x => x.IsAlive).ToList();
 
             if (pl.Count() < 2)
             {

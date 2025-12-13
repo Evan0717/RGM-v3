@@ -38,7 +38,7 @@ SCP-1344 효과 - 투시
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Spawned(player);
             }

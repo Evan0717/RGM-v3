@@ -54,10 +54,10 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            var scp = Player.List.ToList()[UnityEngine.Random.Range(0, Player.List.Count())];
-            var bomb = Player.List.Where(x => x != scp).ToList()[UnityEngine.Random.Range(0, Player.List.Count() - 1)];
+            var scp = PlayerManager.List.ToList()[UnityEngine.Random.Range(0, PlayerManager.List.Count())];
+            var bomb = PlayerManager.List.Where(x => x != scp).ToList()[UnityEngine.Random.Range(0, PlayerManager.List.Count() - 1)];
 
-            foreach (var p in Player.List)
+            foreach (var p in PlayerManager.List)
             {
                 if (p == scp)
                 {
@@ -82,7 +82,7 @@ namespace RGM.Modes
                 }
             }
             yield return Timing.WaitForSeconds(5f);
-            foreach (var p in Player.List)
+            foreach (var p in PlayerManager.List)
             {
                 if (p == scp)
                 {
@@ -113,7 +113,7 @@ namespace RGM.Modes
             for (; ; )
             {
                 yield return Timing.WaitForSeconds(0.5f);
-                if (Player.List.Where(x => x.Role == RoleTypeId.ClassD && x != Bomb).Count() == 0)
+                if (PlayerManager.List.Where(x => x.Role == RoleTypeId.ClassD && x != Bomb).Count() == 0)
                 {
                     Bomb.Role.Set(RoleTypeId.Spectator, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
                     yield break;
@@ -127,7 +127,7 @@ namespace RGM.Modes
             if (!(ev.Effect is CardiacArrest ca)) return;
             if (ev.Player == Bomb)
             {
-                foreach (var cdp in Player.List.Where(x => x.Role == RoleTypeId.ClassD))
+                foreach (var cdp in PlayerManager.List.Where(x => x.Role == RoleTypeId.ClassD))
                 {
                     cdp.DisableAllEffects();
                     GodModePlayers.Add(cdp);
@@ -168,11 +168,11 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            if (Player.List.Where(x => x.IsAlive && !x.IsNPC).ToList()[0].Role.Type == RoleTypeId.Scp049)
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 15));
+            if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList()[0].Role.Type == RoleTypeId.Scp049)
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 15));
 
             else
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }

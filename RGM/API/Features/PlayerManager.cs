@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
+using PlayerRoles;
 using PlayerStatsSystem;
 using RGM.API.Interfaces;
 using System;
@@ -19,6 +20,11 @@ namespace RGM.API.Features
 {
     public static class PlayerManager
     {
+        public static List<Player> List 
+        { 
+            get => Player.List.Where(x => x.Role.Type != RoleTypeId.Overwatch).ToList();
+        }
+
         public static void Hit(this Player player, Player attacker, float damage)
         {
             attacker.ShowHitMarker(damage / 10);

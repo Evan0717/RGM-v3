@@ -78,14 +78,14 @@ namespace RGM.Modes
             door = Tools.GetRandomValue(Door.List.ToList());
             StartupItems = Items();
 
-            Player.List.ToList().CopyTo(pl);
-            Player.List.ToList().ForEach(Spawned);
+            PlayerManager.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().ForEach(Spawned);
 
             yield return Timing.WaitForSeconds(180f);
 
-            Player BusterCall = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Position = BusterCall.Position;
                 player.AddBroadcast(5, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
@@ -102,7 +102,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }
@@ -115,8 +115,8 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            Player.List.ToList().ForEach(x => x.DisableEffect(Exiled.API.Enums.EffectType.FogControl));
-            Timing.CallDelayed(0.1f, () => Player.List.ToList().ForEach(x => x.EnableEffect(Exiled.API.Enums.EffectType.FogControl)));
+            PlayerManager.List.ToList().ForEach(x => x.DisableEffect(Exiled.API.Enums.EffectType.FogControl));
+            Timing.CallDelayed(0.1f, () => PlayerManager.List.ToList().ForEach(x => x.EnableEffect(Exiled.API.Enums.EffectType.FogControl)));
 
             if (player.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist && pl.Contains(player))
             {

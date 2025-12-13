@@ -19,7 +19,7 @@ public class BomberMan : Ability
     {
         var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
         g.FuseTime = 3f;
-        g.SpawnActive(Tools.GetRandomValue(Player.List.ToList().Where(x => x.IsAlive && x.Role.Team != Owner.Role.Team && Owner != x).ToList()).Position, Owner);
+        g.SpawnActive(Tools.GetRandomValue(PlayerManager.List.ToList().Where(x => x.IsAlive && x.Role.Team != Owner.Role.Team && Owner != x).ToList()).Position, Owner);
     }
 
     public override void OnDisabled()

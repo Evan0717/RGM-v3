@@ -64,7 +64,7 @@ namespace RGM.EventArgs
 
                         Timing.CallDelayed(3, () =>
                         {
-                            foreach (var p in Player.List.Where(x => Vector3.Distance(x.Position, ev.Player.Position) < 10))
+                            foreach (var p in PlayerManager.List.Where(x => Vector3.Distance(x.Position, ev.Player.Position) < 10))
                             {
                                 p.RemoveEffect(EffectType.Flashed, 1);
                             }
@@ -178,7 +178,7 @@ namespace RGM.EventArgs
                     }
                     else if (c == 10)
                     {
-                        Player scp = Player.List.GetRandomValue(x => x.IsScp);
+                        Player scp = PlayerManager.List.GetRandomValue(x => x.IsScp);
 
                         if (scp != null)
                         {

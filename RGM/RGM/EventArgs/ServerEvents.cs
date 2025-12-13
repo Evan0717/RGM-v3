@@ -131,7 +131,7 @@ namespace RGM.EventArgs
             Server.FriendlyFire = false;
 
             MapUtils.UnloadMap("RGMLobby");
-            Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 0");
+            Server.ExecuteCommand($"/speak {string.Join(".", PlayerManager.List.Select(x => x.Id))}. 0");
             IntercomPlayers.Clear();
             EnabledModeList.Clear();
 
@@ -164,7 +164,7 @@ namespace RGM.EventArgs
 
                             Timing.CallDelayed(1f, () =>
                             {
-                                foreach (var p in Player.List)
+                                foreach (var p in PlayerManager.List)
                                     p.AddBroadcast(10, $"<size=25><b>롤토체스 당첨자({player.DisplayNickname})</b>에 의해 모드가 {CurrentMode.GetModeData().Name}(으)로 선택되었습니다.</size>");
                             });
                         }
@@ -176,7 +176,7 @@ namespace RGM.EventArgs
                     {
                         CurrentMode = Tools.GetRandomValue(ModeList.Keys.Where(x => ModeList[x].Category == ModeCategory.Public).ToList());
 
-                        foreach (var p in Player.List)
+                        foreach (var p in PlayerManager.List)
                             p.AddBroadcast(10, $"<size=25><b>알 수 없는 이유로 모드가 선택되지 않았으므로, 모드가 랜덤으로 선택되었습니다.</size>");
                     }
                 }
@@ -186,7 +186,7 @@ namespace RGM.EventArgs
 
             List<string> ModeDesc = Tools.GetModeDesc(CurrentMode, CurrentSubMode);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.AddBroadcast(10, ModeDesc[0]);
 
@@ -204,7 +204,7 @@ namespace RGM.EventArgs
                 Tools.TryInstallMode(CurrentSubMode);
 
             if (StartupRandom == 3)
-                Tools.CallSnakeHand(null, Player.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
+                Tools.CallSnakeHand(null, PlayerManager.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
 
             Timing.RunCoroutine(Detonation());
 
@@ -263,7 +263,7 @@ namespace RGM.EventArgs
                         EffectType.SugarRush
                     };
 
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         foreach (var effect in effects)
                         {
@@ -287,7 +287,7 @@ namespace RGM.EventArgs
                     };
                     var effect = effects.GetRandomValue();
 
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         player.AddEffect(effect, 255);
                     }
@@ -296,7 +296,7 @@ namespace RGM.EventArgs
 
             if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
             {
-                IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+                IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
                 if (players.Count() == 1)
                     Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
@@ -307,13 +307,13 @@ namespace RGM.EventArgs
 
             Tools.TryInstallMode(ModeType.FriendlyFire);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Server.ExecuteCommand($"/speak {player.Id} 1");
                 IntercomPlayers.Add(player);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 List<string> uc = UsersManager.UsersCache[player.UserId];
 
@@ -408,7 +408,7 @@ namespace RGM.EventArgs
                     }
                 }
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     try
                     {

@@ -76,7 +76,7 @@ namespace RGM.Modes
         {
             Respawn.PauseWaves();
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(PlayerRoles.RoleTypeId.ClassD);
                 player.Position = pos;
@@ -92,7 +92,7 @@ namespace RGM.Modes
 
                 while (end)
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 10, (LayerMask)1))
                         {
@@ -109,14 +109,14 @@ namespace RGM.Modes
 
                 RoundCount += 1;
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.Position = pos;
 
                 if (RoundCount != 3)
                 {
                     for (int i = 1; i < 10; i++)
                     {
-                        foreach (var player in Player.List)
+                        foreach (var player in PlayerManager.List)
                             player.AddBroadcast(1, $"<b><color=red>{10 - i}</color>초 후 <i><color=yellow>{RoundCount + 1}번째 라운드</color></i>가 시작됩니다.</b>");
 
                         yield return Timing.WaitForSeconds(1f);

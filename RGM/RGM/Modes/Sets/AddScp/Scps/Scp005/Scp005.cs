@@ -32,7 +32,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 while (true)
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         if (player.CurrentItem != null && player.CurrentItem.Serial == item.Serial)
                         {

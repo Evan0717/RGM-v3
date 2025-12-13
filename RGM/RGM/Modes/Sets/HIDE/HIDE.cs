@@ -66,8 +66,8 @@ namespace RGM.Modes
         {
             MapSchematic map = Tools.LoadMap($"container");
 
-            Player.List.ToList().CopyTo(pl);
-            monster = Tools.GetRandomValue(Player.List.ToList());
+            PlayerManager.List.ToList().CopyTo(pl);
+            monster = Tools.GetRandomValue(PlayerManager.List.ToList());
 
             try
             {
@@ -79,7 +79,7 @@ namespace RGM.Modes
                     monster.Position = new Vector3(-0.6015625f, 332.9026f, -32.56641f);
                     Server.ExecuteCommand($"/open ESCAPE_PRIMARY");
 
-                    float health = 15 * Player.List.Count + 5 * Player.List.Count;
+                    float health = 15 * PlayerManager.List.Count + 5 * PlayerManager.List.Count;
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
@@ -87,7 +87,7 @@ namespace RGM.Modes
                     monster.EnableEffect(EffectType.Fade, 230);
                     monster.EnableEffect(EffectType.Lightweight, 150);
 
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         if (player != monster)
                         {
@@ -122,12 +122,12 @@ namespace RGM.Modes
         {
             for (int i = 1; i < 180; i++)
             {
-                Player.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color=#2ECCFA>NTF 승리</color>까지</color> {180 - i}초</size>"));
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color=#2ECCFA>NTF 승리</color>까지</color> {180 - i}초</size>"));
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (player.IsScp)
                 {
@@ -156,7 +156,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

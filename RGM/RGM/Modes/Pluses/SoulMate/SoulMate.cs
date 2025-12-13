@@ -59,16 +59,14 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            IsDropScpItemAllowed = false;
-
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
-                    if (Player.List.ToList().Where(x => x.IsAlive).Count() < 3 && player.Role.Type != PlayerRoles.RoleTypeId.Tutorial)
+                    if (PlayerManager.List.ToList().Where(x => x.IsAlive).Count() < 3 && player.Role.Type != PlayerRoles.RoleTypeId.Tutorial)
                     {
-                        Player.List.ToList().Where(x => x.IsAlive).ToList().ForEach(x => Server.ExecuteCommand($"/fc {x.Id} Tutorial 1"));
-                        Player.List.ToList().ForEach(x => x.AddBroadcast(15, $"<size=30><b>{(Player.List.ToList().Where(x => x.IsAlive).Count() == 2 ? "<color=#ffd700>소울메이트</color>" : "<color=#BFFF00>외톨이</color>")}</b>({string.Join(", ", Player.List.ToList().Where(x => x.IsAlive).Select(x => x.DisplayNickname))})의 승리입니다!</size>"));
+                        PlayerManager.List.ToList().Where(x => x.IsAlive).ToList().ForEach(x => Server.ExecuteCommand($"/fc {x.Id} Tutorial 1"));
+                        PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(15, $"<size=30><b>{(PlayerManager.List.ToList().Where(x => x.IsAlive).Count() == 2 ? "<color=#ffd700>소울메이트</color>" : "<color=#BFFF00>외톨이</color>")}</b>({string.Join(", ", PlayerManager.List.ToList().Where(x => x.IsAlive).Select(x => x.DisplayNickname))})의 승리입니다!</size>"));
                         yield return Timing.WaitForSeconds(100f);
                     }
                 }
@@ -94,7 +92,7 @@ namespace RGM.Modes
                     }
                 }
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (player.IsAlive)
                     {
@@ -161,7 +159,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive && soulMates.ContainsKey(x)))
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && soulMates.ContainsKey(x)))
                 {
                     if (currentItems.ContainsKey(player))
                     {
@@ -211,7 +209,7 @@ namespace RGM.Modes
                     {
                         Server.FriendlyFire = true;
 
-                        foreach (var player in Player.List.Where(x => x.IsAlive))
+                        foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
                             player.AddHint("소울메이트 경고", $"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 자신의 짝을 제외하고 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
                     }
                     else
@@ -243,7 +241,7 @@ namespace RGM.Modes
                         {
                             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                             {
-                                foreach (var player in Player.List.Where(x => x.IsDead))
+                                foreach (var player in PlayerManager.List.Where(x => x.IsDead))
                                     player.AddBroadcast(10, $"<size=20><color={playerColor}>{ev.Player.DisplayNickname}</color>(와)과 <color={soulMateColor}>{soulMate.DisplayNickname}</color>(은)는 <color=#FE2EF7>소울메이트</color>였습니다.</size>");
                             });
 

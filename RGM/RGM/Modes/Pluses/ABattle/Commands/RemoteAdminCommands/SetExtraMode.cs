@@ -3,6 +3,7 @@ using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
 using MultiBroadcast.API;
+using RGM.API.Features;
 
 namespace RGM.Modes.Commands;
 
@@ -25,7 +26,7 @@ public class SetExtraMode : ICommand
                 ABattle.CurrentExtraMode = args;
                 string extraMode = $"<size=25><b><color=#fecdcd>{ABattle.CurrentExtraMode}</color></b></size>\n<size=20>{ABattle.ExtraModes[ABattle.CurrentExtraMode]}</size>";
                 
-                foreach (var p in Player.List)
+                foreach (var p in PlayerManager.List)
                 {
                     p.AddBroadcast(10, extraMode);
                     p.SendConsoleMessage(extraMode, "");

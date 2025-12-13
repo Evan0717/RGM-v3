@@ -45,11 +45,11 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            owner = Player.List.GetRandomValue(x => x.IsAlive);
+            owner = PlayerManager.List.GetRandomValue(x => x.IsAlive);
 
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (player == owner)
                     {
@@ -72,7 +72,7 @@ namespace RGM.Modes
         {
             if (ev.Player == owner)
             {
-                owner = Player.List.GetRandomValue(x => x.IsAlive);
+                owner = PlayerManager.List.GetRandomValue(x => x.IsAlive);
             }
         }
     }

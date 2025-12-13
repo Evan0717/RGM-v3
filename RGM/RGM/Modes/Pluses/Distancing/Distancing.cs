@@ -10,6 +10,7 @@ using RGM.API;
 using UnityEngine;
 using Exiled.API.Enums;
 using PlayerRoles;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -39,9 +40,9 @@ namespace RGM.Modes
             {
                 List<Player> DamagePlayers = new List<Player>();
 
-                foreach (var p1 in Player.List)
+                foreach (var p1 in PlayerManager.List)
                 {
-                    foreach (var p2 in Player.List)
+                    foreach (var p2 in PlayerManager.List)
                     {
                         if (p1 != p2 && Vector3.Distance(p1.Position, p2.Position) < 7.5f)
                         {

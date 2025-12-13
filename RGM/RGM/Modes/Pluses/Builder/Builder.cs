@@ -78,7 +78,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Verified(player);
                 Spawned(player);
@@ -86,7 +86,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var p in Player.List.Where(x => x.IsAlive))
+                foreach (var p in PlayerManager.List.Where(x => x.IsAlive))
                 {
                     if (_tools.Contains(p.CurrentItem))
                     {

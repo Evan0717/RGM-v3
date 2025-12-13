@@ -48,7 +48,7 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
             };
             RoleTypeId RandomScpRole = ScpRoles.GetRandomValue();
 
-            foreach (var player in Player.List.Where(x => x.IsScp && x.Role.Type != RandomScpRole))
+            foreach (var player in PlayerManager.List.Where(x => x.IsScp && x.Role.Type != RandomScpRole))
             {
                 player.Role.Set(RandomScpRole);
 
@@ -61,7 +61,7 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

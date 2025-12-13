@@ -48,7 +48,7 @@ public class Disguise : Ability
         {
             var teams = new Dictionary<Team, int>();
 
-            foreach (var player in Player.List.Where(x => x.IsAlive))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
             {
                 if (player.Role.Team != Team.Dead && player.Role.Team != Team.OtherAlive)
                 {

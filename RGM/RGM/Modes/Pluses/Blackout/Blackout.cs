@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using UnityEngine;
 using MEC;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -49,7 +50,7 @@ namespace RGM.Modes
                 }
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Spawned(player);
             }

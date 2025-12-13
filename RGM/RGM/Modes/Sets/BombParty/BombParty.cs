@@ -58,9 +58,9 @@ namespace RGM.Modes
         {
             Tools.LoadMap($"bp");
 
-            Player.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().CopyTo(pl);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(PlayerRoles.RoleTypeId.ClassD);
                 player.Position = new Vector3(-0.3515625f, 300.9572f, -9.261719f);
@@ -111,7 +111,7 @@ namespace RGM.Modes
                     }
                 }
 
-                Player.List.ToList().ForEach(x => x.DisableEffect(EffectType.Flashed));
+                PlayerManager.List.ToList().ForEach(x => x.DisableEffect(EffectType.Flashed));
                 yield return Timing.WaitForSeconds(3f);
             }
         }
@@ -131,7 +131,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

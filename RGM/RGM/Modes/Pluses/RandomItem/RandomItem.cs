@@ -49,7 +49,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Timing.RunCoroutine(Spawned(player));
             }
@@ -58,7 +58,7 @@ namespace RGM.Modes
             {
                 yield return Timing.WaitForSeconds(60f);
 
-                foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 {
                     try
                     {

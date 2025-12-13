@@ -71,14 +71,14 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
 
-            Player.List.Where(x => !x.IsNPC).CopyTo(pl);
+            PlayerManager.List.Where(x => !x.IsNPC).CopyTo(pl);
 
             foreach (var door in Door.List)
             {
                 door.Lock(DoorLockType.Warhead);
             }
 
-            foreach (var player in Player.List.Where(x => !x.IsNPC))
+            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = GameObject.Find("[SP] Base").transform.position;
@@ -89,7 +89,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List.Where(pl.Contains))
+                foreach (var player in PlayerManager.List.Where(pl.Contains))
                 {
                     Player target = GetTarget(player);
 
@@ -176,7 +176,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

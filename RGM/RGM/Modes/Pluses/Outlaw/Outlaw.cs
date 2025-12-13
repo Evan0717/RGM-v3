@@ -51,7 +51,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
         {
             yield return Timing.WaitForSeconds(1f);
 
-            foreach (var player in Player.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
 
             yield break;
@@ -87,7 +87,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
 
         public void OnRespawningTeam(RespawningTeamEventArgs ev)
         {
-            foreach (var player in Player.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
         }
     }

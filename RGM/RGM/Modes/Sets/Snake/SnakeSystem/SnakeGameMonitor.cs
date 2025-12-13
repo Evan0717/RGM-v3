@@ -5,6 +5,7 @@ using MEC;
 using Exiled.API.Features;
 using UnityEngine;
 using InventorySystem.Items.Keycards.Snake;
+using RGM.API.Features;
 
 namespace RGM.Modes.SnakeSystem
 {
@@ -71,7 +72,7 @@ namespace RGM.Modes.SnakeSystem
             }
 
             // Önce tüm oyuncuları kontrol et
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (player == null || !player.IsAlive) continue;
 

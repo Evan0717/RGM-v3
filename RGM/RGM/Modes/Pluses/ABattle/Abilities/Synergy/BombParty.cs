@@ -23,7 +23,7 @@ public class BombParty : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var enemy in Player.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
+        foreach (var enemy in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
         {
             var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
             g.FuseTime = 3f;

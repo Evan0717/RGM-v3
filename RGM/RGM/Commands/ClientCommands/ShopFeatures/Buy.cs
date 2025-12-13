@@ -62,7 +62,7 @@ namespace RGM.Commands.ClientCommands
                                 UsersManager.UsersCache[player.UserId][18] = string.Join("/", ownedProducts.Split('/').Append(input[0]));
                             UsersManager.SaveUsers();
 
-                            foreach (var p in Player.List.Where(x => x.IsDead || Vector3.Distance(x.Position, player.Position) < 11))
+                            foreach (var p in PlayerManager.List.Where(x => x.IsDead || Vector3.Distance(x.Position, player.Position) < 11))
                                 p.AddBroadcast(5, $"<size=20>{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color>(이)가 {product.Name}(을)를 구매하였습니다.</size>");
 
                             Log.Info($"💰 구매ㅣ{player.Nickname}(`{player.Id}`, `{player.UserId}`, `{player.IPAddress}`) -> {product.Name} {product.Price}");
@@ -110,7 +110,7 @@ namespace RGM.Commands.ClientCommands
                                 }
                             }
 
-                            foreach (var p in Player.List.Where(x => x.IsDead || Vector3.Distance(x.Position, player.Position) < 11))
+                            foreach (var p in PlayerManager.List.Where(x => x.IsDead || Vector3.Distance(x.Position, player.Position) < 11))
                                 p.AddBroadcast(5, $"<size=20>{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>{player.DisplayNickname}</color>(이)가 {product.Name}(을)를 구매하고 즉시 사용하였습니다.</size>");
 
                             Log.Info($"💰 구매 후 사용ㅣ{player.Nickname}(`{player.Id}`, `{player.UserId}`, `{player.IPAddress}`) -> {product.Name} {product.Price}");

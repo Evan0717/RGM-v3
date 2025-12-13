@@ -98,11 +98,6 @@ namespace RGM.API.Features
                 var text = string.Join("\n", UsersCache.Select(x => $"{x.Key};{string.Join(";", x.Value)}"));
 
                 FileManager.WriteFile(UsersFileName, text);
-
-                foreach (var player in Player.List.Where(x => !x.IsHost))
-                {
-                    ServerSpecificSettings.Refresh(player);
-                }
             }
         }
 

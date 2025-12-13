@@ -65,6 +65,9 @@ namespace RGM.API.Features
 
         public static void TeleportToLobby(Player player)
         {
+            if (player.Role.Type == RoleTypeId.Overwatch)
+                return;
+
             List<RoleTypeId> Scps = new List<RoleTypeId>()
             {
                 RoleTypeId.Scp173,
@@ -311,7 +314,7 @@ $"""
             if (exceptPlayers == null)
                 exceptPlayers = new List<Player>();
 
-            foreach (var near in Player.List.Where(x => x.IsAlive && x != player && !exceptPlayers.Contains(x)))
+            foreach (var near in PlayerManager.List.Where(x => x.IsAlive && x != player && !exceptPlayers.Contains(x)))
             {
                 float Distance = Vector3.Distance(near.Position, player.Position);
 
@@ -394,11 +397,6 @@ $"""
 
                 EnabledModeList.Add(ModeType);
 
-                foreach (var player in Player.List)
-                {
-                    ServerSpecificSettings.Refresh(player);
-                }
-
                 return true;
             }
             else
@@ -464,7 +462,7 @@ $"""
 
         public static IEnumerator<float> BugVote(Player host, string reason)
         {
-            int RequiredCount = Player.List.Count / 2;
+            int RequiredCount = PlayerManager.List.Count / 2;
             bool IsSuccess = false;
 
             Webhook.Send(en ? $"🗳️ **Game Unplayable Vote**ㅣStarted by {host.Nickname} ({reason})" : $"🗳️ **게임 진행 불가 투표**ㅣ{host.Nickname}에 의해 시작됨 ({reason})");
@@ -477,7 +475,7 @@ $"""
                     break;
                 }
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddHint("게임진행불가투표", en ? $"<size=25>{host.DisplayNickname} has opened a <b><color=#FFBF00>game inactivity vote</color></b>.\nIf you want to force a round to end, type the <b>.yes</b> command.</size>\nReason: {reason}\n<size=20>{21 - i} seconds left until the vote ends ({BugVotePlayers.Count}/{RequiredCount})</size>" : $"<size=25>{host.DisplayNickname}(이)가 <b><color=#FFBF00>게임 진행 불가 투표</color></b>를 개설하였습니다.\n라운드를 강제로 종료해야 한다면 <b>.찬성</b> 명령어를 입력하세요.</size>\n이유 : {reason}\n<size=20>투표 종료까지 {21 - i}초 남음 ({BugVotePlayers.Count}/{RequiredCount})</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1);
@@ -485,7 +483,7 @@ $"""
 
             if (IsSuccess)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(5, en ? $"The vote to disable the game has <b><color=#9AFE2E>passed</color></b>. The servers will be restarted shortly." : $"게임 진행 불가 투표가 <b><color=#9AFE2E>가결</color></b>되었습니다. 곧 서버가 재시작됩니다.");
 
                 Webhook.Send(en ? $"🗳️ **Game Inability Vote**ㅣ✅ Passed (Voters: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})" : $"🗳️ **게임 진행 불가 투표**ㅣ✅ 가결됨 (투표자: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})");
@@ -496,7 +494,7 @@ $"""
             }
             else
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(5, en ? $"The vote to disable game play has been <b><color=#FE2E2E>rejected</color></b>." : $"게임 진행 불가 투표가 <b><color=#FE2E2E>부결</color></b>되었습니다.");
 
                 Webhook.Send(en ? $"🗳️ **Game Inoperable Vote**ㅣ❌ Rejected (Voters: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})" : $"🗳️ **게임 진행 불가 투표**ㅣ❌ 부결됨 (투표자: {string.Join(", ", BugVotePlayers.Select(x => x.Nickname))})");
@@ -508,7 +506,7 @@ $"""
 
         public static IEnumerator<float> Suggest(Player host, string reason)
         {
-            int RequiredCount = Player.List.Count / 2;
+            int RequiredCount = PlayerManager.List.Count / 2;
             bool IsSuccess = false;
 
             Webhook.Send(en ? $"🔐 **Questionable Proposal**ㅣInitiated by {host.Nickname} ({reason})" : $"🔐 **의문의 제안**ㅣ{host.Nickname}에 의해 시작됨 ({reason})");
@@ -521,7 +519,7 @@ $"""
                     break;
                 }
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddHint("의문의 제안", en ? $"<size=25><b><color=#DA81F5>Questionable Proposal</color></b> has been opened.\nTo accept the proposal, type the <b>.accept</b> command.</size>\n{reason}\n<size=20>{31 - i} seconds left until voting ends ({SuggestPlayers.Count}/{RequiredCount})</size>" : $"<size=25><b><color=#DA81F5>의문의 제안</color></b>이 개설되었습니다.\n제안을 수락하시려면 <b>.수락</b> 명령어를 입력하세요.</size>\n{reason}\n<size=20>투표 종료까지 {31 - i}초 남음 ({SuggestPlayers.Count}/{RequiredCount})</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1);
@@ -529,14 +527,14 @@ $"""
 
             if (IsSuccess)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(5, en ? $"Questionable Proposal <b><color=#9AFE2E>passed</color></b>." : $"의문의 제안이 <b><color=#9AFE2E>가결</color></b>되었습니다.");
 
                 Webhook.Send(en ? $"🔐 **Questionable Proposal**ㅣ✅ Passed (Voters: {string.Join(", ", SuggestPlayers.Select(x => x.Nickname))})" : $"🔐 **의문의 제안**ㅣ✅ 가결됨 (투표자: {string.Join(", ", SuggestPlayers.Select(x => x.Nickname))})");
             }
             else
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(5, en ? $"Questionable Proposal <b><color=#FE2E2E>was rejected</color></b>." : $"의문의 제안이 <b><color=#FE2E2E>부결</color></b>되었습니다.");
 
                 Webhook.Send(en ? $"Questionable Proposal <b><color=#FE2E2E>was rejected</color></b>." : $"🔐 **의문의 제안**ㅣ❌ 부결됨 (투표자: {string.Join(", ", SuggestPlayers.Select(x => x.Nickname))})");
@@ -668,7 +666,7 @@ $"""
         {
             string notice = en ? $"Loaded audio: {clipName}" : $"로드된 오디오: {clipName}";
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.AddBroadcast(10, $"<size=20>{notice}</size>");
             }
@@ -704,7 +702,7 @@ $"""
 
             if (notice)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(10, en ? $"<size=20>Loaded map: {mapName}</size>" : $"<size=20>로드된 맵: {mapName}</size>");
                 }

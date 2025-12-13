@@ -37,7 +37,6 @@ namespace RGM.Variables
         public static bool IsScp3114Enabled = false;
         public static bool IsBugVoteProcessing = false;
         public static bool IsUsersFileLoaded = false;
-        public static bool IsDropScpItemAllowed = true;
         public static bool IsWinnerSelected = false;
         public static bool IsWarningAlone = false;
         public static bool IsClearCitizen = false;
@@ -281,7 +280,7 @@ namespace RGM.Variables
                         "</size>"
                     });
 
-                    foreach (Player ply in Player.List)
+                    foreach (Player ply in PlayerManager.List)
                     {
                         ply.AddBroadcast(10, text);
                     }

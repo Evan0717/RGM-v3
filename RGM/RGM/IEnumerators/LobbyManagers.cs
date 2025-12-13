@@ -11,6 +11,7 @@ using Exiled.API.Features;
 using static RGM.Variables.ServerManagers;
 
 using static RGM.Functions.ModeManagers;
+using RGM.API.Features;
 
 namespace RGM.IEnumerators
 {
@@ -28,13 +29,13 @@ namespace RGM.IEnumerators
                 {
                     bool pressing = false;
 
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1f, (LayerMask)1))
                         {
                             if (hit.transform.name == "GameStartRed")
                             {
-                                if (Player.List.Count() > 1)
+                                if (PlayerManager.List.Count() > 1)
                                 {
                                     if (RemainingPress <= 0)
                                         ButtonPressed = true;
@@ -64,7 +65,7 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForSeconds(0.1f);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.ClearInventory();
                 player.Role.Set(RoleTypeId.Spectator);
@@ -97,7 +98,7 @@ namespace RGM.IEnumerators
                 RaycastHit hit;
                 int stack = 0;
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out hit, 1f, (LayerMask)1))
                     {
@@ -110,7 +111,7 @@ namespace RGM.IEnumerators
                     }
                 }
 
-                if (Player.List.Count() > 1)
+                if (PlayerManager.List.Count() > 1)
                 {
                     float maxPlayers = 35;
                     float pressMultiplier = Math.Max(1, maxPlayers / Server.PlayerCount);

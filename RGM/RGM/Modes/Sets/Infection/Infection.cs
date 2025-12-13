@@ -73,9 +73,9 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
-            for (int i = 0; i < Mathf.Max(1, Player.List.Count() / 7); i++)
+            for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count() / 7); i++)
             {
-                Player hostZombie = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive && !HostZombies.Contains(x)).ToList());
+                Player hostZombie = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive && !HostZombies.Contains(x)).ToList());
 
                 HostZombies.Add(hostZombie);
 
@@ -85,7 +85,7 @@ namespace RGM.Modes
                 });
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 try
                 {
@@ -113,7 +113,7 @@ namespace RGM.Modes
 
             for (int i = 0; i < 500; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(1, $"<b><size=25>{500 - i}초 뒤 인류가 승리합니다.</size></b>");
 
                 yield return Timing.WaitForSeconds(1);
@@ -123,9 +123,9 @@ namespace RGM.Modes
             {
                 Round.IsLocked = false;
                 IsHumanEnd = true;
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsHuman).ToList(), Player.List.Where(x => x.IsHuman).Count() == 1 ? 10 : 1));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsHuman).ToList(), PlayerManager.List.Where(x => x.IsHuman).Count() == 1 ? 10 : 1));
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<size=30><b>인류의 승리입니다. <color=#9AFE2E>좀비들은 해독제를 맞고 치료되었습니다.</color></b></size>");
 
@@ -139,12 +139,12 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (Player.List.Where(x => x.IsHuman).Count() < 1)
+                if (PlayerManager.List.Where(x => x.IsHuman).Count() < 1)
                 {
                     Round.IsLocked = false;
-                    Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.Role.Type == RoleTypeId.Scp0492).ToList(), 1));
+                    Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492).ToList(), 1));
 
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                         player.AddBroadcast(20, $"<size=30><b>숙주의 승리입니다. <color=red>남겨진 인류는 안타까운 결말을 맞이할 것입니다.</color></b></size>");
 
                     yield break;
@@ -158,7 +158,7 @@ namespace RGM.Modes
         {
             Door door = Door.Get(DoorType.NukeSurface);
 
-            foreach (var player in Player.List.Where(x => x.IsScp))
+            foreach (var player in PlayerManager.List.Where(x => x.IsScp))
             {
                 player.Position = door.Position + new Vector3(0, 2, 0);
             }
@@ -224,17 +224,17 @@ namespace RGM.Modes
 
                 try
                 {
-                    IEnumerable<Player> zombies = Player.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
+                    IEnumerable<Player> zombies = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
 
                     if (zombies.Count() < 1)
-                        ev.Player.Position = Tools.GetRandomValue(Player.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList());
+                        ev.Player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList());
 
                     else
                         ev.Player.Position = Tools.GetRandomValue(zombies.Select(x => x.Position).ToList());
                 }
                 catch (Exception ex)
                 {
-                    ev.Player.Position = Tools.GetRandomValue(Player.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList());
+                    ev.Player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList());
                 }
             }
             else

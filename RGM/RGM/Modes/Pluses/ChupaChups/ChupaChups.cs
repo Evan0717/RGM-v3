@@ -41,7 +41,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Timing.RunCoroutine(Spawned(player));
             }
@@ -63,7 +63,7 @@ namespace RGM.Modes
 
         public void OnRespawningTeam(RespawningTeamEventArgs ev)
         {
-            foreach (var player in Player.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
         }
     }

@@ -100,7 +100,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.Tutorial);
             }
@@ -111,7 +111,7 @@ namespace RGM.Modes
                 Map.CleanAllRagdolls();
                 PassedPlayers.Clear();
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.Position = SpawnBase;
                     player.ClearInventory();
@@ -124,7 +124,7 @@ namespace RGM.Modes
                     return new List<Vector3> { SpawnX(), SpawnY(), SpawnZ() }.GetRandomValue();
                 }
 
-                for (int i = 0; i < Player.List.Where(x => x.IsAlive).Count() / 2; i++)
+                for (int i = 0; i < PlayerManager.List.Where(x => x.IsAlive).Count() / 2; i++)
                 {
                     Pickup.CreateAndSpawn(item, pos());
                 }
@@ -133,7 +133,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < 11; i++)
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         player.AddBroadcast(1, $"<b><size=30>{11 - i}</size></b>");
                     }
@@ -145,7 +145,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < 7; i++)
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         player.AddBroadcast(1, $"<b><size=30>{7 - i}</size></b>");
                     }
@@ -157,7 +157,7 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1);
 
-                foreach (var player in Player.List.Where(x => x.IsAlive && !PassedPlayers.Contains(x)))
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && !PassedPlayers.Contains(x)))
                 {
                     var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                     g.FuseTime = 0.1f;
@@ -167,10 +167,10 @@ namespace RGM.Modes
                     player.Kill($"굼떠서 사망했습니다.");
                 }
 
-                if (Player.List.Where(x => x.IsAlive).Count() <= 1)
+                if (PlayerManager.List.Where(x => x.IsAlive).Count() <= 1)
                 {
                     Round.IsLocked = false;
-                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { Player.List.Where(x => x.IsAlive).ToList()[0] }, 5));
+                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { PlayerManager.List.Where(x => x.IsAlive).ToList()[0] }, 5));
 
                     yield break;
                 }

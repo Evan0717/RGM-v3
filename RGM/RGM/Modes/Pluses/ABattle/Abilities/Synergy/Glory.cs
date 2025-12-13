@@ -42,7 +42,7 @@ public class Glory : Ability
 
         while (Owner.IsAlive)
         {
-            foreach (var player in Exiled.API.Features.Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (Tools.TryGetLookPlayer(player, 45f, out Exiled.API.Features.Player target, out RaycastHit? hit))
                 {

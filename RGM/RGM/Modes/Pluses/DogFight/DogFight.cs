@@ -53,7 +53,7 @@ namespace RGM.Modes
             Tools.TryInstallMode(ModeType.Radio);
             Tools.TryInstallMode(ModeType.Ghost);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Spawned(player);
             }
@@ -109,7 +109,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            foreach (var player in Player.List.Where(x => x.IsAlive))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
             {
                 Server.ExecuteCommand($"/drop {player.Id} 31 25");
             }

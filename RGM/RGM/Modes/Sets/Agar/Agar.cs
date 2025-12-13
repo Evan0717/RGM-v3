@@ -70,7 +70,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1f);
 
-            var players = Player.List.ToList();
+            var players = PlayerManager.List.ToList();
             players.ShuffleList();
 
             int halfCount = players.Count / 2;
@@ -95,9 +95,9 @@ namespace RGM.Modes
 
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
-                    player.AddBroadcast(1, $"<size=30><b><color={RoleTypeId.ClassD.GetColor().ToHex()}>{Player.List.Count(x => x.Role.Type.GetSide() == Side.ChaosInsurgency)}</color> vs <color={RoleTypeId.Scientist.GetColor().ToHex()}>{Player.List.Count(x => x.Role.Type.GetSide() == Side.Mtf)}</color></b></size>");
+                    player.AddBroadcast(1, $"<size=30><b><color={RoleTypeId.ClassD.GetColor().ToHex()}>{PlayerManager.List.Count(x => x.Role.Type.GetSide() == Side.ChaosInsurgency)}</color> vs <color={RoleTypeId.Scientist.GetColor().ToHex()}>{PlayerManager.List.Count(x => x.Role.Type.GetSide() == Side.Mtf)}</color></b></size>");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -106,7 +106,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Player winner = Player.List.First(x => x.UserId == PlayersReport
+            Player winner = PlayerManager.List.First(x => x.UserId == PlayersReport
                     .OrderByDescending(kv => kv.Value.Damage)
                     .Take(1)
                     .ToList().First().Key);
@@ -118,7 +118,7 @@ namespace RGM.Modes
         {
             if (ev.Attacker != null)
             {
-                Player reviver = Player.List.GetRandomValue(x => x.Role.Type == RoleTypeId.Spectator);
+                Player reviver = PlayerManager.List.GetRandomValue(x => x.Role.Type == RoleTypeId.Spectator);
                 reviver.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
                 Item item = reviver.AddItem(ItemType.SCP1509);
                 reviver.CurrentItem = item;

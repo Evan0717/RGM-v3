@@ -5,6 +5,7 @@ using HarmonyLib;
 using Exiled.API.Features;
 using UnityEngine;
 using InventorySystem.Items.Keycards.Snake;
+using RGM.API.Features;
 
 namespace RGM.Modes.SnakeSystem
 {
@@ -89,7 +90,7 @@ namespace RGM.Modes.SnakeSystem
                     if (collider != null)
                     {
                         // Collider'ın yakınında olan oyuncuyu bul
-                        foreach (var player in Player.List)
+                        foreach (var player in PlayerManager.List)
                         {
                             if (player?.GameObject != null)
                             {
@@ -105,7 +106,7 @@ namespace RGM.Modes.SnakeSystem
                 }
 
                 // Alternatif: Aktif olan Snake kartına sahip oyuncuyu bul
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (player?.CurrentItem?.Type.ToString().Contains("Keycard") == true)
                     {

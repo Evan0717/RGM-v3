@@ -73,7 +73,7 @@ namespace RGM.Modes
 
             Tools.TryInstallMode(ModeType.SuperStar);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 playerScore.Add(player, (0, 0));
 
@@ -111,7 +111,7 @@ namespace RGM.Modes
                 
                 if (time == 177)
                 {
-                    foreach (var player in Player.List.Where(x => x.IsAlive))
+                    foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
                     {
                         player.Kill($"제한 시간 초과! (최종 점수: {playerScore[player].Item1}점)");
                     }
@@ -139,7 +139,7 @@ namespace RGM.Modes
 
         void OnDied(DiedEventArgs ev)
         {
-            if (Player.List.Count(x => x.IsAlive) == 0)
+            if (PlayerManager.List.Count(x => x.IsAlive) == 0)
             {
                 Round.IsLocked = false;
 

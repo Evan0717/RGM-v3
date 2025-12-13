@@ -18,7 +18,7 @@ public class ThirdForce : Ability
 {
     public override void OnEnabled()
     {
-        List<Player> DeadPlayers = Player.List.Where(x => x.IsDead).ToList();
+        List<Player> DeadPlayers = PlayerManager.List.Where(x => x.IsDead).ToList();
         DeadPlayers.ShuffleList();
 
         Tools.CallSnakeHand(Owner, DeadPlayers.Take(2).ToList());

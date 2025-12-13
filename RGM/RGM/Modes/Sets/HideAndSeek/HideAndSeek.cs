@@ -74,9 +74,9 @@ namespace RGM.Modes
 
             Map.CleanAllItems();
 
-            for (float i = 1; i < Player.List.Count / 6 + 2; i++)
+            for (float i = 1; i < PlayerManager.List.Count / 6 + 2; i++)
             {
-                Finders.Add(Tools.GetRandomValue(Player.List.Where(x => !Finders.Contains(x)).ToList()));
+                Finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !Finders.Contains(x)).ToList()));
             }
 
             foreach (var Finder in Finders)
@@ -87,7 +87,7 @@ namespace RGM.Modes
                 Server.ExecuteCommand($"/speak {Finder.Id} 1");
             }
 
-            foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !Finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Scale = new Vector3(0.4f, 0.4f, 0.4f);
@@ -99,20 +99,20 @@ namespace RGM.Modes
 
             for (int i = 1; i < 60; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(1, $"<size=25><b><color=red>{60 - i}초 뒤 술래가 출몰합니다. 빨리 숨으세요!</color></b></size>");
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Server.ExecuteCommand($"/speak {player.Id} 0");
             }
 
             int Remaining = 300;
 
-            foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !Finders.Contains(x)))
             {
                 player.EnableEffect(EffectType.SinkHole);
                 player.DisableEffect(EffectType.Lightweight);
@@ -142,7 +142,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < Remaining; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(1, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
                 }
@@ -154,7 +154,7 @@ namespace RGM.Modes
                         finder.EnableEffect(EffectType.Scp1344);
                     }
 
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         player.AddBroadcast(10, $"<size=25>모든 술래에게 <color=red>SCP-1344</color>가 지급됩니다, 행운을 빕니다!</size>");
                     }
@@ -167,7 +167,7 @@ namespace RGM.Modes
             {
                 Round.IsLocked = false;
 
-                foreach (var player in Player.List.Where(x => x.Role.Type == RoleTypeId.FacilityGuard))
+                foreach (var player in PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.FacilityGuard))
                 {
                     player.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다.");
                 }
@@ -176,7 +176,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

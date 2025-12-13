@@ -52,14 +52,14 @@ namespace RGM.Modes
         {
             Tools.LoadMap($"DeathRun");
 
-            Tagger = Tools.GetRandomValue(Player.List.ToList());
+            Tagger = Tools.GetRandomValue(PlayerManager.List.ToList());
 
             Tagger.Role.Set(RoleTypeId.Scientist);
             Tagger.Position = new Vector3(44.57422f, 999.7067f, 78.52734f);
             Tagger.ClearInventory();
             Tagger.AddHint("데스런 D계급 입장 알림", "곧 <color=orange>D계급</color>이 데스런에 입장합니다.\n그들을 막기 위해 <color=red>빨간 버튼</color>을 눌러 일회용 함정을 발동시킬 수 있습니다.\n\n<size=40><b>절대로 그들이 목적지에 도착하지 않도록 하세요!</b></size>", 10);
 
-            foreach (var player in Player.List.Where(x => x != Tagger))
+            foreach (var player in PlayerManager.List.Where(x => x != Tagger))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = new Vector3(48.86719f, 1002.6483f, 86.34375f);
@@ -68,7 +68,7 @@ namespace RGM.Modes
 
             for (int i=1; i<11; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(1, $"<size=30><b><color=red>{11 - i}</color>초 후 게임이 시작됩니다. 준비하세요!</b></size>");
 
                 yield return Timing.WaitForSeconds(1f);
@@ -76,7 +76,7 @@ namespace RGM.Modes
 
             Timing.RunCoroutine(Timer());
 
-            foreach (var player in Player.List.Where(x => x != Tagger))
+            foreach (var player in PlayerManager.List.Where(x => x != Tagger))
                 player.DisableEffect(EffectType.Ensnared);
         }
 
@@ -84,13 +84,13 @@ namespace RGM.Modes
         {
             for (int i=1; i<201; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(1, $"<size=25><b><color=yellow>과학자</color>가 총기를 입수하기까지 <color=red>{201 - i}</color>초 남았습니다.</b></size>");
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            foreach (var player in Player.List.Where(x => x.IsAlive))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
             {
                 if (player != Tagger)
                     player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
@@ -103,7 +103,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

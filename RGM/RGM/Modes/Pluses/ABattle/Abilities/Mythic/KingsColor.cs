@@ -47,7 +47,7 @@ public class KingsColor : Ability
 
         while (Owner.IsAlive)
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (Tools.TryGetLookPlayer(player, 90f, out Player target, out RaycastHit? hit))
                 {
@@ -83,7 +83,7 @@ public class KingsColor : Ability
             Owner.RankName = "시산혈해 (屍山血海)";
             Owner.RankColor = "red";
 
-            foreach (var player in Player.List.Where(x => Owner.LeadingTeam != x.LeadingTeam))
+            foreach (var player in PlayerManager.List.Where(x => Owner.LeadingTeam != x.LeadingTeam))
             {
                 player.EnableEffect(EffectType.Stained, 1, 20);
             }

@@ -23,7 +23,7 @@ public class CallScp : Ability
 {
     public override void OnEnabled()
     {
-        RoleTypeId _role = Tools.GetRandomValue(Datas.AIRoles.Where(x => !Player.List.ToList().Where(x => x.IsNPC).Select(x1 => x1.Role.Type).ToList().Contains(x)).ToList());
+        RoleTypeId _role = Tools.GetRandomValue(Datas.AIRoles.Where(x => !PlayerManager.List.ToList().Where(x => x.IsNPC).Select(x1 => x1.Role.Type).ToList().Contains(x)).ToList());
 
         Server.ExecuteCommand($"/spawnai {_role.ToString()}");
 

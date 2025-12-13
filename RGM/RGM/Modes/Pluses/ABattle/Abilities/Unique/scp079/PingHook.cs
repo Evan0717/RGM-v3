@@ -40,6 +40,6 @@ public class PingHook : Ability
 
         Vector3 pos = ev.Position;
 
-        Player.List.Where(x => x.IsAlive).GetRandomValue().Position = new Vector3(pos.x, pos.y + 2, pos.z);
+        PlayerManager.List.Where(x => x.IsAlive).GetRandomValue().Position = new Vector3(pos.x, pos.y + 2, pos.z);
     }
 }

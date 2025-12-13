@@ -29,7 +29,7 @@ namespace RGM.IEnumerators
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (player.Role is SpectatorRole spectator)
                     {
@@ -48,7 +48,7 @@ namespace RGM.IEnumerators
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60 * 5, 60 * 15 + 1));
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<size=20><b><color=#7289da>Discord</color>에 가입하여 <color=#C8FE2E>실시간 업데이트 현황</color>을 확인하고, 서버에 대한 <color=#F781D8>아이디어</color>를 나누고, <color=#FF4000>상점</color>을 이용하세요!</b></size>");
                     player.AddBroadcast(20, $"<size=20>만일 서버가 터진다면 그것은 개발자가 이상한 거 만들다가 가끔씩 터트리는 것이오니, 계속 플레이하시려면 고쳐질때까지 계속 <b>재접속</b>하시는 것을 권장드립니다.</size>");
@@ -60,7 +60,7 @@ namespace RGM.IEnumerators
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive))
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
                 {
                     if (OnGround.ContainsKey(player.UserId) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
                     {
@@ -77,7 +77,7 @@ namespace RGM.IEnumerators
                                 {
                                     player.IsGodModeEnabled = true;
 
-                                    player.Position = Player.List.Where(x => x != player).GetRandomValue().Position;
+                                    player.Position = PlayerManager.List.Where(x => x != player).GetRandomValue().Position;
 
                                     Timing.CallDelayed(1, () =>
                                     {
@@ -114,7 +114,7 @@ namespace RGM.IEnumerators
         {
             while (!Round.IsStarted)
             {
-                foreach (Player player in Player.List.Where(x => x.IsAlive))
+                foreach (Player player in PlayerManager.List.Where(x => x.IsAlive))
                 {
                     foreach (Transform Ball in Balls)
                     {
@@ -141,7 +141,7 @@ namespace RGM.IEnumerators
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => PlayersInfo.ContainsKey(x.UserId) && x.IsAlive))
+                foreach (var player in PlayerManager.List.Where(x => PlayersInfo.ContainsKey(x.UserId) && x.IsAlive))
                 {
                     PlayersInfo[player.UserId] = new PlayerInfo
                     {
@@ -163,7 +163,7 @@ namespace RGM.IEnumerators
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List.Where(x => x.IsHuman && !JumpScareCooldown.Contains(x)))
+                foreach (var player in PlayerManager.List.Where(x => x.IsHuman && !JumpScareCooldown.Contains(x)))
                 {
                     if (player.TryGetLookPlayer(25, out Player target, out RaycastHit? hit))
                     {
@@ -199,7 +199,7 @@ namespace RGM.IEnumerators
                 if (UnityEngine.Random.Range(1, 1001) == 1)
                     Tools.PlayGlobalAudio($"scp079-{UnityEngine.Random.Range(1, 3)}", volume: 1.5f);
 
-                int citizenCount = Player.List.Where(x => x.Role.Type == RoleTypeId.ClassD || x.Role.Type == RoleTypeId.Scientist).Count();
+                int citizenCount = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.ClassD || x.Role.Type == RoleTypeId.Scientist).Count();
 
                 if (citizenCount == 1 && !IsWarningAlone)
                 {
@@ -224,7 +224,7 @@ namespace RGM.IEnumerators
             {
                 if (Warhead.IsDetonated)
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         if (player.CurrentRoom.Type != RoomType.Surface)
                         {

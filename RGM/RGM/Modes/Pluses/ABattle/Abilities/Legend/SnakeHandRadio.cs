@@ -52,7 +52,7 @@ public class SnakeHandRadio : Ability
             if (ev.Player.Role.Type != RoleTypeId.Tutorial)
                 ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
 
-            List<Player> deadPlayers = Player.List.Where(x => x.IsDead).ToList();
+            List<Player> deadPlayers = PlayerManager.List.Where(x => x.IsDead).ToList();
             Tools.CallSnakeHand(ev.Player, deadPlayers);
 
             Timing.CallDelayed(1, () =>

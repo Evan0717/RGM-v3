@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
+using RGM.API.Features;
 
 namespace RGM.Modes.Commands;
 
@@ -12,7 +13,7 @@ public class AddAbility : ICommand
     {
         if (Round.IsStarted)
         {
-            var players = arguments.At(0) == "all" ? Player.List : new List<Player> { Player.Get(arguments.At(0)) };
+            var players = arguments.At(0) == "all" ? PlayerManager.List : new List<Player> { Player.Get(arguments.At(0)) };
             var args = string.Join(" ", arguments.Skip(1));
 
             if (arguments.Count < 2)

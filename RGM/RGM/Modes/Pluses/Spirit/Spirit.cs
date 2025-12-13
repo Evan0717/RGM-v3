@@ -53,7 +53,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (spirits.Contains(player))
                     {

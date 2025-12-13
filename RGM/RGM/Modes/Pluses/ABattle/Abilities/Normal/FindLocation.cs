@@ -14,7 +14,7 @@ public class FindLocation : Ability
 {
     public override void OnEnabled()
     {
-        Timing.RunCoroutine(FindLocationCoroutine(Tools.GetRandomValue(Player.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)).ToList())));
+        Timing.RunCoroutine(FindLocationCoroutine(Tools.GetRandomValue(PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)).ToList())));
     }
 
     public override void OnDisabled()

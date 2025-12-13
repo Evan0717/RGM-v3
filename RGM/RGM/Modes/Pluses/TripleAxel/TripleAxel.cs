@@ -39,7 +39,7 @@ COM-45로 인한 데미지가 70%로 하향됩니다.
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 foreach (var item in player.Items)
                 {
