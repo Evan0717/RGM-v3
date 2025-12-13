@@ -8,9 +8,16 @@ namespace RGM.Patches
     {
         public static void Postfix(ReferenceHub player, ref bool __result)
         {
-            Player ply = Player.Get(player);
+            if (player.IsHost || player.IsDummy)
+            {
+                __result = false;
+            }
+            else
+            {
+                Player ply = Player.Get(player);
 
-            __result = ply.IsDead || NonePlayers.Contains(ply);
+                __result = ply.IsDead || NonePlayers.Contains(ply);
+            }
         }
     }
 }

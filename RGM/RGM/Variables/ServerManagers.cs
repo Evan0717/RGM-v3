@@ -8,6 +8,7 @@ using PlayerRoles;
 using RGM.API.DataBases;
 using RGM.API.Features;
 using RGM.API.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,9 +30,9 @@ namespace RGM.Variables
         public static AudioPlayer GlobalPlayer;
         public static string SelectMode = null;
         public static string Tip = Tools.GetRandomValue(Tips.LobbyTips);
-        public static string Logo = Random.Range(1, 3) == 1 ? "❓" : "❔";
+        public static string Logo = UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔";
         public static string WinMessage = "";
-        public static int StartupRandom = Random.Range(1, 31);
+        public static int StartupRandom = UnityEngine.Random.Range(1, 31);
         public static bool FreezeGameStart = false;
         public static bool AutoNuke = false;
         public static bool IsScp3114Enabled = false;
@@ -299,7 +300,7 @@ namespace RGM.Variables
                     IsModeSuggestUsed = true;
 
                     string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;
-                    bool flag = Random.Range(1, 11) == 1;
+                    bool flag = UnityEngine.Random.Range(1, 11) == 1;
 
                     if (flag)
                     {

@@ -18,5 +18,6 @@ namespace RGM.API.Interfaces
         public int KillScp { get; set; }
         public int KillHuman { get; set; }
         public int Damage { get; set; }
+        public DateTime LastDeath { get; set; }
     }
 }

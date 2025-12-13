@@ -35,6 +35,7 @@ using System.Diagnostics.Eventing.Reader;
 using CustomPlayerEffects;
 using MapGeneration.Holidays;
 using Respawning.Waves;
+using System.Windows.Forms;
 
 
 namespace RGM.EventArgs
@@ -60,12 +61,7 @@ namespace RGM.EventArgs
                 }
                 , onIntialCreation: (p) =>
                 {
-                    p.transform.parent = ev.Player.GameObject.transform;
-
                     Speaker speaker = p.AddSpeaker("Main", isSpatial: false, minDistance: 0, maxDistance: 5000);
-
-                    speaker.transform.parent = ev.Player.GameObject.transform;
-                    speaker.transform.localPosition = Vector3.zero;
                 });
 
                 PlayersAudio.Add(ev.Player, audioPlayer);
@@ -80,7 +76,8 @@ namespace RGM.EventArgs
                     Revive = 0,
                     KillScp = 0,
                     KillHuman = 0,
-                    Damage = 0
+                    Damage = 0,
+                    LastDeath = DateTime.MinValue
                 });
             }
 
@@ -522,6 +519,14 @@ namespace RGM.EventArgs
             });
         }
 
+        public static void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+            if (NonePlayers.Contains(ev.Player))
+            {
+                ev.Player.ClearInventory();
+            }
+        }
+
         public static void OnSpawned(SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/pfx FogControl 1 0 {ev.Player.Id}");
@@ -566,7 +571,8 @@ namespace RGM.EventArgs
                                 ActiveEffects = ev.Player.ActiveEffects.ToList(),
                                 Items = ev.Player.Items.ToList(),
                                 CurrentItem = ev.Player.CurrentItem,
-                                Position = new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z)
+                                Position = new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z),
+                                Rotation = new Quaternion(ev.Player.Rotation.x, ev.Player.Rotation.y, ev.Player.Rotation.z, ev.Player.Rotation.w),
                             });
                         }
                     }
@@ -701,6 +707,11 @@ namespace RGM.EventArgs
 
         public static void OnDying(DyingEventArgs ev)
         {
+            if (NonePlayers.Contains(ev.Player))
+            {
+                ev.Player.ClearInventory();
+            }
+
             if (Round.IsLobby)
             {
                 ev.Player.ClearInventory();
@@ -737,6 +748,27 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
+            if (NonePlayers.Contains(ev.Player))
+            {
+                ev.Ragdoll.Destroy();
+            }
+
+            IEnumerator<float> timeCount()
+            {
+                ButtonSetting button = (ButtonSetting)SettingBase.SyncedList[ev.Player].First(x => x.Id == 12051);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    button.UpdateLabelAndHint($"{ServerSpecificSettings.SpectatorToNone_Text} ({10 - i}초 남음)", button.HintDescription, filter: x => x == ev.Player);
+
+                    yield return Timing.WaitForSeconds(1);
+                }
+
+                button.UpdateLabelAndHint($"{ServerSpecificSettings.SpectatorToNone_Text}", button.HintDescription, filter: x => x == ev.Player);
+            }
+
+            Timing.RunCoroutine(timeCount());
+
             if (!Round.IsStarted)
             {
                 Timing.CallDelayed(5, () =>
@@ -772,6 +804,8 @@ namespace RGM.EventArgs
 
                 if (!ev.Player.IsNPC)
                     PlayersReport[ev.Player.UserId].Death += 1;
+
+                PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
             }
         }
 
@@ -839,6 +873,12 @@ namespace RGM.EventArgs
                     }
                 }
             }
+        }
+
+        public static void OnShot(ShotEventArgs ev)
+        {
+            if (NonePlayers.Contains(ev.Player) && ev.Firearm.AmmoType != AmmoType.None)
+                ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }
 
         public static void OnKicking(KickingEventArgs ev)
