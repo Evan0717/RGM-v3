@@ -461,6 +461,8 @@
     <Compile Include="RGM\Functions\ModeManagers.cs" />
     <Compile Include="RGM\Modes\Sets\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Sets\WitGame\WitGame.cs" />
+    <Compile Include="RGM\Patches\Wave.cs" />
+    <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\UserSettings\ServerSpecificSettings.cs" />
     <Compile Include="RGM\Variables\ServerManagers.cs" />
   </ItemGroup>
