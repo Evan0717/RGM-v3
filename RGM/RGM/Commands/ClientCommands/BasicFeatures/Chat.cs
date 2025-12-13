@@ -121,7 +121,7 @@ namespace RGM.Commands.ClientCommands
                     return false;
                 }
 
-                foreach (Player ply in PlayerManager.List)
+                foreach (Player ply in Player.List)
                 {
                     if (Check(ply))
                         ply.AddBroadcast(6, text2);

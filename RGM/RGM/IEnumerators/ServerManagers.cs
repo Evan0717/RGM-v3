@@ -65,7 +65,7 @@ namespace RGM.IEnumerators
         {
             while (true)
             {
-                foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
+                foreach (var player in Player.List.Where(x => x.IsAlive))
                 {
                     if (OnGround.ContainsKey(player.UserId) && !player.IsNoclipPermitted && player.Role.Type != RoleTypeId.Scp079)
                     {
