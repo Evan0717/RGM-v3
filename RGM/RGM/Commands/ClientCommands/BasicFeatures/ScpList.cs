@@ -9,6 +9,7 @@ using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API;
 using RGM.API.Components;
+using RGM.API.Features;
 using RGM.Modes;
 using UnityEngine;
 using static RGM.Variables.ServerManagers;
@@ -24,7 +25,7 @@ namespace RGM.Commands.ClientCommands
 
             if (player.IsScp)
             {
-                response = "\n" + string.Join("\n", Player.List.Where(x => x.IsScp).Select(x => $"{x.Role.Name} : {x.Nickname}"));
+                response = "\n" + string.Join("\n", PlayerManager.List.Where(x => x.IsScp).Select(x => $"{x.Role.Name} : {x.Nickname}"));
                 return true;
             }
             else

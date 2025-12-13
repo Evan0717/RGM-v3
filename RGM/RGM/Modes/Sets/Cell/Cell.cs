@@ -45,9 +45,9 @@ namespace RGM.Modes
         {
             Server.FriendlyFire = true;
             Tools.LoadMap($"cell");
-            Player.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().CopyTo(pl);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(PlayerRoles.RoleTypeId.Tutorial);
                 player.Position = GameObject.Find("[SP] Base").transform.position;
@@ -55,7 +55,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                Player badLucky = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+                Player badLucky = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
 
                 Throwable scp018 = (Throwable)badLucky.AddItem(ItemType.SCP018);
                 Scp018 scp = (Scp018)scp018;
@@ -77,7 +77,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

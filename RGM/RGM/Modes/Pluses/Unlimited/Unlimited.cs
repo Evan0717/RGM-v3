@@ -61,11 +61,11 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Player.List.ToList().ForEach(Spawned);
+            PlayerManager.List.ToList().ForEach(Spawned);
 
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (player.Role is Scp049Role scp049)
                     {

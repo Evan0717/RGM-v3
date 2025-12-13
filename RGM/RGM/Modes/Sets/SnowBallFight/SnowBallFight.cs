@@ -80,7 +80,7 @@ namespace RGM.Modes
             Vector3 secondPoint = GameObject.Find("SecondPoint").transform.position;
             Vector3 busterCallPoint = GameObject.Find("BusterCallPoint").transform.position;
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = spawnPoint;
@@ -95,7 +95,7 @@ namespace RGM.Modes
 
             Timing.CallDelayed(120, () =>
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(10, $"<b><size=25>2분이 지나 버스터콜이 발동되었습니다.</size></b>");
                     
@@ -106,7 +106,7 @@ namespace RGM.Modes
 
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List.Where(x => !x.HasItem(ItemType.Snowball)))
+                foreach (var player in PlayerManager.List.Where(x => !x.HasItem(ItemType.Snowball)))
                 {
                     player.AddItem(ItemType.Snowball);
                 }
@@ -126,15 +126,15 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
+                if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                 {
-                    List<Player> playerList = Player.List.Where(x => x.IsAlive && !x.IsNPC).ToList();
+                    List<Player> playerList = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList();
 
                     Round.IsLocked = false;
 
                     DummyUtils.DestroyAllDummies();
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {playerList[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {playerList[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { playerList[0] }, 5));
 
                     yield break;

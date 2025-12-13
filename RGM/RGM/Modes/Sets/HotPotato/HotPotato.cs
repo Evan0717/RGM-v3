@@ -67,14 +67,14 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("Skeleton", 1, true);
 
-            Player.List.Where(x => !x.IsNPC).CopyTo(pl);
+            PlayerManager.List.Where(x => !x.IsNPC).CopyTo(pl);
 
             foreach (var door in Door.List)
             {
                 door.Lock(DoorLockType.Warhead);
             }
 
-            foreach (var player in Player.List.Where(x => !x.IsNPC))
+            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = GameObject.Find("[SP] Base").transform.position;
@@ -106,7 +106,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < 11; i++)
                 {
-                    Player.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 폭탄 알림", $"현재 폭탄 : {string.Join(" & ", BomberMans.Select(b => b.DisplayNickname))}\n{11 - i}초 후 폭탄이 터집니다.", 1.2f));
+                    PlayerManager.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 폭탄 알림", $"현재 폭탄 : {string.Join(" & ", BomberMans.Select(b => b.DisplayNickname))}\n{11 - i}초 후 폭탄이 터집니다.", 1.2f));
 
                     yield return Timing.WaitForSeconds(1f);
                 }
@@ -140,12 +140,12 @@ namespace RGM.Modes
                     Round.IsLocked = false;
 
                     pl[0].Role.Set(RoleTypeId.ClassD, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                     break;
                 }
 
-                Player.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 펑", $"펑!", 2));
+                PlayerManager.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 펑", $"펑!", 2));
 
                 yield return Timing.WaitForSeconds(2f);
             }
@@ -216,7 +216,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

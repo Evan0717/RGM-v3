@@ -94,7 +94,7 @@ COM-15
                     Door.IsOpen = true;
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (GodModePlayers.Contains(player))
                     GodModePlayers.Remove(player);
@@ -104,7 +104,7 @@ COM-15
 
             while (!IsEnd)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (Stage.ContainsKey(player))
                     {
@@ -124,7 +124,7 @@ COM-15
             Player topPlayer = Stage.OrderByDescending(x => x.Value).FirstOrDefault().Key;
             Round.IsLocked = false;
 
-            Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><color=yellow>{topPlayer.DisplayNickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!"));
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><color=yellow>{topPlayer.DisplayNickname}</color></b>(이)가 <color=#088A08>Gun Game</color>에서 우승했습니다!"));
             Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { topPlayer }, 5));
         }
 
@@ -135,7 +135,7 @@ COM-15
                 Map.CleanAllItems();
                 Map.CleanAllRagdolls();
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (Stage.ContainsKey(player))
                     {

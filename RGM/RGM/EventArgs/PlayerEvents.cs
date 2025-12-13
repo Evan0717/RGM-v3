@@ -83,14 +83,14 @@ namespace RGM.EventArgs
                 });
             }
 
-            try
-            {
-                ServerSpecificSettings.RegisterCommonSettings(ev.Player);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
+            //try
+            //{
+            //    ServerSpecificSettings.RegisterCommonSettings(ev.Player);
+            //}
+            //catch (Exception e)
+            //{
+            //    Log.Error(e);
+            //}
 
             List<string> DefaultValues = Enumerable.Repeat("0", 25).ToList();
 
@@ -190,6 +190,8 @@ namespace RGM.EventArgs
             {
                 Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
                 IntercomPlayers.Add(ev.Player);
+
+                yield return Timing.WaitForOneFrame;
 
                 Tools.TeleportToLobby(ev.Player);
 
@@ -447,8 +449,6 @@ namespace RGM.EventArgs
             OnGround.Remove(ev.Player.UserId);
             PlayersAudio.Remove(ev.Player);
 
-            ServerSpecificSettings.UnregisterHeader(ev.Player.UserId);
-
             if (Round.IsLobby)
             {
                 for (int i = 0; i < 4; i++)
@@ -473,7 +473,7 @@ namespace RGM.EventArgs
                     {
                         Log.Info($"{nickname}({userId}) 재접속 대기 중.. ({181 - i})");
 
-                        foreach (var player in Player.List.Where(x => !x.IsNPC))
+                        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
                         {
                             if (userId == player.UserId)
                             {
@@ -494,7 +494,7 @@ namespace RGM.EventArgs
                                 if (PlayersInfo.ContainsKey(userId))
                                     PlayersInfo.Remove(userId);
 
-                                Player.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{(en ? player.Role.Name : Trans.Role[player.Role.Type])}</color>)</size>"));
+                                PlayerManager.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> {player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{(en ? player.Role.Name : Trans.Role[player.Role.Type])}</color>)</size>"));
                                 Webhook.Send($"**✅ 재접속 완료**ㅣ`{nickname}`({role}, {userId})");
                                 yield break;
                             }
@@ -542,7 +542,7 @@ namespace RGM.EventArgs
                 if (ev.Player.Zone == ZoneType.Surface) // 지상에 그대로 스폰되는 경우
                 {
                     ev.Player.Role.Set(RoleTypeId.Tutorial);
-                    ev.Player.Position = Player.List.GetRandomValue(x => x.IsHuman && x != ev.Player).Position;
+                    ev.Player.Position = PlayerManager.List.GetRandomValue(x => x.IsHuman && x != ev.Player).Position;
                 }
 
                 if (ev.Player.IsScp)
@@ -755,7 +755,7 @@ namespace RGM.EventArgs
                         return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9>{ev.Attacker.DisplayNickname}</color>(<color={ev.Attacker.Role.Color.ToHex()}>{(en ? ev.Attacker.Role.Name : Trans.Role[ev.Attacker.Role.Type])}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{(en ? ev.TargetOldRole.GetFullName() : Trans.Role[ev.TargetOldRole])}</color>) - {ev.DamageHandler.Type}";
                 }
 
-                foreach (var player in Player.List.Where(x => x.IsDead || x == ev.Attacker))
+                foreach (var player in PlayerManager.List.Where(x => x.IsDead || x == ev.Attacker))
                     player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>");
 
                 if (ev.Attacker != null && !ev.Attacker.IsNPC)
@@ -807,88 +807,6 @@ namespace RGM.EventArgs
             });
         }
 
-        public static void OnItemAdded(ItemAddedEventArgs ev)
-        {
-            if (ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo"))
-            {
-                if (ev.Player.Role is Scp3114Role scp3114 && scp3114.DisguiseStatus == PlayerRoles.PlayableScps.Scp3114.Scp3114Identity.DisguiseStatus.Active)
-                {
-                }
-                else
-                {
-                    if (!ev.Item.IsAmmo)
-                    {
-                        try
-                        {
-                            ev.Player.CurrentItem = ev.Item;
-
-                            if (IsDropScpItemAllowed)
-                            {
-                                foreach (var item in ev.Player.Items.Where(x => x != ev.Item).ToList())
-                                    ev.Player.DropItem(item);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error(e);
-                        }
-
-                        if (ev.Player.CurrentItem == null)
-                        {
-                            ev.Player.ClearItems();
-                        }
-                    }
-                }
-            }
-
-//            if (ev.Item.Type.ToString().Contains("KeycardCustom") && ev.Player.Id != 1)
-//            {
-//                if (ev.Item is Keycard kc)
-//                {
-//                    if (kc.Permissions == KeycardPermissions.None)
-//                    {
-//                        string keycard = $"{ev.Item.Type.ToString()}";
-//                        string name = AudioClipStorage.AudioClips.Keys.GetRandomValue().Replace(" ", "_");
-//                        int level1 = UnityEngine.Random.Range(0, 4);
-//                        int level2 = UnityEngine.Random.Range(0, 4);
-//                        int level3 = UnityEngine.Random.Range(0, 4);
-//                        string permissionColor = Tools.GenerateRandomHexColor();
-//                        string tintColor = Tools.GenerateRandomHexColor();
-//                        string label = "커스텀_키카드";
-//                        string labelColor = Tools.GenerateRandomHexColor();
-//                        string holderName = "커스텀_키카드";
-//                        int num1 = UnityEngine.Random.Range(1, 5);
-
-//                        string info;
-
-//                        switch (ev.Item.Type)
-//                        {
-//                            case ItemType.KeycardCustomTaskForce:
-//                                info = $"{keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {holderName} {num1} {num1}";
-//                                break;
-
-//                            default:
-//                                info = $"{keycard} {name} {level1} {level2} {level3} {permissionColor} {tintColor} {label} {labelColor} {holderName} {num1}";
-//                                break;
-//                        }
-
-//                        string hint = $"<size=20><b>🎉 축하드립니다, 커스텀 키카드를 획득하셨군요!</b></size>\n<size=17>마음에 드는 디자인인 경우 스크린샷을 찍어두세요.</size>\n<size=15>{info}</size>";
-
-//                        ev.Player.AddItem(ev.Item.Type);
-//                        ev.Player.AddCustomKeycard(info);
-//                        ev.Player.AddHint("커스텀 키카드 획득", hint, 10);
-//                        ev.Player.SendConsoleMessage(hint, "white");
-//                        Webhook.Send(
-//$"""
-//{ev.Player.DisplayNickname}(`{ev.Player.Nickname}, {ev.Player.UserId}`)(이)가 커스텀 키카드를 획득했습니다.
-//{info}
-//""");
-//                        ev.Item.Destroy();
-//                    }
-//                }
-//            }
-        }
-
         public static void OnShooting(ShootingEventArgs ev)
         {
             if (ev.ClaimedTarget != null)
@@ -919,7 +837,7 @@ namespace RGM.EventArgs
                 return;
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
                 player.AddBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>추방</color>되었습니다. (사유: {ev.Reason})</size>");
         }
 
@@ -931,7 +849,7 @@ namespace RGM.EventArgs
                 return;
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
                 player.AddBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>차단</color>되었습니다. (사유: {ev.Reason})</size>");
         }
 
@@ -980,7 +898,7 @@ namespace RGM.EventArgs
                         return "꼭 오우거같이 보이는군요";
                 }
 
-                foreach (var player in Player.List.Where(x => x.IsDead || Vector3.Distance(x.Position, ev.Player.Position) < 11))
+                foreach (var player in PlayerManager.List.Where(x => x.IsDead || Vector3.Distance(x.Position, ev.Player.Position) < 11))
                     player.AddBroadcast(5, $"<size=20>{Tools.BadgeFormat(ev.Player)}<color={ev.Player.Role.Color.ToHex()}>{ev.Player.DisplayNickname}</color>(은)는 {emotion()}.</size>");
             }
         }

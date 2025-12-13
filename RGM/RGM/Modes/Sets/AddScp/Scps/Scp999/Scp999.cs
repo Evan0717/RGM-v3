@@ -127,7 +127,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                     schematic.AnimationController.Play(name);
                     Tools.PlaySound(schematic.transform, "scp-999", 2);
 
-                    foreach (var p in Player.List.Where(x => Vector3.Distance(player.Position, x.Position) < 10))
+                    foreach (var p in PlayerManager.List.Where(x => Vector3.Distance(player.Position, x.Position) < 10))
                     {
                         p.AddEffect(EffectType.MovementBoost, 15, 7);
                         p.AddEffect(EffectType.Invigorated, 1, 7);
@@ -193,7 +193,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                             {
                                 while (true)
                                 {
-                                    foreach (Player player in Player.List.Where(x => x.IsAlive))
+                                    foreach (Player player in PlayerManager.List.Where(x => x.IsAlive))
                                     {
                                         GameObject _ball = dead.gameObject;
 

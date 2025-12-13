@@ -84,7 +84,7 @@ namespace RGM.Modes
             {
                 hellMode = true;
                 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(10, "<color=red><b><size=25>지옥 모드 활성화</size></b></color>");
                 }
@@ -111,7 +111,7 @@ namespace RGM.Modes
             pos = GameObject.Find("[SP] Base").transform.position;
             finalDoor = GameObject.Find("Final Door").transform.position;
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.EnableEffect(EffectType.MovementBoost, 50);
@@ -125,7 +125,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(Raser());
             Timing.RunCoroutine(RaserCheck());
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (player.Role is Scp096Role scp096)
                 {
@@ -139,7 +139,7 @@ namespace RGM.Modes
 
             Round.IsLocked = false;
 
-            var players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
             {
@@ -206,7 +206,7 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive))
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
                 {
                     foreach (var vector in new List<Vector3> { Vector3.down, Vector3.forward, Vector3.back, Vector3.left, Vector3.right })
                     {
@@ -228,7 +228,7 @@ namespace RGM.Modes
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                var players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+                var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
                 if (players.Count() == 0)
                 {

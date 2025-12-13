@@ -49,7 +49,7 @@ $"""
         {
             Respawn.PauseWaves();
 
-            alone = Player.List.Where(x => !x.IsNPC).GetRandomValue();
+            alone = PlayerManager.List.Where(x => !x.IsNPC).GetRandomValue();
             List<RoleTypeId> ignoredRoles = new List<RoleTypeId> 
             { 
                 RoleTypeId.Scp079,
@@ -75,7 +75,7 @@ $"""
             foreach (var item in items)
                 alone.AddItem(item);
 
-            foreach (var player in Player.List.Where(x => x != alone))
+            foreach (var player in PlayerManager.List.Where(x => x != alone))
                 player.Role.Set(scpRoles.GetRandomValue());
 
             yield break;
@@ -87,14 +87,14 @@ $"""
             {
                 Timing.RunCoroutine(Tools.SetWinner(new List<Player> { alone }, 5));
 
-                foreach (var player in Player.List.Where(x => x != alone && x.IsAlive))
+                foreach (var player in PlayerManager.List.Where(x => x != alone && x.IsAlive))
                     player.Role.Set(RoleTypeId.Tutorial);
             } 
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

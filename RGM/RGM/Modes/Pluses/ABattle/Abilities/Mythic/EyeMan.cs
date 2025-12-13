@@ -39,7 +39,7 @@ public class EyeMan : Ability
         {
             try
             {
-                //foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
+                //foreach (var near in PlayerManager.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) < 11))
                 //{
                 //    if (Owner != near && HitboxIdentity.IsEnemy(Owner.ReferenceHub, near.ReferenceHub))
                 //    {

@@ -55,7 +55,7 @@ namespace RGM.Modes
         {
             Tools.LoadMap($"plane");
 
-            Player.List.CopyTo(pl);
+            PlayerManager.List.CopyTo(pl);
 
             List<ItemType> ItemTypes = Tools.EnumToList<ItemType>().Where(x => !Datas.ExceptItems.Contains(x)).ToList();
             List<ItemType> ammoTypes = Tools.EnumToList<ItemType>().Where(x => x.IsAmmo()).ToList();
@@ -89,7 +89,7 @@ namespace RGM.Modes
                 }
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 try
                 {
@@ -114,7 +114,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

@@ -52,8 +52,8 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Level05 = Tools.GetRandomValue(Player.List.ToList());
-            Assassin = Tools.GetRandomValue(Player.List.Where(x => x != Level05).ToList());
+            Level05 = Tools.GetRandomValue(PlayerManager.List.ToList());
+            Assassin = Tools.GetRandomValue(PlayerManager.List.Where(x => x != Level05).ToList());
 
             List<ItemType> Level05Items = new List<ItemType>() 
             {
@@ -82,15 +82,15 @@ namespace RGM.Modes
             foreach (ItemType item in AssanssinItems) Assassin.AddItem(item);
             Assassin.AddBroadcast(10, $"<size=25>당신은 <color=#FE9A2E><b>암살자</b></color>, <color=#04B404>혼돈의 반란</color>들과 함께 <color=#000000><b>05 평의회</b></color>를 사살하십시오.</size>");
 
-            for (int i = 0; i < Player.List.Count / 1.5f; i++)
+            for (int i = 0; i < PlayerManager.List.Count / 1.5f; i++)
             {
-                Player player = Tools.GetRandomValue(Player.List.Where(x => x != Level05 && x != Assassin).ToList());
+                Player player = Tools.GetRandomValue(PlayerManager.List.Where(x => x != Level05 && x != Assassin).ToList());
                 player.Role.Set(RoleTypeId.ChaosRifleman);
 
                 player.AddBroadcast(10, $"<size=25>당신은 <color=#04B404><b>혼돈의 반란</b></color>, <color=#FE9A2E><b>암살자</b></color>에 협조하여 <color=#000000><b>05 평의회</b></color>를 사살하십시오.</size>");
             }
 
-            foreach (var player in Player.List.Where(x => x != Level05 && x != Assassin && !x.IsCHI))
+            foreach (var player in PlayerManager.List.Where(x => x != Level05 && x != Assassin && !x.IsCHI))
             {
                 player.Role.Set(RoleTypeId.FacilityGuard);
                 player.Role.Set(RoleTypeId.NtfPrivate, RoleSpawnFlags.AssignInventory);
@@ -118,9 +118,9 @@ namespace RGM.Modes
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
                 Round.IsLocked = false;
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.LeadingTeam == LeadingTeam.FacilityForces).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.LeadingTeam == LeadingTeam.FacilityForces).ToList(), 1));
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 탈출하여 <u><i>강화제 제작 방법</i>을 재단에 넘기는 데 성공하였습니다.</u></size>");
 
@@ -135,9 +135,9 @@ namespace RGM.Modes
             if (ev.Player == Level05 && ev.Player.Role.Type == RoleTypeId.Scientist)
             {
                 Round.IsLocked = false;
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.LeadingTeam == LeadingTeam.ChaosInsurgency).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.LeadingTeam == LeadingTeam.ChaosInsurgency).ToList(), 1));
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 <color=red>사살당하였습니다.</color></size>");
 
@@ -155,7 +155,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

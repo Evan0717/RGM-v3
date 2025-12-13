@@ -9,6 +9,7 @@ using Exiled.API.Enums;
 using MEC;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -46,7 +47,7 @@ namespace RGM.Modes
             if (count != 125)
                 count++;
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.EnableEffect(EffectType.MovementBoost, (byte)(count * 2));
             }

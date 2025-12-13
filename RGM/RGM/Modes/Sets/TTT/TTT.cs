@@ -125,14 +125,14 @@ Trouble in Terrorist Town의 약자.
         {
             Tools.LoadMap($"{Maps.GetRandomValue()}");
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 spawn(player);
             }
 
             for (int i = 0; i < 20; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddHint("TTT 안내", $"""
 <align=left><size=25>
 {desc}
@@ -150,7 +150,7 @@ Trouble in Terrorist Town의 약자.
             Timing.RunCoroutine(Timer());
             Timing.RunCoroutine(FindLocate());
 
-            foreach (var player in Player.List.Where(x => x.IsDead))
+            foreach (var player in PlayerManager.List.Where(x => x.IsDead))
             {
                 spawn(player);
             }
@@ -158,7 +158,7 @@ Trouble in Terrorist Town의 약자.
             GodModePlayers.Clear();
 
             int traitorCount = 0;
-            int playerCount = Player.List.Count();
+            int playerCount = PlayerManager.List.Count();
 
             if (playerCount >= 2 && playerCount <= 5)
                 traitorCount = 1;
@@ -175,7 +175,7 @@ Trouble in Terrorist Town의 약자.
 
             for (int i = 0; i < traitorCount; i++)
             {
-                Player traitor = Player.List.Where(x => !traitors.Contains(x)).GetRandomValue();
+                Player traitor = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
                 traitor.AddItem(ItemType.Radio);
                 traitor.AddItem(ItemType.SCP1853);
 
@@ -184,7 +184,7 @@ Trouble in Terrorist Town의 약자.
 
             for (int i = 0; i < traitorCount / 3; i++)
             {
-                Player mimic = Player.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x)).GetRandomValue();
+                Player mimic = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x)).GetRandomValue();
 
                 mimics.Add(mimic);
             }
@@ -193,15 +193,15 @@ Trouble in Terrorist Town의 약자.
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Player soulMate = Player.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x)).GetRandomValue();
+                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x)).GetRandomValue();
 
                     soulMates.Add(soulMate);
                 }
 
-                O5 = Player.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x)).GetRandomValue();
+                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x)).GetRandomValue();
             }
 
-            detective = Player.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && O5 != x).GetRandomValue();
+            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && O5 != x).GetRandomValue();
             detective.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
             detective.RankName = "탐정";
             detective.RankColor = "cyan";
@@ -216,7 +216,7 @@ Trouble in Terrorist Town의 약자.
                 detective.AddItem(item);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (traitors.Contains(player))
                 {
@@ -257,12 +257,12 @@ Trouble in Terrorist Town의 약자.
                 if (Round.IsEnded)
                     yield break;
 
-                Player.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인 팀 승리</color>까지</color> {600 - i}초</size>"));
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인 팀 승리</color>까지</color> {600 - i}초</size>"));
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            foreach (var player in Player.List.Where(x => x.IsAlive))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
             {
                 if (traitors.Contains(player))
                 {
@@ -317,7 +317,7 @@ Trouble in Terrorist Town의 약자.
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (traitors.Contains(player))
                 {
@@ -426,38 +426,38 @@ Trouble in Terrorist Town의 약자.
                 ev.Player.RankColor = "orange";
             }
 
-            if (Player.List.Count(x => x.IsAlive) == 1 && Player.List.FirstOrDefault(x => x.IsAlive) == O5)
+            if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == O5)
             {
                 Round.IsLocked = false;
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<color=#000000>O5 평의회</color>의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x == O5).ToList(), 5));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == O5).ToList(), 5));
             }
-            else if (traitors.Where(x => x.IsAlive).Count() == 0 && !Player.List.Any(x => x == O5 && x.IsAlive))
+            else if (traitors.Where(x => x.IsAlive).Count() == 0 && !PlayerManager.List.Any(x => x == O5 && x.IsAlive))
             {
                 Round.IsLocked = false;
 
                 if (detective != null && detective.IsAlive)
                     detective.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<color=orange>무죄인</color> 팀의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => !traitors.Contains(x) && O5 != x).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => !traitors.Contains(x) && O5 != x).ToList(), 1));
             }
-            else if (Player.List.Where(x => !traitors.Contains(x)).Where(x => x.IsAlive).Count() == 0)
+            else if (PlayerManager.List.Where(x => !traitors.Contains(x)).Where(x => x.IsAlive).Count() == 0)
             {
                 Round.IsLocked = false;
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(20, $"<color=red>배신자</color> 팀의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => traitors.Contains(x)).ToList(), 3));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => traitors.Contains(x)).ToList(), 3));
             }
         }
     }

@@ -32,7 +32,7 @@ public class CollectiveIntelligence : Ability
 
         int PowerCount = 0;
 
-        foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
+        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == ev.Player.LeadingTeam && x != ev.Player))
         {
             if (Vector3.Distance(player.Position, ev.Player.Position) < 11)
                 PowerCount++;

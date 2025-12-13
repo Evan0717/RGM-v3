@@ -47,7 +47,7 @@ public class LavaChicken : Ability
                     lava.Position = hit.point;
                 }
 
-                foreach (var player in Player.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
+                foreach (var player in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
                     if (Vector3.Distance(player.Position, Owner.Position) <= 8)
                     {

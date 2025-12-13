@@ -54,12 +54,12 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
         {
             Tools.LoadMap($"HideAndSeek1205");
 
-            for (float i = 1; i < Player.List.Count / 10 + 2; i++)
-                Finders.Add(Tools.GetRandomValue(Player.List.Where(x => !Finders.Contains(x)).ToList()));
+            for (float i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
+                Finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !Finders.Contains(x)).ToList()));
 
-            Player.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
+            PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
 
-            foreach (var player in Player.List.Where(x => !Finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !Finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = GameObject.Find("StartPoint").transform.position;
@@ -67,7 +67,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
 
             for (int i = 1; i < 10; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(1, $"<size=25><b><color=red>{10 - i}초 뒤 술래가 출몰합니다.</color></b></size>");
 
                 yield return Timing.WaitForSeconds(1f);
@@ -83,12 +83,12 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
 
             yield return Timing.WaitForSeconds(1f);
 
-            Player.List.ToList().ForEach(x => x.IsGodModeEnabled = false);
+            PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = false);
             Round.IsLocked = false;
 
             for (int i = 1; i < Remaining; i++)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(1, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
                 }
@@ -113,7 +113,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

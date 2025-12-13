@@ -11,6 +11,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using PlayerRoles;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -39,7 +40,7 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Spawned(player);
             }
@@ -48,12 +49,12 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 
             while (true)
             {
-                List<Player> Players = Player.List.ToList();
+                List<Player> Players = PlayerManager.List.ToList();
                 List<Player> PassPlayers = new List<Player>();
 
                 foreach (var p1 in Players)
                 {
-                    foreach (var p2 in Player.List.Where(x => !PassPlayers.Contains(x)))
+                    foreach (var p2 in PlayerManager.List.Where(x => !PassPlayers.Contains(x)))
                     {
                         if (p1 != p2 && Vector3.Distance(p1.Position, p2.Position) <= 3f)
                         {
@@ -66,7 +67,7 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
                     }
                 }
 
-                foreach (var player in Player.List.Where(x => !PassPlayers.Contains(x) && x.IsAlive))
+                foreach (var player in PlayerManager.List.Where(x => !PassPlayers.Contains(x) && x.IsAlive))
                     player.EnableEffect(EffectType.Hypothermia, 255, 1.5f);
 
                 yield return Timing.WaitForSeconds(1f);

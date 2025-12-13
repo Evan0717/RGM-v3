@@ -65,11 +65,11 @@ namespace RGM.Modes
 
             Tools.LoadMap("Spleef1205");
 
-            Player.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().CopyTo(pl);
 
             door = Tools.GetRandomValue(Door.List.ToList());
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = new Vector3(36.99778f, 353.3881f, -88.50272f);
@@ -77,7 +77,7 @@ namespace RGM.Modes
 
             for (int i=1; i<11; i++)
             {
-                Player.List.ToList().ForEach(x => x.AddHint("스플리프 안내", $"<b>{11 - i}초 뒤 게임이 시작됩니다.</b>", 1.2f));
+                PlayerManager.List.ToList().ForEach(x => x.AddHint("스플리프 안내", $"<b>{11 - i}초 뒤 게임이 시작됩니다.</b>", 1.2f));
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -101,7 +101,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive).ToList())
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive).ToList())
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 3f, (LayerMask)1))
                     {
@@ -148,7 +148,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

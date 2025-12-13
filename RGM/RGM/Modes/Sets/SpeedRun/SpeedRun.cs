@@ -63,7 +63,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            Player.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().CopyTo(pl);
 
             Warhead.Start();
 
@@ -78,7 +78,7 @@ namespace RGM.Modes
 
             Tools.TryInstallMode(ModeType.FriendlyFire);
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
                 Spawned(player);
 
             yield break;
@@ -119,7 +119,7 @@ namespace RGM.Modes
                     {
                         Round.IsLocked = false;
 
-                        Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><생존자 : {pl[0].DisplayNickname}></size></b>"));
+                        PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><생존자 : {pl[0].DisplayNickname}></size></b>"));
                         Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                         IsEnd = true;
                     }
@@ -135,7 +135,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><최초 탈출자 : {ev.Player.DisplayNickname}></size></b>"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"<b><size=30><최초 탈출자 : {ev.Player.DisplayNickname}></size></b>"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { ev.Player }, 5));
                     IsEnd = true;
                 }
@@ -144,7 +144,7 @@ namespace RGM.Modes
 
         public void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
         {
-            Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"<size=30>{ev.Player.DisplayNickname}(으)로 인해 20초 뒤 <color=red>핵</color>이 강제로 폭파됩니다.</size>"));
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"<size=30>{ev.Player.DisplayNickname}(으)로 인해 20초 뒤 <color=red>핵</color>이 강제로 폭파됩니다.</size>"));
 
             Timing.CallDelayed(20, Warhead.Detonate);
         }

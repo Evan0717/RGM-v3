@@ -40,7 +40,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Spawned(player);
             }   
@@ -128,7 +128,7 @@ namespace RGM.Modes
                         break;
 
                     case 12:
-                        Player player = Player.List.GetRandomValue();
+                        Player player = PlayerManager.List.GetRandomValue();
 
                         player.EnableEffect(EffectType.Slowness, 150, Random.Range(1, 11));
                         break;

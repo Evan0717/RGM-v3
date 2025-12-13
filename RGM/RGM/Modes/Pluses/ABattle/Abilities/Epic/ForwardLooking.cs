@@ -45,7 +45,7 @@ public class ForwardLooking : Ability
 
                 bool isNear = false;
 
-                foreach (var player in Exiled.API.Features.Player.List.Where(x => x != Owner))
+                foreach (var player in PlayerManager.List.Where(x => x != Owner))
                 {
                     if (Vector3.Distance(player.Position, Owner.Position) < 3)
                     {

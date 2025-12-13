@@ -45,11 +45,11 @@ namespace RGM.Modes
                 switch (UnityEngine.Random.Range(1, 6))
                 {
                     case 1:
-                        Server.ExecuteCommand($"/fc {string.Join(".", Player.List.Where(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch).Select(x => x.Id))}. Scp0492");
+                        Server.ExecuteCommand($"/fc {string.Join(".", PlayerManager.List.Where(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch).Select(x => x.Id))}. Scp0492");
                         break;
 
                     case 2:
-                        Tools.CallSnakeHand(null, Player.List.Where(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch).ToList());
+                        Tools.CallSnakeHand(null, PlayerManager.List.Where(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch).ToList());
                         break;
 
                     case 3:

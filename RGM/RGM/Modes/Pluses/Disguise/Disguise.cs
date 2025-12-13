@@ -57,7 +57,7 @@ SCP-079
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Verified(player);
                 Spawned(player);
@@ -67,7 +67,7 @@ SCP-079
 
             while (true)
             {
-                foreach (var p in Player.List.Where(x => x.IsAlive && _disguisedList.ContainsKey(x)))
+                foreach (var p in PlayerManager.List.Where(x => x.IsAlive && _disguisedList.ContainsKey(x)))
                 {
                     if (Tools.TryGetLookPlayer(p, 3, out Player t, out RaycastHit? hit) && _disguisedList.ContainsKey(t))
                         p.AddHint("변장 탐색", $"<size=25><b>진실의 눈은 그를 <color={t.Role.Color.ToHex()}>{(en ? t.Role.Name : Trans.Role[t.Role.Type])}</color>(으)로 판별했습니다.</b></size>", 1.2f);

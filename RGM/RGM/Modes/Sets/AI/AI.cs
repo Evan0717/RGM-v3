@@ -52,7 +52,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var p in Player.List.Where(x => x.IsScp))
+            foreach (var p in PlayerManager.List.Where(x => x.IsScp))
                 p.Role.Set(RoleTypeId.ClassD);
 
             foreach (var aiscprole in Datas.AIRoles)
@@ -65,10 +65,10 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var ai in Player.List.Where(x => x.IsNPC))
+                foreach (var ai in PlayerManager.List.Where(x => x.IsNPC))
                 {
                     if (ai.Position.y < -2000)
-                        Server.ExecuteCommand($"/tpx {ai.Id} {Tools.GetRandomValue(Player.List.Where(x => x.IsNPC && x != ai).ToList()).Id}");
+                        Server.ExecuteCommand($"/tpx {ai.Id} {Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsNPC && x != ai).ToList()).Id}");
                 }
 
                 yield return Timing.WaitForSeconds(1f);

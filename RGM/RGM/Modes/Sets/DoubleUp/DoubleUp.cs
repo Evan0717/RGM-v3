@@ -67,7 +67,7 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
             for (int i=0; i<2; i++)
                 Tools.TryInstallMode(Mods[Modes[i]].Type);
 
-            foreach (var player in Player.List.Where(x => !x.IsNPC))
+            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
             {
                 player.AddBroadcast(10, Desc);
                 player.SendConsoleMessage($"\n{Desc}", "white");
@@ -84,7 +84,7 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

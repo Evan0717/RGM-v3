@@ -69,7 +69,7 @@ namespace RGM.Modes
                 door.Lock(DoorLockType.SpecialDoorFeature);
             }
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.AddItem(ItemType.GunCOM15);
@@ -86,9 +86,9 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1);
 
-            Player BusterCall = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Position = BusterCall.Position;
                 player.AddBroadcast(20, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
@@ -99,7 +99,7 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     player.AddHint($"계급 사회", $"<size=20>당신의 계급: {player.RankName}</size>", 1);
                 }
@@ -153,7 +153,7 @@ namespace RGM.Modes
                 ev.Player.RankColor = "red";
             }
 
-            var players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 2)
             {

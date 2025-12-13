@@ -46,7 +46,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
             IEnumerator<float> main()
             {
-                while (Player.List.Count(x => x.IsScp) > 1)
+                while (PlayerManager.List.Count(x => x.IsScp) > 1)
                 {
                     if (!player.IsEffectActive<Invisible>())
                     {

@@ -26,7 +26,7 @@ public class HealthCenterStaff : Ability
             ItemType.SCP330
         };
 
-        foreach (var team in Player.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == Owner.LeadingTeam && Vector3.Distance(Owner.Position, x.Position) < 11))
+        foreach (var team in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == Owner.LeadingTeam && Vector3.Distance(Owner.Position, x.Position) < 11))
             team.AddItem(Tools.GetRandomValue(HealItem));
     }
 

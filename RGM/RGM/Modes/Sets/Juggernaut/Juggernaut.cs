@@ -82,16 +82,16 @@ namespace RGM.Modes
         {
             Door.Get(DoorType.EscapeFinal).IsOpen = true;
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 Spawned(player);
             }
 
-            juggernaut = Tools.GetRandomValue(Player.List.ToList());
+            juggernaut = Tools.GetRandomValue(PlayerManager.List.ToList());
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.2f, 1.1f, 1.2f);
-            juggernaut.MaxHealth = 350 * Player.List.Count() + 120 * Player.List.Count();
+            juggernaut.MaxHealth = 350 * PlayerManager.List.Count() + 120 * PlayerManager.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
@@ -112,26 +112,26 @@ namespace RGM.Modes
             {
                 if (juggernaut.IsAlive)
                 {
-                    if (Player.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
+                    if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
                     {
-                        Player.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
+                        PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
                         IsEnd = true;
 
-                        Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 5));
+                        Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 5));
                     }
                 }
                 else
                 {
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25><color=#298A08>저거너트</color>가 사망했습니다.</size>\n<b>Site-76 구성원</b>들의 승리입니다."));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25><color=#298A08>저거너트</color>가 사망했습니다.</size>\n<b>Site-76 구성원</b>들의 승리입니다."));
                     IsEnd = true;
 
-                    Timing.RunCoroutine(Tools.SetWinner(Player.List.Where(x => x.IsAlive).ToList(), 1));
+                    Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 1));
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            Player.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
+            PlayerManager.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
             Round.IsLocked = false;
         }
 

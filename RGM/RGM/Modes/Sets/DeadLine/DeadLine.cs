@@ -62,9 +62,9 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("LineLite", 1, true);
 
-            Player.List.CopyTo(pl);
+            PlayerManager.List.CopyTo(pl);
 
-            foreach (var player in Player.List.Where(x => !x.IsNPC))
+            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
             {
                 player.Role.Set(RoleTypeId.Scientist);
                 player.Position = new Vector3(37.81419f, 340.06f, -51.64725f);
@@ -73,7 +73,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List.Where(x => !x.IsNPC && x.IsAlive))
+                foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive))
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1, (LayerMask)1))
                     {
@@ -87,7 +87,7 @@ namespace RGM.Modes
                                 {
                                     Round.IsLocked = false;
 
-                                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                                 }
 
@@ -144,7 +144,7 @@ namespace RGM.Modes
                 {
                     Round.IsLocked = false;
 
-                    Player.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
+                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
                     Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
                 }
             }

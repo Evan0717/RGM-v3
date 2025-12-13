@@ -65,7 +65,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1f);
 
-            var players = Player.List.ToList();
+            var players = PlayerManager.List.ToList();
             players.ShuffleList();
 
             int halfCount = players.Count / 2;
@@ -92,9 +92,9 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(180f);
 
-            Player BusterCall = Tools.GetRandomValue(Player.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
 
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 player.Position = BusterCall.Position;
                 player.AddBroadcast(20, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
@@ -121,13 +121,13 @@ namespace RGM.Modes
 
         public void OnDied(DiedEventArgs ev)
         {
-            if (Player.List.Where(x => x.IsAlive && TeamA.Contains(x)).Count() < 1)
+            if (PlayerManager.List.Where(x => x.IsAlive && TeamA.Contains(x)).Count() < 1)
             {
                 Round.IsLocked = false;
 
                 Timing.RunCoroutine(Tools.SetWinner(TeamB, 1));
             }
-            if (Player.List.Where(x => x.IsAlive && TeamB.Contains(x)).Count() < 1)
+            if (PlayerManager.List.Where(x => x.IsAlive && TeamB.Contains(x)).Count() < 1)
             {
                 Round.IsLocked = false;
 

@@ -36,7 +36,7 @@ public class Radar : Ability
     {
         while (true)
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 if (player.CurrentItem != null && RadarSerial == player.CurrentItem.Serial)
                 {

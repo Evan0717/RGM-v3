@@ -72,11 +72,11 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("tothemoon", 1, true);
 
-            Player.List.CopyTo(pl);
+            PlayerManager.List.CopyTo(pl);
 
             yield return Timing.WaitForOneFrame;
 
-            foreach (var player in Player.List.Where(x => !x.IsNPC).ToList())
+            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC).ToList())
             {
                 player.Role.Set(RoleTypeId.Scp3114);
                 player.Position = new Vector3(77.66434f, 315.4858f, -42.20193f);
@@ -87,7 +87,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 11; i++)
             {
-                Player.List.ToList().ForEach(x => x.AddHint("GG클럽 게임 시작 알림", $"게임이 {11 - i}초 후에 시작됩니다.", 1.2f));
+                PlayerManager.List.ToList().ForEach(x => x.AddHint("GG클럽 게임 시작 알림", $"게임이 {11 - i}초 후에 시작됩니다.", 1.2f));
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -115,7 +115,7 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(3 - Phase * 0.2f);
 
-                foreach (var player in Player.List.Where(pl.Contains))
+                foreach (var player in PlayerManager.List.Where(pl.Contains))
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 3f, (LayerMask)1))
                     {
@@ -157,14 +157,14 @@ namespace RGM.Modes
             Round.IsLocked = false;
 
             if (pl.Count > 1)
-                Player.List.ToList().ForEach(x => x.AddBroadcast(3, "게임이 종료되었습니다. 그나저나 어떻게 사셨"));
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(3, "게임이 종료되었습니다. 그나저나 어떻게 사셨"));
         }
 
         public IEnumerator<float> gingerbreadHint()
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddHint("3114 힌트", $"<b>[TIP]</b> <i>gingerbread</i>를 입력하면 춤출 수 있습니다.", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
@@ -243,7 +243,7 @@ namespace RGM.Modes
         {
             while (Phase < 11)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                     player.AddBroadcast(1, $"<b><color=#FFF700>P</color><color=#FFC516>h</color><color=#FF942C>a</color><color=#FF6242>s</color><color=#FF3158>e</color></b> {Phase}");
 
                 yield return Timing.WaitForSeconds(1f);
@@ -280,7 +280,7 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

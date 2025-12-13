@@ -35,7 +35,7 @@ public class StickySwamp : Ability
     {
         while (true)
         {
-            foreach (var near in Player.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) <= 4))
+            foreach (var near in PlayerManager.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) <= 4))
             {
                 if (Owner != near && HitboxIdentity.IsEnemy(Owner.ReferenceHub, near.ReferenceHub))
                     near.EnableEffect(EffectType.SinkHole, 10, 0.5f);

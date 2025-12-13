@@ -36,7 +36,7 @@ public class Sear : Ability
 
         int Stack = 0;
 
-        foreach (var player in Player.List.Where(x => x.IsHuman))
+        foreach (var player in PlayerManager.List.Where(x => x.IsHuman))
         {
             if (Stack == 4)
                 break;

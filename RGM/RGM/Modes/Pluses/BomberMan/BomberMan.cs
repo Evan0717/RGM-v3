@@ -58,7 +58,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in Player.List)
+            foreach (var player in PlayerManager.List)
             {
                 try
                 {
@@ -76,7 +76,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (!player.HasItem(ItemType.GrenadeHE))
                         player.AddItem(ItemType.GrenadeHE);

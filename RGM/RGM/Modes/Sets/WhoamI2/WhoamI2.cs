@@ -65,14 +65,14 @@ namespace RGM.Modes
             {
                 yield return Timing.WaitForSeconds(60f);
 
-                foreach (var player in Player.List.Where(x => !ignoredRoles.Contains(x.Role.Type)).ToList())
+                foreach (var player in PlayerManager.List.Where(x => !ignoredRoles.Contains(x.Role.Type)).ToList())
                     player.Role.Set(Tools.EnumToList<RoleTypeId>().Where(x => !ignoredRoles.Contains(x)).ToList().GetRandomValue(), RoleSpawnFlags.None);
             }
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = Player.List.Where(x => x.IsAlive && !x.IsNPC);
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
             if (players.Count() == 1)
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

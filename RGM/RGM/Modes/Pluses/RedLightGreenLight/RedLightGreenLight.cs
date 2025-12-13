@@ -56,19 +56,19 @@ namespace RGM.Modes
             Timing.RunCoroutine(RecordPlayerInfo());
             Timing.RunCoroutine(CheckRedLight());
 
-            Player.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
+            PlayerManager.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
 
             while (true)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 51));
 
                 Light = "Red";
-                Player.List.ToList().ForEach(x => x.AddHint("불", $"<color=red>빨간 불</color>! 움직이지 마세요!", 250));
+                PlayerManager.List.ToList().ForEach(x => x.AddHint("불", $"<color=red>빨간 불</color>! 움직이지 마세요!", 250));
 
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 6));
 
                 Light = "Green";
-                Player.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
+                PlayerManager.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
             }
         }
 
@@ -76,7 +76,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (PlayerPosition.ContainsKey(player))
                     {
@@ -89,10 +89,10 @@ namespace RGM.Modes
                         PlayerRotation.Add(player, rot(player));
                     }
 
-                    if (player.Role.Type == RoleTypeId.Scp079 && Player.List.Where(x => x.IsScp).Count() < 2)
+                    if (player.Role.Type == RoleTypeId.Scp079 && PlayerManager.List.Where(x => x.IsScp).Count() < 2)
                     {
                         player.Role.Set(RoleTypeId.Tutorial);
-                        player.Position = Tools.GetRandomValue(Player.List.Where(x => x.IsHuman).ToList()).Position;
+                        player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsHuman).ToList()).Position;
                         Timing.RunCoroutine(Tools.DoRocket(player, player, 1f));
                     }
                 }
@@ -112,7 +112,7 @@ namespace RGM.Modes
 
                 while (Light == "Red")
                 {
-                    foreach (var player in Player.List)
+                    foreach (var player in PlayerManager.List)
                     {
                         if (PlayerPosition.ContainsKey(player) && player.IsAlive)
                         {
@@ -121,7 +121,7 @@ namespace RGM.Modes
                                 if (player.Role.Type == RoleTypeId.Scp079)
                                 {
                                     player.Role.Set(RoleTypeId.Tutorial);
-                                    player.Position = Tools.GetRandomValue(Player.List.Where(x => x.IsHuman).ToList()).Position;
+                                    player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsHuman).ToList()).Position;
                                     Timing.RunCoroutine(Tools.DoRocket(player, player, 1f));
                                 }
                                 else

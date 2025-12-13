@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -37,7 +38,7 @@ public class Spirit : Ability
         {
             Owner.EnableEffect(EffectType.Invisible);
 
-            foreach (var player in Player.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 5))
+            foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 5))
             {
                 try
                 {

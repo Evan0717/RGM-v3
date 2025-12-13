@@ -24,7 +24,7 @@ public class Priest : Ability
     {
         for (int i = 0; i < 3; i++)
         {
-            var dead = Player.List.Where(x => x.IsDead).ToList();
+            var dead = PlayerManager.List.Where(x => x.IsDead).ToList();
 
             if (dead.Count() != 0)
             {

@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using HarmonyLib;
 using MEC;
 using PlayerRoles;
+using RGM.API.Features;
 using UnityEngine;
 using VoiceChat;
 using VoiceChat.Playbacks;
@@ -38,8 +39,8 @@ namespace RGM.Modes
         {
             while (true)
             {
-                Server.ExecuteCommand($"/speak {string.Join(".", Player.List.Select(x => x.Id))}. 1");
-                foreach (var player in Player.List)
+                Server.ExecuteCommand($"/speak {string.Join(".", PlayerManager.List.Select(x => x.Id))}. 1");
+                foreach (var player in PlayerManager.List)
                 {
                     if (!IntercomPlayers.Contains(player))
                         IntercomPlayers.Add(player);
