@@ -72,6 +72,7 @@
     <Compile Include="API\Interfaces\Product.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\BugVote.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Emotion.cs" />
+    <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Link.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyBadge.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyCustom.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplySpawnEffect.cs" />
