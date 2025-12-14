@@ -14,7 +14,7 @@ using static UnityEngine.GraphicsBuffer;
 using Exiled.API.Enums;
 using Exiled.API.Features.DamageHandlers;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

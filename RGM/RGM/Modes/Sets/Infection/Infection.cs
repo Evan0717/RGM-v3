@@ -17,7 +17,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using RGM.API.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using RGM.API.DataBases;
 using Respawning;
 using Exiled.Events.EventArgs.Server;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace RGM;

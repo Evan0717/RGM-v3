@@ -11,12 +11,9 @@ using UnityEngine;
 using Exiled.API.Features;
 using MultiBroadcast.API;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 using static RGM.Functions.ModeManagers;
-
-using static RGM.IEnumerators.LobbyManagers;
-using static RGM.IEnumerators.ServerManagers;
 
 using Exiled.API.Enums;
 using RGM.API.DataBases;

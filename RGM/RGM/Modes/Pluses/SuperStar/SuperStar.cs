@@ -13,7 +13,7 @@ using UnityEngine;
 using VoiceChat;
 using VoiceChat.Playbacks;
 using static RGM.Modes.FriendlyFire;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

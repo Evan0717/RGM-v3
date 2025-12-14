@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Exiled.API.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using MEC;
 using Exiled.API.Features.Toys;
 using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;

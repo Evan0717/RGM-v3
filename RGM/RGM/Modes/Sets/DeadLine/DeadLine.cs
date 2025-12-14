@@ -16,7 +16,7 @@ using Mirror;
 using Respawning;
 using Exiled.API.Features.Toys;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

@@ -18,7 +18,7 @@ using GameCore;
 using RGM.Commands;
 using Utils;
 using Exiled.Events.EventArgs.Player;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using RGM.API.Features;
 
 namespace RGM.Modes

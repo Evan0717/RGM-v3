@@ -14,6 +14,7 @@ using MultiBroadcast.API;
 using PlayerRoles;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
+using RGM.Variables;
 
 namespace RGM.Modes
 {
@@ -32,12 +33,12 @@ namespace RGM.Modes
 • (SCP-079) 전력 하락
 
 <b>관전자</b>의 수가 5명씩 넘어갈 때마다 특수한 효과가 적용됩니다.
-5명 이상 - SCP-939 안개 효과
-10명 이상 - 블라인드 효과
-15명 이상 - 아이템이 자꾸 버려짐
-20명 이상 - <b><color=#0BBDF9>S</color><color=#12B2F9>C</color><color=#19A7FA>P</color><color=#209CFA>-</color><color=#2792FB>2</color><color=#2E87FB>4</color><color=#357CFC>4</color> <color=#4367FD>효</color><color=#4A5CFE>과</color></b>
-25명 이상 - <i><color=#CCF2FF>섬</color><color=#D6DBF7>광</color> <color=#EAADE7>효</color><color=#F496DF>과</color></i>
-30명 이상 - <b><i><color=#FF1F1F>손</color> <color=#EB335F>절</color><color=#E13D7F>단</color> <color=#CD51BF>효</color><color=#C35BDF>과</color></i></b>
+3명 이상 - SCP-939 안개 효과
+5명 이상 - 블라인드 효과
+8명 이상 - 아이템이 자꾸 버려짐
+12명 이상 - <b><color=#0BBDF9>S</color><color=#12B2F9>C</color><color=#19A7FA>P</color><color=#209CFA>-</color><color=#2792FB>2</color><color=#2E87FB>4</color><color=#357CFC>4</color> <color=#4367FD>효</color><color=#4A5CFE>과</color></b>
+16명 이상 - <i><color=#CCF2FF>섬</color><color=#D6DBF7>광</color> <color=#EAADE7>효</color><color=#F496DF>과</color></i>
+20명 이상 - <b><i><color=#FF1F1F>손</color> <color=#EB335F>절</color><color=#E13D7F>단</color> <color=#CD51BF>효</color><color=#C35BDF>과</color></i></b>
 """;
         public override string Color => "000000";
         public override string Suggester => "idea by 광대(@yun_0n0)";
@@ -46,6 +47,8 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            Variable.IsNonePlayerAllowed = false;
+
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
             Timing.RunCoroutine(OnModeStarted());
@@ -68,7 +71,7 @@ namespace RGM.Modes
                         if (player.Role is Scp079Role scp079)
                             scp079.Energy -= 0.15f * s;
 
-                        if (s >= 5)
+                        if (s >= 3)
                         {
                             t = "소수의 관전자들이 당신을 알아봅니다.";
                             player.EnableEffect(EffectType.AmnesiaVision);
@@ -76,7 +79,7 @@ namespace RGM.Modes
                         else
                             player.DisableEffect(EffectType.AmnesiaVision);
 
-                        if (s >= 10)
+                        if (s >= 5)
                         {
                             t = "더 많은 관전자들이 당신을 싸늘하게 지켜봅니다.";
                             player.EnableEffect(EffectType.Blinded);
@@ -84,7 +87,7 @@ namespace RGM.Modes
                         else
                             player.DisableEffect(EffectType.Blinded);
 
-                        if (s >= 15)
+                        if (s >= 8)
                         {
                             t = "많은 관전자들이 당신을 원망하고 있습니다.";
                             if (UnityEngine.Random.Range(1, 11) == 1)
@@ -100,7 +103,7 @@ namespace RGM.Modes
                             }
                         }
 
-                        if (s >= 20)
+                        if (s >= 12)
                         {
                             t = "다수의 관전자들이 당신을 향해 분노하고 있습니다.";
                             player.EnableEffect(EffectType.Hypothermia, 50);
@@ -108,7 +111,7 @@ namespace RGM.Modes
                         else
                             player.DisableEffect(EffectType.Blinded);
 
-                        if (s >= 25)
+                        if (s >= 16)
                         {
                             t = "대다수의 관전자들이 당신의 죽음을 바랍니다.";
                             player.EnableEffect(EffectType.Flashed, 1, 0.3f);
@@ -116,7 +119,7 @@ namespace RGM.Modes
                         else
                             player.DisableEffect(EffectType.Flashed);
 
-                        if (s >= 30)
+                        if (s >= 20)
                         {
                             t = "<b><color=red>모든 관전자들이 당신을 저주합니다.</color></b>";
                             player.EnableEffect(EffectType.SeveredHands);

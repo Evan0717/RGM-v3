@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using MultiBroadcast.API;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Patches
 {

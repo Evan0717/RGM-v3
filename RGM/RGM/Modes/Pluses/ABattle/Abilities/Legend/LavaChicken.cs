@@ -15,7 +15,7 @@ using Mirror;
 using PlayerRoles;
 using static UnityEngine.GraphicsBuffer;
 using PlayerStatsSystem;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Legend;
 

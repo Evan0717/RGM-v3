@@ -24,9 +24,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static RGM.Functions.ModeManagers;
-using static RGM.IEnumerators.LobbyManagers;
-using static RGM.IEnumerators.ServerManagers;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
+using static RGM.IEnumerators.ServerIEnumerator;
+using static RGM.IEnumerators.LobbyIEnumerator;
 
 namespace RGM.EventArgs
 {

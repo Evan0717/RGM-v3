@@ -17,7 +17,7 @@ using ProjectMER.Features.Serializable;
 using ProjectMER.Features.Objects;
 using ProjectMER.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.API.Features.Pickups.Projectiles;
 
 namespace RGM.Modes

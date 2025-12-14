@@ -94,8 +94,8 @@
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SpawnEffect.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRC.cs" />
     <Compile Include="RGM\EventArgs\MEREvents.cs" />
-    <Compile Include="RGM\IEnumerators\LobbyManagers.cs" />
-    <Compile Include="RGM\IEnumerators\ServerManagers.cs" />
+    <Compile Include="RGM\IEnumerators\LobbyIEnumerator.cs" />
+    <Compile Include="RGM\IEnumerators\ServerIEnumerator.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Custom.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\KillEffect.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Develop.cs" />
@@ -465,7 +465,7 @@
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\UserSettings\ServerSpecificSettings.cs" />
-    <Compile Include="RGM\Variables\ServerManagers.cs" />
+    <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

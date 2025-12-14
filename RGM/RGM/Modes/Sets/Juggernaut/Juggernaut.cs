@@ -20,7 +20,7 @@ using Exiled.API.Features.Roles;
 using RGM.API.Features;
 using RGM.API.DataBases;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.Events.EventArgs.Server;
 using ProjectMER.Features;
 using ProjectMER.Features.Objects;

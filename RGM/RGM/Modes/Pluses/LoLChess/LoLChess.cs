@@ -15,7 +15,7 @@ using PlayerRoles;
 using RemoteAdmin;
 using RGM.API.Features;
 using RGM.Modes.Commands;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Random = UnityEngine.Random;
 
 namespace RGM.Modes;

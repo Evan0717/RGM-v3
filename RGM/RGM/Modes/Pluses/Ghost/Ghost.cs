@@ -13,7 +13,7 @@ using Exiled.API.Extensions;
 using UnityEngine;
 using RGM.API.DataBases;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

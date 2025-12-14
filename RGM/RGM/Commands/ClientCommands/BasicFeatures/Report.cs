@@ -11,7 +11,7 @@ using RGM.API;
 using RGM.API.Components;
 using RGM.Modes;
 using UnityEngine;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Commands.ClientCommands
 {

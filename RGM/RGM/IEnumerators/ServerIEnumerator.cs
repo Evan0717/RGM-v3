@@ -10,7 +10,7 @@ using UnityEngine;
 using Exiled.API.Features;
 using RGM.API.Interfaces;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.API.Features.Roles;
 using MultiBroadcast.API;
 using Christmas.Scp2536.Gifts;
@@ -23,7 +23,7 @@ using RGM.API.Features;
 
 namespace RGM.IEnumerators
 {
-    public static class ServerManagers
+    public static class ServerIEnumerator
     {
         public static IEnumerator<float> SyncSpectatedHint()
         {

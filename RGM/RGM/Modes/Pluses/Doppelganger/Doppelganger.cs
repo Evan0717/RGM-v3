@@ -10,7 +10,7 @@ using PlayerRoles;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using RGM.API.DataBases;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using UnityEngine;
 using System.IO;
 using Exiled.Events.EventArgs.Player;

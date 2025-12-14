@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Exiled.API.Features.Items;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Respawning;
 
 namespace RGM.Modes

@@ -21,7 +21,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Server;
 using Decals;

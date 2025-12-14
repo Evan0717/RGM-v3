@@ -18,7 +18,7 @@ using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Extensions;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

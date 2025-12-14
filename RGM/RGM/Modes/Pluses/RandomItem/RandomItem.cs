@@ -12,7 +12,7 @@ using RGM.API.DataBases;
 using UnityEngine;
 using Exiled.API.Features.Items;
 using PlayerRoles;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

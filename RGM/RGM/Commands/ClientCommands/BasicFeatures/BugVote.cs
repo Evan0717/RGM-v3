@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using UnityEngine;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Commands.ClientCommands
 {

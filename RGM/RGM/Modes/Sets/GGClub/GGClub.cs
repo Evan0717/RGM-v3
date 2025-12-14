@@ -21,7 +21,7 @@ using MultiBroadcast.API;
 using Exiled.Events.EventArgs.Server;
 using Respawning;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

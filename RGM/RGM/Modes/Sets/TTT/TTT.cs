@@ -15,7 +15,7 @@ using Respawning;
 using RGM.API.DataBases;
 using Exiled.API.Extensions;
 using System.Reflection;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.API.Enums;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;

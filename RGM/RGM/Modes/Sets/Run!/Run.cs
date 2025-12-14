@@ -10,7 +10,7 @@ using PlayerRoles;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Server;
 using RGM.API.Features;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using UnityEngine;
 using AdminToys;
 using Interactables.Interobjects.DoorUtils;

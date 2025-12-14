@@ -17,7 +17,7 @@ using PlayerRoles;
 using MultiBroadcast.API;
 using RGM.API.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Respawning;
 
 namespace RGM.Modes

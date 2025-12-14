@@ -14,7 +14,7 @@ using RGM.API.Features;
 using Mirror;
 using Respawning;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Extensions;

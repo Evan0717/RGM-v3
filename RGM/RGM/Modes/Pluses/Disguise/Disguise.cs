@@ -11,7 +11,7 @@ using RGM.API.Features;
 using PlayerRoles;
 using RGM.API.DataBases;
 using UnityEngine;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {

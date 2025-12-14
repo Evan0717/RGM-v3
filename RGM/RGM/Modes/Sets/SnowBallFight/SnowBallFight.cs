@@ -24,7 +24,7 @@ using CommandSystem.Commands.RemoteAdmin.Dummies;
 using GameCore;
 using RelativePositioning;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using NetworkManagerUtils.Dummies;
 
 namespace RGM.Modes

@@ -12,7 +12,7 @@ using PlayerRoles;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Scp1507;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.API.Enums;
 
 namespace RGM.Modes;

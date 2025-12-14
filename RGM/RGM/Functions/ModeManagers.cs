@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Exiled.API.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using RGM.API.DataBases;
 using LabApi.Features.Wrappers;
 using Exiled.API.Features.Toys;

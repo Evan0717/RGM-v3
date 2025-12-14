@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Exiled.API.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 using static RGM.Functions.ModeManagers;
 using RGM.API.Features;
 
 namespace RGM.IEnumerators
 {
-    public static class LobbyManagers
+    public static class LobbyIEnumerator
     {
         public static IEnumerator<float> GameStartButton()
         {

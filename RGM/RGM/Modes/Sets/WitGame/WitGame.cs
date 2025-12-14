@@ -18,7 +18,7 @@ using MultiBroadcast.API;
 using RGM.API.Features;
 using ProjectMER.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Respawning;
 using Exiled.Events.EventArgs.Player;
 

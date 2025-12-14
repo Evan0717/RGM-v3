@@ -3,7 +3,7 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using UnityEngine;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 

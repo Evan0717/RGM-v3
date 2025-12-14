@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using UnityEngine;
 using UserSettings.ServerSpecific;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace RGM.UserSettings
@@ -64,7 +64,7 @@ namespace RGM.UserSettings
 """
 관전석에서 훈련장으로 이동합니다. 사망자는 "관전자"와 "오버워치" 둘 다 포함합니다.
 
-• Set 모드에서 사용 불가
+• Set 모드 또는 특정 모드에서 사용 불가
 • 사망 후 10초가 지나야 사용 가능
 """,
                 
@@ -149,7 +149,9 @@ namespace RGM.UserSettings
 
             if (setting.SettingId == 12051)
             {
-                if (Round.IsStarted && CurrentMode.GetModeData().Info != ModeInfo.Set && 
+                if (Round.IsStarted && 
+                    CurrentMode.GetModeData().Info != ModeInfo.Set && 
+                    IsNonePlayerAllowed &&
                     (DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10)
                 {
                     if (player.IsAlive && NonePlayers.Contains(player))

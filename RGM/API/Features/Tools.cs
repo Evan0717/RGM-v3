@@ -17,7 +17,7 @@ using RGM.API.DataBases;
 using UnityEngine;
 using DiscordInteraction.Discord;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using RGM.API.Interfaces;
 using AdminToys;
 using ProjectMER.Features.Objects;

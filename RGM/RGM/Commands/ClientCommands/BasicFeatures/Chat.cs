@@ -12,7 +12,7 @@ using RGM.API.DataBases;
 using RGM.Modes;
 using UnityEngine;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using DiscordInteraction.Discord;
 
 using CustomPlayerEffects;

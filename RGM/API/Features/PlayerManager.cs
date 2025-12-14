@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Windows;
 using UserSettings.ServerSpecific;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
 {

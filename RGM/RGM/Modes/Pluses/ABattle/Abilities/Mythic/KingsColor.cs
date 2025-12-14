@@ -13,7 +13,7 @@ using ProjectMER.Features;
 using Mirror;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 

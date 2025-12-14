@@ -12,7 +12,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Rare;
 

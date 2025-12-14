@@ -9,7 +9,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using RGM.API.Features;
 
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Waves;
 using Respawning;

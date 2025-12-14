@@ -13,7 +13,7 @@ using Exiled.API.Features.Roles;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
-using static RGM.Variables.ServerManagers;
+using static RGM.Variables.Variable;
 using VoiceChat.Codec;
 using InventorySystem.Items;
 

@@ -20,7 +20,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace RGM.Variables
 {
-    public static class ServerManagers
+    public static class Variable
     {
         // Config
         public static bool en;
@@ -44,6 +44,7 @@ namespace RGM.Variables
         public static bool IsSuggestProcessing = false;
         public static bool IsModeSuggestUsed = false;
         public static bool IsWaveEnabled = true;
+        public static bool IsNonePlayerAllowed = true;
 
         public static Dictionary<ModeType, ModeData> ModeList = new();
         public static Dictionary<ModeType, List<Player>> ModeVote = new();
