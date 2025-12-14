@@ -124,7 +124,6 @@ namespace RGM.UserSettings
                             player.Position = new Vector3(20.16966f, 275.0556f, -29.42459f);
                             player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon()));
                             player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
-                            player.SetFriendlyFire(RoleTypeId.Tutorial, 1);
 
                             while (player.Role.Type == RoleTypeId.Tutorial)
                             {
@@ -133,8 +132,6 @@ namespace RGM.UserSettings
 
                             if (NonePlayers.Contains(player))
                                 NonePlayers.Remove(player);
-
-                            player.TryRemoveFriendlyFire(RoleTypeId.Tutorial);
                         }
 
                         Timing.RunCoroutine(none());
