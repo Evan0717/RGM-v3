@@ -50,7 +50,6 @@ namespace RGM.EventArgs
             text.Parent = ev.Player.Transform;
             Texts.Add(ev.Player, text);
 
-            PlayerSettings.Add(ev.Player.UserId, (new List<SettingBase>(), new List<SettingInfo>()));
             OnGround.Add(ev.Player.UserId, 5);
 
             if (!PlayersAudio.ContainsKey(ev.Player))
@@ -80,15 +79,6 @@ namespace RGM.EventArgs
                     LastDeath = DateTime.MinValue
                 });
             }
-
-            //try
-            //{
-            //    ServerSpecificSettings.RegisterCommonSettings(ev.Player);
-            //}
-            //catch (Exception e)
-            //{
-            //    Log.Error(e);
-            //}
 
             List<string> DefaultValues = Enumerable.Repeat("0", 25).ToList();
 
@@ -443,7 +433,6 @@ namespace RGM.EventArgs
             Texts[ev.Player].Destroy();
             Texts.Remove(ev.Player);
 
-            PlayerSettings.Remove(ev.Player.UserId);
             OnGround.Remove(ev.Player.UserId);
             PlayersAudio.Remove(ev.Player);
 

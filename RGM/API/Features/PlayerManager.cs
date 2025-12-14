@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Exiled.API.Features;
+using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
@@ -17,14 +18,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Windows;
+using UserSettings.ServerSpecific;
 using static RGM.Variables.ServerManagers;
 
 namespace RGM.API.Features
 {
     public static class PlayerManager
     {
-        public static List<Player> List 
-        { 
+        public static List<Player> List
+        {
             get => Player.List.Where(x => !NonePlayers.Contains(x)).ToList();
         }
 
@@ -429,7 +431,7 @@ namespace RGM.API.Features
                     GodModePlayers.Remove(player);
             });
         }
-        
+
         public static void Grab(this Player player)
         {
             OverlayAnimationsSubcontroller subcontroller;
@@ -442,6 +444,87 @@ namespace RGM.API.Features
             }
             subcontroller._overlayAnimations[1].OnStarted();
             subcontroller._overlayAnimations[1].SendRpc();
+        }
+
+        public static void RefreshSettings(this Player player)
+        {
+            try
+            {
+                List<TextInputSetting> settings = new();
+
+                List<string> uc()
+                {
+                    return UsersManager.UsersCache[player.UserId];
+                }
+
+                for (int i = 1; i <= 11; i++)
+                {
+                    TextInputSetting textInputSetting = (TextInputSetting)SettingBase.SyncedList[player].First(x => x.Id == i);
+                    settings.Add(textInputSetting);
+                }
+
+                foreach (var setting in settings)
+                {
+                    if (setting.Id == 1)
+                    {
+                        setting.UpdateLabelAndHint($"👤 Steam ID: {player.UserId}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://steamcommunity.com/profiles/{player.RawUserId}>ㅤ자신의 스팀 프로필 보기ㅤㅤ</link></mark></align>", null);
+                    }
+                    if (setting.Id == 2)
+                    {
+                        setting.UpdateLabelAndHint($"⭐ EXP: {uc()[0]}", null);
+                    }
+                    if (setting.Id == 3)
+                    {
+                        setting.UpdateLabelAndHint($"💫 랜덤코인: {uc()[1]}", null);
+                    }
+                    if (setting.Id == 4)
+                    {
+                        setting.UpdateLabelAndHint($"💎 Cash: {uc()[2]}<line-height=0>\n</line-height><align=right><mark=#5865f215><link=https://discord.gg/h4AKgks7VMV>ㅤ🏪 Cash 충전하기ㅤㅤ</link></mark></align>", null);
+                    }
+                    if (setting.Id == 5)
+                    {
+                        setting.UpdateLabelAndHint(uc()[13] == "0" ? $"디스코드에서 아래에 명시된 명령어를 사용하세요.\n'/rgm 연동 <Steam ID> <연동 코드>' (연동 코드: {uc()[14]})" : $"📎 연동된 Discord ID: {uc()[13]}", uc()[13] == "0" ? $"클릭하여 Discord 연동 코드를 확인하세요." : "✅ Discord와 Steam이 연동된 상태입니다.");
+                    }
+                    if (setting.Id == 6)
+                    {
+                        setting.UpdateLabelAndHint(uc()[3].Split('/').Count() == 0 ? "보유한 킬이펙트가 없습니다." : $"{(uc()[4] == "0" ? "" : $"장착한 킬이펙트: {uc()[4]}\n<size=15>{KillEffects[uc()[4]]}</size>\n")}보유한 킬이펙트\n{string.Join("\n", uc()[3].Split('/').Select(x => $"<size=15>{x}</size>"))}", $"💀 킬이펙트");
+                    }
+                    if (setting.Id == 7)
+                    {
+                        setting.UpdateLabelAndHint(uc()[19].Split('/').Count() == 0 ? "보유한 스폰이펙트가 없습니다." : $"{(uc()[20] == "0" ? "" : $"장착한 스폰이펙트: {uc()[20]}\n<size=15>{SpawnEffects[uc()[20]]}</size>\n")}보유한 스폰이펙트\n{string.Join("\n", uc()[19].Split('/').Select(x => $"<size=15>{x}</size>"))}", $"📥 스폰이펙트");
+                    }
+                    if (setting.Id == 8)
+                    {
+                        string nick(int num)
+                        {
+                            string n = uc()[num];
+
+                            if (n == "0")
+                                n = "";
+
+                            return n;
+                        }
+
+                        setting.UpdateLabelAndHint(uc()[7].Split('/').Count() == 0 ? "보유한 커스터마이징이 없습니다." : $"{(uc()[7].Split('/').Contains("커스텀 닉네임") ? $"커스텀 닉네임: {uc()[5]}({Tools.CustomFormatter(player, nick(5))})" : "")}{(uc()[7].Split('/').Contains("커스텀 인포") ? $"\n커스텀 인포: {uc()[6]}({Tools.CustomFormatter(player, nick(6))})" : "")}", $"🔧 커스터마이징");
+                    }
+                    if (setting.Id == 9)
+                    {
+                        setting.UpdateLabelAndHint(uc()[8].Split('/').Count() == 0 ? "보유한 페인트가 없습니다." : $"{(uc()[9] == "0" ? "" : $"장착한 페인트: {uc()[9]}\n<size=15>{Paints[uc()[9]]}</size>\n")}보유한 페인트\n{string.Join("\n", uc()[8].Split('/').Select(x => $"<size=15>{x}</size>"))}", $"🎨 페인트");
+                    }
+                    if (setting.Id == 10)
+                    {
+                        setting.UpdateLabelAndHint(uc()[10].Split('/').Count() == 0 ? "보유한 칭호가 없습니다." : $"{(uc()[11] == "0" ? "" : $"장착한 칭호: {uc()[11]}\n<size=15>{Badges[uc()[11]]}</size>\n")}보유한 칭호\n{string.Join("\n", uc()[10].Split('/').Select(x => $"<size=15>{x}</size>"))}", $"🔖 칭호");
+                    }
+                    if (setting.Id == 11 && player.HasReservedSlot)
+                    {
+                        setting.UpdateLabelAndHint($"<b>✨ 풀방 접속권 보유 중 ✨</b>", null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[PlayerManager.RefreshSettings] {ex}");
+            }
         }
     }
 }

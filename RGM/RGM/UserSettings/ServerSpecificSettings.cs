@@ -32,6 +32,19 @@ namespace RGM.UserSettings
         public static string SpectatorToNone_Text = "사망자 <-> 훈련장";
         public static ButtonSetting SwitchToSpectator { get; private set; }
 
+        public static HeaderSetting Info { get; private set; } = new HeaderSetting(2111, "<b>ⓘ 유저</b>");
+        public static TextInputSetting SteamProfile { get; private set; }
+        public static TextInputSetting Exp { get; private set; }
+        public static TextInputSetting RandomCoin { get; private set; }
+        public static TextInputSetting Cash { get; private set; }
+        public static TextInputSetting LinkToDiscord { get; private set; }
+        public static TextInputSetting KillEffects { get; private set; }
+        public static TextInputSetting SpawnEffects { get; private set; }
+        public static TextInputSetting Customs { get; private set; }
+        public static TextInputSetting Paints { get; private set; }
+        public static TextInputSetting Badges { get; private set; }
+        public static TextInputSetting ReservedSlot { get; private set; }
+
         public static void RegisterSettings()
         {
             ScpCanEquipRandomItem = new KeybindSetting(
@@ -63,16 +76,47 @@ namespace RGM.UserSettings
                 id: 12052,
                 label: "관전자 <-> 오버워치",
                 buttonText: "꾹꾹 ❤️❤️",
-                hintDescription: "관전자와 오버워치 상태를 변경합니다.",
+                hintDescription:
+"""
+관전자와 오버워치 상태를 변경합니다.
+
+• 사망 후 10초가 지나야 사용 가능
+""",
                 header: RGM,
                 holdTime: 0.5f
             );
 
+            SteamProfile = new TextInputSetting(1, "테스트", header: Info);
+            Exp = new TextInputSetting(2, "테스트", header: Info);
+            RandomCoin = new TextInputSetting(3, "테스트", header: Info);
+            Cash = new TextInputSetting(4, "테스트", header: Info);
+            LinkToDiscord = new TextInputSetting(5, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
+            KillEffects = new TextInputSetting(6, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
+            SpawnEffects = new TextInputSetting(7, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
+            Customs = new TextInputSetting(8, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
+            Paints = new TextInputSetting(9, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
+            Badges = new TextInputSetting(10, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
+            ReservedSlot = new TextInputSetting(11, $"<color=red>❌</color> 풀방 접속권 미보유 <color=red>❌</color></b>", header: Info);
+
             IEnumerable<SettingBase> settings = new SettingBase[]
             {
+                // 기본
                 ScpCanEquipRandomItem, 
                 SpectatorToNone, 
-                SwitchToSpectator
+                SwitchToSpectator,
+
+                // 유저
+                SteamProfile,
+                Exp,
+                RandomCoin,
+                Cash,
+                LinkToDiscord,
+                KillEffects,
+                SpawnEffects,
+                Customs,
+                Paints,
+                Badges,
+                ReservedSlot
             };
 
             SettingBase.Register(settings);
@@ -149,13 +193,20 @@ namespace RGM.UserSettings
 
             if (setting.SettingId == 12052)
             {
-                if (player.Role.Type == RoleTypeId.Overwatch)
+                if ((DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10)
                 {
-                    player.Role.Set(RoleTypeId.Spectator);
-                }
-                else if (player.Role.Type == RoleTypeId.Spectator)
-                {
-                    player.Role.Set(RoleTypeId.Overwatch);
+                    if (player.Role.Type == RoleTypeId.Overwatch)
+                    {
+                        player.Role.Set(RoleTypeId.Spectator);
+                    }
+                    else if (player.Role.Type == RoleTypeId.Spectator)
+                    {
+                        player.Role.Set(RoleTypeId.Overwatch);
+                    }
+                    else
+                    {
+                        PlayersAudio[player].TryPlay($"nope");
+                    }
                 }
                 else
                 {

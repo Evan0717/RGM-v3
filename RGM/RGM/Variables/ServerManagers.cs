@@ -53,7 +53,6 @@ namespace RGM.Variables
         public static Dictionary<string, PlayerReport> PlayersReport = new();
         public static Dictionary<Player, AudioPlayer> PlayersAudio = new();
         public static Dictionary<Door, int> InteractedDoors = new();
-        public static Dictionary<string, (List<SettingBase>, List<SettingInfo>)> PlayerSettings = new();
         public static Dictionary<string, string> DiscordIdToUserId = new();
         public static Dictionary<Player, List<string>> Chats = new();
         public static Dictionary<Player, LabApi.Features.Wrappers.TextToy> Texts = new();

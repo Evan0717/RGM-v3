@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Exiled.API.Features;
 using MEC;
 using RGM.UserSettings;
@@ -129,6 +130,11 @@ namespace RGM.API.Features
 
         public static IEnumerator<float> RefreshDiscordId()
         {
+            foreach (var player in Player.List)
+            {
+                player.RefreshSettings();
+            }
+
             var validUsers = UsersManager.UsersCache
             .Where(x => x.Value.Count > 13 && x.Value[13] != "0")
             .GroupBy(userData => userData.Value[13])
