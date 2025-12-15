@@ -169,12 +169,6 @@ $"""
                 //CurrentModes,
             };
 
-            foreach (var setting in settings)
-            {
-                if (!SettingBase.List.Contains(setting))
-                    SettingBase.List.AddItem(setting);
-            }
-
             SettingBase.Register(settings);
         }
 
