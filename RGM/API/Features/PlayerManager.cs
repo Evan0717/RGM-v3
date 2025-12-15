@@ -14,6 +14,7 @@ using RGM.Variables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -449,6 +450,8 @@ namespace RGM.API.Features
 
         public static void RefreshSettings(this Player player)
         {
+            return;
+
             try
             {
                 List<TextInputSetting> textInputSettings = new();
