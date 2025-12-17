@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using MultiBroadcast.API;
+using RGM.Modes.SubClass;
 using static RGM.Variables.Variable;
 
 namespace RGM.Patches
@@ -16,7 +17,7 @@ namespace RGM.Patches
             {
                 Player ply = Player.Get(player);
 
-                __result = ply.IsDead || NonePlayers.Contains(ply);
+                __result = ply.IsDead || NonePlayer.Players.Contains(ply);
             }
         }
     }

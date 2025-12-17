@@ -9,6 +9,8 @@ using MultiBroadcast.API;
 using PlayerRoles;
 using RGM.API.Features;
 using RGM.API.Interfaces;
+using RGM.Commands.ClientCommands;
+using RGM.Modes.SubClass;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +23,6 @@ using System.Windows;
 using UnityEngine;
 using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RGM.UserSettings
 {
@@ -33,7 +34,6 @@ namespace RGM.UserSettings
         public static HeaderSetting Setting { get; private set; } = new HeaderSetting(19287, "<b>⚙️ 설정</b>");
         public static KeybindSetting ScpCanEquipRandomItem { get; private set; }
         public static ButtonSetting SpectatorToNone { get; private set; }
-        public static string SpectatorToNone_Text = "사망자 <-> 훈련장";
         public static ButtonSetting SwitchToSpectator { get; private set; }
 
         public static HeaderSetting Info { get; private set; } = new HeaderSetting(2111, "<b>ⓘ 유저</b>");
@@ -66,7 +66,7 @@ namespace RGM.UserSettings
             }
         }
 
-        public static void RegisterSettings()
+        public static void Init()
         {
             Description = new TextInputSetting(29, 
 $"""
@@ -95,14 +95,14 @@ $"""
 
             SpectatorToNone = new ButtonSetting(
                 id: 12051,
-                label: SpectatorToNone_Text,
+                label: "관전석 <-> 훈련장",
                 buttonText: "꾹 눌러주세요 ❤️",
                 hintDescription:
 """
-관전석에서 훈련장으로 이동합니다. 사망자는 "관전자"와 "오버워치" 둘 다 포함합니다.
+관전석에서 훈련장으로 이동합니다.
 
 • Set 모드 또는 특정 모드에서 사용 불가
-• 사망 후 10초가 지나야 사용 가능
+• 사망 후 30초가 지나야 사용 가능
 """,
                 
                 header: Setting,
@@ -123,23 +123,6 @@ $"""
                 holdTime: 0.5f
             );
 
-            SteamProfile = new TextInputSetting(1, "테스트", header: Info);
-            Exp = new TextInputSetting(2, "테스트", header: Info);
-            RandomCoin = new TextInputSetting(3, "테스트", header: Info);
-            Cash = new TextInputSetting(4, "테스트", header: Info);
-            LinkToDiscord = new TextInputSetting(5, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
-            KillEffects = new TextInputSetting(6, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
-            SpawnEffects = new TextInputSetting(7, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
-            Customs = new TextInputSetting(8, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
-            Paints = new TextInputSetting(9, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
-            Badges = new TextInputSetting(10, "테스트", SSTextArea.FoldoutMode.CollapsedByDefault, header: Info);
-            ReservedSlot = new TextInputSetting(11, $"<color=red>❌</color> 풀방 접속권 미보유 <color=red>❌</color></b>", header: Info);
-
-            //ModeDescription = new TextInputSetting(301, "📝 모드 설명\n자세한 설명을 조회할 모드를 선택해주세요.", header: Mode);
-            //IEnumerable<string> modeList = ModeList.Keys.Select(x => $"{x.GetModeData().Name} ({x.GetModeData().Category}, {x.GetModeData().Info})");
-            //AllModes = new DropdownSetting(100, "📃 전체 모드", modeList, header: Mode);
-            //CurrentModes = new DropdownSetting(101, "✅ 활성화된 모드", EnabledModeList.Select(x => $"{x.GetModeData().Name} ({x.GetModeData().Category})"), header: Mode);
-
             IEnumerable<SettingBase> settings = new SettingBase[]
             {
                 // 설명
@@ -149,24 +132,6 @@ $"""
                 ScpCanEquipRandomItem, 
                 SpectatorToNone, 
                 SwitchToSpectator,
-
-                // 유저
-                SteamProfile,
-                Exp,
-                RandomCoin,
-                Cash,
-                LinkToDiscord,
-                KillEffects,
-                SpawnEffects,
-                Customs,
-                Paints,
-                Badges,
-                ReservedSlot,
-
-                //// 모드
-                //ModeDescription,
-                //AllModes,
-                //CurrentModes,
             };
 
             SettingBase.Register(settings);
@@ -204,39 +169,14 @@ $"""
                     IsNonePlayerAllowed &&
                     (DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10)
                 {
-                    if (player.IsAlive && NonePlayers.Contains(player))
+                    if (player.IsAlive && NonePlayer.Players.Contains(player))
                     {
                         player.ClearInventory();
-                        player.Role.Set(RoleTypeId.Spectator);
+                        player.Kill("관전석으로 되돌아갑니다.");
                     }
                     else if (player.IsDead)
                     {
-                        IEnumerator<float> none()
-                        {
-                            if (!NonePlayers.Contains(player))
-                                NonePlayers.Add(player);
-
-                            player.Role.Set(RoleTypeId.Tutorial);
-                            player.Position = new Vector3(20.16966f, 275.0556f, -29.42459f);
-                            player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon()));
-                            player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => !new List<ItemType> 
-                            {
-                                ItemType.SCP1509,
-                                ItemType.SCP1507Tape,
-                                ItemType.SCP244a,
-                                ItemType.SCP244b
-                            }.Contains(x)));
-
-                            while (player.Role.Type == RoleTypeId.Tutorial)
-                            {
-                                yield return Timing.WaitForOneFrame;
-                            }
-
-                            if (NonePlayers.Contains(player))
-                                NonePlayers.Remove(player);
-                        }
-
-                        Timing.RunCoroutine(none());
+                        NonePlayer.Create(player);
                     }
                     else
                     {
@@ -269,18 +209,6 @@ $"""
                 else
                 {
                     PlayersAudio[player].TryPlay($"nope");
-                }
-            }
-
-            if (setting is SSDropdownSetting dropdown)
-            {
-                if (setting.SettingId == 100 || setting.SettingId == 101)
-                {
-                    TextInputSetting modeLabel = (TextInputSetting)SettingBase.SyncedList[player].First(x => x.Id == 301);
-
-                    string modeName = GetValue(dropdown.DebugValue);
-                    ModeType mode = ModeList.Keys.Select(x => x.GetModeData().Name).Contains(modeName) ? (ModeList.Keys.FirstOrDefault(x => x.GetModeData().Name == modeName)).GetModeData().Type : ModeType.Develop;
-                    modeLabel.UpdateLabelAndHint($"📝 모드 설명\n{(mode.GetModeData().Description)}\n<size=80%>{mode.GetModeData().Detail}</size>", modeLabel.HintDescription);
                 }
             }
         }

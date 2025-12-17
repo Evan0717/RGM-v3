@@ -57,6 +57,7 @@ namespace RGM.Variables
         public static Dictionary<string, string> DiscordIdToUserId = new();
         public static Dictionary<Player, List<string>> Chats = new();
         public static Dictionary<Player, LabApi.Features.Wrappers.TextToy> Texts = new();
+        public static Dictionary<Player, List<SettingBase>> PlayerSetting = new();
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
@@ -179,7 +180,6 @@ namespace RGM.Variables
         public static List<Player> ShopCooldown = new();
         public static List<ModeType> HighlightModes = new();
         public static List<Player> SuggestPlayers = new();
-        public static List<Player> NonePlayers = new();
         public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",

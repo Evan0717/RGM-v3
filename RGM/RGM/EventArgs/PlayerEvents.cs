@@ -36,6 +36,7 @@ using CustomPlayerEffects;
 using MapGeneration.Holidays;
 using Respawning.Waves;
 using System.Windows.Forms;
+using RGM.Modes.SubClass;
 
 
 namespace RGM.EventArgs
@@ -508,14 +509,6 @@ namespace RGM.EventArgs
             });
         }
 
-        public static void OnChangingRole(ChangingRoleEventArgs ev)
-        {
-            if (NonePlayers.Contains(ev.Player))
-            {
-                ev.Player.ClearInventory();
-            }
-        }
-
         public static void OnSpawned(SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/pfx FogControl 1 0 {ev.Player.Id}");
@@ -685,7 +678,7 @@ namespace RGM.EventArgs
                     ev.Player.Kill(ev.DamageHandler);
                 }
             }
-            else if (ev.Attacker != null)
+            else if (ev.Attacker != null && !NonePlayer.Players.Contains(ev.Attacker))
             {
                 float damage = ev.IsInstantKill ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield : ev.DamageHandler.Damage;
 
@@ -696,11 +689,6 @@ namespace RGM.EventArgs
 
         public static void OnDying(DyingEventArgs ev)
         {
-            if (NonePlayers.Contains(ev.Player))
-            {
-                ev.Player.ClearInventory();
-            }
-
             if (Round.IsLobby)
             {
                 ev.Player.ClearInventory();
@@ -737,27 +725,6 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
-            if (NonePlayers.Contains(ev.Player))
-            {
-                ev.Ragdoll.Destroy();
-            }
-
-            IEnumerator<float> timeCount()
-            {
-                ButtonSetting button = (ButtonSetting)SettingBase.SyncedList[ev.Player].First(x => x.Id == 12051);
-
-                for (int i = 0; i < 10; i++)
-                {
-                    button.UpdateLabelAndHint($"{ServerSpecificSettings.SpectatorToNone_Text} ({10 - i}초 남음)", button.HintDescription, filter: x => x == ev.Player);
-
-                    yield return Timing.WaitForSeconds(1);
-                }
-
-                button.UpdateLabelAndHint($"{ServerSpecificSettings.SpectatorToNone_Text}", button.HintDescription, filter: x => x == ev.Player);
-            }
-
-            Timing.RunCoroutine(timeCount());
-
             if (!Round.IsStarted)
             {
                 Timing.CallDelayed(5, () =>
@@ -780,21 +747,24 @@ namespace RGM.EventArgs
                 foreach (var player in PlayerManager.List.Where(x => x.IsDead || x == ev.Attacker))
                     player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>");
 
-                if (ev.Attacker != null && !ev.Attacker.IsNPC)
+                if (!NonePlayer.Players.Contains(ev.Player))
                 {
-                    PlayersReport[ev.Attacker.UserId].Kill += 1;
+                    if (ev.Attacker != null && !ev.Attacker.IsNPC)
+                    {
+                        PlayersReport[ev.Attacker.UserId].Kill += 1;
 
-                    if (ev.Player.IsScp)
-                        PlayersReport[ev.Attacker.UserId].KillScp += 1;
+                        if (ev.Player.IsScp)
+                            PlayersReport[ev.Attacker.UserId].KillScp += 1;
 
-                    if (!ev.Player.IsScp)
-                        PlayersReport[ev.Attacker.UserId].KillHuman += 1;
+                        if (!ev.Player.IsScp)
+                            PlayersReport[ev.Attacker.UserId].KillHuman += 1;
+                    }
+
+                    if (!ev.Player.IsNPC)
+                        PlayersReport[ev.Player.UserId].Death += 1;
+
+                    PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
                 }
-
-                if (!ev.Player.IsNPC)
-                    PlayersReport[ev.Player.UserId].Death += 1;
-
-                PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
             }
         }
 
@@ -811,7 +781,7 @@ namespace RGM.EventArgs
 
         public static void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if (Round.IsLobby || NonePlayers.Contains(ev.Player))
+            if (Round.IsLobby)
                 ev.IsAllowed = false;
         }
 
@@ -864,12 +834,6 @@ namespace RGM.EventArgs
             }
         }
 
-        public static void OnShot(ShotEventArgs ev)
-        {
-            if (NonePlayers.Contains(ev.Player) && ev.Firearm.AmmoType != AmmoType.None)
-                ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
-        }
-
         public static void OnKicking(KickingEventArgs ev)
         {
             if (ev.Player.IsNPC)
@@ -904,43 +868,6 @@ namespace RGM.EventArgs
                 {
                     ev.Player.Group.Permissions = permission;
                 });
-            }
-        }
-
-        public static void OnChangedEmotion(ChangedEmotionEventArgs ev)
-        {
-            if (!EmotionCooldown.Contains(ev.Player))
-            {
-                EmotionCooldown.Add(ev.Player);
-
-                EmotionPresetType type = ev.EmotionPresetType;
-
-                if (type == EmotionPresetType.Neutral)
-                    return;
-
-                string emotion()
-                {
-                    if (type == EmotionPresetType.Happy)
-                        return "행복한 표정을 짓고 있습니다";
-
-                    else if (type == EmotionPresetType.AwkwardSmile)
-                        return "뒤틀린 미소를 짓고 있습니다";
-
-                    else if (type == EmotionPresetType.Scared)
-                        return "두려운 표정을 짓고 있습니다";
-
-                    else if (type == EmotionPresetType.Angry)
-                        return "화가난 표정을 짓고 있습니다";
-
-                    else if (type == EmotionPresetType.Chad)
-                        return "꼭 채드처럼 보이는군요";
-
-                    else
-                        return "꼭 오우거같이 보이는군요";
-                }
-
-                foreach (var player in PlayerManager.List.Where(x => x.IsDead || Vector3.Distance(x.Position, ev.Player.Position) < 11))
-                    player.AddBroadcast(5, $"<size=20>{Tools.BadgeFormat(ev.Player)}<color={ev.Player.Role.Color.ToHex()}>{ev.Player.DisplayNickname}</color>(은)는 {emotion()}.</size>");
             }
         }
 
