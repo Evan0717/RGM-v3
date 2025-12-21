@@ -17,14 +17,17 @@ public class Sylph : Ability
 {
     public override void OnEnabled()
     {
-        Room Room = Owner.CurrentRoom;
-        Color RoomColor = Owner.CurrentRoom.Color;
 
-        Room.Color = new Color(0, 1, 0);
+        RoomType roomType = Owner.CurrentRoom.Type;
+        Color roomColor = Owner.CurrentRoom.Color;
+
+        Room room = Room.Get(roomType);
+
+        room.Color = new Color(0, 1, 0);
 
         Timing.CallDelayed(10f, () =>
         {
-            Room.Color = RoomColor;
+            room.Color = roomColor;
         });
     }
 

@@ -17,14 +17,16 @@ public class Salamandra : Ability
 {
     public override void OnEnabled()
     {
-        Room Room = Owner.CurrentRoom;
-        Color RoomColor = Owner.CurrentRoom.Color;
+        RoomType roomType = Owner.CurrentRoom.Type;
+        Color roomColor = Owner.CurrentRoom.Color;
 
-        Room.Color = new Color(1, 0, 0);
+        Room room = Room.Get(roomType);
+
+        room.Color = new Color(1, 0, 0);
 
         Timing.CallDelayed(10f, () =>
         {
-            Room.Color = RoomColor;
+            room.Color = roomColor;
         });
     }
 
