@@ -54,7 +54,7 @@ namespace RGM.EventArgs
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
             });
 
-            Tools.PlayGlobalAudio("SCP - Breach (GP Remix)", 0.75f, true);
+            Tools.PlayGlobalAudio("크리스마스캐롤", 1, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
