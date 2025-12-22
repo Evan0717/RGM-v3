@@ -38,7 +38,9 @@ namespace RGM.API.DataBases
             {RoleTypeId.Filmmaker, "필름메이커"},
             {RoleTypeId.Flamingo, "플라밍고"},
             {RoleTypeId.AlphaFlamingo, "알파 플라밍고"},
-            {RoleTypeId.ZombieFlamingo, "좀비 플라밍고"}
+            {RoleTypeId.ZombieFlamingo, "좀비 플라밍고"},
+            {RoleTypeId.NtfFlamingo, "구미호 플라밍고"},
+            {RoleTypeId.ChaosFlamingo, "반란 플라밍고"}
         };
 
         public static Dictionary<ItemType, string> Item { get; set; } = new Dictionary<ItemType, string>
@@ -103,7 +105,12 @@ namespace RGM.API.DataBases
             {ItemType.Snowball, "눈덩이"},
             {ItemType.Coal, "석탄"},
             {ItemType.SpecialCoal, "석탄?"},
-            {ItemType.SCP1507Tape, "카세트 플레이어?"}
+            {ItemType.SCP1507Tape, "카세트 플레이어?"},
+            {ItemType.SurfaceAccessPass, "지상 출입 허가증"},
+            {ItemType.GunSCP127, "SCP-127"},
+            {ItemType.MarshmallowItem, "마시멜로우"},
+            {ItemType.SCP1509, "SCP-1509"},
+            {ItemType.Scp021J, "SCP-021-J"}
         };
     }
 }
