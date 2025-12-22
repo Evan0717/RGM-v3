@@ -50,7 +50,7 @@ namespace RGM.Commands.ClientCommands
                 response = en ? "Don't break the secret ballot clause." : "비밀 선거 조항을 깨트리지 마십시오.";
                 return false;
             }
-            else if (EnabledModeList.Contains(ModeType.Silent))
+            else if (EnabledModeList.Select(x => x.Data.Type).Contains(ModeType.Silent))
             {
                 if (player.IsAlive)
                 {
@@ -99,7 +99,10 @@ namespace RGM.Commands.ClientCommands
                         return true;
 
                     if (chatType == (en ? "SCP" : "SCP"))
-                        return p.IsDead || NonePlayer.Players.Contains(p) || p.IsScpRole() || p.Role.Type == RoleTypeId.ZombieFlamingo;
+                        return p.IsDead || NonePlayer.Players.Contains(p) || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
+
+                    if (chatType == (en ? "Flamingo" : "플라밍고"))
+                        return p.IsDead || NonePlayer.Players.Contains(p) || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
 
                     if (chatType == (en ? "Spectator" : "관전자"))
                         return p.IsDead || NonePlayer.Players.Contains(p);
@@ -142,18 +145,18 @@ namespace RGM.Commands.ClientCommands
                 return true;
             }
                 
-            if (player.IsScpRole() || player.Role.Type == RoleTypeId.ZombieFlamingo)
+            if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
             {
                 response = ChatFormat(en ? "SCP" : "SCP");
                 return true;
             }
-                
+
             if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
             {
                 response = ChatFormat(en ? "Flamingo" : "플라밍고");
                 return true;
             }
-                
+
             if (player.IsDead || NonePlayer.Players.Contains(player))
             {
                 response = ChatFormat(en ? "Spectator" : "관전자");
