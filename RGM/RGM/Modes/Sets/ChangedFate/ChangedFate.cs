@@ -44,7 +44,7 @@ $"""
         {
             { RoleTypeId.ClassD, new List<RoleTypeId> { RoleTypeId.Scientist } },
             { RoleTypeId.Scientist, new List<RoleTypeId> { RoleTypeId.ClassD } },
-            { RoleTypeId.FacilityGuard, Tools.EnumToList<RoleTypeId>().Where(x => x.IsScp() && !ignoredRoles.Contains(x)).ToList() }
+            { RoleTypeId.FacilityGuard, Tools.EnumToList<RoleTypeId>().Where(x => x.IsScpRole() && !ignoredRoles.Contains(x)).ToList() }
         };
 
         RoleTypeId selectRole(Player player)
@@ -56,7 +56,7 @@ $"""
             }
             else
             {
-                if (player.IsScp)
+                if (player.IsScpRole())
                     return RoleTypeId.FacilityGuard;
 
                 if (player.IsNTF)
@@ -69,11 +69,20 @@ $"""
             }
         }
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

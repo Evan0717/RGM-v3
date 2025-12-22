@@ -30,7 +30,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
 
         public static Outlaw Instance;
 
-        public List<ItemType> SpecialWeapons = new List<ItemType>() 
+        List<ItemType> SpecialWeapons = new List<ItemType>() 
         { 
             ItemType.MicroHID,
             ItemType.ParticleDisruptor,
@@ -38,13 +38,24 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             ItemType.GrenadeHE
         };
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawningTeam;
+
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -87,7 +98,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
 
         public void OnRespawningTeam(RespawningTeamEventArgs ev)
         {
-            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
         }
     }

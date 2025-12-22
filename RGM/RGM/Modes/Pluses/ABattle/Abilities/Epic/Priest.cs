@@ -30,7 +30,7 @@ public class Priest : Ability
             {
                 var revive = dead.GetRandomValue();
 
-                if (Owner.IsScp)
+                if (Owner.IsScpRole())
                     revive.Role.Set(RoleTypeId.Scp0492);
 
                 else

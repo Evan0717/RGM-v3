@@ -29,8 +29,8 @@ using NetworkManagerUtils.Dummies;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.SnowBallFight)]
-    class SnowBallFight : Mode
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SnowBallFight)]
+    public class SnowBallFight : Mode
     {
         public override string Name => "눈싸움";
         public override string Description => "[겨울 이벤트 전용] 눈싸움을 하세요!";
@@ -42,8 +42,14 @@ namespace RGM.Modes
 2분 뒤 버스터콜이 진행됩니다.
 """;
         public override string Color => "FFFFFF";
+        public override string Map => "SnowBallFight";
 
         public static SnowBallFight Instance;
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _checkEnd;
+
+        AudioClipPlayback audio;
 
         public override void OnEnabled()
         {
@@ -51,21 +57,26 @@ namespace RGM.Modes
             Respawn.PauseWaves();
             Server.FriendlyFire = true;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(CheckEnd());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _checkEnd = Timing.RunCoroutine(CheckEnd());
+
+            audio = Tools.PlayGlobalAudio("ChristmasRock", 0.3f, true);
+        }
+
+        public override void OnDisabled()
+        {
+            Round.IsLocked = false;
+            Respawn.ResumeWaves();
+            Server.FriendlyFire = false;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_checkEnd);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"SnowBallFight");
-
-            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-            {
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-            });
-
-            Tools.PlayGlobalAudio("ChristmasRock", 0.3f, true);
-
             ReferenceHub dummy = DummyUtils.SpawnDummy("귀여운 땅콩이 ❤️");
             Player bot = Player.Get(dummy);
 

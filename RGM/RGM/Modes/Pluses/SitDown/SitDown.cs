@@ -33,6 +33,8 @@ namespace RGM.Modes
 
         static Dictionary<Player, PlayerStatus> playerStatuses = new Dictionary<Player, PlayerStatus>();
 
+        CoroutineHandle _onModeStarted;
+
         class PlayerStatus
         {
             public bool IsSitDown { get; set; } = false;
@@ -43,7 +45,14 @@ namespace RGM.Modes
         {
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

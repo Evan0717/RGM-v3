@@ -34,6 +34,7 @@ namespace RGM.Modes
 하지만 앞은 장애물들이 가로막고 있죠. 과연 무사히 도착 지점으로 갈 수 있을까요?
 """;
         public override string Color => "da0101";
+        public override string Map => "Run!";
 
         public static RUN Instance;
 
@@ -71,11 +72,28 @@ namespace RGM.Modes
         Vector3 finalDoor;
         bool hellMode = false;
 
+        CoroutineHandle _onModeStarted;
+
+        AudioClipPlayback audio = null;
+
         public override void OnEnabled()
         {
+            Server.FriendlyFire = true;
+            Round.IsLocked = true;
+            Respawn.PauseWaves();
+
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            if (audio != null) audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -83,20 +101,12 @@ namespace RGM.Modes
             if (UnityEngine.Random.Range(1, 11) == 1)
             {
                 hellMode = true;
-                
+
                 foreach (var player in PlayerManager.List)
                 {
                     player.AddBroadcast(10, "<color=red><b><size=25>지옥 모드 활성화</size></b></color>");
                 }
             }
-
-            Server.FriendlyFire = true;
-            Round.IsLocked = true;
-            Respawn.PauseWaves();
-
-            Tools.LoadMap("Run!");
-
-            yield return Timing.WaitForSeconds(1);
 
             for (int i = 0; i < 400; i++)
             {
@@ -133,7 +143,7 @@ namespace RGM.Modes
                 }
             }
 
-            GlobalPlayer.TryPlay("RUN FOR IT");
+            audio = GlobalPlayer.TryPlay("RUN FOR IT");
 
             yield return Timing.WaitForSeconds(130);
 

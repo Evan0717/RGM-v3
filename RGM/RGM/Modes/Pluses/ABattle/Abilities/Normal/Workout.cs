@@ -1,4 +1,6 @@
-﻿namespace RGM.Modes.Abilities.Normal;
+﻿using RGM.API.Features;
+
+namespace RGM.Modes.Abilities.Normal;
 
 [Ability("운동", "25만큼 최대 체력을 추가합니다. (SCP는 10배의 보너스를 받습니다.)", AbilityCategory.Common, AbilityType.NORMAL_WORKOUT)]
 public class Workout : Ability
@@ -7,7 +9,7 @@ public class Workout : Ability
 
     public override void OnEnabled()
     {
-        _additionHealth = Owner.IsScp ? 250 : 25;
+        _additionHealth = Owner.IsScpRole() ? 250 : 25;
         Owner.MaxHealth += _additionHealth;
         Owner.Health += _additionHealth;
     }

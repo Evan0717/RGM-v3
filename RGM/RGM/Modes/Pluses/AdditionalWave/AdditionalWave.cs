@@ -38,6 +38,11 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
         }
 
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawningTeam;
+        }
+
         public void OnRespawningTeam(Exiled.Events.EventArgs.Server.RespawningTeamEventArgs ev)
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () => 

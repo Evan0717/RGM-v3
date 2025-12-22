@@ -33,14 +33,17 @@ namespace RGM.Modes
 눈치 게임과 비슷하군요!
 """;
         public override string Color => "A9F5BC";
+        public override string Map => "hp";
 
         public static TailCatcter Instance;
 
-        public List<Player> pl = new List<Player>();
+        List<Player> pl = new List<Player>();
 
-        Player dj;
+        CoroutineHandle _onModeStarted;
 
-        public Player GetTarget(Player attacker)
+        AudioClipPlayback audio;
+
+        Player GetTarget(Player attacker)
         {
             int playerIndex = pl.IndexOf(attacker);
             int targetIndex = (playerIndex + 1) % pl.Count;
@@ -62,15 +65,28 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            audio = Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"hp");
-
-            Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
-
             PlayerManager.List.Where(x => !x.IsNPC).CopyTo(pl);
 
             foreach (var door in Door.List)
@@ -100,60 +116,33 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> DJHeadBanging()
-        {
-            yield return Timing.WaitForSeconds(1f);
-
-            bool HeadUp = true;
-
-            while (true)
-            {
-                if (HeadUp)
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, -1f, 0));
-
-                    HeadUp = false;
-
-                    yield return Timing.WaitForSeconds(0.2f);
-                }
-                else
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, 1f, 0));
-
-                    HeadUp = true;
-
-                    yield return Timing.WaitForSeconds(0.15f);
-                }
-            }
-        }
-
         public void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        public void OnSpawned(SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
             IntercomPlayers.Add(ev.Player);
         }
 
-        public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
+        public void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingAmmo(Exiled.Events.EventArgs.Player.DroppingAmmoEventArgs ev)
+        public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+        public void OnShot(ShotEventArgs ev)
         {
             ev.Firearm.MagazineAmmo += 1;
         }
 
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        public void OnHurting(HurtingEventArgs ev)
         {
             Player target = GetTarget(ev.Attacker);
 
@@ -166,7 +155,7 @@ namespace RGM.Modes
         }
 
 
-        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        public void OnDying(DyingEventArgs ev)
         {
             if (pl.Contains(ev.Player))
             {

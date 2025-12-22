@@ -38,10 +38,13 @@ namespace RGM.Modes
 3분 이상 버틴다면 스스로를 칭찬해주세요.
 """;
         public override string Color => "FAAC58";
+        public override string Map => "bp";
 
         public static BombParty Instance;
 
-        public List<Player> pl = new List<Player>();
+        List<Player> pl = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -54,10 +57,19 @@ namespace RGM.Modes
             Timing.RunCoroutine(OnModeStarted());
         }
 
+        public override void OnDisabled()
+        {
+            Round.IsLocked = false;
+            Respawn.ResumeWaves();
+            Server.FriendlyFire = false;
+
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
+        }
+
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"bp");
-
             PlayerManager.List.ToList().CopyTo(pl);
 
             foreach (var player in PlayerManager.List)

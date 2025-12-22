@@ -93,7 +93,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 while (true)
                 {
-                    foreach (var p in PlayerManager.List.Where(x => !x.IsScp && x != player && Vector3.Distance(x.Position, player.Position) < 3.5f))
+                    foreach (var p in PlayerManager.List.Where(x => !x.IsScpRole() && x != player && Vector3.Distance(x.Position, player.Position) < 3.5f))
                     {
                         p.EnableEffect(EffectType.Burned, 1, 0.1f);
                         p.Hit(player, player.Scale.x * 5);
@@ -176,7 +176,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
                                 for (int i = 0; i < 20; i++)
                                 {
-                                    foreach (var p in PlayerManager.List.Where(x => !x.IsScp && x != player && Vector3.Distance(x.Position, pos) < 4))
+                                    foreach (var p in PlayerManager.List.Where(x => !x.IsScpRole() && x != player && Vector3.Distance(x.Position, pos) < 4))
                                     {
                                         p.EnableEffect(EffectType.Burned, 1, 0.1f);
                                         p.Hit(player, player.Scale.x * 10);

@@ -33,9 +33,11 @@ namespace RGM.Modes
 
         public static Tomb Instance;
 
-        public List<Player> pl = new List<Player>();
+        List<Player> pl = new List<Player>();
 
-        public Vector3 RandomPosition()
+        CoroutineHandle _onModeStarted;
+
+        Vector3 RandomPosition()
         {
             return new Vector3(UnityEngine.Random.Range(-44.64675f, 54.59153f), 336, UnityEngine.Random.Range(-95.17068f, 3.98947f));
         }
@@ -48,7 +50,14 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

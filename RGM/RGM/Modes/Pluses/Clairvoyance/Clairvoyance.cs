@@ -29,11 +29,20 @@ SCP-1344 효과 - 투시
 
         public static Clairvoyance Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

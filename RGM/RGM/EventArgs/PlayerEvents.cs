@@ -533,7 +533,7 @@ namespace RGM.EventArgs
                     ev.Player.Position = PlayerManager.List.GetRandomValue(x => x.IsHuman && x != ev.Player).Position;
                 }
 
-                if (ev.Player.IsScp)
+                if (ev.Player.IsScpRole())
                 {
                     if (ev.Player.Role.Type == RoleTypeId.Scp079)
                     {
@@ -581,11 +581,9 @@ namespace RGM.EventArgs
                         ev.Player.Health = ev.Player.MaxHealth;
                     }
 
-                    if (UnityEngine.Random.Range(1, 41) == 1 && !IsScp3114Enabled && !HolidayUtils.IsHolidayActive(HolidayType.Halloween)) // SCP-3114 추가
+                    if (UnityEngine.Random.Range(1, 41) == 1 && !HolidayUtils.IsHolidayActive(HolidayType.Halloween)) // SCP-3114 추가
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp3114);
-
-                        IsScp3114Enabled = true;
                     }
                 }
             }
@@ -607,7 +605,7 @@ namespace RGM.EventArgs
 
         public static void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (ev.Player.IsScp)
+            if (ev.Player.IsScpRole())
             {
                 if (ev.Door.Type.ToString().Contains("Checkpoint"))
                 {
@@ -753,10 +751,10 @@ namespace RGM.EventArgs
                     {
                         PlayersReport[ev.Attacker.UserId].Kill += 1;
 
-                        if (ev.Player.IsScp)
+                        if (ev.Player.IsScpRole())
                             PlayersReport[ev.Attacker.UserId].KillScp += 1;
 
-                        if (!ev.Player.IsScp)
+                        if (!ev.Player.IsScpRole())
                             PlayersReport[ev.Attacker.UserId].KillHuman += 1;
                     }
 
@@ -770,7 +768,7 @@ namespace RGM.EventArgs
 
         public static void OnItemAdded(ItemAddedEventArgs ev)
         {
-            if (ev.Player.IsScp)
+            if (ev.Player.IsScpRole())
             {
                 if (ev.Player.CurrentItem == null)
                 {

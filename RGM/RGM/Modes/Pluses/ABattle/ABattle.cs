@@ -47,6 +47,7 @@ public class ABattle : Mode
 <size=20>.추가모드 - 현재 워크스테이션 업그레이드 모드의 추가 모드를 확인합니다.</size>
 """;
     public override string Color => "00FFFF";
+    public override string Map => "ABattle";
 
     public static ABattle Instance;
 
@@ -84,8 +85,8 @@ public class ABattle : Mode
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         {"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
-            //{"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
-            //{"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
+        //{"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
+        //{"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
         {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+10 (SCP의 경우 +50))"},
         {"캐시 청소", "9분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
@@ -103,7 +104,7 @@ public class ABattle : Mode
                     .Replace("[희귀]", $"<color={RatingColor["희귀"]}>[희귀]</color>")
                     .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
     }
-    
+
     public string PickExtraMode(List<string> exceptModes = null)
     {
         if (exceptModes == null)
@@ -133,6 +134,9 @@ public class ABattle : Mode
     }
 
     public static string CurrentExtraMode;
+
+    CoroutineHandle _onModeStarted;
+    CoroutineHandle _hintCoroutine;
 
     // 플러그인에 있는 모든 능력 검색
     public override void OnEnabled()
@@ -186,15 +190,37 @@ public class ABattle : Mode
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new AddAbility());
         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(new SetExtraMode());
 
-        Timing.RunCoroutine(OnModeStarted());
-        Timing.RunCoroutine(HintCoroutine());
+        _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        _hintCoroutine = Timing.RunCoroutine(HintCoroutine());
+    }
+
+    public override void OnDisabled()
+    {
+        _eventHandler.UnregisterEvents();
+
+
+        try
+        {
+            foreach (var player in Player.List)
+            {
+                foreach (var ability in GetAbilities(player))
+                {
+                    ability.OnDisabled();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"An error occurred while trying to disable abilities: {e}");
+        }
+
+        Timing.KillCoroutines(_onModeStarted);
+        Timing.KillCoroutines(_hintCoroutine);
     }
 
     private IEnumerator<float> OnModeStarted()
     {
         yield return Timing.WaitForOneFrame;
-
-        Tools.LoadMap($"ABattle");
 
         foreach (var player in PlayerManager.List)
         {
@@ -404,7 +430,7 @@ public class ABattle : Mode
 
         if (CurrentExtraMode == "스펙업")
         {
-            int heal = player.IsScp ? 50 : 10;
+            int heal = player.IsScpRole() ? 50 : 10;
             player.MaxHealth += heal;
             player.Health += heal;
         }

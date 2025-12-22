@@ -36,11 +36,20 @@ namespace RGM.Modes
 
         Player owner;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

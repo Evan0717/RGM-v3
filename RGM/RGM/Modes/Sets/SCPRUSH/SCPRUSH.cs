@@ -27,11 +27,20 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
 
         public static SCPRUSH Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -48,7 +57,7 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
             };
             RoleTypeId RandomScpRole = ScpRoles.GetRandomValue();
 
-            foreach (var player in PlayerManager.List.Where(x => x.IsScp && x.Role.Type != RandomScpRole))
+            foreach (var player in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RandomScpRole))
             {
                 player.Role.Set(RandomScpRole);
 

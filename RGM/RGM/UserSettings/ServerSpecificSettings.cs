@@ -128,7 +128,7 @@ $"""
             {
                 if (setting.SettingId == 12050)
                 {
-                    if (player.IsScp)
+                    if (player.IsScpRole())
                     {
                         var candidates = player.Items
                             .Where(x => player.CurrentItem != x)

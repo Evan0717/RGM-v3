@@ -51,7 +51,7 @@ public class LavaChicken : Ability
                 {
                     if (Vector3.Distance(player.Position, Owner.Position) <= 8)
                     {
-                        float damage = player.IsScp ? player.MaxHealth / 100 : player.MaxHealth / 25;
+                        float damage = player.IsScpRole() ? player.MaxHealth / 100 : player.MaxHealth / 25;
 
                         if (player.HasAbility(AbilityType.RARE_UNDINE))
                         {

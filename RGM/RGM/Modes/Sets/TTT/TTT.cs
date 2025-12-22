@@ -82,6 +82,8 @@ Trouble in Terrorist Town의 약자.
             ItemType.GunRevolver
         };
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Server.FriendlyFire = true;
@@ -94,7 +96,18 @@ Trouble in Terrorist Town의 약자.
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         void spawn(Player player)

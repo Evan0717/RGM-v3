@@ -33,8 +33,8 @@ namespace RGM.Modes
 
         public static Silent Instance;
 
-        private OpusDecoder _decoder;
-        private float[] _decodedBuffer;
+        OpusDecoder _decoder;
+        float[] _decodedBuffer;
 
         public override void OnEnabled()
         {
@@ -42,6 +42,11 @@ namespace RGM.Modes
             _decodedBuffer = new float[24000];
 
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
         }
 
         private float GetLoudness(byte[] encodedBuffer, int length)

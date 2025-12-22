@@ -44,11 +44,20 @@ namespace RGM.Modes
 
         public static List<Player> SpecialScps = new();
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         IEnumerator<float> OnModeStarted()
@@ -60,7 +69,7 @@ namespace RGM.Modes
 
             if (Server.PlayerCount >= 5)
             {
-                Player scp999 = PlayerManager.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
+                Player scp999 = PlayerManager.List.GetRandomValue(x => !x.IsScpRole() && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp999);
 
                 Door door = Door.Get(DoorType.HIDLab);
@@ -72,15 +81,15 @@ namespace RGM.Modes
             if (Server.PlayerCount >= 10)
             {
                 Item item = Scp005.Create();
-                Player lucky = PlayerManager.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
+                Player lucky = PlayerManager.List.GetRandomValue(x => !x.IsScpRole() && x.IsAlive && !SpecialScps.Contains(x));
                 lucky.AddItem(item);
 
-                Player scp008 = PlayerManager.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
+                Player scp008 = PlayerManager.List.GetRandomValue(x => !x.IsScpRole() && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp008);
 
                 Scp008.Create(scp008);
 
-                Player scp035 = PlayerManager.List.GetRandomValue(x => !x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
+                Player scp035 = PlayerManager.List.GetRandomValue(x => !x.IsScpRole() && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp035);
 
                 Door door = Door.Get(DoorType.ElevatorNuke);
@@ -91,12 +100,12 @@ namespace RGM.Modes
 
             if (Server.PlayerCount >= 15)
             {
-                Player scp457 = PlayerManager.List.GetRandomValue(x => x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
+                Player scp457 = PlayerManager.List.GetRandomValue(x => x.IsScpRole() && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp457);
 
                 Scp457.Create(scp457);
 
-                Player scp966 = PlayerManager.List.GetRandomValue(x => x.IsScp && x.IsAlive && !SpecialScps.Contains(x));
+                Player scp966 = PlayerManager.List.GetRandomValue(x => x.IsScpRole() && x.IsAlive && !SpecialScps.Contains(x));
                 SpecialScps.Add(scp966);
 
                 Scp966.Create(scp966);

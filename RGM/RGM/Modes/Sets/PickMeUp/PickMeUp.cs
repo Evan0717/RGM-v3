@@ -34,10 +34,11 @@ namespace RGM.Modes
     최후의 1인이 남을 때까지 게임은 계속됩니다.
     """;
         public override string Color => "AEEFC5";
+        public override string Map => "PickMeUp";
 
         public static PickMeUp Instance;
 
-        public static List<ItemType> ItemTypes = new List<ItemType>
+        static List<ItemType> ItemTypes = new List<ItemType>
         {
             ItemType.Painkillers,
             ItemType.Coin,
@@ -47,35 +48,37 @@ namespace RGM.Modes
             ItemType.Adrenaline,
             ItemType.Flashlight,
         };
-        public static List<Player> PassedPlayers = new List<Player>();
+        static List<Player> PassedPlayers = new List<Player>();
 
-        public static Vector3 SpawnBase;
-        public static Vector3 SpawnX1;
-        public static Vector3 SpawnX2;
-        public static Vector3 SpawnY1;
-        public static Vector3 SpawnY2;
-        public static Vector3 SpawnZ1;
-        public static Vector3 SpawnZ2;
+        static Vector3 SpawnBase;
+        static Vector3 SpawnX1;
+        static Vector3 SpawnX2;
+        static Vector3 SpawnY1;
+        static Vector3 SpawnY2;
+        static Vector3 SpawnZ1;
+        static Vector3 SpawnZ2;
 
-        public static Vector3 SpawnX()
+        static Vector3 SpawnX()
         {
             return new Vector3(Random.Range(SpawnX1.x, SpawnX2.x), SpawnX1.y, Random.Range(SpawnX1.z, SpawnX2.z));
         }
 
-        public static Vector3 SpawnY()
+        static Vector3 SpawnY()
         {
             return new Vector3(Random.Range(SpawnY1.x, SpawnY2.x), SpawnY1.y, Random.Range(SpawnY1.z, SpawnY2.z));
         }
 
-        public static Vector3 SpawnZ()
+        static Vector3 SpawnZ()
         {
             return new Vector3(Random.Range(SpawnZ1.x, SpawnZ2.x), SpawnZ1.y, Random.Range(SpawnZ1.z, SpawnZ2.z));
         }
 
+        CoroutineHandle _onModeStarted;
+
+        AudioClipPlayback audio;
+
         public override void OnEnabled()
         {
-            Tools.LoadMap("PickMeUp");
-
             Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.PauseWaves();
@@ -94,8 +97,19 @@ namespace RGM.Modes
                 Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
                 Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
 
-                Timing.RunCoroutine(OnModeStarted());
+                _onModeStarted = Timing.RunCoroutine(OnModeStarted());
             });
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            if (audio != null)
+                audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -107,8 +121,9 @@ namespace RGM.Modes
 
             while (!Round.IsEnded)
             {
-                Map.CleanAllItems();
-                Map.CleanAllRagdolls();
+                Exiled.API.Features.Map.CleanAllItems();
+                Exiled.API.Features.Map.CleanAllRagdolls();
+
                 PassedPlayers.Clear();
 
                 foreach (var player in PlayerManager.List)
@@ -129,7 +144,7 @@ namespace RGM.Modes
                     Pickup.CreateAndSpawn(item, pos());
                 }
 
-                GlobalPlayer.TryPlay($"PickMeUp", 2f);
+                audio = GlobalPlayer.TryPlay($"PickMeUp", 2f);
 
                 for (int i = 1; i < 11; i++)
                 {

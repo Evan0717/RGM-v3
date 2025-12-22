@@ -34,6 +34,19 @@ public class ABattleEventHandler(ABattle aBattle)
         Exiled.Events.Handlers.Scp1507.SpawningFlamingos += OnSpawningFlamingos;
     }
 
+    internal void UnregisterEvents()
+    {
+        Exiled.Events.Handlers.Player.Verified -= OnVerified;
+        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+        Exiled.Events.Handlers.Player.Jumping -= OnJumping;
+        Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+        Exiled.Events.Handlers.Player.Died -= OnDied;
+
+        Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
+
+        Exiled.Events.Handlers.Scp1507.SpawningFlamingos -= OnSpawningFlamingos;
+    }
+
     private void OnVerified(VerifiedEventArgs ev)
     {
         Verified(ev.Player);

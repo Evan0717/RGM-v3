@@ -36,8 +36,13 @@ namespace RGM.Modes
 
         public static SoulMate Instance;
 
-        private Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
-        private List<Player> waitingPlayers = new List<Player>();
+        Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
+        List<Player> waitingPlayers = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _soulMateMatching;
+        CoroutineHandle _currentItemAsync;
+        CoroutineHandle _checkIfScpSoulMate;
 
         public override void OnEnabled()
         {
@@ -51,10 +56,28 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Scp3114.Revealing += OnRevealing;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(SoulMateMatching());
-            Timing.RunCoroutine(CurrentItemAsync());
-            Timing.RunCoroutine(CheckIfScpSoulMate());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _soulMateMatching = Timing.RunCoroutine(SoulMateMatching());
+            _currentItemAsync = Timing.RunCoroutine(CurrentItemAsync());
+            _checkIfScpSoulMate = Timing.RunCoroutine(CheckIfScpSoulMate());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+            Exiled.Events.Handlers.Player.Healed -= OnHealed;
+            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.UsingItemCompleted -= OnUsingItemCompleted;
+            Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
+
+            Exiled.Events.Handlers.Scp3114.Revealing -= OnRevealing;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_soulMateMatching);
+            Timing.KillCoroutines(_currentItemAsync);
+            Timing.KillCoroutines(_checkIfScpSoulMate);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -203,7 +226,7 @@ namespace RGM.Modes
                 try
                 {
                     int totalSoulMatePairs = soulMates.Count;
-                    int scpSoulMatePairs = soulMates.Count(pair => pair.Key.IsScp || pair.Value.IsScp);
+                    int scpSoulMatePairs = soulMates.Count(pair => pair.Key.IsScpRole() || pair.Value.IsScpRole());
 
                     if (totalSoulMatePairs == scpSoulMatePairs)
                     {

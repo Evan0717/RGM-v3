@@ -172,7 +172,7 @@ namespace RGM.IEnumerators
                 {
                     if (player.TryGetLookPlayer(25, out Player target, out RaycastHit? hit))
                     {
-                        if (target.IsScp)
+                        if (target.IsScpRole())
                         {
                             JumpScareCooldown.Add(player);
 

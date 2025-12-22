@@ -37,10 +37,13 @@ namespace RGM.Modes
 @vasileii, @sleeplessbutter
 """;
         public override string Color => "F8E0E6";
+        public override string Map => Maps.GetRandomValue();
 
         public static LastOne Instance;
 
-        public List<ItemType> StartupItems = new List<ItemType>();
+        List<ItemType> StartupItems = new List<ItemType>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -53,13 +56,21 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"{Maps.GetRandomValue()}");
-
             StartupItems = Items();
 
             foreach (var player in PlayerManager.List)

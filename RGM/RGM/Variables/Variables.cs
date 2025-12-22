@@ -35,7 +35,6 @@ namespace RGM.Variables
         public static int StartupRandom = UnityEngine.Random.Range(1, 31);
         public static bool FreezeGameStart = false;
         public static bool AutoNuke = false;
-        public static bool IsScp3114Enabled = false;
         public static bool IsBugVoteProcessing = false;
         public static bool IsUsersFileLoaded = false;
         public static bool IsWinnerSelected = false;

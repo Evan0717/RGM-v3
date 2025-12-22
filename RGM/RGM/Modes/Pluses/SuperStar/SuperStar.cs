@@ -30,9 +30,16 @@ namespace RGM.Modes
 
         public static SuperStar Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

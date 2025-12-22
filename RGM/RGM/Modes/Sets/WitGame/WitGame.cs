@@ -36,13 +36,17 @@ namespace RGM.Modes
 마지막까지 점프하지 않으면 승천합니다.
 """;
         public override string Color => "CEECF5";
+        public override string Map => "wg";
 
         public static WitGame Instance;
 
-        public int Stack = 0;
-        public int Remain = 0;
-        public List<Player> JumpingPlayers = new List<Player>();
-        public List<Player> PassPlayers = new List<Player>();
+        int Stack = 0;
+        int Remain = 0;
+        List<Player> JumpingPlayers = new List<Player>();
+        List<Player> PassPlayers = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _jumpHint;
 
         public override void OnEnabled()
         {
@@ -54,14 +58,22 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(JumpHint());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _jumpHint = Timing.RunCoroutine(JumpHint());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Jumping -= OnJumping;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Kicking -= OnKicking;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_jumpHint);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"wg");
-
             foreach (var player in PlayerManager.List)
             {
                 player.Role.Set(RoleTypeId.ClassD);

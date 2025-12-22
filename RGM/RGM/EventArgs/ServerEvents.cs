@@ -244,7 +244,7 @@ namespace RGM.EventArgs
                 {
                     AutoNuke = true;
                     DeadmanSwitch.StartWarhead();
-                    Server.ExecuteCommand("/cassie_sl <color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
+                    Exiled.API.Features.Cassie.MessageTranslated("", $"<color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
                 }
             }
         }

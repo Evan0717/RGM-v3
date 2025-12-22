@@ -28,13 +28,11 @@ COM-45
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-
-            Timing.RunCoroutine(OnModeStarted());
         }
 
-        public IEnumerator<float> OnModeStarted()
+        public override void OnDisabled()
         {
-            yield return 0f;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         }
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)

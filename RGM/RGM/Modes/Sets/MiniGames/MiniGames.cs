@@ -28,11 +28,12 @@ namespace RGM.Modes
 총 3개 라운드로 구성되어 있습니다. (이 모드에서는 EXP, 랜덤코인 지급 안됨)
 """;
         public override string Color => "A4A4A4";
+        public override string Map => "ru";
 
         public static MiniGames Instance;
 
-        public int RoundCount = 0;
-        public List<string> Games = new List<string>()
+        int RoundCount = 0;
+        List<string> Games = new List<string>()
         {
             //"jail", - 뭔 게임인지 모름
             //"airstrike", - 순수 노잼
@@ -62,14 +63,19 @@ namespace RGM.Modes
         };
         Vector3 pos = new Vector3(14.07672f, 328.4382f, 11.39262f);
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Round.IsLocked = true;
-            Map.IsDecontaminationEnabled = false;
+            Exiled.API.Features.Map.IsDecontaminationEnabled = false;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
 
-            Tools.LoadMap($"ru");
+        public override void OnDisabled()
+        {
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

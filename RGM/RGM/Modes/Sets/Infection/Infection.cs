@@ -45,8 +45,13 @@ namespace RGM.Modes
 
         public static Infection Instance;
 
-        public List<Player> HostZombies = new();
-        public bool IsHumanEnd = false;
+        List<Player> HostZombies = new();
+        bool IsHumanEnd = false;
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _checkEnd;
+
+        AudioClipPlayback audio;
 
         public override void OnEnabled()
         {
@@ -60,18 +65,28 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(CheckEnd());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _checkEnd = Timing.RunCoroutine(CheckEnd());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
+
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_checkEnd);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-            {
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-            });
-
-            Tools.PlayGlobalAudio("Voices", 0.3f, true);
+            audio = Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
             for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count() / 7); i++)
             {
@@ -158,7 +173,7 @@ namespace RGM.Modes
         {
             Door door = Door.Get(DoorType.NukeSurface);
 
-            foreach (var player in PlayerManager.List.Where(x => x.IsScp))
+            foreach (var player in PlayerManager.List.Where(x => x.IsScpRole()))
             {
                 player.Position = door.Position + new Vector3(0, 2, 0);
             }

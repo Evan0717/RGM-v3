@@ -38,14 +38,17 @@ namespace RGM.Modes
 최대한 오래 살아남기 위한 전략을 고안해 보세요!
 """;
         public override string Color => "BEF781";
+        public override string Map => "Spleef1205";
 
         public static Spleef Instance;
 
-        public List<Player> pl = new List<Player>();
-        public List<ItemType> StartupItems = new List<ItemType>();
-        public List<AdminToys.PrimitiveObjectToy> Transforms = new List<AdminToys.PrimitiveObjectToy>();
-        public Door door;
-        public Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
+        List<Player> pl = new List<Player>();
+        List<AdminToys.PrimitiveObjectToy> Transforms = new List<AdminToys.PrimitiveObjectToy>();
+        Dictionary<Player, float> OnGround = new Dictionary<Player, float>();
+
+        CoroutineHandle _onModeStarted;
+
+        AudioClipPlayback audio;
 
         public override void OnEnabled()
         {
@@ -53,21 +56,27 @@ namespace RGM.Modes
             Respawn.PauseWaves();
             Server.FriendlyFire = true;
 
-            Timing.RunCoroutine(OnModeStarted());
-
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            audio = Tools.PlayGlobalAudio("Spleef", volume: 0.5f, loop: true);
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.PlayGlobalAudio("Spleef", volume: 0.5f, loop: true);
-
-            Tools.LoadMap("Spleef1205");
-
             PlayerManager.List.ToList().CopyTo(pl);
-
-            door = Tools.GetRandomValue(Door.List.ToList());
 
             foreach (var player in PlayerManager.List)
             {

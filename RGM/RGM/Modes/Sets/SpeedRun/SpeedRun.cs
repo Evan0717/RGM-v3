@@ -31,7 +31,7 @@ namespace RGM.Modes
 
         public static SpeedRun Instance;
 
-        public List<Player> pl = new List<Player>();
+        List<Player> pl = new List<Player>();
         List<ItemType> _standards = new List<ItemType>()
         {
             ItemType.Flashlight
@@ -47,7 +47,9 @@ namespace RGM.Modes
         };
         List<ItemType> _itemsList = new List<ItemType>();
 
-        public bool IsEnd = false;
+        bool IsEnd = false;
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -58,7 +60,18 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
+
+            Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

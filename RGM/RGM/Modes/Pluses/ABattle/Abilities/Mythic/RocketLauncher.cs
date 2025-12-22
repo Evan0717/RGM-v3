@@ -33,7 +33,7 @@ public class RocketLauncher : Ability
 
         if (!isInRocket.Contains(ev.Player))
         {
-            if (ev.Attacker.IsScp)
+            if (ev.Attacker.IsScpRole())
             {
                 if (Random.Range(1, 6) == 1)
                 {

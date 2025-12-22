@@ -41,8 +41,10 @@ namespace RGM.Modes
 
         public static Agar Instance;
 
-        public List<Player> TeamA = new List<Player>();
-        public List<Player> TeamB = new List<Player>();
+        List<Player> TeamA = new List<Player>();
+        List<Player> TeamB = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -61,13 +63,25 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Respawn.ResumeWaves();
+
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            // Tools.LoadMap($"Agar");
-
             yield return Timing.WaitForSeconds(1f);
 
             var players = PlayerManager.List.ToList();
@@ -124,8 +138,8 @@ namespace RGM.Modes
                 reviver.CurrentItem = item;
             }
 
-            Map.CleanAllItems();
-            Map.CleanAllRagdolls();
+            Exiled.API.Features.Map.CleanAllItems();
+            Exiled.API.Features.Map.CleanAllRagdolls();
             foreach (var decal in new List<DecalPoolType> 
             { 
                 DecalPoolType.Bullet,
@@ -134,7 +148,7 @@ namespace RGM.Modes
                 DecalPoolType.Blood,
             })
             {
-                Map.Clean(decal);
+                Exiled.API.Features.Map.Clean(decal);
             }
         }
 

@@ -30,9 +30,13 @@ namespace RGM.Modes
 
         public static RedLightGreenLight Instance;
 
-        public string Light = "Green";
-        public Dictionary<Player, Vector3> PlayerPosition = new Dictionary<Player, Vector3>();
-        public Dictionary<Player, Quaternion> PlayerRotation = new Dictionary<Player, Quaternion>();
+        string Light = "Green";
+        Dictionary<Player, Vector3> PlayerPosition = new Dictionary<Player, Vector3>();
+        Dictionary<Player, Quaternion> PlayerRotation = new Dictionary<Player, Quaternion>();
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _recordPlayerInfo;
+        CoroutineHandle _checkRedLight;
 
         public Quaternion rot(Player player)
         {
@@ -48,14 +52,20 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _recordPlayerInfo = Timing.RunCoroutine(RecordPlayerInfo());
+            _checkRedLight = Timing.RunCoroutine(CheckRedLight());
+        }
+
+        public override void OnDisabled()
+        {
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_recordPlayerInfo);
+            Timing.KillCoroutines(_checkRedLight);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Timing.RunCoroutine(RecordPlayerInfo());
-            Timing.RunCoroutine(CheckRedLight());
-
             PlayerManager.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
 
             while (true)
@@ -89,7 +99,7 @@ namespace RGM.Modes
                         PlayerRotation.Add(player, rot(player));
                     }
 
-                    if (player.Role.Type == RoleTypeId.Scp079 && PlayerManager.List.Where(x => x.IsScp).Count() < 2)
+                    if (player.Role.Type == RoleTypeId.Scp079 && PlayerManager.List.Where(x => x.IsScpRole()).Count() < 2)
                     {
                         player.Role.Set(RoleTypeId.Tutorial);
                         player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsHuman).ToList()).Position;

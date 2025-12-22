@@ -34,16 +34,14 @@ namespace RGM.Commands.ClientCommands
                 }
                 else
                 {
-                    List<string> ModeDesc = Tools.GetModeDesc(CurrentMode, CurrentSubMode);
+                    foreach (var mode in EnabledModeList)
+                    {
+                        List<string> ModeDesc = Tools.GetModeDesc(mode, ModeType.None);
 
-                    response = ModeDesc[1];
+                        player.SendConsoleMessage($"{ModeDesc[0]}\n{ModeDesc[3]}", "white");
+                    }
 
-                    player.SendConsoleMessage(ModeDesc[0], "white");
-                    if (ModeDesc[3] == "")
-                        player.SendConsoleMessage($"\n{ModeDesc[2]}", "white");
-
-                    else
-                        player.SendConsoleMessage($"\n{ModeDesc[3]}", "white");
+                    response = en ? $"Mode description loaded successfully. ({EnabledModeList.Count()})" : $"성공적으로 모드 설명을 불러왔습니다. ({EnabledModeList.Count()})";
 
                     return true;
                 }

@@ -23,9 +23,9 @@ namespace RGM.Commands.ClientCommands
         {
             Player player = Player.Get(sender);
 
-            if (player.IsScp)
+            if (player.IsScpRole())
             {
-                response = "\n" + string.Join("\n", PlayerManager.List.Where(x => x.IsScp).Select(x => $"{x.Role.Name} : {x.Nickname}"));
+                response = "\n" + string.Join("\n", PlayerManager.List.Where(x => x.IsScpRole()).Select(x => $"{x.Role.Name} : {x.Nickname}"));
                 return true;
             }
             else

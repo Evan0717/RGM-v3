@@ -37,7 +37,7 @@ public class CallScp : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player.IsScp && ev.Player.IsNPC)
+        if (ev.Player.IsScpRole() && ev.Player.IsNPC)
             ev.DamageHandler.Damage /= 2;
     }
 }

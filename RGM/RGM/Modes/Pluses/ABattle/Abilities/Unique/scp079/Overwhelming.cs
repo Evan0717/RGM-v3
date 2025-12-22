@@ -35,7 +35,7 @@ public class Overwhelming : Ability
         if (ev.Player != Owner)
             return;
 
-        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && !x.IsScp && x.IsAlive))
+        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && !x.IsScpRole() && x.IsAlive))
         {
             if (player.CurrentRoom == ev.Player.CurrentRoom)
                 player.EnableEffect(EffectType.Slowness, (byte)(6 * ev.Player.AbilityCount(AbilityType.SCP079_OVERWHELMING)), 0.1f);

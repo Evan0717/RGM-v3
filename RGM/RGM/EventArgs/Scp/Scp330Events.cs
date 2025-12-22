@@ -24,7 +24,7 @@ namespace RGM.EventArgs
     {
         public static void OnInteractingScp330(InteractingScp330EventArgs ev)
         {
-            if (ev.Player.IsScp)
+            if (ev.Player.IsScpRole())
                 return;
 
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
@@ -74,7 +74,7 @@ namespace RGM.EventArgs
 
                 if (ev.Candy.Kind == CandyKindID.Brown)
                 {
-                    if (ev.Player.IsScp)
+                    if (ev.Player.IsScpRole())
                     {
                         ev.IsAllowed = false;
                         ev.Player.TryRemoveCandу(CandyKindID.Brown);
@@ -178,7 +178,7 @@ namespace RGM.EventArgs
                     }
                     else if (c == 10)
                     {
-                        Player scp = PlayerManager.List.GetRandomValue(x => x.IsScp);
+                        Player scp = PlayerManager.List.GetRandomValue(x => x.IsScpRole());
 
                         if (scp != null)
                         {

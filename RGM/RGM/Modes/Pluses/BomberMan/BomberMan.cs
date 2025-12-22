@@ -41,7 +41,10 @@ namespace RGM.Modes
 
         public static BomberMan Instance;
 
-        public bool _isScp079Cooldown = false;
+        bool isScp079Cooldown = false;
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -52,8 +55,21 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(AutoWarhead());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
+            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.ThrownProjectile -= OnThrownProjectile;
+
+            Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -93,7 +109,7 @@ namespace RGM.Modes
             if (Warhead.IsDetonated)
                 yield break;
 
-            Server.ExecuteCommand("/cassie_sl 1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+            Exiled.API.Features.Cassie.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
 
             if (Warhead.IsDetonated)
                 yield break;
@@ -128,7 +144,7 @@ namespace RGM.Modes
 
         public void OnPinging(PingingEventArgs ev)
         {
-            if (!_isScp079Cooldown)
+            if (!isScp079Cooldown)
             {
                 Timing.CallDelayed(0.1f, () =>
                 {
@@ -148,11 +164,11 @@ namespace RGM.Modes
                         light.Destroy();
                     });
 
-                    _isScp079Cooldown = true;
+                    isScp079Cooldown = true;
 
                     Timing.CallDelayed(20, () =>
                     {
-                        _isScp079Cooldown = false;
+                        isScp079Cooldown = false;
                     });
                 });
             }

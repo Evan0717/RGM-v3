@@ -37,6 +37,8 @@ namespace RGM.Modes
 
         List<Player> Finders = new List<Player>();
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Round.IsLocked = true;
@@ -49,7 +51,18 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -72,7 +85,7 @@ namespace RGM.Modes
                 }
             }
 
-            Map.CleanAllItems();
+            Exiled.API.Features.Map.CleanAllItems();
 
             for (float i = 1; i < PlayerManager.List.Count / 6 + 2; i++)
             {

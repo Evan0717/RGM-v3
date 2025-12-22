@@ -32,6 +32,8 @@ namespace RGM.Modes
         public override string Color => "a0aade";
         public override string Suggester => "made by A3인데(@a3ind)";
 
+        RoundHandler roundHandler;
+
         public override void OnEnabled()
         {
             Round.IsLocked = true;
@@ -39,17 +41,17 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
-        }
-
-        public IEnumerator<float> OnModeStarted()
-        {
-            RoundHandler roundHandler = new RoundHandler();
+            roundHandler = new RoundHandler();
             roundHandler.OnRoundStarted();
 
             Exiled.Events.Handlers.Server.EndingRound += roundHandler.OnEndingRound;
+        }
 
-            yield return Timing.WaitForSeconds(1);
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            roundHandler.OnEndingRound();
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)

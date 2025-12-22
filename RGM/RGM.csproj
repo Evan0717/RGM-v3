@@ -395,7 +395,6 @@
     <Compile Include="RGM\Modes\Pluses\Collector\Collector.cs" />
     <Compile Include="RGM\Modes\Sets\ChangedFate\ChangedFate.cs" />
     <Compile Include="RGM\Modes\Sets\DeadLine\DeadLine.cs" />
-    <Compile Include="RGM\Modes\Sets\DeathRun\DeathRun.cs" />
     <Compile Include="RGM\Modes\Pluses\Distancing\Distancing.cs" />
     <Compile Include="RGM\Modes\Sets\Develop\Develop.cs" />
     <Compile Include="RGM\Modes\Sets\DoubleUp\DoubleUp.cs" />
@@ -424,7 +423,6 @@
     <Compile Include="RGM\Modes\Pluses\Outlaw\Outlaw.cs" />
     <Compile Include="RGM\Modes\Sets\LastOne\LastOne.cs" />
     <Compile Include="RGM\Modes\Sets\MiniGames\MiniGames.cs" />
-    <Compile Include="RGM\Modes\Sets\AI\AI.cs" />
     <Compile Include="RGM\Modes\Sets\ClassSociety\ClassSociety.cs" />
     <Compile Include="RGM\Modes\Sets\Original\Original.cs" />
     <Compile Include="RGM\Modes\Sets\PickMeUp\PickMeUp.cs" />
@@ -439,7 +437,6 @@
     <Compile Include="RGM\Modes\Sets\Rescue05\Rescue05.cs" />
     <Compile Include="RGM\Modes\Sets\RussianRoulette\RussianRoulette.cs" />
     <Compile Include="RGM\Modes\Sets\Snake\Snake.cs" />
-    <Compile Include="RGM\Modes\Sets\SourceMan\SourceMan.cs" />
     <Compile Include="RGM\Modes\Sets\SpeedRun\SpeedRun.cs" />
     <Compile Include="RGM\Modes\Pluses\Spirit\Spirit.cs" />
     <Compile Include="RGM\Modes\Sets\Spleef\Spleef.cs" />
@@ -504,31 +501,31 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Privacy\DiscordInteraction\bin\Debug\DiscordInteraction.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=9.10.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.API, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\SCP Secret Laboratory\LabAPI\dependencies\global\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CreditTags, Version=9.10.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.CreditTags, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomItems, Version=9.10.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.CustomItems, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.CustomItems.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomRoles, Version=9.10.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.CustomRoles, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.CustomRoles.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=9.10.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.Events, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Loader, Version=9.8.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.Loader, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\SCP Secret Laboratory\LabAPI\plugins\global\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=9.10.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.Permissions, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
     </Reference>

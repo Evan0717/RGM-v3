@@ -23,7 +23,7 @@ public class SystemHacking : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var scp in PlayerManager.List.Where(x => x.IsScp && x.Role.Type != RoleTypeId.Scp079))
+        foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
         {
             scp.AddEffect(EffectType.Fade, 90, 120);
         }

@@ -52,12 +52,17 @@ namespace RGM.Modes
 
         public static Juggernaut Instance;
 
-        public Player juggernaut;
-        public Player dj;
-        public List<Player> ScpAttackCooldown = new List<Player>();
-        public Dictionary<Player, float> PlayerDamages = new Dictionary<Player, float>();
-        public Speaker speaker;
+        Player juggernaut;
+        List<Player> ScpAttackCooldown = new List<Player>();
+        Dictionary<Player, float> PlayerDamages = new Dictionary<Player, float>();
+        Speaker speaker;
         float stack = 0;
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
+        CoroutineHandle _findLocate;
+        CoroutineHandle _musicAsync;
+        CoroutineHandle _reduceWaveTimer;
 
         public override void OnEnabled()
         {
@@ -74,8 +79,33 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(AutoWarhead());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _findLocate = Timing.RunCoroutine(FindLocate());
+            _musicAsync = Timing.RunCoroutine(MusicAsync());
+            _reduceWaveTimer = Timing.RunCoroutine(ReduceWaveTimer());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.Shooting -= OnShooting;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
+            Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
+
+            Exiled.Events.Handlers.Item.ChargingJailbird -= OnChargingJailbird;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
+            Timing.KillCoroutines(_findLocate);
+            Timing.KillCoroutines(_musicAsync);
+            Timing.KillCoroutines(_reduceWaveTimer);
+
+            if (speaker != null)
+                speaker.Destroy();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -102,10 +132,6 @@ namespace RGM.Modes
             List<ItemType> Items = new List<ItemType>() { ItemType.GunLogicer, ItemType.Jailbird };
             foreach (var Item in Items)
                 juggernaut.AddItem(Item);
-
-            Timing.RunCoroutine(FindLocate());
-            Timing.RunCoroutine(MusicAsync());
-            Timing.RunCoroutine(ReduceWaveTimer());
 
             bool IsEnd = false;
             while (!IsEnd)
@@ -142,7 +168,7 @@ namespace RGM.Modes
             if (Warhead.IsDetonated)
                 yield break;
 
-            Server.ExecuteCommand("/cassie_sl 1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+            Exiled.API.Features.Cassie.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
 
             if (Warhead.IsDetonated)
                 yield break;
@@ -157,7 +183,7 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius, new List<Player>() { dj }))
+                if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius))
                     juggernaut.AddHint("저거너트 레이더", $"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{(en ? nearestPlayer.Role.Name : Trans.Role[nearestPlayer.Role.Type])}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
 
                 else
@@ -208,7 +234,7 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            if (player.IsAlive && player.IsScp)
+            if (player.IsAlive && player.IsScpRole())
             {
                 List<RoleTypeId> ScpsList = new List<RoleTypeId>()
                 {
@@ -217,7 +243,7 @@ namespace RGM.Modes
                 };
 
                 if (ScpsList.Contains(player.Role))
-                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x) && x.IsScp()).ToList()));
+                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x) && x.IsScpRole()).ToList()));
             }
         }
 

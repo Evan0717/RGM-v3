@@ -36,7 +36,7 @@ public class Druid : Ability
         if (ev.Player != Owner || ev.Attacker == null || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
-        float reflectChance = ev.Player.IsScp ? 0.5f : 0.8f;
+        float reflectChance = ev.Player.IsScpRole() ? 0.5f : 0.8f;
 
         if (UnityEngine.Random.Range(0f, 1f) <= reflectChance)
         {

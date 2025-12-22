@@ -37,7 +37,7 @@ namespace RGM.Modes
 
         public static WhoamI2 Instance;
 
-        public List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
+        List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
         {
             RoleTypeId.Scp079,
             RoleTypeId.Spectator,
@@ -51,12 +51,23 @@ namespace RGM.Modes
             RoleTypeId.CustomRole
         };
 
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(AutoWarhead());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -88,7 +99,7 @@ namespace RGM.Modes
             if (Warhead.IsDetonated)
                 yield break;
 
-            Server.ExecuteCommand("/cassie_sl 1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+            Exiled.API.Features.Cassie.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
 
             if (Warhead.IsDetonated)
                 yield break;

@@ -46,13 +46,22 @@ namespace RGM.Modes
 
         public static Blessing Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Variable.IsNonePlayerAllowed = false;
 
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

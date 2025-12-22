@@ -34,27 +34,13 @@ namespace RGM.Modes
 
         public static FreeForAll Instance;
 
-        public List<Player> pl = new List<Player>();
-        public List<ItemType> StartupItems = new List<ItemType>();
-        public Door door;
+        List<Player> pl = new List<Player>();
+        List<ItemType> StartupItems = new List<ItemType>();
+        Door door;
 
-        public override void OnEnabled()
-        {
-            Server.FriendlyFire = true;
-            Round.IsLocked = true;
-            Respawn.PauseWaves();
-            Door.List.ToList().ForEach(x => x.Lock(1205, Exiled.API.Enums.DoorLockType.Lockdown079));
+        CoroutineHandle _onModeStarted;
 
-            Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
-            Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
-            Exiled.Events.Handlers.Player.Shot += OnShot;
-
-            Timing.RunCoroutine(OnModeStarted());
-        }
-
-        public List<ItemType> Items()
+        List<ItemType> Items()
         {
             List<ItemType> Guns = new List<ItemType>() { ItemType.GunA7, ItemType.GunE11SR, ItemType.GunShotgun, ItemType.GunCom45, ItemType.GunFSP9, ItemType.GunRevolver,
                 ItemType.GunCOM18, ItemType.GunCrossvec, ItemType.GunLogicer, ItemType.GunFRMG0, ItemType.GunAK, ItemType.Jailbird, ItemType.ParticleDisruptor };
@@ -71,6 +57,35 @@ namespace RGM.Modes
             }
 
             return Items;
+        }
+
+        public override void OnEnabled()
+        {
+            Server.FriendlyFire = true;
+            Round.IsLocked = true;
+            Respawn.PauseWaves();
+            Door.List.ToList().ForEach(x => x.Lock(1205, Exiled.API.Enums.DoorLockType.Lockdown079));
+
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
+
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Door.List.ToList().ForEach(x => x.Unlock());
+
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

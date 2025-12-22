@@ -37,7 +37,7 @@ public class RestArea : Ability
         if (Owner != ev.Player)
             return;
 
-        foreach (var scp in PlayerManager.List.Where(x => x.IsScp))
+        foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole()))
         {
             if (scp.Health >= scp.MaxHealth)
                 continue;

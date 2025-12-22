@@ -37,18 +37,24 @@ namespace RGM.Modes
 순발력을 마음껏 뽐내 보세요!
 """;
         public override string Color => "C8FE2E";
+        public override string Map => "GGClub";
 
         public static GGClub Instance;
 
-        public List<Player> pl = new List<Player>();
-        public List<Transform> ClubLights = new List<Transform>();
-        public List<Transform> Pads = new List<Transform>();
-        public List<Transform> goldPads = new List<Transform>();
+        List<Player> pl = new List<Player>();
+        List<Transform> ClubLights = new List<Transform>();
+        List<Transform> Pads = new List<Transform>();
+        List<Transform> goldPads = new List<Transform>();
 
-        public bool IsSongStopped = false;
-        public int Phase = 1;
+        bool IsSongStopped = false;
+        int Phase = 1;
 
-        Player dj;
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _dj;
+        CoroutineHandle _gingerbreadHint;
+        CoroutineHandle _showPhase;
+
+        AudioClipPlayback audio;
 
         public override void OnEnabled()
         {
@@ -63,15 +69,33 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _dj = Timing.RunCoroutine(DJ());
+            _gingerbreadHint = Timing.RunCoroutine(gingerbreadHint());
+            _showPhase = Timing.RunCoroutine(ShowPhase());
+
+            audio = Tools.PlayGlobalAudio("tothemoon", 1, true);
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
+
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_dj);
+            Timing.KillCoroutines(_gingerbreadHint);
+            Timing.KillCoroutines(_showPhase);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"GGClub");
-
-            Tools.PlayGlobalAudio("tothemoon", 1, true);
-
             PlayerManager.List.CopyTo(pl);
 
             yield return Timing.WaitForOneFrame;
@@ -91,10 +115,6 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
-
-            Timing.RunCoroutine(DJ());
-            Timing.RunCoroutine(gingerbreadHint());
-            Timing.RunCoroutine(ShowPhase());
 
             ClubLights = Tools.GetObjectList("ClubLight");
             Pads = Tools.GetObjectList("Pad");
@@ -168,33 +188,6 @@ namespace RGM.Modes
                     player.AddHint("3114 힌트", $"<b>[TIP]</b> <i>gingerbread</i>를 입력하면 춤출 수 있습니다.", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
-            }
-        }
-
-        public IEnumerator<float> DJHeadBanging()
-        {
-            yield return Timing.WaitForSeconds(1f);
-
-            bool HeadUp = true;
-
-            while (true)
-            {
-                if (HeadUp)
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, -1f, 0));
-
-                    HeadUp = false;
-
-                    yield return Timing.WaitForSeconds(0.2f);
-                }
-                else
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, 1f, 0));
-
-                    HeadUp = true;
-
-                    yield return Timing.WaitForSeconds(0.15f);
-                }
             }
         }
 

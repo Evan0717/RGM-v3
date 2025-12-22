@@ -44,7 +44,7 @@ public class Clone : Ability
     {
         clone = DummyUtils.SpawnDummy($"누군가의 분신");
 
-        clone.roleManager.ServerSetRole(Owner.IsScp ? RoleTypeId.Scp0492 : Owner.Role.Type, RoleChangeReason.ItemUsage);
+        clone.roleManager.ServerSetRole(Owner.IsScpRole() ? RoleTypeId.Scp0492 : Owner.Role.Type, RoleChangeReason.ItemUsage);
         clone.transform.position = Owner.Position;
 
         while (Owner.IsAlive)

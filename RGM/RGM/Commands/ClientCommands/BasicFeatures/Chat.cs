@@ -99,10 +99,7 @@ namespace RGM.Commands.ClientCommands
                         return true;
 
                     if (chatType == (en ? "SCP" : "SCP"))
-                        return p.IsDead || NonePlayer.Players.Contains(p) || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
-
-                    if (chatType == (en ? "Flamingo" : "플라밍고"))
-                        return p.IsDead || NonePlayer.Players.Contains(p) || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
+                        return p.IsDead || NonePlayer.Players.Contains(p) || p.IsScpRole() || p.Role.Type == RoleTypeId.ZombieFlamingo;
 
                     if (chatType == (en ? "Spectator" : "관전자"))
                         return p.IsDead || NonePlayer.Players.Contains(p);
@@ -145,7 +142,7 @@ namespace RGM.Commands.ClientCommands
                 return true;
             }
                 
-            if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
+            if (player.IsScpRole() || player.Role.Type == RoleTypeId.ZombieFlamingo)
             {
                 response = ChatFormat(en ? "SCP" : "SCP");
                 return true;

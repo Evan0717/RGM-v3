@@ -32,16 +32,11 @@ namespace RGM.Modes
         {
             Round.IsLocked = true;
             Respawn.PauseWaves();
-            Map.IsDecontaminationEnabled = false;
-
+            Exiled.API.Features.Map.IsDecontaminationEnabled = false;
         }
 
-        public IEnumerator<float> OnModeStarted()
+        public override void OnDisabled()
         {
-            foreach (var player in PlayerManager.List)
-                player.Role.Set(RoleTypeId.Tutorial);
-
-            yield break;
         }
     }
 }

@@ -48,10 +48,10 @@ COM-15
 
         public static GunGame Instance;
 
-        public Dictionary<Player, int> Stage = new Dictionary<Player, int>(); 
-        public bool IsEnd = false;
+        Dictionary<Player, int> Stage = new Dictionary<Player, int>(); 
+        bool IsEnd = false;
 
-        public List<ItemType> GunsList = new List<ItemType>()
+        List<ItemType> GunsList = new List<ItemType>()
         { 
             ItemType.Jailbird,
             ItemType.ParticleDisruptor,
@@ -70,6 +70,9 @@ COM-15
             ItemType.Lantern
         };
 
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _scoreBoard;
+
         public override void OnEnabled()
         {
             Server.FriendlyFire = true;
@@ -79,8 +82,17 @@ COM-15
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Left += OnLeft;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(ScoreBoard());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _scoreBoard = Timing.RunCoroutine(ScoreBoard());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Left -= OnLeft;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_scoreBoard);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -132,8 +144,8 @@ COM-15
         {
             IEnumerator<float> Processing()
             {
-                Map.CleanAllItems();
-                Map.CleanAllRagdolls();
+                Exiled.API.Features.Map.CleanAllItems();
+                Exiled.API.Features.Map.CleanAllRagdolls();
 
                 foreach (var player in PlayerManager.List)
                 {

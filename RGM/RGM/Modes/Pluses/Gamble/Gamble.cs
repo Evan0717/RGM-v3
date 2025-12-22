@@ -29,13 +29,24 @@ namespace RGM.Modes
 
         public static Gamble Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -45,7 +56,7 @@ namespace RGM.Modes
         
         public void OnSpawned(SpawnedEventArgs ev)
         {
-            if (!(ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo")))
+            if (!(ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo")))
                 return;
 
             ev.Player.AddHint("도박 안내", $"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
@@ -53,7 +64,7 @@ namespace RGM.Modes
 
         public void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if (ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo"))
+            if (ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo"))
                 return;
 
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
@@ -75,7 +86,7 @@ namespace RGM.Modes
 
         public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (!(ev.Player.IsScp || ev.Player.Role.Type.ToString().Contains("Flamingo")) || !ev.Player.IsJumping || ev.Player.GetEffect(EffectType.SeveredHands).IsEnabled)
+            if (!(ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo")) || !ev.Player.IsJumping || ev.Player.GetEffect(EffectType.SeveredHands).IsEnabled)
                 return;
 
             int rand = UnityEngine.Random.Range(1, 101);

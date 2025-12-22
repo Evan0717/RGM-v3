@@ -34,6 +34,8 @@ namespace RGM.Modes
 
         public static DogFight Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
@@ -44,15 +46,32 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            Tools.TryInstallMode(ModeType.FriendlyFire);
+            Tools.TryInstallMode(ModeType.Radio);
+            Tools.TryInstallMode(ModeType.Ghost);
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Shooting -= OnShooting;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+
+            Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            Tools.UnInstallMode(ModeType.FriendlyFire);
+            Tools.UnInstallMode(ModeType.Radio);
+            Tools.UnInstallMode(ModeType.Ghost);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.TryInstallMode(ModeType.FriendlyFire);
-            Tools.TryInstallMode(ModeType.Radio);
-            Tools.TryInstallMode(ModeType.Ghost);
-
             foreach (var player in PlayerManager.List)
             {
                 Spawned(player);

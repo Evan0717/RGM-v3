@@ -39,17 +39,38 @@ namespace RGM.Modes
 
         Player Bomb = null;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
+
             Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
+
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
+
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
+
+            Exiled.Events.Handlers.Scp049.StartingRecall -= OnStartingRecall;
+
+            Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawningTeam;
+
+            Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Kicking -= OnKicking;
+
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

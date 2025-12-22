@@ -13,6 +13,7 @@ namespace RGM;
 public abstract class Mode
 {
     public abstract void OnEnabled();
+    public abstract void OnDisabled();
 
     public abstract string Name { get; }
     public abstract string Description { get; }
@@ -20,6 +21,7 @@ public abstract class Mode
     public abstract string Color { get; }
     public virtual string Author { get; set; } = "GoldenPig1205";
     public virtual string Suggester { get; set; } = "";
+    public virtual string Map { get; } = "";
 
     public ModeData Data { get; set; }
 }
@@ -35,6 +37,7 @@ public class ModeData
     public string Color { get; set; }
     public string Author { get; set; }
     public string Suggester { get; set; } = "";
+    public string Map { get; set; } = "";
 }
 
 [AttributeUsage(AttributeTargets.Class)]

@@ -33,13 +33,16 @@ namespace RGM.Modes
 어떤 수단을 사용하더라도 최후까지 살아남으세요!
 """;
         public override string Color => "FA58D0";
+        public override string Map => "hp";
 
         public static Skeleton Instance;
 
-        public List<Player> pl = new List<Player>();
-        public List<Player> BomberMans = new List<Player>();
+        List<Player> pl = new List<Player>();
+        List<Player> BomberMans = new List<Player>();
 
-        Player dj;
+        CoroutineHandle _onModeStarted;
+
+        AudioClipPlayback audio;
 
         public override void OnEnabled()
         {
@@ -53,20 +56,25 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            audio = Tools.PlayGlobalAudio("Skeleton", 1, true);
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"hp");
-
-            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-            {
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-            });
-
-            Tools.PlayGlobalAudio("Skeleton", 1, true);
-
             PlayerManager.List.Where(x => !x.IsNPC).CopyTo(pl);
 
             foreach (var door in Door.List)
@@ -148,33 +156,6 @@ namespace RGM.Modes
                 PlayerManager.List.ToList().ForEach(x => x.AddHint("폭탄돌리기 펑", $"펑!", 2));
 
                 yield return Timing.WaitForSeconds(2f);
-            }
-        }
-
-        public IEnumerator<float> DJHeadBanging()
-        {
-            yield return Timing.WaitForSeconds(1f);
-
-            bool HeadUp = true;
-
-            while (true)
-            {
-                if (HeadUp)
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, -1f, 0));
-
-                    HeadUp = false;
-
-                    yield return Timing.WaitForSeconds(0.2f);
-                }
-                else
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, 1f, 0));
-
-                    HeadUp = true;
-
-                    yield return Timing.WaitForSeconds(0.15f);
-                }
             }
         }
 

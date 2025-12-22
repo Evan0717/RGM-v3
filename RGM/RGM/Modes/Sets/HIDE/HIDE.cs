@@ -39,12 +39,15 @@ namespace RGM.Modes
 @vlrpfrjs
 """;
         public override string Color => "0489B1";
+        public override string Map => "container";
 
         public static HIDE Instance;
 
-        public List<Player> pl = new List<Player>();
-        public Player monster = null;
+        List<Player> pl = new List<Player>();
+        Player monster = null;
 
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _timer;
 
         public override void OnEnabled()
         {
@@ -58,14 +61,23 @@ namespace RGM.Modes
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(Timer());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _timer = Timing.RunCoroutine(Timer());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_timer);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            MapSchematic map = Tools.LoadMap($"container");
-
             PlayerManager.List.ToList().CopyTo(pl);
             monster = Tools.GetRandomValue(PlayerManager.List.ToList());
 
@@ -106,16 +118,7 @@ namespace RGM.Modes
                 ServerConsole.AddLog(e.ToString());
             }
 
-            while (true)
-            {
-                foreach (var obj in map.SpawnedObjects)
-                {
-                    if (obj.name == "CustomSchematic-MonsterCapsule")
-                        obj.Base.Position = monster.Position;
-                }
-
-                yield return Timing.WaitForSeconds(0.01f);
-            }
+            yield break;
         }
 
         public IEnumerator<float> Timer()
@@ -129,7 +132,7 @@ namespace RGM.Modes
 
             foreach (var player in PlayerManager.List)
             {
-                if (player.IsScp)
+                if (player.IsScpRole())
                 {
                     if (GodModePlayers.Contains(player))
                         GodModePlayers.Remove(player);
@@ -141,7 +144,7 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Attacker.IsScp && ev.DamageHandler.Type != DamageType.Strangled)
+            if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type != DamageType.Strangled)
                 ev.DamageHandler.Damage += 60;
         }
 

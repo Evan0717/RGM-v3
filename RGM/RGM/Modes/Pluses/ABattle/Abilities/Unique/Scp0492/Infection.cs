@@ -34,7 +34,7 @@ public class Infection : Ability
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;
 
-        if (ev.Attacker.IsScp)
+        if (ev.Attacker.IsScpRole())
         {
             ev.Player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
         }

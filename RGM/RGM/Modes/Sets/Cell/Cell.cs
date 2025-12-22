@@ -27,24 +27,36 @@ namespace RGM.Modes
 최대한 잘 피해 보세요!
 """;
         public override string Color => "D7DF01";
+        public override string Map => "cell";
 
         public static Cell Instance;
 
-        public List<Player> pl = new List<Player>();
+        List<Player> pl = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
             Round.IsLocked = true;
+            Server.FriendlyFire = true;
 
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Round.IsLocked = false;
+            Server.FriendlyFire = false;
+
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.FriendlyFire = true;
-            Tools.LoadMap($"cell");
             PlayerManager.List.ToList().CopyTo(pl);
 
             foreach (var player in PlayerManager.List)

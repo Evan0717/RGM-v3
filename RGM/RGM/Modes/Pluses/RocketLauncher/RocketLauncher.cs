@@ -32,13 +32,11 @@ namespace RGM.Modes
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
-
-            Timing.RunCoroutine(OnModeStarted());
         }
 
-        public IEnumerator<float> OnModeStarted()
+        public override void OnDisabled()
         {
-            yield return 0f;
+            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
         }
 
         public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
@@ -51,7 +49,7 @@ namespace RGM.Modes
 
                     int GetPercent()
                     {
-                        if (ev.Attacker.IsScp)
+                        if (ev.Attacker.IsScpRole())
                             return UnityEngine.Random.Range(1, 3);
 
                         else if (ev.Attacker.Role.Type == RoleTypeId.Tutorial)

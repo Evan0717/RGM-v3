@@ -45,24 +45,44 @@ namespace RGM.Modes
 
         public static ClassSociety Instance;
 
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _display;
+
         public override void OnEnabled()
         {
+            Server.FriendlyFire = true;
+            Round.IsLocked = true;
+            Respawn.PauseWaves();
+
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(Display());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _display = Timing.RunCoroutine(Display());
+        }
+
+        public override void OnDisabled()
+        {
+            Server.FriendlyFire = false;
+            Round.IsLocked = false;
+            Respawn.ResumeWaves();
+
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_display);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Server.FriendlyFire = true;
-            Round.IsLocked = true;
-            Respawn.PauseWaves();
-            Map.CleanAllItems();
+            Exiled.API.Features.Map.CleanAllItems();
 
             foreach (var door in Door.List.Where(x => x.IsCheckpoint))
             {

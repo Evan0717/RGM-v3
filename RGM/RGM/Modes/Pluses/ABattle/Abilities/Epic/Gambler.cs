@@ -17,7 +17,7 @@ public class Gambler : Ability
 {
     public override void OnEnabled()
     {
-        if (Owner.IsScp || Owner.Role.Type.ToString().Contains("Flamingo"))
+        if (Owner.IsScpRole() || Owner.Role.Type.ToString().Contains("Flamingo"))
             Owner.AddHint("도박", $"<size=20>[Space + ALT]ㅣ도박을 진행할 수 있습니다.</size>", 10);
 
         Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
@@ -53,7 +53,7 @@ public class Gambler : Ability
 
     public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
-        if (!(Owner.IsScp || Owner.Role.Type.ToString().Contains("Flamingo")) || !Owner.IsJumping || Owner.GetEffect(EffectType.SeveredHands).IsEnabled)
+        if (!(Owner.IsScpRole() || Owner.Role.Type.ToString().Contains("Flamingo")) || !Owner.IsJumping || Owner.GetEffect(EffectType.SeveredHands).IsEnabled)
             return;
 
         int rand = UnityEngine.Random.Range(1, 101);

@@ -39,6 +39,11 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            // 히히 날먹
+        }
+
+        public override void OnDisabled()
+        {
         }
     }
 }

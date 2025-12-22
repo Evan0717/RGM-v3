@@ -63,7 +63,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
                 ItemType itemType = list.GetRandomValue();
 
-                if (player.IsScp)
+                if (player.IsScpRole())
                 {
                     player.AddItem(itemType);
                 }

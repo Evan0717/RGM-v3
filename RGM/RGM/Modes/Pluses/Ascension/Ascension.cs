@@ -35,6 +35,11 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Jumping += OnJumping;
         }
 
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Jumping -= OnJumping;
+        }
+
         public void OnJumping(JumpingEventArgs ev)
         {
             Timing.RunCoroutine(Tools.DoRocket(ev.Player, ev.Player, 1));

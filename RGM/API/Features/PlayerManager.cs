@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Items;
@@ -30,7 +31,17 @@ namespace RGM.API.Features
     {
         public static List<Player> List
         {
-            get => Player.List.Where(x => !NonePlayer.Players.Contains(x)).ToList();
+            get => Player.List.Where(x => UsersManager.UsersCache[x.UserId][23] == "0" && !NonePlayer.Players.Contains(x)).ToList();
+        }
+
+        public static bool IsScpRole(this Player player)
+        {
+            return player.IsScp || player.Role.Type.IsFlamingo();
+        }
+
+        public static bool IsScpRole(this RoleTypeId roleTypeId)
+        {
+            return roleTypeId.IsScp() || roleTypeId.IsFlamingo();
         }
 
         public static void Hit(this Player player, Player attacker, float damage)

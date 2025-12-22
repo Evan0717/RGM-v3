@@ -31,7 +31,7 @@ public class Fear : Ability
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;
 
-        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && !x.IsScp))
+        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && !x.IsScpRole()))
         {
             if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
             {

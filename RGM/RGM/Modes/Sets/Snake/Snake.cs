@@ -44,6 +44,8 @@ namespace RGM.Modes
         Dictionary<Player, (int, int)> playerScore = new();
         int time = 0;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Server.FriendlyFire = true;
@@ -51,28 +53,40 @@ namespace RGM.Modes
             Respawn.PauseWaves();
             AFKManager._kickTime = 120500;
 
-            PlayerScoreManager.LoadScores();
-            SnakeEventManager.Initialize();
-            SnakeGameMonitor.StartMonitoring();
-
             Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Died += OnDied;
 
+            PlayerScoreManager.LoadScores();
+            SnakeEventManager.Initialize();
+            SnakeGameMonitor.StartMonitoring();
+
             SnakeEventManager.OnSnakeGameEnd += OnSnakeGameEnd;
             SnakeEventManager.OnSnakeScoreChanged += OnSnakeScoreChanged;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            Tools.TryInstallMode(ModeType.SuperStar);
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            SnakeEventManager.Cleanup();
+
+            SnakeEventManager.OnSnakeGameEnd -= OnSnakeGameEnd;
+            SnakeEventManager.OnSnakeScoreChanged -= OnSnakeScoreChanged;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            Tools.UnInstallMode(ModeType.SuperStar);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Round.IsLocked = true;
-            Respawn.PauseWaves();
-            Server.FriendlyFire = true;
-
-            Tools.TryInstallMode(ModeType.SuperStar);
-
             foreach (var player in PlayerManager.List)
             {
                 playerScore.Add(player, (0, 0));

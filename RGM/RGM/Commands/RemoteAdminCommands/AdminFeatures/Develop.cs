@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using UnityEngine;
 using static PlayerList;
 using static UnityEngine.GraphicsBuffer;
+using static RGM.Variables.Variable;
 
 namespace RGM.Commands.RemoteAdminCommands
 {
@@ -27,17 +28,31 @@ namespace RGM.Commands.RemoteAdminCommands
         {
             Player player = Player.Get(sender);
 
-            player.Kill("이 자는 개발의 의무를 짊어지고 죽었습니다.");
-            player.Role.Set(RoleTypeId.Overwatch);
+            bool flag = UsersManager.UsersCache[player.UserId][23] == "1";
 
-            response = "Complete!";
+            if (flag)
+            {
+                UsersManager.UsersCache[player.UserId][23] = "0";
+                UsersManager.SaveUsers();
 
-            return true;
+                response = "방해 금지 <color=red>OFF</color>!\nComplete!";
+
+                return true;
+            }
+            else
+            {
+                UsersManager.UsersCache[player.UserId][23] = "1";
+                UsersManager.SaveUsers();
+
+                response = "방해 금지 <color=green>ON</color>!\nComplete!";
+
+                return true;
+            }
         }
 
         public string Command { get; } = "develop";
 
-        public string[] Aliases { get; } = { "dv", "dev", "개발", "roqkf" };
+        public string[] Aliases { get; } = { "dv", "dev", "개발", "roqkf", "dnd", "방해금지" };
 
         public string Description { get; } = "개발하러 갈 때 사용하세요!";
 

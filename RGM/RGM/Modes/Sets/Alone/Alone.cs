@@ -34,21 +34,33 @@ $"""
 
         public static Alone Instance;
 
-        public Player alone;
+        Player alone;
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
+            Respawn.PauseWaves();
+
             Exiled.Events.Handlers.Player.Escaped += OnEscaped;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Respawn.ResumeWaves();
+
+            Exiled.Events.Handlers.Player.Escaped -= OnEscaped;
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Respawn.PauseWaves();
-
             alone = PlayerManager.List.Where(x => !x.IsNPC).GetRandomValue();
             List<RoleTypeId> ignoredRoles = new List<RoleTypeId> 
             { 
@@ -56,7 +68,7 @@ $"""
                 RoleTypeId.Scp3114,
                 RoleTypeId.Scp0492
             };
-            List<RoleTypeId> scpRoles = Tools.EnumToList<RoleTypeId>().Where(x => x.IsScp() && !ignoredRoles.Contains(x)).ToList();
+            List<RoleTypeId> scpRoles = Tools.EnumToList<RoleTypeId>().Where(x => x.IsScpRole() && !ignoredRoles.Contains(x)).ToList();
             List<ItemType> items = new List<ItemType>() 
             {
                 ItemType.KeycardO5,

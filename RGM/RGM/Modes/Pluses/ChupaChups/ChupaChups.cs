@@ -30,13 +30,23 @@ namespace RGM.Modes
 
         public static ChupaChups Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
-
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;
 
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawningTeam;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -63,7 +73,7 @@ namespace RGM.Modes
 
         public void OnRespawningTeam(RespawningTeamEventArgs ev)
         {
-            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScp && x.Role.Type != RoleTypeId.Scp079))
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
         }
     }

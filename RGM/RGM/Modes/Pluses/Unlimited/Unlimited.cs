@@ -25,7 +25,9 @@ namespace RGM.Modes
 
         public static Unlimited Instance;
 
-        public int Tantrum = 0;
+        int Tantrum = 0;
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -33,6 +35,9 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Healing += OnHealing;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
             Exiled.Events.Handlers.Player.UsingRadioBattery += OnUsingRadioBattery;
+            Exiled.Events.Handlers.Player.Shooting += OnShooting;
+            Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
+            Exiled.Events.Handlers.Player.UsingMicroHIDEnergy += OnUsingMicroHIDEnergy;
 
             Exiled.Events.Handlers.Scp106.Teleporting += OnTeleporting;
             Exiled.Events.Handlers.Scp106.Stalking += OnStalking;
@@ -50,13 +55,40 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp173.PlacingTantrum += OnPlacingTantrum;
             Exiled.Events.Handlers.Scp173.UsingBreakneckSpeeds += OnUsingBreakneckSpeeds;
 
-            Exiled.Events.Handlers.Player.Shooting += OnShooting;
-            Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
-            Exiled.Events.Handlers.Player.UsingMicroHIDEnergy += OnUsingMicroHIDEnergy;
-
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
 
             Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Healing -= OnHealing;
+            Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
+            Exiled.Events.Handlers.Player.UsingRadioBattery -= OnUsingRadioBattery;
+            Exiled.Events.Handlers.Player.Shooting -= OnShooting;
+            Exiled.Events.Handlers.Player.ChangingMicroHIDState -= OnChangingMicroHIDState;
+            Exiled.Events.Handlers.Player.UsingMicroHIDEnergy -= OnUsingMicroHIDEnergy;
+
+            Exiled.Events.Handlers.Scp106.Teleporting -= OnTeleporting;
+            Exiled.Events.Handlers.Scp106.Stalking -= OnStalking;
+            Exiled.Events.Handlers.Scp106.Attacking -= OnScp106Attacking;
+
+            Exiled.Events.Handlers.Scp939.PlayingSound -= OnPlayingSound;
+
+            Exiled.Events.Handlers.Scp079.ChangingCamera -= OnChangingCamera;
+
+            Exiled.Events.Handlers.Scp049.StartingRecall -= OnStartingRecall;
+            Exiled.Events.Handlers.Scp049.Attacking -= OnScp049Attacking;
+
+            Exiled.Events.Handlers.Scp096.Enraging -= OnEnraging;
+
+            Exiled.Events.Handlers.Scp173.PlacingTantrum -= OnPlacingTantrum;
+            Exiled.Events.Handlers.Scp173.UsingBreakneckSpeeds -= OnUsingBreakneckSpeeds;
+
+            Exiled.Events.Handlers.Item.ChargingJailbird -= OnChargingJailbird;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

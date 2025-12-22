@@ -41,17 +41,19 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
 
         public static DoubleUp Instance;
 
-        public static Dictionary<ModeType, ModeData> Mods = ModeList;
+        static Dictionary<ModeType, ModeData> Mods = ModeList;
 
-        public static List<ModeType> ModeKeys = ModeList.Keys.Where(x => Mods[x].Category == ModeCategory.Public).ToList();
-        public static ModeType mod1 = Tools.GetRandomValue(ModeKeys);
-        public static ModeType mod2 = Tools.GetRandomValue(ModeKeys.Where(x => (mod1.GetModeData().Info == ModeInfo.Set ? x != mod1 : true) && ModeList.Keys.Where(x => x.GetModeData().Info != ModeInfo.Set).Contains(x)).ToList());
+        static List<ModeType> ModeKeys = ModeList.Keys.Where(x => Mods[x].Category == ModeCategory.Public).ToList();
+        static ModeType mod1 = Tools.GetRandomValue(ModeKeys);
+        static ModeType mod2 = Tools.GetRandomValue(ModeKeys.Where(x => (mod1.GetModeData().Info == ModeInfo.Set ? x != mod1 : true) && ModeList.Keys.Where(x => x.GetModeData().Info != ModeInfo.Set).Contains(x)).ToList());
 
-        public List<ModeType> Modes = new List<ModeType>() { mod1, mod2 };
+        List<ModeType> Modes = new List<ModeType>() { mod1, mod2 };
 
-        public List<string> pl = new List<string>();
+        List<string> pl = new List<string>();
 
-        public static string Desc = $"<size=25><b>[<color=#{Mods[mod1].Color}>{mod1.GetModeData().Name}</color> + <color=#{Mods[mod2].Color}>{mod2.GetModeData().Name}</color>]</b></size>";
+        static string Desc = $"<size=25><b>[<color=#{Mods[mod1].Color}>{mod1.GetModeData().Name}</color> + <color=#{Mods[mod2].Color}>{mod2.GetModeData().Name}</color>]</b></size>";
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -59,12 +61,20 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            for (int i=0; i<2; i++)
+            for (int i = 0; i < 2; i++)
                 Tools.TryInstallMode(Mods[Modes[i]].Type);
 
             foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))

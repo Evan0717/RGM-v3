@@ -62,6 +62,8 @@ namespace RGM.Modes
         };
         Dictionary<Player, int> _stacks = new Dictionary<Player, int>();
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -73,7 +75,21 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp079.GainingLevel += OnGainingLevel;
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+
+            Exiled.Events.Handlers.Scp079.GainingLevel -= OnGainingLevel;
+            Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -158,7 +174,7 @@ namespace RGM.Modes
             if (ev.Player.CurrentItem == null)
                 return;
 
-            if (_tools.Contains(ev.Player.CurrentItem) && !ev.Player.IsScp)
+            if (_tools.Contains(ev.Player.CurrentItem) && !ev.Player.IsScpRole())
             {
                 ev.IsAllowed = false;
             }
@@ -218,7 +234,7 @@ namespace RGM.Modes
             Vector3 _forward = ev.Player.CameraTransform.forward;
 
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, _forward, out RaycastHit hit, 3, (LayerMask)1))
-                GGUtils.HealthObject.DamageObject(ev.Player, ev.Player.IsScp ? 100 : 40, hit);
+                GGUtils.HealthObject.DamageObject(ev.Player, ev.Player.IsScpRole() ? 100 : 40, hit);
 
             _cooldownPlayers.Add(ev.Player);
 

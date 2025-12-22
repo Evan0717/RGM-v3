@@ -48,7 +48,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 player.Health += 700;
                 player.EnableEffect(EffectType.MovementBoost, 25);
 
-                foreach (var p in PlayerManager.List.Where(x => !x.IsScp && !AddScpMode.SpecialScps.Contains(x) && Vector3.Distance(player.Position, x.Position) < 6))
+                foreach (var p in PlayerManager.List.Where(x => !x.IsScpRole() && !AddScpMode.SpecialScps.Contains(x) && Vector3.Distance(player.Position, x.Position) < 6))
                 {
                     p.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
                     p.AddHint("SCP-008에 의해 감염됨", $"<size=25>당신은 <color=red>SCP-008-X</color>(<color=#f4fe48>Euclid</color>)입니다.</size>\n<size=20>당신은 {player.DisplayNickname}(으)로 인해 감염되었습니다.</size>", 20);

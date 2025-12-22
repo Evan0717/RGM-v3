@@ -26,7 +26,7 @@ namespace RGM.Modes.Abilities.Unique.Scp079;
 [Ability("카메라 플래시", "핑이 찍힌 장소에 점화된 섬광탄이 생성됩니다. (쿨타임 20초)", AbilityCategory.Scp079, AbilityType.SCP079_CAMERAFLASH)]
 public class CameraFlash : Ability
 {
-    bool _isScp079Cooldown = false;
+    bool isScp079Cooldown = false;
 
     public override void OnEnabled()
     {
@@ -43,7 +43,7 @@ public class CameraFlash : Ability
         if (ev.Player != Owner)
             return;
 
-        if (!_isScp079Cooldown)
+        if (!isScp079Cooldown)
         {
             Timing.CallDelayed(0.1f, () =>
             {
@@ -63,11 +63,11 @@ public class CameraFlash : Ability
                     light.Destroy();
                 });
 
-                _isScp079Cooldown = true;
+                isScp079Cooldown = true;
 
                 Timing.CallDelayed(20, () =>
                 {
-                    _isScp079Cooldown = false;
+                    isScp079Cooldown = false;
                 });
             });
         }

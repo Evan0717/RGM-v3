@@ -29,9 +29,16 @@ namespace RGM.Modes
 
         public static Distancing Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -57,7 +64,7 @@ namespace RGM.Modes
 
                 foreach (var player in DamagePlayers.Where(x => x.Role.Type != RoleTypeId.Scp079))
                 {
-                    player.Hurt(player.IsScp ? 30 : 2, "인싸는 죽었습니다.");
+                    player.Hurt(player.IsScpRole() ? 30 : 2, "인싸는 죽었습니다.");
 
                     if (player.IsAlive)
                     {

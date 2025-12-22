@@ -41,15 +41,18 @@ namespace RGM.Modes
 <size=25>* 다른 플레이어를 사망에 이르게 할 경우 격발 기회를 한번 더 얻습니다.</size>
 """;
         public override string Color => "F5ECCE";
+        public override string Map => "ru";
 
         public static RussianRoulette Instance;
 
-        public int RequiredFinals;
-        public List<Player> pl = new List<Player>();
-        public List<Player> Finals = new List<Player>();
+        int RequiredFinals;
+        List<Player> pl = new List<Player>();
+        List<Player> Finals = new List<Player>();
 
-        public Dictionary<Vector3, List<Player>> TablePositions = new Dictionary<Vector3, List<Player>>();
-        public Dictionary<Player, Player> ShotChecks = new Dictionary<Player, Player>();
+        Dictionary<Vector3, List<Player>> TablePositions = new Dictionary<Vector3, List<Player>>();
+        Dictionary<Player, Player> ShotChecks = new Dictionary<Player, Player>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -61,13 +64,21 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+            Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.Kicking -= OnKicking;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap("ru");
-
             foreach (var ply in PlayerManager.List)
             {
                 if (GodModePlayers.Contains(ply))

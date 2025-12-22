@@ -35,8 +35,11 @@ namespace RGM.Modes
 
         public static Rescue05 Instance;
 
-        public Player Level05;
-        public Player Assassin;
+        Player Level05;
+        Player Assassin;
+
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -46,8 +49,20 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
-            Timing.RunCoroutine(OnModeStarted());
-            Timing.RunCoroutine(AutoWarhead());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
+
+            Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -105,7 +120,7 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(9 * 60);
 
-            Server.ExecuteCommand("/cassie_sl 1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+            Exiled.API.Features.Cassie.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
 
             yield return Timing.WaitForSeconds(1 * 60);
 

@@ -40,9 +40,11 @@ namespace RGM.Modes
 
         public static TeamMatch Instance;
 
-        public List<ItemType> StartupItems = new List<ItemType>();
-        public List<Player> TeamA = new List<Player>();
-        public List<Player> TeamB = new List<Player>();
+        List<ItemType> StartupItems = new List<ItemType>();
+        List<Player> TeamA = new List<Player>();
+        List<Player> TeamB = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -54,7 +56,17 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()

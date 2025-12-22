@@ -391,9 +391,40 @@ $"""
             {
                 var modeInstance = Activator.CreateInstance(modeType);
                 var onEnabledMethod = modeType.GetMethod("OnEnabled");
+
+                if (ModeType.GetModeData().Map != "")
+                    LoadMap(ModeType.GetModeData().Map);
+
                 onEnabledMethod?.Invoke(modeInstance, null);
 
                 EnabledModeList.Add(ModeType);
+
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public static bool UnInstallMode(ModeType ModeType)
+        {
+            var modeType = Type.GetType($"RGM.Modes.{ModeType}");
+
+            if (modeType == null)
+            {
+                if (ModeList.ContainsKey(ModeType.GetModeData().Type))
+                    modeType = Type.GetType($"RGM.Modes.{modeType}");
+            }
+
+            if (modeType != null)
+            {
+                var modeInstance = Activator.CreateInstance(modeType);
+                var onEnabledMethod = modeType.GetMethod("OnDisabled");
+                onEnabledMethod?.Invoke(modeInstance, null);
+
+                if (ModeType.GetModeData().Map != "")
+                    Server.ExecuteCommand($"/mp unload {ModeType.GetModeData().Map}");
+
+                EnabledModeList.Remove(ModeType);
 
                 return true;
             }
@@ -660,7 +691,7 @@ $"""
             }
         }
 
-        public static void PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
+        public static AudioClipPlayback PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
         {
             string notice = en ? $"Loaded audio: {clipName}" : $"로드된 오디오: {clipName}";
 
@@ -671,7 +702,7 @@ $"""
 
             Log.Info(notice);
 
-            GlobalPlayer.TryPlay(clipName, volume, loop, destroyOnEnd);
+            return GlobalPlayer.TryPlay(clipName, volume, loop, destroyOnEnd);
         }
 
         public static MapSchematic LoadMap(string mapName, bool notice = true)

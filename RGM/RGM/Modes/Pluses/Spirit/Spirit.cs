@@ -20,6 +20,7 @@ using Utils;
 using Exiled.Events.EventArgs.Player;
 using static RGM.Variables.Variable;
 using RGM.API.Features;
+using MapGeneration.Holidays;
 
 namespace RGM.Modes
 {
@@ -39,6 +40,8 @@ namespace RGM.Modes
 
         List<Player> spirits = new List<Player>();
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -46,7 +49,17 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -58,7 +71,8 @@ namespace RGM.Modes
                     if (spirits.Contains(player))
                     {
                         player.EnableEffect(EffectType.Invisible);
-                        // player.EnableEffect(EffectType.Ghostly);
+                        if (!HolidayUtils.IsHolidayActive(HolidayType.Halloween))
+                            player.EnableEffect(EffectType.Ghostly);
                     }
                 }
 

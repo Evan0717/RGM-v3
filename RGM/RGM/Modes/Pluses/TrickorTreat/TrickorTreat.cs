@@ -25,12 +25,22 @@ namespace RGM.Modes
 
         public static TrickorTreat Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Dying += OnDying;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -75,7 +85,7 @@ namespace RGM.Modes
                 var toGive = Tools.GetRandomValue(CandyList);
                 ev.Attacker.AddCandy(toGive);
 
-                if (ev.Player.IsScp)
+                if (ev.Player.IsScpRole())
                     Server.ExecuteCommand($"/forceeq {ev.Player.Id} 42");
             }
         }

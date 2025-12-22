@@ -34,8 +34,11 @@ namespace RGM.Modes
 TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
 """;
         public override string Color => "F5A9E1";
+        public override string Map => "HideAndSeek1205";
 
         List<Player> Finders = new List<Player>();
+
+        CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -43,17 +46,24 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
             Respawn.PauseWaves(); 
             Server.FriendlyFire = true;
 
-            // Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        }
+
+        public override void OnDisabled()
+        {
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+
+            Timing.KillCoroutines(_onModeStarted);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"HideAndSeek1205");
-
             for (float i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
                 Finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !Finders.Contains(x)).ToList()));
 
@@ -104,7 +114,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
         {
             if (Tools.TryGetLookPlayer(ev.Player, 2, out Player target, out RaycastHit? hit))
             {
-                if (!target.IsScp)
+                if (!target.IsScpRole())
                 {
                     ev.Player.Push(target);
                 }

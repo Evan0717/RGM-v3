@@ -33,13 +33,13 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
-
-            Timing.RunCoroutine(OnModeStarted());
         }
 
-        public IEnumerator<float> OnModeStarted()
+        public override void OnDisabled()
         {
-            yield return 0;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+            Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
         }
 
         public void OnDied(DiedEventArgs ev)

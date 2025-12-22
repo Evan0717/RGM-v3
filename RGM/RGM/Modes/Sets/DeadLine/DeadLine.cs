@@ -32,12 +32,15 @@ namespace RGM.Modes
 <i>발 아래를 조심하세요!</i>
 """;
         public override string Color => "FA8258";
+        public override string Map => "dl";
 
         public static DeadLine Instance;
 
         public List<Player> pl = new List<Player>();
 
-        Player dj;
+        CoroutineHandle _onModeStarted;
+
+        AudioClipPlayback audio;
 
         public override void OnEnabled()
         {
@@ -48,20 +51,27 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnDied;
 
-            Timing.RunCoroutine(OnModeStarted());
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            audio = Tools.PlayGlobalAudio("LineLite", 1, true);
+        }
+
+        public override void OnDisabled()
+        {
+            Round.IsLocked = false;
+            Respawn.ResumeWaves();
+            Server.FriendlyFire = false;
+
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+
+            Timing.KillCoroutines(_onModeStarted);
+
+            audio.IsPaused = true;
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            Tools.LoadMap($"dl");
-
-            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
-            {
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-            });
-
-            Tools.PlayGlobalAudio("LineLite", 1, true);
-
             PlayerManager.List.CopyTo(pl);
 
             foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
@@ -98,33 +108,6 @@ namespace RGM.Modes
                 }
 
                 yield return Timing.WaitForOneFrame;
-            }
-        }
-
-        public IEnumerator<float> DJHeadBanging()
-        {
-            yield return Timing.WaitForSeconds(1f);
-
-            bool HeadUp = true;
-
-            while (true)
-            {
-                if (HeadUp)
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, -1f, 0));
-
-                    HeadUp = false;
-
-                    yield return Timing.WaitForSeconds(0.2f);
-                }
-                else
-                {
-                    GGUtils.Gtool.Rotate(dj.ReferenceHub, new Vector3(0, 1f, 0));
-
-                    HeadUp = true;
-
-                    yield return Timing.WaitForSeconds(0.15f);
-                }
             }
         }
 
