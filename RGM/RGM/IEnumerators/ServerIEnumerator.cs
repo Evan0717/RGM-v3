@@ -20,6 +20,7 @@ using InventorySystem.Items.FlamingoTapePlayer;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using RGM.API.Features;
+using MapGeneration.Holidays;
 
 namespace RGM.IEnumerators
 {
@@ -52,6 +53,14 @@ namespace RGM.IEnumerators
             while (true)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60 * 5, 60 * 15 + 1));
+
+                if (HolidayUtils.IsHolidayActive(HolidayType.Christmas))
+                {
+                    TapeGift._canSpawn = true;
+                    Scp1507Spawner.CurState = Scp1507Spawner.State.Idle;
+
+                    Map.Broadcast(10, $"<b><size=25>플라밍고를 소환하는 테이프가 재사용 가능해집니다.</size></b>");
+                }
 
                 foreach (var player in PlayerManager.List)
                 {
