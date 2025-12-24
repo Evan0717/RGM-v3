@@ -225,7 +225,7 @@ namespace RGM.EventArgs
                         {
                             if (UnityEngine.Random.Range(1, 4) == 1)
                             {
-                                Tools.LoadMap(special, false);
+                                Tools.LoadMap(special);
                             }
                         }
 

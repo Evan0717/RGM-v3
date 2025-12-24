@@ -100,7 +100,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
         public static IEnumerator<float> OnStarted()
         {
-            Tools.LoadMap("vm", false);
+            Tools.LoadMap("vm");
 
             foreach (var pickup in Pickup.List.ToList())
             {

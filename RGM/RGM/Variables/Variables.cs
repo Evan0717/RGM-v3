@@ -204,7 +204,8 @@ namespace RGM.Variables
             "Sky",
             "TRRBR",
             "Moszka",
-            "Agar"
+            "Agar",
+            "undertale"
         };
         public static List<Product> Products = new()
         {

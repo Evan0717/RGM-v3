@@ -33,7 +33,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
 
         public static IEnumerator<float> OnStarted()
         {
-            Tools.LoadMap("Scp1162", false);
+            Tools.LoadMap("Scp1162");
 
             yield return 0;
         }
