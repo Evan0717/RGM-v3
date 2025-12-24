@@ -151,6 +151,13 @@ namespace RGM.EventArgs
             }
             ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
 
+            // ---------------------------------------------------------------------------------------
+
+            if (UnityEngine.Random.Range(1, 201) == 1)
+                CapybaraPet.Create(ev.Player);
+
+            // ---------------------------------------------------------------------------------------
+
             if (Round.IsStarted)
             {
                 string Name = ModeList[CurrentMode].Name;
