@@ -17,16 +17,7 @@ public class Steroid : Ability
 {
     public override void OnEnabled()
     {
-        Owner.GetEffect(EffectType.MovementBoost).Intensity += 50;
-
-        Timing.CallDelayed(25, () =>
-        {
-            if (Owner.GetEffect(EffectType.MovementBoost).Intensity >= 50)
-                Owner.GetEffect(EffectType.MovementBoost).Intensity -= 50;
-
-            else
-                Owner.GetEffect(EffectType.MovementBoost).Intensity = 0;
-        });
+        Owner.AddEffect(EffectType.MovementBoost, 50, 25);
     }
 
     public override void OnDisabled()
