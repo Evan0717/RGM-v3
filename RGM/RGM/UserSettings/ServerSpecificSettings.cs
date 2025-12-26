@@ -134,11 +134,12 @@ $"""
                             .Where(x => player.CurrentItem != x)
                             .ToList();
 
+                        candidates.Add(null);
+
                         if (candidates.Count == 0)
                             return;
 
-                        var index = UnityEngine.Random.Range(0, candidates.Count);
-                        player.CurrentItem = candidates[index];
+                        player.CurrentItem = candidates.GetRandomValue();
                         return;
                     }
                 }
@@ -146,17 +147,16 @@ $"""
 
             if (setting.SettingId == 12051)
             {
-                if (Round.IsStarted && 
-                    CurrentMode.GetModeData().Info != ModeInfo.Set && 
+                if ((CurrentMode == ModeType.None || CurrentMode.GetModeData().Info == ModeInfo.Plus) && 
                     IsNonePlayerAllowed &&
-                    (DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10)
+                    (Round.IsLobby || (DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 30))
                 {
                     if (player.IsAlive && NonePlayer.Players.Contains(player))
                     {
                         player.ClearInventory();
                         player.Kill("관전석으로 되돌아갑니다.");
                     }
-                    else if (player.IsDead)
+                    else if (Round.IsLobby ? true : player.IsDead)
                     {
                         NonePlayer.Create(player);
                     }
