@@ -30,6 +30,17 @@ namespace RGM.Modes.SubClass
 
         public static void Create(Player player)
         {
+            var black = new List<ItemType>
+            {
+                ItemType.SCP1509,
+                ItemType.SCP1507Tape,
+                ItemType.SCP244a,
+                ItemType.SCP244b,
+                ItemType.SCP018,
+                ItemType.SpecialCoal,
+                ItemType.SCP1507Tape
+            };
+
             IEnumerator<float> main()
             {
                 if (!Players.Contains(player))
@@ -37,17 +48,8 @@ namespace RGM.Modes.SubClass
 
                 player.Role.Set(RoleTypeId.Tutorial);
                 player.Position = new Vector3(76.74454f, 27.96138f, 12.53338f);
-                player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon()));
-                player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => !new List<ItemType>
-                {
-                    ItemType.SCP1509,
-                    ItemType.SCP1507Tape,
-                    ItemType.SCP244a,
-                    ItemType.SCP244b,
-                    ItemType.SCP018,
-                    ItemType.SpecialCoal,
-                    ItemType.SCP1507Tape
-                }.Contains(x)));
+                player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon() && !black.Contains(x)));
+                player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => !black.Contains(x)));
 
                 yield break;
             }
