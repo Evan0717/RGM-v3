@@ -1,26 +1,28 @@
-﻿using MEC;
-using PlayerRoles.FirstPersonControl;
+﻿using AdminToys;
+using Christmas.Scp2536.Gifts;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Roles;
+using Exiled.API.Features.Toys;
+using InventorySystem.Items.FlamingoTapePlayer;
+using MapGeneration.Holidays;
+using MEC;
+using MultiBroadcast.API;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
+using PlayerRoles.PlayableScps.Scp1507;
+using RGM.API.Features;
+using RGM.API.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Exiled.API.Features;
-using RGM.API.Interfaces;
-
+using UserSettings;
 using static RGM.Variables.Variable;
-using Exiled.API.Features.Roles;
-using MultiBroadcast.API;
-using Christmas.Scp2536.Gifts;
-using System.Diagnostics;
-using PlayerRoles.PlayableScps.Scp1507;
-using InventorySystem.Items.FlamingoTapePlayer;
-using Exiled.API.Enums;
-using Exiled.API.Extensions;
-using RGM.API.Features;
-using MapGeneration.Holidays;
 
 namespace RGM.IEnumerators
 {
@@ -251,6 +253,35 @@ namespace RGM.IEnumerators
                 }
 
                 yield return Timing.WaitForSeconds(1);
+            }
+        }
+
+        public static IEnumerator<float> MovingShootingTarget()
+        {
+            Target1 = ShootingTargetToy.Get(PrefabHelper.Spawn(PrefabType.SportTarget).GetComponent<ShootingTarget>());
+            Target2 = ShootingTargetToy.Get(PrefabHelper.Spawn(PrefabType.BinaryTarget).GetComponent<ShootingTarget>());
+
+            Target1.Scale = new Vector3(0.5f, 0.5f, 0.5f);
+            Target2.Scale = new Vector3(0.5f, 0.5f, 0.5f);
+
+            void apply(ShootingTargetToy target, (float, float, float, float, float, float) vector3)
+            {
+                Player player = Player.List.OrderBy(x => Vector3.Distance(x.Position, target.Position)).FirstOrDefault();
+
+                target.Position = new Vector3(UnityEngine.Random.Range(vector3.Item1, vector3.Item2), UnityEngine.Random.Range(vector3.Item3, vector3.Item4), UnityEngine.Random.Range(vector3.Item5, vector3.Item6));
+                target.Rotation = target.Rotation = Quaternion.LookRotation(player.Position - target.Position) * Quaternion.Euler(0, 90, 0); 
+            }
+
+            while (true)
+            {
+                while (Server.PlayerCount == 0) yield return Timing.WaitForOneFrame;
+
+                apply(Target1, (57.51999f, 69.58593f, 27.96541f, 31.89687f, 3.390625f, 17.125f));
+                apply(Target2, (50.78125f, 56.71094f, 27.965f, 31.14297f, 3.480469f, 13.40625f));
+
+                while (!ShootingTargetSignal) yield return Timing.WaitForOneFrame;
+
+                ShootingTargetSignal = false;
             }
         }
     }

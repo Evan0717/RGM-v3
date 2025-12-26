@@ -88,6 +88,7 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(InputCooldown());
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
+            Timing.RunCoroutine(MovingShootingTarget());
             Timing.RunCoroutine(HintManager.OnStarted());
             Timing.RunCoroutine(HintManager.RemoveHint());
             Timing.RunCoroutine(ChatManager.RunChat());

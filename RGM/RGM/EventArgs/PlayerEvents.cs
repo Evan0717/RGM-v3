@@ -662,13 +662,7 @@ namespace RGM.EventArgs
             {
                 if (statusEffect.IsEnabled)
                 {
-                    if (ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase statusEffect1))
-                    {
-                        if (!statusEffect1.IsEnabled)
-                        {
-                            ev.IsAllowed = false;
-                        }
-                    }
+                    ev.IsAllowed = false;
                 }
             }
 
@@ -784,6 +778,17 @@ namespace RGM.EventArgs
             }
         }
 
+        public static void OnUsingItem(UsingItemEventArgs ev)
+        {
+            if (ev.Item.Type == ItemType.SCP1576)
+            {
+                foreach (var none in NonePlayer.Players.ToList())
+                {
+                    none.Role.Set(RoleTypeId.Spectator);
+                }
+            }
+        }
+
         public static void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if (Round.IsLobby)
@@ -878,6 +883,14 @@ namespace RGM.EventArgs
         {
             if (SelectMode.Contains("Secret") && Round.IsLobby)
                 ev.IsAllowed = false;
+        }
+
+        public static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
+        {
+            if (ev.ShootingTarget == Target1 || ev.ShootingTarget == Target2)
+            {
+                ShootingTargetSignal = true;
+            }
         }
     }
 }
