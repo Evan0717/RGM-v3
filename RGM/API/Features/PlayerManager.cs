@@ -31,7 +31,12 @@ namespace RGM.API.Features
     {
         public static List<Player> List
         {
-            get => Player.List.Where(x => x.IsNPC ? true : (UsersManager.UsersCache[x.UserId][23] == "0" && !NonePlayer.Players.Contains(x))).ToList();
+            get => Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !NonePlayer.Players.Contains(x))).ToList();
+        }
+
+        public static bool IsDND(this Player player)
+        {
+            return UsersManager.UsersCache[player.UserId][23] == "1";
         }
 
         public static bool IsScpRole(this Player player)

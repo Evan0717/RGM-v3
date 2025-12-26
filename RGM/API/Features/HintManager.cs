@@ -16,7 +16,7 @@ namespace RGM.API.Features
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x) && _playerHints[x].Count > 0))
+                foreach (var player in Player.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x) && _playerHints[x].Count > 0))
                 {
                     player.ShowHint($"{string.Join("\n", _playerHints[player].Values.Select(x => x.Item1))}", 0.2f);
                 }
@@ -29,7 +29,7 @@ namespace RGM.API.Features
         {
             while (true)
             {
-                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x)))
+                foreach (var player in Player.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x)))
                 {
                     foreach (var hint in _playerHints[player].ToList())
                     {

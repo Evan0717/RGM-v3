@@ -35,10 +35,9 @@ namespace RGM.IEnumerators
                         {
                             if (hit.transform.name == "GameStartRed")
                             {
-                                if (PlayerManager.List.Count() > 1)
+                                if (PlayerManager.List.Count() > 1 && RemainingPress <= 0)
                                 {
-                                    if (RemainingPress <= 0)
-                                        ButtonPressed = true;
+                                    ButtonPressed = true;
                                 }
 
                                 redObject = hit.transform;
@@ -65,7 +64,7 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForSeconds(0.1f);
             }
 
-            foreach (var player in PlayerManager.List)
+            foreach (var player in Player.List.Where(x => !x.IsDND()))
             {
                 player.ClearInventory();
                 player.Role.Set(RoleTypeId.Spectator);

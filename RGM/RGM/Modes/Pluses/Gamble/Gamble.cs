@@ -64,7 +64,7 @@ namespace RGM.Modes
 
         public void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if (ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo"))
+            if (ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo") || !PlayerManager.List.Contains(ev.Player))
                 return;
 
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
@@ -86,7 +86,7 @@ namespace RGM.Modes
 
         public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (!(ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo")) || !ev.Player.IsJumping || ev.Player.GetEffect(EffectType.SeveredHands).IsEnabled)
+            if (!(ev.Player.IsScpRole() || ev.Player.Role.Type.ToString().Contains("Flamingo")) || !ev.Player.IsJumping || ev.Player.GetEffect(EffectType.SeveredHands).IsEnabled || !PlayerManager.List.Contains(ev.Player))
                 return;
 
             int rand = UnityEngine.Random.Range(1, 101);

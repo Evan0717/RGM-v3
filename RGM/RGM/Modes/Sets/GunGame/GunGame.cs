@@ -30,6 +30,7 @@ namespace RGM.Modes
         public override string Detail =>
 """
 제일버드
+SCP-1509
 입자 분열기
 FR-MG-0
 Logicer
@@ -54,6 +55,7 @@ COM-15
         List<ItemType> GunsList = new List<ItemType>()
         { 
             ItemType.Jailbird,
+            ItemType.SCP1509,
             ItemType.ParticleDisruptor,
             ItemType.GunFRMG0,
             ItemType.GunLogicer,

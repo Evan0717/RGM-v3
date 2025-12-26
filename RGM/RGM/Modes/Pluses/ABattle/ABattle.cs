@@ -276,7 +276,7 @@ public class ABattle : Mode
     {
         while (true)
         {
-            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
+            foreach (var player in Player.List.Where(x => !x.IsNPC))
             {
                 var CurrentHint = player.CurrentHint;
                 var isStatusHint = CurrentHint != null && (CurrentHint.Content.Contains("워크스테이션") || CurrentHint.Content.Contains("보유 업그레이드"));
