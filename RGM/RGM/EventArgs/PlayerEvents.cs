@@ -224,10 +224,10 @@ namespace RGM.EventArgs
 <align=left><size=30>
 <b><size=35><color=#F7FE2E>관리진</color></size></b>
 @alvar_noah - 서버 소유자
-@mercedes83 - 총괄 관리자 (베테랑)
+@mercedes83 - 총 관리자 (베테랑)
 @normal._.person - 정규 관리자 (베테랑)
-@bluefox2322 - 관리자 신입
-@0735_ - 관리자 신입
+정규 관리자 - @bluefox2322, @mintchoco1575
+수습 관리자 - @ranjjim, @wanjeon_chobo, @dal_go
 
 <b><size=35><color=#C8FE2E>개발진</color></size></b>
 @GoldenPig1205 - 메인 개발자
@@ -760,9 +760,10 @@ namespace RGM.EventArgs
                     }
 
                     if (!ev.Player.IsNPC)
+                    {
                         PlayersReport[ev.Player.UserId].Death += 1;
-
-                    PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
+                        PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
+                    }
                 }
             }
         }
