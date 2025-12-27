@@ -28,6 +28,7 @@ using static RGM.EventArgs.PlayerEvents;
 using static RGM.EventArgs.Scp079Events;
 using static RGM.EventArgs.Scp244Events;
 using static RGM.EventArgs.Scp330Events;
+using static RGM.EventArgs.Scp1509Events;
 using static RGM.EventArgs.ServerEvents;
 using static RGM.EventArgs.WarheadEvents;
 using static RGM.Variables.Variable;
@@ -40,7 +41,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 20, 4);
+        public override Version Version { get; } = new(3, 20, 5);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -116,6 +117,8 @@ namespace RGM
 
             Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
+
+            Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
 
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
             Exiled.Events.Handlers.Scp330.EatingScp330 += OnEatingScp330;
