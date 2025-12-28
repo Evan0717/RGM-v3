@@ -268,9 +268,10 @@ namespace RGM.Modes
                                     player.AddBroadcast(10, $"<size=20><color={playerColor}>{ev.Player.DisplayNickname}</color>(와)과 <color={soulMateColor}>{soulMate.DisplayNickname}</color>(은)는 <color=#FE2EF7>소울메이트</color>였습니다.</size>");
                             });
 
+                            soulMate.ClearInventory();
                             soulMate.Kill(ev.DamageHandler);
 
-                            Server.ExecuteCommand($"/cassie_sl <color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
+                            Exiled.API.Features.Cassie.Message($"<color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
                         }
                     }
                 }
