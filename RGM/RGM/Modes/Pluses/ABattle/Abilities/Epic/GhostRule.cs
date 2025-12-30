@@ -19,11 +19,11 @@ public class GhostRule : Ability
 {
     public override void OnEnabled()
     {
-        Owner.EnableEffect(EffectType.Ghostly);
+        Owner.AddEffect(EffectType.Ghostly, 1);
     }
 
     public override void OnDisabled()
     {
-        Owner.DisableEffect(EffectType.Ghostly);
+        Owner.RemoveEffect(EffectType.Ghostly, 1);
     }
 }
