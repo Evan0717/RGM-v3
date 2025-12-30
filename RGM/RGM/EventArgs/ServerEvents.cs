@@ -19,14 +19,15 @@ using RGM.Modes;
 using RGM.Modes.Sets.AddScp.Scps;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static RGM.Functions.ModeManagers;
-using static RGM.Variables.Variable;
-using static RGM.IEnumerators.ServerIEnumerator;
 using static RGM.IEnumerators.LobbyIEnumerator;
+using static RGM.IEnumerators.ServerIEnumerator;
+using static RGM.Variables.Variable;
 
 namespace RGM.EventArgs
 {
@@ -35,6 +36,27 @@ namespace RGM.EventArgs
         public static IEnumerator<float> OnWaitingForPlayers()
         {
             yield return Timing.WaitForSeconds(1f);
+
+            try
+            {
+                var folderPath = $"{Paths.AppData}/SCP Secret Laboratory/LocalAdminLogs/{Server.Port}/";
+                var files = new DirectoryInfo(folderPath)
+                            .GetFiles()
+                            .OrderByDescending(f => f.CreationTime)
+                            .ToList();
+
+                if (files.Count >= 2)
+                {
+                    FileInfo secondOldest = files[1];
+                    string content = File.ReadAllText(secondOldest.FullName);
+
+                    Webhook.Send($"LocalAdminLogs : {Server.Port}", "https://discord.com/api/webhooks/1455192596291911882/xDadWWo7IJmno_mMnOySwZ4sPxyIMIGZLwYOFi_SGk-AUhB3lqQG9ElvQYWpj5-iFnLK", $"{secondOldest.FullName}");
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error sending LocalAdminLogs webhook: {e}");
+            }
 
             Server.ExecuteCommand("rnr");
 
@@ -334,13 +356,13 @@ namespace RGM.EventArgs
             {
                 string path = $"{Paths.Configs}/RGM/Users.txt";
 
-                if (System.IO.File.Exists(path) && new System.IO.FileInfo(path).Length == 0)
+                if (File.Exists(path) && new FileInfo(path).Length == 0)
                 {
                     string tmpPath = path + ".tmp";
-                    if (System.IO.File.Exists(tmpPath))
+                    if (File.Exists(tmpPath))
                     {
-                        System.IO.File.Delete(path);
-                        System.IO.File.Move(tmpPath, path);
+                        File.Delete(path);
+                        File.Move(tmpPath, path);
                     }
                 }
 
@@ -423,17 +445,6 @@ namespace RGM.EventArgs
                 }
 
                 yield return Timing.WaitForSeconds(1);
-            }
-        }
-
-        public static void OnRespawnedTeam(RespawnedTeamEventArgs ev)
-        {
-            if (HolidayUtils.IsHolidayActive(HolidayType.Christmas) && UnityEngine.Random.Range(0, 100) < 10)
-            {
-                foreach (var player in ev.Players.ToList())
-                {
-                    player.Role.Set(ev.Wave.TargetFaction == Faction.FoundationStaff ? RoleTypeId.NtfFlamingo : RoleTypeId.ChaosFlamingo, RoleSpawnFlags.AssignInventory);
-                }
             }
         }
     }
