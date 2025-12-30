@@ -226,8 +226,7 @@ namespace RGM.EventArgs
 @alvar_noah - 서버 소유자
 @mercedes83 - 총 관리자 (베테랑)
 @normal._.person - 정규 관리자 (베테랑)
-정규 관리자 - @bluefox2322, @mintchoco1575
-수습 관리자 - @ranjjim, @wanjeon_chobo, @dal_go
+정규 관리자 - @bluefox2322, @mintchoco1575, @wanjeon_chobo
 
 <b><size=35><color=#C8FE2E>개발진</color></size></b>
 @GoldenPig1205 - 메인 개발자
@@ -239,7 +238,7 @@ namespace RGM.EventArgs
 <b><size=35><color=#F8E0F7>도움 주신 분들</color></size><b>
 <size=20>@cocoa_1.19, @leejihyuk, @mujishungplay, @changwonfirebird</size>
 </size></align>
-\n\n\n\n\n\n\n\n
+\n\n\n\n\n\n\n\n\n
 """, 1.2f);
                             }
                             else if (hit.transform.name == "Mode")
