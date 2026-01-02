@@ -13,7 +13,7 @@ using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.TripleAxel)]
+    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.TripleAxel)]
     public class TripleAxel : Mode
     {
         public override string Name => "트리플악셀";
