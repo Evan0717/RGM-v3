@@ -24,9 +24,9 @@ namespace RGM
         public static string WelcomeMessage { get; set; } = "<size=25><b>랜덤게임모드 (RGM)</b>에 오신 것을 환영합니다!</size>";
         public static string LobbyMessage { get; set; } =
 """
-<size=120><b><color=#e5dd84>🚢</color> ({Logo}) <color=#84e5db>🎣</color></b></size>
+<size=120><b><color=#e5dd84>❓</color> ({Logo}) <color=#84e5db>❓</color></b></size>
 <size=80><b>[RGM] 랜덤게임모드</b></size> <size=25>(ver. {Version})</size>
-<align=right><size=20><b><i><color=#00FBFF>S</color><color=#00E1FF>e</color><color=#00C8FF>a</color><color=#00AFFF>s</color><color=#0096FF>o</color><color=#007DFF>n</color> <color=#004BFF>1</color><color=#0032FF>.</color> <color=#0003FF>S</color><color=#1414F0>u</color><color=#2929E1>m</color><color=#3E3DD2>m</color><color=#5352C3>e</color><color=#6867B4>r</color> <color=#929097>T</color><color=#A7A488>i</color><color=#BCB979>m</color><color=#D1CE6A>e</color></i></b></size></align>
+<align=right><size=20><b><i><color=#FF0000>아</color><color=#EA1A24>름</color><color=#D63548>다</color><color=#C14F6D>운</color> <color=#9884B6>세</color><color=#849FDA>상</color></i></b></size></align>
 <align=left>
 Exp: {Exp}
 랜덤코인: {RC}
