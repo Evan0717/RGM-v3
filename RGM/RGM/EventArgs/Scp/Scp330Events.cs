@@ -29,11 +29,8 @@ namespace RGM.EventArgs
 
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                if (UnityEngine.Random.Range(1, 6) == 1)
-                {
-                    ev.Player.TryRemoveCandу(ev.Candy);
-                    ev.Player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
-                }
+                ev.Player.TryRemoveCandу(ev.Candy);
+                ev.Player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
             });
         }
 

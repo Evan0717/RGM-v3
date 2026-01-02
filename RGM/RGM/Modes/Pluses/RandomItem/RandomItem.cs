@@ -31,15 +31,6 @@ namespace RGM.Modes
 
         public static RandomItem Instance;
 
-        List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
-        List<ItemType> ignoreItems = new List<ItemType>() 
-        { 
-            ItemType.SCP1507Tape,
-            ItemType.Coal,
-            ItemType.Snowball,
-            ItemType.SpecialCoal
-        };
-
         CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
@@ -71,9 +62,9 @@ namespace RGM.Modes
                 {
                     try
                     {
-                        Item Item = player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
+                        Item item = player.AddRandomItem();
 
-                        player.AddHint("랜덤박스", $"<color=#F3F781>{(en ? Item.Type.ToString() : Trans.Item[Item.Type])}</color>(을)를 지급받았습니다.", 5);
+                        player.AddHint("랜덤박스", $"<color=#F3F781>{(en ? item.Type.ToString() : Trans.Item[item.Type])}</color>(을)를 지급받았습니다.", 5);
                     }
                     catch (Exception ex)
                     {
@@ -102,7 +93,7 @@ namespace RGM.Modes
 
             for (int i = 1; i < 9; i++)
             {
-                player.AddItem(Tools.GetRandomValue(ItemTypes.Where(x => !ignoreItems.Contains(x) && !Datas.ExceptItems.Contains(x)).ToList()));
+                player.AddRandomItem();
 
                 yield return Timing.WaitForSeconds(1);
             }

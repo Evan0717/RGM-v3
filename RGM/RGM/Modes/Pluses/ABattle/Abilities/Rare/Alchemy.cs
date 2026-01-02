@@ -31,9 +31,7 @@ public class Alchemy : Ability
     {
         for (int i = 1; i < 4; i++)
         {
-            List<ItemType> Pension = Tools.EnumToList<ItemType>();
-
-            Item pen = Owner.AddItem(Tools.GetRandomValue(Pension));
+            Owner.AddRandomItem();
 
             yield return Timing.WaitForSeconds(60f);
         }

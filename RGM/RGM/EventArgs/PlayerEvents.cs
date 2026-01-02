@@ -657,12 +657,14 @@ namespace RGM.EventArgs
             if (Round.IsLobby || Round.IsEnded)
                 return;
 
-            if (ev.DamageHandler.Type == DamageType.Falldown && ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase statusEffect))
+            if (ev.DamageHandler.Type == DamageType.Falldown && ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) && lightweight.IsEnabled)
             {
-                if (statusEffect.IsEnabled)
+                if (HolidayUtils.IsHolidayActive(HolidayType.Halloween) && ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) && metal.IsEnabled)
                 {
-                    ev.IsAllowed = false;
+                    
                 }
+                else
+                    ev.IsAllowed = false;
             }
 
             if (GodModePlayers.Contains(ev.Player))
@@ -701,8 +703,6 @@ namespace RGM.EventArgs
                     else
                     {
                         GodModePlayers.Remove(ev.Player);
-
-                        ev.Player.Kill(ev.DamageHandler);
                     }
                 }
                 else

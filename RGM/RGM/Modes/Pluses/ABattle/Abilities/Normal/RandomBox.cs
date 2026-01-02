@@ -14,9 +14,7 @@ public class RandomBox : Ability
 {
     public override void OnEnabled()
     {
-        List<ItemType> RandomBox = Tools.EnumToList<ItemType>().Where(x => x != ItemType.SCP1507Tape && !Datas.ExceptItems.Contains(x)).ToList();
-
-        Item RandomBoxItem = Owner.AddItem(Tools.GetRandomValue(RandomBox));
+        Owner.AddRandomItem();
     }
 
     public override void OnDisabled()

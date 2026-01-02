@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using AdminToys;
+using Discord;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
@@ -10,6 +11,8 @@ using PlayerRoles.FirstPersonControl;
 using PlayerRoles.FirstPersonControl.Thirdperson;
 using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers.OverlayAnims;
 using PlayerStatsSystem;
+using ProjectMER.Features;
+using ProjectMER.Features.Objects;
 using RGM.API.Interfaces;
 using RGM.Modes.SubClass;
 using RGM.Variables;
@@ -23,6 +26,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Windows;
 using UserSettings.ServerSpecific;
+using Utils.Networking;
 using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
@@ -372,42 +376,24 @@ namespace RGM.API.Features
             }
         }
 
-        public static void AddCandy(this Player player, CandyKindID candyKindID)
+        public static Item AddCandy(this Player player, CandyKindID candyKindID)
         {
-            void add()
+            var existing = player.Items
+                .Where(x => x.Type == ItemType.SCP330)
+                .Select(x => x as Scp330)
+                .FirstOrDefault(scp => scp != null && scp.Candies.Count() < 6);
+
+            if (existing != null)
             {
-                Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
-                scp330.AddCandy(candyKindID);
-                scp330.RemoveCandy(scp330.Candies.ToList()[0]);
-                player.AddItem(scp330);
+                existing.AddCandy(candyKindID);
+                return existing;
             }
 
-            if (player.HasItem(ItemType.SCP330))
-            {
-                bool success = false;
-
-                foreach (var scp330 in player.Items.Where(x => x.Type == ItemType.SCP330).Select(x => (Scp330)x))
-                {
-                    if (scp330.Candies.Count() == 6)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        scp330.AddCandy(candyKindID);
-                        success = true;
-                    }
-                }
-
-                if (!success)
-                {
-                    add();
-                }
-            }
-            else
-            {
-                add();
-            }
+            Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
+            scp330.AddCandy(candyKindID);
+            scp330.RemoveCandy(scp330.Candies.ToList()[0]);
+            player.AddItem(scp330);
+            return scp330;
         }
 
         public static void Push(this Player player, Player target, float distance = 5, float height = 1)
@@ -468,6 +454,205 @@ namespace RGM.API.Features
             }
             subcontroller._overlayAnimations[1].OnStarted();
             subcontroller._overlayAnimations[1].SendRpc();
+        }
+
+        public static Item AddRandomItem(this Player player)
+        {
+            List<ItemType> poll = new();
+
+            List<ItemType> L = new()
+            {
+                // SCP 아이템
+                ItemType.GunSCP127,
+                ItemType.SCP1509,
+                ItemType.SCP268,
+                ItemType.SCP1344,
+
+                // 무기
+                ItemType.Jailbird,
+                ItemType.MicroHID,
+                ItemType.ParticleDisruptor,
+            };
+            List<ItemType> S = new()
+            {
+                // SCP 아이템
+                ItemType.AntiSCP207,
+                ItemType.SCP2176,
+                ItemType.SCP018,
+                ItemType.SCP1576,
+
+                // 카드
+                ItemType.KeycardO5,
+
+                // 무기
+                ItemType.GunLogicer,
+                ItemType.GunFRMG0,
+            };
+            List<ItemType> A = new()
+            {
+                // SCP 아이템
+                ItemType.SCP207,
+                ItemType.SCP244a,
+                ItemType.SCP244b,
+                ItemType.SCP500,
+                ItemType.SCP1853,
+
+                // 카드
+                ItemType.KeycardMTFCaptain,
+                ItemType.KeycardMTFOperative,
+                ItemType.KeycardChaosInsurgency,
+                ItemType.KeycardFacilityManager,
+
+                // 무기
+                ItemType.GunE11SR,
+                ItemType.GunAK,
+                ItemType.GunA7,
+                ItemType.GunShotgun,
+                ItemType.GunCom45,
+
+                // 치료
+                ItemType.Adrenaline,
+
+                // 방탄복
+                ItemType.ArmorHeavy,
+
+                // 기타
+                ItemType.GrenadeHE
+            };
+            List<ItemType> B = new()
+            {
+                // SCP 아이템
+                ItemType.SCP330,
+
+                // 카드
+                ItemType.KeycardZoneManager,
+                ItemType.KeycardGuard,
+                ItemType.KeycardMTFPrivate,
+                ItemType.KeycardContainmentEngineer,
+
+                // 무기
+                ItemType.GunCrossvec,
+                ItemType.GunRevolver,
+                ItemType.GunFSP9,
+
+                // 치료
+                ItemType.Medkit,
+
+                // 방탄복
+                ItemType.ArmorCombat,
+
+                // 기타
+                ItemType.Radio,
+                ItemType.GrenadeFlash
+            };
+            List<ItemType> C = new()
+            {
+                // 카드
+                ItemType.KeycardJanitor,
+                ItemType.KeycardScientist,
+                ItemType.KeycardResearchCoordinator,
+                ItemType.SurfaceAccessPass,
+
+                // 무기
+                ItemType.GunCOM18,
+                ItemType.GunCOM15,
+
+                // 탄약
+                ItemType.Ammo12gauge,
+                ItemType.Ammo44cal,
+                ItemType.Ammo556x45,
+                ItemType.Ammo762x39,
+                ItemType.Ammo9x19,
+
+                // 치료
+                ItemType.Painkillers,
+
+                // 방탄복
+                ItemType.ArmorLight,
+
+                // 기타
+                ItemType.Flashlight,
+                ItemType.Lantern,
+                ItemType.Coin,
+            };
+            List<ItemType> D = new()
+            {
+                // 카드
+                ItemType.KeycardCustomManagement,
+                ItemType.KeycardCustomMetalCase,
+                ItemType.KeycardCustomSite02,
+                ItemType.KeycardCustomTaskForce,
+
+                // 기타
+                ItemType.DebugRagdollMover,
+            };
+
+            foreach (var iL in L)
+                poll.Add(iL);
+
+            for (int i = 0; i < 2; i++)
+            {
+                foreach (var iS in S)
+                    poll.Add(iS);
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                foreach (var iA in A)
+                    poll.Add(iA);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                foreach (var iB in B)
+                    poll.Add(iB);
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                foreach (var iC in C)
+                    poll.Add(iC);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                foreach (var iD in D)
+                    poll.Add(iD);
+            }
+
+            Item item = player.AddItem(poll.GetRandomValue());
+
+            void light(Color color)
+            {
+                SchematicObject schematic = ObjectSpawner.SpawnSchematic("Light", Vector3.zero);
+                LightSourceToy light = schematic.GetComponentsInChildren<LightSourceToy>().First();
+
+                schematic.transform.parent = player.Transform;
+                schematic.transform.localPosition = Vector3.zero;
+
+                light.NetworkLightColor = color;
+                light.NetworkLightRange = 50;
+                light.NetworkLightIntensity = 10;
+
+                Timing.CallDelayed(3, schematic.Destroy);
+            }
+
+            if (L.Contains(item.Type))
+            {
+                Tools.PlaySound(player.Transform, "L 등급", 4);
+                light(Color.red);
+            }
+            if (S.Contains(item.Type))
+            {
+                Tools.PlaySound(player.Transform, "S 등급", 2);
+                light(Color.yellow);
+            }
+            if (A.Contains(item.Type))
+            {
+                light(new Color(2.33f, 0.92f, 2.55f));
+            }
+
+            return item;
         }
     }
 }
