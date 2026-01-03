@@ -447,5 +447,16 @@ namespace RGM.EventArgs
                 yield return Timing.WaitForSeconds(1);
             }
         }
+
+        public static void OnRespawnedTeam(RespawnedTeamEventArgs ev)
+        {
+            if (HolidayUtils.IsHolidayActive(HolidayType.Christmas) && UnityEngine.Random.Range(0, 100) < 10)
+            {
+                foreach (var player in ev.Players)
+                {
+                    player.Role.Set(ev.Wave.TargetFaction == Faction.FoundationStaff ? RoleTypeId.NtfFlamingo : RoleTypeId.ChaosFlamingo, RoleSpawnFlags.AssignInventory);
+                }
+            }
+        }
     }
 }
