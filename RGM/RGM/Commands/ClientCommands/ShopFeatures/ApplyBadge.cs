@@ -26,7 +26,7 @@ namespace RGM.Commands.ClientCommands
 
             if (args == "")
             {
-                response = en ? "Please enter your badge name.\n-" : "칭호 이름을 입력해주세요.\n-";
+                response =  "칭호 이름을 입력해주세요.\n-";
                 return false;
             }
             else
@@ -39,28 +39,28 @@ namespace RGM.Commands.ClientCommands
                     {
                         uc[11] = "0";
                         UsersManager.UsersCache[player.UserId] = uc;
-                        response = en ? "Badge Unequipment Complete!\n-" : "칭호 장착 해제 완료!\n-";
+                        response =  "칭호 장착 해제 완료!\n-";
 
                         UsersManager.SaveUsers();
 
                         player.RankName = null;
                         return true;
                     }
-                    if (args == (en ? "random" : "랜덤 적용"))
+                    if (args == ( "랜덤 적용"))
                     {
                         uc[17] = "1";
                         UsersManager.UsersCache[player.UserId] = uc;
-                        response = en ? "Badge is applied randomly each round." : "칭호가 라운드마다 랜덤으로 적용됩니다.";
+                        response =  "칭호가 라운드마다 랜덤으로 적용됩니다.";
 
                         UsersManager.SaveUsers();
 
                         return true;
                     }
-                    if (args == (en ? "passive" : "랜덤 해제"))
+                    if (args == ( "랜덤 해제"))
                     {
                         uc[17] = "0";
                         UsersManager.UsersCache[player.UserId] = uc;
-                        response = en ? "Badge is no longer applied randomly each round." : "이제 칭호가 라운드마다 랜덤으로 적용되지 않습니다.";
+                        response =  "이제 칭호가 라운드마다 랜덤으로 적용되지 않습니다.";
 
                         UsersManager.SaveUsers();
 
@@ -70,7 +70,7 @@ namespace RGM.Commands.ClientCommands
                     {
                         uc[11] = $"{args}";
                         UsersManager.UsersCache[player.UserId] = uc;
-                        response = en ? "Badge Equipped!\n-" : "칭호 장착 완료!\n-";
+                        response =  "칭호 장착 완료!\n-";
 
                         UsersManager.SaveUsers();
 
@@ -79,13 +79,13 @@ namespace RGM.Commands.ClientCommands
                     }
                     else
                     {
-                        response = en ? "The badge does not exist or is not held.\n-" : "존재하지 않거나 보유하지 않은 칭호입니다.\n-";
+                        response =  "존재하지 않거나 보유하지 않은 칭호입니다.\n-";
                         return false;
                     }
                 }
                 else
                 {
-                    response = en ? "Unable to find player information.\n-" : "플레이어 정보를 찾을 수 없습니다.\n-";
+                    response =  "플레이어 정보를 찾을 수 없습니다.\n-";
                     return false;
                 }
             }
@@ -95,7 +95,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "뱃지", "ab", "칭호" };
 
-        public string Description { get; } = en ? "[RGM] Change equipment by entering the badge name." : "[RGM] 칭호 이름을 입력하여 장착을 변경합니다.";
+        public string Description { get; } =  "[RGM] 칭호 이름을 입력하여 장착을 변경합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

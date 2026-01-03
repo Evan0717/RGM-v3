@@ -29,7 +29,7 @@ namespace RGM.Commands.ClientCommands
             {
                 if (CurrentMode == ModeType.None)
                 {
-                    response = en ? "The current mode is not set." : "현재 모드가 설정되지 않았습니다.";
+                    response =  "현재 모드가 설정되지 않았습니다.";
                     return false;
                 }
                 else
@@ -42,7 +42,7 @@ namespace RGM.Commands.ClientCommands
                     }
 
                     string summary = $"{EnabledModeList.Count()} - {string.Join(", ", EnabledModeList.Select(x => x.Name))}";
-                    response = en ? $"Mode description loaded successfully. ({summary})" : $"성공적으로 모드 설명을 불러왔습니다. ({summary})";
+                    response =  $"성공적으로 모드 설명을 불러왔습니다. ({summary})";
 
                     return true;
                 }
@@ -54,7 +54,7 @@ namespace RGM.Commands.ClientCommands
                 foreach (var Mode in ModeList.Keys)
                     ModeList_.Add($"{Mode.GetModeData().Name}");
 
-                response = en ? $"<b><size=30>[ Mode List ]</size></b>\n{string.Join(", ", ModeList_)}\nSending Command Error.." : $"<b><size=30>[ 모드 리스트 ]</size></b>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
+                response =  $"<b><size=30>[ 모드 리스트 ]</size></b>\n{string.Join(", ", ModeList_)}\nSending Command Error..";
                 return false;
             }
             else
@@ -78,7 +78,7 @@ namespace RGM.Commands.ClientCommands
                 }
                 else
                 {
-                    response = en ? "<mod name> does not exist.\nSending Command Error.." : "존재하지 않는 <모드 이름>입니다.\nSending Command Error..";
+                    response =  "존재하지 않는 <모드 이름>입니다.\nSending Command Error..";
                     return false;
                 }
             }
@@ -88,7 +88,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "모드", "mod" };
 
-        public string Description { get; } = en ? "[RGM] Check the current mode." : "[RGM] 현재 모드를 확인합니다.";
+        public string Description { get; } =  "[RGM] 현재 모드를 확인합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

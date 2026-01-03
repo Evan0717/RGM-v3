@@ -43,7 +43,7 @@ public class SuperStar : Ability
 
         foreach (var player in PlayerManager.List)
         {
-            player.AddBroadcast(10, $"<size=25><color=#FE2EF7>슈퍼 스타</color>였던 <color=#F4FA58>{Owner.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{(en ? ev.TargetOldRole.GetFullName() : Trans.Role[ev.TargetOldRole])}</color>)(은)는 별세하셨습니다..</size>");
+            player.AddBroadcast(10, $"<size=25><color=#FE2EF7>슈퍼 스타</color>였던 <color=#F4FA58>{Owner.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{( Trans.Role[ev.TargetOldRole])}</color>)(은)는 별세하셨습니다..</size>");
         }
     }
 }

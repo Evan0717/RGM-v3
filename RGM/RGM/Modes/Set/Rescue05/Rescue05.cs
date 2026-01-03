@@ -124,7 +124,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1 * 60);
 
-            AutoNuke = true;
+            Warhead.IsLocked = true;
             Warhead.Start();
         }
 

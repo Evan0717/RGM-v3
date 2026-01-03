@@ -26,7 +26,7 @@ public class StartWarhead : Ability
 {
     public override void OnEnabled()
     {
-        AutoNuke = true;
+        Warhead.IsLocked = true;
 
         Warhead.Start();
     }

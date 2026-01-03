@@ -25,8 +25,8 @@ public class Friendship : Ability
 
             nearestPlayer.AddItem(own.Type);
 
-            Owner.AddHint("우애", $"{nearestPlayer.DisplayNickname}(에)게 {(en ? own.Type.ToString() : Trans.Item[own.Type])}(을)를 나누어 주었습니다.");
-            nearestPlayer.AddHint("우애", $"{Owner.DisplayNickname}(으)로부터 {(en ? own.Type.ToString() : Trans.Item[own.Type])}(을)를 나누어 받았습니다.");
+            Owner.AddHint("우애", $"{nearestPlayer.DisplayNickname}(에)게 {( Trans.Item[own.Type])}(을)를 나누어 주었습니다.");
+            nearestPlayer.AddHint("우애", $"{Owner.DisplayNickname}(으)로부터 {( Trans.Item[own.Type])}(을)를 나누어 받았습니다.");
         }
     }
 

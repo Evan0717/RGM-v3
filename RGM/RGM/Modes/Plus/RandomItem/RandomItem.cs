@@ -64,7 +64,7 @@ namespace RGM.Modes
                     {
                         Item item = player.AddRandomItem();
 
-                        player.AddHint("랜덤박스", $"<color=#F3F781>{(en ? item.Type.ToString() : Trans.Item[item.Type])}</color>(을)를 지급받았습니다.", 5);
+                        player.AddHint("랜덤박스", $"<color=#F3F781>{( Trans.Item[item.Type])}</color>(을)를 지급받았습니다.", 5);
                     }
                     catch (Exception ex)
                     {

@@ -26,7 +26,7 @@ namespace RGM.Commands.ClientCommands
 
             string code = UsersManager.UsersCache[player.UserId][14];
 
-            response = en ? $"Discord Link Code: {code}" : $"디스코드 연동 코드: {code}";
+            response = $"디스코드 연동 코드: {code}";
             return true;
         }
 
@@ -34,7 +34,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "연동" };
 
-        public string Description { get; } = en ? "[RGM] Show your discord link code." : "[RGM] 디스코드 연동 링크를 받아보세요.";
+        public string Description { get; } =  "[RGM] 디스코드 연동 링크를 받아보세요.";
 
         public bool SanitizeResponse { get; } = true;
     }

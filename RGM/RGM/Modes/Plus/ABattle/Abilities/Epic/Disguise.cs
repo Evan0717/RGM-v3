@@ -67,8 +67,8 @@ public class Disguise : Ability
 
                 RoleTypeId role = Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => RoleExtensions.GetTeam(x) == mostCommonTeam && !_blockedRoles.Contains(x)).ToList());
 
-                Exiled.API.Extensions.MirrorExtensions.ChangeAppearance(Owner, role);
-                Owner.AddBroadcast(10, $"<size=20><color={role.GetRoleColor().ToHex()}>{(en ? role.GetFullName() : Trans.Role[role])}</color>(으)로 변장했습니다.</size>");
+                MirrorExtensions.ChangeAppearance(Owner, role);
+                Owner.AddBroadcast(10, $"<size=20><color={role.GetRoleColor().ToHex()}>{Trans.Role[role]}</color>(으)로 변장했습니다.</size>");
             }
 
             yield return Timing.WaitForSeconds(1);

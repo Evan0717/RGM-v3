@@ -40,7 +40,7 @@ public class RocketLauncher : Ability
                     isInRocket.Add(ev.Player);
 
                     Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
-                    Exiled.API.Features.Cassie.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{(en ? ev.Player.Role : Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
+                    Exiled.API.Features.Cassie.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
                     Timing.CallDelayed(1, () =>
                     {
@@ -55,7 +55,7 @@ public class RocketLauncher : Ability
                     isInRocket.Add(ev.Player);
 
                     Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
-                    Exiled.API.Features.Cassie.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{(en ? ev.Player.Role : Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
+                    Exiled.API.Features.Cassie.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
                     Timing.CallDelayed(1, () =>
                     {

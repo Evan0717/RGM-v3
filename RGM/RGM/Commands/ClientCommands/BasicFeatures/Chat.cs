@@ -32,22 +32,22 @@ namespace RGM.Commands.ClientCommands
 
             if (args == "")
             {
-                response = en ? "Please enter the message you want to send." : "보낼 메세지를 입력해주세요.";
+                response =  "보낼 메세지를 입력해주세요.";
                 return false;
             }
             else if (ChatCooldown.Contains(player))
             {
-                response = en ? "You are sending input at too fast an interval!" : "너무 빠른 간격으로 입력을 보내고 있습니다!";
+                response =  "너무 빠른 간격으로 입력을 보내고 있습니다!";
                 return false;
             }
             else if (player.IsMuted)
             {
-                response = en ? "You are muted." : "뮤트된 상태입니다.";
+                response =  "뮤트된 상태입니다.";
                 return false;
             }
             else if (SelectMode.Contains("Secret") && Round.IsLobby)
             {
-                response = en ? "Don't break the secret ballot clause." : "비밀 선거 조항을 깨트리지 마십시오.";
+                response =  "비밀 선거 조항을 깨트리지 마십시오.";
                 return false;
             }
             else if (EnabledModeList.Select(x => x.Data.Type).Contains(ModeType.Silent))
@@ -63,9 +63,9 @@ namespace RGM.Commands.ClientCommands
                     if (GodModePlayers.Contains(player))
                         GodModePlayers.Remove(player);
 
-                    player.Kill(en ? "You couldn't do what you didn't say." : "입이 근질거리는 것을 참지 못했습니다.");
+                    player.Kill( "입이 근질거리는 것을 참지 못했습니다.");
 
-                    response = en ? "fizzle!" : "쉿!";
+                    response =  "쉿!";
                     return false;
                 }
             }
@@ -74,7 +74,7 @@ namespace RGM.Commands.ClientCommands
 
             string ChatFormat(string chatType)
             {
-                string text = en ? player.Role.Name : Trans.Role[player.Role.Type];
+                string text =  Trans.Role[player.Role.Type];
                 string text2 = string.Concat(new string[]
                 {
                     $"<size=20><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
@@ -95,28 +95,28 @@ namespace RGM.Commands.ClientCommands
 
                 bool Check(Player p)
                 {
-                    if (chatType == (en ? "All" : "전체"))
+                    if (chatType == ( "전체"))
                         return true;
 
-                    if (chatType == (en ? "SCP" : "SCP"))
+                    if (chatType == ( "SCP"))
                         return p.IsDead || NonePlayer.Players.Contains(p) || p.IsScp || p.Role.Type == RoleTypeId.ZombieFlamingo;
 
-                    if (chatType == (en ? "Flamingo" : "플라밍고"))
+                    if (chatType == ( "플라밍고"))
                         return p.IsDead || NonePlayer.Players.Contains(p) || new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(p.Role.Type);
 
-                    if (chatType == (en ? "Spectator" : "관전자"))
+                    if (chatType == ( "관전자"))
                         return p.IsDead || NonePlayer.Players.Contains(p);
 
-                    if (chatType == (en ? "SCP-1576 + Radio" : "SCP-1576 + 무전기"))
+                    if (chatType == ( "SCP-1576 + 무전기"))
                         return p.IsDead || NonePlayer.Players.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
 
-                    if (chatType == (en ? "SCP-1576" : "SCP-1576"))
+                    if (chatType == ( "SCP-1576"))
                         return p.IsDead || NonePlayer.Players.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10;
 
-                    if (chatType == (en ? "Radio" : "무전기"))
+                    if (chatType == ( "무전기"))
                         return p.IsDead || NonePlayer.Players.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10 || p.HasItem(ItemType.Radio);
 
-                    if (chatType == (en ? "Close" : "근거리"))
+                    if (chatType == ( "근거리"))
                         return p.IsDead || NonePlayer.Players.Contains(p) || Vector3.Distance(p.Position, player.Position) <= 10;
 
                     return false;
@@ -128,38 +128,38 @@ namespace RGM.Commands.ClientCommands
                         ply.AddBroadcast(6, text2);
                 }
 
-                Webhook.Send($"**{chatType}**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({(en ? player.Role.Name : Trans.Role[player.Role.Type])}) - {string.Join(" ", arguments)}");
+                Webhook.Send($"**{chatType}**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({( Trans.Role[player.Role.Type])}) - {string.Join(" ", arguments)}");
 
                 return $"'{text2}'";
             }
 
             if (arguments.Count == 0)
             {
-                response = en ? "Please enter the message you want to send." : "보낼 메세지를 입력해주세요.";
+                response =  "보낼 메세지를 입력해주세요.";
                 return false;
             }
 
             if (IntercomPlayers.Contains(player))
             {
-                response = ChatFormat(en ? "All" : "전체");
+                response = ChatFormat( "전체");
                 return true;
             }
                 
             if (player.IsScp || player.Role.Type == RoleTypeId.ZombieFlamingo)
             {
-                response = ChatFormat(en ? "SCP" : "SCP");
+                response = ChatFormat( "SCP");
                 return true;
             }
 
             if (new List<RoleTypeId>() { RoleTypeId.Flamingo, RoleTypeId.AlphaFlamingo }.Contains(player.Role.Type))
             {
-                response = ChatFormat(en ? "Flamingo" : "플라밍고");
+                response = ChatFormat( "플라밍고");
                 return true;
             }
 
             if (player.IsDead || NonePlayer.Players.Contains(player))
             {
-                response = ChatFormat(en ? "Spectator" : "관전자");
+                response = ChatFormat( "관전자");
                 return true;
             }
                 
@@ -169,12 +169,12 @@ namespace RGM.Commands.ClientCommands
                 {
                     if (player.HasItem(ItemType.Radio))
                     {
-                        response = ChatFormat(en ? "SCP-1576 + Radio" : "SCP-1576 + 무전기");
+                        response = ChatFormat( "SCP-1576 + 무전기");
                         return true;
                     }
                     else
                     {
-                        response = ChatFormat(en ? "SCP-1576" : "SCP-1576");
+                        response = ChatFormat( "SCP-1576");
                         return true;
                     }
                 }
@@ -182,16 +182,16 @@ namespace RGM.Commands.ClientCommands
                 
             if (player.HasItem(ItemType.Radio))
             {
-                response = ChatFormat(en ? "Radio" : "무전기");
+                response = ChatFormat( "무전기");
                 return true;
             }
 
-            response = ChatFormat(en ? "Close" : "근거리");
+            response = ChatFormat( "근거리");
             return true;
         }
 
         public string Command { get; } = "c";
         public string[] Aliases { get; } = new string[] { "챗", "채팅", "chat", "ㅊ" };
-        public string Description { get; } = en ? "[RGM] You can send text chat." : "[RGM] 텍스트 채팅을 사용할 수 있습니다.";
+        public string Description { get; } =  "[RGM] 텍스트 채팅을 사용할 수 있습니다.";
     }
 }

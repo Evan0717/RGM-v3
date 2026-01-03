@@ -25,7 +25,7 @@ namespace RGM.Commands.ClientCommands
 
             if (args == "")
             {
-                response = en ? "Please enter the message you want to send." : "보낼 메세지를 입력해주세요.";
+                response = "보낼 메세지를 입력해주세요.";
                 return false;
             }
             else
@@ -33,8 +33,7 @@ namespace RGM.Commands.ClientCommands
                 DiscordInteraction.Discord.Webhook.Send($"{player.Nickname}({player.Id}, {player.UserId}) {args}",
                     "https://discord.com/api/webhooks/1286570523924627478/oIkgSYPAHul8pKB1tqqXWk3hvVocJBzoWOQTPu0Ha9KmF08NmzXbB3PsY6c7RVg3th6Z");
 
-                response = en ? "A message has been sent to the server administrator.\nUser information will also be sent, so please be careful with your words and actions." : 
-                    "서버 관리자에게 메세지가 전달되었습니다.\n유저 정보도 같이 전송되므로, 언행에 주의하십시오.";
+                response = "서버 관리자에게 메세지가 전달되었습니다.\n유저 정보도 같이 전송되므로, 언행에 주의하십시오.";
                 return true;
             }
         }
@@ -43,7 +42,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "문의" };
 
-        public string Description { get; } = en ? "[RGM] You can send a message to the administrator." : "[RGM] 관리자에게 매세지를 보낼 수 있습니다.";
+        public string Description { get; } = "[RGM] 관리자에게 매세지를 보낼 수 있습니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

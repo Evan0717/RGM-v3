@@ -25,9 +25,6 @@ namespace RGM.Variables
 {
     public static class Variable
     {
-        // Config
-        public static bool en;
-
         public static ModeType CurrentMode = ModeType.None;
         public static ModeType CurrentSubMode = ModeType.None;
         public static AudioPlayer GlobalPlayer;
@@ -37,7 +34,6 @@ namespace RGM.Variables
         public static string WinMessage = "";
         public static int StartupRandom = UnityEngine.Random.Range(1, 31);
         public static bool FreezeGameStart = false;
-        public static bool AutoNuke = false;
         public static bool ShootingTargetSignal = false;
         public static bool IsBugVoteProcessing = false;
         public static bool IsUsersFileLoaded = false;
@@ -125,7 +121,7 @@ namespace RGM.Variables
                 Check = (player, arg) => { return Round.IsLobby || Round.IsEnded; },
                 Script = (player, arg) =>
                 {
-                    player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
+                    player.AddRandomItem();
                 }
             },
             new Product()
@@ -179,7 +175,7 @@ namespace RGM.Variables
                     string text = string.Concat(new string[]
                     {
                         $"<size=40><b>확성기</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
-                        en ? player.Role.Name : Trans.Role[player.Role.Type],
+                         Trans.Role[player.Role.Type],
                         $"</color> ({player.DisplayNickname}) <b> | </b>",
                         arg.Replace("=", "❤️"),
                         "</size>"
@@ -264,7 +260,7 @@ namespace RGM.Variables
             {"크리스마스 볼", "축제의 연출을 돕는 스노우볼입니다."},
             {"철퇴", "이유가 무엇이던간에 처형은 이루어집니다."},
             {"수렴형 레이저", "찰나의 순간, 아래에서 올라오는 빛을 보게 되겠죠."},
-            {"5월 5일", "마음만큼은 어린이날에 머물러 있답니다."}
+            {"5월 5일", "마음만큼은 어린이날에 머물러 있답니다."},
         };
         public static Dictionary<string, string> SpawnEffects = new Dictionary<string, string>()
         {

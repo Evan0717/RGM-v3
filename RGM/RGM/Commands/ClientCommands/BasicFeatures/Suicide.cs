@@ -27,12 +27,12 @@ namespace RGM.Commands.ClientCommands
             {
                 player.Kill(DamageType.Warhead);
 
-                response = en ? "Your prayers have reached the heavens." : "당신의 기도는 저 하늘에 닿았습니다.";
+                response =  "당신의 기도는 저 하늘에 닿았습니다.";
                 return true;
             }
             else
             {
-                response = en ? "Your are already in heaven." : "이미 하늘나라에 있는 상태입니다.";
+                response =  "이미 하늘나라에 있는 상태입니다.";
                 return false;
             }
         }
@@ -41,7 +41,7 @@ namespace RGM.Commands.ClientCommands
 
         public string[] Aliases { get; } = { "자살", "살자" };
 
-        public string Description { get; } = en ? "[RGM] You can end your own life." : "[RGM] 스스로 생을 마감할 수 있습니다.";
+        public string Description { get; } =  "[RGM] 스스로 생을 마감할 수 있습니다.";
 
         public bool SanitizeResponse { get; } = true;
     }
