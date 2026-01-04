@@ -73,6 +73,7 @@
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\BugVote.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Emotion.cs" />
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Link.cs" />
+    <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyIcon.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Pet.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyBadge.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyCustom.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Warn.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Item.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Icon.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SpawnEffect.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRC.cs" />
     <Compile Include="RGM\EventArgs\MEREvents.cs" />
@@ -463,7 +465,6 @@
     <Compile Include="RGM\EventArgs\Scp\Scp330Events.cs" />
     <Compile Include="RGM\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
-    <Compile Include="RGM\Functions\ModeManagers.cs" />
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Set\WitGame\WitGame.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
