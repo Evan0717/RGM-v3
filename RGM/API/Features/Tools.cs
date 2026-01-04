@@ -63,6 +63,49 @@ namespace RGM.API.Features
             return itemList;
         }
 
+        public static void PickModes()
+        {
+            try
+            {
+                ModeVote.Clear();
+                SubModeVote.Clear();
+
+                for (int i = 1; i < 5; i++)
+                {
+                    var StaticModeList = ModeList.Keys.Where(x => ModeList[x].Category == ModeCategory.Public && !ModeVote.ContainsKey(x)).ToList();
+                    var mode = StaticModeList.GetRandomValue();
+                    ModeVote.Add(mode, new List<Player>());
+
+                    if (mode.GetModeData().Info != ModeInfo.Lock && UnityEngine.Random.Range(1, 11) == 1)
+                        SubModeVote.Add(ModeList.Keys.Where(x => ModeList[x].Category != ModeCategory.Private && ModeList[x].Info != ModeInfo.Lock && !ModeVote.ContainsKey(x) && ModeList.Keys.Where(x => x.GetModeData().Info != ModeInfo.Set).Contains(x)).GetRandomValue());
+
+                    else
+                        SubModeVote.Add(ModeType.None);
+                }
+                List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third, Fourth };
+
+                for (int i = 0; i < 4; i++)
+                {
+                    try
+                    {
+                        foreach (var Pad in Pads[i])
+                            Pad.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]].Color, out Color color) ? color : Color.white;
+                    }
+                    catch (Exception e) { }
+                }
+
+                Color randomColor = Tools.GetRandomColor(true);
+
+                Numbers.ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = randomColor);
+                RandomColors.ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = randomColor);
+                RandomLights.ForEach(x => x.GetComponent<LightSourceToy>().NetworkLightColor = Tools.GetRandomColor());
+                Balls.ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = Tools.GetRandomColor(true));
+            }
+            catch (Exception e)
+            {
+                Log.Error($"[RGM] {e}");
+            }
+        }
 
         public static void TeleportToLobby(Player player)
         {
@@ -158,11 +201,11 @@ $"""
 <size=15><i>Cash</i>: ₩{int.Parse(uc[2]).ToString("N0")}</size>
 
 <size=15>보유한 킬이펙트: {GetJoinedInfo(3)}</size>
-<size=15>장착한 킬이펙트: {(uc[4] == "0" ? "-" : uc[4])}</size>
+<size=15>장착한 킬이펙트: {(uc[4] == "0" ? "-" : uc[4])} ({(uc[15] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>
 <size=10>{(uc[4] == "0" ? "'.킬이펙트 <킬이펙트 이름>' 명령어를 사용하여 킬이펙트를 장착할 수 있습니다." : KillEffects[uc[4]])}</size>
 
 <size=15>보유한 스폰이펙트: {GetJoinedInfo(19)}</size>
-<size=15>장착한 스폰이펙트: {(uc[20] == "0" ? "-" : uc[20])}</size>
+<size=15>장착한 스폰이펙트: {(uc[20] == "0" ? "-" : uc[20])} ({(uc[21] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>
 <size=10>{(uc[20] == "0" ? "'.스폰이펙트 <스폰이펙트 이름>' 명령어를 사용하여 스폰이펙트를 장착할 수 있습니다." : SpawnEffects[uc[20]])}</size>
 
 <size=15>보유한 커스텀: {GetJoinedInfo(7)}</size>
@@ -172,12 +215,16 @@ $"""
 <size=10>{(uc[6] == "0" ? "'.인포 <텍스트>' 명령어를 사용하여 커스텀 인포를 설정할 수 있습니다." : $"미리 보기: {Tools.CustomFormatter(player, uc[6]).Replace("\n", "\\n")}")}</size>
 
 <size=15>보유한 페인트: {GetJoinedInfo(8)}</size>
-<size=15>장착한 페인트: {(uc[9] == "0" ? "-" : uc[9])}</size>
+<size=15>장착한 페인트: {(uc[9] == "0" ? "-" : uc[9])} ({(uc[16] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>
 <size=10>{(uc[9] == "0" ? "'.페인트 <페인트 이름>' 명령어를 사용하여 페인트를 장착할 수 있습니다." : Paints[uc[9]])}</size>
 
 <size=15>보유한 칭호: {GetJoinedInfo(10)}</size>
-<size=15>장착한 칭호: {(uc[11] == "0" ? "-" : uc[11])}</size>
+<size=15>장착한 칭호: {(uc[11] == "0" ? "-" : uc[11])} ({(uc[17] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>
 <size=10>{(uc[11] == "0" ? "'.칭호 <칭호 이름>' 명령어를 사용하여 칭호를 장착할 수 있습니다." : Badges[uc[11]])}</size>
+
+<size=15>보유한 아이콘: {GetJoinedInfo(24)}</size>
+<size=15>장착한 아이콘: {(uc[25] == "0" ? "-" : uc[25])} ({(uc[26] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>
+<size=10>{(uc[25] == "0" ? "'.아이콘 <아이콘 이름>' 명령어를 사용하여 아이콘을 장착할 수 있습니다." : Icons[uc[25]])}</size>
 """;
         }
 

@@ -41,7 +41,6 @@ namespace RGM.Variables
         public static bool IsWarningAlone = false;
         public static bool IsClearCitizen = false;
         public static bool IsSuggestProcessing = false;
-        public static bool IsModeSuggestUsed = false;
         public static bool IsWaveEnabled = true;
         public static bool IsNonePlayerAllowed = true;
 
@@ -70,6 +69,7 @@ namespace RGM.Variables
         public static List<Player> ShopCooldown = new();
         public static List<ModeType> HighlightModes = new();
         public static List<Player> SuggestPlayers = new();
+        public static List<string> UsedItems = new();
         public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",
@@ -193,10 +193,10 @@ namespace RGM.Variables
                 Name = "모드 제안서",
                 Description = $".구매 모드 제안서/{{모드 이름}}ㅣ4번째 투표 목록에 있는 모드를 10% 확률로 해당 모드로 교체합니다. 한 라운드 당 한번만 구매할 수 있습니다.",
                 Price = 10,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !IsModeSuggestUsed; },
+                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("모드 제안서"); },
                 Script = (player, arg) =>
                 {
-                    IsModeSuggestUsed = true;
+                    UsedItems.Add("모드 제안서");
 
                     string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;
                     bool flag = UnityEngine.Random.Range(1, 11) == 1;
@@ -220,10 +220,10 @@ namespace RGM.Variables
                 Name = "고급 모드 제안서",
                 Description = $".사용 고급 모드 제안서/{{모드 이름}}ㅣ4번째 투표 목록에 있는 모드를 무조건적으로 해당 모드로 교체합니다.",
                 Price = 1205,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !IsModeSuggestUsed; },
+                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("고급 모드 제안서"); },
                 Script = (player, arg) =>
                 {
-                    IsModeSuggestUsed = true;
+                    UsedItems.Add("고급 모드 제안서");
 
                     string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;
 
@@ -231,6 +231,47 @@ namespace RGM.Variables
                     ModeVote.Add(ModeList.First(x => x.Value.Name == arg).Key, new List<Player>());
 
                     Exiled.API.Features.Cassie.MessageTranslated("", $"{player.DisplayNickname}(이)가 <b><color=#ffd700>고급 모드 제안서</color></b>를 사용하여, <b>{modeName}</b> 모드를 제안하는 데 성공했습니다!!");
+                }
+            },
+            new Product()
+            {
+                IsPubliced = true,
+                Name = "모드 리롤권",
+                Description = $".사용 모드 리롤권ㅣ10% 확률로 모든 투표 목록을 변경합니다. 판 엎기에 딱 좋네요. 한 라운드 당 한번만 사용할 수 있습니다.",
+                Price = 10,
+                Check = (player, arg) => { return Round.IsLobby && !UsedItems.Contains("모드 리롤권"); },
+                Script = (player, arg) =>
+                {
+                    UsedItems.Add("모드 리롤권");
+
+                    bool flag = UnityEngine.Random.Range(1, 11) == 1;
+
+                    if (flag)
+                    {
+                        Tools.PickModes();
+
+                        Exiled.API.Features.Cassie.MessageTranslated("", $"{player.DisplayNickname}(이)가 투표 목록을 갱신하는 데 성공했습니다!!");
+                    }
+                    else
+                    {
+                        Exiled.API.Features.Cassie.MessageTranslated("", $"{player.DisplayNickname}(이)가 투표 목록을 갱신하는 데 실패했습니다.");
+                    }
+                }
+            },
+            new Product()
+            {
+                IsPubliced = false,
+                Name = "고급 모드 리롤권",
+                Description = $".사용 고급 모드 리롤권ㅣ무조건적으로 모든 투표 목록을 변경합니다.",
+                Price = 1205,
+                Check = (player, arg) => { return Round.IsLobby && !UsedItems.Contains("고급 모드 리롤권"); },
+                Script = (player, arg) =>
+                {
+                    UsedItems.Add("고급 모드 리롤권");
+
+                    Tools.PickModes();
+
+                    Exiled.API.Features.Cassie.MessageTranslated("", $"{player.DisplayNickname}(이)가 <b><color=#ffd700>고급 모드 리롤권</color></b>를 사용하여, 투표 목록을 갱신하는 데 성공했습니다!!");
                 }
             },
         };
@@ -329,17 +370,10 @@ namespace RGM.Variables
             {"도파민 우선", "하지만 재밌었죠?"},
             {"2026", "아무도 알아주지 않을 길을 걷는 자"},
         };
-        public static Dictionary<string, string> BadgeIcons = new Dictionary<string, string>()
+        public static Dictionary<string, string> Icons = new Dictionary<string, string>()
         {
-            {"RGM Owner", "👑"},
-            {"RGM Administrator", "⚖️"},
-            {"RGM Developer", "🔧"},
-            {"호기심 많은 자", "❓"},
-            {"1st Anniversary", "⭐"},
-            {"Adieu, Polaris", "⭐"},
-            {"Adieu! 2023", "⭐"},
-            {"2023 RGM Summer", "⭐"},
-            {"Adios! 2024", "✿"}
+            {"⭐", "반짝 반짝 작은 별"},
+            {"✿", "작은 꿈은 벚꽃처럼 만개하리라"},
         };
         public static Dictionary<CandyKindID, ICandy> CandyDataDict = new()
         {

@@ -24,7 +24,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static RGM.Functions.ModeManagers;
 using static RGM.IEnumerators.LobbyIEnumerator;
 using static RGM.IEnumerators.ServerIEnumerator;
 using static RGM.Variables.Variable;
@@ -99,7 +98,7 @@ namespace RGM.EventArgs
 
             yield return Timing.WaitForSeconds(1);
 
-            PickModes();
+            Tools.PickModes();
             Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
 
             Timing.RunCoroutine(SyncSpectatedHint());

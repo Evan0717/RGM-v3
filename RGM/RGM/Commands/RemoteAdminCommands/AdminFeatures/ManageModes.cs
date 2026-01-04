@@ -15,8 +15,6 @@ using UnityEngine;
 
 using static RGM.Variables.Variable;
 
-using static RGM.Functions.ModeManagers;
-
 namespace RGM.Commands.RemoteAdminCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
@@ -69,7 +67,7 @@ namespace RGM.Commands.RemoteAdminCommands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            PickModes();
+            Tools.PickModes();
             response = "모드 리셋이 완료되었습니다.";
             return true;
         }

@@ -10,7 +10,6 @@ using Exiled.API.Features;
 
 using static RGM.Variables.Variable;
 
-using static RGM.Functions.ModeManagers;
 using RGM.API.Features;
 
 namespace RGM.IEnumerators
@@ -79,7 +78,7 @@ namespace RGM.IEnumerators
         {
             while (!Round.IsStarted)
             {
-                PickModes();
+                Tools.PickModes();
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -130,7 +129,7 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForSeconds(0.1f);
             }
 
-            PickModes();
+            Tools.PickModes();
             Exiled.API.Features.Cassie.MessageTranslated("", $"<mark=#ffff00aa><color=#000000><color=#ffffff>모드 투표 리스트</color>가 초기화되었습니다.</color></mark>");
 
             FreezeGameStart = true;
