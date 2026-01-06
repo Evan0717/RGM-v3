@@ -180,7 +180,56 @@ namespace RGM.Donator
 
             if (kE == "5월 5일")
             {
+                PlaySound(_pos, "11", 3);
+
                 SchematicObject ChildrenDay = ObjectSpawner.SpawnSchematic("ChildrenDay", new Vector3(_pos.x, _pos.y - 0.9f, _pos.z), rot);
+
+                Timing.CallDelayed(1.5f, ChildrenDay.Destroy);
+            }
+
+            if (kE == "카피바라")
+            {
+                PlaySound(_pos, "12", 3);
+
+                CapybaraToy capybara = PrefabHelper.Spawn(PrefabType.CapybaraToy, _pos).GetComponent<CapybaraToy>();
+
+                capybara.NetworkCollisionsEnabled = false;
+                capybara.NetworkMovementSmoothing = 100;
+                capybara.NetworkScale = new Vector3(1, 1, 1);
+
+                void update(Vector3 pos, Quaternion rot)
+                {
+                    capybara.NetworkPosition = pos;
+                    capybara.NetworkRotation = rot;
+                    capybara.UpdatePositionClient();
+                    capybara.UpdatePositionServer();
+                }
+
+                Vector3 pos1 = _pos + new Vector3(0, -1, 0);
+                Quaternion rot1 = Vector3.Distance(attacker.Position, capybara.NetworkPosition) < 1.2f
+                                ? Quaternion.Euler(0, attacker.Rotation.eulerAngles.y, 0)
+                                : Quaternion.LookRotation(new Vector3(attacker.Position.x - capybara.transform.position.x, 0, attacker.Position.z - capybara.transform.position.z));
+
+                update(pos1, rot1);
+
+                Timing.CallDelayed(1.5f, () =>
+                {
+                    NetworkServer.Destroy(capybara.gameObject);
+                });
+
+                for (int i = 0; i < 36; i++)
+                {
+                    update(pos1, rot1 *= Quaternion.Euler(0, 10f, 0));
+
+                    yield return Timing.WaitForSeconds(0.03f);
+                }
+            }
+
+            if (kE == "찰칵")
+            {
+                PlaySound(_pos, "13", 3);
+
+                SchematicObject ChildrenDay = ObjectSpawner.SpawnSchematic("Camera", new Vector3(_pos.x, _pos.y, _pos.z), rot);
 
                 Timing.CallDelayed(1.5f, ChildrenDay.Destroy);
             }
