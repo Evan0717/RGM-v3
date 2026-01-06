@@ -56,7 +56,9 @@ namespace RGM.API.DataBases
             {"크리스마스 볼", new List<string>() {"<b><color=#FF0000>크</color><color=#FD5354>리</color><color=#FCA7A9>스</color><color=#FAFBFE>마</color><color=#A7E3A9>스</color> <color=#00B300>볼</color></b>", "<color=#B45F04>루돌프</color>" }},
             {"철퇴", new List<string>() { "<b><color=#000000>철</color><color=#4A4A4A>퇴</color></b>", "처형" }},
             {"수렴형 레이저", new List<string>() {"<b><color=#00E1FF>수</color><color=#00EBD7>렴</color><color=#00F5AF>형</color> <color=#1BFFA1>레</color><color=#36FFBA>이</color><color=#52FFD4>저</color></b>", "소각" }},
-            {"5월 5일", new List<string>() {"<b><color=#E1FF00>5</color><color=#E7E700>월</color> <color=#F3B700>5</color><color=#F99F00>일</color></b>", "행복사" }}
+            {"5월 5일", new List<string>() {"<b><color=#E1FF00>5</color><color=#E7E700>월</color> <color=#F3B700>5</color><color=#F99F00>일</color></b>", "행복사" }},
+            {"카피바라", new List<string>() {"<b><color=#A67B5B>카</color><color=#B28C6C>피</color><color=#BE9D7D>바</color><color=#CABF8E>라</color></b>", "카피바라"}},
+            {"찰칵", new List<string>() { "<b><color=#D8FE9F>카</color><color=#A2FE78>메</color><color=#6DFE51>라</color></b>", "추억 속으로 박제"}}
         };
 
         public static List<DamageType> BlockDamageTypes = new List<DamageType>()
