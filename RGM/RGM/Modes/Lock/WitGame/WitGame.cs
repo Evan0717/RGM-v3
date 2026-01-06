@@ -24,7 +24,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.WitGame)]
+    [Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.WitGame)]
     class WitGame : Mode
     {
         public override string Name => "눈치게임";

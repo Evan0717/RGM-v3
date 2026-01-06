@@ -26,7 +26,7 @@ using Respawning;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.RussianRoulette)]
+    [Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.RussianRoulette)]
     class RussianRoulette : Mode
     {
         public override string Name => "러시안 룰렛";

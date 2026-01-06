@@ -443,7 +443,7 @@
     <Compile Include="RGM\Modes\Plus\Siberia\Siberia.cs" />
     <Compile Include="RGM\Modes\Plus\SoulMate\SoulMate.cs" />
     <Compile Include="RGM\Modes\Set\Rescue05\Rescue05.cs" />
-    <Compile Include="RGM\Modes\Set\RussianRoulette\RussianRoulette.cs" />
+    <Compile Include="RGM\Modes\Lock\RussianRoulette\RussianRoulette.cs" />
     <Compile Include="RGM\Modes\Set\Snake\Snake.cs" />
     <Compile Include="RGM\Modes\Set\SpeedRun\SpeedRun.cs" />
     <Compile Include="RGM\Modes\Plus\Spirit\Spirit.cs" />
@@ -466,7 +466,7 @@
     <Compile Include="RGM\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
-    <Compile Include="RGM\Modes\Set\WitGame\WitGame.cs" />
+    <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\UserSettings\ServerSpecificSettings.cs" />
