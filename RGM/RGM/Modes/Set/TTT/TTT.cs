@@ -22,6 +22,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using System.Windows.Forms;
 using UserSettings.AudioSettings;
+using InventorySystem.Items.Usables.Scp330;
 
 namespace RGM.Modes
 {
@@ -195,9 +196,9 @@ Trouble in Terrorist Town의 약자.
                 traitors.Add(traitor);
             }
 
-            for (int i = 0; i < traitorCount / 3; i++)
+            if (playerCount >= 25)
             {
-                Player mimic = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x)).GetRandomValue();
+                Player mimic = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
 
                 mimics.Add(mimic);
             }
@@ -250,9 +251,9 @@ Trouble in Terrorist Town의 약자.
                 else if (player == O5)
                 {
                     player.AddHint("TTT O5", $"당신은 <color=#000000>O5 평의회</color>입니다. 끝까지 생존하거나, 나머지를 전부 죽이세요!", 20);
-                    player.MaxHealth = 350;
+                    player.MaxHealth = 250;
                     player.Health = player.MaxHealth;
-                    player.AddItem(ItemType.SCP330);
+                    player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
                 }
                 else
                 {
@@ -310,6 +311,9 @@ Trouble in Terrorist Town의 약자.
                     {
                         if (traitors.Contains(t) || mimics.Contains(t))
                             traitor.AddHint("TTT 배신자 확인", $"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
+
+                        else if (t == O5)
+                            traitor.AddHint("TTT O5 평의회 확인", $"그는 <color=#000000>O5 평의회</color>입니다.", 1.2f);
 
                         else
                             traitor.AddHint("TTT 무죄인 확인", $"[ALT]ㅣ해당 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>을 일격에 즉사시키십시오.", 1.2f);
