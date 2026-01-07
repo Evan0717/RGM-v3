@@ -1,12 +1,19 @@
-﻿using Exiled.API.Extensions;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using MEC;
+using Mirror;
+using MultiBroadcast.API;
+using NetworkManagerUtils.Dummies;
+using PlayerRoles;
 using RemoteAdmin;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes;
 
@@ -63,14 +70,112 @@ public class TFT : Mode
         foreach (var player in PlayerManager.List)
             DAONTFT.Core.EventArgs.PlayerEvents.Verified(player);
 
-        Timing.CallDelayed(20f, () =>
+        // --------------------------------------------------
+
+        MultiBroadcast.API.MultiBroadcast.ClearAllBroadcasts();
+
+        GlobalPlayer.AddClip("게임 시작");
+
+        Dictionary<Player, RoleTypeId> role = new();
+
+        var encounter = DAONTFT.Core.Variables.Base.Encounters.GetRandomValue();
+        DAONTFT.Core.Variables.Base.Encounter = encounter.Value.Item1;
+
+        if (encounter.Value.Item1 != RoleTypeId.None)
+        {
+            Player dummy = Player.Get(DummyUtils.SpawnDummy(encounter.Key));
+            dummy.Role.Set(encounter.Value.Item1);
+            dummy.Health = 99999;
+            dummy.Scale = new Vector3(5, 5, 5);
+            dummy.Position = new Vector3(139.8427f, 335.6814f, 67.04181f);
+
+            Timing.CallDelayed(11, () =>
+            {
+                NetworkServer.Destroy(dummy.GameObject);
+            });
+        }
+
+        foreach (var player in Player.List)
+        {
+            role.Add(player, player.Role.Type);
+
+            player.Role.Set(RoleTypeId.Tutorial);
+            player.Position = new Vector3(137.8167f, 304.3213f, 71.88593f);
+            player.AddEffect(EffectType.NightVision, 50);
+
+            Timing.CallDelayed(1, () =>
+            {
+                player.AddBroadcast(10, $"<size=25>{encounter.Value.Item2}</size>");
+            });
+        }
+
+        Timing.CallDelayed(11, () =>
+        {
+            foreach (var player in Player.List)
+            {
+                if (role.ContainsKey(player))
+                    player.Role.Set(role[player]);
+
+                else
+                    player.Role.Set(RoleTypeId.ClassD);
+            }
+
+            try
+            {
+                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosRepressor)
+                {
+                    foreach (var player in Player.List)
+                        player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.IsWeapon()).GetRandomValue());
+                }
+
+                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosMarauder)
+                {
+                    foreach (var player in Player.List)
+                        player.AddItem(Random.Range(1, 3) == 1 ? ItemType.GrenadeFlash : ItemType.GrenadeHE);
+                }
+
+                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosConscript)
+                {
+                    foreach (var player in Player.List)
+                        player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).GetRandomValue());
+                }
+
+                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosRifleman)
+                {
+                    foreach (var player in Player.List)
+                        player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
+                }
+            }
+            catch { }
+        });
+
+        // --------------------------------------------------
+
+        Timing.CallDelayed(30, () =>
         {
             DAONTFT.Core.TFT.ABattle.StartUpgrade();
         });
 
+        int getTime()
+        {
+            if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ClassD)
+                return 100;
+
+            if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scientist)
+                return 60;
+
+            if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.FacilityGuard)
+                return 180;
+
+            else
+                return 300;
+        }
+
+        int waitTime = getTime();
+
         while (true)
         {
-            yield return Timing.WaitForSeconds(300f);
+            yield return Timing.WaitForSeconds(waitTime);
 
             DAONTFT.Core.TFT.ABattle.StartUpgrade();
         }

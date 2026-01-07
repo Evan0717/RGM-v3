@@ -506,7 +506,7 @@
     </Reference>
     <Reference Include="DAONTFT, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\dependencies\DAONTFT.dll</HintPath>
+      <HintPath>..\..\..\DAON\DAONTFT\bin\Debug\DAONTFT.dll</HintPath>
     </Reference>
     <Reference Include="DiscordInteraction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
