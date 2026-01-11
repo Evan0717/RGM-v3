@@ -41,7 +41,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 20, 15);
+        public override Version Version { get; } = new(3, 20, 16);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -94,6 +94,7 @@ namespace RGM
             Exiled.Events.Handlers.Player.Left += OnLeft;
             Exiled.Events.Handlers.Player.SpawningRagdoll += OnSpawningRagdoll;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
