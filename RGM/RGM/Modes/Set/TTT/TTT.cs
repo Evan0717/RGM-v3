@@ -386,6 +386,8 @@ Trouble in Terrorist Town의 약자.
 
         public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
+            ev.Player.Grab();
+
             if (!instantKillCooldown.Contains(ev.Player))
             {
                 if (Tools.TryGetLookPlayer(ev.Player, 3, out Player t, out RaycastHit? hit))
