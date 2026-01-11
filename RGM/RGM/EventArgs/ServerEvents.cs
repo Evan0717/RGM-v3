@@ -34,6 +34,8 @@ namespace RGM.EventArgs
     {
         public static IEnumerator<float> OnWaitingForPlayers()
         {
+            Server.Name = Server.Name.Replace("{version}", $"v{RGM.Instance.Version.Major}.{RGM.Instance.Version.Minor}.{RGM.Instance.Version.Build}");
+
             yield return Timing.WaitForSeconds(1f);
 
             try
@@ -70,7 +72,10 @@ namespace RGM.EventArgs
 
             UsersManager.LoadUsers();
 
-            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", onIntialCreation: (p) =>
+            GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", condition: (ReferenceHub hub) =>
+            {
+                return !MuteBGMPlayers.Contains(Player.Get(hub));
+            }, onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000);
             });

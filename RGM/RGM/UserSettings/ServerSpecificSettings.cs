@@ -35,18 +35,7 @@ namespace RGM.UserSettings
         public static KeybindSetting ScpCanEquipRandomItem { get; private set; }
         public static ButtonSetting SpectatorToNone { get; private set; }
         public static ButtonSetting SwitchToSpectator { get; private set; }
-
-        public static string GetValue(string debugValue)
-        {
-            try
-            {
-                return debugValue.Split('(')[1].Split(')')[0].Trim();
-            }
-            catch
-            {
-                return debugValue;
-            }
-        }
+        public static TwoButtonsSetting MuteBGM { get; private set; }
 
         public static void Init()
         {
@@ -105,6 +94,16 @@ $"""
                 holdTime: 0.5f
             );
 
+            MuteBGM = new TwoButtonsSetting(
+                id: 12053,
+                label: "BGM 음소거",
+                firstOption: "ON",
+                secondOption: "OFF",
+                defaultIsSecond: true,
+                hintDescription: "음악이 유튜브 저작권에 걸릴 것 같다고요? 이 기능을 사용하세요.",
+                header: Setting
+            );
+
             IEnumerable<SettingBase> settings = new SettingBase[]
             {
                 // 설명
@@ -114,6 +113,7 @@ $"""
                 ScpCanEquipRandomItem, 
                 SpectatorToNone, 
                 SwitchToSpectator,
+                MuteBGM,
             };
 
             SettingBase.Register(settings);
@@ -142,6 +142,19 @@ $"""
                         player.CurrentItem = candidates.GetRandomValue();
                         return;
                     }
+                }
+            }
+
+            // 투버튼인 경우
+            if (setting is SSTwoButtonsSetting twoButton)
+            {
+                if (setting.SettingId == 12053)
+                {
+                    if (twoButton.SyncIsA)
+                        MuteBGMPlayers.Add(player);
+
+                    else
+                        MuteBGMPlayers.Remove(player);
                 }
             }
 

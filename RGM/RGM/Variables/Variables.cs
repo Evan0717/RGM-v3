@@ -69,6 +69,7 @@ namespace RGM.Variables
         public static List<Player> ShopCooldown = new();
         public static List<ModeType> HighlightModes = new();
         public static List<Player> SuggestPlayers = new();
+        public static List<Player> MuteBGMPlayers = new();
         public static List<string> UsedItems = new();
         public static List<string> Maps = new()
         {
@@ -147,7 +148,10 @@ namespace RGM.Variables
                 Check = (player, arg) => { return player.IsAlive; },
                 Script = (player, arg) =>
                 {
-                    AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}", onIntialCreation: (p) =>
+                    AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}",  condition: (ReferenceHub hub) =>
+                    {
+                        return !MuteBGMPlayers.Contains(Player.Get(hub));
+                    }, onIntialCreation: (p) =>
                     {
                         p.transform.parent = player.GameObject.transform;
                         Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 1f, maxDistance: 50f);

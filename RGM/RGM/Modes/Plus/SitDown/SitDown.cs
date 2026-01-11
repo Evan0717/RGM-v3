@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
@@ -79,7 +80,10 @@ namespace RGM.Modes
             {
                 playerStatuses[ev.Player].IsChangingSitDownState = true;
 
-                AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player {ev.Player.Nickname}", onIntialCreation: (p) =>
+                AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player {ev.Player.Nickname}", condition: (ReferenceHub hub) =>
+                {
+                    return !MuteBGMPlayers.Contains(Player.Get(hub));
+                }, onIntialCreation: (p) =>
                 {
                     Speaker speaker = p.AddSpeaker("Main", maxDistance: 3);
 

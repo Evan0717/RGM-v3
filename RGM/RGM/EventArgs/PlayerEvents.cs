@@ -57,7 +57,7 @@ namespace RGM.EventArgs
             {
                 AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player - {ev.Player.UserId}", condition: (hub) =>
                 {
-                    return hub == ev.Player.ReferenceHub;
+                    return hub == ev.Player.ReferenceHub && !MuteBGMPlayers.Contains(Player.Get(hub));
                 }
                 , onIntialCreation: (p) =>
                 {
@@ -515,6 +515,14 @@ namespace RGM.EventArgs
             });
         }
 
+        public static void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+            if (ev.Player.IsDND() && ev.NewRole.IsFlamingo())
+            {
+                ev.IsAllowed = false;
+            }
+        }
+
         public static void OnSpawned(SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/pfx FogControl 1 0 {ev.Player.Id}");
@@ -587,7 +595,7 @@ namespace RGM.EventArgs
                         ev.Player.Health = ev.Player.MaxHealth;
                     }
 
-                    if (UnityEngine.Random.Range(1, 41) == 1 && !HolidayUtils.IsHolidayActive(HolidayType.Halloween)) // SCP-3114 추가
+                    if (UnityEngine.Random.Range(1, 41) == 1 && !(HolidayUtils.IsHolidayActive(HolidayType.Halloween) || HolidayUtils.IsHolidayActive(HolidayType.Christmas))) // SCP-3114 추가
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp3114);
                     }

@@ -46,7 +46,10 @@ namespace RGM.Donator
 
         public void PlaySound(Vector3 pos, string clip, float volume = 1)
         {
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"{UnityEngine.Random.Range(1, 10000001)}", onIntialCreation: (p) =>
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"{UnityEngine.Random.Range(1, 10000001)}", condition: (ReferenceHub hub) =>
+            {
+                return !MuteBGMPlayers.Contains(Player.Get(hub));
+            }, onIntialCreation: (p) =>
             {
                 Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 1, maxDistance: 5);
 
@@ -313,7 +316,7 @@ namespace RGM.Donator
             {
                 try
                 {
-                    foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
+                    foreach (var player in Player.List.Where(x => !x.IsNPC))
                     {
                         if (UsersManager.UsersCache.ContainsKey(player.UserId))
                         {

@@ -125,7 +125,10 @@ namespace RGM.Modes
                         break;
 
                     case 11:
-                        AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"{Random.Range(1, 10000001)}", onIntialCreation: (p) =>
+                        AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"{Random.Range(1, 10000001)}", condition: (ReferenceHub hub) =>
+                        {
+                            return !MuteBGMPlayers.Contains(Player.Get(hub));
+                        }, onIntialCreation: (p) =>
                         {
                             Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 1, maxDistance: 10);
 

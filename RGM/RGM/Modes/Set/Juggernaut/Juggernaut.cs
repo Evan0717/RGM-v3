@@ -194,7 +194,10 @@ namespace RGM.Modes
 
         public IEnumerator<float> MusicAsync()
         {
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player {juggernaut.DisplayNickname}", onIntialCreation: (p) =>
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player {juggernaut.DisplayNickname}", condition: (ReferenceHub hub) =>
+            {
+                return !MuteBGMPlayers.Contains(Player.Get(hub));
+            }, onIntialCreation: (p) =>
             {
                 p.transform.parent = juggernaut.GameObject.transform;
 

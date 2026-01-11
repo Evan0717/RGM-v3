@@ -795,7 +795,10 @@ $"""
 
         public static AudioClipPlayback PlaySound(Transform transform, string name, float volume = 1, bool loop = false, bool isSpatial = true, float minDistance = 1, float maxDistance = 10)
         {
-            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform.position}", onIntialCreation: (p) =>
+            AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform.position}", condition: (ReferenceHub hub) =>
+            {
+                return !MuteBGMPlayers.Contains(Player.Get(hub));
+            },onIntialCreation: (p) =>
             {
                 p.transform.parent = transform;
 
