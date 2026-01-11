@@ -53,6 +53,13 @@ namespace RGM.Modes.SubClass
                 player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon() && !black.Contains(x)));
                 player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => !black.Contains(x)));
 
+                GodModePlayers.Add(player);
+
+                Timing.CallDelayed(3, () =>
+                {
+                    GodModePlayers.Remove(player);
+                });
+
                 yield break;
             }
 
