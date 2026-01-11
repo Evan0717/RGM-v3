@@ -26,7 +26,7 @@ public class TFT : Mode
 """
 증강은 한 사람당 총 3개를 확보할 수 있으며,
 
-처음 라운드 시작시 20초 후에,
+처음 라운드 시작시 30초 후에,
 
 그 다음 300초마다 지급됩니다.
 """;
@@ -74,7 +74,9 @@ public class TFT : Mode
 
         MultiBroadcast.API.MultiBroadcast.ClearAllBroadcasts();
 
-        GlobalPlayer.AddClip("게임 시작");
+        GlobalPlayer.AddClip("게임 시작", 2);
+
+        Round.IsLocked = true;
 
         Dictionary<Player, RoleTypeId> role = new();
 
@@ -147,6 +149,8 @@ public class TFT : Mode
                 }
             }
             catch { }
+
+            Round.IsLocked = false;
         });
 
         // --------------------------------------------------
