@@ -40,7 +40,7 @@ public class Joker : Ability
         if (ev.Attacker != null)
             ev.Attacker.RemoveAbility(ev.Attacker.GetAbilities().GetRandomValue());
 
-        foreach (var ability in ABattle.Instance.GetRandomAbilities(AbilityCategory.Legend, 2))
+        foreach (var ability in ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Legend, 2))
             ev.Player.AddAbility(ability);
 
         OnDisabled();

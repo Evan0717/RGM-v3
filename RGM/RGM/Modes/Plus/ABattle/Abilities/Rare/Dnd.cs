@@ -49,7 +49,7 @@ public class Dnd : Ability
                 {
                     try
                     {
-                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(category, 3).ToList().Where(x => x != AbilityType.RARE_DND).GetRandomValue());
+                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 3).ToList().Where(x => x != AbilityType.RARE_DND).GetRandomValue());
                         Timing.CallDelayed(1, () =>
                         {
                             Owner.RemoveAbility(this);

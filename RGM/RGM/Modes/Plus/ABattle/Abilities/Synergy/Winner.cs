@@ -21,7 +21,7 @@ public class Winner : Ability
     {
         Timing.CallDelayed(1, () =>
         {
-            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Mythic, 2).GetRandomValue());
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Mythic, 2).GetRandomValue());
         });
     }
 

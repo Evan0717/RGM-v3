@@ -97,6 +97,13 @@ public class RequiresAbilityAttribute(params AbilityType[] abilities) : Attribut
     public AbilityType[] Abilities { get; } = abilities;
 }
 
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class ConditionAbilityAttribute(AbilityType[] abilities, AbilityType[] blocks) : Attribute
+{
+    public AbilityType[] Abilities { get; } = abilities;
+    public AbilityType[] BlockAbilities { get; } = blocks;
+}
+
 public enum AbilityCategory
 {
     None,

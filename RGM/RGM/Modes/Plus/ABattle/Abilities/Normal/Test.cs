@@ -23,14 +23,12 @@ public class Test : Ability
         {
             if (Owner.IsAlive)
             {
-                Owner.RemoveAbility(this);
-
                 if (Random.Range(1, 101) <= 15)
                 {
                     Owner.AddHint("시험 성공", "<b>능력을 3개 더 얻었습니다!</b>");
 
                     for (int i = 0; i < 3; i++)
-                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ABattle.Instance.GetCategory(Owner), 1)[0]);
+                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, ABattle.Instance.GetCategory(Owner), 1)[0]);
 
                     Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);
                 }

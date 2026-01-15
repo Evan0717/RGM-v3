@@ -596,9 +596,19 @@ public class ABattle : Mode
         return GetAbility(player, type) != null;
     }
 
-    public List<AbilityType> GetRandomAbilities(AbilityCategory category, int count)
+    public List<AbilityType> GetRandomAbilities(Player player, AbilityCategory category, int count)
     {
-        var abilities = Abilities.Where(x => x.Value.Category == category).ToList();
+        var abilities = Abilities
+            .Where(x => x.Value.Category == category)
+            .Where(x =>
+            {
+                var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
+                if (conditionAttr == null)
+                    return true;
+
+                return conditionAttr.Abilities.All(req => player.HasAbility(req));
+            })
+            .ToList();
 
         if (category == AbilityCategory.Dummy)
             abilities = Abilities.ToList();
@@ -648,10 +658,10 @@ public class ABattle : Mode
 
         if (CurrentExtraModes.Contains("1 + 1"))
         {
-            player.AddAbility(GetRandomAbilities(category, 1).First());
+            player.AddAbility(GetRandomAbilities(player, category, 1).First());
         }
 
-        abilities = abilities == null ? GetRandomAbilities(category, count) : abilities;
+        abilities = abilities == null ? GetRandomAbilities(player, category, count) : abilities;
         var ignoredIndexes = new List<int>();
 
         if (abilities.Count == 0)
@@ -678,7 +688,7 @@ public class ABattle : Mode
 
             ignoredIndexes.Add(index);
 
-            var ability = GetRandomAbilities(player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) ? Tools.EnumToList<AbilityCategory>().GetRandomValue(x => !new List<AbilityCategory> { AbilityCategory.None, AbilityCategory.Dummy, AbilityCategory.Synergy }.Contains(x)) : player.GetAbilityCategory(), 1).First();
+            var ability = GetRandomAbilities(player, player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) ? Tools.EnumToList<AbilityCategory>().GetRandomValue(x => !new List<AbilityCategory> { AbilityCategory.None, AbilityCategory.Dummy, AbilityCategory.Synergy }.Contains(x)) : player.GetAbilityCategory(), 1).First();
 
             abilities[index] = ability;
         }
@@ -702,7 +712,7 @@ public class ABattle : Mode
 
                 for (int i = 0; i < 3; i++)
                 {
-                    abilities[i] = GetRandomAbilities(AbilityCategory.Epic, 1).First();
+                    abilities[i] = GetRandomAbilities(player, AbilityCategory.Epic, 1).First();
                 }
 
                 player.AddAbility(AbilityType.DUMMY_RARETRANSITIONSUCCESS);
@@ -730,7 +740,7 @@ public class ABattle : Mode
 
                 for (int i = 0; i < 3; i++)
                 {
-                    abilities[i] = GetRandomAbilities(AbilityCategory.Legend, 1).First();
+                    abilities[i] = GetRandomAbilities(player, AbilityCategory.Legend, 1).First();
                 }
 
                 player.AddAbility(AbilityType.DUMMY_EPICTRANSITIONSUCCESS);
@@ -758,7 +768,7 @@ public class ABattle : Mode
 
                 for (int i = 0; i < 3; i++)
                 {
-                    abilities[i] = GetRandomAbilities(AbilityCategory.Mythic, 1).First();
+                    abilities[i] = GetRandomAbilities(player, AbilityCategory.Mythic, 1).First();
                 }
 
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONSUCCESS);
@@ -920,17 +930,17 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("골드 전주곡"))
         {
             if (player.Role.Type == RoleTypeId.Scp079)
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
+                player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
 
             else
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Epic, 1).First());
+                player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.Role.Type == RoleTypeId.Scp079)
             {
                 for (int i = 0; i < Random.Range(1, 3); i++)
-                    player.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Scp079, 1).First());
+                    player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
             }
 
             else
@@ -946,7 +956,7 @@ public class ABattle : Mode
                     return AbilityCategory.Epic;
                 }
 
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(getRandom(), 1).First());
+                player.AddAbility(ABattle.Instance.GetRandomAbilities(player, getRandom(), 1).First());
             }
         }
     }

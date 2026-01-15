@@ -21,7 +21,7 @@ public class Loser : Ability
     {
         Timing.CallDelayed(1, () =>
         {
-            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(AbilityCategory.Legend, 1).GetRandomValue());
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Legend, 1).GetRandomValue());
         });
     }
 
