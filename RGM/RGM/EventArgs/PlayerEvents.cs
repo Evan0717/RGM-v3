@@ -679,12 +679,6 @@ namespace RGM.EventArgs
             {
                 if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
                     ev.IsAllowed = false;
-
-                else
-                {
-                    GodModePlayers.Remove(ev.Player);
-                    ev.Player.Kill(ev.DamageHandler);
-                }
             }
             else if (ev.Attacker != null && !NonePlayer.Players.Contains(ev.Attacker))
             {
@@ -711,6 +705,7 @@ namespace RGM.EventArgs
                     else
                     {
                         GodModePlayers.Remove(ev.Player);
+                        ev.Player.Kill(ev.DamageHandler);
                     }
                 }
                 else
