@@ -35,7 +35,7 @@ namespace RGM.Modes
 """;
         public override string Color => "e7c77d";
 
-        List<Player> Finders = new List<Player>();
+        List<Player> finders = new List<Player>();
 
         CoroutineHandle _onModeStarted;
 
@@ -89,10 +89,10 @@ namespace RGM.Modes
 
             for (float i = 1; i < PlayerManager.List.Count / 6 + 2; i++)
             {
-                Finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !Finders.Contains(x)).ToList()));
+                finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !finders.Contains(x)).ToList()));
             }
 
-            foreach (var Finder in Finders)
+            foreach (var Finder in finders)
             {
                 Finder.Role.Set(RoleTypeId.Tutorial);
                 Finder.Role.Set(RoleTypeId.Scp049, RoleSpawnFlags.None);
@@ -100,7 +100,7 @@ namespace RGM.Modes
                 Server.ExecuteCommand($"/speak {Finder.Id} 1");
             }
 
-            foreach (var player in PlayerManager.List.Where(x => !Finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Scale = new Vector3(0.4f, 0.4f, 0.4f);
@@ -124,30 +124,31 @@ namespace RGM.Modes
 
             int Remaining = 300;
 
-            foreach (var player in PlayerManager.List.Where(x => !Finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !finders.Contains(x)))
             {
+                player.Scale = new Vector3(0.4f, 0.4f, 0.4f);
                 player.EnableEffect(EffectType.SinkHole);
                 player.DisableEffect(EffectType.Lightweight);
                 player.EnableEffect(EffectType.HeavyFooted, 100);
                 player.AddItem(ItemType.KeycardChaosInsurgency);
             }
 
-            foreach (var Finder in Finders)
+            foreach (var finder in finders)
             {
-                Finder.Role.Set(RoleTypeId.FacilityGuard);
-                Finder.Scale = new Vector3(0.4f, 0.4f, 0.4f);
-                Finder.ClearInventory();
-                Finder.EnableEffect(EffectType.Lightweight, 100);
-                Finder.EnableEffect(EffectType.MovementBoost, 30);
+                finder.Role.Set(RoleTypeId.FacilityGuard);
+                finder.Scale = new Vector3(0.4f, 0.4f, 0.4f);
+                finder.ClearInventory();
+                finder.EnableEffect(EffectType.Lightweight, 100);
+                finder.EnableEffect(EffectType.MovementBoost, 30);
                 foreach (var item in new List<ItemType>
                 {
                     ItemType.Radio,
                     ItemType.GunLogicer,
                 })
                 {
-                    Finder.AddItem(item);
+                    finder.AddItem(item);
                 }
-                Finder.Position = Door.Get(DoorType.HIDLab).Position + new Vector3(0, 2, 0);
+                finder.Position = Door.Get(DoorType.HIDLab).Position + new Vector3(0, 2, 0);
             }
 
             yield return Timing.WaitForSeconds(1f);
@@ -158,7 +159,7 @@ namespace RGM.Modes
 
                 if (i == 275)
                 {
-                    foreach (var finder in Finders)
+                    foreach (var finder in finders)
                     {
                         finder.AddEffect(EffectType.Scp1344, 1);
                     }

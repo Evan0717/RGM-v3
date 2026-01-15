@@ -36,7 +36,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
         public override string Color => "F5A9E1";
         public override string Map => "HideAndSeek1205";
 
-        List<Player> Finders = new List<Player>();
+        List<Player> finders = new List<Player>();
 
         CoroutineHandle _onModeStarted;
 
@@ -65,11 +65,11 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
         public IEnumerator<float> OnModeStarted()
         {
             for (float i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
-                Finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !Finders.Contains(x)).ToList()));
+                finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !finders.Contains(x)).ToList()));
 
             PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
 
-            foreach (var player in PlayerManager.List.Where(x => !Finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = GameObject.Find("StartPoint").transform.position;
@@ -82,9 +82,9 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            int Remaining = 75;
+            int remaining = 75;
 
-            foreach (var Finder in Finders)
+            foreach (var Finder in finders)
             {
                 Finder.Role.Set(RoleTypeId.Scp939);
                 Finder.Position = GameObject.Find("StartPoint").transform.position;
@@ -95,18 +95,18 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
             PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = false);
             Round.IsLocked = false;
 
-            for (int i = 1; i < Remaining; i++)
+            for (int i = 1; i < remaining; i++)
             {
                 foreach (var player in PlayerManager.List)
                 {
-                    player.AddBroadcast(1, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
+                    player.AddBroadcast(1, $"<size=25><b><color=#2EFEF7>{remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
             if (!Round.IsEnded)
-                Finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
+                finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
         }
 
         void OnTogglingNoClip(TogglingNoClipEventArgs ev)
