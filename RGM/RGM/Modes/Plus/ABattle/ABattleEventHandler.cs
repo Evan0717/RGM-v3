@@ -5,7 +5,7 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Attachments;
 using MEC;
 using UnityEngine;
-using MultiBroadcast.API;
+
 using Exiled.Events.EventArgs.Scp079;
 using RGM.API.DataBases;
 using PlayerRoles;

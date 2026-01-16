@@ -7,7 +7,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using InventorySystem.Items.Firearms.Modules;
 using MEC;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using RGM.API.Features;
 using RGM.API.Interfaces;

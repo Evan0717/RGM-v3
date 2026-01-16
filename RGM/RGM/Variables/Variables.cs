@@ -6,7 +6,7 @@ using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Toys;
 using InventorySystem.Items.Usables.Scp330;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using RGM.API.DataBases;
 using RGM.API.Features;
@@ -294,6 +294,7 @@ namespace RGM.Variables
         public static Dictionary<Player, List<string>> Chats = new();
         public static Dictionary<Player, LabApi.Features.Wrappers.TextToy> Texts = new();
         public static Dictionary<Player, List<SettingBase>> PlayerSetting = new();
+        public static Dictionary<Player, string> TranslatorPlayers = new();
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},

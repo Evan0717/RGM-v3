@@ -63,6 +63,9 @@ namespace RGM.IEnumerators
                 yield return Timing.WaitForSeconds(0.1f);
             }
 
+            if (SelectMode == "RandomSelect")
+                Tools.PickModes();
+
             foreach (var player in Player.List.Where(x => !x.IsDND()))
             {
                 player.ClearInventory();
@@ -72,16 +75,6 @@ namespace RGM.IEnumerators
             Round.Start();
 
             yield break;
-        }
-
-        public static IEnumerator<float> RandomSelectMode()
-        {
-            while (!Round.IsStarted)
-            {
-                Tools.PickModes();
-
-                yield return Timing.WaitForSeconds(1f);
-            }
         }
 
         public static IEnumerator<float> ModeResetButton()

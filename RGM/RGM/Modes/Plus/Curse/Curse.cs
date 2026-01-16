@@ -10,7 +10,7 @@ using UnityEngine;
 using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
 using RGM.API.Features;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;

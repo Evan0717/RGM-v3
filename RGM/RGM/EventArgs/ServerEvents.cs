@@ -8,7 +8,7 @@ using InventorySystem.Configs;
 using InventorySystem.Items.Usables.Scp330;
 using MapGeneration.Holidays;
 using MEC;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using ProjectMER.Features;
 using Respawning;
@@ -124,7 +124,6 @@ namespace RGM.EventArgs
             if (rn == 1)
             {
                 SelectMode = "RandomSelect";
-                Timing.RunCoroutine(RandomSelectMode());
             }
             else if (rn == 2)
             {

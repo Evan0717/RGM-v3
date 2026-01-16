@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using RGM.API.DataBases;
 using RGM.API.Features;
@@ -45,6 +45,7 @@ namespace RGM.EventArgs
     {
         public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
+            TranslatorPlayers.Add(ev.Player, "ko");
             Chats.Add(ev.Player, new List<string>());
 
             var text = Tools.CreateText(Vector3.zero, new Quaternion(0, 180, 0, 0), "", 0);
@@ -435,6 +436,7 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnLeft(LeftEventArgs ev)
         {
+            TranslatorPlayers.Remove(ev.Player);
             Chats.Remove(ev.Player);
 
             Texts[ev.Player].Destroy();

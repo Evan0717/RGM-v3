@@ -10,7 +10,7 @@ using UnityEngine;
 using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
 using RGM.API.Features;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using RGM.IEnumerators;
 using Mono.Cecil.Cil;

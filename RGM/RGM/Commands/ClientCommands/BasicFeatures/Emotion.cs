@@ -7,7 +7,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
 using RGM.API;

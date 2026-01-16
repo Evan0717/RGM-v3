@@ -17,7 +17,7 @@ using Exiled.API.Features.Toys;
 using RGM.API.Interfaces;
 
 using static RGM.Variables.Variable;
-using MultiBroadcast.API;
+
 using RGM.API.DataBases;
 using Exiled.API.Features.Roles;
 using AdminToys;

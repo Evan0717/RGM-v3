@@ -8,7 +8,7 @@ using Exiled.API.Features.Toys;
 using InventorySystem.Items.FlamingoTapePlayer;
 using MapGeneration.Holidays;
 using MEC;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles.PlayableScps.Scp1507;

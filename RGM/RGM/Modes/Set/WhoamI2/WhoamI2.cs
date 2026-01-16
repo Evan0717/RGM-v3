@@ -12,7 +12,7 @@ using Achievements.Handlers;
 using Exiled.API.Enums;
 using UnityEngine;
 using CustomPlayerEffects;
-using MultiBroadcast.API;
+
 using RGM.API.Interfaces;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;

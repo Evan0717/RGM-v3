@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using CommandSystem;
-using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using MEC;
 
 using PlayerRoles;
 using RGM.API;
@@ -13,28 +13,38 @@ using RGM.API.Components;
 using RGM.API.Features;
 using RGM.Modes;
 using UnityEngine;
+
 using static RGM.Variables.Variable;
 
 namespace RGM.Commands.ClientCommands
 {
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class Link : ICommand
+    public class Translator : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
+            string args = string.Join(" ", arguments);
 
-            string code = UsersManager.UsersCache[player.UserId][14];
+            TranslationManager.Translate(args, "en",
+            translated =>
+            {
+                player.SendConsoleMessage(translated, "white");
+            },
+            error =>
+            {
+                player.SendConsoleMessage($"{error}\n원문: {args}", "white");
+            });
 
-            response = $"디스코드 연동 코드: {code}";
+            response = "번역이 곧 제공됩니다..";
             return true;
         }
 
-        public string Command { get; } = "link";
+        public string Command { get; } = "번역";
 
-        public string[] Aliases { get; } = { "연동" };
+        public string[] Aliases { get; } = { };
 
-        public string Description { get; } =  "[RGM] 디스코드 연동 링크를 받아보세요.";
+        public string Description { get; } = "[RGM] 번역";
 
         public bool SanitizeResponse { get; } = true;
     }

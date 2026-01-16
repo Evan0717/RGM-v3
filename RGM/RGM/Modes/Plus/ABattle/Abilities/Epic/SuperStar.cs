@@ -8,7 +8,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
-using MultiBroadcast.API;
+
 using RGM.API.DataBases;
 using RGM.API.Features;
 using UnityEngine;

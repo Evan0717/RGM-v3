@@ -7,7 +7,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
-using MultiBroadcast.API;
+
 using RGM.API.Features;
 using UnityEngine;
 

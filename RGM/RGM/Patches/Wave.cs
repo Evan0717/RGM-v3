@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features;
-using MultiBroadcast.API;
+
 using RGM.API.Features;
 using RGM.Modes.SubClass;
 using System;
@@ -7,7 +7,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Patches
 {
-    public class WavePostfix
+    public class WavePatch
     {
         public static void Postfix(ReferenceHub player, ref bool __result)
         {

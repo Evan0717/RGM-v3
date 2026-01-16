@@ -1,10 +1,12 @@
 ﻿using Exiled.API.Features;
 using MEC;
+using RGM.Commands.ClientCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
 {
@@ -18,7 +20,18 @@ namespace RGM.API.Features
             {
                 foreach (var player in Player.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x) && _playerHints[x].Count > 0))
                 {
-                    player.ShowHint($"{string.Join("\n", _playerHints[player].Values.Select(x => x.Item1))}", 0.2f);
+                    string message = $"{string.Join("\n", _playerHints[player].Values.Select(x => x.Item1))}";
+
+                    if (player.IsUsingTranslator())
+                    {
+                        TranslationManager.TranslatePreserveNewlines(message, TranslatorPlayers[player], 
+                            translated => 
+                            {
+                                player.ShowHint(translated, 0.2f); 
+                            });
+                    }
+                    else
+                        player.ShowHint(message, 0.2f);
                 }
                 
                 yield return Timing.WaitForSeconds(0.1f);

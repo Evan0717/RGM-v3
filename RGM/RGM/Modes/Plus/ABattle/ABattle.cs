@@ -13,7 +13,7 @@ using Exiled.API.Features;
 using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration.Holidays;
 using MEC;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using RemoteAdmin;
 using RGM.API.Features;

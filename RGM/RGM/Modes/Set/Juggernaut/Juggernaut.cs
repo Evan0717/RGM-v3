@@ -11,7 +11,7 @@ using Mirror;
 using UnityEngine;
 using Exiled.API.Features.Items;
 using MultiBroadcast;
-using MultiBroadcast.API;
+
 using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;

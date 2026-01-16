@@ -17,7 +17,7 @@ using UnityEngine;
 using SCPSLAudioApi.AudioCore;
 using MultiBroadcast;
 using RGM.API.Features;
-using MultiBroadcast.API;
+
 using Exiled.Events.EventArgs.Server;
 using Respawning;
 
@@ -124,6 +124,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(11 - Phase);
 
                 IsSongStopped = true;
+                audio.IsPaused = true;
 
                 for (int i = 1; i < 12 - Phase; i++)
                 {
@@ -169,6 +170,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1.25f);
 
                 IsSongStopped = false;
+                audio.IsPaused = false;
                 goldPads.Clear();
 
                 Phase++;

@@ -1,9 +1,10 @@
 ﻿using Exiled.API.Features;
-using MultiBroadcast.API;
+
+using RGM.API.Features;
 
 namespace RGM.Patches
 {
-    public class BroadcastPostfix
+    public class BroadcastPatch
     {
         public static void Postfix(ushort duration, string message, Broadcast.BroadcastFlags type, bool shouldClearPrevious)
         {

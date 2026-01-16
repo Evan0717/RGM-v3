@@ -11,7 +11,7 @@ using PlayerRoles;
 using Exiled.API.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 using RGM.API.DataBases;
-using MultiBroadcast.API;
+
 using UserSettings.ServerSpecific;
 using Exiled.API.Features.Core.UserSettings;
 using System.IO;

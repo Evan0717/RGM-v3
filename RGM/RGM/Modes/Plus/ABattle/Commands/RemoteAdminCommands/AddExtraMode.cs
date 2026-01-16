@@ -2,7 +2,7 @@
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
-using MultiBroadcast.API;
+
 using RGM.API.Features;
 
 namespace RGM.Modes.Commands;

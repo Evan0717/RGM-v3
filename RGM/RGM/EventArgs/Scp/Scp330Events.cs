@@ -8,7 +8,7 @@ using Exiled.Events.EventArgs.Scp330;
 using InventorySystem.Items.Usables.Scp330;
 using MapGeneration.Holidays;
 using MEC;
-using MultiBroadcast.API;
+
 using RGM.API.Features;
 using RGM.Modes;
 using System;

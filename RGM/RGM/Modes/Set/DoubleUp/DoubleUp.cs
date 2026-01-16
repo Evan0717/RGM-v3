@@ -7,7 +7,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using MultiBroadcast;
-using MultiBroadcast.API;
+
 using RGM.API.DataBases;
 using RGM.API.Features;
 

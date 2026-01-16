@@ -9,7 +9,7 @@ using Mirror;
 using UnityEngine;
 using Exiled.API.Features.Items;
 using RGM.API.Features;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using Respawning;
 using RGM.API.DataBases;
@@ -55,6 +55,7 @@ Trouble in Terrorist Town의 약자.
 • <color={RoleTypeId.ClassD.GetColor().ToHex()}>전과자</color>는 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color> 팀이지만 <color=red>배신자</color>에게는 <color=red>배신자</color>로 보입니다. 주의하세요!
 • <color=#c753d9>소울메이트</color>들은 서로의 위치를 확인할 수 있습니다.
 • <color=#000000>O5 평의회</color>는 혼자서 살아남아야 하는 대신, 많은 체력과 아이템들을 가지고 시작합니다.
+• <color=#f178fc>광대</color>도 혼자서 살아남아야 하는 대신, <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>에게 사망하면 1번 부활합니다.
 
 <b>[Map Credit]</b>
 @vasileii, @sleeplessbutter
@@ -62,6 +63,7 @@ Trouble in Terrorist Town의 약자.
         bool IsStarted = false;
         Player detective;
         Player O5;
+        Player jester;
         List<Player> traitors = new List<Player>();
         List<Player> mimics = new List<Player>();
         List<Player> soulMates = new List<Player>();
@@ -203,19 +205,24 @@ Trouble in Terrorist Town의 약자.
                 mimics.Add(mimic);
             }
 
+            if (playerCount >= 20)
+            {
+                jester = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x)).GetRandomValue();
+            }
+
             if (playerCount >= 15)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x)).GetRandomValue();
+                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
 
                     soulMates.Add(soulMate);
                 }
 
-                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x)).GetRandomValue();
+                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
             }
 
-            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && O5 != x).GetRandomValue();
+            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x && O5 != x).GetRandomValue();
             detective.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
             detective.RankName = "탐정";
             detective.RankColor = "cyan";
@@ -255,6 +262,10 @@ Trouble in Terrorist Town의 약자.
                     player.Health = player.MaxHealth;
                     player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
                 }
+                else if (player == jester)
+                {
+                    player.AddHint("TTT 광대", $"당신은 <color=#f178fc>광대</color>입니다. <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>에게 사망할 경우 1번 부활하며, 모두가 당신의 정체에 대해 알게 됩니다.", 20);
+                }
                 else
                 {
                     player.AddHint("TTT 무죄인", $"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 20);
@@ -271,12 +282,22 @@ Trouble in Terrorist Town의 약자.
                 if (Round.IsEnded)
                     yield break;
 
-                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인 팀 승리</color>까지</color> {600 - i}초</size>"));
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>게임 종료까지 {600 - i}초</size>"));
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            if (O5 != null && O5.IsAlive)
+            if (jester != null && jester.IsAlive)
+            {
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != jester))
+                {
+                    if (GodModePlayers.Contains(player))
+                        GodModePlayers.Remove(player);
+
+                    player.Kill("광대가 승리를 탈취해갔습니다!");
+                }
+            }
+            else if (O5 != null && O5.IsAlive)
             {
                 foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != O5))
                 {
@@ -311,6 +332,9 @@ Trouble in Terrorist Town의 약자.
                     {
                         if (traitors.Contains(t) || mimics.Contains(t))
                             traitor.AddHint("TTT 배신자 확인", $"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
+
+                        else if (t == jester)
+                            traitor.AddHint("TTT 광대 확인", $"그는 <color=#f178fc>광대</color>입니다.", 1.2f);
 
                         else if (t == O5)
                             traitor.AddHint("TTT O5 평의회 확인", $"그는 <color=#000000>O5 평의회</color>입니다.", 1.2f);
@@ -358,8 +382,6 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.RankName = "소울메이트";
                     player.RankColor = "pink";
-
-                    soulMates.Remove(player);
                 }
                 else if (mimics.Contains(player))
                 {
@@ -370,6 +392,11 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.RankName = "O5 평의회";
                     player.RankColor = "brown";
+                }
+                else if (player == jester)
+                {
+                    player.RankName = "광대";
+                    player.RankColor = "pink";
                 }
                 else if (player != detective)
                 {
@@ -418,7 +445,7 @@ Trouble in Terrorist Town의 약자.
 
             if (ev.Attacker != null)
             {
-                if (ev.Attacker != O5)
+                if (!(ev.Attacker == O5 || ev.Attacker == jester))
                 {
                     if (ev.Attacker != detective && !traitors.Contains(ev.Attacker))
                     {
@@ -452,13 +479,53 @@ Trouble in Terrorist Town의 약자.
                 ev.Player.RankName = "O5 평의회";
                 ev.Player.RankColor = "brown";
             }
+            else if (ev.Player == jester)
+            {
+                ev.Player.RankName = "광대";
+                ev.Player.RankColor = "pink";
+
+                if (ev.Attacker != null && !(traitors.Contains(ev.Attacker) || ev.Attacker == O5))
+                {
+                    Timing.CallDelayed(3, () =>
+                    {
+                        ev.Player.Role.Set(RoleTypeId.Scientist, RoleSpawnFlags.None);
+                        ev.Player.AddItem(main.GetRandomValue());
+                        ev.Player.AddItem(secondary.GetRandomValue());
+                        ev.Player.Position = Tools.GetObjectList("Spot Random").GetRandomValue().position;
+                        switch (Random.Range(1, 16))
+                        {
+                            case 1:
+                                ev.Player.AddItem(ItemType.Flashlight);
+                                break;
+
+                            case 2:
+                                ev.Player.AddItem(ItemType.GrenadeHE);
+                                break;
+
+                            case 3:
+                                ev.Player.AddItem(ItemType.Painkillers);
+                                break;
+                        }
+                    });
+                }
+            }
             else if (ev.Player != detective)
             {
                 ev.Player.RankName = "무죄인";
                 ev.Player.RankColor = "orange";
             }
 
-            if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == O5)
+            if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == jester)
+            {
+                Round.IsLocked = false;
+
+                foreach (var player in PlayerManager.List)
+                {
+                    player.AddBroadcast(20, $"<color=#f178fc>광대</color>의 승리입니다!");
+                }
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 5));
+            }
+            else if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == O5)
             {
                 Round.IsLocked = false;
 

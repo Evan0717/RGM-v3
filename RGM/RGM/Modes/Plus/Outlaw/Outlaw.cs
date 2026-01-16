@@ -79,7 +79,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             {
                 if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
                 {
-                    Item Weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("Gun") || SpecialWeapons.Contains(x)).ToList()));
+                    Item Weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("Gun") || player.IsScp ? false : SpecialWeapons.Contains(x)).ToList()));
 
                     if (Weapon.Type == ItemType.GrenadeHE)
                         player.AddItem(ItemType.GrenadeHE, 2);

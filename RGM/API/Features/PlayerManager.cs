@@ -38,6 +38,11 @@ namespace RGM.API.Features
             get => Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !NonePlayer.Players.Contains(x))).ToList();
         }
 
+        public static bool IsUsingTranslator(this Player player)
+        {
+            return TranslatorPlayers[player] != "ko";
+        }
+
         public static bool IsDND(this Player player)
         {
             return UsersManager.UsersCache[player.UserId][23] == "1";
@@ -698,6 +703,32 @@ namespace RGM.API.Features
             }
 
             return item;
+        }
+
+        public static void AddBroadcast(this Player player, ushort duration, string message, byte priority = 0, string tag = "")
+        {
+            if (player.IsUsingTranslator())
+            {
+                TranslationManager.TranslatePreserveNewlines(message, "en", translated => 
+                { 
+                    MultiBroadcast.API.BroadcastExtensions.AddBroadcast(player, duration, translated, priority, tag);
+                });
+            }
+            else
+                MultiBroadcast.API.BroadcastExtensions.AddBroadcast(player, duration, message, priority, tag);
+        }
+
+        public static void EditBroadcast(this Player player, string text, string tag)
+        {
+            if (player.IsUsingTranslator())
+            {
+                TranslationManager.TranslatePreserveNewlines(text, TranslatorPlayers[player], translated =>
+                {
+                    MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, translated, tag);
+                });
+            }
+            else
+                MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, text, tag);
         }
     }
 }

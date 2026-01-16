@@ -12,7 +12,7 @@ using Achievements.Handlers;
 using Exiled.API.Enums;
 using UnityEngine;
 using CustomPlayerEffects;
-using MultiBroadcast.API;
+
 using RGM.API.Interfaces;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
@@ -24,7 +24,7 @@ namespace RGM.Modes
     public class WhoamI1 : Mode
     {
         public override string Name => "나는 누구?";
-        public override string Description => "7분마다 다른 플레이어와 몸이 바뀝니다.";
+        public override string Description => "랜덤한 시간대에 다른 플레이어와 몸이 바뀝니다.";
         public override string Detail =>
 """
 [] 나는 누구?
@@ -129,7 +129,7 @@ namespace RGM.Modes
 
                 PlayersInfo.Clear();
 
-                yield return Timing.WaitForSeconds(420);
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 300));
             }
         }
 

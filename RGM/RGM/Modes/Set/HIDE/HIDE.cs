@@ -17,7 +17,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
-using MultiBroadcast.API;
+
 using Respawning;
 using static RGM.Variables.Variable;
 using ProjectMER.Features;

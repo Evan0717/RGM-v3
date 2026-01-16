@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using CommandSystem;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using MultiBroadcast.API;
+
 using PlayerRoles;
 using RGM.API.Features;
 using RGM.API.DataBases;
@@ -75,14 +75,21 @@ namespace RGM.Commands.ClientCommands
             string ChatFormat(string chatType)
             {
                 string text =  Trans.Role[player.Role.Type];
-                string text2 = string.Concat(new string[]
+                string prefix = string.Concat(new string[]
                 {
                     $"<size=20><b>{chatType}</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
                     text,
                     $"</color> ({player.DisplayNickname}) <b> | </b>",
-                    $"<noparse>{args.Replace("</noparse>", "")}</noparse>",
-                    "</size>"
                 });
+
+                string suffix = "</size>";
+
+                // What we translate is ONLY the user's raw message, not the rich-text wrapper.
+                string rawMessage = args.Replace("</noparse>", "");
+                string rawMessageNoParse = $"<noparse>{rawMessage}</noparse>";
+
+                // For logging/console response, show the original formatted string.
+                string text2 = $"{prefix}{rawMessageNoParse}{suffix}";
 
                 Chats[player].Add(args);
 
@@ -125,7 +132,18 @@ namespace RGM.Commands.ClientCommands
                 foreach (Player ply in Player.List)
                 {
                     if (Check(ply))
-                        ply.AddBroadcast(6, text2);
+                    {
+                        TranslationManager.TranslatePreserveNewlines(
+                            rawMessage,
+                            TranslatorPlayers[ply],
+                            translated =>
+                            {
+                                string msg = $"{prefix}<noparse>{translated.Replace("</noparse>", "")}</noparse>{suffix}";
+                                msg += $"\n<size=16><i><color=#A9A9A9>(orig) {rawMessageNoParse}</color></i></size>";
+                                ply.AddBroadcast(6, msg);
+                            }
+                        );
+                    }
                 }
 
                 Webhook.Send($"**{chatType}**ㅣ`{player.DisplayNickname}`[{player.IPAddress}, {player.UserId}]({( Trans.Role[player.Role.Type])}) - {string.Join(" ", arguments)}");

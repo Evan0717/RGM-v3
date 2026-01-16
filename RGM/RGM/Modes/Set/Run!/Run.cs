@@ -18,7 +18,7 @@ using ProjectMER.Features;
 using Exiled.API.Extensions;
 using ProjectMER.Features.Objects;
 using RGM.API.Components;
-using MultiBroadcast.API;
+
 using Exiled.API.Enums;
 
 namespace RGM.Modes
