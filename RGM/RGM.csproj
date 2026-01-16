@@ -63,6 +63,7 @@
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
+    <Compile Include="API\Features\TranslationManager.cs" />
     <Compile Include="API\Features\HintManager.cs" />
     <Compile Include="API\Features\PickupMachineManager.cs" />
     <Compile Include="API\Features\PlayerManager.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\Use.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Event.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayAudio.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Translator.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Warn.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
@@ -636,6 +638,10 @@
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
