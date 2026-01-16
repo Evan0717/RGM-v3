@@ -693,6 +693,9 @@ namespace RGM.EventArgs
 
         public static void OnDying(DyingEventArgs ev)
         {
+            if (Round.IsEnded)
+                return;
+
             if (Round.IsLobby)
             {
                 ev.Player.ClearInventory();
@@ -728,7 +731,7 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
-            if (ev.Attacker == null || ev.Attacker.IsNonePlayer() || ev.Player.IsNonePlayer())
+            if (ev.Attacker == null || ev.Attacker.IsNonePlayer() || ev.Player.IsNonePlayer() || Round.IsEnded)
                 return;
 
             if (!Round.IsStarted)
