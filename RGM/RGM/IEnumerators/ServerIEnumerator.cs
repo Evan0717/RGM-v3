@@ -55,10 +55,10 @@ namespace RGM.IEnumerators
                     }
                     else if (player.Role is SpectatorRole spectator)
                     {
-                        string content = spectator.SpectatedPlayer.CurrentHint.Content;
-
                         if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
                         {
+                            string content = spectator.SpectatedPlayer.CurrentHint.Content;
+
                             if (player.IsUsingTranslator())
                             {
                                 TranslationManager.TranslatePreserveNewlines(content, TranslatorPlayers[player],
