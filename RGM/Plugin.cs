@@ -17,6 +17,7 @@ using RGM.UserSettings;
 using RGM.Variables;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -42,7 +43,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 20, 18);
+        public override Version Version { get; } = new(3, 20, 19);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -151,7 +152,7 @@ namespace RGM
 
             // ------------------------------------------------------------------------------------------------------
 
-            TranslationManager.ApiKey = "AIzaSyAYHWTpVKL8d1Z3IiE_InCkH1l6lWIz-vQ";
+            TranslationManager.ApiKey = Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "GoogleAPIKey.txt");
             TranslationManager.IsEnabled = true;
 
             TranslationManager.MinInterval = 0.20f;   // 번역 요청 간 최소 간격 (초)
