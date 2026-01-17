@@ -13,9 +13,6 @@ namespace RGM.Patches
         {
             try
             {
-                if (!__result)
-                    return;
-
                 if (player.IsHost || player.IsDummy)
                 {
                     __result = false;
