@@ -46,8 +46,6 @@ namespace RGM.Modes.SubClass
                 if (!Players.Contains(player))
                     Players.Add(player);
 
-                Server.ExecuteCommand($"/setspectvis {player.Id} true");
-
                 player.Role.Set(RoleTypeId.Tutorial);
                 player.Position = new Vector3(76.74454f, 27.96138f, 12.53338f);
                 player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon() && !black.Contains(x)));
@@ -109,8 +107,6 @@ namespace RGM.Modes.SubClass
 
                     if (Players.Contains(player))
                         Players.Remove(player);
-
-                    Server.ExecuteCommand($"/setspectvis {player.Id} false");
 
                     Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
 
