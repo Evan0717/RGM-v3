@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using HarmonyLib;
+using MapGeneration.Holidays;
 using MEC;
 
 using ProjectMER.Features.Objects;
@@ -43,7 +44,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 20, 20);
+        public override Version Version { get; } = new(3, 20, 21);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -60,6 +61,12 @@ namespace RGM
                 var modeAttribute = type.GetCustomAttribute<ModeAttribute>();
 
                 if (modeAttribute == null)
+                    continue;
+
+                if (modeAttribute.Holiday == ModeHoliday.Halloween && !HolidayUtils.IsHolidayActive(HolidayType.Halloween))
+                    continue;
+
+                if (modeAttribute.Holiday == ModeHoliday.Christmas && !HolidayUtils.IsHolidayActive(HolidayType.Christmas))
                     continue;
 
                 if (!typeof(Mode).IsAssignableFrom(type))
@@ -80,7 +87,8 @@ namespace RGM
                         Detail = mode.Detail,
                         Color = mode.Color,
                         Suggester = mode.Suggester,
-                        Map = mode.Map
+                        Map = mode.Map,
+                        Holiday = modeAttribute.Holiday
                     });
                 }
                 catch (Exception ex)
