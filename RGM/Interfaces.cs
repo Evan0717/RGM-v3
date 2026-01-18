@@ -38,14 +38,16 @@ public class ModeData
     public string Author { get; set; }
     public string Suggester { get; set; } = "";
     public string Map { get; set; } = "";
+    public ModeHoliday Holiday { get; set; } = ModeHoliday.None;
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class ModeAttribute(ModeCategory category, ModeInfo info, ModeType type) : Attribute
+public class ModeAttribute(ModeCategory category, ModeInfo info, ModeType type, ModeHoliday holiday = ModeHoliday.None) : Attribute
 {
     public ModeCategory Category { get; } = category;
     public ModeInfo Info { get; } = info;
     public ModeType Type { get; } = type;
+    public ModeHoliday Holiday { get; set; } = holiday;
 }
 
 public static class ModeExtensions 
@@ -67,6 +69,13 @@ public enum ModeInfo
     Plus,
     Set,
     Lock,
+}
+
+public enum ModeHoliday
+{
+    None,
+    Halloween,
+    Christmas,
 }
 
 public enum ModeType

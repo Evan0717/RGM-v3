@@ -29,7 +29,7 @@ using NetworkManagerUtils.Dummies;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SnowBallFight)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SnowBallFight, ModeHoliday.Christmas)]
     public class SnowBallFight : Mode
     {
         public override string Name => "눈싸움";
