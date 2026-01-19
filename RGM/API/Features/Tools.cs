@@ -198,6 +198,7 @@ $"""
 <size=15>Exp: {uc[0]}</size>
 <size=15>랜덤코인: {uc[1]}</size>
 <size=15><i>Cash</i>: ₩{int.Parse(uc[2]).ToString("N0")}</size>
+<size=15>출석 체크 일수: {uc[28]}회 ({uc[27]}회 연속 출석 중)</size>
 
 <size=15>보유한 킬이펙트: {GetJoinedInfo(3)}</size>
 <size=15>장착한 킬이펙트: {(uc[4] == "0" ? "-" : uc[4])} ({(uc[15] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>

@@ -115,6 +115,7 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
             Timing.RunCoroutine(MovingShootingTarget());
+            if (Server.Port == 7800) Timing.RunCoroutine(TimezoneCheck());
             Timing.RunCoroutine(HintManager.OnStarted());
             Timing.RunCoroutine(HintManager.RemoveHint());
             Timing.RunCoroutine(ChatManager.RunChat());

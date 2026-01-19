@@ -97,6 +97,8 @@
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Badge.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Item.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Icon.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerExp.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\ResetDailyCheck.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SpawnEffect.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRC.cs" />
     <Compile Include="RGM\EventArgs\MEREvents.cs" />

@@ -312,5 +312,45 @@ namespace RGM.IEnumerators
                 ShootingTargetSignal = false;
             }
         }
+
+        public static IEnumerator<float> TimezoneCheck()
+        {
+            DateTime lastProcessedDate = DateTime.MinValue;
+
+            TimeZoneInfo kst = TimeZoneInfo.FindSystemTimeZoneById("Asia/Seoul");
+
+            while (true)
+            {
+                try
+                {
+                    DateTime nowKst = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, kst);
+
+                    bool isMidnight = nowKst.Hour == 0 && nowKst.Minute == 0;
+
+                    if (isMidnight && lastProcessedDate.Date != nowKst.Date)
+                    {
+                        foreach (var steamId in UsersManager.UsersCache.Keys)
+                        {
+                            try
+                            {
+                                UsersManager.UsersCache[steamId][29] = "0";
+                            }
+                            catch
+                            {
+                            }
+                        }
+
+                        UsersManager.SaveUsers();
+                        lastProcessedDate = nowKst.Date;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"TimezoneCheck 오류 발생: {ex.Message}");
+                }
+
+                yield return Timing.WaitForSeconds(60);
+            }
+        }
     }
 }

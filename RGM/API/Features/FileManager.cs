@@ -76,6 +76,9 @@ namespace RGM.API.Features
         보유한 아이콘 - 24
         장착한 아이콘 - 25
         아이콘 랜덤 여부 - 26
+        출석 일수 - 27
+        최대 연속 출석 일수 - 28
+        출석 여부 (오늘) - 29
         */
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.txt");

@@ -54,6 +54,8 @@ namespace RGM.EventArgs
 
             OnGround.Add(ev.Player.UserId, 5);
 
+            EffectIntensities.Add(ev.Player, new Dictionary<EffectType, int>());
+
             if (!PlayersAudio.ContainsKey(ev.Player))
             {
                 AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player - {ev.Player.UserId}", condition: (hub) =>
@@ -82,7 +84,7 @@ namespace RGM.EventArgs
                 });
             }
 
-            List<string> DefaultValues = Enumerable.Repeat("0", 30).ToList();
+            List<string> DefaultValues = Enumerable.Repeat("0", 35).ToList();
 
             if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
             {
@@ -93,6 +95,29 @@ namespace RGM.EventArgs
             else
             {
                 List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
+
+                if (uc[29] == "0") // 오늘 출석을 하지 않았다면
+                {
+                    int score = int.Parse(uc[27]) + 1;
+                    bool flag = int.Parse(uc[28]) < score;
+                    UsersManager.UsersCache[ev.Player.UserId][29] = "1";
+                    UsersManager.UsersCache[ev.Player.UserId][27] = $"{score}";
+
+                    if (flag)
+                    {
+                        UsersManager.UsersCache[ev.Player.UserId][28] = $"{score}";
+
+                        PlayersAudio[ev.Player].TryPlay("출석 체크 굿");
+                    }
+                    else
+                    {
+                        PlayersAudio[ev.Player].TryPlay("출석 체크");
+                    }
+
+                    UsersManager.SaveUsers();
+
+                    ev.Player.AddBroadcast(20, $"<size=25><b>출석 체크 완료!</b> 오늘도 즐거운 랜덤게임모드(RGM) 되세요!</size>\n<size=20>{(flag ? $"우와 신기록이네요! {score}번이나 연속으로 잊지 않고 놀러와주셔서 감사합니다.": $"총 {uc[28]}회 출석 체크했으며, 최고 기록은 {score}회입니다.")}</size>");
+                }
 
                 try
                 {
@@ -436,14 +461,26 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnLeft(LeftEventArgs ev)
         {
-            TranslatorPlayers.Remove(ev.Player);
-            Chats.Remove(ev.Player);
+            if (TranslatorPlayers.ContainsKey(ev.Player))
+                TranslatorPlayers.Remove(ev.Player);
 
-            Texts[ev.Player].Destroy();
-            Texts.Remove(ev.Player);
+            if (Chats.ContainsKey(ev.Player))
+                Chats.Remove(ev.Player);
 
-            OnGround.Remove(ev.Player.UserId);
-            PlayersAudio.Remove(ev.Player);
+            if (Texts.ContainsKey(ev.Player))
+            {
+                Texts[ev.Player].Destroy();
+                Texts.Remove(ev.Player);
+            }
+
+            if (OnGround.ContainsKey(ev.Player.UserId))
+                OnGround.Remove(ev.Player.UserId);
+
+            if (PlayersAudio.ContainsKey(ev.Player))
+                PlayersAudio.Remove(ev.Player);
+
+            if (EffectIntensities.ContainsKey(ev.Player))
+                EffectIntensities.Remove(ev.Player);
 
             if (Round.IsLobby)
             {
@@ -733,6 +770,9 @@ namespace RGM.EventArgs
         {
             if (ev.Attacker == null || ev.Attacker.IsNonePlayer() || ev.Player.IsNonePlayer() || Round.IsEnded)
                 return;
+
+            // 저장된 효과 삭제
+            EffectIntensities[ev.Player].Clear();
 
             if (!Round.IsStarted)
             {
