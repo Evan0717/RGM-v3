@@ -758,5 +758,21 @@ namespace RGM.API.Features
             else
                 MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, text, tag);
         }
+
+        public static void ExplodeGrenade(this Player player, Vector3 pos, float fuseTime = 0.01f, ItemType grenade = ItemType.GrenadeHE)
+        {
+            if (grenade == ItemType.GrenadeFlash)
+            {
+                var g = (FlashGrenade)Item.Create(grenade, player);
+                g.FuseTime = fuseTime;
+                g.SpawnActive(pos, player);
+            }
+            else
+            {
+                var g = (ExplosiveGrenade)Item.Create(grenade, player);
+                g.FuseTime = fuseTime;
+                g.SpawnActive(pos, player);
+            }
+        }
     }
 }

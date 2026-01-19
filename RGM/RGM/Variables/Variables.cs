@@ -300,6 +300,7 @@ namespace RGM.Variables
         public static Dictionary<Player, LabApi.Features.Wrappers.TextToy> Texts = new();
         public static Dictionary<Player, List<SettingBase>> PlayerSetting = new();
         public static Dictionary<Player, string> TranslatorPlayers = new();
+        public static Dictionary<Player, Dictionary<EffectType, int>> EffectIntensities = new();
         public static Dictionary<string, string> KillEffects = new Dictionary<string, string>()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},

@@ -1002,37 +1002,62 @@ public static class ABattleExtensions
 
 public static class Utilities
 {
-    public static void AddEffect(this Player player, EffectType type, byte intensity, float duration = 0f, bool addDuration = false)
+    public static void AddEffect(this Player player, EffectType type, int intensity, float duration = 0f, bool addDuration = false)
     {
-        var effects = player.ActiveEffects.Select(x => x.GetEffectType()).ToList();
+        if (!EffectIntensities[player].ContainsKey(type))
+            EffectIntensities[player][type] = 0;
 
-        if (effects.Contains(type))
+        EffectIntensities[player][type] += intensity;
+
+        const byte MaxIntensity = 255;
+        byte applyIntensity = (byte)Math.Min(EffectIntensities[player][type], MaxIntensity);
+
+        var effect = player.ActiveEffects.FirstOrDefault(x => x.GetEffectType() == type);
+        float newDuration = effect != null && addDuration ? effect.Duration + duration : Math.Max(effect?.Duration ?? 0, duration);
+
+        player.DisableEffect(type);
+        player.EnableEffect(type, applyIntensity, duration == 0f ? 0f : newDuration);
+
+        if (duration > 0f)
         {
-            var effect = player.ActiveEffects.First(x => x.GetEffectType() == type);
+            IEnumerator<float> RemoveAfterDuration()
+            {
+                yield return Timing.WaitForSeconds(duration);
 
-            effect.ServerChangeDuration(duration, addDuration);
-
-            if (effect.Intensity + intensity > 255)
-                effect.Intensity = 255;
-            else
-                effect.Intensity += intensity;
-        }
-        else
-        {
-            player.EnableEffect(type, intensity, duration);
+                if (EffectIntensities.ContainsKey(player) && EffectIntensities[player].ContainsKey(type))
+                {
+                    EffectIntensities[player][type] -= intensity;
+                    if (EffectIntensities[player][type] <= 0)
+                    {
+                        EffectIntensities[player].Remove(type);
+                        player.DisableEffect(type);
+                    }
+                    else
+                    {
+                        byte newApplyIntensity = (byte)Math.Min(EffectIntensities[player][type], 255);
+                        player.EnableEffect(type, newApplyIntensity);
+                    }
+                }
+            }
+            Timing.RunCoroutine(RemoveAfterDuration());
         }
     }
 
-    public static void RemoveEffect(this Player player, EffectType type, byte intensity)
+    public static void RemoveEffect(this Player player, EffectType type, int intensity)
     {
-        if (player.ActiveEffects.Any(x => x.GetEffectType() == type))
-        {
-            var effect = player.ActiveEffects.First(x => x.GetEffectType() == type);
+        if (!EffectIntensities.ContainsKey(player) || !EffectIntensities[player].ContainsKey(type))
+            return;
 
-            if (effect.Intensity - intensity <= 0)
-                player.DisableEffect(type);
-            else
-                effect.Intensity -= intensity;
+        EffectIntensities[player][type] -= intensity;
+        if (EffectIntensities[player][type] <= 0)
+        {
+            EffectIntensities[player].Remove(type);
+            player.DisableEffect(type);
+        }
+        else
+        {
+            byte applyIntensity = (byte)Math.Min(EffectIntensities[player][type], 255);
+            player.EnableEffect(type, applyIntensity);
         }
     }
 }

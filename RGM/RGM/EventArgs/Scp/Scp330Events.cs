@@ -8,7 +8,7 @@ using Exiled.Events.EventArgs.Scp330;
 using InventorySystem.Items.Usables.Scp330;
 using MapGeneration.Holidays;
 using MEC;
-
+using PlayerRoles;
 using RGM.API.Features;
 using RGM.Modes;
 using System;
@@ -229,6 +229,83 @@ namespace RGM.EventArgs
                     else if (c == 17)
                     {
                         ev.Player.ThrowGrenade(ProjectileType.Scp2176);
+                    }
+                    else if (c == 18)
+                    {
+                        var deadPlayer = Player.List.GetRandomValue(x => x.IsDead);
+                        if (deadPlayer != null)
+                        {
+                            deadPlayer.Role.Set(ev.Player.Role.Type);
+                            deadPlayer.Position = ev.Player.Position;
+                        }
+                    }
+                    else if (c == 19)
+                    {
+                        bool check(RoleTypeId roleTypeId)
+                        {
+                            if (ev.Player.IsNTF)
+                                return roleTypeId.IsChaos();
+
+                            if (ev.Player.IsCHI)
+                                return roleTypeId.IsNtf();
+
+                            if (ev.Player.Role.Type == RoleTypeId.ClassD)
+                                return roleTypeId == RoleTypeId.Scientist;
+
+                            if (ev.Player.Role.Type == RoleTypeId.Scientist)
+                                return roleTypeId == RoleTypeId.ClassD;
+
+                            return true;
+                        }
+
+                        RoleTypeId newRole = Tools.EnumToList<RoleTypeId>().GetRandomValue(x => check(x));
+                        ev.Player.Role.Set(newRole, RoleSpawnFlags.None);
+                    }
+                }
+
+                void removeCandy(CandyKindID candyKindID)
+                {
+                    ev.Player.TryRemoveCandу(candyKindID);
+                    ev.IsAllowed = false;
+                    ev.Player.CurrentItem = null;
+                }
+
+                if (ev.Candy.Kind == CandyKindID.Yellow)
+                {
+                    if (UnityEngine.Random.Range(0, 100) < 5)
+                    {
+                        ev.Player.AddEffect(EffectType.MovementBoost, 255, 4);
+                    }
+                    else
+                    {
+                        removeCandy(CandyKindID.Yellow);
+
+                        ev.Player.Stamina += ev.Player.StaminaStat.MaxValue / 4;
+                        ev.Player.AddEffect(EffectType.MovementBoost, 10, 8);
+                        ev.Player.AddEffect(EffectType.Invigorated, 1, 8);
+                    }
+                }
+
+                if (ev.Candy.Kind == CandyKindID.Rainbow)
+                {
+                    removeCandy(CandyKindID.Rainbow);
+
+                    ev.Player.Heal(15);
+                    ev.Player.AddEffect(EffectType.Invigorated, 1, 5);
+                    ev.Player.AddEffect(EffectType.BodyshotReduction, 1);
+                    ev.Player.AddEffect(EffectType.RainbowTaste, 1, 10);
+                    ev.Player.AddAhp(20, sustain: 10);
+                }
+
+                if (ev.Candy.Kind == CandyKindID.Pink)
+                {
+
+                    if (UnityEngine.Random.Range(0f, 100f) < 5)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            ev.Player.ExplodeGrenade(ev.Player.Position);
+                        }
                     }
                 }
             }
