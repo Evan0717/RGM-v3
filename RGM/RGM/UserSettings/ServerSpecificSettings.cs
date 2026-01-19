@@ -29,7 +29,6 @@ namespace RGM.UserSettings
     public static class ServerSpecificSettings
     {
         public static HeaderSetting RGM { get; private set; } = new HeaderSetting(429022, "<size=30>[<color=#F78181>K</color><color=#5882FA>R</color>]</size></align> <b><size=30><color=#F6CECE>랜</color><color=#F6D8CE>덤</color><color=#F6E3CE>게</color><color=#F5ECCE>임</color><color=#F5F6CE>모</color><color=#ECF6CE>드</color></size></b>");
-        public static TextInputSetting Description { get; private set; }
 
         public static HeaderSetting Setting { get; private set; } = new HeaderSetting(19287, "<b>⚙️ 설정</b>");
         public static KeybindSetting ScpCanEquipRandomItem { get; private set; }
@@ -40,41 +39,33 @@ namespace RGM.UserSettings
 
         public static void Init()
         {
-            Description = new TextInputSetting(29, 
-$"""
-• <b><color=#F6CECE>랜</color><color=#F6D8CE>덤</color><color=#F6E3CE>게</color><color=#F5ECCE>임</color><color=#F5F6CE>모</color><color=#ECF6CE>드</color></b>는 매 라운드마다 랜덤한 모드와 함께 라운드가 시작되는 한국 서버입니다.
-• 콘솔(` 또는 ~)을 열고 .help를 입력하여 사용 가능한 [RGM] 명령어 리스트를 확인할 수 있습니다.
-
-<size=25><align=center><color=#81BEF7><link=https://discord.gg/NWSrVqmKsq>| <b>디스코드 (클릭)</b> |</link></color></align></size>
-
-<size=25><align=center><color=#D0A9F5><link=https://www.randomsl.xyz/rule>| <b>규정 (클릭)</b> |</link></color></align></size>
-
-<size=25><align=center><color=#FFFFFF><link=https://www.youtube.com/@RandomGameMode>| <b>공식 유튜브 채널 (클릭)</b> |</link></color></align></size>
-
-<size=25><align=center><color=#FA5858><link=https://www.youtube.com/@GoldenPig1205>| <b>개발자 유튜브 채널 (클릭)</b> |</link></color></align></size>
-
-<size=25><align=center><color=#89d953><link=https://chzzk.naver.com/acb253a537e8a02632532a8f27fafcaa>| <b>개발자 치지직 채널 (클릭)</b> |</link></color></align></size>
-""", header: RGM);
-
             ScpCanEquipRandomItem = new KeybindSetting(
                 id: 12050,
-                label: "SCP의 아이템 장착",
+                label: "SCP의 아이템 장착ㅣEquipping SCP items",
                 suggested: KeyCode.H,
-                hintDescription: "SCP가 보유한 아이템 중 무작위로 하나를 장착합니다.",
+                hintDescription:
+"""
+SCP가 보유한 아이템 중 무작위로 하나를 장착합니다.
+
+Equip a random item from the SCP's inventory.
+""",
                 header: Setting,
                 allowSpectatorTrigger: false
             );
 
             SpectatorToNone = new ButtonSetting(
                 id: 12051,
-                label: "관전석 <-> 훈련장",
-                buttonText: "꾹 눌러주세요 ❤️",
+                label: "관전석 <-> 훈련장ㅣSpectator <-> Training ground",
+                buttonText: "GO!",
                 hintDescription:
 """
 관전석에서 훈련장으로 이동합니다.
-
 • Set 모드 또는 특정 모드에서 사용 불가
 • 사망 후 10초가 지나야 사용 가능
+
+Move from the spectator seats to the training grounds.
+• Not available in Set mode or certain modes.
+• Available 10 seconds after death.
 """,
                 
                 header: Setting,
@@ -83,13 +74,15 @@ $"""
 
             SwitchToSpectator = new ButtonSetting(
                 id: 12052,
-                label: "관전자 <-> 오버워치",
-                buttonText: "꾹꾹 ❤️❤️",
+                label: "관전자 <-> 오버워치ㅣSpectator <-> Overwatch",
+                buttonText: "<->",
                 hintDescription:
 """
 관전자와 오버워치 상태를 변경합니다.
-
 • 사망 후 10초가 지나야 사용 가능
+
+Changes between spectator and Overwatch status.
+• Available 10 seconds after death.
 """,
                 header: Setting,
                 holdTime: 0.5f
@@ -97,17 +90,22 @@ $"""
 
             MuteBGM = new TwoButtonsSetting(
                 id: 12053,
-                label: "BGM 음소거",
+                label: "BGM 음소거ㅣBGM mute",
                 firstOption: "ON",
                 secondOption: "OFF",
                 defaultIsSecond: true,
-                hintDescription: "음악이 유튜브 저작권에 걸릴 것 같다고요? 이 기능을 사용하세요.",
+                hintDescription:
+"""
+음악이 유튜브 저작권에 걸릴 것 같다고요? 이 기능을 사용하세요.
+
+Are you worried BGM might be copyrighted by YouTube? Use this feature.
+""",
                 header: Setting
             );
 
             Translation = new DropdownSetting(
                 id: 12054,
-                label: "번역 (Translation)",
+                label: "번역ㅣTranslation",
                 options: new string[]
                 {
                     "Afrikaans (af)",
@@ -221,15 +219,17 @@ $"""
                     "Zulu (zu)"
                 },
                 defaultOptionIndex: 49,
-                hintDescription: "Use this setting to break the language barrier.",
+                hintDescription: 
+"""
+언어의 장벽을 부수려면 이 설정을 사용하세요.
+
+Use this setting to break the language barrier.
+""",
                 header: Setting
             );
 
             IEnumerable<SettingBase> settings = new SettingBase[]
             {
-                // 설명
-                Description,
-
                 // 설정
                 ScpCanEquipRandomItem, 
                 SpectatorToNone, 
