@@ -30,14 +30,6 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
 
         public static Outlaw Instance;
 
-        List<ItemType> SpecialWeapons = new List<ItemType>() 
-        { 
-            ItemType.MicroHID,
-            ItemType.ParticleDisruptor,
-            ItemType.Jailbird,
-            ItemType.GrenadeHE
-        };
-
         CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
@@ -79,12 +71,12 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             {
                 if (player.IsAlive && player.Role.Type != RoleTypeId.Scp079)
                 {
-                    Item Weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("Gun") || player.IsScp ? false : SpecialWeapons.Contains(x)).ToList()));
+                    Item weapon = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("Gun")).ToList()));
 
-                    if (Weapon.Type == ItemType.GrenadeHE)
+                    if (weapon.Type == ItemType.GrenadeHE)
                         player.AddItem(ItemType.GrenadeHE, 2);
 
-                    if (Weapon is Firearm firearm)
+                    if (weapon is Firearm firearm)
                     {
                         if (firearm.AmmoType != AmmoType.None)
                         {
