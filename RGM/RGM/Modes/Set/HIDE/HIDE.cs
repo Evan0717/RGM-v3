@@ -95,6 +95,7 @@ namespace RGM.Modes
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
+                    monster.MaxHumeShield = 0;
                     monster.EnableEffect(EffectType.MovementBoost, 50);
                     monster.EnableEffect(EffectType.Fade, 230);
                     monster.EnableEffect(EffectType.Lightweight, 150);
