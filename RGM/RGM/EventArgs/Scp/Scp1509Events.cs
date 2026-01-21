@@ -21,10 +21,10 @@ namespace RGM.EventArgs
                 Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
                     if (ev.Player.IsScp)
-                        ev.Victim.Role.Set(RoleTypeId.Scp0492);
+                        ev.Victim.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
 
                     else
-                        ev.Victim.Role.Set(ev.Player.Role.Type);
+                        ev.Victim.Role.Set(ev.Player.Role.Type, RoleSpawnFlags.None);
                 });
             }
         }
