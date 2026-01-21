@@ -51,7 +51,7 @@ namespace RGM.EventArgs
                     FileInfo secondOldest = files[1];
                     string content = File.ReadAllText(secondOldest.FullName);
 
-                    Webhook.Send($"LocalAdminLogs : {Server.Port}", "https://discord.com/api/webhooks/1455192596291911882/xDadWWo7IJmno_mMnOySwZ4sPxyIMIGZLwYOFi_SGk-AUhB3lqQG9ElvQYWpj5-iFnLK", $"{secondOldest.FullName}");
+                    Webhook.Send($"LocalAdminLogs : {Server.Port}", Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook1.txt"), $"{secondOldest.FullName}");
                 }
             }
             catch (Exception e)
