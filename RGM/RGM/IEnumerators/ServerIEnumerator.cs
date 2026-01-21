@@ -333,6 +333,9 @@ namespace RGM.IEnumerators
                         {
                             try
                             {
+                                if (UsersManager.UsersCache[steamId][29] == "0")
+                                    UsersManager.UsersCache[steamId][28] = "0";
+
                                 UsersManager.UsersCache[steamId][29] = "0";
                             }
                             catch
