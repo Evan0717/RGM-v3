@@ -17,11 +17,11 @@ public class SteelShell : Ability
 {
     public override void OnEnabled()
     {
-        Owner.GetEffect(EffectType.DamageReduction).Intensity += 10;
+        Owner.AddEffect(EffectType.DamageReduction, 10);
     }
 
     public override void OnDisabled()
     {
-        Owner.GetEffect(EffectType.DamageReduction).Intensity -= 10;
+        Owner.RemoveEffect(EffectType.DamageReduction, 10);
     }
 }

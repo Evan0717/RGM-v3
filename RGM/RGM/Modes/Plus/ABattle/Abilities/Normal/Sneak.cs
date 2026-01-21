@@ -16,11 +16,11 @@ public class Sneak : Ability
 {
     public override void OnEnabled()
     {
-        Owner.GetEffect(EffectType.SilentWalk).Intensity += 3;
+        Owner.AddEffect(EffectType.SilentWalk, 3);
     }
 
     public override void OnDisabled()
     {
-        Owner.GetEffect(EffectType.SilentWalk).Intensity -= 3;
+        Owner.RemoveEffect(EffectType.SilentWalk, 3);
     }
 }

@@ -34,15 +34,6 @@ public class HalfBlock : Ability
         if (ev.Player != Owner)
             return;
 
-        ev.Player.GetEffect(EffectType.MovementBoost).Intensity += 25;
-
-        Timing.CallDelayed(3f, () =>
-        {
-            if (ev.Player.GetEffect(EffectType.MovementBoost).Intensity >= 25)
-                ev.Player.GetEffect(EffectType.MovementBoost).Intensity -= 25;
-
-            else
-                ev.Player.GetEffect(EffectType.MovementBoost).Intensity = 0;
-        });
+        ev.Player.AddEffect(EffectType.MovementBoost, 2, 3);
     }
 }

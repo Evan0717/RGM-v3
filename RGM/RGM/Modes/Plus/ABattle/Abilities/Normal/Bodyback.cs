@@ -16,11 +16,11 @@ public class Bodyback : Ability
 {
     public override void OnEnabled()
     {
-        Owner.GetEffect(EffectType.BodyshotReduction).Intensity += 6;
+        Owner.AddEffect(EffectType.BodyshotReduction, 6);
     }
 
     public override void OnDisabled()
     {
-        Owner.GetEffect(EffectType.BodyshotReduction).Intensity -= 6;
+        Owner.RemoveEffect(EffectType.BodyshotReduction, 6);
     }
 }
