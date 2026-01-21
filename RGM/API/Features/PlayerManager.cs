@@ -733,6 +733,78 @@ namespace RGM.API.Features
             return item;
         }
 
+        public static void AddRandomCandy(this Player player)
+        {
+            List<CandyKindID> poll = new();
+
+            List<CandyKindID> L = new()
+            {
+                CandyKindID.Evil,
+            };
+            List<CandyKindID> S = new()
+            {
+                CandyKindID.Black,
+                CandyKindID.Pink
+            };
+            List<CandyKindID> A = new()
+            {
+                CandyKindID.White,
+                CandyKindID.Orange,
+                CandyKindID.Gray,
+            };
+            List<CandyKindID> B = new()
+            {
+                CandyKindID.Rainbow,
+            };
+            List<CandyKindID> C = new()
+            {
+                CandyKindID.Blue,
+                CandyKindID.Green,
+                CandyKindID.Red,
+                CandyKindID.Yellow,
+                CandyKindID.Purple,
+            };
+            List<CandyKindID> D = new()
+            {
+                CandyKindID.Brown
+            };
+
+            foreach (var iL in L)
+                poll.Add(iL);
+
+            for (int i = 0; i < 2; i++)
+            {
+                foreach (var iS in S)
+                    poll.Add(iS);
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                foreach (var iA in A)
+                    poll.Add(iA);
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                foreach (var iB in B)
+                    poll.Add(iB);
+            }
+
+            for (int i = 0; i < 15; i++)
+            {
+                foreach (var iC in C)
+                    poll.Add(iC);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                foreach (var iD in D)
+                    poll.Add(iD);
+            }
+
+            player.AddCandy(poll.GetRandomValue());
+        }
+
         public static void AddBroadcast(this Player player, ushort duration, string message, byte priority = 0, string tag = "")
         {
             if (player.IsUsingTranslator() || tag == "chat")

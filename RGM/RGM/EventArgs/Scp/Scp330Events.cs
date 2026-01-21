@@ -30,7 +30,7 @@ namespace RGM.EventArgs
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
                 ev.Player.TryRemoveCandу(ev.Candy);
-                ev.Player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
+                ev.Player.AddRandomCandy();
             });
         }
 
