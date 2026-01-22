@@ -131,7 +131,7 @@ public class ABattle : Mode
             exceptModes = new List<string>();
         }
 
-        if (Random.Range(1, 4) == 1)
+        if (Random.Range(1, 7) == 1)
         {
             return "기본";
         }   
