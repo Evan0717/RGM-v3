@@ -60,7 +60,7 @@ namespace RGM.Modes
         {
             if (ev.Player.IsAlive)
             {
-                if (GetLoudness(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength) > 0.4)
+                if (GetLoudness(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength) > 0.35f)
                 {
                     var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
                     g.FuseTime = 0f;
