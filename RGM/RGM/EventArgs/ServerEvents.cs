@@ -51,7 +51,7 @@ namespace RGM.EventArgs
                     FileInfo secondOldest = files[1];
                     string content = File.ReadAllText(secondOldest.FullName);
 
-                    Webhook.Send($"LocalAdminLogs : {Server.Port}", Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook1.txt"), $"{secondOldest.FullName}");
+                    Webhook.Send($"LocalAdminLogs : {Server.Port}", Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook2.txt"), $"{secondOldest.FullName}");
                 }
             }
             catch (Exception e)
