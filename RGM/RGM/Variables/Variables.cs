@@ -164,12 +164,9 @@ namespace RGM.Variables
                     string fileName = audioDir + $"{arg}.ogg";
                     string clipName = audioFiles.GetRandomValue().Replace(".ogg", "").Replace(audioDir, "");
 
-                    if (radio.TryPlay(arg, 0.5f) == null)
-                    {
-                        radio.TryPlay(clipName, 0.5f);
+                    radio.TryPlay(clipName, 0.5f);
 
-                        player.AddHint("휴대용 라디오", $"<size=20><i>{clipName}</i> 재생 중..</size>", 5);
-                    }
+                    player.AddHint("휴대용 라디오", $"<size=20><i>{clipName}</i> 재생 중..</size>", 5);
                 }
             },
             new Product()

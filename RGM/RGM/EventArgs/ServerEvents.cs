@@ -59,8 +59,6 @@ namespace RGM.EventArgs
                 Log.Error($"Error sending LocalAdminLogs webhook: {e}");
             }
 
-            Server.ExecuteCommand("rnr");
-
             InventoryLimits.StandardCategoryLimits[ItemCategory.SpecialWeapon] = 8;
             InventoryLimits.StandardCategoryLimits[ItemCategory.SCPItem] = 8;
             InventoryLimits.Config.RefreshCategoryLimits();
@@ -103,6 +101,8 @@ namespace RGM.EventArgs
 
             yield return Timing.WaitForSeconds(1);
 
+            Server.ExecuteCommand("rnr");
+
             Tools.PickModes();
             Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
 
@@ -115,7 +115,6 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(RenewalPlayersInfo());
             Timing.RunCoroutine(MovingShootingTarget());
-            if (Server.Port == 7800) Timing.RunCoroutine(TimezoneCheck());
             Timing.RunCoroutine(HintManager.OnStarted());
             Timing.RunCoroutine(HintManager.RemoveHint());
             Timing.RunCoroutine(ChatManager.RunChat());
