@@ -149,6 +149,7 @@ namespace RGM.Modes
                     finder.AddItem(item);
                 }
                 finder.Position = Door.Get(DoorType.HIDLab).Position + new Vector3(0, 2, 0);
+                finder.IsBypassModeEnabled = true;
             }
 
             yield return Timing.WaitForSeconds(1f);
