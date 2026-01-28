@@ -47,6 +47,8 @@ namespace RGM.Modes
             RoleTypeId.Flamingo,
             RoleTypeId.AlphaFlamingo,
             RoleTypeId.ZombieFlamingo,
+            RoleTypeId.NtfFlamingo,
+            RoleTypeId.ChaosFlamingo,
             RoleTypeId.Destroyed,
             RoleTypeId.CustomRole
         };
