@@ -44,7 +44,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 20, 27);
+        public override Version Version { get; } = new(3, 20, 28);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -152,9 +152,9 @@ namespace RGM
 
             Harmony harmony = new Harmony($"Harmony - {DateTime.Now.Ticks}");
 
-            // postfix
+            // Postfix
             harmony.Patch(AccessTools.Method(typeof(Map), nameof(Map.Broadcast), [typeof(ushort), typeof(string), typeof(Broadcast.BroadcastFlags), typeof(bool)]),
-                postfix: new HarmonyMethod(AccessTools.Method(typeof(BroadcastPatch), nameof(BroadcastPatch.Postfix))));
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(BroadcastPatch), nameof(BroadcastPatch.MapBroadcastPostfix))));
             harmony.Patch(AccessTools.Method(typeof(WaveSpawner), nameof(WaveSpawner.CanBeSpawned), [typeof(ReferenceHub)]),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(WavePatch), nameof(WavePatch.Postfix))));
 
