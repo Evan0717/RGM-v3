@@ -19,7 +19,7 @@ using InventorySystem.Items;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Silent)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Silent)]
     public class Silent : Mode
     {
         public override string Name => "사일런트";
