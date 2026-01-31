@@ -164,7 +164,8 @@ public enum ModeType
     HideAndSeek,
     PVE,
     Agar,
-    TFT
+    TFT,
+    RandomBlockMode,
 }
 
 

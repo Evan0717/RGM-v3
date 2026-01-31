@@ -63,6 +63,7 @@
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
+    <Compile Include="API\Features\RoomReplacer.cs" />
     <Compile Include="API\Features\TranslationManager.cs" />
     <Compile Include="API\Features\HintManager.cs" />
     <Compile Include="API\Features\PickupMachineManager.cs" />
@@ -373,6 +374,7 @@
     <Compile Include="RGM\Modes\Plus\GrandBow\GrandBow.cs" />
     <Compile Include="RGM\Modes\Plus\ChupaChups\ChupaChups.cs" />
     <Compile Include="RGM\Modes\Plus\Doppelganger\Doppelganger.cs" />
+    <Compile Include="RGM\Modes\Plus\RandomBlockMode\RandomBlockMode.cs" />
     <Compile Include="RGM\Modes\Plus\SitDown\SitDown.cs" />
     <Compile Include="RGM\Modes\Plus\Radio\Radio.cs" />
     <Compile Include="RGM\Modes\Plus\PaperMan\PaperMan.cs" />
