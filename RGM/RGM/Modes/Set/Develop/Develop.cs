@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Scp1509;
 using MEC;
 using Mirror;
 using MultiBroadcast;
-
 using PlayerRoles;
 using RGM.API.Features;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -29,6 +30,8 @@ namespace RGM.Modes
 
         public static Develop Instance;
 
+        CoroutineHandle _onModeStarted;
+
         public override void OnEnabled()
         {
             Round.IsLocked = true;
@@ -36,6 +39,8 @@ namespace RGM.Modes
             Exiled.API.Features.Map.IsDecontaminationEnabled = false;
 
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
+
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         }
 
         public override void OnDisabled()
@@ -45,6 +50,13 @@ namespace RGM.Modes
             Exiled.API.Features.Map.IsDecontaminationEnabled = true;
 
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
+
+            Timing.KillCoroutines(_onModeStarted);
+        }
+
+        IEnumerator<float> OnModeStarted()
+        {
+            yield return 0f;
         }
 
         void OnResurrecting(ResurrectingEventArgs ev)
