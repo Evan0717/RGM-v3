@@ -403,6 +403,9 @@ $"""
 
                 onEnabledMethod?.Invoke(modeInstance, null);
 
+                if (Server.Port != 7803 && !Round.IsEnded)
+                    Webhook.Send($"{ModeType.GetModeData().Name}", ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook3.txt"));
+
                 return true;
             }
             else
