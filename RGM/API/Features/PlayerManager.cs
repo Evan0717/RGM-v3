@@ -35,7 +35,7 @@ namespace RGM.API.Features
     {
         public static List<Player> List
         {
-            get => Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !NonePlayer.Players.Contains(x))).ToList();
+            get => Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !x.IsNonePlayer())).ToList();
         }
 
         public static bool IsUsingTranslator(this Player player)

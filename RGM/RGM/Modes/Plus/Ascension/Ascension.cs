@@ -17,7 +17,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Ascension)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Ascension)]
     public class Ascension : Mode
     {
         public override string Name => "승천";
@@ -42,6 +42,9 @@ namespace RGM.Modes
 
         public void OnJumping(JumpingEventArgs ev)
         {
+            if (ev.Player.IsNonePlayer())
+                return;
+
             Timing.RunCoroutine(Tools.DoRocket(ev.Player, ev.Player, 1));
         }
     }
