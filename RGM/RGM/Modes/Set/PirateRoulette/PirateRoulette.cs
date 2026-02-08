@@ -37,6 +37,7 @@ namespace RGM.Modes
 
         public static PirateRoulette Instance;
 
+        Player Scp049 = null;
         Player Bomb = null;
 
         CoroutineHandle _onModeStarted;
@@ -82,6 +83,7 @@ namespace RGM.Modes
             {
                 if (p == scp)
                 {
+                    Scp049 = p;
                     p.Role.Set(RoleTypeId.Scp049, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
                     Timing.CallDelayed(0.25f, () =>
                     {
@@ -121,9 +123,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> HurtScp049()
         {
-            while (Bomb.IsAlive)
+            while (Scp049.IsAlive)
             {
-                Bomb.Hurt(Bomb.MaxHealth / 150);
+                Scp049.Hurt(Bomb.MaxHealth / 150);
 
                 yield return Timing.WaitForSeconds(1);
             }
