@@ -89,7 +89,7 @@ namespace RGM.Modes
 
         public void Spawned(Player player)
         {
-            if (player.IsAlive)
+            if (player.IsAlive && !player.IsNonePlayer())
             {
                 Timing.CallDelayed(1f, () =>
                 {
