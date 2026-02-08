@@ -71,6 +71,7 @@ namespace RGM.Variables
         public static List<Player> SuggestPlayers = new();
         public static List<Player> MuteBGMPlayers = new();
         public static List<string> UsedItems = new();
+        public static List<string> 게임칩사용자 = new();
         public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",
@@ -278,6 +279,18 @@ namespace RGM.Variables
                     Tools.PickModes();
 
                     Exiled.API.Features.Cassie.MessageTranslated("", $"{player.DisplayNickname}(이)가 <b><color=#ffd700>고급 모드 리롤권</color></b>를 사용하여, 투표 목록을 갱신하는 데 성공했습니다!!");
+                }
+            },
+            new Product()
+            {
+                IsPubliced = true,
+                Name = "게임 칩",
+                Description = $".사용 이번 라운드에서 승리 시 10배만큼 랜덤코인을 추가로 얻습니다.",
+                Price = 5,
+                Check = (player, arg) => { return Round.IsLobby && !게임칩사용자.Contains(player.UserId); },
+                Script = (player, arg) =>
+                {
+                                    게임칩사용자.Add(player.UserId);
                 }
             },
         };

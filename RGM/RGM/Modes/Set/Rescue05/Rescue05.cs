@@ -134,7 +134,7 @@ namespace RGM.Modes
                 Round.IsLocked = false;
                 Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.LeadingTeam == LeadingTeam.FacilityForces).ToList(), 1));
 
-                foreach (var player in PlayerManager.List)
+                foreach (var player in Player.List)
                 {
                     player.AddBroadcast(20, $"<size=30><b><color=#000000>05 평의회</color>({Level05.DisplayNickname})</b>가 탈출하여 <u><i>강화제 제작 방법</i>을 재단에 넘기는 데 성공하였습니다.</u></size>");
 
