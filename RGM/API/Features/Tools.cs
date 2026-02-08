@@ -291,15 +291,26 @@ $"""
 
             if (Server.PlayerCount >= 15)
             {
-                foreach (var player in playerList.Where(x => !NonePlayer.Players.Contains(x) && UsersManager.UsersCache.ContainsKey(x.UserId)))
+                int is게임칩사용자(Player player)
+                {
+                    if (게임칩사용자.Contains(player.UserId))
+                    {
+                        PlaySound(player.Transform, "money-soundfx", 2);
+                        return 10;
+                    }
+
+                    return 1;
+                }
+
+                foreach (var player in playerList.Where(x => !x.IsNonePlayer() && UsersManager.UsersCache.ContainsKey(x.UserId)))
                 {
                     UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + amount).ToString();
-                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount).ToString();
+                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * is게임칩사용자(player)).ToString();
                 }
 
                 UsersManager.SaveUsers();
 
-                WinMessage = $"<size={(30 - Math.Round(playerList.Count() * 0.5f))}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다";
+                WinMessage = $"<size={30 - Math.Round(playerList.Count() * 0.5f)}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}>{x.DisplayNickname}</color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다";
             }
             else
             {
