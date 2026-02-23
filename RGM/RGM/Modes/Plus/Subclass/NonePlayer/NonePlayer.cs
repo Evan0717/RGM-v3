@@ -108,14 +108,17 @@ namespace RGM.Modes.SubClass
                     if (Players.Contains(player))
                         Players.Remove(player);
 
-                    Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                    {
+                        Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
 
-                    Exiled.Events.Handlers.Player.Dying -= OnDying;
-                    Exiled.Events.Handlers.Player.Died -= OnDied;
-                    Exiled.Events.Handlers.Player.Shot -= OnShot;
-                    Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
-                    Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
-                    Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+                        Exiled.Events.Handlers.Player.Dying -= OnDying;
+                        Exiled.Events.Handlers.Player.Died -= OnDied;
+                        Exiled.Events.Handlers.Player.Shot -= OnShot;
+                        Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+                        Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
+                        Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+                    });
                 }
             }
 
