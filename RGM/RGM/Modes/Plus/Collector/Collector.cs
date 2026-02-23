@@ -60,7 +60,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> Spawned(Player player)
         {
-            if (player.Role.Type == RoleTypeId.Scp079 || !player.IsAlive)
+            if (player.Role.Type == RoleTypeId.Scp079 || !player.IsAlive || player.IsNonePlayer())
                 yield break;
 
             for (int i=1; i<4; i++)
