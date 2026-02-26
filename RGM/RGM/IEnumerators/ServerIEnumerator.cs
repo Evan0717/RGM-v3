@@ -434,32 +434,29 @@ namespace RGM.IEnumerators
 
             bool flag = false;
 
-            if (Owner.IsScp)
+            while (Owner.IsScp)
             {
-                while (Owner.IsAlive)
+                if (!flag && Owner.CurrentItem != null && !(Owner.Role is Scp3114Role scp3114 && scp3114.DisguiseStatus == PlayerRoles.PlayableScps.Scp3114.Scp3114Identity.DisguiseStatus.Active))
                 {
-                    if (!flag && Owner.CurrentItem != null && !(Owner.Role is Scp3114Role scp3114 && scp3114.DisguiseStatus == PlayerRoles.PlayableScps.Scp3114.Scp3114Identity.DisguiseStatus.Active))
-                    {
-                        flag = true;
+                    flag = true;
 
-                        schematic.transform.parent = Owner.Transform;
-                        schematic.transform.localPosition = Vector3.zero;
+                    schematic.transform.parent = Owner.Transform;
+                    schematic.transform.localPosition = Vector3.zero;
 
-                        if (ColorUtility.TryParseHtmlString("#ffff00", out Color color))
-                            light.NetworkLightColor = color;
-                        light.NetworkLightRange = 50;
-                        light.NetworkLightIntensity = 10;
-                    }
-                    else if (flag && Owner.CurrentItem == null)
-                    {
-                        flag = false;
-
-                        schematic.transform.parent = null;
-                        schematic.transform.position = Vector3.zero;
-                    }
-
-                    yield return Timing.WaitForSeconds(1);
+                    if (ColorUtility.TryParseHtmlString("#ffff00", out Color color))
+                        light.NetworkLightColor = color;
+                    light.NetworkLightRange = 50;
+                    light.NetworkLightIntensity = 10;
                 }
+                else if (flag && Owner.CurrentItem == null)
+                {
+                    flag = false;
+
+                    schematic.transform.parent = null;
+                    schematic.transform.position = Vector3.zero;
+                }
+
+                yield return Timing.WaitForSeconds(1);
             }
 
             schematic.Destroy();
