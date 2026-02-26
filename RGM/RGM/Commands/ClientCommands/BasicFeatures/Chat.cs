@@ -133,15 +133,8 @@ namespace RGM.Commands.ClientCommands
                 {
                     if (Check(ply))
                     {
-                        TranslationManager.TranslatePreserveNewlines(
-                            rawMessage,
-                            TranslatorPlayers[ply],
-                            translated =>
-                            {
-                                string msg = $"{prefix}<noparse>{translated.Replace("</noparse>", "")}</noparse>{suffix}";
-                                ply.AddBroadcast(6, msg);
-                            }
-                        );
+                        string msg = $"{prefix}<noparse>{rawMessage.Replace("</noparse>", "")}</noparse>{suffix}";
+                        ply.AddBroadcast(6, msg, tag: "chat");
                     }
                 }
 

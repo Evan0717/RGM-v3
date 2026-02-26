@@ -76,12 +76,12 @@ public class ABattle : Mode
     };
     public static Dictionary<string, string> SelectFormat = new Dictionary<string, string>()
     {
-        {"일반", "<b><i><color=#404040>일</color><color=#474747>반</color> <color=#555555>(</color><color=#5C5C5C>C</color><color=#636363>o</color><color=#6B6B6B>m</color><color=#727272>m</color><color=#797979>o</color><color=#808080>n</color><color=#878787>)</color></i></b>"},
-        {"희귀", "<b><i><color=#47DAFF>희</color><color=#47D4FC>귀</color> <color=#47C8F7>(</color><color=#47C2F5>R</color><color=#48BCF2>a</color><color=#48B6F0>r</color><color=#48B0ED>e</color><color=#48AAEB>)</color></i></b>"},
-        {"영웅", "<b><i><color=#F185FF>영</color><color=#F27DFC>웅</color> <color=#F56EF6>(</color><color=#F767F3>E</color><color=#F85FF1>p</color><color=#FA58EE>i</color><color=#FB50EB>c</color><color=#FD49E8>)</color></i></b>"},
-        {"전설", "<b><i><color=#FFF70A>전</color><color=#FFF40B>설</color> <color=#FFEE0E>(</color><color=#FFEC0F>L</color><color=#FFE911>e</color><color=#FFE612>g</color><color=#FFE314>e</color><color=#FFE115>n</color><color=#FFDE17>d</color><color=#FFDB18>)</color></i></b>"},
-        {"신화", "<b><i><color=#F52500>신</color><color=#F12604>화</color> <color=#E9280D>(</color><color=#E52911>M</color><color=#E12A16>y</color><color=#DD2B1A>t</color><color=#D92C1F>h</color><color=#D52D23>i</color><color=#D12E28>c</color><color=#CD2F2C>)</color></i></b>"},
-        {"알 수 없음", "<b><i><color=#000000>알</color> <color=#555555>수</color> <color=#AAAAAA>없</color><color=#D4D4D4>음</color></i></b>"}
+        {"일반", "<b><i><color=#404040>일반</color></i></b>"},
+        {"희귀", "<b><i><color=#47DAFF>희귀</color></i></b>"},
+        {"영웅", "<b><i><color=#F185FF>영웅</color></i></b>"},
+        {"전설", "<b><i><color=#FFF70A>전설</color></i></b>"},
+        {"신화", "<b><i><color=#F52500>신화</color></i></b>"},
+        {"알 수 없음", "<b><i><color=#000000>알수없음</i></b>"}
     };
     public static Dictionary<string, string> ExtraModes = new Dictionary<string, string>()
     {

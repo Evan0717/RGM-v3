@@ -26,7 +26,7 @@ namespace RGM
 """
 <size=120><b><color=#e5dd84>❓</color> ({Logo}) <color=#84e5db>❓</color></b></size>
 <size=80><b>[RGM] 랜덤게임모드</b></size> <size=25>(ver. {Version})</size>
-<align=right><size=20><b><i><color=#FF0000>아</color><color=#EA1A24>름</color><color=#D63548>다</color><color=#C14F6D>운</color> <color=#9884B6>세</color><color=#849FDA>상</color></i></b></size></align>
+<align=right><size=20><b><i>아름다운 세상</i></b></size></align>
 <align=left>
 Exp: {Exp}
 랜덤코인: {RC}

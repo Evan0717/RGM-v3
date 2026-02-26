@@ -1,5 +1,6 @@
 ﻿using AdminToys;
 using Discord;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
@@ -740,7 +741,7 @@ namespace RGM.API.Features
 
         public static void AddBroadcast(this Player player, ushort duration, string message, byte priority = 0, string tag = "")
         {
-            if (player.IsUsingTranslator() || tag == "chat")
+            if (player.IsUsingTranslator() && tag != "chat" && tag != "kill")
             {
                 TranslationManager.TranslatePreserveNewlines(message, TranslatorPlayers[player], translated => 
                 { 
@@ -764,7 +765,7 @@ namespace RGM.API.Features
                 MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, text, tag);
         }
 
-        public static void ExplodeGrenade(this Player player, Vector3? pos = null, float fuseTime = 0.01f, ItemType grenade = ItemType.GrenadeHE, bool ignore = false)
+        public static void ExplodeGrenade(this Player player, Vector3? pos = null, float fuseTime = 0, ItemType grenade = ItemType.GrenadeHE, bool ignore = false, bool kill = true)
         {
             if (pos == null)
                 pos = player.Position;
@@ -781,6 +782,9 @@ namespace RGM.API.Features
                 g.FuseTime = fuseTime;
                 g.MaxRadius = ignore ? 0 : g.MaxRadius;
                 g.SpawnActive(pos.Value, player);
+
+                if (kill)
+                    player.Kill(DamageType.Explosion);
             }
         }
     }

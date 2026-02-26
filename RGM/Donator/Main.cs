@@ -278,7 +278,7 @@ namespace RGM.Donator
                         foreach (var _player in PlayerManager.List.Where(x => x.IsDead || Vector3.Distance(x.Position, _pos) <= 10 || Vector3.Distance(x.Position, ev.Attacker.Position) <= 10))
                         {
                             if (Datas.KillEffectData.ContainsKey(kE))
-                                _player.AddBroadcast(6, $"<size=25>{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5>{ev.Attacker.DisplayNickname}</color>(이)가 {Datas.KillEffectData[kE][0]}(으)로 {Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>(을)를 {Datas.KillEffectData[kE][1]}시켰습니다!</size>");
+                                _player.AddBroadcast(6, $"<size=25>{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5>{ev.Attacker.DisplayNickname}</color>(이)가 {Datas.KillEffectData[kE][0]}(으)로 {Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>(을)를 {Datas.KillEffectData[kE][1]}시켰습니다!</size>", tag: "kill");
                         }
                     }
                 }

@@ -1,11 +1,14 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using MEC;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -21,6 +24,17 @@ namespace RGM.API.Features
     /// </summary>
     public static class TranslationManager
     {
+        private static readonly string CacheDir = Path.Combine(Paths.Configs, "RGM");
+
+        private static readonly string CacheFile = Path.Combine(CacheDir, "TranslationCache.json");
+
+        // langPair -> (text -> translated)
+        private static Dictionary<string, Dictionary<string, string>> _fileCache = new();
+
+        private static bool _fileCacheLoaded;
+        private static float _lastSaveTime;
+        private const float SaveInterval = 30f; // 초 (IO 보호)
+
         // ===== Public config =====
         public static bool IsEnabled { get; set; } = true;
         public static bool Debug { get; set; } = false;
@@ -72,12 +86,97 @@ namespace RGM.API.Features
         private static CoroutineHandle _worker;
         private static bool _warnedNoKey;
 
+        private static void TrySaveFileCache()
+        {
+            if (Time.realtimeSinceStartup - _lastSaveTime < SaveInterval)
+                return;
+
+            _lastSaveTime = Time.realtimeSinceStartup;
+
+            try
+            {
+                string json = JsonConvert.SerializeObject(_fileCache, Formatting.Indented);
+                File.WriteAllText(CacheFile, json);
+
+                if (Debug)
+                    Log.Debug("[TranslationManager] Cache file saved");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"[TranslationManager] Failed to save cache file: {e}");
+            }
+        }
+
+        // 숫자 정규화용
+        private static string NormalizeNumbers(string text, out List<string> numbers)
+        {
+            var list = new List<string>();
+
+            string result = Regex.Replace(
+                text,
+                @"\d+",
+                m =>
+                {
+                    list.Add(m.Value);
+                    return "{#}";
+                });
+
+            numbers = list;
+            return result;
+        }
+
+        private static string RestoreNumbers(string text, List<string> numbers)
+        {
+            int i = 0;
+            return Regex.Replace(
+                text,
+                @"\{\#\}",
+                _ => i < numbers.Count ? numbers[i++] : "{#}");
+        }
+
         // ===== Public API =====
+
+        public static void EnsureFileCacheLoaded()
+        {
+            if (_fileCacheLoaded)
+                return;
+
+            try
+            {
+                if (!Directory.Exists(CacheDir))
+                    Directory.CreateDirectory(CacheDir);
+
+                if (File.Exists(CacheFile))
+                {
+                    string json = File.ReadAllText(CacheFile);
+                    _fileCache = JsonConvert.DeserializeObject<
+                        Dictionary<string, Dictionary<string, string>>
+                    >(json) ?? new();
+                }
+                else
+                {
+                    _fileCache = new();
+                }
+
+                _fileCacheLoaded = true;
+
+                if (Debug)
+                    Log.Info($"[TranslationManager] Loaded file cache ({_fileCache.Sum(k => k.Value.Count)} entries)");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"[TranslationManager] Failed to load cache file: {e}");
+                _fileCache = new();
+                _fileCacheLoaded = true;
+            }
+        }
 
         public static void StartWorker()
         {
             if (_worker.IsRunning)
                 return;
+
+            EnsureFileCacheLoaded();
 
             _cache.Capacity = Math.Max(10, CacheCapacity);
             _worker = Timing.RunCoroutine(Worker(), Segment.FixedUpdate);
@@ -94,6 +193,14 @@ namespace RGM.API.Features
         public static void ClearCache()
         {
             _cache.Clear();
+            _fileCache.Clear();
+
+            try
+            {
+                if (File.Exists(CacheFile))
+                    File.Delete(CacheFile);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -154,34 +261,39 @@ namespace RGM.API.Features
         {
             var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            // 빈 줄까지 유지하려면 그대로 둬야 함
             var results = new string[lines.Length];
             int remaining = lines.Length;
 
             for (int i = 0; i < lines.Length; i++)
             {
                 int idx = i;
+                string line = lines[idx];
 
-                // 빈 줄은 번역 요청 안 하고 그대로 처리 (쿼터 절약)
-                if (string.IsNullOrEmpty(lines[idx]))
+                if (string.IsNullOrEmpty(line))
                 {
                     results[idx] = "";
-                    if (--remaining == 0) onSuccess(string.Join("\n", results));
+                    if (--remaining == 0)
+                        onSuccess(string.Join("\n", results));
                     continue;
                 }
 
-                TranslationManager.Translate(
-                    lines[idx],
+                // 🔥 핵심: 숫자 정규화
+                string normalized = NormalizeNumbers(line, out var numbers);
+
+                Translate(
+                    normalized,
                     target,
                     translated =>
                     {
-                        results[idx] = translated;
+                        // 🔥 숫자 복원
+                        string restored = RestoreNumbers(translated, numbers);
+                        results[idx] = restored;
+
                         if (--remaining == 0)
                             onSuccess(string.Join("\n", results));
                     },
                     err =>
                     {
-                        // 하나라도 실패하면 전체 실패 처리(원하면 부분 성공으로 바꿀 수 있음)
                         onError?.Invoke(err);
                     },
                     source
@@ -230,6 +342,18 @@ namespace RGM.API.Features
             if (_cache.TryGet(cacheKey, out string cached))
             {
                 onSuccess(cached);
+                return;
+            }
+
+            EnsureFileCacheLoaded();
+
+            string langKey = $"*->{target}";
+
+            if (_fileCache.TryGetValue(langKey, out var langDict) &&
+                langDict.TryGetValue(text, out var fileCached))
+            {
+                _cache.Set(cacheKey, fileCached);
+                onSuccess(fileCached);
                 return;
             }
 
@@ -329,65 +453,75 @@ namespace RGM.API.Features
             }
         }
 
-        private static IEnumerator<float> SendRequest(Request req)
-        {
-            string url = $"https://translation.googleapis.com/language/translate/v2?key={ApiKey}";
-
-            WWWForm form = new WWWForm();
-            form.AddField("q", req.Text);
-            form.AddField("target", req.Target);
-            if (!string.IsNullOrWhiteSpace(req.Source))
-                form.AddField("source", req.Source);
-
-            using UnityWebRequest request = UnityWebRequest.Post(url, form);
-            yield return Timing.WaitUntilDone(request.SendWebRequest());
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                string err = request.error;
-                int code = (int)request.responseCode;
-
-                if (Debug)
-                    Log.Warn($"[TranslationManager] HTTP fail ({code}): {err}");
-
-                if (IsRetryable(code) && req.Retry < MaxRetries)
-                {
-                    req.Retry++;
-                    float delay = ComputeBackoff(req.Retry);
-                    if (Debug)
-                        Log.Debug($"[TranslationManager] retry {req.Retry}/{MaxRetries} in {delay:0.00}s");
-
-                    yield return Timing.WaitForSeconds(delay);
-                    _queue.Enqueue(req);
-                    yield break;
-                }
-
-                Complete(req, req.Text, err ?? $"HTTP {code}");
-                yield break;
+        private static IEnumerator<float> SendRequest(Request req) 
+        { 
+            string langKey = $"*->{req.Target}"; 
+            
+            if (_fileCache.TryGetValue(langKey, out var cachedDict) && cachedDict.TryGetValue(req.Text, out var cachedTranslated)) 
+            { 
+                if (Debug) 
+                    Log.Debug("[TranslationManager] file cache hit"); 
+                
+                _cache.Set(req.Key, cachedTranslated); 
+                
+                Complete(req, cachedTranslated, null); 
+                yield break; 
             }
 
-            try
-            {
-                // { data: { translations: [ { translatedText: "...", detectedSourceLanguage?: "..." } ] } }
-                var root = JObject.Parse(request.downloadHandler.text);
-                string translated = root["data"]?["translations"]?.First?["translatedText"]?.Value<string>();
+            string url = $"https://translation.googleapis.com/language/translate/v2?key={ApiKey}"; 
+            WWWForm form = new WWWForm(); 
+            form.AddField("q", req.Text); 
+            form.AddField("target", req.Target); 
+            using UnityWebRequest request = UnityWebRequest.Post(url, form); 
+            
+            yield return Timing.WaitUntilDone(request.SendWebRequest()); 
 
-                if (translated == null)
-                    throw new Exception("translatedText not found");
+            if (request.result != UnityWebRequest.Result.Success) 
+            { 
+                string err = request.error; 
+                int code = (int)request.responseCode; 
+                if (Debug) Log.Warn($"[TranslationManager] HTTP fail ({code}): {err}"); 
+                if (IsRetryable(code) && req.Retry < MaxRetries) 
+                { 
+                    req.Retry++; 
+                    
+                    yield return Timing.WaitForSeconds(ComputeBackoff(req.Retry)); 
 
-                // Google returns HTML entities sometimes.
-                translated = WebUtility.HtmlDecode(translated);
+                    _queue.Enqueue(req); 
+                    yield break; 
+                } 
+                
+                Complete(req, req.Text, err ?? $"HTTP {code}"); 
+                yield break; 
+            } 
+            try 
+            { 
+                var root = JObject.Parse(request.downloadHandler.text); 
+                string translated = root["data"]?["translations"]?.First?["translatedText"]?.Value<string>(); 
+                if (translated == null) 
+                    throw new Exception("translatedText not found"); translated = WebUtility.HtmlDecode(translated); 
+                
+                _cache.Set(req.Key, translated); 
+                
+                if (!_fileCache.TryGetValue(langKey, out var dict)) 
+                { 
+                    dict = new Dictionary<string, string>(); 
+                    _fileCache[langKey] = dict; 
+                } 
+                
+                dict[req.Text] = translated; 
 
-                _cache.Set(req.Key, translated);
-                Complete(req, translated, null);
-            }
-            catch (Exception e)
-            {
-                if (Debug)
-                    Log.Warn($"[TranslationManager] Parse fail: {e.Message}");
+                TrySaveFileCache(); 
 
-                Complete(req, req.Text, e.Message);
-            }
+                Complete(req, translated, null); 
+            } 
+            catch (Exception e) 
+            { 
+                if (Debug) 
+                    Log.Warn($"[TranslationManager] Parse fail: {e.Message}"); 
+                
+                Complete(req, req.Text, e.Message); 
+            } 
         }
 
         private static void Complete(Request req, string result, string error)
