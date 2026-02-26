@@ -125,31 +125,35 @@ namespace RGM.Modes
             {
                 foreach (var player in dict.Keys.Where(x => !x.IsNonePlayer()))
                 {
-                    var blockedAction = dict[player];
-                    FirstPersonMovementModule fpcModule = (player.ReferenceHub.roleManager.CurrentRole as FpcStandardRoleBase).FpcModule;
-
-                    if (blockedAction == BlockedActions.달리기)
+                    try
                     {
-                        if (fpcModule.CurrentMovementState == PlayerMovementState.Sprinting)
-                            player.ExplodeGrenade(ignore: true);
+                        var blockedAction = dict[player];
+                        FirstPersonMovementModule fpcModule = (player.ReferenceHub.roleManager.CurrentRole as FpcStandardRoleBase).FpcModule;
+
+                        if (blockedAction == BlockedActions.달리기)
+                        {
+                            if (fpcModule.CurrentMovementState == PlayerMovementState.Sprinting)
+                                player.ExplodeGrenade(ignore: true);
+                        }
+
+                        if (blockedAction == BlockedActions.천천히_걷기)
+                        {
+                            if (fpcModule.CurrentMovementState == PlayerMovementState.Sneaking)
+                                player.ExplodeGrenade(ignore: true);
+                        }
+
+                        if (blockedAction == BlockedActions.움직이기)
+                        {
+                            if (!pos_dict.ContainsKey(player))
+                                pos_dict.Add(player, player.Position);
+
+                            if (pos_dict[player] != player.Position)
+                                player.ExplodeGrenade(ignore: true);
+
+                            pos_dict[player] = player.Position;
+                        }
                     }
-
-                    if (blockedAction == BlockedActions.천천히_걷기)
-                    {
-                        if (fpcModule.CurrentMovementState == PlayerMovementState.Sneaking)
-                            player.ExplodeGrenade(ignore: true);
-                    }
-
-                    if (blockedAction == BlockedActions.움직이기)
-                    {
-                        if (!pos_dict.ContainsKey(player))
-                            pos_dict.Add(player, player.Position);
-
-                        if (pos_dict[player] != player.Position)
-                            player.ExplodeGrenade(ignore: true);
-
-                        pos_dict[player] = player.Position;
-                    }
+                    catch { }
                 }
 
                 yield return Timing.WaitForOneFrame;
