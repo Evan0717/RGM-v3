@@ -63,6 +63,7 @@
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
+    <Compile Include="API\Features\ServerManager.cs" />
     <Compile Include="API\Features\RoomReplacer.cs" />
     <Compile Include="API\Features\TranslationManager.cs" />
     <Compile Include="API\Features\HintManager.cs" />
@@ -123,6 +124,117 @@
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Classes\TFTManager.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Commands\ClientCommands\basicfeatures\Reroll.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Commands\ClientCommands\basicfeatures\Select.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Commands\RemoteadminCommands\adminfeatures\AddAbility.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Commands\RemoteadminCommands\adminfeatures\ShowHint.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Commands\RemoteadminCommands\adminfeatures\StartSelect.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\MapEvents.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\MEREvents.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\PlayerEvents.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp096Events.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp3114Events.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp330Events.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Functions\Base.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTBattle.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\AddDefense2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\AddHealth2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\AddJump2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\AddPower2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\AddQuick2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\AddSpeed2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\All\QuickJudgement.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\AdhesivePlaster.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Ambush.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\AmmoBox.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\AntiScp207.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Armory.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\IllegalWeapon.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Peace.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Scp1853.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Scp207.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Seed2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Survivor.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Human\Vampire.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Scp\FindLocation.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp049\Call.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp049\GoodSense.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp079\AutoTesla.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp079\BlackoutZone.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp079\Charger2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp079\Generator2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp079\ResolveProblem.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp079\RoomLockdown.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp096\Charge.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp096\Enrage.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp096\Enraging.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp096\OutSider.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp096\Seer.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp096\StarTearing.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp106\Capture.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp106\Swamp.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp173\Blink.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp173\Mirage.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp173\Scare.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp3114\Disguise.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp3114\Half.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp939\AmnesticCloud.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp939\Attack.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Euclid\Special\Scp939\Mimicry.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\AddDefense3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\AddHealth3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\AddJump3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\AddPower3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\AddQuick3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\AddSpeed3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\Diver.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\Fortunate.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\All\Ghost.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\Adventure.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\Armory2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\CandyAddict.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\DevilContract.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\Gambler.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\Pandora.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Human\Smoke.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Scp\TestSubject.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp049\BestDoctor.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\CameraFlash.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\Generator3.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\OverPower.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\PingRemote.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\ResolveProblem2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\RestArea.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp079\Shutdown.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Keter\Special\Scp096\RoaringSound.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\AddDefense1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\AddHealth1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\AddJump1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\AddPower1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\AddQuick1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\AddSpeed1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\BomberMan.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\All\TransparentCloak.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Human\InventoryUpgrade.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Human\Kick.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Human\Miniaturization.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Human\RemoteSteal.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Human\Seed.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Human\TrickorTreat.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\AirStrike.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\Charger.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\Freedom.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\Generator1.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\JustPrice.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\Overload.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\Repair.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Abilities\Safe\Special\Scp079\SystemHacking.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\Ability.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Marshmellow.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Scp1509.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\CandyPower.cs" />
@@ -366,7 +478,6 @@
     <Compile Include="RGM\Modes\Plus\Curse\Curse.cs" />
     <Compile Include="RGM\Modes\Plus\Blessing\Blessing.cs" />
     <Compile Include="RGM\Modes\Plus\BomberMan\BomberMan.cs" />
-    <Compile Include="RGM\Modes\Plus\Builder\Builder.cs" />
     <Compile Include="RGM\Modes\Plus\Clairvoyance\Clairvoyance.cs" />
     <Compile Include="RGM\Modes\Plus\Disguise\Disguise.cs" />
     <Compile Include="RGM\Modes\Plus\DogFight\DogFight.cs" />
@@ -510,10 +621,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DAONTFT, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DAON\DAONTFT\bin\Debug\DAONTFT.dll</HintPath>
-    </Reference>
     <Reference Include="DiscordInteraction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Privacy\DiscordInteraction\bin\Debug\DiscordInteraction.dll</HintPath>
@@ -545,10 +652,6 @@
     <Reference Include="Exiled.Permissions, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="GGUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\GGUtils.dll</HintPath>
     </Reference>
     <Reference Include="GPUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
