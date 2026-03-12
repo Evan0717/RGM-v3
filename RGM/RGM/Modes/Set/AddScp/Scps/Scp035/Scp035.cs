@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
@@ -28,7 +29,6 @@ namespace RGM.Modes.Sets.AddScp.Scps
             player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
             player.MaxHealth = 1350;
             player.Health = player.MaxHealth;
-            player.EnableEffect(EffectType.Stained, 1);
             player.EnableEffect(EffectType.MovementBoost, 25);
             player.AddHint("SCP-035 설명",
 """
@@ -51,6 +51,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 while (true)
                 {
+                    if (player.TryGetEffect<Stained>(out var effect) && !effect.IsEnabled)
+                        player.EnableEffect(EffectType.Stained, 1);
+
                     player.Hurt(1, "SCP-035의 부식성 물질로 인해 사망했습니다.");
 
                     yield return Timing.WaitForSeconds(3);
