@@ -4,6 +4,7 @@ using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
 using RGM.API.Features;
+using RGM.Commands.RemoteAdminCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,18 +63,14 @@ namespace RGM.Modes
                     if (UnityEngine.Random.Range(0, 100) < 1)
                     {
                         for (int i = 0; i < UnityEngine.Random.Range(1, 10); i++)
-                        {
-                            Tools.PlaceCandy(Tools.PickRandomCandy(), door.Position + new Vector3(0, 2, 0));
-                        }
+                            CandyParty.Create(Tools.PickRandomCandy(), UnityEngine.Random.Range(0.1f, 50), door.Position + new Vector3(0, 2, 0));
                     }
                 }
 
-                foreach (var player in Player.List)
+                foreach (var player in PlayerManager.List)
                 {
                     if (UnityEngine.Random.Range(0, 100) < 2)
-                    {
-                        Tools.PlaceCandy(Tools.PickRandomCandy(), player.Position);
-                    }
+                        CandyParty.Create(Tools.PickRandomCandy(), UnityEngine.Random.Range(0.1f, 50), player.Position);
                 }
 
                 GlobalPlayer.TryPlay("treat or treat", 1.5f);

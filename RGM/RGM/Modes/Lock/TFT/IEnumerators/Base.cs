@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static DAONTFT.Core.Variables.Base;
 using Hint = HintServiceMeow.Core.Models.Hints.Hint;
+using RGM.API.Features;
 
 namespace DAONTFT.Core.IEnumerators
 {
@@ -67,10 +68,10 @@ namespace DAONTFT.Core.IEnumerators
                         Id = "증강 리스트",
                         XCoordinate = -300,
                         YCoordinate = 100,
-                        Alignment = HintAlignment.Left
+                        Alignment = HintAlignment.Right
                     };
 
-                    Owner.AddHint(hint);
+                    Owner.AddCustomHint(hint);
 
                     yield return Timing.WaitForSeconds(1);
 
@@ -101,7 +102,7 @@ namespace DAONTFT.Core.IEnumerators
                         Alignment = HintAlignment.Left
                     };
 
-                    Owner.AddHint(hint);
+                    Owner.AddCustomHint(hint);
 
                     yield return Timing.WaitForSeconds(1);
 

@@ -120,7 +120,7 @@ public class TFT : Mode
             });
         }
 
-        foreach (var player in Player.List)
+        foreach (var player in PlayerManager.List)
         {
             role.Add(player, player.Role.Type);
 
@@ -180,7 +180,7 @@ public class TFT : Mode
 
         Timing.CallDelayed(30, () =>
         {
-            DAONTFT.Core.TFT.TFTBattle.StartUpgrade();
+            TFTBattle.StartUpgrade();
         });
 
         int getTime()
@@ -204,7 +204,7 @@ public class TFT : Mode
         {
             yield return Timing.WaitForSeconds(waitTime);
 
-            DAONTFT.Core.TFT.TFTBattle.StartUpgrade();
+            TFTBattle.StartUpgrade();
         }
     }
 
@@ -215,11 +215,11 @@ public class TFT : Mode
 
     void OnChangingRole(ChangingRoleEventArgs ev)
     {
-        if (ev.Player.IsDead || ev.NewRole.IsDead() || DAONTFT.Core.TFT.TFTBattle.GetAbilities(ev.Player).Count() == 0)
+        if (ev.Player.IsDead || ev.NewRole.IsDead() || TFTBattle.GetAbilities(ev.Player).Count() == 0)
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                DAONTFT.Core.TFT.TFTBattle.Reset(ev.Player);
+                TFTBattle.Reset(ev.Player);
             });
         }
     }

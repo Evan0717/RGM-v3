@@ -215,14 +215,10 @@ public class ABattle : Mode
         }
 
         foreach (var dot in DotCommands)
-        {
             QueryProcessor.DotCommandHandler.RegisterCommand(dot);
-        }
 
         foreach (var ra in RemoteAdminCommands)
-        {
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(ra);
-        }
 
         _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         _hintCoroutine = Timing.RunCoroutine(HintCoroutine());
@@ -266,11 +262,6 @@ public class ABattle : Mode
         {
             try
             {
-                PlayerWorkstations.Add(player, new List<WorkstationController>());
-                PlayerAbilities.Add(player, new List<Ability>());
-                IsSelecting.Add(player, false);
-                IsLifeUsed.Add(player, false);
-
                 ExtraModeNotion(player);
                 ApplyPrelude(player);
             }

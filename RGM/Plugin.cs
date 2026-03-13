@@ -20,6 +20,7 @@ using static RGM.EventArgs.ServerEvents;
 using static RGM.EventArgs.WarheadEvents;
 using static RGM.Variables.Variable;
 using Exiled.Events.EventArgs.Player;
+using System.Linq;
 
 namespace RGM
 {
@@ -29,7 +30,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 21, 6);
+        public override Version Version { get; } = new(3, 21, 7);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -84,7 +85,7 @@ namespace RGM
 
             // ------------------------------------------------------------------------------------------------------
 
-            if (Instance.Config.FixedMode == ModeType.None)
+            if (Instance.Config.FixedModes.Count() == 0)
             {
                 Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
@@ -159,6 +160,7 @@ namespace RGM
                 Exiled.Events.Handlers.Server.RoundStarted += OnFixedModeRoundStarted;
 
                 Exiled.Events.Handlers.Player.Verified += OnFixedModeVerified;
+                Exiled.Events.Handlers.Player.Left += OnFixedModeLeft;
             }
         }
 
@@ -169,12 +171,37 @@ namespace RGM
 
         public static void OnFixedModeRoundStarted()
         {
-            Tools.TryInstallMode(Instance.Config.FixedMode);
+            foreach (var mode in Instance.Config.FixedModes)
+                Tools.TryInstallMode(mode);
         }
 
         public static void OnFixedModeVerified(VerifiedEventArgs ev)
         {
             ev.Player.Setup();
+        }
+
+        public static void OnFixedModeLeft(LeftEventArgs ev)
+        {
+            if (TranslatorPlayers.ContainsKey(ev.Player))
+                TranslatorPlayers.Remove(ev.Player);
+
+            if (Chats.ContainsKey(ev.Player))
+                Chats.Remove(ev.Player);
+
+            if (Texts.ContainsKey(ev.Player))
+            {
+                Texts[ev.Player].Destroy();
+                Texts.Remove(ev.Player);
+            }
+
+            if (OnGround.ContainsKey(ev.Player.UserId))
+                OnGround.Remove(ev.Player.UserId);
+
+            if (PlayersAudio.ContainsKey(ev.Player))
+                PlayersAudio.Remove(ev.Player);
+
+            if (EffectIntensities.ContainsKey(ev.Player))
+                EffectIntensities.Remove(ev.Player);
         }
     }
 }

@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
 using MEC;
+using RGM.API.Features;
 using System;
 using System.Linq;
 using Hint = HintServiceMeow.Core.Models.Hints.Hint;
@@ -29,7 +30,7 @@ public class ShowHint : ICommand
             Alignment = HintAlignment.Center,
         };
 
-        player.AddHint(hint);
+        player.AddCustomHint(hint);
 
         Timing.CallDelayed(5, () =>
         {

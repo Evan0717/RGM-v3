@@ -54,7 +54,7 @@ public class FindLocation : TFTAbility
                     Alignment = HintAlignment.Right,
                 };
 
-                Owner.AddHint(hint);
+                Owner.AddCustomHint(hint);
 
                 yield return Timing.WaitForSeconds(1f);
 

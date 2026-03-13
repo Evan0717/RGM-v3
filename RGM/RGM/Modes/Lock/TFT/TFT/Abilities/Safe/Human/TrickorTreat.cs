@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Safe.Human;
 
-[TFTAbility("트릭 오어 트릿", "무작위 사탕을 받습니다. (기적적인 확률로 분홍색 사탕이 지급될 수 있습니다.)", TFTAbilityLevel.Safe, TFTAbilityCategory.Human, TFTAbilityPoint.Once, TFTAbilityType.TrickOrTreat, "🍬")]
+[TFTAbility("트릭 오어 트릿", "무작위 사탕을 받습니다.", TFTAbilityLevel.Safe, TFTAbilityCategory.Human, TFTAbilityPoint.Once, TFTAbilityType.TrickOrTreat, "🍬")]
 public class TrickorTreat : TFTAbility
 {
     public override void OnEnabled()
@@ -25,7 +25,7 @@ public class TrickorTreat : TFTAbility
         }
         else
         {
-            Owner.AddCandy(Function.EnumToList<CandyKindID>().Where(x => x != CandyKindID.Pink).GetRandomValue());
+            Owner.AddRandomCandy();
         }
     }
 

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using PlayerRoles;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using static DAONTFT.Core.Variables.Base;
 
 namespace DAONTFT.Core.TFT;
@@ -78,7 +77,7 @@ public class TFTAbilityData
 
     public string GetFormattedName()
     {
-        return $"<color={Level.GetColor()}>[{Level.GetTranslation()}]</color> {Name}";
+        return $"<color={Level.GetColor()}>[{Level.GetTranslation()}]</color> {Emoji} {Name}";
     }
 }
 

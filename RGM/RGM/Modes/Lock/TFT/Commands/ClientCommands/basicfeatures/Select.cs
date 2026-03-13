@@ -8,7 +8,7 @@ namespace DAONTFT.Core.Commands.ClientCommands.basicfeatures;
 
 public class SelectTFTFirst : ICommand
 {
-    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)
+    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         var player = Player.Get(sender);
 
@@ -38,7 +38,7 @@ public class SelectTFTFirst : ICommand
 
 public class SelectTFTSecond : ICommand
 {
-    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, [UnscopedRef] out string response)
+    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         var player = Player.Get(sender);
 

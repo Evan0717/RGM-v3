@@ -3,7 +3,6 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
-using GPUtils.Features.PaintToText.Core;
 using InventorySystem.Configs;
 using InventorySystem.Items.Usables.Scp330;
 using MapGeneration.Holidays;
@@ -86,8 +85,6 @@ namespace RGM.EventArgs
 
             yield return Timing.WaitForSeconds(1);
 
-            Server.ExecuteCommand("rnr");
-
             Tools.PickModes();
             Balls.ForEach(x => x.gameObject.AddComponent<BallComponent>());
 
@@ -143,8 +140,6 @@ namespace RGM.EventArgs
 
             if (AudioPlayer.TryGet("Global AudioPlayer", out AudioPlayer ap))
                 ap.RemoveAllClips();
-
-            Tools.CreateText(new Vector3(231.1433f, 368.6755f, -43.0956f), new Quaternion(0, 90, 0, 90), "<size=100><b><color=#FFF0F0>[</color><color=#FEEAF1>R</color><color=#FDE5F2>G</color><color=#FDDFF3>M</color><color=#FCDAF4>]</color> <color=#FBCFF6>랜</color><color=#FBC9F7>덤</color><color=#FAC4F8>게</color><color=#FABEF9>임</color><color=#F9B9FA>모</color><color=#F9B3FB>드</color></b><color=#F8AEFC>에</color> <color=#F2A9F7>오</color><color=#ECA9F1>신</color> <color=#E0A9E4>것</color><color=#DAA9DE>을</color> <color=#CEAAD1>환</color><color=#C8AACA>영</color><color=#C2AAC4>합</color><color=#BCAABE>니</color><color=#B6AAB7>다</color><color=#B0AAB1>!</color></size>", 12051205);
 
             if (CurrentMode == ModeType.None)
             {
@@ -230,9 +225,7 @@ namespace RGM.EventArgs
                         foreach (var special in Specials)
                         {
                             if (UnityEngine.Random.Range(1, 4) == 1)
-                            {
                                 Tools.LoadMap(special);
-                            }
                         }
 
                         if (UnityEngine.Random.Range(1, 3) == 1)
@@ -356,7 +349,7 @@ namespace RGM.EventArgs
                 Log.Error($"Error sending webhook: {e}");
             }
 
-            while (true)
+            while (Round.IsEnded)
             {
                 var top10 = PlayersReport
                 .OrderByDescending(kv => kv.Value.Damage)
@@ -399,7 +392,7 @@ namespace RGM.EventArgs
 
                         if (found && player != null)
                         {
-                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}><b><i>{player.DisplayNickname}</i></b></color> - {report.Kill}킬 / {report.Death}데스 / {report.Damage}뎀</size>");
+                            sb.AppendLine($"<size=25><color=#{ranking(rank)}>{rank}.</color> {Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}><b><i>{player.DisplayNickname}</i></b></color> - {report.Kill} kill / {report.Death} death / {report.Damage} damage</size>");
                         }
                         else
                         {

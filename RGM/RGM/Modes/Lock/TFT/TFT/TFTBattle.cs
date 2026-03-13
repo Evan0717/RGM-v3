@@ -49,10 +49,6 @@ public static class TFTBattle
         {"신화", "<b><i><color=#F52500>신</color><color=#F12604>화</color> <color=#E9280D>(</color><color=#E52911>M</color><color=#E12A16>y</color><color=#DD2B1A>t</color><color=#D92C1F>h</color><color=#D52D23>i</color><color=#D12E28>c</color><color=#CD2F2C>)</color></i></b>"},
         {"알 수 없음", "<b><i><color=#000000>알</color> <color=#555555>수</color> <color=#AAAAAA>없</color><color=#D4D4D4>음</color></i></b>"}
     };
-    public static Dictionary<string, string> ExtraModes = new Dictionary<string, string>()
-    {
-        {"조우자 없음", "이 "},
-    };
 
     public static string ColorFormat(string text)
     {
@@ -353,7 +349,7 @@ public static class TFTBattle
                 foreach (var hint in hints)
                 {
                     PlayerHints[player].Add(hint);
-                    player.AddHint(hint);
+                    player.AddCustomHint(hint);
                 }
             }
 

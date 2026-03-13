@@ -37,17 +37,17 @@ namespace RGM.API.Features
     {
         public static List<Player> List
         {
-            get => RGM.Instance.Config.FixedMode != ModeType.None ? Player.List.ToList() : Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !x.IsNonePlayer())).ToList();
+            get => RGM.Instance.Config.FixedModes.Count() > 0 ? Player.List.ToList() : Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !x.IsNonePlayer())).ToList();
         }
 
         public static bool IsUsingTranslator(this Player player)
         {
-            return RGM.Instance.Config.FixedMode != ModeType.None ? false : TranslatorPlayers[player] != "ko";
+            return RGM.Instance.Config.FixedModes.Count() > 0 ? false : TranslatorPlayers[player] != "ko";
         }
 
         public static bool IsDND(this Player player)
         {
-            return RGM.Instance.Config.FixedMode != ModeType.None ? false : UsersManager.UsersCache[player.UserId][23] == "1";
+            return RGM.Instance.Config.FixedModes.Count() > 0 ? false : UsersManager.UsersCache[player.UserId][23] == "1";
         }
 
         public static bool IsNonePlayer(this Player player)
@@ -802,7 +802,7 @@ namespace RGM.API.Features
             if (player.IsUsingTranslator() && tag != "chat" && tag != "kill")
             {
                 TranslationManager.TranslatePreserveNewlines(message, TranslatorPlayers[player], translated => 
-                { 
+                {
                     MultiBroadcast.API.BroadcastExtensions.AddBroadcast(player, duration, translated, priority, tag);
                 });
             }
@@ -821,6 +821,20 @@ namespace RGM.API.Features
             }
             else
                 MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, text, tag);
+        }
+
+        public static void AddCustomHint(this Player player, HintServiceMeow.Core.Models.Hints.Hint hint)
+        {
+            if (player.IsUsingTranslator())
+            {
+                TranslationManager.TranslatePreserveNewlines(hint.Text, TranslatorPlayers[player], translated =>
+                {
+                    hint.Text = translated;
+                    HintServiceMeow.Core.Extension.ExiledPlayerExtension.AddHint(player, hint);
+                });
+            }
+            else
+                HintServiceMeow.Core.Extension.ExiledPlayerExtension.AddHint(player, hint);
         }
 
         public static void ExplodeGrenade(this Player player, Vector3? pos = null, float fuseTime = 0, ItemType grenade = ItemType.GrenadeHE, bool ignore = false, bool kill = true)

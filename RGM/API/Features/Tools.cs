@@ -285,7 +285,7 @@ $"""
 
         public static IEnumerator<float> SetWinner(List<Player> playerList, int amount)
         {
-            if (IsWinnerSelected || RGM.Instance.Config.FixedMode != ModeType.None)
+            if (IsWinnerSelected || RGM.Instance.Config.FixedModes.Count() > 0)
                 yield break;
 
             IsWinnerSelected = true;

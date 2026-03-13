@@ -40,14 +40,14 @@ namespace RGM.API.Features
     {
         public static void Setup()
         {
+            Server.ExecuteCommand("rnr");
+
             InventoryLimits.StandardCategoryLimits[ItemCategory.SpecialWeapon] = 8;
             InventoryLimits.StandardCategoryLimits[ItemCategory.SCPItem] = 8;
             InventoryLimits.Config.RefreshCategoryLimits();
 
             foreach (var data in CandyDataDict)
-            {
                 Scp330Candies.DictionarizedCandies.Add(data.Key, data.Value);
-            }
 
             GlobalPlayer = AudioPlayer.CreateOrGet($"Global AudioPlayer", condition: (ReferenceHub hub) =>
             {

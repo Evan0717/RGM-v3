@@ -54,15 +54,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     public void Verified(Player player)
     {
-        if (!aBattle.PlayerWorkstations.ContainsKey(player))
-        {
-            aBattle.PlayerWorkstations.Add(player, new List<WorkstationController>());
-            aBattle.PlayerAbilities.Add(player, new List<Ability>());
-            aBattle.IsSelecting.Add(player, false);
-            aBattle.IsLifeUsed.Add(player, false);
-
-            aBattle.ExtraModeNotion(player);
-        }
+        aBattle.ExtraModeNotion(player);
     }
 
     private void OnSpawned(SpawnedEventArgs ev)
@@ -75,13 +67,23 @@ public class ABattleEventHandler(ABattle aBattle)
         yield return Timing.WaitForSeconds(1);
 
         if (player.IsAlive)
-        {
             ABattle.ApplyPrelude(player);
-        }
     }
 
     private void OnJumping(JumpingEventArgs ev)
     {
+        if (!aBattle.PlayerWorkstations.ContainsKey(ev.Player))
+            aBattle.PlayerWorkstations.Add(ev.Player, new List<WorkstationController>());
+
+        if (!aBattle.PlayerAbilities.ContainsKey(ev.Player))
+            aBattle.PlayerAbilities.Add(ev.Player, new List<Ability>());
+
+        if (!aBattle.IsSelecting.ContainsKey(ev.Player))
+            aBattle.IsSelecting.Add(ev.Player, false);
+
+        if (!aBattle.IsLifeUsed.ContainsKey(ev.Player))
+            aBattle.IsLifeUsed.Add(ev.Player, false);
+
         if (Physics.Raycast(ev.Player.Position, Vector3.down, out var hit, 5, (LayerMask)1))
         {
             if (hit.transform != null)

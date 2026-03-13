@@ -35,9 +35,9 @@ public class AddTFTAbility : ICommand
         return false;
     }
 
-    public string Command { get; } = "addability";
+    public string Command { get; } = "addtftability";
 
-    public string[] Aliases { get; } = { "aa", "add" };
+    public string[] Aliases { get; } = { "addtft" };
 
     public string Description { get; } = "DAONㅣ능력을 추가합니다.";
 }
