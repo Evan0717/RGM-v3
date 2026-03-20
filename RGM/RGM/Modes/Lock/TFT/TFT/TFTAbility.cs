@@ -19,51 +19,6 @@ public abstract class TFTAbility
     public Player Owner { get; set; }
 }
 
-public abstract class EffectTFTAbility : TFTAbility
-{
-    public abstract Dictionary<EffectType, byte> EffectTypes { get; }
-
-    public override void OnEnabled()
-    {
-        foreach (var effect in EffectTypes)
-        {
-            Owner.AddEffect(effect.Key, effect.Value);
-        }
-    }
-
-    public override void OnDisabled()
-    {
-        foreach (var effect in EffectTypes)
-        {
-            Owner.RemoveEffect(effect.Key, effect.Value);
-        }
-    }
-}
-
-public abstract class ItemTFTAbility : TFTAbility
-{
-    public abstract ItemType ItemType { get; }
-    public abstract int Amount { get; }
-
-    public override void OnEnabled()
-    {
-        Owner.AddItem(ItemType, Amount);
-    }
-
-    public override void OnDisabled()
-    {
-        for (int i = 0; i < Amount; i++)
-        {
-            var item = Owner.Items.FirstOrDefault(x => x.Type == ItemType);
-
-            if (item == null)
-                break;
-
-            Owner.RemoveItem(item);
-        }
-    }
-}
-
 public class TFTAbilityData
 {
     public Type Type { get; set; }

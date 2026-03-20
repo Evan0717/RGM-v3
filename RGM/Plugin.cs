@@ -146,7 +146,7 @@ namespace RGM
 
                 // ------------------------------------------------------------------------------------------------------
 
-                Harmony harmony = new Harmony($"Harmony - {DateTime.Now.Ticks}");
+                Harmony harmony = new Harmony($"Harmon[Ey - {DateTime.Now.Ticks}");
 
                 // Postfix
                 harmony.Patch(AccessTools.Method(typeof(Map), nameof(Map.Broadcast), [typeof(ushort), typeof(string), typeof(Broadcast.BroadcastFlags), typeof(bool)]),

@@ -161,6 +161,18 @@ public class ABattleEventHandler(ABattle aBattle)
 
     public void OnPinging(PingingEventArgs ev)
     {
+        if (!aBattle.PlayerWorkstations.ContainsKey(ev.Player))
+            aBattle.PlayerWorkstations.Add(ev.Player, new List<WorkstationController>());
+
+        if (!aBattle.PlayerAbilities.ContainsKey(ev.Player))
+            aBattle.PlayerAbilities.Add(ev.Player, new List<Ability>());
+
+        if (!aBattle.IsSelecting.ContainsKey(ev.Player))
+            aBattle.IsSelecting.Add(ev.Player, false);
+
+        if (!aBattle.IsLifeUsed.ContainsKey(ev.Player))
+            aBattle.IsLifeUsed.Add(ev.Player, false);
+
         Vector3 pos = ev.Position;
 
         if (Physics.Raycast(new Vector3(pos.x, pos.y + 1, pos.z), Vector3.down, out var hit, 5, (LayerMask)1))

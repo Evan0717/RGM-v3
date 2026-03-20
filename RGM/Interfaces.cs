@@ -166,6 +166,7 @@ public enum ModeType
     Agar,
     TFT,
     RandomBlockMode,
+    Rank
 }
 
 
