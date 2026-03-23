@@ -603,9 +603,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
@@ -614,7 +611,7 @@
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
     <Reference Include="AudioPlayerApi">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\dependencies\AudioPlayerApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\dependencies\AudioPlayerApi.dll</HintPath>
     </Reference>
     <Reference Include="Caress">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\Caress.dll</HintPath>
@@ -622,40 +619,26 @@
     <Reference Include="CommandSystem.Core">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DiscordInteraction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Privacy\DiscordInteraction\bin\Debug\DiscordInteraction.dll</HintPath>
+    <Reference Include="Exiled.API">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\SCP Secret Laboratory\LabAPI\dependencies\global\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\SCP Secret Laboratory\LabAPI\dependencies\global\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.CreditTags">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CreditTags, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.CreditTags.dll</HintPath>
+    <Reference Include="Exiled.CustomItems">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\Exiled.CustomItems.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomItems, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.CustomItems.dll</HintPath>
+    <Reference Include="Exiled.CustomRoles">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\Exiled.CustomRoles.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomRoles, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.CustomRoles.dll</HintPath>
+    <Reference Include="Exiled.Events">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Loader, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\SCP Secret Laboratory\LabAPI\plugins\global\Exiled.Loader.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Permissions, Version=9.12.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
+    <Reference Include="Exiled.Permissions">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="HintServiceMeow-Exiled">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\HintServiceMeow-Exiled.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\HintServiceMeow-Exiled.dll</HintPath>
     </Reference>
     <Reference Include="LabApi, Version=1.1.1.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
@@ -669,14 +652,13 @@
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\Mirror.dll</HintPath>
     </Reference>
     <Reference Include="MultiBroadcast">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\MultiBroadcast.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\MultiBroadcast.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>..\..\..\SCPSL\14.1\SCPSL_Data\Managed\netstandard.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.1.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NorthwoodLib">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\NorthwoodLib.dll</HintPath>
@@ -685,16 +667,10 @@
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\Pooling.dll</HintPath>
     </Reference>
     <Reference Include="ProjectMER">
-      <HintPath>C:\Users\msnha\AppData\Roaming\SCP Secret Laboratory\LabAPI\plugins\global\ProjectMER.dll</HintPath>
-    </Reference>
-    <Reference Include="PveExiled">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\dependencies\PveExiled.dll</HintPath>
-    </Reference>
-    <Reference Include="SCPSLAudioApi">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\SCP Secret Laboratory\LabAPI\plugins\global\ProjectMER.dll</HintPath>
     </Reference>
     <Reference Include="SLPlayerRotation">
-      <HintPath>C:\Users\msnha\AppData\Roaming\EXILED\Plugins\dependencies\SLPlayerRotation.dll</HintPath>
+      <HintPath>..\..\..\..\..\Users\pkj73\AppData\Roaming\EXILED\Plugins\dependencies\SLPlayerRotation.dll</HintPath>
     </Reference>
     <Reference Include="Snake">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\Snake.dll</HintPath>
@@ -710,8 +686,14 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
