@@ -111,7 +111,7 @@ Are you worried BGM might be copyrighted by YouTube? Use this feature.
                     "Korean (ko)",
                     "English (en)",
                 },
-                defaultOptionIndex: RGM.Instance.Config.EN ? 1 : 0,
+                defaultOptionIndex: Main.Instance.Config.EN ? 1 : 0,
                 hintDescription: 
 """
 언어의 장벽을 부수려면 이 설정을 사용하세요.

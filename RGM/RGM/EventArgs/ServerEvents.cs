@@ -39,7 +39,7 @@ namespace RGM.EventArgs
 
             yield return Timing.WaitForSeconds(1f);
 
-            Server.Name = Server.Name.Replace("{version}", $"v{RGM.Instance.Version.Major}.{RGM.Instance.Version.Minor}.{RGM.Instance.Version.Build}");
+            Server.Name = Server.Name.Replace("{version}", $"v{Main.Instance.Version.Major}.{Main.Instance.Version.Minor}.{Main.Instance.Version.Build}");
 
             try
             {
@@ -64,7 +64,7 @@ namespace RGM.EventArgs
 
             UsersManager.LoadUsers();
 
-            Tools.PlayGlobalAudio("Escape the Backrooms OST - Menu", 1.5f, true);
+            Tools.PlayGlobalAudio("First Blood (Cover)", 1.5f, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;

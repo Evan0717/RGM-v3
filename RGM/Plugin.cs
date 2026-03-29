@@ -24,9 +24,9 @@ using System.Linq;
 
 namespace RGM
 {
-    public class RGM : Plugin<Config>
+    public class Main : Plugin<Config>
     {
-        public static RGM Instance;
+        public static Main Instance;
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
@@ -139,14 +139,14 @@ namespace RGM
                 // ------------------------------------------------------------------------------------------------------
 
                 TranslationManager.ApiKey = Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "GoogleAPIKey.txt");
-                TranslationManager.IsEnabled = true;
-                TranslationManager.Debug = false;
+                TranslationManager.IsEnabled = false;
+                TranslationManager.Debug = true;
 
                 TranslationManager.StartWorker();
 
                 // ------------------------------------------------------------------------------------------------------
 
-                Harmony harmony = new Harmony($"Harmon[Ey - {DateTime.Now.Ticks}");
+                Harmony harmony = new Harmony($"Harmony - {DateTime.Now.Ticks}");
 
                 // Postfix
                 harmony.Patch(AccessTools.Method(typeof(Map), nameof(Map.Broadcast), [typeof(ushort), typeof(string), typeof(Broadcast.BroadcastFlags), typeof(bool)]),

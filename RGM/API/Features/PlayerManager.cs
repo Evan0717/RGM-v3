@@ -37,17 +37,17 @@ namespace RGM.API.Features
     {
         public static List<Player> List
         {
-            get => RGM.Instance.Config.FixedModes.Count() > 0 ? Player.List.ToList() : Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !x.IsNonePlayer())).ToList();
+            get => Main.Instance.Config.FixedModes.Count() > 0 ? Player.List.ToList() : Player.List.Where(x => x.IsNPC ? true : (!x.IsDND() && !x.IsNonePlayer())).ToList();
         }
 
         public static bool IsUsingTranslator(this Player player)
         {
-            return RGM.Instance.Config.FixedModes.Count() > 0 ? false : TranslatorPlayers[player] != "ko";
+            return Main.Instance.Config.FixedModes.Count() > 0 ? false : TranslatorPlayers[player] != "ko";
         }
 
         public static bool IsDND(this Player player)
         {
-            return RGM.Instance.Config.FixedModes.Count() > 0 ? false : UsersManager.UsersCache[player.UserId][23] == "1";
+            return Main.Instance.Config.FixedModes.Count() > 0 ? false : UsersManager.UsersCache[player.UserId][23] == "1";
         }
 
         public static bool IsNonePlayer(this Player player)

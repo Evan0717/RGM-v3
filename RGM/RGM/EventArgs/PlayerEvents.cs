@@ -39,6 +39,7 @@ using System.Windows.Forms;
 using RGM.Modes.SubClass;
 
 using static RGM.IEnumerators.ServerIEnumerator;
+using RGM.Modes;
 
 
 namespace RGM.EventArgs
@@ -204,6 +205,8 @@ namespace RGM.EventArgs
                     ev.Player.AddItem(ItemType.Lantern);
 
                 ev.Player.AddItem(itemType);
+                ev.Player.AddEffect(EffectType.MovementBoost, 50);
+                ev.Player.AddEffect(EffectType.Lightweight, 100);
 
                 if (SelectMode.Contains("Secret"))
                     ev.Player.EnableEffect(EffectType.Invisible);
@@ -415,7 +418,7 @@ namespace RGM.EventArgs
                                     .Replace("{RC}", $"{uc[1]}")
                                     .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
                                     .Replace("{Tip}", Tip)
-                                    .Replace("{Version}", $"{RGM.Instance.Version}")
+                                    .Replace("{Version}", $"{Main.Instance.Version}")
                                     .Replace("{Logo}", $"{Logo}");
 
                                 foreach (string name in HighlightModes.Select(x => x.GetModeData().Name))
@@ -682,18 +685,18 @@ namespace RGM.EventArgs
         
         public static void OnHurting(HurtingEventArgs ev)
         {
-            if (Round.IsLobby || Round.IsEnded)
-                return;
-
             if (ev.DamageHandler.Type == DamageType.Falldown && ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) && lightweight.IsEnabled)
             {
                 if (HolidayUtils.IsHolidayActive(HolidayType.Halloween) && ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) && metal.IsEnabled)
                 {
-                    
+
                 }
                 else
                     ev.IsAllowed = false;
             }
+
+            if (Round.IsLobby || Round.IsEnded)
+                return;
 
             if (GodModePlayers.Contains(ev.Player))
             {

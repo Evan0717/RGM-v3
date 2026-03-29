@@ -29,6 +29,9 @@ namespace RGM.Modes
 {
     public static class RankSetting
     {
+        private const int RankSettingIdStart = 2044;
+        private static readonly Dictionary<int, (RankAbilityCategory AbilityCategory, RankCategory? RankCategory)> RankDropdownMeta = new();
+
         public static HeaderSetting RankHeader { get; private set; } = new HeaderSetting(190023, "경쟁전");
 
         public static DropdownSetting ClassDSetting { get; private set; }
@@ -36,93 +39,114 @@ namespace RGM.Modes
         public static void Init()
         {
             List<DropdownSetting> dropdowns = new();
+            RankDropdownMeta.Clear();
+            int nextSettingId = RankSettingIdStart;
 
-            foreach (var settingDict in RankInfo.변칙성)
+            var categories = RankInfo.변칙성.Keys.Union(RankInfo.가젯.Keys).Distinct();
+
+            foreach (var category in categories)
             {
-                dropdowns.Add(
-                new DropdownSetting(
-                id: 2044,
-                label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.변칙성)}>변칙성</color> {(settingDict.Key.ToString().Contains("SCP") ? settingDict.Key.ToString().Replace("_", "-") : settingDict.Key.ToString().Replace("_", " "))}",
-                options: RankInfo.변칙성[settingDict.Key].Keys,
-                header: RankHeader
-                ));
+                string roleName = category.ToString().Contains("SCP") ? category.ToString().Replace("_", "-") : category.ToString().Replace("_", " ");
+
+                if (RankInfo.변칙성.TryGetValue(category, out var anomalyDict))
+                {
+                    int settingId = nextSettingId++;
+                    dropdowns.Add(new DropdownSetting(
+                        id: settingId,
+                        label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.변칙성)}>변칙성</color> {roleName}",
+                        hintDescription: string.Join("\n", anomalyDict.Select(x => $"• {x.Key}: {x.Value.Item1}")),
+                        options: anomalyDict.Keys,
+                        header: RankHeader
+                    ));
+                    RankDropdownMeta[settingId] = (RankAbilityCategory.변칙성, category);
+                }
+
+                if (RankInfo.가젯.TryGetValue(category, out var gadgetDict))
+                {
+                    int settingId = nextSettingId++;
+                    dropdowns.Add(new DropdownSetting(
+                        id: settingId,
+                        label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.가젯)}>가젯</color> {roleName}",
+                        hintDescription: string.Join("\n", gadgetDict.Select(x => $"• {x.Key}: {x.Value.Item1}")),
+                        options: gadgetDict.Keys,
+                        header: RankHeader
+                    ));
+                    RankDropdownMeta[settingId] = (RankAbilityCategory.가젯, category);
+                }
             }
 
-            foreach (var settingDict in RankInfo.가젯)
-            {
-                dropdowns.Add(
-                new DropdownSetting(
-                id: 2045,
-                label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.가젯)}>가젯</color> {(settingDict.Key.ToString().Contains("SCP") ? settingDict.Key.ToString().Replace("_", "-") : settingDict.Key.ToString().Replace("_", " "))}",
-                options: RankInfo.가젯[settingDict.Key].Keys,
-                header: RankHeader
-                ));
-            }
-
-            foreach (var settingDict in RankInfo.기어)
-            {
-                dropdowns.Add(
-                new DropdownSetting(
-                id: 2046,
+            int gearSettingId = nextSettingId++;
+            dropdowns.Add(new DropdownSetting(
+                id: gearSettingId,
                 label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.기어)}>기어</color>",
+                hintDescription: string.Join("\n", RankInfo.기어.Select(x => $"• {x.Key}: {x.Value.Item1}")),
                 options: RankInfo.기어.Keys,
                 header: RankHeader
-                ));
-            }
+            ));
+            RankDropdownMeta[gearSettingId] = (RankAbilityCategory.기어, null);
 
             SettingBase.Register(dropdowns);
         }
 
         public static void OnSSInput(ReferenceHub sender, ServerSpecificSettingBase setting)
         {
+            if (setting is not SSDropdownSetting dropdown)
+                return;
+
+            if (!RankDropdownMeta.TryGetValue(setting.SettingId, out var meta))
+                return;
+
             Player player = Player.Get(sender);
+            if (player is null)
+                return;
 
-            if (setting is SSDropdownSetting dropdown)
+            string selectedOption = dropdown.SyncSelectionText;
+            if (string.IsNullOrWhiteSpace(selectedOption))
+                return;
+
+            RankCategory rankCategory = meta.RankCategory ?? default;
+            RankAbilityType abilityType;
+
+            if (meta.AbilityCategory == RankAbilityCategory.변칙성)
             {
-                RankAbilityCategory abilityCategory;
+                if (!meta.RankCategory.HasValue)
+                    return;
 
-                if (setting.Label.Contains("변칙성"))
-                    abilityCategory = RankAbilityCategory.변칙성;
-                else if (setting.Label.Contains("가젯"))
-                    abilityCategory = RankAbilityCategory.가젯;
-                else
-                    abilityCategory = RankAbilityCategory.기어;
+                if (!RankInfo.변칙성.TryGetValue(meta.RankCategory.Value, out var anomalies) ||
+                    !anomalies.TryGetValue(selectedOption, out var anomalyInfo))
+                    return;
 
-                string rawLabel = setting.Label;
-
-                string rankText = rawLabel.Split('>').Last().Trim();
-
-                RankCategory rankCategory = Enum.GetValues(typeof(RankCategory))
-                    .Cast<RankCategory>()
-                    .FirstOrDefault(x =>
-                    {
-                        string name = x.ToString();
-                        name = name.Contains("SCP") ? name.Replace("_", "-") : name.Replace("_", " ");
-                        return rankText.Contains(name);
-                    });
-
-                string selectedOption = dropdown.Options.ElementAt(dropdown.SyncSelectionIndexValidated);
-
-                RankAbilityType abilityType;
-
-                if (abilityCategory == RankAbilityCategory.변칙성)
-                    abilityType = RankInfo.변칙성[rankCategory][selectedOption].Item2;
-                else if (abilityCategory == RankAbilityCategory.가젯)
-                    abilityType = RankInfo.가젯[rankCategory][selectedOption].Item2;
-                else
-                    abilityType = RankInfo.기어[selectedOption].Item2;
-
-                if (!RankInfo.PlayerRankSettingAbilities.ContainsKey(player))
-                    RankInfo.PlayerRankSettingAbilities[player] = new();
-
-                if (!RankInfo.PlayerRankSettingAbilities[player].ContainsKey(rankCategory))
-                    RankInfo.PlayerRankSettingAbilities[player][rankCategory] = new();
-
-                var list = RankInfo.PlayerRankSettingAbilities[player][rankCategory];
-
-                if (!list.Contains(abilityType))
-                    list.Add(abilityType);
+                abilityType = anomalyInfo.Item2;
             }
+            else if (meta.AbilityCategory == RankAbilityCategory.가젯)
+            {
+                if (!meta.RankCategory.HasValue)
+                    return;
+
+                if (!RankInfo.가젯.TryGetValue(meta.RankCategory.Value, out var gadgets) ||
+                    !gadgets.TryGetValue(selectedOption, out var gadgetInfo))
+                    return;
+
+                abilityType = gadgetInfo.Item2;
+            }
+            else
+            {
+                if (!RankInfo.기어.TryGetValue(selectedOption, out var gearInfo))
+                    return;
+
+                abilityType = gearInfo.Item2;
+            }
+
+            if (!RankInfo.PlayerRankSettingAbilities.ContainsKey(player))
+                RankInfo.PlayerRankSettingAbilities[player] = new();
+
+            if (!RankInfo.PlayerRankSettingAbilities[player].ContainsKey(rankCategory))
+                RankInfo.PlayerRankSettingAbilities[player][rankCategory] = new();
+
+            var list = RankInfo.PlayerRankSettingAbilities[player][rankCategory];
+
+            if (!list.Contains(abilityType))
+                list.Add(abilityType);
         }
     }
 }

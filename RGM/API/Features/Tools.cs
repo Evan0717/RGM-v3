@@ -285,7 +285,7 @@ $"""
 
         public static IEnumerator<float> SetWinner(List<Player> playerList, int amount)
         {
-            if (IsWinnerSelected || RGM.Instance.Config.FixedModes.Count() > 0)
+            if (IsWinnerSelected || Main.Instance.Config.FixedModes.Count() > 0)
                 yield break;
 
             IsWinnerSelected = true;
@@ -929,7 +929,7 @@ $"""
 
         public static void MessageTranslated(string message, string translation, bool isHeld = false, bool isNoisy = true, bool isSubtitles = true)
         {
-            if (RGM.Instance.Config.EN)
+            if (Main.Instance.Config.EN)
             {
                 TranslationManager.TranslatePreserveNewlines(message, "en", translated =>
                 {

@@ -39,7 +39,7 @@ namespace RGM.API.Features
         public static string ApiKey { get; set; } = string.Empty;
 
         /// <summary>Minimum delay between outbound requests (seconds).</summary>
-        public static float MinInterval { get; set; } = 0;
+        public static float MinInterval { get; set; } = 0.5f;
 
         /// <summary>Max retry count on transient failures (429/5xx/network).</summary>
         public static int MaxRetries { get; set; } = 2;
@@ -202,8 +202,8 @@ namespace RGM.API.Features
                     _fileCache = new();
                 }
 
-                if (Debug)
-                    Log.Info($"[TranslationManager] Loaded file cache ({_fileCache.Sum(k => k.Value.Count)} entries)");
+                //if (Debug)
+                //    Log.Info($"[TranslationManager] Loaded file cache ({_fileCache.Sum(k => k.Value.Count)} entries)");
             }
             catch (Exception e)
             {
@@ -367,7 +367,9 @@ namespace RGM.API.Features
                     finalLines[lineIndex] = joined;
 
                     if (--remainingLines == 0)
+                    {
                         onSuccess(string.Join("\n", finalLines));
+                    }
                 }
             }
         }
@@ -442,6 +444,9 @@ namespace RGM.API.Features
             callbacks.Success.Add(onSuccess);
             if (onError != null) callbacks.Error.Add(onError);
             _inFlight[cacheKey] = callbacks;
+
+            if (Debug)
+                Log.Debug($"[TranslationManager] Queueing new translation: '{text}' (Target: {target})");
 
             _queue.Enqueue(new Request
             {
@@ -524,75 +529,83 @@ namespace RGM.API.Features
             }
         }
 
-        private static IEnumerator<float> SendRequest(Request req) 
-        { 
-            string langKey = $"*->{req.Target}"; 
-            
-            if (_fileCache.TryGetValue(langKey, out var cachedDict) && cachedDict.TryGetValue(req.Text, out var cachedTranslated)) 
-            { 
-                if (Debug) 
-                    Log.Debug("[TranslationManager] file cache hit"); 
-                
-                _cache.Set(req.Key, cachedTranslated); 
-                
-                Complete(req, cachedTranslated, null); 
-                yield break; 
+        private static IEnumerator<float> SendRequest(Request req)
+        {
+            string url = $"https://translation.googleapis.com/v3/projects/random-game-mode/locations/global:translateText?key={ApiKey}";
+
+            var body = new
+            {
+                contents = new[] { req.Text },
+                targetLanguageCode = req.Target,
+                mimeType = "text/plain"
+            };
+
+            string json = JsonConvert.SerializeObject(body);
+
+            using UnityWebRequest request = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.timeout = 10;
+
+            yield return Timing.WaitUntilDone(request.SendWebRequest());
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                string err = request.error;
+                int code = (int)request.responseCode;
+
+                if (Debug)
+                    Log.Warn($"[TranslationManager] HTTP fail ({code}): {err}");
+
+                bool isTimeout = err != null && err.ToLower().Contains("timeout");
+
+                if ((IsRetryable(code) || isTimeout) && req.Retry < MaxRetries)
+                {
+                    req.Retry++;
+                    yield return Timing.WaitForSeconds(ComputeBackoff(req.Retry));
+                    _queue.Enqueue(req);
+                    yield break;
+                }
+
+                Complete(req, req.Text, err ?? $"HTTP {code}");
+                yield break;
             }
 
-            string url = $"https://translation.googleapis.com/language/translate/v2?key={ApiKey}"; 
-            WWWForm form = new WWWForm(); 
-            form.AddField("q", req.Text); 
-            form.AddField("target", req.Target); 
-            using UnityWebRequest request = UnityWebRequest.Post(url, form); 
-            
-            yield return Timing.WaitUntilDone(request.SendWebRequest()); 
+            try
+            {
+                var root = JObject.Parse(request.downloadHandler.text);
+                string translated = root["translations"]?[0]?["translatedText"]?.Value<string>();
 
-            if (request.result != UnityWebRequest.Result.Success) 
-            { 
-                string err = request.error; 
-                int code = (int)request.responseCode; 
-                if (Debug) Log.Warn($"[TranslationManager] HTTP fail ({code}): {err}"); 
-                if (IsRetryable(code) && req.Retry < MaxRetries) 
-                { 
-                    req.Retry++; 
-                    
-                    yield return Timing.WaitForSeconds(ComputeBackoff(req.Retry)); 
+                if (string.IsNullOrWhiteSpace(translated))
+                    throw new Exception("translatedText not found");
 
-                    _queue.Enqueue(req); 
-                    yield break; 
-                } 
-                
-                Complete(req, req.Text, err ?? $"HTTP {code}"); 
-                yield break; 
-            } 
-            try 
-            { 
-                var root = JObject.Parse(request.downloadHandler.text); 
-                string translated = root["data"]?["translations"]?.First?["translatedText"]?.Value<string>(); 
-                if (translated == null) 
-                    throw new Exception("translatedText not found"); translated = WebUtility.HtmlDecode(translated); 
-                
-                _cache.Set(req.Key, translated); 
-                
-                if (!_fileCache.TryGetValue(langKey, out var dict)) 
-                { 
-                    dict = new Dictionary<string, string>(); 
-                    _fileCache[langKey] = dict; 
-                } 
-                
-                dict[req.Text] = translated; 
+                translated = WebUtility.HtmlDecode(translated);
 
-                TrySaveFileCache(); 
+                _cache.Set(req.Key, translated);
 
-                Complete(req, translated, null); 
-            } 
-            catch (Exception e) 
-            { 
-                if (Debug) 
-                    Log.Warn($"[TranslationManager] Parse fail: {e.Message}"); 
-                
-                Complete(req, req.Text, e.Message); 
-            } 
+                string langKey = $"*->{req.Target}";
+                if (!_fileCache.TryGetValue(langKey, out var dict))
+                {
+                    dict = new Dictionary<string, string>();
+                    _fileCache[langKey] = dict;
+                }
+
+                dict[req.Text] = translated;
+
+                TrySaveFileCache();
+
+                Complete(req, translated, null);
+            }
+            catch (Exception e)
+            {
+                if (Debug)
+                    Log.Warn($"[TranslationManager] Parse fail: {e.Message}");
+
+                Complete(req, req.Text, e.Message);
+            }
         }
 
         private static void Complete(Request req, string result, string error)
@@ -629,7 +642,7 @@ namespace RGM.API.Features
             // 0: network / unknown
             if (httpCode == 0) return true;
             if (httpCode == 429) return true;
-            if (httpCode == 403) return true; // quota/rate can be 403 in some cases
+            if (httpCode == 403) return false; // quota/rate can be 403 in some cases
             if (httpCode >= 500 && httpCode <= 599) return true;
             return false;
         }

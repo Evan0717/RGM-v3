@@ -13,6 +13,7 @@ using PlayerRoles;
 using ProjectMER.Features;
 using Respawning;
 using RGM.API.Features;
+using RGM.Modes.Abilities.Normal;
 using RGM.UserSettings;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.Rank)]
+    [Mode(ModeCategory.Private, ModeInfo.Lock, ModeType.Rank)]
     public class Rank : Mode
     {
         public override string Name => "경쟁전";
@@ -70,7 +71,7 @@ namespace RGM.Modes
 
             RankSetting.Init();
 
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += ServerSpecificSettings.OnSSInput;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived += RankSetting.OnSSInput;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         }
@@ -79,7 +80,7 @@ namespace RGM.Modes
         {
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
 
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ServerSpecificSettings.OnSSInput;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= RankSetting.OnSSInput;
 
             Timing.KillCoroutines(_onModeStarted);
         }
@@ -88,6 +89,9 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(30);
 
+            foreach (var p in Player.List)
+                p.AddBroadcast(3, "앙");
+
             foreach (var player in RankInfo.PlayerRankSettingAbilities.Keys.ToList())
             {
                 RankCategory rankCategory = player.GetRankCategory();
@@ -95,7 +99,11 @@ namespace RGM.Modes
                 List<RankAbilityType> list = RankInfo.PlayerRankSettingAbilities[player][rankCategory];
 
                 foreach (var ability in list)
+                {
                     RankBattle.AddRankAbility(player, ability);
+
+                    player.AddBroadcast(3, $"<size=20>{ability.ToString()}</size>");
+                }
             }
         }
 
