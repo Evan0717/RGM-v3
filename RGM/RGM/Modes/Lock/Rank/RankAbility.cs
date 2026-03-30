@@ -233,7 +233,7 @@ public enum RankAbilityType
     요리사,
 
     // SCP-079
-    Installed,
+    Install,
     Upgrade,
     Mute,
 

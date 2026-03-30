@@ -69,7 +69,7 @@ namespace RGM.Modes
             },
             { RankCategory.SCP_079, new()
             {
-            {"Install", ("80초 간 10초마다 10씩 경험치를 얻습니다.", RankAbilityType.Installed)},
+            {"Install", ("80초 간 10초마다 10씩 경험치를 얻습니다.", RankAbilityType.Install)},
             {"Upgrade", ("경험치 획득량이 20% 증가합니다.", RankAbilityType.Upgrade)},
             {"Mute", ("SCP-2176에 면역이 됩니다.", RankAbilityType.Mute)},
             }

@@ -133,14 +133,24 @@
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\기어\속도.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\D계급\강렬한_의지.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\D계급\밤눈.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049\사신.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049\자원봉사자.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049\장의사.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049_2\요리사.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049_2\광기.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\Mute.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\Upgrade.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\Install.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\지문_인식.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\선임_연구원.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\구미호\조직.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\구미호\베테랑.cs" />
-    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\반란\송수신 해킹.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\반란\송수신_해킹.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\반란\방독면.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\시설_경비\변칙_감지.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\시설_경비\위기_감지.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\튜토리얼\선천적_체질.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\튜토리얼\예능.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankBattle.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankInfo.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankSetting.cs" />
@@ -755,15 +765,11 @@
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\반란\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\시설_경비\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\튜토리얼\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_049_2\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_096\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_106\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_173\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_3114\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\튜토리얼\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
