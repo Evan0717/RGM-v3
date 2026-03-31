@@ -527,6 +527,7 @@
     <Compile Include="RGM\Modes\Plus\Moon\Moon.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\NonePlayer\NonePlayer.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\Pet\Capybara.cs" />
+    <Compile Include="RGM\Modes\Plus\Subclass\Steve\Steve.cs" />
     <Compile Include="RGM\Modes\Plus\TripleAxel\TripleAxel.cs" />
     <Compile Include="RGM\Modes\Set\AddScp\AddScp.cs" />
     <Compile Include="RGM\Modes\Set\AddScp\Scps\Scp005\Commands.cs" />
@@ -726,6 +727,10 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
