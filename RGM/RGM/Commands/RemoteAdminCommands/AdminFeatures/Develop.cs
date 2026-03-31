@@ -2,22 +2,26 @@
 using CommandSystem;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-
+using MEC;
+using Mirror;
 using PlayerRoles;
 using ProjectMER.Features;
+using ProjectMER.Features.Objects;
 using ProjectMER.Features.Serializable;
 using RGM.API;
 using RGM.API.Components;
 using RGM.API.Features;
 using RGM.Modes;
+using RGM.Modes.SubClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using UnityEngine;
 using static PlayerList;
-using static UnityEngine.GraphicsBuffer;
 using static RGM.Variables.Variable;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Commands.RemoteAdminCommands
 {
@@ -60,38 +64,35 @@ namespace RGM.Commands.RemoteAdminCommands
     }
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class Test : ICommand
+    public class Test : ICommand, IUsageProvider
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
-
-            if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 100))
+            if (arguments.Count < 1)
             {
-                LabApi.Features.Wrappers.PrimitiveObjectToy toy = LabApi.Features.Wrappers.PrimitiveObjectToy.Create();
-                toy.Type = PrimitiveType.Sphere;
-                toy.Position = hit.point;
-                toy.Scale = new Vector3(0.3f, 0.3f, 0.3f);
-                toy.Color = Color.red;
-                toy.GameObject.AddComponent<BallComponent>();
-                toy.Spawn();
-
-                response = "Complete!";
-                return true;
-            }
-            else
-            {
-                response = "Raycast failed!";
+                response = "플레이어 지정 필요";
                 return false;
             }
+            Player player = Player.Get(arguments.At(0));
+            if (player == null)
+            {
+                response = "플레이어 없음";
+                return false;
+            }
+
+            Steve.Create(player);
+            response = "적용 완료";
+            return true;
         }
 
         public string Command { get; } = "test";
 
-        public string[] Aliases { get; } = {};
+        public string[] Aliases { get; } = { };
 
-        public string Description { get; } = "테스트용 명령어";
+        public string Description { get; } = "테스트용";
 
         public bool SanitizeResponse { get; } = true;
+
+        public string[] Usage { get; } = { "%player%" };
     }
 }
