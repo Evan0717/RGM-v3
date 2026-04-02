@@ -560,8 +560,6 @@ namespace RGM.EventArgs
 
                 if (ev.Player.IsScpRole())
                     Timing.RunCoroutine(ScpGlow(ev.Player));
-
-                Steve.Create(ev.Player);
             }
 
             if (ev.Reason == SpawnReason.RoundStart)
