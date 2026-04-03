@@ -76,7 +76,7 @@ namespace RGM.Modes
             },
             { RankCategory.SCP_096, new()
             {
-            {"본능", ("분노를 제어할 수 없습니다. 가장 가까운 목표물로 화면이 고정됩니다.", RankAbilityType.본능)},
+            {"본능", ("주변에 있는 인간들이 점점 위를 올려다보게 됩니다.", RankAbilityType.본능)},
             {"날카로움Ⅴ", ("공격력이 39 증가합니다.", RankAbilityType.날카로움_5)},
             }
             },
@@ -89,7 +89,7 @@ namespace RGM.Modes
             { RankCategory.SCP_173, new()
             {
             {"좋아, 자연스러웠어!", ("순간이동 시, 0.7초 동안 은신 상태가 됩니다.", RankAbilityType.좋아_자연스러웠어)},
-            {"피규어", ("몸 크기가 0.8로 조정됩니다.", RankAbilityType.피규어)},
+            {"피규어", ("체력이 500 증가하고, 몸 크기가 0.8로 조정됩니다.", RankAbilityType.피규어)},
             }
             },
             { RankCategory.SCP_939, new()
