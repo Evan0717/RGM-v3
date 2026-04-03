@@ -99,7 +99,7 @@ namespace DAONTFT.Core.IEnumerators
                         Id = "증강 리스트",
                         XCoordinate = -300,
                         YCoordinate = 100,
-                        Alignment = HintAlignment.Left
+                        Alignment = HintAlignment.Right
                     };
 
                     Owner.AddCustomHint(hint);

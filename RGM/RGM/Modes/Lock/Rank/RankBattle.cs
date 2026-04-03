@@ -1,6 +1,12 @@
 ﻿using DAONTFT.Core.TFT;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
+using HintServiceMeow.Core.Enum;
+using HintServiceMeow.Core.Extension;
+using MEC;
+using RGM.API.Features;
 using System;
+using System.Collections.Generic;
 
 namespace RGM.Modes
 {
@@ -57,6 +63,86 @@ namespace RGM.Modes
         public static void Reset(this Player player)
         {
             player.RemoveAllRankAbilities();
+        }
+
+        public static IEnumerator<float> UpgradeDisplay(Player Owner)
+        {
+            string hintDescription = $"[ESC] -> [Settings] -> [Server-specific]ㅣ<color={RankAbilityCategory.변칙성.GetColor()}>변칙성</color>, <color={RankAbilityCategory.가젯.GetColor()}>가젯</color>, <color={RankAbilityCategory.기어.GetColor()}>기어</color>를 미리 설정해두세요.";
+
+            HintServiceMeow.Core.Models.Hints.Hint hint = new HintServiceMeow.Core.Models.Hints.Hint
+            {
+                Text = $"",
+            };
+
+            while (true)
+            {
+                if (Owner.IsAlive)
+                {
+                    List<string> queue = new();
+
+                    if (RankInfo.PlayerRankAbilities.TryGetValue(Owner, out var abilities))
+                    {
+                        foreach (var ability in abilities)
+                        {
+                            queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
+                        }
+                    }
+                    else
+                    {
+                        queue.Add(hintDescription);
+                    }
+
+                    hint = new HintServiceMeow.Core.Models.Hints.Hint
+                    {
+                        Text = $"<size=15>{string.Join("\n", queue)}</size>",
+                        Id = "능력 리스트",
+                        XCoordinate = 300,
+                        YCoordinate = 100,
+                        Alignment = HintAlignment.Left
+                    };
+
+                    Owner.AddCustomHint(hint);
+
+                    yield return Timing.WaitForSeconds(1);
+
+                    Owner.RemoveHint(hint);
+                }
+                else if (Owner.Role is SpectatorRole spectator && spectator.SpectatedPlayer != null)
+                {
+                    List<string> queue = new();
+
+                    if (RankInfo.PlayerRankAbilities.TryGetValue(spectator.SpectatedPlayer, out var abilities))
+                    {
+                        foreach (var ability in abilities)
+                        {
+                            queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
+                        }
+                    }
+                    else
+                    {
+                        queue.Add(hintDescription);
+                    }
+
+                    hint = new HintServiceMeow.Core.Models.Hints.Hint
+                    {
+                        Text = $"<size=15>{string.Join("\n", queue)}</size>",
+                        Id = "능력 리스트",
+                        XCoordinate = 300,
+                        YCoordinate = 100,
+                        Alignment = HintAlignment.Left
+                    };
+
+                    Owner.AddCustomHint(hint);
+
+                    yield return Timing.WaitForSeconds(1);
+
+                    Owner.RemoveHint(hint);
+                }
+                else
+                {
+                    yield return Timing.WaitForSeconds(1);
+                }
+            }
         }
     }
 }

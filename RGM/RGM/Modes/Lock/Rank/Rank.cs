@@ -67,6 +67,7 @@ namespace RGM.Modes
                 });
             }
 
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
 
             RankSetting.Init();
@@ -78,6 +79,7 @@ namespace RGM.Modes
 
         public override void OnDisabled()
         {
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
 
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= RankSetting.OnSSInput;
@@ -90,7 +92,7 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(30);
 
             foreach (var p in Player.List)
-                p.AddBroadcast(3, "앙");
+                Verified(p);
 
             foreach (var player in RankInfo.PlayerRankSettingAbilities.Keys.ToList())
             {
@@ -105,6 +107,16 @@ namespace RGM.Modes
                     player.AddBroadcast(3, $"<size=20>{ability.ToString()}</size>");
                 }
             }
+        }
+
+        void OnVerified(VerifiedEventArgs ev)
+        {
+            Verified(ev.Player);
+        }
+        
+        void Verified(Player player)
+        {
+            Timing.RunCoroutine(RankBattle.UpgradeDisplay(player));
         }
 
         void OnChangingRole(ChangingRoleEventArgs ev)

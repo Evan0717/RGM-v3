@@ -116,6 +116,28 @@ public static class RankCategoryExtensions
         };
     }
 
+    public static RoleTypeId GetRoleCategory(this RankCategory category)
+    {
+        return category switch
+        {
+            RankCategory.D계급 => RoleTypeId.ClassD,
+            RankCategory.과학자 => RoleTypeId.Scientist,
+            RankCategory.시설_경비 => RoleTypeId.FacilityGuard,
+            RankCategory.구미호 => RoleTypeId.NtfPrivate,
+            RankCategory.반란 => RoleTypeId.ChaosRifleman,
+            RankCategory.튜토리얼 => RoleTypeId.Tutorial,
+            RankCategory.SCP_049 => RoleTypeId.Scp049,
+            RankCategory.SCP_049_2 => RoleTypeId.Scp0492,
+            RankCategory.SCP_079 => RoleTypeId.Scp079,
+            RankCategory.SCP_096 => RoleTypeId.Scp096,
+            RankCategory.SCP_106 => RoleTypeId.Scp106,
+            RankCategory.SCP_173 => RoleTypeId.Scp173,
+            RankCategory.SCP_939 => RoleTypeId.Scp939,
+            RankCategory.SCP_3114 => RoleTypeId.Scp3114,
+            _ => RoleTypeId.Tutorial
+        };
+    }
+
     public static string GetTranslation(this RankCategory category)
     {
         return category switch

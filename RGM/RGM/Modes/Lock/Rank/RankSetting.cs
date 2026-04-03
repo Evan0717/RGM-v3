@@ -34,10 +34,21 @@ namespace RGM.Modes
 
         public static HeaderSetting RankHeader { get; private set; } = new HeaderSetting(190023, "경쟁전");
 
-        public static DropdownSetting ClassDSetting { get; private set; }
+        public static KeybindSetting GadgetKey { get; private set; }
 
         public static void Init()
         {
+            GadgetKey = new KeybindSetting(
+                id: 289289923, 
+                label: "경쟁전 가젯 키", 
+                suggested: KeyCode.Z, 
+                preventInteractionOnGUI: true, 
+                hintDescription: "경쟁전에서 가젯을 사용할 때 누르는 키입니다.", 
+                header: RankHeader
+                );
+
+            // ---------------------------------------------------------------------------------------------------------------------------------------------
+
             List<DropdownSetting> dropdowns = new();
             RankDropdownMeta.Clear();
             int nextSettingId = RankSettingIdStart;
@@ -53,7 +64,7 @@ namespace RGM.Modes
                     int settingId = nextSettingId++;
                     dropdowns.Add(new DropdownSetting(
                         id: settingId,
-                        label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.변칙성)}>변칙성</color> {roleName}",
+                        label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.변칙성)}>변칙성</color> <color={category.GetRoleCategory().GetColor().ToHex()}>{roleName}</color>",
                         hintDescription: string.Join("\n", anomalyDict.Select(x => $"• {x.Key}: {x.Value.Item1}")),
                         options: anomalyDict.Keys,
                         header: RankHeader
@@ -66,7 +77,7 @@ namespace RGM.Modes
                     int settingId = nextSettingId++;
                     dropdowns.Add(new DropdownSetting(
                         id: settingId,
-                        label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.가젯)}>가젯</color> {roleName}",
+                        label: $"<color={RankAbilityCategoryExtensions.GetColor(RankAbilityCategory.가젯)}>가젯</color> <color={category.GetRoleCategory().GetColor().ToHex()}>{roleName}</color>",
                         hintDescription: string.Join("\n", gadgetDict.Select(x => $"• {x.Key}: {x.Value.Item1}")),
                         options: gadgetDict.Keys,
                         header: RankHeader
