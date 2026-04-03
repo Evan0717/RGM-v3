@@ -142,6 +142,16 @@
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\Mute.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\Upgrade.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_079\Install.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_096\날카로움_5.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_096\본능.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_106\가벼운_주머니.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_106\23분_카레.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_173\피규어.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_173\좋아_자연스러웠어.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_3114\단백질.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_3114\살점은_나의_힘.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\흉내쟁이.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\암살_조장.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\지문_인식.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\선임_연구원.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\구미호\조직.cs" />
@@ -771,11 +781,6 @@
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\반란\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\시설_경비\" />
     <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\튜토리얼\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_096\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_106\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_173\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_3114\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
