@@ -76,8 +76,6 @@ namespace RGM.API.Features
 
             OnGround.Add(player.UserId, 5);
 
-            EffectIntensities.Add(player, new Dictionary<EffectType, int>());
-
             if (!PlayersAudio.ContainsKey(player))
             {
                 AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player - {player.UserId}", condition: (hub) =>

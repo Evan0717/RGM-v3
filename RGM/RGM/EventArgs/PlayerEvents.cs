@@ -205,8 +205,8 @@ namespace RGM.EventArgs
                     ev.Player.AddItem(ItemType.Lantern);
 
                 ev.Player.AddItem(itemType);
-                ev.Player.AddEffect(EffectType.MovementBoost, 50);
-                ev.Player.AddEffect(EffectType.Lightweight, 100);
+                ev.Player.EnableEffect(EffectType.MovementBoost, 50);
+                ev.Player.EnableEffect(EffectType.Lightweight, 100);
 
                 if (SelectMode.Contains("Secret"))
                     ev.Player.EnableEffect(EffectType.Invisible);

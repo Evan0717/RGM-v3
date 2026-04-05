@@ -995,6 +995,9 @@ public static class Utilities
 {
     public static void AddEffect(this Player player, EffectType type, int intensity, float duration = 0f, bool addDuration = false)
     {
+        if (!EffectIntensities.ContainsKey(player))
+            EffectIntensities[player] = new Dictionary<EffectType, int>();
+
         if (!EffectIntensities[player].ContainsKey(type))
             EffectIntensities[player][type] = 0;
 
@@ -1011,10 +1014,8 @@ public static class Utilities
 
         if (duration > 0f)
         {
-            IEnumerator<float> RemoveAfterDuration()
+            Timing.CallDelayed(duration, () =>
             {
-                yield return Timing.WaitForSeconds(duration);
-
                 if (EffectIntensities.ContainsKey(player) && EffectIntensities[player].ContainsKey(type))
                 {
                     EffectIntensities[player][type] -= intensity;
@@ -1029,8 +1030,7 @@ public static class Utilities
                         player.EnableEffect(type, newApplyIntensity);
                     }
                 }
-            }
-            Timing.RunCoroutine(RemoveAfterDuration());
+            });
         }
     }
 
