@@ -4,6 +4,7 @@ using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using PlayerRoles;
+using RGM.API.Features;
 
 namespace RGM.Modes;
 

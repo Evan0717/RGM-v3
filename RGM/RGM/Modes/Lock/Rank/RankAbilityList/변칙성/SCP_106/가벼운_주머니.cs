@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using RGM.Modes;
 using UnityEngine;
+using RGM.API.Features;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {

@@ -8,6 +8,7 @@ namespace RGM.Modes
         public static Dictionary<RankAbilityType, RankAbilityData> RankAbilities = new Dictionary<RankAbilityType, RankAbilityData>();
         public static Dictionary<Player, Dictionary<RankCategory, List<RankAbilityType>>> PlayerRankSettingAbilities = new();
         public static Dictionary<Player, List<RankAbility>> PlayerRankAbilities = new();
+        public static Dictionary<Player, bool> PlayerShowRanks = new();
 
         public static Dictionary<RankCategory, Dictionary<string, (string, RankAbilityType)>> 변칙성 = new()
         {
@@ -109,26 +110,26 @@ namespace RGM.Modes
             },
             { RankCategory.과학자, new()
             {
-            {"변칙성 배리어", ("0.5초간 어떠한 피해도 받지 않는 대신, 움직일 수 없습니다.", RankAbilityType.변칙성_배리어)},
-            {"변칙성 인식 저해", ("쳐다보는 적들에게 일시적으로 부식과 흐릿함 효과를 부여합니다.", RankAbilityType.변칙성_인식_저해)},
+            {"비브라늄", ("0.5초간 어떠한 피해도 받지 않는 대신, 움직일 수 없습니다.", RankAbilityType.비브라늄)},
+            {"호신용 후추 스프레이", ("근접해 있는 적에게 일시적으로 부식과 흐릿함 효과를 부여합니다.", RankAbilityType.호신용_후추_스프레이)},
             }
             },
             { RankCategory.시설_경비, new()
             {
             {"구보", ("5초간 아무런 아이템을 들 수 없는 대신, 이동 속도가 12% 증가합니다.", RankAbilityType.구보)},
-            {"이중 탄창", ("즉시 탄창을 30 장전합니다. (최대치를 넘길 수 없습니다.)", RankAbilityType.이중_탄창)},
+            {"이중 탄창", ("즉시 탄창을 30 장전합니다.", RankAbilityType.이중_탄창)},
             }
             },
             { RankCategory.구미호, new()
             {
-            {"몰래 챙겨온 초콜릿", ("체력이 3초 동안 12씩 회복합니다.", RankAbilityType.몰래_챙겨온_초콜릿)},
+            {"몰래 챙겨온 초콜릿", ("속도가 5% 느려지는 대신, 체력이 3초 동안 12씩 회복합니다.", RankAbilityType.몰래_챙겨온_초콜릿)},
             {"용도 외 사용금지", ("4초간 투시 효과를 얻습니다.", RankAbilityType.용도_외_사용금지)},
             }
             },
             { RankCategory.반란, new()
             {
             {"스펀지", ("6초간 발걸음 소리가 사라집니다.", RankAbilityType.스펀지)},
-            {"텔레파시", ("아군이 몇 명 살아있는지 확인합니다.", RankAbilityType.텔레파시)},
+            {"연결 확인", ("반란이 몇 명 살아있는지 확인합니다.", RankAbilityType.연결_확인)},
             }
             },
             { RankCategory.튜토리얼, new()
@@ -157,8 +158,8 @@ namespace RGM.Modes
             },
             { RankCategory.SCP_096, new()
             {
-            {"허상", ("즉시 분노합니다. 대신 유지 시간이 10초로 조정됩니다.", RankAbilityType.허상)},
-            {"아드레날린", ("10초간 데미지를 40% 적게 받습니다. (분노 시 한정)", RankAbilityType.아드레날린)},
+            {"분노조절문제", ("즉시 분노합니다. 대신 유지 시간이 10초로 조정됩니다.", RankAbilityType.분노조절문제)},
+            {"아드레날린", ("10초간 데미지를 40% 적게 받습니다. (분노 중 한정)", RankAbilityType.아드레날린)},
             }
             },
             { RankCategory.SCP_106, new()
@@ -170,7 +171,7 @@ namespace RGM.Modes
             { RankCategory.SCP_173, new()
             {
             {"엇박자", ("다음 이동 쿨타임을 즉시 1초로 조정합니다.", RankAbilityType.엇박자)},
-            {"망원경", ("다음 순간이동 거리를 1.5배 늘립니다.", RankAbilityType.망원경)},
+            {"부드럽고 따뜻한 호박 고구마", ("즉시 웅덩이를 만듭니다.", RankAbilityType.부드럽고_따뜻한_호박_고구마)},
             }
             },
             { RankCategory.SCP_939, new()
@@ -181,7 +182,7 @@ namespace RGM.Modes
             },
             { RankCategory.SCP_3114, new()
             {
-            {"트릭", ("변장하지 않은 상태여도 10초간 인간으로 보입니다.", RankAbilityType.트릭)},
+            {"트릭", ("변장하지 않은 상태여도 20초간 인간으로 보입니다.", RankAbilityType.트릭)},
             {"외골격", ("흄 쉴드를 모두 소모하여 50% 만큼 체력으로 치환합니다.", RankAbilityType.외골격)},
             }
             },

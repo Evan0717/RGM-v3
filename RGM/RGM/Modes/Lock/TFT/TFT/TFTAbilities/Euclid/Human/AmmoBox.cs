@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using DAONTFT.Core.Functions;
 using Exiled.API.Extensions;
+using RGM.API.Features;
 
 namespace DAONTFT.Core.TFT.Euclid.Human;
 
@@ -9,7 +9,7 @@ public class CandyAddict : TFTAbility
 {
     public override void OnEnabled()
     {
-        foreach (var ammo in Function.EnumToList<ItemType>().Where(x => x.IsAmmo()))
+        foreach (var ammo in Tools.EnumToList<ItemType>().Where(x => x.IsAmmo()))
         {
             for (int i = 0; i < 5; i++)
             {

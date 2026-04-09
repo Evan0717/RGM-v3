@@ -928,5 +928,38 @@ $"""
             else    
                 Exiled.API.Features.Cassie.MessageTranslated(message, translation, isHeld, isNoisy, isSubtitles);
         }
+
+        public static string InsertBreaks(string input, int maxLineLength)
+        {
+            if (string.IsNullOrEmpty(input) || maxLineLength <= 0)
+                return input;
+
+            StringBuilder sb = new StringBuilder();
+            int currentLength = 0;
+            string[] words = input.Split(' ');
+
+            foreach (string word in words)
+            {
+                if (currentLength + word.Length > maxLineLength)
+                {
+                    if (sb.Length > 0)
+                        sb.Append('\n');
+                    sb.Append(word);
+                    currentLength = word.Length;
+                }
+                else
+                {
+                    if (currentLength > 0)
+                    {
+                        sb.Append(' ');
+                        currentLength++;
+                    }
+                    sb.Append(word);
+                    currentLength += word.Length;
+                }
+            }
+
+            return sb.ToString();
+        }
     }
 }

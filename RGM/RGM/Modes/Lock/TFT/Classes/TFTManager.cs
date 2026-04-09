@@ -1,7 +1,7 @@
-﻿using DAONTFT.Core.Functions;
-using DAONTFT.Core.TFT;
+﻿using DAONTFT.Core.TFT;
 using Exiled.API.Features;
 using HintServiceMeow.Core.Enum;
+using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 using static DAONTFT.Core.Variables.Base;
@@ -48,8 +48,8 @@ namespace DAONTFT.Core.Classes
             {
                 Hint o = get($"<color={upgrade.Level.GetColor()}><size=170>○</size></color>", upgrade.X, 350 + x);
                 Hint emoji = get($"<color={upgrade.Level.GetColor()}><size=100>{upgrade.Emoji}</size></color>", upgrade.X, 350 + x);
-                Hint title = get($"<size=32><b>{Function.InsertBreaks(upgrade.Title, 12)}</b></size>", upgrade.X, 500 + x);
-                Hint description = get($"<size=20>{Function.InsertBreaks(upgrade.Description, 20)}</size>", upgrade.X, 610 + x);
+                Hint title = get($"<size=32><b>{Tools.InsertBreaks(upgrade.Title, 12)}</b></size>", upgrade.X, 500 + x);
+                Hint description = get($"<size=20>{Tools.InsertBreaks(upgrade.Description, 20)}</size>", upgrade.X, 610 + x);
                 Hint chance = get($"<size=15>리롤 가능한 횟수: {Selections[player].First(x => x.Key == upgrade.Type).Value}</size>", upgrade.X, 750 + x);
                 Hint box = get($"""
 <size=180><color={upgrade.Level.GetColor()}>

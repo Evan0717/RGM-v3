@@ -3,6 +3,7 @@ using Exiled.Events.EventArgs.Scp049;
 using MEC;
 using RGM.Modes;
 using System.Collections.Generic;
+using RGM.API.Features;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {

@@ -1,5 +1,4 @@
-﻿using DAONTFT.Core.Functions;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
@@ -27,7 +26,7 @@ public class Kick : TFTAbility
         if (ev.Player != Owner)
             return;
 
-        if (Function.TryGetLookPlayer(ev.Player, 3f, out Player player, out RaycastHit? hit))
+        if (Tools.TryGetLookPlayer(ev.Player, 3f, out Player player, out RaycastHit? hit))
         {
             if (ev.Player != player && MeleeCooldown <= 0 && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
             {

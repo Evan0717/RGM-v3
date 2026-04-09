@@ -1,8 +1,8 @@
-﻿using DAONTFT.Core.Functions;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,7 +53,7 @@ public class RoaringSound : TFTAbility
         {
             RoaringSoundCooldown = 180;
 
-            Function.PlayGlobalAudio("GmanRoaringSound");
+            Tools.PlayGlobalAudio("GmanRoaringSound");
 
             foreach (var player in Player.List.Where(x => !x.IsNPC && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub) && x.IsAlive))
             {

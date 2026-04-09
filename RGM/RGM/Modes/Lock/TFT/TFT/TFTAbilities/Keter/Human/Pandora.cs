@@ -1,6 +1,6 @@
-﻿using DAONTFT.Core.Functions;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Extensions;
 using MEC;
+using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,7 +30,7 @@ public class Pandora : TFTAbility
                 ItemCategory category = item.Category;
 
                 Owner.RemoveItem(item);
-                Owner.AddItem(Function.EnumToList<ItemType>().Where(x => x.GetCategory() == category).GetRandomValue());
+                Owner.AddItem(Tools.EnumToList<ItemType>().Where(x => x.GetCategory() == category).GetRandomValue());
             }
 
             yield return Timing.WaitForSeconds(60);

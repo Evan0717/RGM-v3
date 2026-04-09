@@ -98,6 +98,65 @@ namespace RGM.API.Features
             }
         }
 
+        public static void AddEffect(this Player player, EffectType type, int intensity, float duration = 0f, bool addDuration = false)
+        {
+            if (!EffectIntensities.ContainsKey(player))
+                EffectIntensities[player] = new Dictionary<EffectType, int>();
+
+            if (!EffectIntensities[player].ContainsKey(type))
+                EffectIntensities[player][type] = 0;
+
+            EffectIntensities[player][type] += intensity;
+
+            const byte MaxIntensity = 255;
+            byte applyIntensity = (byte)Math.Min(EffectIntensities[player][type], MaxIntensity);
+
+            var effect = player.ActiveEffects.FirstOrDefault(x => x.GetEffectType() == type);
+            float newDuration = effect != null && addDuration ? effect.Duration + duration : Math.Max(effect?.Duration ?? 0, duration);
+
+            player.DisableEffect(type);
+            player.EnableEffect(type, applyIntensity, duration == 0f ? 0f : newDuration);
+
+            if (duration > 0f)
+            {
+                Timing.CallDelayed(duration, () =>
+                {
+                    if (EffectIntensities.ContainsKey(player) && EffectIntensities[player].ContainsKey(type))
+                    {
+                        EffectIntensities[player][type] -= intensity;
+                        if (EffectIntensities[player][type] <= 0)
+                        {
+                            EffectIntensities[player].Remove(type);
+                            player.DisableEffect(type);
+                        }
+                        else
+                        {
+                            byte newApplyIntensity = (byte)Math.Min(EffectIntensities[player][type], 255);
+                            player.EnableEffect(type, newApplyIntensity);
+                        }
+                    }
+                });
+            }
+        }
+
+        public static void RemoveEffect(this Player player, EffectType type, int intensity)
+        {
+            if (!EffectIntensities.ContainsKey(player) || !EffectIntensities[player].ContainsKey(type))
+                return;
+
+            EffectIntensities[player][type] -= intensity;
+            if (EffectIntensities[player][type] <= 0)
+            {
+                EffectIntensities[player].Remove(type);
+                player.DisableEffect(type);
+            }
+            else
+            {
+                byte applyIntensity = (byte)Math.Min(EffectIntensities[player][type], 255);
+                player.EnableEffect(type, applyIntensity);
+            }
+        }
+
         public static void Hit(this Player player, Player attacker, float damage)
         {
             attacker.ShowHitMarker(damage / 10);

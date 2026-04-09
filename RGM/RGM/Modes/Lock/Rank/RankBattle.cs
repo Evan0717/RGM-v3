@@ -6,6 +6,7 @@ using MEC;
 using RGM.API.Features;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace RGM.Modes
 {
@@ -22,28 +23,26 @@ namespace RGM.Modes
                 return;
             }
 
-            var RankAbilityData = RankInfo.RankAbilities[type];
-            RankAbility RankAbility;
+            var typeInfo = RankInfo.RankAbilities[type].Type;
+            RankAbility RankAbility = Activator.CreateInstance(typeInfo) as RankAbility;
 
-            try
+            var attribute = typeInfo.GetCustomAttribute<RankAbilityAttribute>();
+            if (attribute != null)
             {
-                RankAbility = Activator.CreateInstance(RankInfo.RankAbilities[type].Type) as RankAbility;
-            }
-            catch (Exception e)
-            {
-                Log.Error($"An error occurred while trying to create an instance of {RankAbilityData.Name}: {e}");
-                return;
-            }
-
-            if (RankAbility == null)
-            {
-                Log.Error($"An error occurred while trying to create an instance of {RankAbilityData.Name}. The instance is null.");
-                return;
+                RankAbility.Data = new RankAbilityData
+                {
+                    Name = attribute.Name,
+                    Description = attribute.Description,
+                    Emoji = attribute.Emoji,
+                    RankAbilityCategory = attribute.RankAbilityCategory,
+                    RankAbilityType = attribute.Type,
+                    RankCategory = attribute.RankCategory,
+                    Type = typeInfo
+                };
             }
 
             RankInfo.PlayerRankAbilities[player].Add(RankAbility);
 
-            RankAbility.Data = RankAbilityData;
             RankAbility.Owner = player;
             RankAbility.OnEnabled();
         }
@@ -75,67 +74,74 @@ namespace RGM.Modes
 
             while (true)
             {
-                if (Owner.IsAlive)
+                if (RankInfo.PlayerShowRanks.ContainsKey(Owner) && RankInfo.PlayerShowRanks[Owner])
                 {
-                    List<string> queue = new();
-
-                    if (RankInfo.PlayerRankAbilities.TryGetValue(Owner, out var abilities))
+                    if (Owner.IsAlive)
                     {
-                        foreach (var ability in abilities)
+                        List<string> queue = new();
+
+                        if (RankInfo.PlayerRankAbilities.TryGetValue(Owner, out var abilities))
                         {
-                            queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
+                            foreach (var ability in abilities)
+                            {
+                                queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
+                            }
                         }
+                        else
+                        {
+                            queue.Add(hintDescription);
+                        }
+
+                        hint = new HintServiceMeow.Core.Models.Hints.Hint
+                        {
+                            Text = $"<size=15>{string.Join("\n", queue)}</size>",
+                            Id = "능력 리스트",
+                            XCoordinate = -300,
+                            YCoordinate = 100,
+                            Alignment = HintAlignment.Left
+                        };
+
+                        Owner.AddCustomHint(hint);
+
+                        yield return Timing.WaitForSeconds(1);
+
+                        Owner.RemoveHint(hint);
+                    }
+                    else if (Owner.Role is SpectatorRole spectator && spectator.SpectatedPlayer != null)
+                    {
+                        List<string> queue = new();
+
+                        if (RankInfo.PlayerRankAbilities.TryGetValue(spectator.SpectatedPlayer, out var abilities))
+                        {
+                            foreach (var ability in abilities)
+                            {
+                                queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
+                            }
+                        }
+                        else
+                        {
+                            queue.Add(hintDescription);
+                        }
+
+                        hint = new HintServiceMeow.Core.Models.Hints.Hint
+                        {
+                            Text = $"<size=15>{string.Join("\n", queue)}</size>",
+                            Id = "능력 리스트",
+                            XCoordinate = -300,
+                            YCoordinate = 100,
+                            Alignment = HintAlignment.Left
+                        };
+
+                        Owner.AddCustomHint(hint);
+
+                        yield return Timing.WaitForSeconds(1);
+
+                        Owner.RemoveHint(hint);
                     }
                     else
                     {
-                        queue.Add(hintDescription);
+                        yield return Timing.WaitForSeconds(1);
                     }
-
-                    hint = new HintServiceMeow.Core.Models.Hints.Hint
-                    {
-                        Text = $"<size=15>{string.Join("\n", queue)}</size>",
-                        Id = "능력 리스트",
-                        XCoordinate = -300,
-                        YCoordinate = 100,
-                        Alignment = HintAlignment.Left
-                    };
-
-                    Owner.AddCustomHint(hint);
-
-                    yield return Timing.WaitForSeconds(1);
-
-                    Owner.RemoveHint(hint);
-                }
-                else if (Owner.Role is SpectatorRole spectator && spectator.SpectatedPlayer != null)
-                {
-                    List<string> queue = new();
-
-                    if (RankInfo.PlayerRankAbilities.TryGetValue(spectator.SpectatedPlayer, out var abilities))
-                    {
-                        foreach (var ability in abilities)
-                        {
-                            queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
-                        }
-                    }
-                    else
-                    {
-                        queue.Add(hintDescription);
-                    }
-
-                    hint = new HintServiceMeow.Core.Models.Hints.Hint
-                    {
-                        Text = $"<size=15>{string.Join("\n", queue)}</size>",
-                        Id = "능력 리스트",
-                        XCoordinate = -300,
-                        YCoordinate = 100,
-                        Alignment = HintAlignment.Left
-                    };
-
-                    Owner.AddCustomHint(hint);
-
-                    yield return Timing.WaitForSeconds(1);
-
-                    Owner.RemoveHint(hint);
                 }
                 else
                 {

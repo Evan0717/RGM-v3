@@ -1,11 +1,14 @@
-﻿using DAONTFT.Core.TFT;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using global::UserSettings.ServerSpecific;
 
 using static RGM.Modes.RankVar;
+using RGM.API.Features;
 
 namespace RGM.Modes;
 
@@ -17,6 +20,68 @@ public abstract class RankAbility
 
     public RankAbilityData Data { get; set; }
     public Player Owner { get; set; }
+}
+
+public abstract class RankGadgetAbility : RankAbility
+{
+    public bool IsOnCooldown { get; private set; }
+
+    public override void OnEnabled()
+    {
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnSSInput;
+    }
+
+    public override void OnDisabled()
+    {
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnSSInput;
+    }
+
+    private void OnSSInput(ReferenceHub sender, ServerSpecificSettingBase setting)
+    {
+        var player = Player.Get(sender);
+
+        if (player != Owner || IsOnCooldown)
+            return;
+
+        var gadgetAttr = this.GetType().GetCustomAttribute<RankGadgetAttribute>();
+        if (gadgetAttr == null) return;
+
+        if (setting is SSKeybindSetting keybind && keybind.SyncIsPressed && keybind.SettingId == gadgetAttr.SettingId)
+        {
+            if (!CanUseGadget())
+            {
+                Tools.PlaySound(player.Transform, "");
+
+                return;
+            }
+
+            OnGadgetUsed();
+
+            IEnumerator<float> onCooldown()
+            {
+                IsOnCooldown = true;
+                string originalDesc = gadgetAttr.Description;
+
+                for (int i = 0; i < gadgetAttr.Cooldown; i++)
+                {
+                    Data.Description = $"{originalDesc} ({gadgetAttr.Cooldown - i})";
+                    yield return Timing.WaitForSeconds(1);
+                }
+
+                Data.Description = originalDesc;
+                IsOnCooldown = false;
+            }
+
+            Timing.RunCoroutine(onCooldown());
+        }
+    }
+
+    protected virtual bool CanUseGadget()
+    {
+        return true;
+    }
+
+    protected abstract void OnGadgetUsed();
 }
 
 public class RankAbilityData
@@ -45,6 +110,14 @@ public class RankAbilityAttribute(string name, string description, RankAbilityTy
     public RankCategory RankCategory { get; set; } = rankCategory;
     public RankAbilityCategory RankAbilityCategory { get; set; } = rankAbilityCategory;
 }
+
+[AttributeUsage(AttributeTargets.Class)]
+public class RankGadgetAttribute(string name, string description, RankAbilityType type, RankCategory rankCategory, string emoji = "🎲", int cooldown = 100, int settingId = 289289923) 
+    : RankAbilityAttribute(name, description, type, rankCategory, RankAbilityCategory.가젯, emoji)
+{
+    public int SettingId { get; } = settingId;
+    public int Cooldown { get; } = cooldown;
+}   
 
 public static class RankAbilityTypeExtensions
 {
@@ -282,8 +355,8 @@ public enum RankAbilityType
     또수코인,
 
     // 과학자
-    변칙성_배리어,
-    변칙성_인식_저해,
+    비브라늄,
+    호신용_후추_스프레이,
 
     // 시설 경비
     구보,
@@ -295,7 +368,7 @@ public enum RankAbilityType
 
     // 반란
     스펀지,
-    텔레파시,
+    연결_확인,
 
     // 튜토리얼
     프로그램,
@@ -314,7 +387,7 @@ public enum RankAbilityType
     Brake,
 
     // SCP-096
-    허상,
+    분노조절문제,
     아드레날린,
 
     // SCP-106
@@ -323,7 +396,7 @@ public enum RankAbilityType
 
     // SCP-173
     엇박자,
-    망원경,
+    부드럽고_따뜻한_호박_고구마,
 
     // SCP-939
     목표를_포착했다,

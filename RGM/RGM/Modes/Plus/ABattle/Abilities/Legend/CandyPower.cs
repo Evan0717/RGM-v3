@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Enums;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 

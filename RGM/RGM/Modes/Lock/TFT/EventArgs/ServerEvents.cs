@@ -1,19 +1,17 @@
-﻿using DAONTFT.Core.TFT;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using Mirror;
-using MultiBroadcast.API;
 using NetworkManagerUtils.Dummies;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static DAONTFT.Core.Variables.Base;
-using static DAONTFT.Core.Functions.Function;
 using static RGM.Variables.Variable;
+using RGM.API.Features;
 
 namespace DAONTFT.Core.EventArgs
 {
@@ -89,7 +87,7 @@ namespace DAONTFT.Core.EventArgs
                     if (Encounter == RoleTypeId.ChaosRepressor)
                     {
                         foreach (var player in Player.List)
-                            player.AddItem(EnumToList<ItemType>().Where(x => x.IsWeapon()).GetRandomValue());
+                            player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.IsWeapon()).GetRandomValue());
                     }
 
                     if (Encounter == RoleTypeId.ChaosMarauder)
@@ -101,13 +99,13 @@ namespace DAONTFT.Core.EventArgs
                     if (Encounter == RoleTypeId.ChaosConscript)
                     {
                         foreach (var player in Player.List)
-                            player.AddItem(EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).GetRandomValue());
+                            player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).GetRandomValue());
                     }
 
                     if (Encounter == RoleTypeId.ChaosRifleman)
                     {
                         foreach (var player in Player.List)
-                            player.AddItem(EnumToList<ItemType>().GetRandomValue());
+                            player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
                     }
                 }
                 catch { }

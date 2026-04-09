@@ -1,5 +1,4 @@
-﻿using DAONTFT.Core.Functions;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Extensions;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
 using RGM.API.Features;
@@ -24,12 +23,12 @@ public class CandyAddict : TFTAbility
 
     IEnumerator<float> candyParty()
     {
-        Owner.AddCandy(Function.EnumToList<CandyKindID>().GetRandomValue());
+        Owner.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
 
         while (true)
         {
             if (Owner.IsAlive)
-                Owner.AddCandy(Function.EnumToList<CandyKindID>().GetRandomValue());
+                Owner.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
 
             for (int i = 0; i < 60; i++)
             {

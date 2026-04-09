@@ -5,6 +5,7 @@ using RGM.Modes;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using RGM.API.Features;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {

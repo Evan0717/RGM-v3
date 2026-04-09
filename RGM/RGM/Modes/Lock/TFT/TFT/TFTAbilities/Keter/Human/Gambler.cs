@@ -1,7 +1,7 @@
-﻿using DAONTFT.Core.Functions;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Keter.Human;
@@ -32,7 +32,7 @@ public class Gambler : TFTAbility
 
                 else
                 {
-                    Owner.AddItem(Function.EnumToList<ItemType>().GetRandomValue());
+                    Owner.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
                 }
             }
             catch { }

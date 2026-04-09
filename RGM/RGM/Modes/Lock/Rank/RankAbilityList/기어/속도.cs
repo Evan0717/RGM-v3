@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using RGM.API.Features;
 using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.기어

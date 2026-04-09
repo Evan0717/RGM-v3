@@ -127,6 +127,34 @@
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\D계급\또수코인.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\D계급\전력_질주.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049\집결.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049\걸작.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049_2\유대.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049_2\강펀치.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_079\Brake.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_079\Fix.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_096\아드레날린.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_096\분노조절문제.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_106\참호.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_106\비타민_C.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_173\부드럽고_따뜻한_호박_고구마.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_173\엇박자.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_3114\외골격.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_3114\트릭.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_939\유독성_가스.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_939\목표를_포착했다.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\과학자\호신용_후추_스프레이.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\과학자\비브라늄.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\구미호\용도_외_사용금지.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\구미호\몰래_챙겨온_초콜릿.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\반란\연결_확인.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\반란\스펀지.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\시설_경비\이중_탄창.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\시설_경비\구보.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\튜토리얼\변칙성_이동기.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\튜토리얼\프로그램.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\기어\효율.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\기어\치유.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\기어\방어.cs" />
@@ -180,7 +208,6 @@
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp330Events.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\Functions\Base.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTBattle.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\All\AddDefense2.cs" />
@@ -766,21 +793,6 @@
       <HintPath>..\..\..\..\SCPSL\Latest\SCPSL_Data\Managed\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\D계급\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049_2\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_079\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_096\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_106\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_173\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_3114\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_939\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\과학자\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\구미호\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\반란\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\시설_경비\" />
-    <Folder Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\튜토리얼\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
