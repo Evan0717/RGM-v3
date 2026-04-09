@@ -7,7 +7,7 @@ using Exiled.API.Features.Items;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("또수코인", "코인을 획득합니다. 이 코인을 튕기면 2% 빨라지거나, 1% 느려집니다.", RankAbilityType.또수코인, RankCategory.D계급, "🕜")]
+    [RankGadget("또수코인", "코인을 획득합니다. 이 코인을 튕기면 1% 빨라지거나, 1% 느려집니다.", RankAbilityType.또수코인, RankCategory.D계급, "🕜")]
     public class 또수_코인 : RankGadgetAbility
     {
 
@@ -20,7 +20,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
                 if (Owner == ev.Player && item == ev.Item)
                 {
                     if (ev.IsTails)
-                        Owner.AddEffect(EffectType.MovementBoost, 2);
+                        Owner.AddEffect(EffectType.MovementBoost, 1);
 
                     else
                         Owner.RemoveEffect(EffectType.MovementBoost, 1);

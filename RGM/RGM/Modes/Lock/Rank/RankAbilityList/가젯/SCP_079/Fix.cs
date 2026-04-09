@@ -13,8 +13,8 @@ using System.Linq;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("FIx", "보고 있는 방의 부서진 문 중 하나를 복구합니다.", RankAbilityType.Fix, RankCategory.SCP_079, "🔨")]
-    public class FIx : RankGadgetAbility
+    [RankGadget("Fix", "보고 있는 방의 부서진 문 중 하나를 복구합니다.", RankAbilityType.Fix, RankCategory.SCP_079, "🔨")]
+    public class Fix : RankGadgetAbility
     {
         protected override bool CanUseGadget()
         {

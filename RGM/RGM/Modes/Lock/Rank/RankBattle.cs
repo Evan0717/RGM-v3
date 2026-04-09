@@ -41,6 +41,9 @@ namespace RGM.Modes
                 };
             }
 
+            if (!RankInfo.PlayerRankAbilities.ContainsKey(player))
+                RankInfo.PlayerRankAbilities[player] = new();
+
             RankInfo.PlayerRankAbilities[player].Add(RankAbility);
 
             RankAbility.Owner = player;
@@ -103,7 +106,7 @@ namespace RGM.Modes
 
                         Owner.AddCustomHint(hint);
 
-                        yield return Timing.WaitForSeconds(1);
+                        yield return Timing.WaitForOneFrame;
 
                         Owner.RemoveHint(hint);
                     }
@@ -134,18 +137,18 @@ namespace RGM.Modes
 
                         Owner.AddCustomHint(hint);
 
-                        yield return Timing.WaitForSeconds(1);
+                        yield return Timing.WaitForOneFrame;
 
                         Owner.RemoveHint(hint);
                     }
                     else
                     {
-                        yield return Timing.WaitForSeconds(1);
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
                 else
                 {
-                    yield return Timing.WaitForSeconds(1);
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }

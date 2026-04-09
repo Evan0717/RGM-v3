@@ -1,4 +1,4 @@
-﻿using Exiled.API.Extensions;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using PlayerRoles;
@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using global::UserSettings.ServerSpecific;
-
-using static RGM.Modes.RankVar;
 using RGM.API.Features;
 
 namespace RGM.Modes;
@@ -49,13 +47,11 @@ public abstract class RankGadgetAbility : RankAbility
         if (setting is SSKeybindSetting keybind && keybind.SyncIsPressed && keybind.SettingId == gadgetAttr.SettingId)
         {
             if (!CanUseGadget())
-            {
-                Tools.PlaySound(player.Transform, "");
-
                 return;
-            }
 
             OnGadgetUsed();
+
+            Tools.PlaySound(player.Transform, "Gadget");
 
             IEnumerator<float> onCooldown()
             {
@@ -123,7 +119,7 @@ public static class RankAbilityTypeExtensions
 {
     public static RankAbilityData GetData(this RankAbilityType type)
     {
-        if (!RankAbilities.TryGetValue(type, out var RankAbility))
+        if (!RankInfo.RankAbilities.TryGetValue(type, out var RankAbility))
             return null;
 
         return RankAbility;
@@ -405,10 +401,4 @@ public enum RankAbilityType
     // SCP-3114
     트릭,
     외골격,
-}
-
-public class RankVar
-{
-    public static Dictionary<RankAbilityType, RankAbilityData> RankAbilities = new Dictionary<RankAbilityType, RankAbilityData>();
-    public static Dictionary<Player, List<RankAbility>> PlayerRankSettingAbilities = new Dictionary<Player, List<RankAbility>>();
 }

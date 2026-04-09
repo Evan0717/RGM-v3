@@ -105,7 +105,7 @@ namespace RGM.Modes
             { RankCategory.D계급, new()
             {
             {"전력 질주", ("0.5초간 빠르게 이동합니다.", RankAbilityType.전력_질주)},
-            {"또수코인", ("코인을 획득합니다. 이 코인을 튕기면 2% 빨라지거나, 1% 느려집니다.", RankAbilityType.또수코인)},
+            {"또수코인", ("코인을 획득합니다. 이 코인을 튕기면 1% 빨라지거나, 1% 느려집니다.", RankAbilityType.또수코인)},
             }
             },
             { RankCategory.과학자, new()

@@ -1,4 +1,5 @@
-﻿using Exiled.API.Extensions;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -10,7 +11,7 @@ using UserSettings.ServerSpecific;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Lock, ModeType.Rank)]
+    [Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.Rank)]
     public class Rank : Mode
     {
         public override string Name => "경쟁전";
@@ -27,6 +28,8 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            RankInfo.RankAbilities.Clear();
+
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
             {
                 var abilityAttribute = type.GetCustomAttribute<RankAbilityAttribute>();
@@ -74,16 +77,46 @@ namespace RGM.Modes
             foreach (var p in Player.List)
                 Verified(p);
 
-            yield return Timing.WaitForSeconds(30);
+            Tools.PlayGlobalAudio("RankCountdown", 1.5f);
+
+            for (int i = 0; i < 20; i++)
+            {
+                foreach (var player in Player.List)
+                {
+                    player.AddBroadcast(1, $"<size=30>시작까지 <size=50><b>{20 - i}</b></size>초</size>\n" +
+                        $"<size=20>[ESC] -> [Settings] -> [Server-specific]ㅣ" +
+                        $"<color={RankAbilityCategory.변칙성.GetColor()}>변칙성</color>, <color={RankAbilityCategory.가젯.GetColor()}>가젯</color>, <color={RankAbilityCategory.기어.GetColor()}>기어</color>를 미리 설정해두세요.</size>");
+
+                    player.AddEffect(EffectType.Ensnared, 1, 1);
+                    player.AddEffect(EffectType.HeavyFooted, 100, 1);
+                    player.AddEffect(EffectType.Blinded, 55, 1);
+                }
+
+                yield return Timing.WaitForSeconds(1);
+            }
 
             foreach (var player in RankInfo.PlayerRankSettingAbilities.Keys.ToList())
             {
+                if (player is null)
+                    continue;
+
                 RankCategory rankCategory = player.GetRankCategory();
 
-                List<RankAbilityType> list = RankInfo.PlayerRankSettingAbilities[player][rankCategory];
+                if (!RankInfo.PlayerRankSettingAbilities.TryGetValue(player, out var playerSettings) ||
+                    playerSettings is null ||
+                    !playerSettings.TryGetValue(rankCategory, out List<RankAbilityType> list) ||
+                    list is null)
+                    continue;
 
                 foreach (var ability in list)
                 {
+                    var data = ability.GetData();
+                    if (data is null)
+                    {
+                        Log.Warn($"Rank ability data not found for {ability}.");
+                        continue;
+                    }
+
                     RankBattle.AddRankAbility(player, ability);
 
                     player.AddBroadcast(3, $"<size=20>{ability.ToString()}</size>");
