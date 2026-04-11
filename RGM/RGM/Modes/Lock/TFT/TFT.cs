@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
 
 namespace RGM.Modes;
@@ -27,10 +28,10 @@ public class TFT : Mode
     public override string Detail =>
 """
 증강은 한 사람당 총 3개를 확보할 수 있으며,
-
-처음 라운드 시작시 30초 후에,
-
+처음 라운드 시작시 40초 후에,
 그 다음 300초마다 지급됩니다.
+
+25% 확률로 "경쟁전" 모드가 설치됩니다.
 """;
     public override string Color => "ffd700";
 
@@ -58,6 +59,9 @@ public class TFT : Mode
 
     IEnumerator<float> OnModeStarted()
     {
+        if (Random.Range(1, 5) == 1)
+            Tools.TryInstallMode(ModeType.Rank);
+
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
         {
             var abilityAttribute = type.GetCustomAttribute<TFTAbilityAttribute>();
@@ -88,6 +92,10 @@ public class TFT : Mode
 
         foreach (var player in PlayerManager.List)
             DAONTFT.Core.EventArgs.PlayerEvents.Verified(player);
+
+        TFTSetting.Init();
+
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived += TFTSetting.OnSSInput;
 
         // --------------------------------------------------
 
@@ -152,7 +160,7 @@ public class TFT : Mode
                 if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosMarauder)
                 {
                     foreach (var player in Player.List)
-                        player.AddItem(UnityEngine.Random.Range(1, 3) == 1 ? ItemType.GrenadeFlash : ItemType.GrenadeHE);
+                        player.AddItem(Random.Range(1, 3) == 1 ? ItemType.GrenadeFlash : ItemType.GrenadeHE);
                 }
 
                 if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosConscript)
@@ -174,7 +182,7 @@ public class TFT : Mode
 
         // --------------------------------------------------
 
-        Timing.CallDelayed(30, () =>
+        Timing.CallDelayed(40, () =>
         {
             TFTBattle.StartUpgrade();
         });

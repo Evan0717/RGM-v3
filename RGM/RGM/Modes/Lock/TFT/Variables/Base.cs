@@ -30,6 +30,7 @@ namespace DAONTFT.Core.Variables
         public static Dictionary<Player, bool> IsSelecting = new Dictionary<Player, bool>();
         public static Dictionary<Player, bool> IsLifeUsed = new Dictionary<Player, bool>();
         public static Dictionary<Player, List<Hint>> PlayerHints = new();
+        public static Dictionary<Player, bool> PlayerShowTFTs = new();
         public static Dictionary<string, (RoleTypeId, string)> Encounters = new()
         {
             {"조우자 없음", (RoleTypeId.None, "재단이 참 평화로운걸요?")},

@@ -209,6 +209,7 @@
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTBattle.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\All\AddDefense2.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\All\AddHealth2.cs" />

@@ -22,6 +22,8 @@ namespace RGM.Modes
 """
 모든 능력들은 스폰 후, 30초 뒤에 적용됩니다.
 
+25% 확률로 "전략적 팀 전투" 모드가 설치됩니다. 설치될 경우, 능력 적용이 12초 뒤로 당겨집니다.
+
 [ESC] -> [Settings] -> [Server-specific]
 """;
         public override string Color => "ea524c";
@@ -30,6 +32,9 @@ namespace RGM.Modes
 
         public override void OnEnabled()
         {
+            if (UnityEngine.Random.Range(1, 5) == 1)
+                Tools.TryInstallMode(ModeType.TFT);
+
             RankInfo.RankAbilities.Clear();
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -55,7 +60,6 @@ namespace RGM.Modes
             }
 
             Exiled.Events.Handlers.Player.Verified += OnVerified;
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
 
             RankSetting.Init();
 
@@ -79,6 +83,8 @@ namespace RGM.Modes
             foreach (var p in Player.List)
                 Verified(p);
 
+            yield return Timing.WaitForSeconds(Variable.EnabledModeList.Select(x => x.Data.Type).Contains(ModeType.TFT) ? 12 : 0);
+
             Tools.PlayGlobalAudio("RankCountdown", 1.5f);
 
             for (int i = 0; i < 20; i++)
@@ -96,6 +102,8 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1);
             }
+
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
 
             foreach (var player in RankInfo.PlayerRankSettingAbilities.Keys.ToList())
             {

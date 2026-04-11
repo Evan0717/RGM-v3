@@ -21,7 +21,7 @@ namespace DAONTFT.Core.IEnumerators
 
             while (true)
             {
-                if (Owner.IsAlive)
+                if (Owner.IsAlive && PlayerShowTFTs.ContainsKey(Owner) && PlayerShowTFTs[Owner])
                 {
                     List<string> queue = new();
 
@@ -41,14 +41,14 @@ namespace DAONTFT.Core.IEnumerators
                     {
                         Text = $"<size=15>{string.Join("\n", queue)}</size>",
                         Id = "증강 리스트",
-                        XCoordinate = -300,
+                        XCoordinate = -500,
                         YCoordinate = 80,
                         Alignment = HintAlignment.Right
                     };
 
                     Owner.AddCustomHint(hint);
 
-                    yield return Timing.WaitForSeconds(1);
+                    yield return Timing.WaitForOneFrame;
 
                     Owner.RemoveHint(hint);
                 }
@@ -72,20 +72,20 @@ namespace DAONTFT.Core.IEnumerators
                     {
                         Text = $"<size=15>{string.Join("\n", queue)}</size>",
                         Id = "증강 리스트",
-                        XCoordinate = -300,
+                        XCoordinate = -500,
                         YCoordinate = 80,
                         Alignment = HintAlignment.Right
                     };
 
                     Owner.AddCustomHint(hint);
 
-                    yield return Timing.WaitForSeconds(1);
+                    yield return Timing.WaitForOneFrame;
 
                     Owner.RemoveHint(hint);
                 }
                 else
                 {
-                    yield return Timing.WaitForSeconds(1);
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }
