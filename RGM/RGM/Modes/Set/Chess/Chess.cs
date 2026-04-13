@@ -106,6 +106,18 @@ namespace RGM.Modes
 
             Tools.PlayGlobalAudio("RankCountdown", 1.5f);
 
+            void OnChangingItem(ChangingItemEventArgs ev)
+            {
+                ev.IsAllowed = false;
+            }
+
+            Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
+
+            Timing.CallDelayed(20, () =>
+            {
+                Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
+            });
+
             void setupTeam(List<Player> team, RoleTypeId roleType, string color, Vector3 pos, Player king, Player queen, List<Player> knights, List<Player> rooks, List<Player> bishops)
             {
                 foreach (var ply in team)
@@ -192,20 +204,23 @@ namespace RGM.Modes
 
         void OnDied(DiedEventArgs ev)
         {
-            List<Player> winTeam = new();
+            if (new List<Player> { kingA, kingB }.Contains(ev.Player))
+            {
+                List<Player> winTeam = new();
 
-            if (ev.Player == kingA)
-                winTeam.AddRange(teamB);
+                if (ev.Player == kingA)
+                    winTeam.AddRange(teamB);
 
-            if (ev.Player == kingB)
-                winTeam.AddRange(teamA);
+                if (ev.Player == kingB)
+                    winTeam.AddRange(teamA);
 
-            Round.IsLocked = false;
+                Round.IsLocked = false;
 
-            foreach (var loser in Player.List.Where(x => !winTeam.Contains(x) && x.IsAlive))
-                loser.Kill("당신은 킹을 지키지 못했군요..");
+                foreach (var loser in Player.List.Where(x => !winTeam.Contains(x) && x.IsAlive))
+                    loser.Kill("당신은 킹을 지키지 못했군요..");
 
-            Timing.RunCoroutine(Tools.SetWinner(winTeam, 1));
+                Timing.RunCoroutine(Tools.SetWinner(winTeam, 1));
+            }
         }
 
         void OnDroppingItem(DroppingItemEventArgs ev)
