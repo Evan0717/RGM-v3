@@ -184,7 +184,10 @@ namespace RGM.Modes
             }
 
             setupTeam(teamA, RoleTypeId.Scientist, "red", new Vector3(34.60717f, 381.5809f, -30.17525f), kingA, queenA, knightA, rookA, bishopA); // A팀 (과학자)
-            setupTeam(teamB, RoleTypeId.ClassD, "cyan", new Vector3(34.64063f, 381.5783f, -1.050781f), kingB, queenB, knightB, rookB, bishopB);    // B팀 (죄수)
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                setupTeam(teamB, RoleTypeId.ClassD, "cyan", new Vector3(34.64063f, 381.5783f, -1.050781f), kingB, queenB, knightB, rookB, bishopB);    // B팀 (죄수)
+            });
         }
 
         void OnDied(DiedEventArgs ev)
