@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
@@ -67,19 +69,33 @@ public class KoreanSpeed : Mode
 
     private void AddEffects()
     {
-        foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
+        try
         {
-            player.EnableEffect(EffectType.MovementBoost, (byte)(count * 3));
-            player.EnableEffect(EffectType.Scp1853, (byte)count);
+            foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
+            {
+                player.EnableEffect(EffectType.MovementBoost, (byte)(count * 3));
+                player.EnableEffect(EffectType.Scp1853, count <= 5 ? (byte)count : (byte)5);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Error while adding effects, Deception: {e.Message}");
         }
     }
 
     private void UnloadEffects()
     {
-        foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
+        try
         {
-            player.DisableEffect(EffectType.MovementBoost);
-            player.DisableEffect(EffectType.Scp1853);
+            foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
+            {
+                player.DisableEffect(EffectType.MovementBoost);
+                player.DisableEffect(EffectType.Scp1853);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Error while removing effects, Deception: {e.Message}");
         }
     }
 }
