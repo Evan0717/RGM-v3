@@ -33,10 +33,10 @@ public class KoreanSpeed : Mode
             Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
         }
 
-        public void OnDied(DiedEventArgs ev)
-        {
-            if (count != 125)
-                count++;
+    private void OnDied(DiedEventArgs ev)
+    {
+        if (count != 125)
+            count++;
 
             foreach (var player in PlayerManager.List)
             {
@@ -44,14 +44,15 @@ public class KoreanSpeed : Mode
             }
         }
 
-        public void OnSearchingPickup(SearchingPickupEventArgs ev)
-        {
-            ev.SearchTime -= count * 0.1f;
-        }
-
-        public void OnThrowingRequest(ThrowingRequestEventArgs ev)
-        {
-            ev.Throwable.PinPullTime -= count * 0.1f;
-        }
+    private void OnSearchingPickup(SearchingPickupEventArgs ev)
+    {
+        ev.SearchTime -= count * 0.1f;
     }
+
+    private void OnThrowingRequest(ThrowingRequestEventArgs ev)
+    {
+        ev.Throwable.PinPullTime -= count * 0.1f;
+    }
+
+
 }
