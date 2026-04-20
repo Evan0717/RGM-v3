@@ -23,6 +23,12 @@ namespace RGM.Commands.ClientCommands
                 return false;
             }
 
+            if (args.Contains(",") || args.Contains("\"") || args.Contains("["))
+            {
+                response = "닉네임에 허용되지 않는 특수문자(',', '\"', '[')가 포함되어 있습니다.\n-";
+                return false;
+            }
+
             if (UsersManager.UsersCache.ContainsKey(player.UserId))
             {
                 List<string> uc = UsersManager.UsersCache[player.UserId];
@@ -66,6 +72,18 @@ namespace RGM.Commands.ClientCommands
         {
             Player player = Player.Get(sender);
             string args = string.Join(" ", arguments).Trim();
+
+            if (args.Count() > 16)
+            {
+                response = "인포는 최대 16자까지만 허용됩니다.\n-";
+                return false;
+            }
+
+            if (args.Contains(",") || args.Contains("\"") || args.Contains("["))
+            {
+                response = "인포에 허용되지 않는 특수문자(',', '\"', '[')가 포함되어 있습니다.\n-";
+                return false;
+            }
 
             if (UsersManager.UsersCache.ContainsKey(player.UserId))
             {
