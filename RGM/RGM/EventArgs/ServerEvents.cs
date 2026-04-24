@@ -322,7 +322,7 @@ namespace RGM.EventArgs
 
             try
             {
-                string path = $"{Paths.Configs}/RGM/Users.txt";
+                string path = $"{Paths.Configs}/RGM/Users.db";
 
                 if (File.Exists(path) && new FileInfo(path).Length == 0)
                 {

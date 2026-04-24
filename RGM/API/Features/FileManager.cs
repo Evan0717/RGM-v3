@@ -140,7 +140,6 @@ namespace RGM.API.Features
         private static readonly object _usersLock = new object();
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.db");
-        public static string LegacyUsersFileName = Path.Combine(Paths.Configs, "RGM/Users.txt");
         public static Dictionary<string, List<string>> UsersCache = new Dictionary<string, List<string>>();
 
         public static string CheckUser(string userId, int num)
@@ -189,36 +188,10 @@ namespace RGM.API.Features
                         var loadedDb = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(dbText);
                         if (loadedDb != null)
                             UsersCache = loadedDb;
-
-                        IsUsersFileLoaded = true;
-                        return;
                     }
                     catch (System.Exception ex)
                     {
-                        Log.Warn($"[UsersManager] Failed to parse Users.db, trying legacy txt. {ex.Message}");
-                    }
-                }
-
-                var text = FileManager.ReadFile(LegacyUsersFileName);
-                if (!string.IsNullOrWhiteSpace(text))
-                {
-                    Dictionary<string, List<string>> loaded = new Dictionary<string, List<string>>();
-
-                    foreach (var line in text.Split('\n'))
-                    {
-                        var parts = line.TrimEnd('\r').Split(';');
-
-                        if (parts.Length < 2 || string.IsNullOrWhiteSpace(parts[0]))
-                            continue;
-
-                        loaded[parts[0]] = parts.Skip(1).ToList();
-                    }
-
-                    if (loaded.Count > 0)
-                    {
-                        UsersCache = loaded;
-                        FileManager.WriteFile(UsersFileName, JsonConvert.SerializeObject(UsersCache, Formatting.None));
-                        Log.Info("[UsersManager] Migrated Users.txt -> Users.db");
+                        Log.Error($"[UsersManager] Failed to parse Users.db: {ex}");
                     }
                 }
 

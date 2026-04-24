@@ -107,10 +107,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            foreach (var player in PlayerManager.List)
-            {
-                Server.ExecuteCommand($"/speak {player.Id} 0");
-            }
+            Tools.TryInstallMode(ModeType.SuperStar);
 
             int Remaining = 300;
 
@@ -146,6 +143,8 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1f);
 
+            Round.IsLocked = false;
+
             for (int i = 1; i < Remaining; i++)
             {
                 MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(1, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
@@ -153,17 +152,13 @@ namespace RGM.Modes
                 if (i == 275)
                 {
                     foreach (var finder in finders)
-                    {
                         finder.AddEffect(EffectType.Scp1344, 1);
-                    }
 
                     MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10, $"<size=25>모든 술래에게 <color=red>SCP-1344</color>가 지급됩니다, 행운을 빕니다!</size>");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
-
-            Round.IsLocked = false;
 
             foreach (var player in Player.List.Where(x => x.Role.Type == RoleTypeId.FacilityGuard))
             {
