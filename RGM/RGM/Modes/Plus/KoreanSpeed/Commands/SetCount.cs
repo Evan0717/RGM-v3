@@ -8,6 +8,10 @@ namespace RGM.Modes;
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
 public class SetCount : ICommand
 {
+    private static SetCount _instance;
+    
+    public static SetCount Instance => _instance ??= new SetCount();
+    
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         try
