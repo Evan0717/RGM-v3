@@ -4,6 +4,7 @@ using Exiled.API.Features.Core.UserSettings;
 
 using PlayerRoles;
 using RGM.API.Features;
+using RGM.Modes.Plus.ABattle;
 using RGM.Modes.SubClass;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,12 @@ namespace RGM.UserSettings
         public static ButtonSetting SwitchToSpectator { get; private set; }
         public static TwoButtonsSetting MuteBGM { get; private set; }
         public static DropdownSetting Translation { get; private set; }
+        public static KeybindSetting UpKey { get; private set; }
+        public static KeybindSetting DownKey { get; private set; }
+        public static KeybindSetting LeftKey { get; private set; }
+        public static KeybindSetting RightKey { get; private set; }
+        public static KeybindSetting EnterKey { get; private set; }
+        public static KeybindSetting DetailInfoKey { get; private set; }
 
         public static void Init()
         {
@@ -55,7 +62,7 @@ Move from the spectator seats to the training grounds.
 • Not available in Set mode or certain modes.
 • Available 10 seconds after death.
 """,
-                
+
                 header: Setting,
                 holdTime: 0.5f
             );
@@ -100,7 +107,7 @@ Are you worried BGM might be copyrighted by YouTube? Use this feature.
                     "English (en)",
                 },
                 defaultOptionIndex: Main.Instance.Config.EN ? 1 : 0,
-                hintDescription: 
+                hintDescription:
 """
 언어의 장벽을 부수려면 이 설정을 사용하세요.
 
@@ -109,14 +116,63 @@ Use this setting to break the language barrier.
                 header: Setting
             );
 
+            UpKey = new KeybindSetting(
+                id: 12055,
+                label: "위 이동키ㅣUp movement key",
+                suggested: KeyCode.UpArrow,
+                header: Setting
+            );
+
+            DownKey = new KeybindSetting(
+                id: 12056,
+                label: "아래 이동키ㅣDown movement key",
+                suggested: KeyCode.DownArrow,
+                header: Setting
+            );
+
+            LeftKey = new KeybindSetting(
+                id: 12057,
+                label: "왼쪽 이동키ㅣLeft movement key",
+                suggested: KeyCode.LeftArrow,
+                header: Setting
+            );
+
+            RightKey = new KeybindSetting(
+                id: 12058,
+                label: "오른쪽 이동키ㅣRight movement key",
+                suggested: KeyCode.RightArrow,
+                header: Setting
+            );
+
+            EnterKey = new KeybindSetting(
+                id: 12059,
+                label: "확인 키ㅣEnter key",
+                suggested: KeyCode.Return,
+                header: Setting
+            );
+
+            DetailInfoKey = new KeybindSetting(
+                id: 12060,
+                label: "자세한 설명 보기ㅣShow detailed info",
+                suggested: KeyCode.F1,
+                hintDescription: "현재 모드의 자세한 정보를 확인합니다.",
+                header: Setting
+            );
+
             IEnumerable<SettingBase> settings = new SettingBase[]
             {
                 // 설정
-                ScpCanEquipRandomItem, 
-                SpectatorToNone, 
+                ScpCanEquipRandomItem,
+                SpectatorToNone,
                 SwitchToSpectator,
                 MuteBGM,
                 Translation,
+                UpKey,
+                DownKey,
+                LeftKey,
+                RightKey,
+                EnterKey,
+                DetailInfoKey,
             };
 
             SettingBase.Register(settings);
@@ -146,81 +202,87 @@ Use this setting to break the language barrier.
                         return;
                     }
                 }
-            }
 
-            // 투버튼인 경우
-            if (setting is SSTwoButtonsSetting twoButton)
-            {
-                if (setting.SettingId == 12053)
+                if (setting.SettingId == 12055 || setting.SettingId == 12056 || setting.SettingId == 12057 || setting.SettingId == 12058)
+                    PlayersAudio[player].TryPlay("Select", 3);
+
+                if (setting.SettingId == 12059)
+                    PlayersAudio[player].TryPlay("SelectConfirm", 2);
+
+                // 투버튼인 경우
+                if (setting is SSTwoButtonsSetting twoButton)
                 {
-                    if (twoButton.SyncIsA)
+                    if (setting.SettingId == 12053)
                     {
-                        if (!MuteBGMPlayers.Contains(player))
-                            MuteBGMPlayers.Add(player);
-                    }
-                    else
-                    {
-                        if (MuteBGMPlayers.Contains(player))
-                            MuteBGMPlayers.Remove(player);
+                        if (twoButton.SyncIsA)
+                        {
+                            if (!MuteBGMPlayers.Contains(player))
+                                MuteBGMPlayers.Add(player);
+                        }
+                        else
+                        {
+                            if (MuteBGMPlayers.Contains(player))
+                                MuteBGMPlayers.Remove(player);
+                        }
                     }
                 }
-            }
 
-            // 드롭다운인 경우
-            if (setting is SSDropdownSetting dropdown)
-            {
-                if (setting.SettingId == 12054)
+                // 드롭다운인 경우
+                if (setting is SSDropdownSetting dropdown)
                 {
-                    TranslatorPlayers[player] = dropdown.SyncSelectionText.Split('(')[1].Replace(")", "");
-                }
-            }
-
-            if (setting.SettingId == 12051)
-            {
-                if ((CurrentMode == ModeType.None || CurrentMode.GetModeData().Info == ModeInfo.Plus) && 
-                    IsNonePlayerAllowed &&
-                    (Round.IsLobby || (DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10))
-                {
-                    if (player.IsAlive && NonePlayer.Players.Contains(player))
+                    if (setting.SettingId == 12054)
                     {
-                        player.ClearInventory();
-                        player.Kill("관전석으로 되돌아갑니다.");
-                    }
-                    else if (Round.IsLobby ? true : player.IsDead)
-                    {
-                        NonePlayer.Create(player);
-                    }
-                    else
-                    {
-                        PlayersAudio[player].TryPlay($"nope");
+                        TranslatorPlayers[player] = dropdown.SyncSelectionText.Split('(')[1].Replace(")", "");
                     }
                 }
-                else
-                {
-                    PlayersAudio[player].TryPlay($"nope");
-                }
-            }
 
-            if (setting.SettingId == 12052)
-            {
-                if ((DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10)
+                if (setting.SettingId == 12051)
                 {
-                    if (player.Role.Type == RoleTypeId.Overwatch)
+                    if ((CurrentMode == ModeType.None || CurrentMode.GetModeData().Info == ModeInfo.Plus) &&
+                        IsNonePlayerAllowed &&
+                        (Round.IsLobby || (DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10))
                     {
-                        player.Role.Set(RoleTypeId.Spectator);
-                    }
-                    else if (player.Role.Type == RoleTypeId.Spectator)
-                    {
-                        player.Role.Set(RoleTypeId.Overwatch);
+                        if (player.IsAlive && NonePlayer.Players.Contains(player))
+                        {
+                            player.ClearInventory();
+                            player.Kill("관전석으로 되돌아갑니다.");
+                        }
+                        else if (Round.IsLobby ? true : player.IsDead)
+                        {
+                            NonePlayer.Create(player);
+                        }
+                        else
+                        {
+                            PlayersAudio[player].TryPlay($"nope");
+                        }
                     }
                     else
                     {
                         PlayersAudio[player].TryPlay($"nope");
                     }
                 }
-                else
+
+                if (setting.SettingId == 12052)
                 {
-                    PlayersAudio[player].TryPlay($"nope");
+                    if ((DateTime.UtcNow - PlayersReport[player.UserId].LastDeath).TotalSeconds >= 10)
+                    {
+                        if (player.Role.Type == RoleTypeId.Overwatch)
+                        {
+                            player.Role.Set(RoleTypeId.Spectator);
+                        }
+                        else if (player.Role.Type == RoleTypeId.Spectator)
+                        {
+                            player.Role.Set(RoleTypeId.Overwatch);
+                        }
+                        else
+                        {
+                            PlayersAudio[player].TryPlay($"nope");
+                        }
+                    }
+                    else
+                    {
+                        PlayersAudio[player].TryPlay($"nope");
+                    }
                 }
             }
         }

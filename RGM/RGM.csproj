@@ -210,6 +210,7 @@
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTInputSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTBattle.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\All\AddDefense2.cs" />
@@ -305,8 +306,9 @@
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Special\Scp079\Repair.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Special\Scp079\SystemHacking.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbility.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\Rank.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Marshmellow.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Scp1509.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\CandyPower.cs" />
