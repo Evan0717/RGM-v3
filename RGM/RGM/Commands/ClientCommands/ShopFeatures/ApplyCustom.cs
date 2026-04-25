@@ -17,9 +17,9 @@ namespace RGM.Commands.ClientCommands
             Player player = Player.Get(sender);
             string args = string.Join(" ", arguments).Trim();
 
-            if (args.Count() > 16)
+            if (args.Count() > 20)
             {
-                response = "닉네임은 최대 16자까지만 허용됩니다.\n-";
+                response = "닉네임은 최대 20자까지만 허용됩니다.\n-";
                 return false;
             }
 
@@ -73,9 +73,9 @@ namespace RGM.Commands.ClientCommands
             Player player = Player.Get(sender);
             string args = string.Join(" ", arguments).Trim();
 
-            if (args.Count() > 16)
+            if (args.Count() > 50)
             {
-                response = "인포는 최대 16자까지만 허용됩니다.\n-";
+                response = "인포는 최대 50자까지만 허용됩니다.\n-";
                 return false;
             }
 

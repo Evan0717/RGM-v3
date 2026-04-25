@@ -45,14 +45,12 @@ namespace RGM.API.Features
                     Directory.CreateDirectory(directory);
 
                 string tempFile = targetFile + ".tmp";
-                string backupFile = targetFile + ".bak";
 
                 File.WriteAllText(tempFile, content, Encoding.UTF8);
 
                 if (File.Exists(targetFile))
                 {
-                    File.Copy(targetFile, backupFile, true);
-                    File.Replace(tempFile, targetFile, backupFile, true);
+                    File.Replace(tempFile, targetFile, null, true);
                 }
                 else
                 {
