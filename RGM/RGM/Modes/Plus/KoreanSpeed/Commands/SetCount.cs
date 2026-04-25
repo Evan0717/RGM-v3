@@ -59,8 +59,9 @@ public class SetCount : ICommand
                 response = "숫자를 입력해주세요.";
                 return false;
             }
+
             var data = byte.TryParse(arguments.At(1), out var value);
-            
+
             if (Regex.IsMatch(arguments.At(1), @"^[0-9]+$") && data && value <= 125)
             {
                 switch (arguments.At(0))
@@ -85,6 +86,7 @@ public class SetCount : ICommand
                                    """;
                         return false;
                 }
+
                 KoreanSpeed.AddEffects();
             }
             else

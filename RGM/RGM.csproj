@@ -559,7 +559,7 @@
     <Compile Include="RGM\Modes\Plus\GrandBow\GrandBow.cs" />
     <Compile Include="RGM\Modes\Plus\ChupaChups\ChupaChups.cs" />
     <Compile Include="RGM\Modes\Plus\Doppelganger\Doppelganger.cs" />
-    <Compile Include="RGM\Modes\Plus\KoreanSpeed\Commands\RACommands\SetCount.cs" />
+    <Compile Include="RGM\Modes\Plus\KoreanSpeed\Commands\SetCount.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Variables\KSVariables.cs" />
     <Compile Include="RGM\Modes\Plus\RandomBlockMode\RandomBlockMode.cs" />
     <Compile Include="RGM\Modes\Plus\SitDown\SitDown.cs" />
