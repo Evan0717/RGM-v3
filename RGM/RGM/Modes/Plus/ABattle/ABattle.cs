@@ -14,6 +14,8 @@ using PlayerRoles;
 using RemoteAdmin;
 using RGM.API.Features;
 using RGM.Modes.Commands;
+using RGM.Modes.Plus.ABattle;
+using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
 using Random = UnityEngine.Random;
 
@@ -56,6 +58,7 @@ public class ABattle : Mode
     public Dictionary<Player, List<Ability>> PlayerAbilities = new Dictionary<Player, List<Ability>>();
     public Dictionary<Player, List<AbilityType>> Selections = new Dictionary<Player, List<AbilityType>>();
     public Dictionary<Player, bool> IsSelecting = new Dictionary<Player, bool>();
+    public Dictionary<Player, int> SelectionCursor = new Dictionary<Player, int>();
     public Dictionary<Player, bool> IsLifeUsed = new Dictionary<Player, bool>();
 
     private ABattleEventHandler _eventHandler;
@@ -218,6 +221,8 @@ public class ABattle : Mode
 
         _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         _hintCoroutine = Timing.RunCoroutine(HintCoroutine());
+
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived += ABattleSetting.OnSSInput;
     }
 
     public override void OnDisabled()
@@ -248,6 +253,8 @@ public class ABattle : Mode
 
         Timing.KillCoroutines(_onModeStarted);
         Timing.KillCoroutines(_hintCoroutine);
+
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ABattleSetting.OnSSInput;
     }
 
     private IEnumerator<float> OnModeStarted()
@@ -283,7 +290,7 @@ public class ABattle : Mode
                     player.AddHint("워크스테이션 힌트", FormatHint(player), 1.2f);
             }
 
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForOneFrame;
         }
     }
 
@@ -765,6 +772,7 @@ public class ABattle : Mode
         }
 
         Selections[player] = abilities;
+        SelectionCursor[player] = 0;
 
         // 다음 타자, 코루틴!!!
         Timing.RunCoroutine(SelectionCoroutine(player));
@@ -778,7 +786,7 @@ public class ABattle : Mode
 
             if (Abilities[type].HolidayType == AbilityHolidayType.Halloween)
             {
-                result = "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>E</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b>";
+                result = "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>EE</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b>";
                 return true;
             }
 
@@ -792,9 +800,24 @@ public class ABattle : Mode
         }
 
         var abilities = Selections[player];
-        var text = string.Join("\n", abilities.Select((x, i) => $"[{i + 1}] {x.GetTranslation()}\n<size=20>{(holidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n"));
 
-        string CheckAbilityGrade()
+        string BuildSelectionText()
+        {
+            if (!SelectionCursor.ContainsKey(player))
+                SelectionCursor[player] = 0;
+
+            int cursor = SelectionCursor[player];
+            if (abilities.Count > 0)
+                cursor = Math.Max(0, Math.Min(cursor, abilities.Count - 1));
+
+            return string.Join("\n", abilities.Select((x, i) =>
+            {
+                string prefix = i == cursor ? "▶ " : "   ";
+                return $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>{(holidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n";
+            }));
+        }
+
+        string CheckAbilityGrade(string text)
         {
             if (text.Contains("일반")) return "일반";
             else if (text.Contains("희귀")) return "희귀";
@@ -805,23 +828,25 @@ public class ABattle : Mode
             else return "알 수 없음";
         }
 
-        for (var i = 0; i < 20; i++)
+        for (var i = 0; i < 200; i++)
         {
             if (player.IsDead || !Selections.ContainsKey(player))
             {
                 if (Selections.ContainsKey(player))
                     Selections.Remove(player);
 
+                SelectionCursor.Remove(player);
                 IsSelecting[player] = false;
 
                 yield break;
             }
 
+            var text = BuildSelectionText();
             player.AddHint("능력 선택",
-            $"<align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade()]}</b></size>\n\n<size=30>{text}</size>\n\n<size=25><b>{20 - i}초 안에 [.(번호)] 명령어로 원하는 능력을 선택하세요. (ex .1)</b></size></align>\n\n\n\n\n",
+            $"<align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(int)((200 - i) / 10)})</b></size>\n\n<size=30>{text}</size>\n\n<size=25><b>위/아래 키로 선택 후, Enter 키로 확정하세요.</b></size>\n<size=20><color=#bcbcbc><i>[ESC] -> [Settings] -> [Server-specific]</i></color></size></align>\n\n\n\n\n",
             1.2f);
 
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(0.1f);
         }
 
         IsSelecting[player] = false;
@@ -829,11 +854,12 @@ public class ABattle : Mode
         if (!Selections.ContainsKey(player))
             yield break;
 
-        var random = Random.Range(0, 3);
+        var random = Random.Range(0, abilities.Count);
 
         player.AddAbility(abilities[random]);
 
         Selections.Remove(player);
+        SelectionCursor.Remove(player);
     }
 
     public AbilityCategory GetCategory(Player player)
@@ -861,7 +887,7 @@ public class ABattle : Mode
                     return AbilityCategory.Common;
             }
         }
-        
+
         switch (random)
         {
             case <= 5:
@@ -896,11 +922,48 @@ public class ABattle : Mode
         player.AddAbility(ability);
 
         Selections.Remove(player);
+        SelectionCursor.Remove(player);
 
         player.AddHint("/?/", "", 0.1f);
 
         response = $"{index}번 능력 선택 완료!";
         return true;
+    }
+
+    public void MoveSelectionCursor(Player player, int delta)
+    {
+        if (!Selections.TryGetValue(player, out var abilities) || abilities.Count == 0)
+            return;
+
+        if (!SelectionCursor.ContainsKey(player))
+            SelectionCursor[player] = 0;
+
+        int cursor = SelectionCursor[player];
+        cursor = (cursor + delta) % abilities.Count;
+
+        if (cursor < 0)
+            cursor += abilities.Count;
+
+        SelectionCursor[player] = cursor;
+
+        PlayersAudio[player].TryPlay("Select");
+    }
+
+    public bool ConfirmSelectionByCursor(Player player, out string response)
+    {
+        if (!Selections.TryGetValue(player, out var abilities) || abilities.Count == 0)
+        {
+            response = "선택할 수 있는 능력이 없습니다.";
+            return false;
+        }
+
+        if (!SelectionCursor.ContainsKey(player))
+            SelectionCursor[player] = 0;
+
+        PlayersAudio[player].TryPlay("SelectConfirm", 1.5f);
+
+        int cursor = Math.Max(0, Math.Min(SelectionCursor[player], abilities.Count - 1));
+        return Select(player, cursor + 1, out response);
     }
 
     public void Reset(Player player)
@@ -909,6 +972,7 @@ public class ABattle : Mode
 
         PlayerWorkstations[player].Clear();
         IsSelecting[player] = false;
+        SelectionCursor.Remove(player);
         IsLifeUsed[player] = false;
     }
 
@@ -917,17 +981,17 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("골드 전주곡"))
         {
             if (player.Role.Type == RoleTypeId.Scp079)
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
+                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
 
             else
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1).First());
+                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.Role.Type == RoleTypeId.Scp079)
             {
                 for (int i = 0; i < Random.Range(1, 3); i++)
-                    player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
+                    player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
             }
 
             else
@@ -943,7 +1007,7 @@ public class ABattle : Mode
                     return AbilityCategory.Epic;
                 }
 
-                player.AddAbility(ABattle.Instance.GetRandomAbilities(player, getRandom(), 1).First());
+                player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1).First());
             }
         }
     }

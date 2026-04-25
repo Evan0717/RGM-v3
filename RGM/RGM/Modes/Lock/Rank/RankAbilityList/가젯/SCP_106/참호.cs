@@ -29,7 +29,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 
         protected override void OnGadgetUsed()
         {
-            foreach (BreakableDoor door in Door.List.Where(x => Vector3.Distance(x.Position, Owner.Position) < 5).Select(x => x as BreakableDoor))
+            foreach (BreakableDoor door in Door.List.Where(x => Vector3.Distance(x.Position, Owner.Position) < 5).Select(x => x as BreakableDoor).ToList())
             {
                 door.IsOpen = false;
                 door.Lock(5, DoorLockType.Regular079);

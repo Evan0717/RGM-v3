@@ -17,9 +17,15 @@ namespace RGM.Commands.ClientCommands
             Player player = Player.Get(sender);
             string args = string.Join(" ", arguments).Trim();
 
-            if (args.Count() > 16)
+            if (args.Count() > 20)
             {
-                response = "닉네임은 최대 16자까지만 허용됩니다.\n-";
+                response = "닉네임은 최대 20자까지만 허용됩니다.\n-";
+                return false;
+            }
+
+            if (args.Contains(",") || args.Contains("\"") || args.Contains("["))
+            {
+                response = "닉네임에 허용되지 않는 특수문자(',', '\"', '[')가 포함되어 있습니다.\n-";
                 return false;
             }
 
@@ -66,6 +72,18 @@ namespace RGM.Commands.ClientCommands
         {
             Player player = Player.Get(sender);
             string args = string.Join(" ", arguments).Trim();
+
+            if (args.Count() > 50)
+            {
+                response = "인포는 최대 50자까지만 허용됩니다.\n-";
+                return false;
+            }
+
+            if (args.Contains(",") || args.Contains("\"") || args.Contains("["))
+            {
+                response = "인포에 허용되지 않는 특수문자(',', '\"', '[')가 포함되어 있습니다.\n-";
+                return false;
+            }
 
             if (UsersManager.UsersCache.ContainsKey(player.UserId))
             {

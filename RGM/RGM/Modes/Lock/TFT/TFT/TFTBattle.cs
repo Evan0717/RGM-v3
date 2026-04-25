@@ -19,6 +19,8 @@ namespace DAONTFT.Core.TFT;
 public static class TFTBattle
 {
 
+    private static readonly Dictionary<Player, int> SelectionCursor = new();
+
     public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
     {
         {"일반", "#A4A4A4"},
@@ -267,6 +269,7 @@ public static class TFTBattle
         }
 
         Selections[player] = queue;
+        SelectionCursor[player] = 0;
 
         // 다음 타자, 코루틴!!!
         Timing.RunCoroutine(SelectionCoroutine(player));
@@ -333,7 +336,20 @@ public static class TFTBattle
 
                 removeHints();
 
-                List<Hint> hints = TFTManager.GetUpgradeDisplay(player, upgrades);
+                var abilities = getAbilities();
+                TFTAbilityType? selected = null;
+
+                if (abilities.Count > 0)
+                {
+                    if (!SelectionCursor.ContainsKey(player))
+                        SelectionCursor[player] = 0;
+
+                    int cursor = Math.Max(0, Math.Min(SelectionCursor[player], abilities.Count - 1));
+                    SelectionCursor[player] = cursor;
+                    selected = abilities[cursor];
+                }
+
+                List<Hint> hints = TFTManager.GetUpgradeDisplay(player, upgrades, 0, selected);
 
                 foreach (var hint in hints)
                 {
@@ -346,19 +362,20 @@ public static class TFTBattle
             {
                 resetupgradeDisplay();
 
-                yield return Timing.WaitForSeconds(1);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
         CoroutineHandle _hintDisplay = Timing.RunCoroutine(hintDisplay());
 
-        for (var i = 0; i < 30; i++)
+        for (var i = 0; i < 300; i++)
         {
             if (player.IsDead || !Selections.ContainsKey(player))
             {
                 if (Selections.ContainsKey(player))
                     Selections.Remove(player);
 
+                SelectionCursor.Remove(player);
                 IsSelecting[player] = false;
 
                 Timing.KillCoroutines(_hintDisplay);
@@ -366,7 +383,7 @@ public static class TFTBattle
                 yield break;
             }
 
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(0.1f);
         }
 
         IsSelecting[player] = false;
@@ -379,11 +396,12 @@ public static class TFTBattle
         if (!Selections.ContainsKey(player))
             yield break;
 
-        var random = Random.Range(0, 3);
+        var random = Random.Range(0, getAbilities().Count);
 
         player.AddTFTAbility(getAbilities().ElementAt(random));
 
         Selections.Remove(player);
+        SelectionCursor.Remove(player);
     }
 
     public static bool Select(this Player player, int index, out string response)
@@ -405,6 +423,7 @@ public static class TFTBattle
         player.AddTFTAbility(TFTAbility);
 
         Selections.Remove(player);
+        SelectionCursor.Remove(player);
 
         foreach (var hint in PlayerHints[player].Where(x => x.Id == "증강"))
         {
@@ -465,10 +484,45 @@ public static class TFTBattle
         }
     }
 
+    public static void MoveSelectionCursor(this Player player, int delta)
+    {
+        if (!Selections.TryGetValue(player, out var selections) || selections.Count == 0)
+            return;
+
+        if (!SelectionCursor.ContainsKey(player))
+            SelectionCursor[player] = 0;
+
+        int cursor = SelectionCursor[player];
+        cursor = (cursor + delta) % selections.Count;
+
+        if (cursor < 0)
+            cursor += selections.Count;
+
+        SelectionCursor[player] = cursor;
+
+        PlayersAudio[player].TryPlay("Select");
+    }
+
+    public static bool ConfirmSelectionByCursor(this Player player, out string response)
+    {
+        if (!Selections.TryGetValue(player, out var selections) || selections.Count == 0)
+        {
+            response = "선택할 수 있는 능력이 없습니다.";
+            return false;
+        }
+
+        if (!SelectionCursor.ContainsKey(player))
+            SelectionCursor[player] = 0;
+
+        int cursor = Math.Max(0, Math.Min(SelectionCursor[player], selections.Count - 1));
+        return player.Select(cursor + 1, out response);
+    }
+
     public static void Reset(this Player player)
     {
         player.RemoveAllAbilities();
 
+        SelectionCursor.Remove(player);
         IsSelecting[player] = false;
         IsLifeUsed[player] = false;
     }

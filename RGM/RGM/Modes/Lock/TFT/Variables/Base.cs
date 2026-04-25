@@ -1,4 +1,4 @@
-﻿using DAONTFT.Core.TFT;
+using DAONTFT.Core.TFT;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;

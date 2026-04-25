@@ -334,7 +334,7 @@ namespace RGM.EventArgs
                     }
                 }
 
-                Webhook.Send($"# {Server.IpAddress}:{Server.Port}", "https://discord.com/api/webhooks/1373673172401913928/MKZROq8z9OjuGn21Oj8yjuTMHamSf8Z_VGE5BBebFO9c_WFvD9KphmcN2wZucC2cczLS", path);
+                Webhook.Send($"# {Server.IpAddress}:{Server.Port}", Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook4.txt"), path);
             }
             catch (Exception e)
             {

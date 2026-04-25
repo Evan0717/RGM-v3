@@ -73,7 +73,7 @@ public class KoreanSpeed : Mode
         {
             foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
             {
-                player.EnableEffect(EffectType.MovementBoost, (byte)(count * 3));
+                player.EnableEffect(EffectType.MovementBoost, (byte)(count * 2));
                 player.EnableEffect(EffectType.Scp1853, count <= 5 ? (byte)count : (byte)5);
             }
         }
