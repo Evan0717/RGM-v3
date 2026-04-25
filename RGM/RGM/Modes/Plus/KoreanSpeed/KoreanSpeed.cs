@@ -27,8 +27,7 @@ public class KoreanSpeed : Mode
         Exiled.Events.Handlers.Player.Died -= OnDied;
         Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
         Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
-        SpeedStore.Clear();
-        SpeedStore.isEnabled = false;
+        SpeedStore.Disable();
         UnloadEffects();
     }
 
@@ -39,10 +38,10 @@ public class KoreanSpeed : Mode
         Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
         Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
         SpeedStore.Clear();
-        SpeedStore.isEnabled = true;
+        SpeedStore.Ignition();
     }
 
-    private void OnDied(DiedEventArgs ev)
+    private static void OnDied(DiedEventArgs ev)
     {
         if (SpeedStore.Count != 125)
             SpeedStore.Count++;
