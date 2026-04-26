@@ -12,6 +12,12 @@ namespace RGM.Commands.ClientCommands
         {
             Player player = Player.Get(sender);
 
+            if (player.IsScp)
+            {
+                response = "SCP는 이 명령어를 사용할 수 없습니다.";
+                return false;
+            }
+
             if (player.IsAlive && Round.IsStarted)
             {
                 player.Kill(DamageType.Warhead);
