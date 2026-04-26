@@ -79,7 +79,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnDied(DiedEventArgs ev)
         {
-            if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown)
+            if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown || ev.DamageHandler.Type == DamageType.Warhead)
             {
                 ev.Player.AddHint("스피릿 성불", $"성불했습니다..", 3);
                 spirits.Remove(ev.Player);
