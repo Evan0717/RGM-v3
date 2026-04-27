@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -193,8 +193,8 @@
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\튜토리얼\예능.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankBattle.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankInfo.cs" />
-    <Compile Include="RGM\Modes\Lock\Rank\RankSetting.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbility.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Classes\TFTManager.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Commands\ClientCommands\basicfeatures\Reroll.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Commands\ClientCommands\basicfeatures\Select.cs" />
@@ -662,7 +662,7 @@
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
-    <Compile Include="RGM\UserSettings\ServerSpecificSettings.cs" />
+    <Compile Include="RGM\UserSettings\MainSetting.cs" />
     <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -753,6 +753,9 @@
     </Reference>
     <Reference Include="PveExiled">
       <HintPath>$(EXILED_REFERENCES)\PveExiled.dll</HintPath>
+    </Reference>
+    <Reference Include="SecretAPI">
+      <HintPath>..\..\..\EXILED_REFERENCES\SecretAPI.dll</HintPath>
     </Reference>
     <Reference Include="SLPlayerRotation">
       <HintPath>$(EXILED_REFERENCES)\SLPlayerRotation.dll</HintPath>
