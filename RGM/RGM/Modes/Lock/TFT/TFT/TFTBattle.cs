@@ -21,6 +21,30 @@ public static class TFTBattle
 
     private static readonly Dictionary<Player, int> SelectionCursor = new();
 
+    private static void ClearSelectionPresentation(Player player, bool playCloseAudio = false)
+    {
+        if (PlayerHints.TryGetValue(player, out var hints))
+        {
+            foreach (var hint in hints.Where(x => x.Id == "증강").ToList())
+            {
+                player.RemoveHint(hint);
+                hints.Remove(hint);
+            }
+        }
+
+        foreach (var clip in PlayersAudio[player].ClipsById.Values)
+        {
+            if (clip.Clip.Contains("증강"))
+                clip.IsPaused = true;
+        }
+
+        player.DisableEffect(EffectType.Blinded);
+        player.DisableEffect(EffectType.SoundtrackMute);
+
+        if (playCloseAudio)
+            PlayersAudio[player].TryPlay("증강 선택창 닫힘", 3);
+    }
+
     public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
     {
         {"일반", "#A4A4A4"},
@@ -379,6 +403,7 @@ public static class TFTBattle
                 IsSelecting[player] = false;
 
                 Timing.KillCoroutines(_hintDisplay);
+                ClearSelectionPresentation(player);
 
                 yield break;
             }
@@ -425,22 +450,7 @@ public static class TFTBattle
         Selections.Remove(player);
         SelectionCursor.Remove(player);
 
-        foreach (var hint in PlayerHints[player].Where(x => x.Id == "증강"))
-        {
-            player.RemoveHint(hint);
-        }
-
-        foreach (var clip in PlayersAudio[player].ClipsById.Values)
-        {
-            if (clip.Clip.Contains("증강"))
-            {
-                clip.IsPaused = true;
-            }
-        }
-
-        player.DisableEffect(EffectType.Blinded);
-        player.DisableEffect(EffectType.SoundtrackMute);
-        PlayersAudio[player].TryPlay($"증강 선택창 닫힘", 3);
+        ClearSelectionPresentation(player, true);
 
         response = $"{index}번 능력 선택 완료!";
         return true;
@@ -522,8 +532,13 @@ public static class TFTBattle
     {
         player.RemoveAllAbilities();
 
+        if (Selections.ContainsKey(player))
+            Selections.Remove(player);
+
         SelectionCursor.Remove(player);
         IsSelecting[player] = false;
         IsLifeUsed[player] = false;
+
+        ClearSelectionPresentation(player);
     }
 }
