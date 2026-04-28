@@ -606,6 +606,34 @@
     <Compile Include="RGM\Modes\Set\GunGame\GunGame.cs" />
     <Compile Include="RGM\Modes\Set\HideAndSeek\HideAndSeek.cs" />
     <Compile Include="RGM\Modes\Set\PVE\PVE.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Hard.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Insane.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Normal.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Special.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Assassin.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\ClassD.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Cloaker.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Demolisher.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Gunner.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Juggernaut.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Pyromancer.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Rifleman.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Scout.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Sniper.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Striker.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Tranquilizer.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Zombie.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemy.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Main.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\RoundHandler.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWave.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Blackout.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\DemolisherRush.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Hangout.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Mirrored.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Spirit.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Upgraded.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\WaveConfig.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\Config.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\PlayerScoreManager.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\SnakeCommands.cs" />
@@ -798,6 +826,5 @@
       <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
