@@ -136,7 +136,6 @@ namespace RGM.API.Features
         현재 연속 출석 일수 - 30
         */
 
-        private static readonly object _usersLock = new object();
         private static DateTime _lastUsersFileLoadUtc = DateTime.MinValue;
         private static DateTime _lastUsersFileWriteUtc = DateTime.MinValue;
 
@@ -221,43 +220,34 @@ namespace RGM.API.Features
 
         public static void SaveUsers()
         {
-            lock (_usersLock)
-            {
-                if (!IsUsersFileLoaded)
-                    return;
+            if (!IsUsersFileLoaded)
+                return;
 
-                if (ReloadIfExternallyModified())
-                    return;
+            if (ReloadIfExternallyModified())
+                return;
 
-                Timing.RunCoroutine(RefreshDiscordId());
+            Timing.RunCoroutine(RefreshDiscordId());
 
-                var text = JsonConvert.SerializeObject(UsersCache, Formatting.None);
-                FileManager.WriteFile(UsersFileName, text);
+            var text = JsonConvert.SerializeObject(UsersCache, Formatting.None);
+            FileManager.WriteFile(UsersFileName, text);
 
-                _lastUsersFileWriteUtc = GetUsersFileLastWriteUtc();
-                if (_lastUsersFileWriteUtc == DateTime.MinValue)
-                    _lastUsersFileWriteUtc = DateTime.UtcNow;
-            }
+            _lastUsersFileWriteUtc = GetUsersFileLastWriteUtc();
+            if (_lastUsersFileWriteUtc == DateTime.MinValue)
+                _lastUsersFileWriteUtc = DateTime.UtcNow;
         }
 
         public static void LoadUsers()
         {
-            lock (_usersLock)
-            {
-                if (IsUsersFileLoaded)
-                    return;
+            Timing.RunCoroutine(RefreshDiscordId());
 
-                Timing.RunCoroutine(RefreshDiscordId());
+            if (TryReadUsersFromDisk(out var loadedDb))
+                UsersCache = loadedDb;
 
-                if (TryReadUsersFromDisk(out var loadedDb))
-                    UsersCache = loadedDb;
+            DateTime writeUtc = GetUsersFileLastWriteUtc();
+            _lastUsersFileLoadUtc = writeUtc;
+            _lastUsersFileWriteUtc = writeUtc;
 
-                DateTime writeUtc = GetUsersFileLastWriteUtc();
-                _lastUsersFileLoadUtc = writeUtc;
-                _lastUsersFileWriteUtc = writeUtc;
-
-                IsUsersFileLoaded = true;
-            }
+            IsUsersFileLoaded = true;
         }
 
         public static IEnumerator<float> RefreshDiscordId()
