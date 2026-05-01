@@ -660,6 +660,7 @@
     <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
+    <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\UserSettings\MainSetting.cs" />

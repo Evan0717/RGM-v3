@@ -528,7 +528,8 @@ namespace RGM.EventArgs
 
         public static void OnSpawned(SpawnedEventArgs ev)
         {
-            ev.Player.EnableEffect(EffectType.FogControl, 1);
+            if (Server.Port != 7803)
+                ev.Player.EnableEffect(EffectType.FogControl, 1);
 
             if (ev.Player.IsAlive)
             {

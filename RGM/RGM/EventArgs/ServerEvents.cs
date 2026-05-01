@@ -11,6 +11,7 @@ using ProjectMER.Features;
 using RGM.API.Components;
 using RGM.API.Features;
 using RGM.Modes.Sets.AddScp.Scps;
+using RGM.RGM.Modes.Tiny.대인전;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -110,6 +111,51 @@ namespace RGM.EventArgs
             else
             {
                 SelectMode = "MostVote";
+            }
+
+            if (Server.Port == 7803)
+            {
+                Respawn.PauseWaves();
+                
+
+                IEnumerator<float> enumerator()
+                {
+                    Map.Broadcast(10, "대기 중..");
+                    yield return Timing.WaitForSeconds(10);
+
+                    Server.ExecuteCommand("/fm 필독");
+                    Server.ExecuteCommand("/fs");
+
+                    foreach (var player in Player.List)
+                        player.Role.Set(RoleTypeId.Tutorial);
+
+                    Map.Broadcast(10, "대기 중..");
+                    yield return Timing.WaitForSeconds(10);
+
+                    while (true)
+                    {
+                        while (Player.List.Count(x => !x.IsNPC) <= 1)
+                        {
+                            Map.Broadcast(1, "대인전을 시작하려면 플레이어가 2명 이상 필요합니다.");
+
+                            yield return Timing.WaitForSeconds(1);
+                        }
+
+                        대인전.Start();
+
+                        while (Player.List.All(x => !x.IsTutorial))
+                            yield return Timing.WaitForSeconds(1);
+
+                        for (int i = 0; i < 30; i++)
+                        {
+                            Map.Broadcast(1, $"{30 - i}초 후 대인전이 시작됩니다.");
+
+                            yield return Timing.WaitForSeconds(1);
+                        }
+                    }
+                }
+
+                Timing.RunCoroutine(enumerator());
             }
 
             while (true)
