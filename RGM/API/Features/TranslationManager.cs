@@ -38,10 +38,10 @@ namespace RGM.API.Features
         public static string ApiKey { get; set; } = string.Empty;
 
         /// <summary>Minimum delay between outbound requests (seconds).</summary>
-        public static float MinInterval { get; set; } = 0.5f;
+        public static float MinInterval { get; set; } = 0.1f;
 
         /// <summary>Max retry count on transient failures (429/5xx/network).</summary>
-        public static int MaxRetries { get; set; } = 2;
+        public static int MaxRetries { get; set; } = 0;
 
         /// <summary>Base delay for backoff (seconds).</summary>
         public static float RateLimitBackoffBase { get; set; } = 0.5f;
