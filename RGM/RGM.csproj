@@ -569,6 +569,7 @@
     <Compile Include="RGM\Modes\Plus\Moon\Moon.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\NonePlayer\NonePlayer.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\Pet\Capybara.cs" />
+    <Compile Include="RGM\Modes\Plus\Subclass\Foxy\Foxy.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\Steve\Steve.cs" />
     <Compile Include="RGM\Modes\Plus\TripleAxel\TripleAxel.cs" />
     <Compile Include="RGM\Modes\Set\AddScp\AddScp.cs" />
@@ -687,6 +688,7 @@
     <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
+    <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\UserSettings\MainSetting.cs" />

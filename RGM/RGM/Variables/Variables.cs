@@ -83,7 +83,8 @@ namespace RGM.Variables
             "OperationNightFlight",
             "China",
             "CityPlusCITY",
-            "Castle"
+            "Castle",
+            "FNAF2"
         };
         public static List<string> Specials = new()
         {
@@ -388,7 +389,8 @@ namespace RGM.Variables
             {"포기는 금물", "(대충 길어서 설명은 디스코드 확인하세요)"},
             {"도파민 우선", "하지만 재밌었죠?"},
             {"2026", "아무도 알아주지 않을 길을 걷는 자"},
-            {"2025 Last Survivor", "2025 연말 이벤트의 마지막 생존자"}
+            {"2025 Last Survivor", "2025 연말 이벤트의 마지막 생존자"},
+            {"마음만큼은 어린이", "2026년도 어린이날(5월 5일) 기념"}
         };
         public static Dictionary<string, string> Icons = new Dictionary<string, string>()
         {

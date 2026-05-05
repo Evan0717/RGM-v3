@@ -1,28 +1,29 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Discord;
+using DiscordInteraction.Discord;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
-
+using Exiled.API.Features;
+using Exiled.API.Features.Roles;
+using Exiled.Events.EventArgs.Player;
+using MapGeneration.Holidays;
+using MEC;
 using PlayerRoles;
+using PlayerStatsSystem;
+using ProjectMER.Features;
 using RGM.API.DataBases;
 using RGM.API.Features;
 using RGM.API.Interfaces;
+using RGM.Modes;
+using RGM.Modes.SubClass;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using UnityEngine;
-using Exiled.API.Features;
-
-using static RGM.Variables.Variable;
-using MEC;
-using Exiled.Events.EventArgs.Player;
-using DiscordInteraction.Discord;
-using PlayerStatsSystem;
-using Exiled.API.Features.Roles;
-using CustomPlayerEffects;
-using MapGeneration.Holidays;
-using RGM.Modes.SubClass;
-
+using UnityEngine.DedicatedServer;
 using static RGM.IEnumerators.ServerIEnumerator;
-using RGM.Modes;
+using static RGM.Variables.Variable;
 
 
 namespace RGM.EventArgs
@@ -528,10 +529,42 @@ namespace RGM.EventArgs
 
         public static void OnSpawned(SpawnedEventArgs ev)
         {
-            ev.Player.EnableEffect(EffectType.FogControl, 1);
+            if (Server.Port != 7803)
+            {
+                ev.Player.EnableEffect(EffectType.FogControl, 1);
+
+                if (MapUtils.LoadedMaps.Keys.Any(Maps.Contains))
+                    ev.Player.EnableEffect(EffectType.NightVision, 255);
+            }
 
             if (ev.Player.IsAlive)
             {
+                if (Round.IsStarted)
+                {
+                    DateTime kst = DateTime.UtcNow.AddHours(9); // 어린이날 전용
+                    if (!ev.Player.IsNonePlayer() && kst.Month == 5 && kst.Day == 5)
+                    {
+                        if (UnityEngine.Random.Range(1, 201) == 1)
+                        {
+                            Foxy.Create(ev.Player);
+
+                            string name;
+
+                            if (UnityEngine.Random.Range(1, 3) == 1)
+                                name = "고급 모드 제안서";
+                            else
+                                name = "고급 모드 리롤권";
+
+                            ev.Player.UserId.AddProduct(name, out string response);
+
+                            Map.Broadcast(20, $"<size=30><b>🎁 축하드립니다!</b> <i>{ev.Player.DisplayNickname}</i>님께서 {name}(을)를 획득했습니다!</size>");
+                            GlobalPlayer.TryPlay("6AM", 1.5f);
+                        }
+                        else if (UnityEngine.Random.Range(1, 51) == 1)
+                            Steve.Create(ev.Player);
+                    }
+                }
+
                 ev.Player.Scale = new Vector3(1, 1, 1);
 
                 if (Round.IsLobby || ev.Reason == SpawnReason.RoundStart)

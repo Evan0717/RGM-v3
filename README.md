@@ -6,8 +6,8 @@
 
 [![Discord](https://img.shields.io/discord/930837847026585600?color=738adb&label=Discord&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/NWSrVqmKsq)
 
-</div>
+[종속성을 얻으려면 이 레포지토리를 다운로드하세요.](https://github.com/GoldenPig1205/EXILED_REFERENCES)
 
-[![RGM](https://media.discordapp.net/attachments/830246342491111485/1281971393424003104/ezgif-1-88991f6643-2.gif?ex=6758eca6&is=67579b26&hm=c304147a86cab1d831b69e28c1f0462b4e4d4928e0a10cf10ef502076b0f0104&=)]()
+</div>
 
 

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace RGM.Modes.SubClass
 {
-    public static class Steve
+    public static class Foxy
     {
         public static List<Player> Players = new();
 
@@ -16,7 +16,7 @@ namespace RGM.Modes.SubClass
         {
             IEnumerator<float> main()
             {
-                Server.ExecuteCommand($"/slw suit {player.Id} Steve");
+                Server.ExecuteCommand($"/slw suit {player.Id} Foxy");
 
                 yield break;
             }
