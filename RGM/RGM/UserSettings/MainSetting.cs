@@ -2,7 +2,6 @@
 using Exiled.API.Features;
 using PlayerRoles;
 using RGM.API.Features;
-using RGM.Modes.Plus.ABattle;
 using RGM.Modes.SubClass;
 using SecretAPI.Features.UserSettings;
 using System;

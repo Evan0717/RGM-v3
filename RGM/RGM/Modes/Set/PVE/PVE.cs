@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using RGM.API.Features;
+using RGM.Modes.PveExiledSystem;
 
 namespace RGM.Modes
 {

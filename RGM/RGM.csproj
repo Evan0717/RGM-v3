@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -569,6 +569,7 @@
     <Compile Include="RGM\Modes\Plus\Moon\Moon.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\NonePlayer\NonePlayer.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\Pet\Capybara.cs" />
+    <Compile Include="RGM\Modes\Plus\Subclass\Foxy\Foxy.cs" />
     <Compile Include="RGM\Modes\Plus\Subclass\Steve\Steve.cs" />
     <Compile Include="RGM\Modes\Plus\TripleAxel\TripleAxel.cs" />
     <Compile Include="RGM\Modes\Set\AddScp\AddScp.cs" />
@@ -606,6 +607,33 @@
     <Compile Include="RGM\Modes\Set\GunGame\GunGame.cs" />
     <Compile Include="RGM\Modes\Set\HideAndSeek\HideAndSeek.cs" />
     <Compile Include="RGM\Modes\Set\PVE\PVE.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Hard.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Insane.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Normal.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Difficulty\Special.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Assassin.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\ClassD.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Cloaker.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Demolisher.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Gunner.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Juggernaut.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Pyromancer.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Rifleman.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Scout.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Sniper.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Striker.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Tranquilizer.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemies\Zombie.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\Enemy.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\RoundHandler.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWave.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Blackout.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\DemolisherRush.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Hangout.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Mirrored.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Spirit.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\SpecialWaves\Upgraded.cs" />
+    <Compile Include="RGM\Modes\Set\PVE\PveExiled\WaveConfig.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\Config.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\PlayerScoreManager.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\SnakeCommands.cs" />
@@ -660,6 +688,7 @@
     <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
+    <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\UserSettings\MainSetting.cs" />
@@ -751,11 +780,11 @@
     <Reference Include="ProjectMER">
       <HintPath>$(EXILED_REFERENCES)\ProjectMER.dll</HintPath>
     </Reference>
-    <Reference Include="PveExiled">
-      <HintPath>$(EXILED_REFERENCES)\PveExiled.dll</HintPath>
-    </Reference>
     <Reference Include="SecretAPI">
       <HintPath>..\..\..\EXILED_REFERENCES\SecretAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="SemanticVersioning">
+      <HintPath>..\..\..\EXILED_REFERENCES\SemanticVersioning.dll</HintPath>
     </Reference>
     <Reference Include="SLPlayerRotation">
       <HintPath>$(EXILED_REFERENCES)\SLPlayerRotation.dll</HintPath>
@@ -773,6 +802,10 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\EXILED_REFERENCES\UnityEngine.AIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -801,6 +834,5 @@
       <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
