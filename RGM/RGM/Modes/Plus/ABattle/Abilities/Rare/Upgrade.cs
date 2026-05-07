@@ -8,10 +8,7 @@ public class Upgrade : Ability
 {
     public override void OnEnabled()
     {
-        if (Owner.CurrentItem == null)
-            throw new System.Exception("현재 들고 있는 아이템이 없습니다.");
-
-        else
+        if (Owner.CurrentItem != null)
         {
             if (Scp914Upgrader.TryGetProcessor(Owner.CurrentItem.Type, out Scp914ItemProcessor processor))
                 processor.UpgradeInventoryItem(Scp914KnobSetting.VeryFine, Owner.CurrentItem.Base);

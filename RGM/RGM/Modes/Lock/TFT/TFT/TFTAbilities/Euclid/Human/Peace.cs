@@ -15,24 +15,18 @@ public class Peace : TFTAbility
     {
         foreach (var item in Owner.Items.ToList())
         {
-            if (item.IsFirearm || new List<ItemType> 
-            { 
-                ItemType.MicroHID,
-                ItemType.Jailbird
-            }.Contains(item.Type))
-            {
+            if (item.Type.IsWeapon())
                 Owner.DropItem(item);
-            }
         }
 
-        Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
+        Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
         
         _peaceLoop = Timing.RunCoroutine(peaceLoop());
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+        Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
 
         Timing.KillCoroutines(_peaceLoop);
     }
@@ -48,14 +42,12 @@ public class Peace : TFTAbility
         }
     }
 
-    void OnSearchingPickup(SearchingPickupEventArgs ev)
+    void OnItemAdded(ItemAddedEventArgs ev)
     {
         if (ev.Player == Owner) 
         {
-            if (ev.Pickup.Type.IsWeapon())
-            {
-                ev.IsAllowed = false;
-            }
+            if (ev.Item.Type.IsWeapon())
+                ev.Player.DropItem(ev.Item);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
                 ev.IsAllowed = false;
 
                 ev.Player.RemoveEffect(EffectType.PocketCorroding, 1);
-                ev.Player.Teleport(Room.List.GetRandomValue());
+                ev.Player.Position = Player.List.GetRandomValue(x => x.IsAlive && x != ev.Player).Position;
             }
         }
     }

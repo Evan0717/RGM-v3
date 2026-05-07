@@ -695,17 +695,7 @@ $"""
             }
 
             if (!MapUtils.LoadedMaps.ContainsKey(mapName))
-            {
-                if (Maps.Contains(mapName))
-                {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
-                    {
-                        ObjectSpawner.SpawnSchematic("Sun", new Vector3(0, 1500, 0));
-                    }
-                }
-
                 MapUtils.LoadMap(mapName);
-            }
 
             Log.Info($"로드된 맵: {mapName}");
 

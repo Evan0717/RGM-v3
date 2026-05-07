@@ -1,9 +1,6 @@
-﻿using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.Events.EventArgs.Scp049;
+﻿using Exiled.Events.EventArgs.Scp049;
 using MEC;
 using RGM.Modes;
-using System.Linq;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {

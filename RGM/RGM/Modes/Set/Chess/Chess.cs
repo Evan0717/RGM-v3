@@ -5,7 +5,6 @@ using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp1509;
 using MEC;
-using Mirror;
 using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;

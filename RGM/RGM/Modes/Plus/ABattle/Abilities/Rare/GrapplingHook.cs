@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
@@ -38,12 +37,9 @@ public class GrapplingHook : Ability
     {
         if (ev.Item.Serial == serial)
         {
-            if (Tools.TryGetLookPlayers(ev.Player, 100f, out List<Player> players, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayer(ev.Player, 100f, out Player target, out RaycastHit? hit))
             {
-                foreach (var player in players)
-                {
-                    player.Position = ev.Player.Position;
-                }
+                target.Position = ev.Player.Position;
 
                 ev.Item.Destroy();
                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);

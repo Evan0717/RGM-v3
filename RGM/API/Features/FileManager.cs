@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -135,7 +136,8 @@ namespace RGM.API.Features
         현재 연속 출석 일수 - 30
         */
 
-        private static readonly object _usersLock = new object();
+        private static DateTime _lastUsersFileLoadUtc = DateTime.MinValue;
+        private static DateTime _lastUsersFileWriteUtc = DateTime.MinValue;
 
         public static string UsersFileName = Path.Combine(Paths.Configs, "RGM/Users.db");
         public static Dictionary<string, List<string>> UsersCache = new Dictionary<string, List<string>>();
@@ -151,50 +153,101 @@ namespace RGM.API.Features
         public static bool AddUser(string userId, List<string> UserInfo)
         {
             UsersCache[userId] = UserInfo;
+            return true;
+        }
 
+        private static DateTime GetUsersFileLastWriteUtc()
+        {
+            try
+            {
+                if (!File.Exists(UsersFileName))
+                    return DateTime.MinValue;
+
+                return File.GetLastWriteTimeUtc(UsersFileName);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[UsersManager] Failed to get Users.db last write time: {ex}");
+                return DateTime.MinValue;
+            }
+        }
+
+        private static bool TryReadUsersFromDisk(out Dictionary<string, List<string>> loadedDb)
+        {
+            loadedDb = null;
+
+            var dbText = FileManager.ReadFile(UsersFileName);
+            if (string.IsNullOrWhiteSpace(dbText))
+                return false;
+
+            try
+            {
+                var parsed = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(dbText);
+                if (parsed == null)
+                    return false;
+
+                loadedDb = parsed;
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error($"[UsersManager] Failed to parse Users.db: {ex}");
+                return false;
+            }
+        }
+
+        private static bool ReloadIfExternallyModified()
+        {
+            DateTime diskWriteUtc = GetUsersFileLastWriteUtc();
+
+            if (diskWriteUtc == DateTime.MinValue)
+                return false;
+
+            DateTime baseline = _lastUsersFileWriteUtc > DateTime.MinValue ? _lastUsersFileWriteUtc : _lastUsersFileLoadUtc;
+            if (baseline != DateTime.MinValue && diskWriteUtc <= baseline)
+                return false;
+
+            if (!TryReadUsersFromDisk(out var loadedDb))
+                return false;
+
+            UsersCache = loadedDb;
+            _lastUsersFileLoadUtc = diskWriteUtc;
+
+            Timing.RunCoroutine(RefreshDiscordId());
+            Log.Warn("[UsersManager] Users.db was modified externally. Reloaded cache from disk and skipped this save cycle to preserve external changes.");
             return true;
         }
 
         public static void SaveUsers()
         {
-            lock (_usersLock)
-            {
-                if (!IsUsersFileLoaded)
-                    return;
+            if (!IsUsersFileLoaded)
+                return;
 
-                Timing.RunCoroutine(RefreshDiscordId());
+            if (ReloadIfExternallyModified())
+                return;
 
-                var text = JsonConvert.SerializeObject(UsersCache, Formatting.None);
-                FileManager.WriteFile(UsersFileName, text);
-            }
+            Timing.RunCoroutine(RefreshDiscordId());
+
+            var text = JsonConvert.SerializeObject(UsersCache, Formatting.None);
+            FileManager.WriteFile(UsersFileName, text);
+
+            _lastUsersFileWriteUtc = GetUsersFileLastWriteUtc();
+            if (_lastUsersFileWriteUtc == DateTime.MinValue)
+                _lastUsersFileWriteUtc = DateTime.UtcNow;
         }
 
         public static void LoadUsers()
         {
-            lock (_usersLock)
-            {
-                if (IsUsersFileLoaded)
-                    return;
+            Timing.RunCoroutine(RefreshDiscordId());
 
-                Timing.RunCoroutine(RefreshDiscordId());
+            if (TryReadUsersFromDisk(out var loadedDb))
+                UsersCache = loadedDb;
 
-                var dbText = FileManager.ReadFile(UsersFileName);
-                if (!string.IsNullOrWhiteSpace(dbText))
-                {
-                    try
-                    {
-                        var loadedDb = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(dbText);
-                        if (loadedDb != null)
-                            UsersCache = loadedDb;
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Log.Error($"[UsersManager] Failed to parse Users.db: {ex}");
-                    }
-                }
+            DateTime writeUtc = GetUsersFileLastWriteUtc();
+            _lastUsersFileLoadUtc = writeUtc;
+            _lastUsersFileWriteUtc = writeUtc;
 
-                IsUsersFileLoaded = true;
-            }
+            IsUsersFileLoaded = true;
         }
 
         public static IEnumerator<float> RefreshDiscordId()
