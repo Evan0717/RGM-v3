@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -308,6 +308,12 @@
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbility.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\Rank.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
+    <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
+    <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
+    <Compile Include="RGM\Modes\Plus\Store\Store.cs" />
+    <Compile Include="RGM\Modes\Plus\Store\StoreSetting.cs" />
+    <Compile Include="RGM\Modes\Plus\Store\StoreItem.cs" />
+    <Compile Include="RGM\Modes\Plus\Store\Variables\ServerManagers.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Marshmellow.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Scp1509.cs" />
@@ -833,6 +839,12 @@
     <Reference Include="YamlDotNet">
       <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
+    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
+    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
+    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

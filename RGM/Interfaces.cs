@@ -161,7 +161,8 @@ public enum ModeType
     TFT,
     RandomBlockMode,
     Rank,
-    Chess
+    Chess,
+    Store
 }
 
 
