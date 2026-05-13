@@ -18,7 +18,7 @@ namespace RGM.Modes
 나도이게뭔지잘몰?루
 """;
         public override string Color => "a0aade";
-        public override string Suggester => "made by A3인데(@a3ind)";
+        public override string Author => "A3인데";
 
         RoundHandler roundHandler;
 

@@ -361,12 +361,20 @@ namespace RGM.EventArgs
                                     Description = $"{FirstDesc()}\n<size=25>[ESC] -> [Settings] -> [Server-specific]에서 유용한 정보를 확인해보세요.</size>";
                                 }
 
+                                string createBy()
+                                {
+                                    if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode].Author == "")
+                                        return "";
+                                    else
+                                        return $" <size=20><color=white>Made by <i>{ModeList[SelectedMode].Author}</i></color></size>";
+                                }
+
                                 string IdeaBy()
                                 {
                                     if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode].Suggester == "")
                                         return "";
                                     else
-                                        return $" <size=20><color=white>{ModeList[SelectedMode].Suggester}</color></size>";
+                                        return $" <size=20><color=white>Idea by <i>{ModeList[SelectedMode].Suggester}</i></color></size>";
                                 }
 
                                 string s(int num)
@@ -392,7 +400,7 @@ namespace RGM.EventArgs
                                     .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{s(3)}</color>" : s(3))
                                     .Replace("{Fourth}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(4)].Color}>{iv(4).GetModeData().Name}</color>") + (SubModeVote[3] != ModeType.None ? $" + <b> <size=20><color=#{ModeList[SubModeVote[3]].Color}>{SubModeVote[3].GetModeData().Name}</color></size></b>" : ""))
                                     .Replace("{FourthVote}", ModeVote[iv(4)].Contains(ev.Player) ? $"<color=yellow>{s(4)}</color>" : s(4))
-                                    .Replace("{ModeName}", $"{(SelectedMode == ModeType.None ? "참고" : SelectedMode.GetModeData().Name)}{IdeaBy()}")
+                                    .Replace("{ModeName}", $"{(SelectedMode == ModeType.None ? "참고" : SelectedMode.GetModeData().Name)}{createBy()}{IdeaBy()}")
                                     .Replace("{ModeColor}", $"{Color}").Replace("{ModeDescription}", $"{Description}")
                                     .Replace("{Lines}", $"{(Description.Contains("\n") ? "\n" : "\n\n")}")
                                     .Replace("{Exp}", $"{uc[0]}")

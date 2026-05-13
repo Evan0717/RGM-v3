@@ -10,7 +10,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.ChangedFate)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.ChangedFate)]
     public class ChangedFate : Mode
     {
         public override string Name => "뒤바뀐 운명";
@@ -24,7 +24,7 @@ $"""
 <color={RoleTypeId.NtfSergeant.GetColor().ToHex()}>NTF</color> <-> <color={RoleTypeId.ChaosMarauder.GetColor().ToHex()}>혼돈의 반란</color>
 """;
         public override string Color => "B40486";
-        public override string Suggester => "idea by A(@idk_9936)";
+        public override string Suggester => "A";
 
         public static ChangedFate Instance;
 
