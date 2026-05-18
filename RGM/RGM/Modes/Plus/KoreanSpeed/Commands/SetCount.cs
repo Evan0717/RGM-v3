@@ -53,6 +53,7 @@ public class SetCount : ICommand
                            set <숫자> - 현재 횟수를 숫자로 설정합니다.
                            remove (또는 rm) <숫자> - 현재 횟수에서 숫자를 제거합니다.
                            clear - 현재 횟수를 0으로 설정합니다.
+                           scp_power (또는 scp_pw) <숫자(소숫점 허용> - SCP의 유틸속도 향상에 필요한 계산변수를 설정합니다.
                            help - 도움말을 표시합니다.
                            """;
                 return true;
@@ -66,7 +67,7 @@ public class SetCount : ICommand
                            set <숫자> - 현재 횟수를 숫자로 설정합니다.
                            remove (또는 rm) <숫자> - 현재 횟수에서 숫자를 제거합니다.
                            clear - 현재 횟수를 0으로 설정합니다.
-                           scp_power (또는 scp_pw) <숫자(소숫점 허용> - SCP의 유틸속도 향상에 필요한 로직의 속도를 설정합니다.
+                           scp_power (또는 scp_pw) <숫자(소숫점 허용> - SCP의 유틸속도 향상에 필요한 계산변수를 설정합니다.
                            help - 도움말을 표시합니다.
                            """;
                 return false;
@@ -99,7 +100,7 @@ public class SetCount : ICommand
                     case "scp_power":
                     case "scp_pw":
                         var result = float.TryParse(arguments.At(1), out var power);
-                        if (result && !(power > 10.0f) && !(power < 0.1f))
+                        if (result && power is <= 10.0f and >= 0.1f)
                         {
                             SpeedStore.ScpMultiplier = power;
                         }

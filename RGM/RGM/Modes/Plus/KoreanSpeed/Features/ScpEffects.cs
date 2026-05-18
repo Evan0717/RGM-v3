@@ -137,7 +137,7 @@ public class ScpEffects
     {
         try
         {
-            foreach (var player in PlayerManager.List.Where(target => SpeedStore.ScpCoroutines.ContainsKey(target)))
+            foreach (var player in PlayerManager.List.Where(target => SpeedStore.ScpCoroutines.ContainsKey(target) && !target.IsScpRole()))
             {
                 foreach (var items in SpeedStore.ScpCoroutines[player].Values.ToList())
                 {
