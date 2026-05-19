@@ -293,15 +293,15 @@ namespace RGM.IEnumerators
                 Player player = Player.List.OrderBy(x => Vector3.Distance(x.Position, target.Position)).FirstOrDefault();
 
                 target.Position = new Vector3(UnityEngine.Random.Range(vector3.Item1, vector3.Item2), UnityEngine.Random.Range(vector3.Item3, vector3.Item4), UnityEngine.Random.Range(vector3.Item5, vector3.Item6));
-                target.Rotation = target.Rotation = Quaternion.LookRotation(player.Position - target.Position) * Quaternion.Euler(0, 90, 0); 
+                target.Rotation = target.Rotation = Quaternion.LookRotation(player.Position - target.Position) * Quaternion.Euler(0, 90, 0);
             }
 
             while (true)
             {
                 while (Server.PlayerCount == 0) yield return Timing.WaitForOneFrame;
 
-                apply(Target1, (57.51999f, 69.58593f, 27.96541f, 31.89687f, 3.390625f, 17.125f));
-                apply(Target2, (50.78125f, 56.71094f, 27.965f, 31.14297f, 3.480469f, 13.40625f));
+                apply(Target1, (52.01f, 64.06f, 181.50f, 181.10f, -58.50f, -44.83f));
+                apply(Target2, (50.37f, 44.47f, 181.50f, 181.61f, -58.74f, -48.45f));
 
                 while (!ShootingTargetSignal) yield return Timing.WaitForOneFrame;
 
