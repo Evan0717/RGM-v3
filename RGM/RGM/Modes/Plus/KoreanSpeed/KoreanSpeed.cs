@@ -1,4 +1,6 @@
-﻿using Exiled.Events.EventArgs.Player;
+﻿using Exiled.Events.EventArgs.Item;
+using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.MicroHID.Modules;
 using MEC;
 using PlayerRoles.PlayableScps.Scp049;
 using RGM.API.Features;
@@ -18,7 +20,7 @@ public class KoreanSpeed : Mode
 
     public static KoreanSpeed Instance;
 
-    private ScpEffects _scpEffects;
+    private ScpFeatures _scpFeatures;
     public override void OnDisabled()
     {
         
@@ -26,7 +28,7 @@ public class KoreanSpeed : Mode
         Exiled.Events.Handlers.Player.Died -= OnDied;
         Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
         Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
-        _scpEffects = null;
+        _scpFeatures = null;
         
         PlayerEffects.UnloadEffects();
         SpeedStore.Disable();
@@ -34,7 +36,7 @@ public class KoreanSpeed : Mode
 
     public override void OnEnabled()
     {
-        _scpEffects = new ScpEffects();
+        _scpFeatures = new ScpFeatures();
         
         Exiled.Events.Handlers.Player.Spawned += OnSpawn;
         Exiled.Events.Handlers.Player.Died += OnDied;
@@ -43,6 +45,8 @@ public class KoreanSpeed : Mode
         SpeedStore.Clear();
         SpeedStore.Ignition();
         _scpEffects.Run();
+        
+        _scpFeatures.Run();
         Scp049ResurrectAbility._mask = 5;
     }
 
@@ -72,5 +76,4 @@ public class KoreanSpeed : Mode
             PlayerEffects.AddEffects();
         });
     }
-    
 }

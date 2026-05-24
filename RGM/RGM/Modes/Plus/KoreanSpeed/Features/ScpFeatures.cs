@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace RGM.Modes;
 
-public class ScpEffects : IScpEffects
+public class ScpFeatures : ILogicFeatures
 {
     private static bool _isRunning;
 
@@ -25,8 +25,8 @@ public class ScpEffects : IScpEffects
             {
                 yield return Timing.WaitForSeconds(30.5f);
                 Tools.MessageTranslated(
-                    "ALL SCP move Controller are now ACTIVATED by UNIT 1 system",
-                    "유닛 1 시스템에 의해 SCP 움직임 컨트롤러가 활성화되었습니다.",
+                    "SCP move system has been Activated",
+                    "SCP 움직임 시스템이 가동되었습니다.",
                     true);
                 _isRunning = true;
             }

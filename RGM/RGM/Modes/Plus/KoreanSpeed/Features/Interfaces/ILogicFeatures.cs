@@ -1,6 +1,6 @@
 ﻿namespace RGM.Modes.Interfaces;
 
-public interface IScpEffects
+public interface ILogicFeatures
 {
     void Run();
 }
