@@ -1,6 +1,6 @@
 ﻿using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp173;
 using MEC;
-using PlayerRoles.PlayableScps.Scp049;
 using RGM.API.Features;
 
 namespace RGM.Modes;
@@ -26,10 +26,11 @@ public class KoreanSpeed : Mode
         Exiled.Events.Handlers.Player.Died -= OnDied;
         Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
         Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
-        _scpFeatures = null;
-        
-        PlayerEffects.UnloadEffects();
+        Exiled.Events.Handlers.Scp173.Blinking -= On173Blink;
+
+        PlayerEffects.DeActivate();
         SpeedStore.Disable();
+        _scpFeatures = null;
     }
 
     public override void OnEnabled()
@@ -40,11 +41,11 @@ public class KoreanSpeed : Mode
         Exiled.Events.Handlers.Player.Died += OnDied;
         Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
         Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
+        Exiled.Events.Handlers.Scp173.Blinking += On173Blink;
         SpeedStore.Clear();
         SpeedStore.Ignition();
         
         _scpFeatures.Run();
-        Scp049ResurrectAbility._mask = 5;
     }
 
     private static void OnDied(DiedEventArgs ev)
@@ -72,5 +73,11 @@ public class KoreanSpeed : Mode
             if (ev.Player == null || !ev.Player.IsAlive || ev.Player.IsNonePlayer()) return;
             PlayerEffects.AddEffects();
         });
+    }
+
+    private static void On173Blink(BlinkingEventArgs e)
+    {
+        // 버그 해결용 쿨타임 추가 장치
+        e.Scp173.BlinkCooldown = 5.0f;
     }
 }

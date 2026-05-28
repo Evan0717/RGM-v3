@@ -14,6 +14,8 @@ namespace RGM.Modes;
 public class ScpFeatures : ILogicFeatures
 {
     private static bool _isRunning;
+    private static CoroutineHandle _isRunning079;
+    private static CoroutineHandle _isRunning173;
 
     public void Run() => Timing.RunCoroutine(RegisterFeatures());
 
@@ -35,13 +37,14 @@ public class ScpFeatures : ILogicFeatures
                 Scp096Effect();
                 Scp049Effect();
                 Scp106Effect();
-                Scp939Effect();
                 Scp079Effect();
                 Scp173Effect();
                 Scp3114Effect();
+                Scp939Effect();
+                yield return Timing.WaitForSeconds(.4f);
             }
-            yield return Timing.WaitForOneFrame;
         }
+
         Cleaner();
     }
 
@@ -65,11 +68,8 @@ public class ScpFeatures : ILogicFeatures
             if (player.Role is not Scp096Role scp096) continue;
 
             if (scp096.ChargeCooldown != 0)
-                scp096.ChargeCooldown -=
-                    scp096.ChargeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp096.ChargeCooldown
-                        : scp096.ChargeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
-            
+                scp096.ChargeCooldown =
+                    Math.Max(0.1f, scp096.ChargeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
 
@@ -81,16 +81,12 @@ public class ScpFeatures : ILogicFeatures
             if (player.Role is not Scp106Role scp106) continue;
 
             if (scp106.CaptureCooldown != 0)
-                scp106.CaptureCooldown -= scp106.CaptureCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                    ? scp106.CaptureCooldown
-                    : scp106.CaptureCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
-
+                scp106.CaptureCooldown =
+                    Math.Max(0.1f, scp106.CaptureCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
             if (scp106.RemainingSinkholeCooldown != 0)
-                scp106.RemainingSinkholeCooldown -=
-                    scp106.RemainingSinkholeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp106.RemainingSinkholeCooldown
-                        : scp106.RemainingSinkholeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp106.RemainingSinkholeCooldown = Math.Max(0.1f,
+                    scp106.RemainingSinkholeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
 
@@ -101,21 +97,21 @@ public class ScpFeatures : ILogicFeatures
         {
             if (player.Role is not Scp939Role scp939) continue;
 
-            if (scp939.AmnesticCloudCooldown != 0)
-                scp939.AmnesticCloudCooldown -=
-                    scp939.AmnesticCloudCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp939.AmnesticCloudCooldown
-                        : scp939.AmnesticCloudCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
 
+            Timing.CallDelayed(.3f, () =>
+            {
+                if (scp939.AmnesticCloudCooldown != 0 && scp939.AmnesticCloudDuration == 0.0f)
+                    scp939.AmnesticCloudCooldown = Math.Max(0.1f,
+                        scp939.AmnesticCloudCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+            });
+            
             if (scp939.AttackCooldown != 0)
-                scp939.AttackCooldown -= scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                    ? scp939.AttackCooldown
-                    : scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp939.AttackCooldown =
+                    Math.Max(0.1f, scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
             if (scp939.MimicryCooldown != 0)
-                scp939.MimicryCooldown -= scp939.MimicryCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                    ? scp939.MimicryCooldown
-                    : scp939.MimicryCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp939.MimicryCooldown =
+                    Math.Max(0.1f, scp939.MimicryCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
 
@@ -127,25 +123,15 @@ public class ScpFeatures : ILogicFeatures
             if (player.Role is not Scp049Role scp049) continue;
 
             if (scp049.CallCooldown != 0)
-                scp049.CallCooldown -= scp049.CallCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                    ? scp049.CallCooldown
-                    : scp049.CallCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp049.CallCooldown = Math.Max(0.1f, scp049.CallCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
             if (scp049.GoodSenseCooldown != 0)
-                scp049.GoodSenseCooldown -= scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                    ? scp049.GoodSenseCooldown
-                    : scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp049.GoodSenseCooldown =
+                    Math.Max(0.2f, scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier); 
 
             if (scp049.RemainingAttackCooldown != 0)
-                scp049.RemainingAttackCooldown -=
-                    scp049.RemainingAttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp049.RemainingAttackCooldown
-                        : scp049.RemainingAttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
-
-            if (scp049.ResurrectAbility.Duration != 0)
-            {
-                
-            }
+                scp049.RemainingAttackCooldown = Math.Max(0.1f,
+                    scp049.RemainingAttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
 
@@ -157,18 +143,18 @@ public class ScpFeatures : ILogicFeatures
             if (player.Role is not Scp079Role scp079) continue;
 
             if (scp079.BlackoutZoneCooldown != 0)
-                scp079.BlackoutZoneCooldown -=
-                    scp079.BlackoutZoneCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp079.BlackoutZoneCooldown
-                        : scp079.BlackoutZoneCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp079.BlackoutZoneCooldown =
+                    Math.Max(0.1f, scp079.BlackoutZoneCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
-            Timing.RunCoroutine(EnergyCreator());
+            if (!Timing.IsRunning(_isRunning079))
+                _isRunning079 = Timing.RunCoroutine(EnergyCreator());
         }
+
         return;
 
         IEnumerator<float> EnergyCreator()
         {
-            while (SpeedStore.IsEnabled) 
+            while (SpeedStore.IsEnabled)
             {
                 foreach (var player in PlayerManager.List.Where(target =>
                              target.IsScpRole() && target.Role.Type == RoleTypeId.Scp079))
@@ -180,9 +166,11 @@ public class ScpFeatures : ILogicFeatures
 
                     scp079.Energy += 1;
                 }
-                yield return Timing.WaitForSeconds(10 - SpeedStore.Count * SpeedStore.ScpMultiplier);
-            }
-        } 
+
+                yield return 
+                    Timing.WaitForSeconds(Math.Max(.1f, 2.5f - SpeedStore.Count * SpeedStore.ScpMultiplier));
+            } 
+        }
     }
 
     private static void Scp173Effect()
@@ -192,29 +180,41 @@ public class ScpFeatures : ILogicFeatures
         {
             if (player.Role is not Scp173Role scp173) continue;
 
-            if (scp173.BlinkCooldown != 0)
-                scp173.BlinkCooldown -= scp173.BlinkCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                    ? scp173.BlinkCooldown
-                    : scp173.BlinkCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
-
-            if (scp173.RemainingBreakneckCooldown != 0)
-                scp173.RemainingBreakneckCooldown -=
-                    scp173.RemainingBreakneckCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp173.RemainingBreakneckCooldown
-                        : scp173.RemainingBreakneckCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+            if (scp173.RemainingBreakneckCooldown != 0 && !(scp173.RemainingBreakneckCooldown <= .3f))
+                scp173.RemainingBreakneckCooldown = Math.Max(0.1f,
+                    scp173.RemainingBreakneckCooldown - SpeedStore.Count * 0.1f);
 
             if (scp173.RemainingTantrumCooldown != 0)
-                scp173.RemainingTantrumCooldown -=
-                    scp173.RemainingTantrumCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier <= 0
-                        ? scp173.RemainingTantrumCooldown
-                        : scp173.RemainingTantrumCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier;
+                scp173.RemainingTantrumCooldown = Math.Max(0.1f,
+                    scp173.RemainingTantrumCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+        }
+        
+        if (!Timing.IsRunning(_isRunning173))
+            _isRunning173 = Timing.RunCoroutine(BlinkCreator());
+        return;
+
+        IEnumerator<float> BlinkCreator()
+        {
+            while (SpeedStore.IsEnabled)
+            {
+                foreach (var player in PlayerManager.List.Where(target =>
+                             target.IsScpRole() && target.Role.Type == RoleTypeId.Scp173))
+                {
+                    if (player.Role is not Scp173Role scp173) continue;
+                    
+                    if (scp173.BlinkCooldown != 0)  
+                        scp173.BlinkCooldown = Math.Max(0.1f,
+                            scp173.BlinkCooldown - SpeedStore.Count * .01f);
+                }
+                yield return Timing.WaitForSeconds(.1f);
+            }
         }
     }
 
     private static void Scp3114Effect()
     {
         foreach (var player in
-                 PlayerManager.List.Where(target => target.IsScp && target.Role.Type == RoleTypeId.Scp096))
+                 PlayerManager.List.Where(target => target.IsScp && target.Role.Type == RoleTypeId.Scp3114))
         {
             if (player.Role is not Scp3114Role scp3114) continue;
 
