@@ -15,6 +15,7 @@ public class KoreanSpeed : Mode
         "<b><color=#FB00FF>슈</color><color=#D200D5>우</color><color=#A901AB>우</color><color=#800282>우</color><color=#570358>웅</color><color=#2E042E>화</color></b>";
 
     public override string Color => "5882FA";
+    public override string Author { get; set; } = "아기고양이";
 
     public static KoreanSpeed Instance;
 
