@@ -26,8 +26,11 @@ public class KoreanSpeed : Mode
 
     public override void OnDisabled()
     {
+        SpeedStore.Disable();
         PlayerFeatures.DeActivate();
         SpeedStore.Disable();
+        ScpFeatures.Start -= AddPatches;
+        RemovePatches();
         _scpFeatures = null;
         ScpFeatures.Start -= AddPatches;
     }
@@ -36,32 +39,52 @@ public class KoreanSpeed : Mode
     {
         SpeedStore.Ignition();
         PlayerFeatures.Activate();
+        ScpFeatures.Start += AddPatches;
 
         _scpFeatures = new ScpFeatures();
         _scpFeatures.Run();
     }
 
+    ///<summary>    
+    /// Harmony 패치를 활성화하기 위한 Event 호환 매서드입니다.
+    /// </summary>
     private static void AddPatches(object sender, System.EventArgs e)
     {
         Scp049Patch();
+        LogicPatch();
     }
 
-    private static void RemovePatches(object sender, System.EventArgs e)
+    ///<summary>
+    /// 이 내부모듈의 harmony 패치를 제거합니다.
+    /// </summary>
+    private static void RemovePatches()
     {
         _harmony?.UnpatchAll();
         _harmony = null;
     }
 
+    ///<summary>
+    /// SCP-049 관련 Harmony 패치입니다.
+    /// </summary>
     private static void Scp049Patch()
     {
-        if (!PlayerManager.List.Exists(player =>
-                player.IsAlive && !player.IsNonePlayer() && !player.IsNPC &&
-                player.Role.Type == RoleTypeId.Scp049)) return;
+            if (!PlayerManager.List.Exists(player =>
+                    player.IsAlive && !player.IsNonePlayer() && !player.IsNPC &&
+                    player.Role.Type == RoleTypeId.Scp049)) return;
 
-        _harmony.Patch(AccessTools.PropertyGetter(
-                typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
-            postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
+            _harmony.Patch(AccessTools.PropertyGetter(
+                    typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
+                postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
     }
 
+    ///<summary>
+    ///시스템 로직 관련 Harmony 패치입니다.
+    /// </summary>
+    private static void LogicPatch()
+    {
+        _harmony.Patch(AccessTools.PropertyGetter(
+                typeof(CustomPlayerEffects.Scp1853), nameof(CustomPlayerEffects.Scp1853.MaxIntensity)),
+            postfix: new HarmonyMethod(typeof(SystemPatch), nameof(SystemPatch.Scp1853MaxIntensityPostfix)));
+    }
 
 }
