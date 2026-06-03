@@ -1,8 +1,6 @@
 ﻿using System;
 using HarmonyLib;
-using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp049;
-using RGM.API.Features;
 using RGM.Modes.Patches;
 
 namespace RGM.Modes;
@@ -22,7 +20,7 @@ public class KoreanSpeed : Mode
 
     private ScpFeatures _scpFeatures;
 
-    private static Harmony _harmony = new($"Harmony - {DateTime.Now.Ticks} - KoreanSpeed");
+    private static Harmony _harmony;
 
     public override void OnDisabled()
     {
@@ -30,6 +28,8 @@ public class KoreanSpeed : Mode
         PlayerFeatures.DeActivate();
         ScpFeatures.Start -= AddPatches;
         RemovePatches();
+        
+        _scpFeatures?.OnDisabled();
         _scpFeatures = null;
     }
 
@@ -39,21 +39,25 @@ public class KoreanSpeed : Mode
         PlayerFeatures.Activate();
         ScpFeatures.Start += AddPatches;
 
-        _scpFeatures = new ScpFeatures();
-        _scpFeatures.Run();
+        _scpFeatures ??= new ScpFeatures();
+        _scpFeatures?.OnEnabled();
     }
 
     ///<summary>    
     /// Harmony 패치를 활성화하기 위한 Event 호환 매서드입니다.
+    /// <br />
+    /// 만약 Harmony가 null일 경우, 새 Harmony 인스턴스를 대입 또는 초기화합니다.
     /// </summary>
     private static void AddPatches(object sender, System.EventArgs e)
     {
+        _harmony ??= new Harmony($"Harmony - {DateTime.Now.Ticks} - KoreanSpeed");
+
         Scp049Patch();
         LogicPatch();
     }
 
     ///<summary>
-    /// 이 내부모듈의 harmony 패치를 제거합니다.
+    /// 내부 모듈의 harmony 패치를 제거합니다.
     /// </summary>
     private static void RemovePatches()
     {
@@ -66,10 +70,6 @@ public class KoreanSpeed : Mode
     /// </summary>
     private static void Scp049Patch()
     {
-            if (!PlayerManager.List.Exists(player =>
-                    player.IsAlive && !player.IsNonePlayer() && !player.IsNPC &&
-                    player.Role.Type == RoleTypeId.Scp049)) return;
-
             _harmony.Patch(AccessTools.PropertyGetter(
                     typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
                 postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
@@ -81,7 +81,7 @@ public class KoreanSpeed : Mode
     private static void LogicPatch()
     {
         return;
-        // 이 기능은 아직 개발 단계입니다. 따라서 사용되지 않습니다.
+        // 이 기능은 아직 개발 단계입니다. 따라서 당장은 사용되지 않습니다.
         _harmony.Patch(AccessTools.PropertyGetter(
                 typeof(CustomPlayerEffects.Scp1853), nameof(CustomPlayerEffects.Scp1853.MaxIntensity)),
             postfix: new HarmonyMethod(typeof(SystemPatch), nameof(SystemPatch.Scp1853MaxIntensityPostfix)));

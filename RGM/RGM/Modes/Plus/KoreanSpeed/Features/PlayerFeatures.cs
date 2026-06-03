@@ -75,8 +75,9 @@ public static class PlayerFeatures
 
     private static void OnChanging(ChangingMicroHIDStateEventArgs ev)
     {
-        if (SpeedStore.Count > 30) 
-            SpeedStore.RailgunMultiplier = 6.0f;
+        SpeedStore.RailgunCooldown = SpeedStore.Count > 30 ? 
+            SpeedStore.RailgunCooldown + SpeedStore.Count * 0.01f :
+            SpeedStore.RailgunCooldown;
         if (!Timing.IsRunning(_hidCoroutine))
             _hidCoroutine = Timing.RunCoroutine(Run());
         return;
@@ -95,7 +96,17 @@ public static class PlayerFeatures
                     hid.WindUpProgress += 0.1f;
                     
                 }
-                yield return Timing.WaitForSeconds(SpeedStore.RailgunMultiplier - SpeedStore.Count * 0.1f);
+                foreach (var items in Item.List.Where(x =>
+                             x.Type == ItemType.MicroHID))
+                {
+                    if (items is not MicroHid hid) continue;
+                    if (hid.State is not MicroHidPhase.WindingDown)
+                        continue;
+
+                    hid.WindUpProgress -= 0.1f;
+                    
+                }
+                yield return Timing.WaitForSeconds(SpeedStore.RailgunCooldown - SpeedStore.Count * 0.1f);
             }
         }
     }

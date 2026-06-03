@@ -1,4 +1,7 @@
-﻿namespace RGM.Modes;
+﻿using System.Collections.Generic;
+using LabApi.Features.Wrappers;
+
+namespace RGM.Modes;
 
 public static class SpeedStore
 {
@@ -9,7 +12,9 @@ public static class SpeedStore
     
     public static float ScpMultiplier => 0.1f;
 
-    public static float RailgunMultiplier { get; internal set; } = 2.5f;
+    public static float RailgunCooldown { get; internal set; } = 3.5f;
+
+    public static HashSet<Player> CurrentSensePlayers { get; } = [];
 
     /// <summary>
     /// 모드의 활성화 유무를 따질 때 사용합니다.

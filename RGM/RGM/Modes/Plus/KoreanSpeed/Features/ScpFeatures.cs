@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Scp173;
+using LabApi.Events.Arguments.Scp049Events;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
 using RGM.Modes.Interfaces;
 using UnityEngine;
+using Scp049Role = Exiled.API.Features.Roles.Scp049Role;
 
 namespace RGM.Modes;
 
@@ -15,18 +18,34 @@ public class ScpFeatures : ILogicFeatures
 {
     private const float WaitTime = .2f;
     private static bool _isRunning;
-    
+
     private static CoroutineHandle _isRunning079;
     private static CoroutineHandle _isRunning173;
-    
+
     public static event EventHandler Start;
 
-    public void Run() => Timing.RunCoroutine(RegisterFeatures());
+    public void OnEnabled()
+    {
+        Timing.RunCoroutine(RegisterFeatures());
+        Exiled.Events.Handlers.Scp173.Blinking += On173Blink;
+        LabApi.Events.Handlers.Scp049Events.UsingSense += On049SenseUsing;
+        LabApi.Events.Handlers.Scp049Events.SenseKilledTarget += On049SenseKilled;
+        LabApi.Events.Handlers.Scp049Events.SenseLostTarget += On049SenseLost;
+    }
+
+    public void OnDisabled()
+    {
+        Exiled.Events.Handlers.Scp173.Blinking -= On173Blink;
+        LabApi.Events.Handlers.Scp049Events.SenseKilledTarget -= On049SenseKilled;
+        LabApi.Events.Handlers.Scp049Events.SenseLostTarget -= On049SenseLost;
+        LabApi.Events.Handlers.Scp049Events.UsingSense -= On049SenseUsing;
+        _isRunning = false;
+    }
 
     private static IEnumerator<float> RegisterFeatures()
     {
-        Exiled.Events.Handlers.Scp173.Blinking += On173Blink;
-        
+
+
         while (SpeedStore.IsEnabled)
         {
             if (!_isRunning)
@@ -51,14 +70,6 @@ public class ScpFeatures : ILogicFeatures
                 yield return Timing.WaitForSeconds(WaitTime);
             }
         }
-
-        UnregisterScpFeatures();
-    }
-
-    private static void UnregisterScpFeatures()
-    {
-            Exiled.Events.Handlers.Scp173.Blinking -= On173Blink;
-            _isRunning = false;
     }
 
     private static void Scp096Effect()
@@ -105,7 +116,7 @@ public class ScpFeatures : ILogicFeatures
                     scp939.AmnesticCloudCooldown = Math.Max(0.1f,
                         scp939.AmnesticCloudCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
             });
-            
+
             if (scp939.AttackCooldown != 0)
                 scp939.AttackCooldown =
                     Math.Max(0.1f, scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
@@ -126,10 +137,10 @@ public class ScpFeatures : ILogicFeatures
             if (scp049.CallCooldown != 0)
                 scp049.CallCooldown = Math.Max(0.1f, scp049.CallCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
-            if (scp049.GoodSenseCooldown != 0)
+            if (scp049.RemainingGoodSenseDuration != 0)
                 scp049.GoodSenseCooldown =
-                    Math.Max(0.2f, scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier); 
-
+                    Math.Max(0.2f, scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+            
             if (scp049.RemainingAttackCooldown != 0)
                 scp049.RemainingAttackCooldown = Math.Max(0.1f,
                     scp049.RemainingAttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
@@ -168,9 +179,9 @@ public class ScpFeatures : ILogicFeatures
                     scp079.Energy += 1;
                 }
 
-                yield return 
+                yield return
                     Timing.WaitForSeconds(Math.Max(WaitTime - .1f, 2.5f - SpeedStore.Count * SpeedStore.ScpMultiplier));
-            } 
+            }
         }
     }
 
@@ -191,7 +202,7 @@ public class ScpFeatures : ILogicFeatures
                 scp173.RemainingTantrumCooldown = Math.Max(0.1f,
                     scp173.RemainingTantrumCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
-        
+
         if (!Timing.IsRunning(_isRunning173))
             _isRunning173 = Timing.RunCoroutine(BlinkCreator());
         return;
@@ -204,14 +215,15 @@ public class ScpFeatures : ILogicFeatures
                              target.IsScpRole() && target.Role.Type == RoleTypeId.Scp173 && !target.IsNPC))
                 {
                     if (player.Role is not Scp173Role scp173) continue;
-                    
+
                     if (scp173.BreakneckActive)
                         continue;
-                    
-                    if (scp173.BlinkCooldown != 0)  
+
+                    if (scp173.BlinkCooldown != 0)
                         scp173.BlinkCooldown = Math.Max(0.1f,
                             scp173.BlinkCooldown - SpeedStore.Count * .01f);
                 }
+
                 yield return Timing.WaitForSeconds(WaitTime);
             }
         }
@@ -220,7 +232,8 @@ public class ScpFeatures : ILogicFeatures
     private static void Scp3114Effect()
     {
         foreach (var player in
-                 PlayerManager.List.Where(target => target.IsScp && target.Role.Type == RoleTypeId.Scp3114 && !target.IsNPC))
+                 PlayerManager.List.Where(target =>
+                     target.IsScp && target.Role.Type == RoleTypeId.Scp3114 && !target.IsNPC))
         {
             if (player.Role is not Scp3114Role scp3114) continue;
 
@@ -233,5 +246,37 @@ public class ScpFeatures : ILogicFeatures
         // 버그 해결용 쿨타임 추가 장치
         if (SpeedStore.Count > 15)
             e.Scp173.BlinkCooldown = 5.0f;
+    }
+
+    private static void On049SenseLost(Scp049SenseLostTargetEventArgs e)
+    {
+        Player player = e.Player;
+        if (player.Role != RoleTypeId.Scp049 || player.IsNPC || !player.IsAlive || player.IsHost ||
+            player.IsNonePlayer()) return;
+        if (!SpeedStore.CurrentSensePlayers.Contains(player)) return;
+        if (player.Role is not Scp049Role scp049) return;
+
+        scp049.RemainingGoodSenseDuration = 0.0f;
+        SpeedStore.CurrentSensePlayers.Remove(player);
+    }
+    
+    private static void On049SenseKilled(Scp049SenseKilledTargetEventArgs e)
+    {
+        Player player = e.Player;
+        if (player.Role != RoleTypeId.Scp049 || player.IsNPC || !player.IsAlive || player.IsHost ||
+            player.IsNonePlayer()) return;
+        if (!SpeedStore.CurrentSensePlayers.Contains(player)) return;
+        if (player.Role is not Scp049Role scp049) return;
+
+        scp049.RemainingGoodSenseDuration = 0.0f;
+        SpeedStore.CurrentSensePlayers.Remove(player);
+    }
+    
+    private static void On049SenseUsing(Scp049UsingSenseEventArgs e)
+    {
+        var player = e.Player;
+        
+        if (player.Role == RoleTypeId.Scp049 && !player.IsNpc && player.IsAlive && player.IsPlayer && !player.IsHost) 
+            SpeedStore.CurrentSensePlayers.Add(player);
     }
 }
