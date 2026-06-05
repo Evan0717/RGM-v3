@@ -40,7 +40,6 @@ Trouble in Terrorist Town의 약자.
 • 탐정은 <color={RoleTypeId.FacilityGuard.GetColor().ToHex()}>시설 경비</color>의 모습을 하고 있습니다. <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>들은 가급적이면 그의 명령을 따라야 합니다.
 • 가끔씩 진통제, 고폭 수류탄, 섬광탄이 추가로 지급될 수 있습니다.
 • <b><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>은 잘못된 유저를 죽이면 심각한 피해를 입습니다!</b>
-• <color={RoleTypeId.ClassD.GetColor().ToHex()}>전과자</color>는 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color> 팀이지만 <color=red>배신자</color>에게는 <color=red>배신자</color>로 보입니다. 주의하세요!
 • <color=#c753d9>소울메이트</color>들은 서로의 위치를 확인할 수 있습니다.
 • <color=#000000>O5 평의회</color>는 혼자서 살아남아야 하는 대신, 많은 체력과 아이템들을 가지고 시작합니다.
 • <color=#f178fc>광대</color>도 혼자서 살아남아야 하는 대신, <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>에게 사망하면 1번 부활합니다.
@@ -53,7 +52,6 @@ Trouble in Terrorist Town의 약자.
         Player O5;
         Player jester;
         List<Player> traitors = new List<Player>();
-        List<Player> mimics = new List<Player>();
         List<Player> soulMates = new List<Player>();
         List<Player> instantKillCooldown = new List<Player>();
         List<ItemType> main = new List<ItemType> 
@@ -186,31 +184,24 @@ Trouble in Terrorist Town의 약자.
                 traitors.Add(traitor);
             }
 
-            if (playerCount >= 25)
-            {
-                Player mimic = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
-
-                mimics.Add(mimic);
-            }
-
             if (playerCount >= 20)
             {
-                jester = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x)).GetRandomValue();
+                jester = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
             }
 
             if (playerCount >= 15)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
+                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
 
                     soulMates.Add(soulMate);
                 }
 
-                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
+                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
             }
 
-            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x && O5 != x).GetRandomValue();
+            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !soulMates.Contains(x) && jester != x && O5 != x).GetRandomValue();
             detective.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
             detective.RankName = "탐정";
             detective.RankColor = "cyan";
@@ -332,7 +323,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     if (Tools.TryGetLookPlayer(traitor, 100, out Player t, out RaycastHit? hit))
                     {
-                        if (traitors.Contains(t) || mimics.Contains(t))
+                        if (traitors.Contains(t))
                             traitor.AddHint("TTT 배신자 확인", $"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
 
                         else if (t == jester)
@@ -349,11 +340,6 @@ Trouble in Terrorist Town의 약자.
 
                     else
                         traitor.AddHint("TTT 배신자 임무 완수", "당신은 임무를 완수하였습니다.", 1.2f);
-                }
-
-                foreach (var mimic in mimics.Where(x => x.IsAlive))
-                {
-                    mimic.AddHint("TTT 전과자", $"당신은 <color=red>배신자</color>에게 같은 <color=red>배신자</color>로 보입니다.", 1.2f);
                 }
 
                 foreach (var soulMate in soulMates.Where(x => x.IsAlive))
@@ -384,11 +370,6 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.RankName = "소울메이트";
                     player.RankColor = "pink";
-                }
-                else if (mimics.Contains(player))
-                {
-                    player.RankName = "전과자";
-                    player.RankColor = "orange";
                 }
                 else if (player == O5)
                 {
@@ -479,11 +460,6 @@ Trouble in Terrorist Town의 약자.
 
                 soulMates.Remove(ev.Player);
             }
-            else if (mimics.Contains(ev.Player))
-            {
-                ev.Player.RankName = "전과자";
-                ev.Player.RankColor = "orange";
-            }
             else if (ev.Player == O5)
             {
                 ev.Player.RankName = "O5 평의회";
@@ -536,7 +512,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.AddBroadcast(20, $"<color=orange>무죄인</color> 팀의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => !traitors.Contains(x) && O5 != x && jester != x).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => !traitors.Contains(x) && O5 != x && jester != x && x.IsAlive).ToList(), 1));
             }
             else if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == jester)
             {
