@@ -8,6 +8,9 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.MicroHID.Modules;
 using MEC;
 using RGM.API.Features;
+using UnityEngine;
+
+using PlayerHandler = Exiled.Events.Handlers.Player;
 
 namespace RGM.Modes;
 
@@ -17,22 +20,21 @@ public static class PlayerFeatures
 
     public static void Activate()
     {
-        Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChanging;
-        Exiled.Events.Handlers.Player.Spawned += OnSpawn;
-        Exiled.Events.Handlers.Player.Died += OnDied;
-        Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
-        Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
-
+        PlayerHandler.ChangingMicroHIDState += OnChanging;
+        PlayerHandler.Spawned += OnSpawn;
+        PlayerHandler.Died += OnDied;
+        PlayerHandler.SearchingPickup += OnSearchingPickup;
+        PlayerHandler.ThrowingRequest += OnThrowingRequest; 
     }
 
     public static void DeActivate()
     {
-        Exiled.Events.Handlers.Player.ChangingMicroHIDState -= OnChanging;
-        Exiled.Events.Handlers.Player.Spawned -= OnSpawn;
-        Exiled.Events.Handlers.Player.Died -= OnDied;
-        Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
-        Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
-        
+        PlayerHandler.ChangingMicroHIDState -= OnChanging;
+        PlayerHandler.Spawned -= OnSpawn;
+        PlayerHandler.Died -= OnDied;
+        PlayerHandler.SearchingPickup -= OnSearchingPickup;
+        PlayerHandler.ThrowingRequest -= OnThrowingRequest;
+
         UnloadEffects();
     }
 
@@ -45,9 +47,7 @@ public static class PlayerFeatures
             {
                 UnloadEffects();
                 player.AddEffect(EffectType.MovementBoost, (byte)(SpeedStore.Count * 2));
-                player.AddEffect(EffectType.Scp1853, Math.Min(SpeedStore.Count, (byte)5));
-                // 곧 적용예정.
-                // player.AddEffect(EffectType.Scp1853, Math.Min(SpeedStore.Count, (byte)100));
+                player.AddEffect(EffectType.Scp1853, Mathf.Min(SpeedStore.Count, 5));
             }
         }
         catch (Exception e)
@@ -75,9 +75,6 @@ public static class PlayerFeatures
 
     private static void OnChanging(ChangingMicroHIDStateEventArgs ev)
     {
-        SpeedStore.RailgunCooldown = SpeedStore.Count > 30 ? 
-            SpeedStore.RailgunCooldown + SpeedStore.Count * 0.01f :
-            SpeedStore.RailgunCooldown;
         if (!Timing.IsRunning(_hidCoroutine))
             _hidCoroutine = Timing.RunCoroutine(Run());
         return;
@@ -90,27 +87,34 @@ public static class PlayerFeatures
                              x.Type == ItemType.MicroHID))
                 {
                     if (items is not MicroHid hid) continue;
-                    if (hid.State is not MicroHidPhase.WindingUp)
-                        continue;
+                    if (hid.Owner.IsNPC && hid.Owner.IsNonePlayer()) continue;
+                    if (hid.State is not MicroHidPhase.WindingUp) continue;
+                    if (hid.WindUpProgress >= 1) continue;
 
                     hid.WindUpProgress += 0.1f;
-                    
                 }
+                
                 foreach (var items in Item.List.Where(x =>
                              x.Type == ItemType.MicroHID))
                 {
                     if (items is not MicroHid hid) continue;
-                    if (hid.State is not MicroHidPhase.WindingDown)
-                        continue;
+                    if (hid.Owner.IsNPC && hid.Owner.IsNonePlayer()) continue;
+                    if (hid.State is not MicroHidPhase.WindingDown) continue;
+                    if (hid.WindUpProgress <= 0) continue;
 
                     hid.WindUpProgress -= 0.1f;
-                    
                 }
-                yield return Timing.WaitForSeconds(SpeedStore.RailgunCooldown - SpeedStore.Count * 0.1f);
+
+                yield return SpeedStore.Count switch
+                {
+                    > 50 => Timing.WaitForSeconds(SpeedStore.Sin(5f)),
+                    > 30 => Timing.WaitForSeconds(SpeedStore.Sin(15f)),
+                    _ => Timing.WaitForSeconds(SpeedStore.Sin())
+                };
             }
         }
     }
-    
+
     private static void OnSearchingPickup(SearchingPickupEventArgs ev)
     {
         ev.SearchTime -= SpeedStore.Count * 0.1f;
@@ -120,7 +124,7 @@ public static class PlayerFeatures
     {
         ev.Throwable.PinPullTime -= SpeedStore.Count * 0.1f;
     }
-    
+
     private static void OnDied(DiedEventArgs ev)
     {
         if (!(SpeedStore.Count > 125))
@@ -136,6 +140,5 @@ public static class PlayerFeatures
             if (ev.Player == null || !ev.Player.IsAlive || ev.Player.IsNonePlayer()) return;
             AddEffects();
         });
-        
     }
 }

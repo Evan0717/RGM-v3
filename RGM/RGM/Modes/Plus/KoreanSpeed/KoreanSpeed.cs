@@ -54,7 +54,6 @@ public class KoreanSpeed : Mode
         _harmony ??= new Harmony($"Harmony - {DateTime.Now.Ticks} - KoreanSpeed");
 
         Scp049Patch();
-        LogicPatch();
     }
 
     ///<summary>
@@ -73,19 +72,6 @@ public class KoreanSpeed : Mode
     {
             _harmony.Patch(AccessTools.PropertyGetter(
                     typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
-                postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
+               postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
     }
-
-    ///<summary>
-    ///시스템 로직 관련 Harmony 패치입니다.
-    /// </summary>
-    private static void LogicPatch()
-    {
-        return;
-        // 이 기능은 아직 개발 단계입니다. 따라서 당장은 사용되지 않습니다.
-        _harmony.Patch(AccessTools.PropertyGetter(
-                typeof(CustomPlayerEffects.Scp1853), nameof(CustomPlayerEffects.Scp1853.MaxIntensity)),
-            postfix: new HarmonyMethod(typeof(SystemPatch), nameof(SystemPatch.Scp1853MaxIntensityPostfix)));
-    }
-
-}
+}   

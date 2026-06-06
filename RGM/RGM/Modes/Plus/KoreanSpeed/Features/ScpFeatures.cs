@@ -36,9 +36,9 @@ public class ScpFeatures : ILogicFeatures
     public void OnDisabled()
     {
         Exiled.Events.Handlers.Scp173.Blinking -= On173Blink;
+        LabApi.Events.Handlers.Scp049Events.UsingSense -= On049SenseUsing;
         LabApi.Events.Handlers.Scp049Events.SenseKilledTarget -= On049SenseKilled;
         LabApi.Events.Handlers.Scp049Events.SenseLostTarget -= On049SenseLost;
-        LabApi.Events.Handlers.Scp049Events.UsingSense -= On049SenseUsing;
         _isRunning = false;
     }
 
@@ -67,7 +67,7 @@ public class ScpFeatures : ILogicFeatures
                 Scp173Effect();
                 Scp3114Effect();
                 Scp939Effect();
-                yield return Timing.WaitForSeconds(WaitTime);
+                yield return Timing.WaitForSeconds(SpeedStore.Sin(WaitTime));
             }
         }
     }
@@ -81,7 +81,7 @@ public class ScpFeatures : ILogicFeatures
 
             if (scp096.ChargeCooldown != 0)
                 scp096.ChargeCooldown =
-                    Math.Max(0.1f, scp096.ChargeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                    Mathf.Max(0.0f, scp096.ChargeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
 
@@ -94,10 +94,10 @@ public class ScpFeatures : ILogicFeatures
 
             if (scp106.CaptureCooldown != 0)
                 scp106.CaptureCooldown =
-                    Math.Max(0.1f, scp106.CaptureCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                    Mathf.Max(0.0f, scp106.CaptureCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
             if (scp106.RemainingSinkholeCooldown != 0)
-                scp106.RemainingSinkholeCooldown = Math.Max(0.1f,
+                scp106.RemainingSinkholeCooldown = Mathf.Max(0.0f,
                     scp106.RemainingSinkholeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
@@ -113,17 +113,17 @@ public class ScpFeatures : ILogicFeatures
             Timing.CallDelayed(.3f, () =>
             {
                 if (scp939.AmnesticCloudCooldown != 0 && scp939.AmnesticCloudDuration == 0.0f)
-                    scp939.AmnesticCloudCooldown = Math.Max(0.1f,
+                    scp939.AmnesticCloudCooldown = Mathf.Max(0.0f,
                         scp939.AmnesticCloudCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
             });
 
             if (scp939.AttackCooldown != 0)
                 scp939.AttackCooldown =
-                    Math.Max(0.1f, scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                    Mathf.Max(0.0f, scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
             if (scp939.MimicryCooldown != 0)
                 scp939.MimicryCooldown =
-                    Math.Max(0.1f, scp939.MimicryCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                    Mathf.Max(0.0f, scp939.MimicryCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
     }
 
@@ -135,15 +135,17 @@ public class ScpFeatures : ILogicFeatures
             if (player.Role is not Scp049Role scp049) continue;
 
             if (scp049.CallCooldown != 0)
-                scp049.CallCooldown = Math.Max(0.1f, scp049.CallCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                scp049.CallCooldown = Mathf.Max(0.0f, scp049.CallCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
-            if (scp049.RemainingGoodSenseDuration != 0)
+            if (scp049.GoodSenseCooldown != 0)
                 scp049.GoodSenseCooldown =
-                    Math.Max(0.2f, scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                    Mathf.Max(0.0f, scp049.GoodSenseCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
             
             if (scp049.RemainingAttackCooldown != 0)
-                scp049.RemainingAttackCooldown = Math.Max(0.1f,
+            {
+                scp049.RemainingAttackCooldown = Mathf.Max(0.0f,
                     scp049.RemainingAttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+            }
         }
     }
 
@@ -156,10 +158,14 @@ public class ScpFeatures : ILogicFeatures
 
             if (scp079.BlackoutZoneCooldown != 0)
                 scp079.BlackoutZoneCooldown =
-                    Math.Max(0.1f, scp079.BlackoutZoneCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+                    Mathf.Max(0.0f, scp079.BlackoutZoneCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
+            
+            if (scp079.RoomLockdownCooldown != 0)
+                scp079.RoomLockdownCooldown =
+                    Mathf.Max(0.0f, scp079.RoomLockdownCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
 
             if (!Timing.IsRunning(_isRunning079))
-                _isRunning079 = Timing.RunCoroutine(EnergyCreator());
+                _isRunning079 = Timing.RunCoroutine(EnergyCreator());   
         }
 
         return;
@@ -179,8 +185,7 @@ public class ScpFeatures : ILogicFeatures
                     scp079.Energy += 1;
                 }
 
-                yield return
-                    Timing.WaitForSeconds(Math.Max(WaitTime - .1f, 2.5f - SpeedStore.Count * SpeedStore.ScpMultiplier));
+                yield return Timing.WaitForSeconds(SpeedStore.Sin(.1f));
             }
         }
     }
@@ -195,11 +200,11 @@ public class ScpFeatures : ILogicFeatures
                 continue;
 
             if (scp173.RemainingBreakneckCooldown != 0 && !(scp173.RemainingBreakneckCooldown <= .3f))
-                scp173.RemainingBreakneckCooldown = Math.Max(0.1f,
+                scp173.RemainingBreakneckCooldown = Mathf.Max(0.0f,
                     scp173.RemainingBreakneckCooldown - SpeedStore.Count * 0.1f);
 
             if (scp173.RemainingTantrumCooldown != 0)
-                scp173.RemainingTantrumCooldown = Math.Max(0.1f,
+                scp173.RemainingTantrumCooldown = Mathf.Max(0.0f,
                     scp173.RemainingTantrumCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
         }
 
@@ -220,11 +225,11 @@ public class ScpFeatures : ILogicFeatures
                         continue;
 
                     if (scp173.BlinkCooldown != 0)
-                        scp173.BlinkCooldown = Math.Max(0.1f,
+                        scp173.BlinkCooldown = Mathf.Max(0.0f,
                             scp173.BlinkCooldown - SpeedStore.Count * .01f);
                 }
 
-                yield return Timing.WaitForSeconds(WaitTime);
+                yield return Timing.WaitForSeconds(SpeedStore.Sin());
             }
         }
     }

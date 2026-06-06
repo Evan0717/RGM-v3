@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using LabApi.Features.Wrappers;
+using UnityEngine;
 
 namespace RGM.Modes;
 
@@ -9,10 +10,8 @@ public static class SpeedStore
     /// 모드 "한국인이 좋아하는 속도"에서 속도 관련 계산을 처리할 때 사용합니다.
     /// </summary>
     public static byte Count { get; set; }
-    
-    public static float ScpMultiplier => 0.1f;
 
-    public static float RailgunCooldown { get; internal set; } = 3.5f;
+    public const float ScpMultiplier = 0.1f;
 
     public static HashSet<Player> CurrentSensePlayers { get; } = [];
 
@@ -49,4 +48,10 @@ public static class SpeedStore
             PlayerFeatures.AddEffects();
             return true;
     }
+    
+    /// <summary>
+    /// Count와 특정 값으로 Sin 값을 조합합니다.
+    /// </summary>
+    /// <returns></returns>
+    public static float Sin(float div = 2f) => Mathf.Abs(Mathf.Sin(Count / (div is 0 ? 2 : div)));
 }
