@@ -210,13 +210,14 @@ public class ScpFeatures : ILogicFeatures
                              target.IsScpRole() && target.Role.Type == RoleTypeId.Scp173 && !target.IsNPC))
                 {
                     if (player.Role is not Scp173Role scp173) continue;
-
-                    if (scp173.BlinkCooldown != 0)
-                        scp173.BlinkCooldown = Mathf.Max(0.0f,
+                    if (scp173.BreakneckActive) continue;
+                   
+                    if (scp173.BlinkCooldown != 0 && !(scp173.BlinkCooldown <= 1f))
+                        scp173.BlinkCooldown = Mathf.Max(.5f,
                             scp173.BlinkCooldown - SpeedStore.Count * .05f);
                 }
 
-                yield return Timing.WaitForSeconds(SpeedStore.CosReg() * 10);
+                yield return Timing.WaitForSeconds(SpeedStore.Cos());
             }
         }
     }
