@@ -123,10 +123,6 @@ public class ScpFeatures : ILogicFeatures
                         scp939.AmnesticCloudCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
             });
 
-            if (scp939.AttackCooldown != 0)
-                scp939.AttackCooldown =
-                    Mathf.Max(0.0f, scp939.AttackCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
-
             if (scp939.MimicryCooldown != 0)
                 scp939.MimicryCooldown =
                     Mathf.Max(0.0f, scp939.MimicryCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
