@@ -69,8 +69,7 @@ public class DestructionBullet : Ability
                     {
                         if (ABattle.Instance.PlayerAbilities[player].Count <= 0 || !ABattle.Instance.PlayerAbilities.ContainsKey(player))
                             player.Hit(ev.Player, player.MaxHealth * 5);
-                        //왜 그런진 모르겠지만 더미에게 쐈을 때 이 만큼의 데미지가 안 들어갑니다. 뭐지? 머리 아파서 워크 코드 전부 분석 안하긴 했는데
-
+                            
                         else
                         {
                             if (Random.Range(1, 11) <= 9)
