@@ -80,6 +80,8 @@ public class DestructionBullet : Ability
                                 ABattle.Instance.PlayerWorkstations[player].Clear();
                                 ABattle.Instance.PlayerAbilities[player].Clear();
                             }
+
+                            player.Hit(ev.Player, 500f);
                         }
                         
                         
