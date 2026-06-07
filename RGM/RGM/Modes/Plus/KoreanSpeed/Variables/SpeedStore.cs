@@ -50,7 +50,7 @@ public static class SpeedStore
     }
 
     /// <summary>
-    /// Count에서 특정 값을 빼는 기능을 시도합니다.
+    /// Count에서 특정 값만큼 제거합니다.
     /// </summary>
     /// <param name="value">빼려는 값입니다.</param>
     /// <param name="message">Message입니다. 오직 이 값을 저장할려는 변수에 넣으세요.</param>
@@ -71,27 +71,27 @@ public static class SpeedStore
     }
     
     /// <summary>
-    /// Count와 특정 값으로 Sin 값을 반환합니다.
+    /// Sin 값을 반환합니다.
     /// </summary>
+    /// <returns>Sin값을 반환합니다.</returns>
     public static float Sin(float div = 2f) => Mathf.Abs(Mathf.Sin(Count / (Mathf.Approximately(div, 0) ? 2 : div)));
 
     /// <summary>
-    /// Count와 특정 값으로 Cos 값을 반환합니다.
+    /// Cos 값을 반환합니다.
     /// </summary>
-    /// <param name="div">엄준식</param>
+    /// <returns>Cos값을 반환합니다.</returns>
     public static float Cos(float div = 2f) => Mathf.Abs(Mathf.Cos(Count / (Mathf.Approximately(div, 0) ? 2 : div)));
-
+    
     /// <summary>
-    /// Count만으로 Sin 값을 반환합니다.
-    /// <br />
-    /// Count만을 사용하므로, 쿨타임이 과도하게 줄여지지 않았는지 확인하세요.
+    /// Log 값을 반환합니다.
     /// </summary>
-    public static float SinReg() => Mathf.Abs(Mathf.Sin(Count));
-
+    /// <param name="div">특정 값입니다.</param>
+    /// <returns>Log값을 반환합니다.</returns>
+    public static float Log(float div) =>  Mathf.Log(Count) / Mathf.Log(Mathf.Approximately(div, 0) ? 2 : div);
+    
     /// <summary>
-    /// Count만으로 Cos 값을 반환합니다.
-    /// <br />
-    /// Count만을 사용하므로, 쿨타임이 과도하게 줄여지지 않았는지 확인하세요.
+    /// Log 값을 반환힙니다.
     /// </summary>
-    public static float CosReg() => Mathf.Abs(Mathf.Cos(Count));
+    /// <returns>Log값을 반환합니다.</returns>
+    public static float Log() =>  Mathf.Log(Count);
 }
