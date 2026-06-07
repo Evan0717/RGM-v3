@@ -98,10 +98,6 @@ public class ScpFeatures : ILogicFeatures
         {
             if (player.Role is not Scp106Role scp106) continue;
 
-            if (scp106.CaptureCooldown != 0)
-                scp106.CaptureCooldown =
-                    Mathf.Max(0.0f, scp106.CaptureCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
-
             if (scp106.RemainingSinkholeCooldown != 0)
                 scp106.RemainingSinkholeCooldown = Mathf.Max(0.0f,
                     scp106.RemainingSinkholeCooldown - SpeedStore.Count * SpeedStore.ScpMultiplier);
@@ -173,7 +169,7 @@ public class ScpFeatures : ILogicFeatures
                     scp079.Energy += 1;
                 }
 
-                yield return Timing.WaitForSeconds(SpeedStore.SinReg());
+                yield return Timing.WaitForSeconds(SpeedStore.Log(.1f));
             }
         }
     }
@@ -213,7 +209,7 @@ public class ScpFeatures : ILogicFeatures
                             scp173.BlinkCooldown - SpeedStore.Count * .05f);
                 }
 
-                yield return Timing.WaitForSeconds(SpeedStore.Cos());
+                yield return Timing.WaitForSeconds(SpeedStore.Log());
             }
         }
     }
