@@ -390,7 +390,7 @@ public enum AbilityType
     MYTHIC_NOCLIP, // [신화] 노클립
     MYTHIC_BOMBGUN, // [신화] 워 머신
     MYTHIC_WARGOD, // [신화] 광전사
-    MYTHIC_BALLISTAEM3, // [신화] 발리스타 MP3
+    MYTHIC_DESTRUCTIONBULLET, // [신화] 파괴 탄환
     MYTHIC_TOOLGUN, // [신화] 툴건
     MYTHIC_KINGSCOLOR, // [신화] 패왕색 패기
     MYTHIC_ROSEHIP, // [신화] 장미칼
