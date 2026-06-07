@@ -155,7 +155,7 @@ public class ScpFeatures : ILogicFeatures
     {
         if (!Timing.IsRunning(_isRunning079))
             _isRunning079 = Timing.RunCoroutine(EnergyCreator());
-        // BUG: SCP:SL 자체 버그로 인해 추후 복구 예정
+        // BUG: SCP:SL 자체 버그로 인해 추후 복구 예정, 에너지 지급 기능만 추가
         return;
 
         IEnumerator<float> EnergyCreator()
