@@ -2,5 +2,7 @@
 
 public interface ILogicFeatures
 {
-    void Run();
+    void OnEnabled();
+
+    void OnDisabled();
 }

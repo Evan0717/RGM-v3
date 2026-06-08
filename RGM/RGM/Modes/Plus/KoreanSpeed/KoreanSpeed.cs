@@ -1,7 +1,7 @@
-﻿using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp173;
-using MEC;
-using RGM.API.Features;
+﻿using System;
+using HarmonyLib;
+using PlayerRoles.PlayableScps.Scp049;
+using RGM.Modes.Patches;
 
 namespace RGM.Modes;
 
@@ -20,64 +20,58 @@ public class KoreanSpeed : Mode
     public static KoreanSpeed Instance;
 
     private ScpFeatures _scpFeatures;
+
+    private static Harmony _harmony;
+
     public override void OnDisabled()
     {
-        
-        Exiled.Events.Handlers.Player.Spawned -= OnSpawn;
-        Exiled.Events.Handlers.Player.Died -= OnDied;
-        Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
-        Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
-        Exiled.Events.Handlers.Scp173.Blinking -= On173Blink;
-
         SpeedStore.Disable();
+        PlayerFeatures.DeActivate();
+        ScpFeatures.Start -= AddPatches;
+        RemovePatches();
+        
+        _scpFeatures?.OnDisabled();
         _scpFeatures = null;
     }
 
     public override void OnEnabled()
     {
-        _scpFeatures = new ScpFeatures();
-        
-        Exiled.Events.Handlers.Player.Spawned += OnSpawn;
-        Exiled.Events.Handlers.Player.Died += OnDied;
-        Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
-        Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
-        Exiled.Events.Handlers.Scp173.Blinking += On173Blink;
-        SpeedStore.Clear();
         SpeedStore.Ignition();
-        
-        _scpFeatures.Run();
+        PlayerFeatures.Activate();
+        ScpFeatures.Start += AddPatches;
+
+        _scpFeatures ??= new ScpFeatures();
+        _scpFeatures?.OnEnabled();
     }
 
-    private static void OnDied(DiedEventArgs ev)
+    ///<summary>    
+    /// Harmony 패치를 활성화하기 위한 Event 호환 매서드입니다.
+    /// <br />
+    /// 만약 Harmony가 null일 경우, 새 Harmony 인스턴스를 대입 또는 초기화합니다.
+    /// </summary>
+    private static void AddPatches(object sender, System.EventArgs e)
     {
-        if (!(SpeedStore.Count > 125))
-            SpeedStore.Count++;
+        _harmony ??= new Harmony($"Harmony - {DateTime.Now.Ticks} - KoreanSpeed");
 
-        PlayerEffects.AddEffects();
+        Scp049Patch();
     }
 
-    private static void OnSearchingPickup(SearchingPickupEventArgs ev)
+    ///<summary>
+    /// 내부 모듈의 harmony 패치를 제거합니다.
+    /// </summary>
+    private static void RemovePatches()
     {
-        ev.SearchTime -= SpeedStore.Count * 0.1f;
+        _harmony?.UnpatchAll();
+        _harmony = null;
     }
 
-    private static void OnThrowingRequest(ThrowingRequestEventArgs ev)
+    ///<summary>
+    /// SCP-049 관련 Harmony 패치입니다.
+    /// </summary>
+    private static void Scp049Patch()
     {
-        ev.Throwable.PinPullTime -= SpeedStore.Count * 0.1f;
+        _harmony.Patch(AccessTools.PropertyGetter(
+                typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
+            postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
     }
-
-    private static void OnSpawn(SpawnedEventArgs ev)
-    {
-        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-        {
-            if (ev.Player == null || !ev.Player.IsAlive || ev.Player.IsNonePlayer()) return;
-            PlayerEffects.AddEffects();
-        });
-    }
-
-    private static void On173Blink(BlinkingEventArgs e)
-    {
-        // 버그 해결용 쿨타임 추가 장치
-        e.Scp173.BlinkCooldown = 5.0f;
-    }
-}
+}   
