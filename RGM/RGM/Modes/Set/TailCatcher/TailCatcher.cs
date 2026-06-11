@@ -61,7 +61,7 @@ namespace RGM.Modes
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
 
-            audio = Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
+            audio = Tools.PlayGlobalAudio("Initial-D-Dancing", 1, true);
         }
 
         public override void OnDisabled()

@@ -50,7 +50,7 @@ namespace RGM.Modes
             "lava",
             "zombie",
             "zombie2",
-            "amongus"
+            //"amongus" - 24인 이하 제한 걸려 있어서 제외
         };
         Vector3 pos = new Vector3(14.07672f, 328.4382f, 11.39262f);
 

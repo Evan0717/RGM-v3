@@ -792,9 +792,9 @@
     <Reference Include="ProjectMER">
       <HintPath>$(EXILED_REFERENCES)\ProjectMER.dll</HintPath>
     </Reference>
-    <Reference Include="SecretAPI, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SecretAPI, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\EXILED_REFERENCES\SecretAPI.dll</HintPath>
+      <HintPath>..\..\EXILED_REFERENCES\SecretAPI.dll</HintPath>
     </Reference>
     <Reference Include="SemanticVersioning">
       <HintPath>$(EXILED_REFERENCES)\SemanticVersioning.dll</HintPath>
@@ -852,6 +852,9 @@
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SecretAPI.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
