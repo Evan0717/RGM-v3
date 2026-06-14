@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static RGM.Variables.Variable;
+using Random = System.Random;
 
 namespace RGM.API.Features
 {
@@ -649,6 +650,8 @@ namespace RGM.API.Features
 
         public static Item AddRandomItem(this Player player)
         {
+            Random rand = new(Map.Seed);
+            
             List<ItemType> poll = new();
 
             List<ItemType> L = new()
@@ -777,14 +780,16 @@ namespace RGM.API.Features
                 // 기타
                 ItemType.DebugRagdollMover,
             };
-
+            
             foreach (var iL in L)
-                poll.Add(iL);
+                if (Mathf.Clamp01((float) rand.NextDouble()) <= .1f)
+                    poll.Add(iL);
 
             for (int i = 0; i < 2; i++)
             {
-                foreach (var iS in S)
-                    poll.Add(iS);
+                if (Mathf.Clamp01((float) rand.NextDouble()) <= .2f)
+                    foreach (var iS in S)
+                        poll.Add(iS);
             }
 
             for (int i = 0; i < 5; i++)
@@ -813,34 +818,41 @@ namespace RGM.API.Features
 
             Item item = player.AddItem(poll.GetRandomValue());
 
-            void light(Color color)
+            void Light(Color color)
             {
-                SchematicObject schematic = ObjectSpawner.SpawnSchematic("Light", Vector3.zero);
-                LightSourceToy light = schematic.GetComponentsInChildren<LightSourceToy>().First();
+                try
+                {
+                    SchematicObject schematic = ObjectSpawner.SpawnSchematic("Light", Vector3.zero);
+                    LightSourceToy light = schematic.GetComponentsInChildren<LightSourceToy>().First();
 
-                schematic.transform.parent = player.Transform;
-                schematic.transform.localPosition = Vector3.zero;
+                    schematic.transform.parent = player.Transform;
+                    schematic.transform.localPosition = Vector3.zero;
 
-                light.NetworkLightColor = color;
-                light.NetworkLightRange = 50;
-                light.NetworkLightIntensity = 10;
+                    light.NetworkLightColor = color;
+                    light.NetworkLightRange = 50;
+                    light.NetworkLightIntensity = 10;
 
-                Timing.CallDelayed(3, schematic.Destroy);
+                    Timing.CallDelayed(3, schematic.Destroy);
+                }
+                catch (NullReferenceException e)
+                {
+                    Log.Warn("Failure to fetch object 'light'.");
+                }
             }
 
             if (L.Contains(item.Type))
             {
                 Tools.PlaySound(player.Transform, "L 등급", 4);
-                light(Color.red);
+                Light(Color.red);
             }
             if (S.Contains(item.Type))
             {
                 Tools.PlaySound(player.Transform, "S 등급", 2);
-                light(Color.yellow);
+                Light(Color.yellow);
             }
             if (A.Contains(item.Type))
             {
-                light(new Color(2.33f, 0.92f, 2.55f));
+                Light(new Color(2.33f, 0.92f, 2.55f));
             }
 
             return item;
