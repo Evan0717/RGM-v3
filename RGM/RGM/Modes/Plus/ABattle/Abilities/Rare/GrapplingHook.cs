@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("갈고리", "지급된 동전을 튕기면 대상을 끌어옵니다. (사거리 100)", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
+[Ability("갈고리", "지급된 동전을 튕기면 대상을 끌어옵니다. (사거리 15)", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
 public class GrapplingHook : Ability
 {
     ushort serial = 0;
@@ -37,7 +37,7 @@ public class GrapplingHook : Ability
     {
         if (ev.Item.Serial == serial)
         {
-            if (Tools.TryGetLookPlayer(ev.Player, 100f, out Player target, out RaycastHit? hit))
+            if (Tools.TryGetLookPlayer(ev.Player, 15f, out Player target, out RaycastHit? hit))
             {
                 target.Position = ev.Player.Position;
 

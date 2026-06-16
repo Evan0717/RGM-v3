@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("집단 지성", "주변에 있는 아군 한명당 데미지가 10% 증가합니다.", AbilityCategory.NTF, AbilityType.NTF_COLLECTIVEINTELLIGENCE)]
+[Ability("집단 지성", "주변에 있는 아군 한명당 데미지가 13% 증가합니다.", AbilityCategory.NTF, AbilityType.NTF_COLLECTIVEINTELLIGENCE)]
 public class CollectiveIntelligence : Ability
 {
     public override void OnEnabled()
@@ -31,6 +31,6 @@ public class CollectiveIntelligence : Ability
                 PowerCount++;
         }
 
-        ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.1 * PowerCount)));
+        ev.DamageHandler.Damage = (int)(ev.DamageHandler.Damage * (1 + (0.13 * PowerCount)));
     }
 }

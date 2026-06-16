@@ -21,9 +21,9 @@ public class CompetentDoctor : Ability
         if (ev.Player != Owner)
             return;
         
-        Timing.CallDelayed(0.1f, () =>
+        Timing.CallDelayed(1f, () =>
         {
-            ev.Target.MaxHealth *= 3 / 2;
+            ev.Target.MaxHealth *= 1.5f;
             ev.Target.Health = ev.Target.MaxHealth;
         });
     }

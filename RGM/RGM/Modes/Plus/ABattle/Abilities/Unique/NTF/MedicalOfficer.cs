@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("의무병", "주변에 있는 아군들을 매 초마다 0.5HP씩 치료합니다.", AbilityCategory.NTF, AbilityType.NTF_MEDICALOFFICER)]
+[Ability("의무병", "주변에 있는 아군들을 매 초마다 1HP씩 치료합니다.", AbilityCategory.NTF, AbilityType.NTF_MEDICALOFFICER)]
 public class MedicalOfficer : Ability
 {
     CoroutineHandle _medical;
@@ -25,10 +25,10 @@ public class MedicalOfficer : Ability
     {
         while (true)
         {
-            foreach (var team in PlayerManager.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x != Owner && Vector3.Distance(x.Position, Owner.Position) < 6))
+            foreach (var team in PlayerManager.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x != Owner && Vector3.Distance(x.Position, Owner.Position) < 7))
             {
                 if (team.Health < team.MaxHealth)
-                    team.Health += 0.5f;
+                    team.Health += 1f;
             }
 
             yield return Timing.WaitForSeconds(1f);

@@ -4,7 +4,7 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("단련", "공격력이 9% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
+[Ability("단련", "공격력이 11% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
 public class Training : Ability
 {
     List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
@@ -29,6 +29,6 @@ public class Training : Ability
         if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
             return;
 
-        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.09f;
+        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.11f;
     }
 }

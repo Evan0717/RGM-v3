@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.Scp0492;
 
-[Ability("허기", "인간을 섭취할 때 얻는 회복량이 100HP 추가됩니다.", AbilityCategory.Scp0492, AbilityType.SCP0492_HUNGER)]
+[Ability("허기", "인간을 섭취할 때 얻는 회복량이 65HP 추가되고, 회복량 만큼 최대 체력이 증가합니다.", AbilityCategory.Scp0492, AbilityType.SCP0492_HUNGER)]
 public class Hurger : Ability
 {
     public override void OnEnabled()
@@ -22,7 +22,8 @@ public class Hurger : Ability
 
         Timing.CallDelayed(0.1f, () =>
         {
-            ev.Player.Health += 100;
+            ev.Player.Health += 65;
+            ev.Player.MaxHealth += 65;
         });
     }
 }

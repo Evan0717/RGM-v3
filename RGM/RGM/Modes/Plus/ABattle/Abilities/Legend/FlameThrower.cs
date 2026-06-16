@@ -9,7 +9,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("화염 방사기", "위력은 33%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
+[Ability("화염 방사기", "위력은 40%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
 public class FlameThrower : Ability
 {
     ushort FlamethrowerSerial = 0;
@@ -72,7 +72,7 @@ public class FlameThrower : Ability
 
         if (ev.Attacker.CurrentItem != null && FlamethrowerSerial == ev.Attacker.CurrentItem.Serial)
         {
-            ev.DamageHandler.Damage /= 3;
+            ev.DamageHandler.Damage *= 0.4f;
 
             ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
         }

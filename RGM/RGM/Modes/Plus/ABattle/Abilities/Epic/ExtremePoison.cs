@@ -4,7 +4,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("극독", "죽인 자에게 20초 동안 심장 마비 효과를 부여합니다.", AbilityCategory.Epic, AbilityType.EPIC_EXTREMEPOISON)]
+[Ability("극독", "죽인 자에게 60초 동안 심장 마비 효과를 부여합니다.", AbilityCategory.Epic, AbilityType.EPIC_EXTREMEPOISON)]
 public class ExtremePoison : Ability
 {
     public override void OnEnabled()
@@ -25,7 +25,7 @@ public class ExtremePoison : Ability
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
             if (Owner.IsDead)
-                ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 20 * Owner.AbilityCount(AbilityType.EPIC_EXTREMEPOISON));
+                ev.Attacker.EnableEffect(EffectType.CardiacArrest, 1, 60 * Owner.AbilityCount(AbilityType.EPIC_EXTREMEPOISON));
         });
     }
 }

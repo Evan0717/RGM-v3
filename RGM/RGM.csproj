@@ -539,7 +539,7 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp3114\Showmanship.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp3114\HalfBlock.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp3114\SkilledAssassin.cs" />
-    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\AgileHuntingTool.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\VampireClaw.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\HugMe.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\NoEyes.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\Minic.cs" />

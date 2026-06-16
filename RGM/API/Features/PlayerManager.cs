@@ -847,7 +847,7 @@ namespace RGM.API.Features
             }
             if (epic.Contains(item.Type))
             {
-                Light(new Color(2.33f, 0.92f, 2.55f));
+                Light(Color.magenta);
             }
 
             return item;

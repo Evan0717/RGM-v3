@@ -22,7 +22,7 @@ public class Proficiency : Ability
 
         Timing.CallDelayed(0.1f, () =>
         {
-            ev.Scp049.RemainingCallDuration /= 2;
+            ev.Scp049.RemainingCallDuration *= 0.5f;
         });
     }
 }

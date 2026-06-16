@@ -6,7 +6,7 @@ using LabApi.Features.Wrappers;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("카메라 플래시", "핑이 찍힌 장소에 점화된 섬광탄이 생성됩니다. (쿨타임 20초)", AbilityCategory.Scp079, AbilityType.SCP079_CAMERAFLASH)]
+[Ability("카메라 플래시", "핑이 찍힌 장소에 점화된 섬광탄이 생성됩니다. (쿨타임 24초)", AbilityCategory.Scp079, AbilityType.SCP079_CAMERAFLASH)]
 public class CameraFlash : Ability
 {
     bool isScp079Cooldown = false;
@@ -48,7 +48,7 @@ public class CameraFlash : Ability
 
                 isScp079Cooldown = true;
 
-                Timing.CallDelayed(20, () =>
+                Timing.CallDelayed(24, () =>
                 {
                     isScp079Cooldown = false;
                 });

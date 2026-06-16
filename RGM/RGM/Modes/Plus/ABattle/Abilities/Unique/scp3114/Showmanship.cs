@@ -33,7 +33,7 @@ public class Showmanship : Ability
 
             if (scp3114.Dance)
             {
-                Owner.Hit(Owner, 0.2f);
+                Owner.Hit(Owner, 1f);
             }
 
             yield return Timing.WaitForSeconds(0.1f);

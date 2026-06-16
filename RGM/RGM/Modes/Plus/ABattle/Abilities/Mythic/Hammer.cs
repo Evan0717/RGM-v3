@@ -10,6 +10,7 @@ public class Hammer : Ability
     {
         Owner.AddEffect(EffectType.Metal, 255);
         Owner.AddEffect(EffectType.Lightweight, 255);
+        Owner.AddEffect(EffectType.DamageReduction, 80);
     }
 
     public override void OnDisabled()

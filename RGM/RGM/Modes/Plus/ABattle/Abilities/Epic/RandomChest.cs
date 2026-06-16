@@ -4,7 +4,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("랜덤상자", "랜덤하지만 좋은 아이템을 2개 지급받습니다.", AbilityCategory.Epic, AbilityType.EPIC_RANDOMCHEST)]
+[Ability("랜덤상자", "랜덤하지만 좋은 아이템을 3개 지급받습니다.", AbilityCategory.Epic, AbilityType.EPIC_RANDOMCHEST)]
 public class RandomChest : Ability
 {
     public override void OnEnabled()
@@ -25,7 +25,7 @@ public class RandomChest : Ability
             ItemType.SCP1344
         };
 
-        for (int i = 1; i < 3; i++)
+        for (int i = 1; i < 4; i++)
         {
             Item RandomChestItem = Owner.AddItem(Tools.GetRandomValue(RandomChest));
         }

@@ -7,7 +7,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("봉쇄", "20초 간 모든 문을 닫고, 잠급니다. 모든 방이 정전됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_LOCKDOWN)]
+[Ability("봉쇄", "16초 간 모든 문을 닫고, 잠급니다. 모든 방이 정전됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_LOCKDOWN)]
 public class Lockdown : Ability
 {
     public override void OnEnabled()
@@ -20,7 +20,7 @@ public class Lockdown : Ability
             door.Lock(1205, DoorLockType.Lockdown079);
         }
 
-        Timing.CallDelayed(10, () =>
+        Timing.CallDelayed(16, () =>
         {
             foreach (var door in doors)
             {
@@ -28,7 +28,7 @@ public class Lockdown : Ability
             }
         });
 
-        Map.TurnOffAllLights(20);
+        Map.TurnOffAllLights(16);
     }
 
     public override void OnDisabled()

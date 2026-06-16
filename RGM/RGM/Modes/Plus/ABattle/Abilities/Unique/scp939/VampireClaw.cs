@@ -2,13 +2,13 @@
 
 namespace RGM.Modes.Abilities.Unique.Scp939;
 
-[Ability("민첩한 사냥 도구", "공격 쿨타임이 25% 줄어듭니다.", AbilityCategory.Scp939, AbilityType.SCP939_AGILEHUNTINGTOOL)]
-public class AgileHuntingTool : Ability
+[Ability("흡혈 발톱", "공격 시 36의 HS가 회복됩니다.", AbilityCategory.Scp939, AbilityType.SCP939_VAMPIRECLAW)]
+public class VampireClaw : Ability
 {
     public override void OnEnabled()
     {
         if (Owner.Role is Scp939Role Scp939)
-            Scp939.AttackCooldown /= 4;
+            Scp939.Owner.HumeShield += 36;
     }
 
     public override void OnDisabled()

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)", AbilityCategory.Common, AbilityType.NORMAL_KICK)]
+[Ability("회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초, 중복 불가능)", AbilityCategory.Common, AbilityType.NORMAL_KICK)]
 public class Kick : Ability
 {
     public static int MeleeCooldown = 0;

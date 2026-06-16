@@ -64,7 +64,7 @@ public class BALLISTAEM3 : Ability
                 {
                     if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
                     {
-                        player.Hit(ev.Player, 1200);
+                        player.Hit(ev.Player, 16384);
                         
                         enemy = true;
                     }
