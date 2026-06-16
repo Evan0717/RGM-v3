@@ -16,9 +16,12 @@ public class VampireClaw : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
-        if (Owner.Role is Scp939Role Scp939)
-            Scp939.Owner.HumeShield += 40;
+        if (Owner.Role is not Scp939Role scp939) return;
+        if (ev.Attacker.ReferenceHub == scp939.Owner.ReferenceHub && scp939.Owner.HumeShield < 700)
+            scp939.Owner.HumeShield += 25;
+        else
+            scp939.Owner.HumeShield += 1;
     }
 }

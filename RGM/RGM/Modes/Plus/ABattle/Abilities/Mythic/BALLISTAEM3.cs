@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
@@ -60,14 +61,12 @@ public class BALLISTAEM3 : Ability
             {
                 bool enemy = false;
 
-                foreach (var player in players)
+                foreach (var player in players.Where(
+                             player => HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub)))
                 {
-                    if (HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
-                    {
-                        player.Hit(ev.Player, 16384);
+                    player.Hit(player, 16384.1972f);
                         
-                        enemy = true;
-                    }
+                    enemy = true;
                 }
 
                 if (!enemy)
