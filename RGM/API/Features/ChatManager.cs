@@ -8,8 +8,15 @@ using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
 {
+    /**
+     * <summary>채팅 관련된 작업을 처리합니다</summary>
+     */
     public static class ChatManager
     {
+        /**
+         * <summary>플레이어의 머리 위에 TextToy를 띄웁니다</summary>
+         * <returns>MEC 코루틴</returns>
+         */
         public static IEnumerator<float> RunChat()
         {
             while (!Round.IsEnded)

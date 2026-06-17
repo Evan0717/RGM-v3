@@ -6,10 +6,20 @@ using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
 {
+    /**
+     * <summary>힌트와 관련된 작업을 처리합니다</summary>
+     */
     public static class HintManager
     {
+        /// <summary>
+        /// TODO: Fill summary
+        /// </summary>
         private static Dictionary<Player, Dictionary<string, (string, float)>> _playerHints = new(); // Custom ID, (힌트, 남은 시간)
-
+        
+        /**
+         * <summary>살아있는 플레이어에게 힌트를 띄웁니다</summary>
+         * <returns>MEC 코루틴</returns>
+         */
         public static IEnumerator<float> OnStarted()
         {
             while (!Round.IsEnded)
@@ -35,7 +45,10 @@ namespace RGM.API.Features
                 yield return Timing.WaitForSeconds(0.1f);
             }
         }
-
+        
+        /**
+         * <summary>힌트가 띄워진 모든 플레이어에게서 힌트를 제거합니다</summary>
+         */
         public static IEnumerator<float> RemoveHint()
         {
             while (true)
@@ -59,6 +72,13 @@ namespace RGM.API.Features
             }
         }
         
+        /**
+         * <summary>Player의 확장 메서드로서 힌트를 띄우는 메서드를 추가합니다</summary>
+         * <param name="player"> 플레이어 인스턴스</param>
+         * <param name="customId">힌트 커스텀 ID</param>
+         * <param name="hint">힌트 내용</param>
+         * <param name="duration">힌트 길이</param>
+         */
         public static void AddHint(this Player player, string customId, string hint, float duration = 3)
         {
             duration = (int)duration;

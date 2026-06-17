@@ -2,8 +2,20 @@
 
 namespace RGM.API.Features
 {
+    /**
+     * <summary>오디오 관련된 작업을 처리합니다</summary>
+     */
     public static class AudioManager
     {
+        /**
+         * <summary>AudioPlayer의 확장 메서드로서 클립을 로드하는 기능을 추가합니다</summary>
+         * <param name="audioPlayer">AudioPlayer 인스턴스</param>
+         * <param name="clipName">재생할 클립 이름</param>
+         * <param name="volume">음량 (기본 1)</param>
+         * <param name="loop">반복 재생 여부</param>
+         * <param name="destroyOnEnd">재생 후 클립 객체 제거</param>
+         * <returns>AudioClipPlayback 을 반환합니다</returns>
+         */
         public static AudioClipPlayback TryPlay(this AudioPlayer audioPlayer, string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
         {
             string audioDir = Paths.Plugins + "/audio/";

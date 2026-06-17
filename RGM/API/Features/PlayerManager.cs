@@ -24,8 +24,14 @@ using Random = System.Random;
 
 namespace RGM.API.Features
 {
+    /**
+     * <summary>플레이어 관련 작업을 처리합니다</summary>
+     */
     public static class PlayerManager
     {
+        /// <summary>
+        /// 천장 시스템 관련 리스트 (잘 모르겠음...)
+        /// </summary>
         private static readonly Dictionary<Player, List<byte>> PlayerRandomValueCount = [];
         
         public static List<Player> List
@@ -57,7 +63,11 @@ namespace RGM.API.Features
         {
             return roleTypeId.IsScp() || roleTypeId.ToString().Contains("Flamingo");
         }
-
+        
+        /**
+         * <summary>Player에 확장 메서드로서 플레이어를 세팅하는 메서드를 추가합니다</summary>
+         * <param name="player"></param>
+         */
         public static void Setup(this Player player)
         {
             TranslatorPlayers.Add(player, "ko");

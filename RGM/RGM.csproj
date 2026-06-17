@@ -13,6 +13,7 @@
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -795,7 +796,7 @@
     </Reference>
     <Reference Include="SecretAPI, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\EXILED_REFERENCES\SecretAPI.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\SecretAPI.dll</HintPath>
     </Reference>
     <Reference Include="SemanticVersioning">
       <HintPath>$(EXILED_REFERENCES)\SemanticVersioning.dll</HintPath>

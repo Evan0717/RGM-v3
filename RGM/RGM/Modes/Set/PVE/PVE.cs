@@ -47,7 +47,9 @@ namespace RGM.Modes
             List<Player> players = PlayerManager.List.Where(x => !x.IsNPC).ToList();
             if (players.Count == 0 || roundHandler.SelectedDifficulty < 0)
                 return;
-
+            
+            if (roundHandler.CurrentWave < 10) return;
+            
             int[] difficultyRewards = { 6, 12, 18 };
             int reward = difficultyRewards[roundHandler.SelectedDifficulty];
             if (!roundHandler.AllWavesCleared)

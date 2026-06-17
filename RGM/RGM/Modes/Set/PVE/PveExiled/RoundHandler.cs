@@ -25,6 +25,7 @@ namespace RGM.Modes.PveExiledSystem
         private bool roundStarted = false;
         private WaveConfig waveConfig;
 
+        public int CurrentWave { get; private set; } = -1;
         public bool AllWavesCleared { get; private set; }
         public int SelectedDifficulty { get; private set; } = -1;
 
@@ -293,6 +294,7 @@ namespace RGM.Modes.PveExiledSystem
             for (int wave = 0; wave < waveConfig.Waves.Length; wave++)//웨이브 진행 루프
             {
                 WaveConfig.WaveInfo waveInfo = waveConfig.Waves[wave];
+                this.CurrentWave = wave;
                 Exiled.API.Features.Map.CleanAllRagdolls();
                 Exiled.API.Features.Map.Clean(Decals.DecalPoolType.Blood);
                 Exiled.API.Features.Map.Clean(Decals.DecalPoolType.GlassCrack);
