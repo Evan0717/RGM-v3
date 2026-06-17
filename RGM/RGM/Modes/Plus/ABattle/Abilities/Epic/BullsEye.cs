@@ -23,6 +23,6 @@ public class BullsEye : Ability
             return;
 
         if (damageHandler.Hitbox == HitboxType.Headshot)
-            damageHandler.Damage *= 1.6f;
+            damageHandler.Damage *= 1.8f;
     }
 }
