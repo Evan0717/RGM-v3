@@ -18,8 +18,10 @@ public class VampireClaw : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
+        if (ev.Attacker.ReferenceHub != Owner.ReferenceHub || ev.Player != Owner || ev.Player == null) return;
+        
         if (Owner.Role is not Scp939Role scp939) return;
-        if (ev.Attacker.ReferenceHub == scp939.Owner.ReferenceHub && scp939.Owner.HumeShield < 1000)
+        if ( scp939.Owner.HumeShield < 1000)
             scp939.Owner.HumeShield += 25;
         else
             scp939.Owner.HumeShield += 1;
