@@ -19,7 +19,8 @@ namespace RGM.Modes
 """;
         public override string Color => "a0aade";
         public override string Author => "A3인데";
-
+        
+        
         RoundHandler roundHandler;
 
         public override void OnEnabled()
@@ -48,10 +49,14 @@ namespace RGM.Modes
             if (players.Count == 0 || roundHandler.SelectedDifficulty < 0)
                 return;
             
-            if (roundHandler.CurrentWave < 10) return;
+            int[][] difficultyRewards =
+            {
+                new int[]{1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6},
+                new int[]{1, 1, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 9, 12},
+                new int[]{1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9, 10, 11, 18} 
+            };
             
-            int[] difficultyRewards = { 6, 12, 18 };
-            int reward = difficultyRewards[roundHandler.SelectedDifficulty];
+            int reward = difficultyRewards[roundHandler.SelectedDifficulty][roundHandler.CurrentWave];
             if (!roundHandler.AllWavesCleared)
                 reward /= 3;
 
