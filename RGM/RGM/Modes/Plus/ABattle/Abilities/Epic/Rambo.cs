@@ -28,7 +28,7 @@ public class Rambo : Ability
         if (InfinityGunSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
         {
             if (InfinityGunSerial == ev.Item.Serial)
-                ev.Player.AddHint("람보", $"<b><color={ABattle.RatingColor["영웅"]}>람보</color></b> 능력이 있는 Logicer입니다.");
+                ev.Player.AddHint("람보", $"<b><color={ABattle.RatingColor["영웅"]}>람보</color></b> 능력이 있는 Logicer입니다");
         }
     }
 
