@@ -38,7 +38,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                string audioDir = Paths.Plugins + "/audio/";
+                string audioDir = $"{Paths.Plugins}/audio/";
                 string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
         
                 AudioClipPlayback clip = Tools.PlayGlobalAudio(audioFiles.GetRandomValue().Replace(".ogg", ""));
