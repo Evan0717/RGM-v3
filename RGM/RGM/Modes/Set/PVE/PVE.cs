@@ -5,6 +5,7 @@ using Exiled.Events.EventArgs.Server;
 using MEC;
 using RGM.API.Features;
 using RGM.Modes.PveExiledSystem;
+using RGM.Variables;
 
 namespace RGM.Modes
 {
@@ -57,10 +58,12 @@ namespace RGM.Modes
             };
             
             int reward = difficultyRewards[roundHandler.SelectedDifficulty][roundHandler.CurrentWave];
-            if (!roundHandler.AllWavesCleared)
-                reward /= 3;
+            List<Player> wonplayers = players
+                .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report) 
+                            && report.Damage >= 1000)
+                .ToList();
 
-            Timing.RunCoroutine(Tools.SetWinner(players, reward));
+            Timing.RunCoroutine(Tools.SetWinner(wonplayers, reward));
         }
     }
 }
