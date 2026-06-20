@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("로켓 런처", "공격 시, 5% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 20%)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
+[Ability("로켓 런처", "공격 시, 11% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 35%)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
 public class RocketLauncher : Ability
 {
     List<Player> isInRocket = new();
@@ -32,7 +32,7 @@ public class RocketLauncher : Ability
         {
             if (ev.Attacker.IsScpRole())
             {
-                if (Random.Range(1, 6) == 1)
+                if (Random.Range(1, 101) <= 12)
                 {
                     isInRocket.Add(ev.Player);
 
@@ -47,7 +47,7 @@ public class RocketLauncher : Ability
             }
             else
             {
-                if (Random.Range(1, 21) == 1)
+                if (Random.Range(1, 101) <= 36)
                 {
                     isInRocket.Add(ev.Player);
 

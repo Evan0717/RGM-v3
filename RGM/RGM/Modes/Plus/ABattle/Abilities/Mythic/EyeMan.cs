@@ -57,7 +57,7 @@ public class EyeMan : Ability
                         target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.2f);
                         target.CurrentItem = null;
-                        target.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.005f : target.MaxHealth * 0.025f);
+                        target.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.005f : target.MaxHealth * 0.022f);
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
                     else

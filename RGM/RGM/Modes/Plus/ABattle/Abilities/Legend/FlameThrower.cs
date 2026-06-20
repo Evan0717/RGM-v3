@@ -72,9 +72,9 @@ public class FlameThrower : Ability
 
         if (ev.Attacker.CurrentItem != null && FlamethrowerSerial == ev.Attacker.CurrentItem.Serial)
         {
-            ev.DamageHandler.Damage *= 0.4f;
+            ev.DamageHandler.Damage *= 0.42f;
 
-            ev.Player.EnableEffect(EffectType.Burned, 1, 1.2f);
+            ev.Player.EnableEffect(EffectType.Burned, 1, 1.5f);
         }
     }
 }

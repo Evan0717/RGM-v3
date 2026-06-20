@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("장미칼", "이 명검은 무한한 힘을 가지고 있습니다..", AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
+[Ability("장미칼", "이 명검은 무한으로 발산하는 힘을 가지고 있습니다..", AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
 public class Rosehip : Ability
 {
     ushort serial = 0;
