@@ -91,13 +91,13 @@ namespace RGM.Modes
             player.ClearInventory();
             for (int i = 1; i < 7; i++) {
                 player.AddItem(ItemType.Ammo9x19);
-                player.AddItem(ItemType.Ammo12gauge);
-                player.AddItem(ItemType.Ammo44cal);
             }
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < 3; i++)
             {
                 player.AddItem(ItemType.Ammo556x45);
                 player.AddItem(ItemType.Ammo762x39);
+                player.AddItem(ItemType.Ammo12gauge);
+                player.AddItem(ItemType.Ammo44cal);
             }
             for (int i = 1; i < 9; i++)
             {

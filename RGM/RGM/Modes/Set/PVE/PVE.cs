@@ -52,8 +52,8 @@ namespace RGM.Modes
             int[][] difficultyRewards =
             {
                 new int[]{1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6},
-                new int[]{1, 1, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 9, 12},
-                new int[]{1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9, 10, 11, 18} 
+                new int[]{1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 12},
+                new int[]{1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9, 10, 10, 18} 
             };
             
             int reward = difficultyRewards[roundHandler.SelectedDifficulty][roundHandler.CurrentWave];
