@@ -16,13 +16,13 @@ namespace RGM.Modes
         private static bool _isEnabled;
         
         public override string Name => "랜덤박스";
-        public override string Description => "30초마다 랜덤한 아이템을 얻을 수 있습니다!";
+        public override string Description => "24초마다 랜덤한 아이템을 얻을 수 있습니다!";
 
         public override string Detail =>
             """
             무작위 아이템들이 클래스 별 확률로 지급됩니다.
 
-            이후, 30초마다 무작위 아이템들을 하나 더 받습니다.
+            이후, 24초마다 무작위 아이템들을 하나 더 받습니다.
             """;
 
         public override string Color => "BFFF00";
@@ -56,7 +56,7 @@ namespace RGM.Modes
 
             while (_isEnabled)
             {
-                yield return Timing.WaitForSeconds(30f);
+                yield return Timing.WaitForSeconds(24f);
 
                 foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                     try
@@ -99,7 +99,7 @@ namespace RGM.Modes
                 player.AddItem(ItemType.Ammo12gauge);
                 player.AddItem(ItemType.Ammo44cal);
             }
-            for (int i = 1; i < 9; i++)
+            for (int i = 1; i < 6; i++)
             {
                 player.AddRandomItem();
 

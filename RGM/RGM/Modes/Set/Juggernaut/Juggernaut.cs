@@ -103,7 +103,7 @@ namespace RGM.Modes
             juggernaut = Tools.GetRandomValue(PlayerManager.List.ToList());
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
-            juggernaut.Scale = new Vector3(1.2f, 1.1f, 1.2f);
+            juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
             juggernaut.MaxHealth = 350 * PlayerManager.List.Count() + 120 * PlayerManager.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
