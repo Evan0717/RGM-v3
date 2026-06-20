@@ -57,16 +57,15 @@ Trouble in Terrorist Town의 약자.
         List<Player> instantKillCooldown = new List<Player>();
         List<ItemType> main = new List<ItemType> 
         {
-            ItemType.GunA7,
-            ItemType.GunRevolver,
             ItemType.GunAK,
             ItemType.GunShotgun,
-            ItemType.GunE11SR
+            ItemType.GunE11SR,
+            ItemType.GunLogicer,
+            ItemType.GunFRMG0
         };
         List<ItemType> secondary = new List<ItemType> 
-        { 
-            ItemType.GunCom45,
-            ItemType.GunCOM15,
+        {
+            ItemType.GunRevolver,
             ItemType.GunCOM18,
             ItemType.GunCrossvec,
             ItemType.GunFSP9
