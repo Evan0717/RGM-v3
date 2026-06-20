@@ -35,19 +35,19 @@ public class Kick : Ability
                     switch (pos)
                     {
                         case "Head":
-                            return 24.1f;
+                            return 40f;
 
                         case "Chest":
-                            return 14f;
+                            return 20f;
 
                         default:
-                            return 12.05f;
+                            return 14f;
                     }
                 }
 
                 float damage = damageCalcu(hit.Value.transform.name);
 
-                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / 14);
+                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / 20);
                 player.Hit(ev.Player, damage);
                 ev.Player.Grab();
 

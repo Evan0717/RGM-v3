@@ -7,7 +7,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("조커", "사망할 경우 5초간 무적이 되고, 최대 체력이 1~3배로 조정되고, 상대방의 능력 1개를 삭제시키고, 좋은 능력 2개를 얻습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_JOKER)]
+[Ability("조커", "사망할 경우 5초간 무적이 되고, 최대 체력이 2~4배로 조정되고, 상대방의 능력 1개를 삭제시키고,\n전설 이상 등급 능력 4개를 얻습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_JOKER)]
 public class Joker : Ability
 {
     public override void OnEnabled()
@@ -35,12 +35,12 @@ public class Joker : Ability
                 GodModePlayers.Remove(ev.Player);
         });
 
-        ev.Player.MaxHealth = Random.Range(1, 4) * ev.Player.MaxHealth;
+        ev.Player.MaxHealth = Random.Range(2, 5) * ev.Player.MaxHealth;
 
         if (ev.Attacker != null)
             ev.Attacker.RemoveAbility(ev.Attacker.GetAbilities().GetRandomValue());
 
-        foreach (var ability in ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Legend, 2))
+        foreach (var ability in ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Legend, 4))
             ev.Player.AddAbility(ability);
 
         OnDisabled();

@@ -20,7 +20,7 @@ namespace RGM.Modes
 """
 랜덤한 맵에서, 팀 승리를 위해 상대 팀을 무찌르세요.
 
-제한 시간은 3분이며, 3분이 지나면 버스터콜이 발생합니다.
+제한 시간은 2분이며, 2분이 지나면 버스터콜이 발생합니다.
 
 <b>[Map Credit]</b>
 @vasileii, @sleeplessbutter
@@ -91,7 +91,7 @@ namespace RGM.Modes
                     player.AddItem(item);
             }
 
-            yield return Timing.WaitForSeconds(180f);
+            yield return Timing.WaitForSeconds(120f);
 
             Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
 

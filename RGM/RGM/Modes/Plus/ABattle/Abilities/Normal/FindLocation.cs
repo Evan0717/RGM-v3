@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("위치 추적", "10초 간 아군이 아닌 유저의 위치를 확인합니다.", AbilityCategory.Common, AbilityType.NORMAL_FINDLOCATION)]
+//[Ability("위치 추적", "10초 간 아군이 아닌 유저의 위치를 확인합니다.", AbilityCategory.Common, AbilityType.NORMAL_FINDLOCATION)]
 public class FindLocation : Ability
 {
     public override void OnEnabled()

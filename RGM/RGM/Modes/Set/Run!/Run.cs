@@ -24,7 +24,7 @@ namespace RGM.Modes
         public override string Description => "뛰세요, 따라잡히기 전에!";
         public override string Detail =>
 """
-모든 플레이어는 SCP-096이 되며, 뒤따라오는 무언가에 잡히지 않도록 도망가야 합니다.
+모든 플레이어는 ClassD 가 되며, 뒤따라오는 무언가에 잡히지 않도록 도망가야 합니다.
 하지만 앞은 장애물들이 가로막고 있죠. 과연 무사히 도착 지점으로 갈 수 있을까요?
 """;
         public override string Color => "da0101";
@@ -96,7 +96,15 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            hellMode = true;
+            if (Random.Range(1, 101) <= 45)
+            {
+                hellMode = true;
+
+                foreach (var player in PlayerManager.List)
+                {
+                    player.AddBroadcast(10, "<color=red><b><size=25>지옥 모드 활성화</size></b></color>");
+                }
+            }
 
             for (int i = 0; i < 400; i++)
             {
@@ -142,12 +150,16 @@ namespace RGM.Modes
 
             var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
-            if (players.Count() == 1)
-            {
+            if (players.Count() == 1 && hellMode) {
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 15));
+            }
+            else if (players.Count() > 1 && hellMode) {
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
+            }
+            else if (players.Count() == 1) {
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
             }
-            else
-            {
+            else {
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
             }
         }

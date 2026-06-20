@@ -57,22 +57,21 @@ Trouble in Terrorist Town의 약자.
         List<Player> instantKillCooldown = new List<Player>();
         List<ItemType> main = new List<ItemType> 
         {
-            ItemType.GunA7,
-            ItemType.GunRevolver,
             ItemType.GunAK,
             ItemType.GunShotgun,
-            ItemType.GunE11SR
+            ItemType.GunE11SR,
+            ItemType.GunLogicer,
+            ItemType.GunFRMG0
         };
         List<ItemType> secondary = new List<ItemType> 
-        { 
-            ItemType.GunCom45,
-            ItemType.GunCOM15,
+        {
+            ItemType.GunRevolver,
             ItemType.GunCOM18,
             ItemType.GunCrossvec,
             ItemType.GunFSP9
         };
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -267,12 +266,12 @@ Trouble in Terrorist Town의 약자.
 
         public IEnumerator<float> Timer()
         {
-            for (int i = 1; i < 570; i++)
+            for (int i = 1; i < 480; i++)
             {
                 if (Round.IsEnded)
                     yield break;
 
-                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>게임 종료까지 {570 - i}초</size>"));
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>게임 종료까지 {480 - i}초</size>"));
 
                 yield return Timing.WaitForSeconds(1f);
             }

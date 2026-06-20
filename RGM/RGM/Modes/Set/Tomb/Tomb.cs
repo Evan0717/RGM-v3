@@ -104,8 +104,17 @@ namespace RGM.Modes
                 {
                 }
             }
-
             yield return 0f;
+            
+            yield return Timing.WaitForSeconds(120f);
+
+            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
+
+            foreach (var player in PlayerManager.List)
+            {
+                player.Position = BusterCall.Position;
+                player.AddBroadcast(20, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
+            }
         }
 
         public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)

@@ -125,11 +125,8 @@ namespace RGM.API.Features
             }
         }
     }
-    
-    /**
-     * <summary>유저 DB 관련 작업을 처리합니다</summary>
-     */
-    public static class UsersManager
+
+    public enum UserDataStructure
     {
         /*
         Exp - 0
@@ -164,6 +161,45 @@ namespace RGM.API.Features
         출석 여부 (오늘) - 29
         현재 연속 출석 일수 - 30
         */
+        
+        Exp = 0,
+        RandomCoin = 1,
+        Cash = 2,
+        OwnKillEffect = 3,
+        EquipKillEffect = 4,
+        CustomNickName = 5,
+        CustomInfo = 6,
+        OwnCustomizing = 7,
+        OwnPaint = 8,
+        EquipPaint = 9,
+        OwnTitle = 10,
+        EquipTitle = 11,
+        NickName = 12,
+        DiscordID = 13,
+        LinkCode = 14,
+        KillEffectRandom = 15,
+        PaintRandom = 16,
+        TitleRandom = 17,
+        OwnItem = 18,
+        OwnSpawnEffect = 19,
+        EquipSpawnEffect = 20,
+        SpawnEffectRandom = 21,
+        Warning = 22,
+        DoNotDisturb = 23,
+        OwnIcon = 24,
+        EquipIcon = 25,
+        IconRandom = 26,
+        DayStreak = 27,
+        MaxDayStreak = 28,
+        TodayAttend = 29,
+        NowDayStreak = 30
+    }
+    
+    /**
+     * <summary>유저 DB 관련 작업을 처리합니다</summary>
+     */
+    public static class UsersManager
+    {
         
         /// <summary>
         /// 마지막 유저 DB 로드 시간 (UTC)
