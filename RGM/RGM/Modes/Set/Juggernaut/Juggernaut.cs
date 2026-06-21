@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Exiled.API.Features.DamageHandlers;
+using Exiled.Events.EventArgs.Player;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using MEC;
@@ -29,7 +31,7 @@ namespace RGM.Modes
 
 이제 친구가 될 시간이야.
 
-* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.
+* 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "088A08";
 
@@ -104,17 +106,20 @@ namespace RGM.Modes
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            juggernaut.MaxHealth = 350 * PlayerManager.List.Count() + 120 * PlayerManager.List.Count();
+            juggernaut.MaxHealth = 398 * PlayerManager.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
-            juggernaut.EnableEffect(EffectType.DamageReduction, 10);
             juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25>본인을 제외한 모두를 사살하십시오.</size>");
             juggernaut.Position = new Vector3(123.3271f, 288.7908f, 27.01838f);
 
-            List<ItemType> Items = new List<ItemType>() { ItemType.GunLogicer, ItemType.Jailbird };
-            foreach (var Item in Items)
-                juggernaut.AddItem(Item);
+            List<ItemType> items = new List<ItemType>() {
+                ItemType.GunLogicer,
+                ItemType.Jailbird,
+                ItemType.ArmorHeavy
+            };
+            foreach (var item in items)
+                juggernaut.AddItem(item);
 
             bool IsEnd = false;
             while (!IsEnd)
@@ -146,7 +151,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> AutoWarhead()
         {
-            yield return Timing.WaitForSeconds(9 * 60);
+            yield return Timing.WaitForSeconds(11 * 60);
 
             if (Warhead.IsDetonated)
                 yield break;
@@ -184,7 +189,7 @@ namespace RGM.Modes
             {
                 p.transform.parent = juggernaut.GameObject.transform;
 
-                Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 5f, maxDistance: 15f);
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 5f, maxDistance: 20f);
 
                 speaker.transform.parent = juggernaut.GameObject.transform;
 
@@ -212,7 +217,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        public void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
@@ -224,7 +229,8 @@ namespace RGM.Modes
                 List<RoleTypeId> ScpsList = new List<RoleTypeId>()
                 {
                     RoleTypeId.Scp3114,
-                    RoleTypeId.Scp079
+                    RoleTypeId.Scp079,
+                    RoleTypeId.Scp049
                 };
 
                 if (ScpsList.Contains(player.Role))
@@ -232,25 +238,25 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSearchingPickup(Exiled.Events.EventArgs.Player.SearchingPickupEventArgs ev)
+        public void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (ev.Player == juggernaut)
                 ev.IsAllowed = false;
         }
 
-        public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
+        public void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if (ev.Player == juggernaut)
                 ev.IsAllowed = false;
         }
 
-        public void OnShooting(Exiled.Events.EventArgs.Player.ShootingEventArgs ev)
+        public void OnShooting(ShootingEventArgs ev)
         {
             if (ev.Player == juggernaut)
                 ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
         }
 
-        public IEnumerator<float> OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        public IEnumerator<float> OnHurting(HurtingEventArgs ev)
         {
             if (ev.Attacker != null)
             {
@@ -258,7 +264,10 @@ namespace RGM.Modes
                 {
                     if (ev.Attacker == juggernaut && ev.Player != juggernaut)
                     {
-                        ev.DamageHandler.Damage = ev.DamageHandler.Damage * 3;
+                        if (ev.DamageHandler.CustomBase is FirearmDamageHandler { Hitbox: HitboxType.Headshot } damageHandler)
+                            damageHandler.Damage /= 2;
+
+                        ev.DamageHandler.Damage *= 3.55f;
                     }
                     else if (ev.Attacker != juggernaut && ev.Player == juggernaut)
                     {
@@ -268,10 +277,10 @@ namespace RGM.Modes
                         PlayerDamages[ev.Attacker] += ev.DamageHandler.Damage;
                         stack += ev.DamageHandler.Damage;
 
-                        if (stack > 150)
+                        if (stack > 300)
                         {
-                            Respawn.GrantInfluence(Faction.FoundationStaff, 10);
-                            Respawn.GrantInfluence(Faction.FoundationEnemy, 10);
+                            Respawn.GrantInfluence(Faction.FoundationStaff, 20);
+                            Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
 
                             stack = 0;
                         }
@@ -281,16 +290,16 @@ namespace RGM.Modes
                             bool flag = WaveTimer.TryGetWaveTimers(wave.TargetFaction, out List<WaveTimer> waves);
 
                             foreach (var w in waves)
-                                w.SetTime((int)w.TimeLeft.TotalSeconds - 2);
+                                w.SetTime((int)w.TimeLeft.TotalSeconds - 3);
                         }
 
                         List<RoleTypeId> Scps = new List<RoleTypeId>() 
                         { 
                             RoleTypeId.Scp173,
-                            RoleTypeId.Scp049,
                             RoleTypeId.Scp106,
                             RoleTypeId.Scp096,
-                            RoleTypeId.Scp939
+                            RoleTypeId.Scp939,
+                            RoleTypeId.Scp0492
                         };
 
                         if (ev.IsInstantKill || (Scps.Contains(ev.Attacker.Role.Type) && !ScpAttackCooldown.Contains(ev.Attacker)))
@@ -306,32 +315,37 @@ namespace RGM.Modes
                             ScpAttackCooldown.Remove(ev.Attacker);
                         }
                     }
-                }
-                else
+                } 
+                else 
                 {
                     ev.IsAllowed = false;
                 }
             }
         }
 
-        public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
+        public void OnReceivingEffect(ReceivingEffectEventArgs ev)
         {
             if (ev.Player == juggernaut && ev.Effect.GetEffectType() != EffectType.SinkHole)
             {
                 if (ev.Effect.GetEffectType() == EffectType.PocketCorroding)
                     ev.IsAllowed = false;
 
-                else
+                else if (ev.Effect.GetEffectType().GetCategories() == EffectCategory.Negative)
                 {
                     Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                     {
+                        /*
+                         * 저거너트랑 다른 추가모드 호환성 만들기
+                         *
+                         * 부정적인 효과(EffectCategory.Negative)만 제거하도록 변경.
+                         */
                         ev.Player.DisableEffect(ev.Effect.GetEffectType());
                     });
                 }
             }
         }
 
-        public void OnHandcuffing(Exiled.Events.EventArgs.Player.HandcuffingEventArgs ev)
+        public void OnHandcuffing(HandcuffingEventArgs ev)
         {
             ev.IsAllowed = false;
         }
