@@ -106,10 +106,11 @@ namespace RGM.Modes
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            juggernaut.MaxHealth = 398 * PlayerManager.List.Count();
+            juggernaut.MaxHealth = 385 * PlayerManager.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
+            juggernaut.EnableEffect(EffectType.Slowness, 3);
             juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25>본인을 제외한 모두를 사살하십시오.</size>");
             juggernaut.Position = new Vector3(123.3271f, 288.7908f, 27.01838f);
 
@@ -267,7 +268,7 @@ namespace RGM.Modes
                         if (ev.DamageHandler.CustomBase is FirearmDamageHandler { Hitbox: HitboxType.Headshot } damageHandler)
                             damageHandler.Damage /= 2;
 
-                        ev.DamageHandler.Damage *= 3.55f;
+                        ev.DamageHandler.Damage *= 3.28f;
                     }
                     else if (ev.Attacker != juggernaut && ev.Player == juggernaut)
                     {
@@ -281,7 +282,11 @@ namespace RGM.Modes
                         {
                             Respawn.GrantInfluence(Faction.FoundationStaff, 20);
                             Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
-
+                            if (stack > 3000)
+                            {
+                                Respawn.GrantTokens(Faction.FoundationStaff, 1);
+                                Respawn.GrantTokens(Faction.FoundationEnemy, 1);
+                            }
                             stack = 0;
                         }
 
@@ -305,7 +310,7 @@ namespace RGM.Modes
                         if (ev.IsInstantKill || (Scps.Contains(ev.Attacker.Role.Type) && !ScpAttackCooldown.Contains(ev.Attacker)))
                         {
                             ev.IsAllowed = false;
-                            ev.Player.Hurt(120.5f, DamageType.Scp);
+                            ev.Player.Hurt(200f, DamageType.Scp);
                             ev.Attacker.ShowHitMarker(1.5f);
 
                             ScpAttackCooldown.Add(ev.Attacker);
