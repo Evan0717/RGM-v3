@@ -99,6 +99,19 @@ namespace RGM.Modes
                 speaker.Destroy();
         }
 
+        public IEnumerator<float> Timer()
+        {
+            for (int i = 1; i < 75; i++)
+            {
+                if (Round.IsEnded)
+                    yield break;
+
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>저거너트 외부 지원 호출까지 {75 - i}초</size>"));
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+
         public IEnumerator<float> OnModeStarted()
         {
             Door.Get(DoorType.EscapeFinal).IsOpen = true;
@@ -112,11 +125,12 @@ namespace RGM.Modes
 
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            juggernaut.MaxHealth = 385 * PlayerManager.List.Count();
+            juggernaut.MaxHealth = 530 * PlayerManager.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
             juggernaut.EnableEffect(EffectType.Slowness, 3);
+            juggernaut.EnableEffect(EffectType.BodyshotReduction, 4);
             juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25>본인을 제외한 모두를 사살하십시오.</size>");
             juggernaut.Position = new Vector3(123.3271f, 288.7908f, 27.01838f);
 
@@ -128,29 +142,63 @@ namespace RGM.Modes
             foreach (var item in items)
                 juggernaut.AddItem(item);
 
+            if (Warhead.IsDetonated) {
+                juggernaut.DisableAllEffects();
+                juggernaut.EnableEffect(EffectType.BodyshotReduction, 4);
+                juggernaut.EnableEffect(EffectType.Scp1344, 1);
+                juggernaut.EnableEffect(EffectType.Scp1853, 5);
+                juggernaut.EnableEffect(EffectType.Scp207, 1);
+                juggernaut.EnableEffect(EffectType.MovementBoost, 10);
+                juggernaut.EnableEffect(EffectType.FogControl, 1);
+                juggernaut.EnableEffect(EffectType.Bleeding, 1);
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신, 중독과 출혈 효과를 받습니다.</size>"));
+                yield return Timing.WaitForSeconds(10f);
+                
+                // 저거너트 외부 지원 호출 구현(2번에 나눠서)
+                Timing.RunCoroutine(Timer());
+                yield return Timing.WaitForSeconds(75f); // 1차 호출
+                /*
+                 * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
+                 */
+                Timing.RunCoroutine(Timer());
+                yield return Timing.WaitForSeconds(75f); // 2차 호출
+                /*
+                 * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
+                 */
+                
+                // 초토화 작전 구현
+                yield return Timing.WaitForSeconds(120f); // 외부지원 호출에도 게임이 끝나지 않을 경우
+                
+            }
+            
             bool IsEnd = false;
             while (!IsEnd)
             {
                 if (juggernaut.IsAlive)
                 {
-                    if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2)
-                    {
+                    if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2) {
                         PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
                         IsEnd = true;
-
-                        Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 5));
+                        Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 11));
+                        /*
+                         * 저거너트 외부 지원 호출 기능을 추가할 것이기 때문에, 기존의 검사 방식을 사용하면 안 됨.
+                         * 이제 저거너트랑 튜토리얼을 같은 팀으로 취급하기 때문에, 이를 검사하는 방식으로 구현하되,
+                         * 저거너트 단 하나만 생존할 경우 기존의 시스템을 그대로 사용.
+                         *
+                         * 저거너트만 살아있는가?
+                         * 저거너트랑 튜토리얼이 같이 살았는가?
+                         * 를 봐야 함.
+                         */
                     }
                 }
-                else
-                {
+                else {
                     PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25><color=#298A08>저거너트</color>가 사망했습니다.</size>\n<b>Site-76 구성원</b>들의 승리입니다."));
                     IsEnd = true;
-
                     Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 1));
                 }
 
                 yield return Timing.WaitForSeconds(1f);
-            }
+            }   
 
             PlayerManager.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
             Round.IsLocked = false;
@@ -207,7 +255,6 @@ namespace RGM.Modes
 
             yield return 0;
         }
-
         public IEnumerator<float> ReduceWaveTimer()
         {
             while (true)
@@ -240,8 +287,10 @@ namespace RGM.Modes
                     RoleTypeId.Scp049
                 };
 
-                if (ScpsList.Contains(player.Role))
-                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x) && x.IsScpRole()).ToList()));
+                if (ScpsList.Contains(player.Role)) {
+                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>() 
+                        .Where(x => !ScpsList.Contains(x) && x.IsScpRole()).ToList()));
+                }
             }
         }
 
@@ -274,26 +323,36 @@ namespace RGM.Modes
                         if (ev.DamageHandler.CustomBase is FirearmDamageHandler { Hitbox: HitboxType.Headshot } damageHandler)
                             damageHandler.Damage /= 2;
 
-                        ev.DamageHandler.Damage *= 3.25f;
+                        ev.DamageHandler.Damage *= 3.30f;
                     }
                     else if (ev.Attacker != juggernaut && ev.Player == juggernaut)
                     {
                         if (!PlayerDamages.ContainsKey(ev.Attacker))
                             PlayerDamages.Add(ev.Attacker, 0);
-
+                        /*
+                         * RoleId가 Tutorial인 경우 juggernaut랑 서로 데미지를 입지 않아야 함.
+                         * (두 진영을 같은 팀으로 만들어야 하기 때문)
+                         */
                         PlayerDamages[ev.Attacker] += ev.DamageHandler.Damage;
                         stack += ev.DamageHandler.Damage;
 
-                        if (stack > 300)
-                        {
-                            Respawn.GrantInfluence(Faction.FoundationStaff, 20);
-                            Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
-                            if (stack > 3000)
-                            {
-                                Respawn.GrantTokens(Faction.FoundationStaff, 1);
-                                Respawn.GrantTokens(Faction.FoundationEnemy, 1);
+                        while (true) {
+                            if (stack > 300) {
+                                Respawn.GrantInfluence(Faction.FoundationStaff, 20);
+                                Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
+                                      
+                                if (stack > 3000) {
+                                    Respawn.GrantTokens(Faction.FoundationStaff, 1);
+                                    Respawn.GrantTokens(Faction.FoundationEnemy, 1);
+                                    /*
+                                     * stack이 3000이 넘을 경우, NTF 또는 CHAOS 중에서 랜덤으로 지원을 즉시 호출
+                                     * 단, Instant Respawn이 아닌 일반 Respawn으로 작동
+                                     */
+                                    stack = 0;
+                                    break;
+                                }
+
                             }
-                            stack = 0;
                         }
 
                         foreach (var wave in WaveManager.Waves)
@@ -321,7 +380,7 @@ namespace RGM.Modes
 
                             ScpAttackCooldown.Add(ev.Attacker);
 
-                            yield return Timing.WaitForSeconds(1.5f);
+                            yield return Timing.WaitForSeconds(1.2f);
 
                             ScpAttackCooldown.Remove(ev.Attacker);
                         }
@@ -345,11 +404,6 @@ namespace RGM.Modes
                 {
                     Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                     {
-                        /*
-                         * 저거너트랑 다른 추가모드 호환성 만들기
-                         *
-                         * 부정적인 효과(EffectCategory.Negative)만 제거하도록 변경.
-                         */
                         ev.Player.DisableEffect(ev.Effect.GetEffectType());
                     });
                 }
