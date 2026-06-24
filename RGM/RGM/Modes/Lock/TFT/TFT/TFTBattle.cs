@@ -95,39 +95,41 @@ public static class TFTBattle
         }
     }
 
-    public static void StartUpgrade(List<Player> players = null)
+    public static TFTAbilityLevel GetRandomAbilityLevel()
     {
         int random = Random.Range(1, 101);
-        TFTAbilityLevel level;
 
         if (random <= 15)
-        {
-            level = TFTAbilityLevel.Keter;
-        }
-        else if (random <= 50)
-        {
-            level = TFTAbilityLevel.Euclid;
-        }
-        else
-        {
-            level = TFTAbilityLevel.Safe;
-        }
+            return TFTAbilityLevel.Keter;
+
+        if (random <= 50)
+            return TFTAbilityLevel.Euclid;
+
+        return TFTAbilityLevel.Safe;
+    }
+
+    public static bool StartUpgrade(List<Player> players = null, TFTAbilityLevel? levelOverride = null)
+    {
+        TFTAbilityLevel level = levelOverride ?? GetRandomAbilityLevel();
+        bool started = false;
 
         foreach (var player in players == null ? PlayerManager.List.Where(x => x.IsAlive && x.GetAbilities().Count() < (Encounter == RoleTypeId.Scp0492 ? 4 : 3)) : players)
         {
+            TFTAbilityLevel playerLevel = level;
+
             if (Encounter == RoleTypeId.NtfCaptain)
-                level = TFTAbilityLevel.Keter;
+                playerLevel = TFTAbilityLevel.Keter;
 
             if (Encounter == RoleTypeId.NtfSergeant)
-                level = TFTAbilityLevel.Euclid;
+                playerLevel = TFTAbilityLevel.Euclid;
 
             if (Encounter == RoleTypeId.NtfSpecialist && player.GetAbilities().Count() == 0)
-                level = TFTAbilityLevel.Keter;
+                playerLevel = TFTAbilityLevel.Keter;
 
             if (Encounter == RoleTypeId.NtfPrivate && player.GetAbilities().Count() == 2)
-                level = TFTAbilityLevel.Keter;
+                playerLevel = TFTAbilityLevel.Keter;
 
-            Dictionary<TFTAbilityData, int> TFTAbilityDatas = player.GetValidAbilities(level);
+            Dictionary<TFTAbilityData, int> TFTAbilityDatas = player.GetValidAbilities(playerLevel);
             Dictionary<TFTAbilityType, int> abilities = new();
 
             foreach (var TFTAbility in TFTAbilityDatas)
@@ -135,8 +137,14 @@ public static class TFTBattle
                 abilities.Add(TFTAbility.Key.TFTAbilityType, TFTAbility.Value);
             }
 
-            player.StartSelect(abilities);
+            if (abilities.Count == 0)
+                continue;
+
+            player.StartSelect(abilities, Math.Min(2, abilities.Count));
+            started = true;
         }
+
+        return started;
     }
 
     // 플레이어에게 특정 능력을 부여
@@ -274,22 +282,24 @@ public static class TFTBattle
         if (!Selections.ContainsKey(player))
             Selections.Add(player, new Dictionary<TFTAbilityType, int>());
 
-        IsSelecting[player] = true;
-
         var ignoredIndexes = new List<int>();
 
         if (abilities.Count == 0)
+        {
+            IsSelecting[player] = false;
             return;
+        }
+
+        IsSelecting[player] = true;
 
         Dictionary<TFTAbilityType, int> queue = new();
+        int selectionCount = Math.Min(count, abilities.Count);
+        List<TFTAbilityType> candidates = abilities.Keys.ToList();
+        candidates.ShuffleList();
 
-        for (int i = 0; i < count; i++)
+        foreach (var TFTAbility in candidates.Take(selectionCount))
         {
-            var TFTAbility = abilities.Keys.GetRandomValue();
-            if (!queue.ContainsKey(TFTAbility))
-                queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 3 : 1);
-            else
-                i--;
+            queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 3 : 1);
         }
 
         Selections[player] = queue;

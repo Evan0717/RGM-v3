@@ -20,7 +20,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes;
 
-[Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.TFT)]
+[Mode(ModeCategory.Private, ModeInfo.Lock, ModeType.TFT)]
 public class TFT : Mode
 {
     public override string Name => "전략적 팀 전투";
@@ -29,13 +29,20 @@ public class TFT : Mode
 """
 증강은 한 사람당 총 3개를 확보할 수 있으며,
 처음 라운드 시작시 40초 후에,
-그 다음 300초마다 지급됩니다.
+그 다음 240초마다 지급됩니다.
 
-25% 확률로 "경쟁전" 모드가 설치됩니다.
+10% 확률로 "경쟁전" 모드가 설치됩니다.
 """;
     public override string Color => "ffd700";
 
     CoroutineHandle _onModeStarted;
+    CoroutineHandle _upgradeTimerLoop;
+    readonly Dictionary<string, float> _upgradeRemainingTimes = new();
+    readonly HashSet<string> _playersWaitingRespawn = new();
+    readonly List<TFTAbilityLevel> _upgradeLevelSequence = new();
+    int _upgradeWaitTime = 240;
+    bool _isUpgradeTimerReady;
+    const bool DebugUpgradeTimer = true;
 
     public override void OnEnabled()
     {
@@ -43,6 +50,8 @@ public class TFT : Mode
 
         Exiled.Events.Handlers.Player.Verified += OnVerified;
         Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
         _onModeStarted = Timing.RunCoroutine(OnModeStarted());
     }
@@ -53,13 +62,21 @@ public class TFT : Mode
 
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
         Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
         Timing.KillCoroutines(_onModeStarted);
+        Timing.KillCoroutines(_upgradeTimerLoop);
+
+        _upgradeRemainingTimes.Clear();
+        _playersWaitingRespawn.Clear();
+        _upgradeLevelSequence.Clear();
+        _isUpgradeTimerReady = false;
     }
 
-    IEnumerator<float> OnModeStarted()
+    public IEnumerator<float> OnModeStarted()
     {
-        if (Random.Range(1, 5) == 1)
+        if (Random.Range(1, 11) == 1)
             Tools.TryInstallMode(ModeType.Rank);
 
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -181,16 +198,19 @@ public class TFT : Mode
         });
 
         // --------------------------------------------------
-
-        Timing.CallDelayed(40, () =>
-        {
-            TFTBattle.StartUpgrade();
-        });
-
+        /*
+         * 증강 지급 시간 로직 변경
+         *
+         * 새로 리스폰하는 유저들은 지급 시간을 초기화하도록 변경.
+         * 즉, 유저마다 증강 지급 시간을 개별로 적용함.
+         *
+         * 기존 유저는 시작 40초 후 획득, 이후 240(또는 다른 시간)초마다 획득
+         * 중간에 리스폰 한 유저는 리스폰 한 시점 부터 40초 후 획득, 이후 240(또는 다른 시간)초마다 획득
+         */
         int getTime()
         {
             if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ClassD)
-                return 100;
+                return 120;
 
             if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scientist)
                 return 60;
@@ -198,33 +218,228 @@ public class TFT : Mode
             if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.FacilityGuard)
                 return 180;
             
-            return 300;
+            return 240;
         }
 
-        int waitTime = getTime();
+        _upgradeWaitTime = getTime();
+        _isUpgradeTimerReady = true;
+        _upgradeTimerLoop = Timing.RunCoroutine(UpgradeTimerLoop());
+        DebugBroadcast($"타이머 루프 시작 / 간격: {_upgradeWaitTime}초 / 대상: {PlayerManager.List.Count()}명");
 
-        while (true)
+        foreach (var player in PlayerManager.List)
+            StartUpgradeTimer(player);
+
+        yield break;
+    }
+
+    void StartUpgradeTimer(Player player)
+    {
+        string key = GetPlayerKey(player);
+        if (key == null)
         {
-            yield return Timing.WaitForSeconds(waitTime);
-
-            TFTBattle.StartUpgrade();
+            DebugBroadcast($"타이머 시작 실패 / key null / player: {player?.Nickname ?? "null"}");
+            return;
         }
+
+        _playersWaitingRespawn.Remove(key);
+        _upgradeRemainingTimes[key] = 40;
+        DebugBroadcast($"타이머 시작 / {player.Nickname} / 40초", player);
+    }
+
+    void StopUpgradeTimer(Player player)
+    {
+        string key = GetPlayerKey(player);
+        if (key == null)
+        {
+            DebugBroadcast($"타이머 중지 실패 / key null / player: {player?.Nickname ?? "null"}");
+            return;
+        }
+
+        _upgradeRemainingTimes.Remove(key);
+        DebugBroadcast($"타이머 중지 / {player.Nickname}", player);
+    }
+
+    IEnumerator<float> UpgradeTimerLoop()
+    {
+        while (_isUpgradeTimerReady)
+        {
+            yield return Timing.WaitForSeconds(1);
+            DebugBroadcast($"루프 tick / 등록 타이머: {_upgradeRemainingTimes.Count}명");
+
+            foreach (var key in _upgradeRemainingTimes.Keys.ToList())
+            {
+                Player player = GetPlayerByKey(key);
+
+                if (!CanReceiveUpgrade(player))
+                {
+                    DebugBroadcast($"타이머 제거 / {key} / 사유: {GetCannotReceiveReason(player)}", player);
+                    _upgradeRemainingTimes.Remove(key);
+                    continue;
+                }
+
+                _upgradeRemainingTimes[key] -= 1;
+                int remaining = Mathf.CeilToInt(_upgradeRemainingTimes[key]);
+
+                if (remaining % 10 == 0 || remaining <= 5)
+                    DebugBroadcast($"타이머 진행 / {player.Nickname} / 남은 시간: {remaining}초", player);
+
+                if (_upgradeRemainingTimes[key] > 0)
+                    continue;
+
+                TFTAbilityLevel level = GetUpgradeLevel(player.GetAbilities().Count());
+                DebugBroadcast($"증강 지급 시도 / {player.Nickname} / 차수: {player.GetAbilities().Count() + 1} / 등급: {level}", player);
+
+                bool isUpgradeStarted;
+
+                try
+                {
+                    isUpgradeStarted = TFTBattle.StartUpgrade(new List<Player> { player }, level);
+                }
+                catch (System.Exception e)
+                {
+                    isUpgradeStarted = false;
+                    DebugBroadcast($"증강 지급 예외 / {player.Nickname} / {e.GetType().Name}: {e.Message}", player);
+                }
+
+                if (isUpgradeStarted)
+                {
+                    _upgradeRemainingTimes[key] = _upgradeWaitTime;
+                    DebugBroadcast($"증강 지급 완료 / {player.Nickname} / 다음 대기: {_upgradeWaitTime}초", player);
+                }
+                else
+                {
+                    _upgradeRemainingTimes[key] = 5;
+                    DebugBroadcast($"증강 지급 실패 / {player.Nickname} / 선택지 없음 또는 시작 실패 / 5초 후 재시도", player);
+                }
+            }
+        }
+    }
+
+    TFTAbilityLevel GetUpgradeLevel(int upgradeIndex)
+    {
+        while (_upgradeLevelSequence.Count <= upgradeIndex)
+            _upgradeLevelSequence.Add(TFTBattle.GetRandomAbilityLevel());
+
+        return _upgradeLevelSequence[upgradeIndex];
+    }
+
+    bool CanReceiveUpgrade(Player player)
+    {
+        return player != null &&
+               player.IsAlive &&
+               !player.IsNPC &&
+               TFTBattle.GetAbilities(player).Count() < (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scp0492 ? 4 : 3);
+    }
+
+    string GetCannotReceiveReason(Player player)
+    {
+        if (player == null)
+            return "player null";
+
+        if (!player.IsAlive)
+            return "not alive";
+
+        if (player.IsNPC)
+            return "npc";
+
+        int maxAbilityCount = DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scp0492 ? 4 : 3;
+
+        if (TFTBattle.GetAbilities(player).Count() >= maxAbilityCount)
+            return $"max abilities ({TFTBattle.GetAbilities(player).Count()}/{maxAbilityCount})";
+
+        return "unknown";
+    }
+
+    string GetPlayerKey(Player player)
+    {
+        if (player == null || player.IsNPC || string.IsNullOrEmpty(player.UserId))
+            return null;
+
+        return player.UserId;
+    }
+
+    Player GetPlayerByKey(string key)
+    {
+        return PlayerManager.List.FirstOrDefault(x => !x.IsNPC && x.UserId == key);
     }
 
     void OnVerified(VerifiedEventArgs ev)
     {
         DAONTFT.Core.EventArgs.PlayerEvents.Verified(ev.Player);
+        DebugBroadcast($"Verified / {ev.Player.Nickname} / ready: {_isUpgradeTimerReady} / alive: {ev.Player.IsAlive}", ev.Player);
+
+        if (_isUpgradeTimerReady && ev.Player.IsAlive)
+            StartUpgradeTimer(ev.Player);
     }
 
     void OnChangingRole(ChangingRoleEventArgs ev)
     {
+        DebugBroadcast($"ChangingRole / {ev.Player.Nickname} / oldDead: {ev.Player.IsDead} / new: {ev.NewRole} / newDead: {ev.NewRole.IsDead()}", ev.Player);
+
         if (ev.Player.IsDead || ev.NewRole.IsDead() || TFTBattle.GetAbilities(ev.Player).Count() == 0)
         {
+            if (ev.NewRole.IsDead())
+            {
+                string key = GetPlayerKey(ev.Player);
+                if (key != null)
+                    _playersWaitingRespawn.Add(key);
+
+                StopUpgradeTimer(ev.Player);
+            }
+
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
                 TFTBattle.Reset(ev.Player);
             });
         }
+    }
+
+    void OnDied(DiedEventArgs ev)
+    {
+        string key = GetPlayerKey(ev.Player);
+        if (key == null)
+        {
+            DebugBroadcast($"Died / key null / {ev.Player.Nickname}", ev.Player);
+            return;
+        }
+
+        _playersWaitingRespawn.Add(key);
+        DebugBroadcast($"Died / {ev.Player.Nickname} / respawn 대기 등록", ev.Player);
+        StopUpgradeTimer(ev.Player);
+    }
+
+    void OnSpawned(SpawnedEventArgs ev)
+    {
+        string key = GetPlayerKey(ev.Player);
+        DebugBroadcast($"Spawned / {ev.Player.Nickname} / key: {key ?? "null"} / ready: {_isUpgradeTimerReady} / locked: {Round.IsLocked} / waiting: {(key != null && _playersWaitingRespawn.Contains(key))} / hasTimer: {(key != null && _upgradeRemainingTimes.ContainsKey(key))}", ev.Player);
+
+        if (key == null || !_isUpgradeTimerReady || Round.IsLocked)
+            return;
+
+        if (!_playersWaitingRespawn.Remove(key) && _upgradeRemainingTimes.ContainsKey(key))
+            return;
+
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+        {
+            StartUpgradeTimer(ev.Player);
+        });
+    }
+
+    void DebugBroadcast(string message, Player player = null)
+    {
+        if (!DebugUpgradeTimer)
+            return;
+
+        string text = $"<size=18><color=#00ffff>[TFT DEBUG]</color> {message}</size>";
+
+        if (player != null)
+        {
+            player.AddBroadcast(3, text);
+            return;
+        }
+
+        foreach (var target in PlayerManager.List.Where(x => !x.IsNPC))
+            target.AddBroadcast(3, text);
     }
 
     void OnRoundEnded(RoundEndedEventArgs ev)
