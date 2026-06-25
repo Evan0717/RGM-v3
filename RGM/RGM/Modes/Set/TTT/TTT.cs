@@ -313,7 +313,7 @@ Trouble in Terrorist Town의 약자.
                     player.Kill("광대가 승리를 탈취해갔습니다!");
                 }
                 jester.AddBroadcast(20, $"<color=#f178fc>광대</color>의 승리입니다!");
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 8));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 13));
             }
             else if (O5 != null && O5.IsAlive)
             {
