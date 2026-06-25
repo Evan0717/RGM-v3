@@ -126,11 +126,12 @@ namespace RGM.Modes
                 finder.Scale = new Vector3(0.4f, 0.4f, 0.4f);
                 finder.ClearInventory();
                 finder.EnableEffect(EffectType.Lightweight, 100);
-                finder.EnableEffect(EffectType.MovementBoost, 30);
+                finder.EnableEffect(EffectType.MovementBoost, 50);
                 foreach (var item in new List<ItemType>
                 {
                     ItemType.Radio,
-                    ItemType.GunLogicer,
+                    ItemType.GunShotgun,
+                    ItemType.GunRevolver
                 })
                 {
                     finder.AddItem(item);
@@ -149,12 +150,20 @@ namespace RGM.Modes
             {
                 MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(1, $"<size=25><b><color=#2EFEF7>{Remaining - i}초 뒤 술래가 패배합니다.</color></b></size>");
 
-                if (i == 275)
+                if (i == Remaining - 60)
                 {
-                    foreach (var finder in finders)
+                    foreach (var finder in finders) {
+                        finder.DisableAllEffects();
                         finder.AddEffect(EffectType.Scp1344, 1);
+                        finder.EnableEffect(EffectType.Lightweight, 100);
+                        finder.EnableEffect(EffectType.MovementBoost, 100);
+                        finder.AddEffect(EffectType.Scp1853, 1);
+                        finder.ClearInventory();
+                        finder.AddItem(ItemType.GunLogicer);
+                        finder.AddItem(ItemType.Radio);
+                    }
 
-                    MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10, $"<size=25>모든 술래에게 <color=red>SCP-1344</color>가 지급됩니다, 행운을 빕니다!</size>");
+                    MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10, $"<size=30><color=red>버닝 타임</color>이 시작됩니다, 행운을 빕니다!</size>");
                 }
 
                 yield return Timing.WaitForSeconds(1f);
