@@ -1,6 +1,5 @@
 using Exiled.API.Features.DamageHandlers;
 using Exiled.Events.EventArgs.Player;
-using LabApi.Events.Arguments.PlayerEvents;
 
 namespace RGM.Modes.Abilities.Epic;
 

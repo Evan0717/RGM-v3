@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DAONTFT.Core.TFT.Euclid.Human;
 
-[TFTAbility("무기고", "2분 뒤 특별한 무기 중 하나를 얻습니다. 해당 무기의 탄약을 3세트 받습니다.", TFTAbilityLevel.Euclid, TFTAbilityCategory.Human, TFTAbilityPoint.Once, TFTAbilityType.Armory1, "📦")]
+[TFTAbility("무기고", "2분 뒤 특별한 무기 중 하나를 얻습니다. 해당 무기의 탄약을 4세트 받습니다.", TFTAbilityLevel.Euclid, TFTAbilityCategory.Human, TFTAbilityPoint.Once, TFTAbilityType.Armory1, "📦")]
 public class Armory1 : TFTAbility
 {
     CoroutineHandle _waiting;
@@ -31,7 +31,7 @@ public class Armory1 : TFTAbility
             var item = items.GetRandomValue();
 
             Owner.AddItem(item.Key);
-            Owner.AddItem(item.Value, 3);
+            Owner.AddItem(item.Value, 4);
         });
 
         yield break;

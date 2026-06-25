@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Keter.Scp;
 
-[TFTAbility("실험체", "크기가 50% 작아집니다. 다른 실험체와 가까이 있으면 초당 2의 체력을 회복합니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Scp, TFTAbilityPoint.Continuous, TFTAbilityType.TestSubject, "😡")]
+[TFTAbility("실험체", "크기가 32% 작아집니다. 다른 실험체와 가까이 있으면 초당 2의 체력을 회복합니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Scp, TFTAbilityPoint.Continuous, TFTAbilityType.TestSubject, "😡")]
 public class TestSubject : TFTAbility
 {
     CoroutineHandle _test;
 
     public override void OnEnabled()
     {
-        Owner.Scale = new Vector3(0.5f, 0.5f, 0.5f);
+        Owner.Scale = new Vector3(0.68f, 0.68f, 0.68f);
 
         _test = Timing.RunCoroutine(test());
     }

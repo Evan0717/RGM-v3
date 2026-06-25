@@ -4,14 +4,13 @@ using System.Collections.Generic;
 
 namespace DAONTFT.Core.TFT.Keter.All;
 
-[TFTAbility("단련Ⅲ", "피해 증폭을 얻습니다. (+36%)", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower3, "💪")]
+[TFTAbility("단련Ⅲ", "피해 증폭을 얻습니다. (+60%)", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower3, "💪")]
 public class AddPower3 : TFTAbility
 {
     List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
     {
         RoleTypeId.Scp173,
-        RoleTypeId.Scp049,
-        RoleTypeId.Scp106
+        RoleTypeId.Scp049
     };
 
     public override void OnEnabled()
@@ -29,6 +28,6 @@ public class AddPower3 : TFTAbility
         if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
             return;
 
-        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.36f;
+        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.6f;
     }
 }
