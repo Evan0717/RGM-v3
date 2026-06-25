@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Keter.Human;
 
-[TFTAbility("도박꾼", "능력 키(ALT)를 누르면 들고 있는 아이템이 랜덤하게 변경됩니다. (10% 확률로 손이 잘립니다.)", TFTAbilityLevel.Keter, TFTAbilityCategory.Human, TFTAbilityPoint.ALT, TFTAbilityType.Gambler, "🎰")]
+[TFTAbility("도박꾼", "능력 키(ALT)를 누르면 들고 있는 아이템이 랜덤하게 변경됩니다. (3% 확률로 손이 잘립니다.)", TFTAbilityLevel.Keter, TFTAbilityCategory.Human, TFTAbilityPoint.ALT, TFTAbilityType.Gambler, "🎰")]
 public class Gambler : TFTAbility
 {
     public override void OnEnabled()
@@ -27,7 +27,7 @@ public class Gambler : TFTAbility
             {
                 ev.Player.RemoveHeldItem();
 
-                if (Random.Range(0, 100) < 10)
+                if (Random.Range(1, 101) <= 3)
                     Owner.EnableEffect(EffectType.SeveredHands, 1, 50);
 
                 else

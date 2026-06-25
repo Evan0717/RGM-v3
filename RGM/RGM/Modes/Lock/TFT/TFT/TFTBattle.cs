@@ -21,6 +21,14 @@ public static class TFTBattle
 
     private static readonly Dictionary<Player, int> SelectionCursor = new();
 
+    // 플레이어의 AudioPlayer가 없거나 라운드 재시작 등으로 파괴된 경우(Unity fake-null)
+    // 안전하게 재생을 건너뛴다. (확장 메서드 TryPlay 내부에서 발생하던 NullReferenceException 방지)
+    private static void PlayAudio(Player player, string clipName, float volume = 1f)
+    {
+        if (player != null && PlayersAudio.TryGetValue(player, out var audioPlayer) && audioPlayer != null)
+            audioPlayer.TryPlay(clipName, volume);
+    }
+
     private static void ClearSelectionPresentation(Player player, bool playCloseAudio = false)
     {
         if (PlayerHints.TryGetValue(player, out var hints))
@@ -32,17 +40,20 @@ public static class TFTBattle
             }
         }
 
-        foreach (var clip in PlayersAudio[player].ClipsById.Values)
+        if (PlayersAudio.TryGetValue(player, out var audio) && audio != null)
         {
-            if (clip.Clip.Contains("증강"))
-                clip.IsPaused = true;
+            foreach (var clip in audio.ClipsById.Values)
+            {
+                if (clip.Clip.Contains("증강"))
+                    clip.IsPaused = true;
+            }
         }
 
         player.DisableEffect(EffectType.Blinded);
         player.DisableEffect(EffectType.SoundtrackMute);
 
         if (playCloseAudio)
-            PlayersAudio[player].TryPlay("증강 선택창 닫힘", 3);
+            PlayAudio(player, "증강 선택창 닫힘", 3);
     }
 
     public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
@@ -95,39 +106,41 @@ public static class TFTBattle
         }
     }
 
-    public static void StartUpgrade(List<Player> players = null)
+    public static TFTAbilityLevel GetRandomAbilityLevel()
     {
         int random = Random.Range(1, 101);
-        TFTAbilityLevel level;
 
         if (random <= 15)
-        {
-            level = TFTAbilityLevel.Keter;
-        }
-        else if (random <= 50)
-        {
-            level = TFTAbilityLevel.Euclid;
-        }
-        else
-        {
-            level = TFTAbilityLevel.Safe;
-        }
+            return TFTAbilityLevel.Keter;
+
+        if (random <= 50)
+            return TFTAbilityLevel.Euclid;
+
+        return TFTAbilityLevel.Safe;
+    }
+
+    public static bool StartUpgrade(List<Player> players = null, TFTAbilityLevel? levelOverride = null)
+    {
+        TFTAbilityLevel level = levelOverride ?? GetRandomAbilityLevel();
+        bool started = false;
 
         foreach (var player in players == null ? PlayerManager.List.Where(x => x.IsAlive && x.GetAbilities().Count() < (Encounter == RoleTypeId.Scp0492 ? 4 : 3)) : players)
         {
+            TFTAbilityLevel playerLevel = level;
+
             if (Encounter == RoleTypeId.NtfCaptain)
-                level = TFTAbilityLevel.Keter;
+                playerLevel = TFTAbilityLevel.Keter;
 
             if (Encounter == RoleTypeId.NtfSergeant)
-                level = TFTAbilityLevel.Euclid;
+                playerLevel = TFTAbilityLevel.Euclid;
 
             if (Encounter == RoleTypeId.NtfSpecialist && player.GetAbilities().Count() == 0)
-                level = TFTAbilityLevel.Keter;
+                playerLevel = TFTAbilityLevel.Keter;
 
             if (Encounter == RoleTypeId.NtfPrivate && player.GetAbilities().Count() == 2)
-                level = TFTAbilityLevel.Keter;
+                playerLevel = TFTAbilityLevel.Keter;
 
-            Dictionary<TFTAbilityData, int> TFTAbilityDatas = player.GetValidAbilities(level);
+            Dictionary<TFTAbilityData, int> TFTAbilityDatas = player.GetValidAbilities(playerLevel);
             Dictionary<TFTAbilityType, int> abilities = new();
 
             foreach (var TFTAbility in TFTAbilityDatas)
@@ -135,8 +148,14 @@ public static class TFTBattle
                 abilities.Add(TFTAbility.Key.TFTAbilityType, TFTAbility.Value);
             }
 
-            player.StartSelect(abilities);
+            if (abilities.Count == 0)
+                continue;
+
+            player.StartSelect(abilities, Math.Min(2, abilities.Count));
+            started = true;
         }
+
+        return started;
     }
 
     // 플레이어에게 특정 능력을 부여
@@ -274,22 +293,24 @@ public static class TFTBattle
         if (!Selections.ContainsKey(player))
             Selections.Add(player, new Dictionary<TFTAbilityType, int>());
 
-        IsSelecting[player] = true;
-
         var ignoredIndexes = new List<int>();
 
         if (abilities.Count == 0)
+        {
+            IsSelecting[player] = false;
             return;
+        }
+
+        IsSelecting[player] = true;
 
         Dictionary<TFTAbilityType, int> queue = new();
+        int selectionCount = Math.Min(count, abilities.Count);
+        List<TFTAbilityType> candidates = abilities.Keys.ToList();
+        candidates.ShuffleList();
 
-        for (int i = 0; i < count; i++)
+        foreach (var TFTAbility in candidates.Take(selectionCount))
         {
-            var TFTAbility = abilities.Keys.GetRandomValue();
-            if (!queue.ContainsKey(TFTAbility))
-                queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 3 : 1);
-            else
-                i--;
+            queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 3 : 1);
         }
 
         Selections[player] = queue;
@@ -303,30 +324,32 @@ public static class TFTBattle
     {
         TFTAbilityLevel level = TFTAbilityLevel.Safe;
 
-        PlayersAudio[player].TryPlay("증강 선택창", 3);
+        PlayAudio(player, "증강 선택창", 3);
 
         player.EnableEffect(EffectType.Blinded, 30);
         player.EnableEffect(EffectType.SoundtrackMute);
 
         List<TFTAbilityType> getAbilities() 
         {
-            return Selections[player].Keys.ToList();
+            return Selections.TryGetValue(player, out var selection) ? selection.Keys.ToList() : new List<TFTAbilityType>();
         };
-
-        var text = string.Join("\n", getAbilities().Select((x, i) => $"[{i + 1}] {x.GetData().GetFormattedName()}\n<size=20>{TFTAbilities[x].Description}</size>\n"));
 
         List<Upgrade> upgrades = new();
 
         void TFTAbilityAdd(TFTAbilityType TFTAbility)
         {
+            var data = TFTAbility.GetData();
+            if (data == null)
+                return;
+
             upgrades.Add(new Upgrade
             {
                 X = -400 + getAbilities().IndexOf(TFTAbility) * 800, //-1200 + getAbilities().IndexOf(TFTAbility) * 800,
-                Emoji = TFTAbility.GetData().Emoji,
-                Title = TFTAbility.GetData().Name,
-                Description = TFTAbility.GetData().Description,
-                Level = TFTAbility.GetData().Level,
-                Type = TFTAbility.GetData().TFTAbilityType
+                Emoji = data.Emoji,
+                Title = data.Name,
+                Description = data.Description,
+                Level = data.Level,
+                Type = data.TFTAbilityType
             });
         }
 
@@ -334,14 +357,19 @@ public static class TFTBattle
         {
             TFTAbilityAdd(TFTAbility);
 
-            level = TFTAbility.GetData().Level;
+            var data = TFTAbility.GetData();
+            if (data != null)
+                level = data.Level;
         }
 
-        PlayersAudio[player].TryPlay($"{level.ToString()} 증강", 0.7f);
+        PlayAudio(player, $"{level.ToString()} 증강", 0.7f);
 
         void removeHints()
         {
-            foreach (var hint in PlayerHints[player].Where(x => x.Id == "증강"))
+            if (!PlayerHints.TryGetValue(player, out var playerHints))
+                return;
+
+            foreach (var hint in playerHints.Where(x => x.Id == "증강").ToList())
             {
                 player.RemoveHint(hint);
             }
@@ -351,34 +379,44 @@ public static class TFTBattle
         {
             void resetupgradeDisplay()
             {
-                upgrades.Clear();
-
-                foreach (var TFTAbility in getAbilities())
+                try
                 {
-                    TFTAbilityAdd(TFTAbility);
+                    upgrades.Clear();
+
+                    foreach (var TFTAbility in getAbilities())
+                    {
+                        TFTAbilityAdd(TFTAbility);
+                    }
+
+                    removeHints();
+
+                    var abilities = getAbilities();
+                    TFTAbilityType? selected = null;
+
+                    if (abilities.Count > 0)
+                    {
+                        if (!SelectionCursor.ContainsKey(player))
+                            SelectionCursor[player] = 0;
+
+                        int cursor = Math.Max(0, Math.Min(SelectionCursor[player], abilities.Count - 1));
+                        SelectionCursor[player] = cursor;
+                        selected = abilities[cursor];
+                    }
+
+                    if (!PlayerHints.ContainsKey(player))
+                        PlayerHints[player] = new List<Hint>();
+
+                    List<Hint> hints = TFTManager.GetUpgradeDisplay(player, upgrades, 0, selected);
+
+                    foreach (var hint in hints)
+                    {
+                        PlayerHints[player].Add(hint);
+                        player.AddCustomHint(hint);
+                    }
                 }
-
-                removeHints();
-
-                var abilities = getAbilities();
-                TFTAbilityType? selected = null;
-
-                if (abilities.Count > 0)
+                catch (Exception e)
                 {
-                    if (!SelectionCursor.ContainsKey(player))
-                        SelectionCursor[player] = 0;
-
-                    int cursor = Math.Max(0, Math.Min(SelectionCursor[player], abilities.Count - 1));
-                    SelectionCursor[player] = cursor;
-                    selected = abilities[cursor];
-                }
-
-                List<Hint> hints = TFTManager.GetUpgradeDisplay(player, upgrades, 0, selected);
-
-                foreach (var hint in hints)
-                {
-                    PlayerHints[player].Add(hint);
-                    player.AddCustomHint(hint);
+                    Log.Error($"[TFT] 증강 선택창 표시 중 예외 / {player?.Nickname ?? "null"}\n{e}");
                 }
             }
 
@@ -416,7 +454,7 @@ public static class TFTBattle
         removeHints();
         player.DisableEffect(EffectType.Blinded);
         player.DisableEffect(EffectType.SoundtrackMute);
-        PlayersAudio[player].TryPlay($"증강 선택창 닫힘", 3);
+        PlayAudio(player, "증강 선택창 닫힘", 3);
 
         if (!Selections.ContainsKey(player))
             yield break;
@@ -483,7 +521,7 @@ public static class TFTBattle
             Selections[player].Remove(TFTAbility);
             Selections[player].Add(TFTAbilityDatas.GetRandomValue().Key.TFTAbilityType, chance);
 
-            PlayersAudio[player].TryPlay($"증강 선택창 리롤", 2.5f);
+            PlayAudio(player, "증강 선택창 리롤", 2.5f);
             response = $"{index}번 능력 리롤 완료!";
             return true;
         }
@@ -510,7 +548,7 @@ public static class TFTBattle
 
         SelectionCursor[player] = cursor;
 
-        PlayersAudio[player].TryPlay("Select");
+        PlayAudio(player, "Select");
     }
 
     public static bool ConfirmSelectionByCursor(this Player player, out string response)

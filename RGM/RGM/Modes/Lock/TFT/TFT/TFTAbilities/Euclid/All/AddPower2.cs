@@ -4,14 +4,13 @@ using System.Collections.Generic;
 
 namespace DAONTFT.Core.TFT.Euclid.All;
 
-[TFTAbility("단련Ⅱ", "피해 증폭을 얻습니다. (+18%)", TFTAbilityLevel.Euclid, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower2, "💪")]
+[TFTAbility("단련Ⅱ", "피해 증폭을 얻습니다. (+30%)", TFTAbilityLevel.Euclid, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower2, "💪")]
 public class AddPower2 : TFTAbility
 {
     List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
     {
         RoleTypeId.Scp173,
-        RoleTypeId.Scp049,
-        RoleTypeId.Scp106
+        RoleTypeId.Scp049
     };
 
     public override void OnEnabled()
@@ -29,6 +28,6 @@ public class AddPower2 : TFTAbility
         if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
             return;
 
-        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.18f;
+        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.3f;
     }
 }

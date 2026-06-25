@@ -92,8 +92,8 @@ public static class PlayerExtensions
         {
             foreach (var TFTAbility in TFTAbilities.Values.Where(x => x.Level == TFTAbilityLevel && x.Category == TFTAbilityCategory))
             {
-                if (player.GetAbilities().Count(x => x.Data.Type == TFTAbility.Type) > 0 || // 중복되는 증강은 얻을 수 없습니다.
-                    (TFTAbility.Point == TFTAbilityPoint.ALT && player.GetAbilities().Count(x => x.Data.Point == TFTAbilityPoint.ALT) > 0) || // ALT를 사용하는 증강은 중복이 불가합니다.
+                if (player.GetAbilities().Count(x => x.Data != null && x.Data.Type == TFTAbility.Type) > 0 || // 중복되는 증강은 얻을 수 없습니다.
+                    (TFTAbility.Point == TFTAbilityPoint.ALT && player.GetAbilities().Count(x => x.Data != null && x.Data.Point == TFTAbilityPoint.ALT) > 0) || // ALT를 사용하는 증강은 중복이 불가합니다.
                     (Selections.ContainsKey(player) && Selections[player].ContainsKey(TFTAbility.TFTAbilityType))) // 선택지에 있는 증강은 나타나지 않습니다.
                     continue;
 
@@ -301,7 +301,7 @@ public enum TFTAbilityType
     Gambler, // 도박꾼
     Armory2, // 무기고+
     Adventure, // 고귀한 모험
-    Smoke, // 연막술사
+    BULLSEYETFT, // 불스아이
     Pandora, // 판도라의 인벤토리
     // Scp
     TestSubject, // 실험체

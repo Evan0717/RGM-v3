@@ -38,9 +38,10 @@ public class OrganicMilk : Ability
     {
         if (CoinSerial == ev.Item.Serial && ev.Player.CurrentRoom.Type != RoomType.Pocket)
         {
-            foreach (var effect in Owner.ActiveEffects.Where(x => x.GetEffectType().GetCategories() == EffectCategory.Negative || x.GetEffectType().GetCategories() == EffectCategory.Harmful))
+            foreach (var effect in Owner.ActiveEffects.Where(x => x.GetEffectType().GetCategories() == EffectCategory.Negative))
             {
                 Owner.DisableEffect(effect.GetEffectType());
+                ev.Player.DisableEffect(effect.GetEffectType());
             }
 
             ev.Item.Destroy();

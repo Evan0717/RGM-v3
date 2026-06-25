@@ -104,9 +104,26 @@ namespace RGM.Modes
 
         public List<ItemType> Items()
         {
-            List<ItemType> Guns = new List<ItemType>() { ItemType.GunA7, ItemType.GunE11SR, ItemType.GunShotgun, ItemType.GunCom45, ItemType.GunFSP9, ItemType.GunRevolver,
-                ItemType.GunCOM18, ItemType.GunCrossvec, ItemType.GunLogicer, ItemType.GunFRMG0, ItemType.GunAK };
-            List<ItemType> CDItems = new List<ItemType>() { ItemType.Medkit, ItemType.Painkillers, ItemType.Radio, ItemType.GrenadeFlash };
+            List<ItemType> Guns = new List<ItemType>() { 
+                ItemType.GunA7,
+                ItemType.GunE11SR,
+                ItemType.GunShotgun,
+                ItemType.GunCom45,
+                ItemType.GunFSP9,
+                ItemType.GunRevolver,
+                ItemType.GunCOM18,
+                ItemType.GunCrossvec,
+                ItemType.GunLogicer,
+                ItemType.GunFRMG0,
+                ItemType.GunAK
+                
+            };
+            List<ItemType> CDItems = new List<ItemType>() {
+                ItemType.Medkit,
+                ItemType.Painkillers,
+                ItemType.Radio,
+                ItemType.GrenadeFlash
+            };
             List<ItemType> Items = new List<ItemType>();
 
             Items.Add(Tools.GetRandomValue(Guns));
