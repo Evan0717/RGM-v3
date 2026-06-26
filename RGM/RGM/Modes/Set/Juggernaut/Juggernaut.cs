@@ -38,6 +38,7 @@ namespace RGM.Modes
 이제 친구가 될 시간이야.
 
 * 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
+* 저거너트는 알파 핵탄두가 폭파할 경우 즉시 과부하 프로토콜이 작동합니다.
 """;
         public override string Color => "088A08";
 
@@ -99,7 +100,7 @@ namespace RGM.Modes
                 speaker.Destroy();
         }
 
-        public IEnumerator<float> Timer()
+        public IEnumerator<float> JuggernautExternalTimer()
         {
             for (int i = 1; i < 75; i++)
             {
@@ -111,9 +112,32 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
         }
-
-        public IEnumerator<float> OnModeStarted()
+        public IEnumerator<float> RoundTimer()
         {
+            for (int i = 1; i < 821; i++)
+            {
+                if (Round.IsEnded || Warhead.IsDetonated)
+                    yield break;
+
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>저거너트 과부하 프로토콜 가동까지 {821 - i}초</size>"));
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+        public IEnumerator<float> AnnihilationTimer()
+        {
+            for (int i = 1; i < 120; i++)
+            {
+                if (Round.IsEnded || Warhead.IsDetonated)
+                    yield break;
+
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>초토화 작전 실행까지 {120 - i}초</size>"));
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
+        public IEnumerator<float> OnModeStarted()
+        {  
             Door.Get(DoorType.EscapeFinal).IsOpen = true;
 
             foreach (var player in PlayerManager.List)
@@ -122,7 +146,7 @@ namespace RGM.Modes
             }
 
             juggernaut = Tools.GetRandomValue(PlayerManager.List.ToList());
-
+            
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
             juggernaut.MaxHealth = 530 * PlayerManager.List.Count();
@@ -141,37 +165,46 @@ namespace RGM.Modes
             };
             foreach (var item in items)
                 juggernaut.AddItem(item);
-
-            if (Warhead.IsDetonated) {
-                juggernaut.DisableAllEffects();
-                juggernaut.EnableEffect(EffectType.BodyshotReduction, 4);
-                juggernaut.EnableEffect(EffectType.Scp1344, 1);
-                juggernaut.EnableEffect(EffectType.Scp1853, 5);
-                juggernaut.EnableEffect(EffectType.Scp207, 1);
-                juggernaut.EnableEffect(EffectType.MovementBoost, 10);
-                juggernaut.EnableEffect(EffectType.FogControl, 1);
-                juggernaut.EnableEffect(EffectType.Bleeding, 1);
-                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신, 중독과 출혈 효과를 받습니다.</size>"));
-                yield return Timing.WaitForSeconds(10f);
-                
-                // 저거너트 외부 지원 호출 구현(2번에 나눠서)
-                Timing.RunCoroutine(Timer());
-                yield return Timing.WaitForSeconds(75f); // 1차 호출
-                /*
-                 * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
-                 */
-                Timing.RunCoroutine(Timer());
-                yield return Timing.WaitForSeconds(75f); // 2차 호출
-                /*
-                 * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
-                 */
-                
-                // 초토화 작전 구현
-                yield return Timing.WaitForSeconds(120f); // 외부지원 호출에도 게임이 끝나지 않을 경우
-                
-            }
             
-            bool IsEnd = false;
+            // 이 아래부터 초토화 작전 부 까지, Warhead.IsDetonated 이후 작동되도록 설계해야 함.
+            Timing.RunCoroutine(RoundTimer());
+            while (!Round.IsEnded && !Warhead.IsDetonated)
+                yield return Timing.WaitForSeconds(1f);
+
+            if (Round.IsEnded)
+                yield break;
+
+            juggernaut.DisableAllEffects();
+            juggernaut.EnableEffect(EffectType.BodyshotReduction, 4);
+            juggernaut.EnableEffect(EffectType.Lightweight, 10);
+            juggernaut.EnableEffect(EffectType.NightVision, 100);
+            juggernaut.EnableEffect(EffectType.Scp1344, 1);
+            juggernaut.EnableEffect(EffectType.Scp1853, 1);
+            juggernaut.EnableEffect(EffectType.Scp207, 1);
+            juggernaut.EnableEffect(EffectType.MovementBoost, 10);
+            juggernaut.EnableEffect(EffectType.FogControl, 1);
+            juggernaut.EnableEffect(EffectType.Bleeding, 1);
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신, 중독과 출혈 효과를 받습니다.</size>"));
+            yield return Timing.WaitForSeconds(10f);
+            
+            // 저거너트 외부 지원 호출 구현(2번에 나눠서)
+            Timing.RunCoroutine(JuggernautExternalTimer());
+            yield return Timing.WaitForSeconds(75f); // 1차 호출
+            /*
+             * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
+             */
+            Timing.RunCoroutine(JuggernautExternalTimer());
+            yield return Timing.WaitForSeconds(75f); // 2차 호출
+            /*
+             * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
+             */
+            
+            // 초토화 작전 구현
+            Timing.RunCoroutine(AnnihilationTimer()); 
+            yield return Timing.WaitForSeconds(120f); // 외부지원 호출에도 게임이 끝나지 않을 경우
+            
+            
+            /*bool IsEnd = false;
             while (!IsEnd)
             {
                 if (juggernaut.IsAlive)
@@ -188,7 +221,7 @@ namespace RGM.Modes
                          * 저거너트만 살아있는가?
                          * 저거너트랑 튜토리얼이 같이 살았는가?
                          * 를 봐야 함.
-                         */
+                         #1#
                     }
                 }
                 else {
@@ -201,7 +234,7 @@ namespace RGM.Modes
             }   
 
             PlayerManager.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
-            Round.IsLocked = false;
+            Round.IsLocked = false;*/
         }
 
         public IEnumerator<float> AutoWarhead()
@@ -267,7 +300,7 @@ namespace RGM.Modes
                         w.SetTime((int)w.TimeLeft.TotalSeconds - 3);
                 }
 
-                yield return Timing.WaitForSeconds(1f);
+                yield return Timing.WaitForSeconds(0.5f);
             }
         }
 
@@ -323,7 +356,7 @@ namespace RGM.Modes
                         if (ev.DamageHandler.CustomBase is FirearmDamageHandler { Hitbox: HitboxType.Headshot } damageHandler)
                             damageHandler.Damage /= 2;
 
-                        ev.DamageHandler.Damage *= 3.30f;
+                        ev.DamageHandler.Damage *= 3.35f;
                     }
                     else if (ev.Attacker != juggernaut && ev.Player == juggernaut)
                     {
@@ -380,7 +413,7 @@ namespace RGM.Modes
 
                             ScpAttackCooldown.Add(ev.Attacker);
 
-                            yield return Timing.WaitForSeconds(1.2f);
+                            yield return Timing.WaitForSeconds(1.1f);
 
                             ScpAttackCooldown.Remove(ev.Attacker);
                         }
@@ -397,11 +430,12 @@ namespace RGM.Modes
         {
             if (ev.Player == juggernaut && ev.Effect.GetEffectType() != EffectType.SinkHole)
             {
-                if (ev.Effect.GetEffectType() == EffectType.PocketCorroding)
-                    ev.IsAllowed = false;
+                if (ev.Effect.GetEffectType() == EffectType.PocketCorroding) ev.IsAllowed = false;
 
                 else if (ev.Effect.GetEffectType().GetCategories() == EffectCategory.Negative)
                 {
+                    if (Warhead.IsDetonated) return;
+                    
                     Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                     {
                         ev.Player.DisableEffect(ev.Effect.GetEffectType());
