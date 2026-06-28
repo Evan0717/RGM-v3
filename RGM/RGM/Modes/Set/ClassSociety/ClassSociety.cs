@@ -79,7 +79,7 @@ namespace RGM.Modes
                 player.RankName = $"{UnityEngine.Random.Range(1, 11)}";
             }
 
-            yield return Timing.WaitForSeconds(180f);
+            yield return Timing.WaitForSeconds(60f);
 
             foreach (var door in Door.List)
             {
