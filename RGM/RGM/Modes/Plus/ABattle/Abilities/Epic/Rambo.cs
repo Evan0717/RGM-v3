@@ -35,6 +35,9 @@ public class Rambo : Ability
     public void OnShooting(ShootingEventArgs ev)
     {
         if (ev.Item.Serial == InfinityGunSerial)
+        {
             ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
+            ev.Player.CurrentItem.As<Firearm>().Damage *= 0.86f;
+        }
     }
 }
