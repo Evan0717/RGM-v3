@@ -57,7 +57,8 @@ namespace RGM.Modes
                 new []{1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9, 10, 10, 18} 
             };
             
-            int reward = difficultyRewards[roundHandler.SelectedDifficulty][roundHandler.CurrentWave - 1];
+            int reward = difficultyRewards[roundHandler.SelectedDifficulty]
+                [roundHandler.AllWavesCleared ? roundHandler.CurrentWave : roundHandler.CurrentWave - 1];
             List<Player> wonplayers = players
                 .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report) 
                             && report.Damage >= 3000)
