@@ -584,8 +584,8 @@ namespace RGM.API.Features
         {
             var existing = player.Items
                 .Where(x => x.Type == ItemType.SCP330)
-                .Select(x => x as Scp330)
-                .FirstOrDefault(scp => scp != null && scp.Candies.Count() < 6);
+                .OfType<Scp330>()
+                .FirstOrDefault(scp => scp.Candies.Count < 6);
 
             if (existing != null)
             {
@@ -618,21 +618,16 @@ namespace RGM.API.Features
             RaycastHit? validHit = null;
             foreach (var h in hits.OrderBy(hit => hit.distance))
             {
-                if (!h.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
-                {
-                    validHit = h;
-                    break;
-                }
+                if (h.collider.TryGetComponent<IDestructible>(out IDestructible destructible)) continue;
+                
+                validHit = h;
+                break;
             }
 
             if (validHit.HasValue)
-            {
                 target.Position = validHit.Value.point;
-            }
             else
-            {
                 target.Position = player.Position + throwVector;
-            }
         }
 
         public static void ApplyGodMode(this Player player, float time)
