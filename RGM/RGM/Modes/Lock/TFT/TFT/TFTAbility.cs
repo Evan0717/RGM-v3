@@ -212,7 +212,7 @@ public enum TFTAbilityType
     TransparentCloak, // 투명 망토
     // Human
     RemoteSteal, // 슬쩍하기
-    Miniaturization, // 소인화
+    Miniaturization1, // 소인화 · 입문
     TrickOrTreat, // 트릭 오어 트릿
     InventoryUpgrade, // 간이 914
     Seed1, // 꿈나무
@@ -250,6 +250,7 @@ public enum TFTAbilityType
     AntiScp207, // 초재생
     Scp1853, // 무기 전문가
     Scp207, // 스피드왜건
+    Miniaturization2, // 소인화 · 숙련
     // Scp
     FindLocation, // 본능
     // SCP-049
@@ -303,6 +304,7 @@ public enum TFTAbilityType
     Adventure, // 고귀한 모험
     BULLSEYETFT, // 불스아이
     Pandora, // 판도라의 인벤토리
+    Miniaturization3, // 소인화 · 통달
     // Scp
     TestSubject, // 실험체
     // SCP-049

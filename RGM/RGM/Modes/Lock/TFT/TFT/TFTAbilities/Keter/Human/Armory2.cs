@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DAONTFT.Core.TFT.Keter.Human;
 
-[TFTAbility("무기고+", "2분 뒤 특수 무기(제일버드, 입자분열기) 중 하나를 얻습니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Human, TFTAbilityPoint.Once, TFTAbilityType.Armory2, "📦")]
+[TFTAbility("무기고+", "1분 뒤 특수 무기(제일버드, 입자분열기) 중 하나를 얻습니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Human, TFTAbilityPoint.Once, TFTAbilityType.Armory2, "📦")]
 public class Armory2 : TFTAbility
 {
     CoroutineHandle _waiting;
@@ -21,7 +21,7 @@ public class Armory2 : TFTAbility
 
     IEnumerator<float> waiting()
     {
-        Timing.CallDelayed(120, () =>
+        Timing.CallDelayed(60, () =>
         {
             List<ItemType> items = new()
             {

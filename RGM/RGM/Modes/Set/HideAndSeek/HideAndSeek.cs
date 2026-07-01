@@ -109,7 +109,7 @@ namespace RGM.Modes
 
             Tools.TryInstallMode(ModeType.SuperStar);
 
-            int Remaining = 300;
+            int Remaining = 330;
 
             foreach (var player in PlayerManager.List.Where(x => !finders.Contains(x)))
             {
@@ -155,8 +155,10 @@ namespace RGM.Modes
                     foreach (var finder in finders) {
                         finder.DisableAllEffects();
                         finder.AddEffect(EffectType.Scp1344, 1);
-                        finder.EnableEffect(EffectType.Lightweight, 100);
-                        finder.EnableEffect(EffectType.MovementBoost, 100);
+                        finder.AddEffect(EffectType.Lightweight, 100);
+                        finder.AddEffect(EffectType.MovementBoost, 100);
+                        finder.AddEffect(EffectType.NightVision, 100);
+                        finder.AddEffect(EffectType.FogControl, 1);
                         finder.AddEffect(EffectType.Scp1853, 1);
                         finder.ClearInventory();
                         finder.AddItem(ItemType.GunLogicer);

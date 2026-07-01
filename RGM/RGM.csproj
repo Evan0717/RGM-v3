@@ -211,6 +211,8 @@
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\Human\Miniaturization2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Keter\Human\Miniaturization3.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTInputSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTBattle.cs" />
@@ -294,7 +296,7 @@
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\All\TransparentCloak.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\InventoryUpgrade.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Kick.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Miniaturization.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Miniaturization1.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\RemoteSteal.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Seed.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\TrickorTreat.cs" />
