@@ -385,6 +385,7 @@ public enum AbilityType
     LEGEND_SCP999, // [전설] SCP-999, 간지럼 괴물
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
+    LEGEND_TURTLE, // [전설] 거북 도사
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
