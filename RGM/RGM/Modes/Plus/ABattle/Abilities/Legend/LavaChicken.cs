@@ -11,7 +11,7 @@ using Mirror;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("La-La-La Lava Ch-Ch-Ch Chicken", "10m 반경의 적들을 태웁니다.", AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
+[Ability("Lava Chicken", "6.3m 반경의 적들을 태웁니다.", AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
 public class LavaChicken : Ability
 {
     CoroutineHandle _onStarted;
@@ -41,9 +41,9 @@ public class LavaChicken : Ability
 
                 foreach (var player in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
-                    if (Vector3.Distance(player.Position, Owner.Position) <= 8)
+                    if (Vector3.Distance(player.Position, Owner.Position) <= 6.3f)
                     {
-                        float damage = player.IsScpRole() ? player.MaxHealth / 100 : player.MaxHealth / 25;
+                        var damage = player.IsScpRole() ? player.MaxHealth * 0.015f : player.MaxHealth * 0.06f;
 
                         if (player.HasAbility(AbilityType.RARE_UNDINE))
                         {

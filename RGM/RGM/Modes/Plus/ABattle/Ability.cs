@@ -465,7 +465,7 @@ public enum AbilityType
     SCP106_HUNTINGPREY, // [전용] 사냥감 모색
 
     // SCP-939
-    SCP939_MINIC, // [전용] 흉내쟁이
+    SCP939_REINFORCECLAW, // [전용] 발톱 강화
     SCP939_HUGME, // [전용] 안아줘요
     SCP939_VAMPIRECLAW, // [전용] 흡혈 발톱
     SCP939_NOEYES, // [전용] 실명

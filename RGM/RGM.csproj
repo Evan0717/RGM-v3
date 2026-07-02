@@ -551,7 +551,7 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\VampireClaw.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\HugMe.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\NoEyes.cs" />
-    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\Minic.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\ReinforceClaw.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Tutorial\Researcher.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Tutorial\ThirdForce.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Tutorial\Tongue.cs" />
