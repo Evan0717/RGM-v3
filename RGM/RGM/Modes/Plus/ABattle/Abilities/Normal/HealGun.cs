@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using PlayerRoles;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
@@ -7,6 +8,9 @@ namespace RGM.Modes.Abilities.Normal;
 [Ability("치유 사제", "체력을 15만큼 회복시켜주는 COM-18을 받습니다. 9x19mm탄을 2세트 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_HEALGUN)]
 public class HealGun : Ability
 {
+    const float HealAmount = 15f;
+    const float AdditionalMaxHealHealth = 1000f;
+
     ushort HealGunSerial = 0;
 
     public override void OnEnabled()
@@ -26,11 +30,9 @@ public class HealGun : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (HealGunSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
-        {
-            if (HealGunSerial == ev.Item.Serial)
-                ev.Player.AddHint("치유 사제", $"<b><color={ABattle.RatingColor["일반"]}>치유 사제</color></b> 능력이 있는 COM-18입니다.");
-        }
+        if (HealGunSerial != ev.Player.CurrentItem.Serial || ev.Item == null) return;
+        if (HealGunSerial == ev.Item.Serial)
+            ev.Player.AddHint("치유 사제", $"<b><color={ABattle.RatingColor["일반"]}>치유 사제</color></b> 능력이 있는 COM-18입니다.");
     }
 
     public void OnHurting(HurtingEventArgs ev)
@@ -38,11 +40,15 @@ public class HealGun : Ability
         if (ev.Attacker == null)
             return;
 
-        if (ev.Attacker.CurrentItem != null && ev.Attacker.CurrentItem.Serial == HealGunSerial && ev.Attacker.MaxHealth > ev.Attacker.Health)
-        {
-            ev.IsAllowed = false;
+        if (ev.Player.ReferenceHub.roleManager.CurrentRole is not IHealthbarRole healthbarRole)
+            return;
 
-            ev.Player.Heal(ev.Player.HasAbility(AbilityType.MYTHIC_UNLIMITED) ? 0.1f : 15);
-        }
+        float maxHealth = healthbarRole.MaxHealth + AdditionalMaxHealHealth;
+
+        if (ev.Attacker.CurrentItem == null || ev.Attacker.CurrentItem.Serial != HealGunSerial ||
+            !(maxHealth > ev.Player.Health)) return;
+        float healAmount = ev.Player.Health + HealAmount > maxHealth ? maxHealth - ev.Player.Health : HealAmount;
+        ev.IsAllowed = false;
+        ev.Player.Heal(healAmount);
     }
 }
