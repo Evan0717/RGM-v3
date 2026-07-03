@@ -17,6 +17,7 @@ public class Rambo : Ability
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Shooting += OnShooting;
+        Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
     public override void OnDisabled()
@@ -25,19 +26,23 @@ public class Rambo : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (InfinityGunSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
-        {
-            if (InfinityGunSerial == ev.Item.Serial)
-                ev.Player.AddHint("람보", $"<b><color={ABattle.RatingColor["영웅"]}>람보</color></b> 능력이 있는 Logicer입니다");
-        }
+        if (InfinityGunSerial != ev.Player.CurrentItem.Serial || ev.Item == null) return;
+        if (InfinityGunSerial == ev.Item.Serial)
+            ev.Player.AddHint("람보", $"<b><color={ABattle.RatingColor["영웅"]}>람보</color></b> 능력이 있는 Logicer입니다");
     }
 
     public void OnShooting(ShootingEventArgs ev)
     {
-        if (ev.Item.Serial == InfinityGunSerial)
-        {
+        if (ev.Item.Serial == InfinityGunSerial) {
             ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
-            ev.Player.CurrentItem.As<Firearm>().Damage *= 0.86f;
+        }
+    }
+
+    public void OnHurting(HurtingEventArgs ev)
+    {
+        if (ev.Attacker == null || ev.Player == ev.Attacker) return;
+        if (ev.Attacker.CurrentItem != null && InfinityGunSerial == ev.Attacker.CurrentItem.Serial) {
+            ev.DamageHandler.Damage *= 0.84f;
         }
     }
 }

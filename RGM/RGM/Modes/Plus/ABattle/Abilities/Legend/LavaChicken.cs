@@ -11,7 +11,7 @@ using Mirror;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("La-La-La Lava Ch-Ch-Ch Chicken", "10m 반경의 적들을 태웁니다.", AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
+[Ability("Lava Chicken", "6.3m 반경의 적들을 태웁니다.", AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
 public class LavaChicken : Ability
 {
     CoroutineHandle _onStarted;
@@ -41,13 +41,13 @@ public class LavaChicken : Ability
 
                 foreach (var player in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
-                    if (Vector3.Distance(player.Position, Owner.Position) <= 8)
+                    if (Vector3.Distance(player.Position, Owner.Position) <= 6.3f)
                     {
-                        float damage = player.IsScpRole() ? player.MaxHealth / 100 : player.MaxHealth / 25;
+                        var damage = player.IsScpRole() ? player.MaxHealth * 0.015f : player.MaxHealth * 0.06f;
 
                         if (player.HasAbility(AbilityType.RARE_UNDINE))
                         {
-                            damage /= player.AbilityCount(AbilityType.RARE_UNDINE);
+                            damage /= 1 + player.AbilityCount(AbilityType.RARE_UNDINE);
 
                             player.AddHint("운디네", $"<color={ABattle.RatingColor["희귀"]}><b>운디네</b></color>가 화염으로부터 당신을 보호하기 위해 노력하고 있습니다.", 0.5f);
                         }

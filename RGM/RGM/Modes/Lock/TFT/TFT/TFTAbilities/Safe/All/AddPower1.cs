@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DAONTFT.Core.TFT.Safe.All;
 
-[TFTAbility("단련Ⅰ", "피해 증폭을 얻습니다. (+12%)", TFTAbilityLevel.Safe, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower1, "💪")]
+[TFTAbility("단련 · 입문", "피해 증폭을 얻습니다. (+12%)", TFTAbilityLevel.Safe, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower1, "💪")]
 public class AddPower1 : TFTAbility
 {
     List<RoleTypeId> ignoredRoles = new List<RoleTypeId>

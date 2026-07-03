@@ -34,7 +34,7 @@ public class KingsColor : Ability
     {
         lightSource = LabApi.Features.Wrappers.LightSourceToy.Create();
         lightSource.Color = Color.red;
-        lightSource.Intensity = 50;
+        lightSource.Intensity = 40;
         lightSource.Range = 10;
 
         while (Owner.IsAlive)
@@ -50,7 +50,7 @@ public class KingsColor : Ability
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
                         player.EnableEffect(EffectType.Slowness, 80, 0.8f);
                         player.CurrentItem = null;
-                        player.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.015f : target.MaxHealth * 0.107f);
+                        player.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.019f : target.MaxHealth * 0.113f);
                     }
                 }
             }
@@ -68,20 +68,32 @@ public class KingsColor : Ability
 
         count++;
 
-        if (count == 5)
+        switch (count)
         {
-            Tools.PlayGlobalAudio("시산혈해 (屍山血海)", 2.5f);
-
-            Owner.RankName = "시산혈해 (屍山血海)";
-            Owner.RankColor = "red";
-
-            foreach (var player in PlayerManager.List.Where(x => Owner.LeadingTeam != x.LeadingTeam))
+            case 5:
             {
-                player.EnableEffect(EffectType.Stained, 1, 20);
+                Tools.PlayGlobalAudio("시산혈해 (屍山血海)", 2.5f);
+
+                Owner.RankName = "시산혈해 (屍山血海)";
+                Owner.RankColor = "red";
+
+                foreach (var player in PlayerManager.List.Where(x => Owner.LeadingTeam != x.LeadingTeam))
+                {
+                    player.EnableEffect(EffectType.SinkHole, 1, 3);
+                    player.EnableEffect(EffectType.Blinded, 1, 3);
+                }
+
+                break;
+            }
+            case 30:
+            {
+                foreach (var player in PlayerManager.List.Where(x => x != Owner))
+                {
+                    player.Kill("패기에 의해 공중분해 되었습니다");
+                }
+
+                break;
             }
         }
-
-        lightSource.Intensity += 10;
-        lightSource.Range += 5;
     }
 }

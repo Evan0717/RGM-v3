@@ -20,8 +20,8 @@ namespace RGM.Modes
 """;
         public override string Color => "a0aade";
         public override string Author => "A3인데";
-        
-        
+
+
         RoundHandler roundHandler;
 
         public override void OnEnabled()
@@ -52,15 +52,16 @@ namespace RGM.Modes
             
             int[][] difficultyRewards =
             {
-                new []{1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6},
-                new []{1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 12},
-                new []{1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9, 10, 10, 18} 
-            };
+                [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6],
+                [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 12],
+                [1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 8, 9, 18]
+            };  
             
-            int reward = difficultyRewards[roundHandler.SelectedDifficulty][roundHandler.CurrentWave - 1];
+            int reward = difficultyRewards[roundHandler.SelectedDifficulty]
+                [roundHandler.AllWavesCleared ? roundHandler.CurrentWave : roundHandler.CurrentWave - 1];
             List<Player> wonplayers = players
                 .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report) 
-                            && report.Damage >= 3000)
+                            && report.Damage >= 2700)
                 .ToList();
 
             Timing.RunCoroutine(Tools.SetWinner(wonplayers, reward));

@@ -1,21 +1,18 @@
-﻿using Exiled.API.Enums;
+using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using MEC;
-using RGM.API.Features;
 using static RGM.Variables.Variable;
 
-namespace DAONTFT.Core.TFT.Keter.All;
+namespace RGM.Modes.Abilities.Legend;
 
-[TFTAbility("방어 · 통달", "방어력을 20% 얻습니다. 추가로, 모든 받는 데미지가 최대 45까지만 적용됩니다. 능력 발동 시, 1.4초간 무적이 됩니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Once, TFTAbilityType.AddDefense3, "⛔")]
-public class AddDefense3 : TFTAbility
+[Ability("거북 도사", "받는 모든 데미지는 40를 넘을 수 없습니다.(일부 피해 제외)\n능력 발동 시, 2.2초간 무적이 됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_TURTLE)]
+public class Turtle : Ability
 {
-    const float MaxDamage = 45f;
+    const float MaxDamage = 40f;
 
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
-
-        Owner.AddEffect(EffectType.DamageReduction, 40);
     }
 
     public override void OnDisabled()
@@ -32,9 +29,9 @@ public class AddDefense3 : TFTAbility
         {
             ev.IsAllowed = false;
             ev.Player.Hurt(MaxDamage, ev.DamageHandler.Type);
+            
             GodModePlayers.Add(Owner);
-
-            Timing.CallDelayed(1.4f, () =>
+            Timing.CallDelayed(2.2f, () => 
             {
                 if (GodModePlayers.Contains(Owner))
                     GodModePlayers.Remove(Owner);
@@ -42,12 +39,11 @@ public class AddDefense3 : TFTAbility
             return;
         }
 
-        if (ev.DamageHandler.Damage > MaxDamage)
-        {
+        if (ev.DamageHandler.Damage > MaxDamage) {
             ev.DamageHandler.Damage = MaxDamage;
+            
             GodModePlayers.Add(Owner);
-
-            Timing.CallDelayed(1.4f, () =>
+            Timing.CallDelayed(2.2f, () =>
             {
                 if (GodModePlayers.Contains(Owner))
                     GodModePlayers.Remove(Owner);

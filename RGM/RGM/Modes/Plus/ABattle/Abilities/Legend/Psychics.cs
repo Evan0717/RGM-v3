@@ -12,7 +12,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다. 사망해도 모두에게 이야기할 수 있습니다.", AbilityCategory.Legend, AbilityType.LEGEND_PSYCHICS)]
+//[Ability("영매", "당신을 바라보는 관전자 수에 비례하여 능력치가 상승합니다. 사망해도 모두에게 이야기할 수 있습니다.", AbilityCategory.Legend, AbilityType.LEGEND_PSYCHICS)]
 public class Psychics : Ability
 {
     CoroutineHandle _blessing;

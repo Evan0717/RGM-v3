@@ -358,6 +358,7 @@ public enum AbilityType
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
     EPIC_BULLSEYE, // [영웅] 불스아이
     EPIC_RAMBO, // [영웅] 람보
+    EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -383,6 +384,8 @@ public enum AbilityType
     LEGEND_SCP966, // [전설] SCP-966, 잠을 죽이는 자
     LEGEND_SCP999, // [전설] SCP-999, 간지럼 괴물
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
+    LEGEND_JOHNWICK, // [전설] 존 윅
+    LEGEND_TURTLE, // [전설] 거북 도사
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -462,7 +465,7 @@ public enum AbilityType
     SCP106_HUNTINGPREY, // [전용] 사냥감 모색
 
     // SCP-939
-    SCP939_MINIC, // [전용] 흉내쟁이
+    SCP939_REINFORCECLAW, // [전용] 발톱 강화
     SCP939_HUGME, // [전용] 안아줘요
     SCP939_VAMPIRECLAW, // [전용] 흡혈 발톱
     SCP939_NOEYES, // [전용] 실명

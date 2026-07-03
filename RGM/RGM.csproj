@@ -211,6 +211,8 @@
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\Human\Miniaturization2.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Keter\Human\Miniaturization3.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTInputSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTSetting.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTBattle.cs" />
@@ -294,7 +296,7 @@
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\All\TransparentCloak.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\InventoryUpgrade.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Kick.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Miniaturization.cs" />
+    <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Miniaturization1.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\RemoteSteal.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\Seed.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Safe\Human\TrickorTreat.cs" />
@@ -312,6 +314,9 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\BullsEye.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ContExpert.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Rambo.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\SpringfieldM1A.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Turtle.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
@@ -546,7 +551,7 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\VampireClaw.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\HugMe.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\NoEyes.cs" />
-    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\Minic.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Scp939\ReinforceClaw.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Tutorial\Researcher.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Tutorial\ThirdForce.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Unique\Tutorial\Tongue.cs" />
@@ -707,6 +712,7 @@
     <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
+    <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
     <Compile Include="RGM\UserSettings\MainSetting.cs" />
     <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
@@ -740,27 +746,27 @@
     <Reference Include="DiscordInteraction">
       <HintPath>$(EXILED_REFERENCES)\DiscordInteraction.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=9.13.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.API, Version=9.14.2.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CreditTags, Version=9.13.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.CreditTags, Version=9.14.2.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Exiled.CreditTags.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomItems, Version=9.13.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.CustomItems, Version=9.14.2.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Exiled.CustomItems.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomRoles, Version=9.13.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.CustomRoles, Version=9.14.2.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Exiled.CustomRoles.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=9.13.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.Events, Version=9.14.2.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=9.13.1.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="Exiled.Permissions, Version=9.14.2.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Exiled.Permissions.dll</HintPath>
     </Reference>

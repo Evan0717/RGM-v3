@@ -9,7 +9,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("화염 방사기", "위력은 40%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
+[Ability("화염 방사기", "위력은 42%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
 public class FlameThrower : Ability
 {
     ushort FlamethrowerSerial = 0;
@@ -42,7 +42,7 @@ public class FlameThrower : Ability
                     MicroHid MicroHID = (MicroHid)Item;
 
                     if (MicroHID.Energy < 1)
-                        MicroHID.Energy += 0.02f;
+                        MicroHID.Energy += 0.025f;
                 }
             }
 

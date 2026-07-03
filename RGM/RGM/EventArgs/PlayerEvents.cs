@@ -13,7 +13,6 @@ using ProjectMER.Features;
 using RGM.API.DataBases;
 using RGM.API.Features;
 using RGM.API.Interfaces;
-using RGM.Modes;
 using RGM.Modes.SubClass;
 using System;
 using System.Collections.Generic;
@@ -212,13 +211,12 @@ namespace RGM.EventArgs
 <align=left><size=30>
 <b><size=35><color=#F7FE2E>관리진</color></size></b>
 @alvar_noah - 서버 소유자
-@mercedes83 - 총 관리자 (베테랑)
-@normal._.person - 정규 관리자 (베테랑)
-정규 관리자 - @bluefox2322, @mintchoco1575, @wanjeon_chobo
+@normal._.person - 총 관리자 (베테랑)
+정규 관리자 - @bluefox2322, @wanjeon_chobo
 
 <b><size=35><color=#C8FE2E>개발진</color></size></b>
-@GoldenPig1205 - 메인 개발자
-@cocoa_1.19 - 서브? 개발자
+@mercedes83 - 총괄 개발자
+@cocoa_1.19 - 서브 개발자
 
 <b><size=35><color=#F79F81>후원자</color></size></b>
 <size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @solminb27, @LESI_2010, @handsome_dobby</size>
@@ -773,11 +771,16 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
-            if (ev.Attacker == null || ev.Attacker.IsNonePlayer() || ev.Player.IsNonePlayer() || Round.IsEnded)
+            if (ev.Attacker == null || 
+                ev.Attacker.IsNonePlayer() || 
+                ev.Player.IsNonePlayer() || 
+                SelectMode == "FightVote" ||
+                Round.IsEnded)
                 return;
 
             // 저장된 효과 삭제
-            EffectIntensities[ev.Player].Clear();
+            if (EffectIntensities.TryGetValue(ev.Player, out var effectIntensities))
+                effectIntensities.Clear();
 
             if (!Round.IsStarted)
             {
@@ -811,7 +814,8 @@ namespace RGM.EventArgs
                     if (!ev.Player.IsScpRole())
                         PlayersReport[ev.Attacker.UserId].KillHuman += 1;
 
-                    PlayersAudio[ev.Attacker].TryPlay("Overwatch2Kill", 2);
+                    if (PlayersAudio.TryGetValue(ev.Attacker, out var attackerAudio))
+                        attackerAudio.TryPlay("Overwatch2Kill", 2);
                 }
 
                 if (!ev.Player.IsNPC)

@@ -71,7 +71,7 @@ public class ASync : Ability
                         player.AddEffect(EffectType.Flashed, 1, 1);
                     }
 
-                    time = 60 * 4;
+                    time = 60;
 
                     IEnumerator<float> timer()
                     {
