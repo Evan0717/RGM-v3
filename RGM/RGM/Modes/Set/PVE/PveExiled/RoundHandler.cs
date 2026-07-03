@@ -257,11 +257,8 @@ namespace RGM.Modes.PveExiledSystem
                     }
                     DummyUtils.DestroyAllDummies();
                     int selected = 0;
-                    if (difficultyVote[1] >= difficultyVote[0])
-                    {
-                        if (difficultyVote[2] >= difficultyVote[1]) selected = 2;
-                        else selected = 1;
-                    }
+                    if (difficultyVote[1] >= difficultyVote[selected]) selected = 1;
+                    if (difficultyVote[2] >= difficultyVote[selected]) selected = 2;
                     switch (selected)
                     {
                         case 0: waveConfig = new Difficulty.Normal(); break;

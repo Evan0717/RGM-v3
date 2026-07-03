@@ -6,7 +6,7 @@
 
 [![Discord](https://img.shields.io/discord/930837847026585600?color=738adb&label=Discord&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/NWSrVqmKsq)
 
-[종속성을 얻으려면 이 레포지토리를 다운로드하세요.](https://github.com/GoldenPig1205/EXILED_REFERENCES)
+[종속성을 얻으려면 이 레포지토리를 다운로드하세요.](https://github.com/Evan0717/EXILED_REFERENCES)
 
 </div>
 
