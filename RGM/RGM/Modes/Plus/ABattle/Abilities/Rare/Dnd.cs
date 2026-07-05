@@ -8,14 +8,14 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("자리 비움", "2분 동안 움직일 수 없고 아이템을 들 수 없습니다. 대신 2분 후 <color=#A4A4A4>일반</color>, <color=#2ECCFA>희귀</color>, <color=#FF00FF>영웅</color> 능력을 하나씩 획득합니다.", AbilityCategory.Rare, AbilityType.RARE_DND)]
+[Ability("자리 비움", "100초 동안 움직일 수 없고 아이템을 들 수 없습니다. 대신 2분 후 <color=#A4A4A4>일반</color>, <color=#2ECCFA>희귀</color>, <color=#FF00FF>영웅</color> 능력을 하나씩 획득합니다.", AbilityCategory.Rare, AbilityType.RARE_DND)]
 public class Dnd : Ability
 {
     public override void OnEnabled()
     {
         IEnumerator<float> enumerator()
         {
-            Owner.EnableEffect(EffectType.Ensnared, 1, 120);
+            Owner.EnableEffect(EffectType.Ensnared, 1, 100);
 
             for (int i = 0; i < 120; i++)
             {

@@ -94,6 +94,6 @@ public class SpringfieldM1A : Ability
             return;
 
         firearm.DamageFalloffDistance = 500f;
-        firearm.Damage = 38.36f;
+        firearm.Damage = 48.7f;
     }
 }
