@@ -30,12 +30,10 @@ public class ContExpert : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker != Owner || ScpRoles.Contains(ev.Attacker.Role))
-            return;
-
-        if (!ScpRoles.Contains(ev.Player.Role))
-            return;
-
+        if (ev.Attacker != Owner || ScpRoles.Contains(ev.Attacker.Role)) return;
+        if (!ScpRoles.Contains(ev.Player.Role)) return;
+        if (ABattle.Instance.GetAbility(Owner, AbilityType.EPIC_CONTEXPERT) != this) return;
+        
         ev.DamageHandler.Damage *= 1 + 1.1f * Owner.AbilityCount(AbilityType.EPIC_CONTEXPERT);
     }
 }
