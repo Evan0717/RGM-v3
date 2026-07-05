@@ -35,7 +35,8 @@ public class Anchor : Ability
         Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         Exiled.Events.Handlers.Scp049.Attacking += On049Attack;
-
+        Exiled.Events.Handlers.Player.Handcuffing += OnArrest;
+        
         Timing.RunCoroutine(Main());
     }
 
