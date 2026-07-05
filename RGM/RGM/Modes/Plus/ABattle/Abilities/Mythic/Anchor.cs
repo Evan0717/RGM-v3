@@ -43,9 +43,8 @@ public class Anchor : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (itemSerial != ev.Player.CurrentItem.Serial) return;
         if (ev.Item == null) return;
-
+        if (itemSerial != ev.Player.CurrentItem.Serial) return;
         if (itemSerial == ev.Item.Serial)
                 ev.Player.AddHint("구속", $"<b><color={ABattle.RatingColor["신화"]}>구속</color></b> 능력이 있는 <b>리볼버</b>입니다!");
         
@@ -54,8 +53,10 @@ public class Anchor : Ability
     private void OnShooting(ShootingEventArgs ev)
     {
         if (ev.Player != Owner) return;
-        if (itemSerial != ev.Player.CurrentItem.Serial) return;
+        if (ev.Player.CurrentItem.Serial != itemSerial) return;
         if (ev.Item.Serial != itemSerial) return;
+        ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 6;
+
         if (!Tools.TryGetLookPlayers(ev.Player, 100f, out List<Player> players, out _)) return;
         bool enemy = false;
 
@@ -99,10 +100,7 @@ public class Anchor : Ability
         if (enemy)
             Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 3f);
 
-        Timing.CallDelayed(1, () =>
-        {
-            ev.Item.As<Firearm>().MagazineAmmo = 6;
-        });
+        
     }
 
     private IEnumerator<float> Main()
@@ -135,6 +133,7 @@ public class Anchor : Ability
                 }
                 player.Position = position;
                 if(Owner.CurrentItem.Serial == itemSerial) player.AddEffect(EffectType.Fade, 230, 0.05f); //시야 방해 방지
+                player.EnableEffect(EffectType.Ensnared, 1, 3);
                 player.AddHint("알림", $"{Owner.Nickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.05f);
             }
              yield return Timing.WaitForSeconds(0.05f);
