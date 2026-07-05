@@ -127,15 +127,15 @@ public class Anchor : Ability
                 Owner.AddHint("알림", $"구속을 해제하려면 리볼버를 들고 [ALT]를 누르십시오.\n현재 붙잡힌 플레이어 수: {TargetPlayer.Count}", 0.1f);
             }
 
-            Vector3 origin = Owner.ReferenceHub.PlayerCameraReference.position;
-            Vector3 direction = Owner.ReferenceHub.PlayerCameraReference.forward;
+            //Vector3 origin = Owner.ReferenceHub.PlayerCameraReference.position;
+            //Vector3 direction = Owner.ReferenceHub.PlayerCameraReference.forward;
 
-            float maxDistance = 4f;
-            int ignorePlayerMask = ~(1 << LayerMask.NameToLayer("Player"));
-            Vector3 position = origin + (direction * maxDistance);
+            //float maxDistance = 4f;
+            //int ignorePlayerMask = ~(1 << LayerMask.NameToLayer("Player"));
+            Vector3 position = Owner.Position;
 
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, maxDistance, ignorePlayerMask))
-                position = hit.point - (direction * 0.2f);
+            //if (Physics.Raycast(origin, direction, out RaycastHit hit, maxDistance, ignorePlayerMask))
+                //position = hit.point - (direction * 0.2f);
 
             foreach (var player in TargetPlayer.ToList())
             {
@@ -162,27 +162,34 @@ public class Anchor : Ability
     }
 
 
-    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    public IEnumerator<float> OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
-        if (ev.Player != Owner) return;
+        if (ev.Player != Owner) Timing.WaitForSeconds(1f);
 
         foreach (var player in TargetPlayer.ToList())
         {
             if (player == null) continue;
+            Timing.CallDelayed(2f, () =>
+            {
+                player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
+                player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
+            });
             
-            player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
-            player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
         }
         LWPlayerDuration.Clear();
         LWPlayerIntensity.Clear();
         FPlayerIntensity.Clear();
         FPlayerDuration.Clear();
         TargetPlayer.Clear();
+
+        yield break;
     }
 
     public void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null || ev.Attacker == ev.Player) return;
+        if (ev.Attacker == Owner && Owner.CurrentItem.Serial == itemSerial)
+            ev.IsAllowed = false;
 
         if (TargetPlayer.Contains(ev.Attacker))
         {
