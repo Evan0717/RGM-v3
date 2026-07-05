@@ -402,6 +402,7 @@ public enum AbilityType
     MYTHIC_ROSEHIP, // [신화] 장미칼
     MYTHIC_HAMMER, // [신화] 철퇴
     MYTHIC_UNLIMITED, // [신화] 무제한
+    MYTHIC_ANCHOR, //[신화] 구속
 
     // 전용 //
     // D계급

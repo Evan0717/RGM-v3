@@ -79,11 +79,11 @@ namespace RGM.Modes
                     monster.Position = new Vector3(-0.6015625f, 332.9026f, -32.56641f);
                     Server.ExecuteCommand($"/open ESCAPE_PRIMARY");
 
-                    float health = 14 * PlayerManager.List.Count;
+                    float health = 15 * PlayerManager.List.Count;
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
-                    monster.MaxHumeShield = 40;
+                    monster.MaxHumeShield = 50;
                     monster.HumeShield = monster.MaxHumeShield;
                     monster.EnableEffect(EffectType.MovementBoost, 70);
                     monster.EnableEffect(EffectType.Fade, 220);
@@ -136,7 +136,7 @@ namespace RGM.Modes
         {
             if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type != DamageType.Strangled) {
                 ev.DamageHandler.Damage += 79;
-                ev.Attacker.HumeShield += 4;
+                ev.Attacker.HumeShield += 12;
             }
         }
 

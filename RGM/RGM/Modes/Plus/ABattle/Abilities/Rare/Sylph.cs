@@ -1,8 +1,11 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using System.Linq;
+using AdminToys;
 using Exiled.API.Features;
 using MEC;
+using ProjectMER.Features;
+using ProjectMER.Features.Objects;
 using UnityEngine;
-
 namespace RGM.Modes.Abilities.Rare;
 
 [Ability("실프", "싱그러운 바람의 기운! 물, 불, 흙의 정령을 모으면..?", AbilityCategory.Rare, AbilityType.RARE_SYLPH)]
@@ -10,21 +13,32 @@ public class Sylph : Ability
 {
     public override void OnEnabled()
     {
-
-        RoomType roomType = Owner.CurrentRoom.Type;
-        Color roomColor = Owner.CurrentRoom.Color;
-
-        Room room = Room.Get(roomType);
-
-        room.Color = new Color(0, 1, 0);
-
-        Timing.CallDelayed(10f, () =>
-        {
-            room.Color = roomColor;
-        });
+        Light(Owner, Color.green);
     }
 
     public override void OnDisabled()
     {
+    }
+    
+    public void Light(Player player, Color color)
+    {
+        try
+        {
+            SchematicObject schematic = ObjectSpawner.SpawnSchematic("Light", Vector3.zero);
+            LightSourceToy light = schematic.GetComponentsInChildren<LightSourceToy>().First();
+
+            schematic.transform.parent = player.Transform;
+            schematic.transform.localPosition = Vector3.zero;
+
+            light.NetworkLightColor = color;
+            light.NetworkLightRange = 50;
+            light.NetworkLightIntensity = 20;
+
+            Timing.CallDelayed(5, schematic.Destroy);
+        }
+        catch (NullReferenceException e)
+        {
+            Log.Warn("Failure to fetch object 'light'.");
+        }
     }
 }

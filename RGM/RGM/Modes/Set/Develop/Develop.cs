@@ -27,7 +27,8 @@ namespace RGM.Modes
             Exiled.API.Features.Map.IsDecontaminationEnabled = false;
 
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
-
+            Exiled.Events.Handlers.Player.Kicking += OnKicking;
+            
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         }
 
@@ -38,6 +39,7 @@ namespace RGM.Modes
             Exiled.API.Features.Map.IsDecontaminationEnabled = true;
 
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
+            Exiled.Events.Handlers.Player.Kicking -= OnKicking;
 
             Timing.KillCoroutines(_onModeStarted);
         }
@@ -47,9 +49,14 @@ namespace RGM.Modes
             yield return 0f;
         }
 
-        void OnResurrecting(ResurrectingEventArgs ev)
+        public void OnResurrecting(ResurrectingEventArgs ev)
         {
             ev.IsAllowed = false;
+        }
+        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        {
+            if (ev.Reason.ToLower().Contains("afk"))
+                ev.IsAllowed = false;
         }
     }
 }

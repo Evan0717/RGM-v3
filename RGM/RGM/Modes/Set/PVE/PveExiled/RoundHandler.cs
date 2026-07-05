@@ -292,9 +292,11 @@ namespace RGM.Modes.PveExiledSystem
             {
                 WaveConfig.WaveInfo waveInfo = waveConfig.Waves[wave];
                 this.CurrentWave = wave;
-                Exiled.API.Features.Map.CleanAllRagdolls();
-                Exiled.API.Features.Map.Clean(Decals.DecalPoolType.Blood);
-                Exiled.API.Features.Map.Clean(Decals.DecalPoolType.GlassCrack);
+                Map.CleanAllRagdolls();
+                Map.Clean(Decals.DecalPoolType.Blood);
+                Map.Clean(Decals.DecalPoolType.GlassCrack);
+                Map.Clean(Decals.DecalPoolType.Bullet);
+                Map.Clean(Decals.DecalPoolType.Buckshot);
 
                 DummyUtils.DestroyAllDummies();
                 if (wave == 0 || (wave + 1) % 3 == 0)
