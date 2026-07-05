@@ -47,6 +47,7 @@ public class Anchor : Ability
     {
         if (ev.Item == null) return;
         if (itemSerial != ev.Player.CurrentItem.Serial) return;
+        if (ev.Player != Owner) return;
         if (itemSerial == ev.Item.Serial)
                 ev.Player.AddHint("구속", $"<b><color={ABattle.RatingColor["신화"]}>구속</color></b> 능력이 있는 <b>리볼버</b>입니다!");
         
@@ -155,7 +156,7 @@ public class Anchor : Ability
                 player.EnableEffect(EffectType.Lightweight, 1, 3f);
                 player.AddHint("알림", $"{Owner.DisplayNickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.1f);
             }
-             yield return Timing.WaitForSeconds(0.05f);
+             yield return Timing.WaitForSeconds(0.34f);
         }
     }
 
@@ -167,7 +168,7 @@ public class Anchor : Ability
         foreach (var player in TargetPlayer.ToList())
         {
             if (player == null) continue;
-            Timing.CallDelayed(1f, () =>
+            Timing.CallDelayed(0.3f, () =>
             {
                 player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
                 player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
