@@ -167,7 +167,7 @@ public class Anchor : Ability
         foreach (var player in TargetPlayer.ToList())
         {
             if (player == null) continue;
-            Timing.CallDelayed(2f, () =>
+            Timing.CallDelayed(1f, () =>
             {
                 player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
                 player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
