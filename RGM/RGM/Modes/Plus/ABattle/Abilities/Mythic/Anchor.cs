@@ -23,6 +23,10 @@ public class Anchor : Ability
 {
     ushort itemSerial = 0;
     private List<Player> TargetPlayer = new();
+    private Dictionary<Player, byte> LWPlayerIntensity = new();
+    private Dictionary<Player, float> LWPlayerDuration = new();
+    private Dictionary<Player, byte> FPlayerIntensity = new();
+    private Dictionary<Player, float> FPlayerDuration = new();
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.GunRevolver);
@@ -91,7 +95,16 @@ public class Anchor : Ability
                 Owner.AddHint("알림", $"다른 플레이어에게 구속당한 플레이어는 구속할 수 없습니다.", 3f);
                 continue;
             }
+            byte LWintensity = player.GetEffect(EffectType.Lightweight).Intensity;
+            float LWduration = player.GetEffect(EffectType.Lightweight).Duration;
 
+            byte Fintensity = player.GetEffect(EffectType.Lightweight).Intensity;
+            float Fduration = player.GetEffect(EffectType.Lightweight).Duration;
+
+            LWPlayerIntensity.Add(player, LWintensity);
+            LWPlayerDuration.Add(player, LWduration);
+            FPlayerIntensity.Add(player, Fintensity);
+            FPlayerDuration.Add(player, Fduration);
             TargetPlayer.Add(player);
 
             enemy = true;
@@ -132,9 +145,17 @@ public class Anchor : Ability
                     continue;
                 }
                 player.Position = position;
-                if(Owner.CurrentItem.Serial == itemSerial) player.AddEffect(EffectType.Fade, 230, 0.05f); //시야 방해 방지
-                player.EnableEffect(EffectType.Ensnared, 1, 3);
-                player.AddHint("알림", $"{Owner.Nickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.05f);
+
+                byte LWintensity = player.GetEffect(EffectType.Lightweight).Intensity;
+                float LWduration = player.GetEffect(EffectType.Lightweight).Duration;
+
+                byte Fintensity = player.GetEffect(EffectType.Lightweight).Intensity;
+                float Fduration = player.GetEffect(EffectType.Lightweight).Duration;
+
+                player.EnableEffect(EffectType.Fade, 179, 0.05f); //시야 방해 방지
+                player.EnableEffect(EffectType.Ensnared, 1, 3f);
+                player.EnableEffect(EffectType.Lightweight, 1, 3f);
+                player.AddHint("알림", $"{Owner.DisplayNickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.05f);
             }
              yield return Timing.WaitForSeconds(0.05f);
         }
@@ -145,6 +166,17 @@ public class Anchor : Ability
     {
         if (ev.Player != Owner) return;
 
+        foreach (var player in TargetPlayer.ToList())
+        {
+            if (player == null) continue;
+            
+            player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
+            player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
+        }
+        LWPlayerDuration.Clear();
+        LWPlayerIntensity.Clear();
+        FPlayerIntensity.Clear();
+        FPlayerDuration.Clear();
         TargetPlayer.Clear();
     }
 
