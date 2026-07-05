@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
@@ -9,10 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using PlayerRoles;
-using RGM.Modes;
-using System.Xml.Linq;
-using Exiled.API.Extensions;
-using LabApi.Events.Arguments.Scp049Events;
 using Exiled.Events.EventArgs.Scp049;
 
 namespace RGM.Modes.Abilities.Mythic;
