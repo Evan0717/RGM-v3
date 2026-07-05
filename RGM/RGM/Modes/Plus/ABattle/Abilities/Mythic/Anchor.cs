@@ -156,7 +156,7 @@ public class Anchor : Ability
                 player.EnableEffect(EffectType.Lightweight, 1, 3f);
                 player.AddHint("알림", $"{Owner.DisplayNickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.1f);
             }
-             yield return Timing.WaitForSeconds(0.34f);
+             yield return Timing.WaitForSeconds(0.034f);
         }
     }
 
