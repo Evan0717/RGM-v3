@@ -29,6 +29,9 @@ public class Training : Ability
         if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
             return;
 
+        if (ABattle.Instance.GetAbility(Owner, AbilityType.NORMAL_TRAINING) != this)
+            return;
+
         ev.DamageHandler.Damage *= 1.0f + 0.16f * Owner.AbilityCount(AbilityType.NORMAL_TRAINING);
     }
 }
