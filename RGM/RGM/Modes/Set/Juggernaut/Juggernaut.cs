@@ -128,7 +128,7 @@ namespace RGM.Modes
         {
             for (int i = 1; i < 120; i++)
             {
-                if (Round.IsEnded || Warhead.IsDetonated)
+                if (Round.IsEnded)
                     yield break;
 
                 PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>초토화 작전 실행까지 {120 - i}초</size>"));
@@ -181,7 +181,6 @@ namespace RGM.Modes
             juggernaut.EnableEffect(EffectType.Scp1344, 1);
             juggernaut.EnableEffect(EffectType.Scp1853, 1);
             juggernaut.EnableEffect(EffectType.Scp207, 1);
-            juggernaut.EnableEffect(EffectType.MovementBoost, 10);
             juggernaut.EnableEffect(EffectType.FogControl, 1);
             juggernaut.EnableEffect(EffectType.Bleeding, 1);
             PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신, 중독과 출혈 효과를 받습니다.</size>"));
@@ -204,7 +203,7 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(120f); // 외부지원 호출에도 게임이 끝나지 않을 경우
             
             
-            /*bool IsEnd = false;
+            bool IsEnd = false;
             while (!IsEnd)
             {
                 if (juggernaut.IsAlive)
@@ -221,7 +220,7 @@ namespace RGM.Modes
                          * 저거너트만 살아있는가?
                          * 저거너트랑 튜토리얼이 같이 살았는가?
                          * 를 봐야 함.
-                         #1#
+                         */
                     }
                 }
                 else {
@@ -234,7 +233,7 @@ namespace RGM.Modes
             }   
 
             PlayerManager.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
-            Round.IsLocked = false;*/
+            Round.IsLocked = false;
         }
 
         public IEnumerator<float> AutoWarhead()

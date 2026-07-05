@@ -17,7 +17,7 @@ public class Dnd : Ability
         {
             Owner.EnableEffect(EffectType.Ensnared, 1, 100);
 
-            for (int i = 0; i < 120; i++)
+            for (int i = 0; i < 100; i++)
             {
                 if (Owner.IsDead)
                     yield break;
