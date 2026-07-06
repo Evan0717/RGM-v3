@@ -9,12 +9,12 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
     {
         public override void OnEnabled()
         {
-            Owner.AddEffect(EffectType.NightVision, 10);
+            Owner.AddEffect(EffectType.NightVision, 20);
         }
 
         public override void OnDisabled()
         {
-            Owner.RemoveEffect(EffectType.NightVision, 10);
+            Owner.RemoveEffect(EffectType.NightVision, 20);
         }
     }
 }

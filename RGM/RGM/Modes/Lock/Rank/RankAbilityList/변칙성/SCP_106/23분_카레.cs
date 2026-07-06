@@ -4,14 +4,14 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {
-    [RankAbility("23분 카레", "체력이 850이 되는 대신 총기 관련 데미지에 99% 저항을 가지며, 흄 쉴드가 삭제됩니다.", RankAbilityType.이십삼분_카레, RankCategory.SCP_106, RankAbilityCategory.변칙성, "🍛")]
+    [RankAbility("23분 카레", "체력이 1200이 되는 대신 탄약을 사용하는 총기 관련 데미지에 80% 저항을 가지며, 흄 쉴드가 95% 감소합니다.", RankAbilityType.이십삼분_카레, RankCategory.SCP_106, RankAbilityCategory.변칙성, "🍛")]
     public class 이십삼분_카레 : RankAbility
     {
         public override void OnEnabled()
         {
-            Owner.MaxHealth = 850;
+            Owner.MaxHealth = 1200;
             Owner.Health = Owner.MaxHealth;
-            Owner.MaxHumeShield = 0;
+            Owner.MaxHumeShield *= 0.05f;
             Owner.HumeShield = Owner.MaxHumeShield;
 
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -25,7 +25,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
         void OnHurting(HurtingEventArgs ev)
         {
             if (ev.Player == Owner && ev.DamageHandler.Type.IsWeapon(false))
-                ev.DamageHandler.Damage *= 0.01f;
+                ev.DamageHandler.Damage *= 0.2f;
         }
     }
 }

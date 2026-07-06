@@ -2,7 +2,7 @@
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("외골격", "흄 쉴드를 모두 소모하여 50% 만큼 체력으로 치환합니다.", RankAbilityType.외골격, RankCategory.SCP_3114, "💀", 110)]
+    [RankGadget("외골격", "흄 쉴드를 모두 소모하여 60% 만큼 체력으로 치환합니다.", RankAbilityType.외골격, RankCategory.SCP_3114, "💀", 120)]
     public class 외골격 : RankGadgetAbility
     {
         protected override bool CanUseGadget()
@@ -15,11 +15,11 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
         }
         protected override void OnGadgetUsed()
         {
-            float hume = Owner.HumeShield;
+            var hume = Owner.HumeShield;
 
             Owner.HumeShield = 0;
 
-            Owner.Heal(hume / 2);
+            Owner.Heal(hume * 0.6f);
         }
     }
 }

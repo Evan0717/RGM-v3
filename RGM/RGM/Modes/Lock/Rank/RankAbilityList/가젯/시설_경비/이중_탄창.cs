@@ -4,7 +4,7 @@ using Exiled.API.Features.Items;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("이중 탄창", "즉시 탄창을 30 장전합니다.", RankAbilityType.이중_탄창, RankCategory.시설_경비, "󾠯", 110)]
+    [RankGadget("이중 탄창", "즉시 탄창을 30 장전합니다.", RankAbilityType.이중_탄창, RankCategory.시설_경비, "󾠯", 60)]
     public class 이중_탄창 : RankGadgetAbility
     {
         protected override bool CanUseGadget()

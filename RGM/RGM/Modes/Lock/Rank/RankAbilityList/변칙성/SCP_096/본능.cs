@@ -1,48 +1,48 @@
-﻿using Exiled.API.Features.Roles;
-using MEC;
-using RGM.API.Features;
+﻿using RGM.API.Features;
 using RGM.Modes;
-using SLPlayerRotation;
-using System.Collections.Generic;
 using System.Linq;
+using Exiled.Events.EventArgs.Scp096;
 using UnityEngine;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {
-    [RankAbility("본능", "주변에 있는 인간들이 점점 위를 올려다보게 됩니다.", RankAbilityType.본능, RankCategory.SCP_096, RankAbilityCategory.변칙성, "❓")]
+    [RankAbility("본능", "분노 시에 30m 내의 인간들을 목격자에 포함시킵니다. (최대 4명)", RankAbilityType.본능, RankCategory.SCP_096, RankAbilityCategory.변칙성, "❓")]
     public class 본능 : RankAbility
     {
-        CoroutineHandle handle;
-
         public override void OnEnabled()
         {
-            handle = Timing.RunCoroutine(enumerator());
+            Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
         }
 
         public override void OnDisabled()
         {
-            Timing.KillCoroutines(handle);
+            Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
         }
 
-        IEnumerator<float> enumerator()
+        public void OnEnraging(EnragingEventArgs ev)
         {
-            while (true)
-            {
-                if (Owner.Role is Scp096Role scp096)
-                {
-                    foreach (var human in PlayerManager.List.Where(x => !x.IsScpRole() && !scp096.Targets.Contains(x)))
-                    {
-                        if (Vector3.Distance(Owner.Position, human.Position) < 2)
-                        {
-                            var currentEuler = human.CameraTransform.rotation.eulerAngles;
-                            currentEuler.x -= 0.3f;
-                            human.SetHubRotation(Quaternion.Euler(currentEuler));
-                        }
-                    }
-                }
+            if (ev.Player != Owner)
+                return;
 
-                yield return Timing.WaitForOneFrame;
+            int Stack = 0;
+
+            foreach (var player in PlayerManager.List.Where(x => x.IsHuman))
+            {
+                if (Stack == 4)
+                    break;
+
+                if (Vector3.Distance(player.Position, ev.Player.Position) < 31)
+                {
+                    Stack += 1;
+
+                    ev.Scp096.AddTarget(player);
+
+                    player.AddHint("본능",
+                        $"<color={ABattle.RatingColor["전용"]}>본능</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
+                }
             }
+
+            ev.Player.AddHint("본능", $"<color={ABattle.RatingColor["전용"]}>본능</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
         }
     }
 }

@@ -3,7 +3,7 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {
-    [RankAbility("날카로움Ⅴ", "공격력이 39 증가합니다.", RankAbilityType.날카로움_5, RankCategory.SCP_096, RankAbilityCategory.변칙성, "🔪")]
+    [RankAbility("날카로움 Ⅴ", "공격력이 30 증가합니다.", RankAbilityType.날카로움_5, RankCategory.SCP_096, RankAbilityCategory.변칙성, "🔪")]
     public class 날카로움_5 : RankAbility
     {
         public override void OnEnabled()
@@ -19,7 +19,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
         void OnHurting(HurtingEventArgs ev)
         {
             if (ev.Attacker != null && ev.Attacker == Owner)
-                ev.DamageHandler.Damage += 39;
+                ev.DamageHandler.Damage += 30;
         }
     }
 }

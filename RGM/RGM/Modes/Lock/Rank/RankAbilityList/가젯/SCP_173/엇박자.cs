@@ -5,7 +5,7 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("엇박자", "다음 이동 쿨타임을 즉시 1초로 조정합니다.", RankAbilityType.엇박자, RankCategory.SCP_173, "🎶", 120)]
+    [RankGadget("엇박자", "다음 이동 쿨타임을 즉시 1초로 조정합니다.", RankAbilityType.엇박자, RankCategory.SCP_173, "🎶", 30)]
     public class 엇박자 : RankGadgetAbility
     {
         protected override void OnGadgetUsed()
