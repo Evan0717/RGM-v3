@@ -1,8 +1,8 @@
 ﻿using Exiled.API.Features.DamageHandlers;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
 using System.Collections.Generic;
 using System.Linq;
-using Achievements.Handlers;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
@@ -16,11 +16,13 @@ using RGM.API.DataBases;
 using static RGM.Variables.Variable;
 using Respawning;
 using Exiled.API.Features.Waves;
-using LabApi.Features.Wrappers;
 using Door = Exiled.API.Features.Doors.Door;
+using ChaosMiniWave = Respawning.Waves.ChaosMiniWave;
+using NtfMiniWave = Respawning.Waves.NtfMiniWave;
 using Player = Exiled.API.Features.Player;
 using Round = Exiled.API.Features.Round;
 using Server = Exiled.API.Features.Server;
+using SpawnableWaveBase = Respawning.Waves.SpawnableWaveBase;
 using Warhead = Exiled.API.Features.Warhead;
 
 namespace RGM.Modes
@@ -47,6 +49,7 @@ namespace RGM.Modes
         Player juggernaut;
         List<Player> ScpAttackCooldown = new List<Player>();
         Dictionary<Player, float> PlayerDamages = new Dictionary<Player, float>();
+        HashSet<SpawnableWaveBase> juggernautExternalSupportWaves = new HashSet<SpawnableWaveBase>();
         Speaker speaker;
         float stack = 0;
 
@@ -69,6 +72,8 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
+            Exiled.Events.Handlers.Server.RespawnedTeam += OnRespawnedTeam;
+
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
@@ -88,7 +93,11 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
 
+            Exiled.Events.Handlers.Server.RespawnedTeam -= OnRespawnedTeam;
+
             Exiled.Events.Handlers.Item.ChargingJailbird -= OnChargingJailbird;
+
+            juggernautExternalSupportWaves.Clear();
 
             Timing.KillCoroutines(_onModeStarted);
             Timing.KillCoroutines(_autoWarhead);
@@ -136,6 +145,47 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(1f);
             }
         }
+
+        bool IsJuggernautTeam(Player player)
+        {
+            return player == juggernaut || player.Role.Type == RoleTypeId.Tutorial;
+        }
+
+        bool TryGetExternalSupportWave<T>(out SpawnableWaveBase wave) where T : SpawnableWaveBase
+        {
+            if (WaveManager.TryGet<T>(out T spawnWave))
+            {
+                wave = spawnWave;
+                return true;
+            }
+
+            wave = null;
+            return false;
+        }
+
+        void CallJuggernautExternalSupport()
+        {
+            if (Round.IsEnded || !PlayerManager.List.Any(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch))
+                return;
+
+            SpawnableWaveBase wave;
+
+            if (UnityEngine.Random.Range(1, 3) == 1)
+            {
+                if (!TryGetExternalSupportWave<NtfMiniWave>(out wave) && !TryGetExternalSupportWave<ChaosMiniWave>(out wave))
+                    return;
+            }
+            else
+            {
+                if (!TryGetExternalSupportWave<ChaosMiniWave>(out wave) && !TryGetExternalSupportWave<NtfMiniWave>(out wave))
+                    return;
+            }
+
+            juggernautExternalSupportWaves.Add(wave);
+            Timing.CallDelayed(10f, () => juggernautExternalSupportWaves.Remove(wave));
+            WaveManager.Spawn(wave);
+        }
+
         public IEnumerator<float> OnModeStarted()
         {  
             Door.Get(DoorType.EscapeFinal).IsOpen = true;
@@ -189,14 +239,11 @@ namespace RGM.Modes
             // 저거너트 외부 지원 호출 구현(2번에 나눠서)
             Timing.RunCoroutine(JuggernautExternalTimer());
             yield return Timing.WaitForSeconds(75f); // 1차 호출
-            /*
-             * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
-             */
+            CallJuggernautExternalSupport();
+
             Timing.RunCoroutine(JuggernautExternalTimer());
             yield return Timing.WaitForSeconds(75f); // 2차 호출
-            /*
-             * NTFMiniWave 또는 ChaosMiniWave 중에서 랜덤으로 Instant Respawn 하고, 이를 튜토리얼로 변경
-             */
+            CallJuggernautExternalSupport();
             
             // 초토화 작전 구현
             Timing.RunCoroutine(AnnihilationTimer()); 
@@ -208,25 +255,19 @@ namespace RGM.Modes
             {
                 if (juggernaut.IsAlive)
                 {
-                    if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).Count() < 2) {
+                    List<Player> alivePlayers = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList();
+                    List<Player> aliveJuggernautTeam = alivePlayers.Where(IsJuggernautTeam).ToList();
+
+                    if (!alivePlayers.Except(aliveJuggernautTeam).Any()) {
                         PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
                         IsEnd = true;
-                        Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 11));
-                        /*
-                         * 저거너트 외부 지원 호출 기능을 추가할 것이기 때문에, 기존의 검사 방식을 사용하면 안 됨.
-                         * 이제 저거너트랑 튜토리얼을 같은 팀으로 취급하기 때문에, 이를 검사하는 방식으로 구현하되,
-                         * 저거너트 단 하나만 생존할 경우 기존의 시스템을 그대로 사용.
-                         *
-                         * 저거너트만 살아있는가?
-                         * 저거너트랑 튜토리얼이 같이 살았는가?
-                         * 를 봐야 함.
-                         */
+                        Timing.RunCoroutine(Tools.SetWinner(aliveJuggernautTeam, aliveJuggernautTeam.Count == 1 ? 20 : 4));
                     }
                 }
                 else {
                     PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, "<size=25><color=#298A08>저거너트</color>가 사망했습니다.</size>\n<b>Site-76 구성원</b>들의 승리입니다."));
                     IsEnd = true;
-                    Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 1));
+                    Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 2));
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -308,6 +349,14 @@ namespace RGM.Modes
             Spawned(ev.Player);
         }
 
+        public void OnRespawnedTeam(RespawnedTeamEventArgs ev)
+        {
+            if (!juggernautExternalSupportWaves.Remove(ev.Wave))
+                return;
+
+            global::RGM.EventArgs.ServerEvents.CallTutorialSupport(ev.Players);
+        }
+
         public void Spawned(Player player)
         {
             if (player.IsAlive && player.IsScpRole())
@@ -348,7 +397,16 @@ namespace RGM.Modes
         {
             if (ev.Attacker != null)
             {
-                if (ev.Player == juggernaut || ev.Attacker == juggernaut)
+                bool isPlayerJuggernautTeam = IsJuggernautTeam(ev.Player);
+                bool isAttackerJuggernautTeam = IsJuggernautTeam(ev.Attacker);
+
+                if (isPlayerJuggernautTeam == isAttackerJuggernautTeam)
+                {
+                    ev.IsAllowed = false;
+                    yield break;
+                }
+
+                if (isPlayerJuggernautTeam || isAttackerJuggernautTeam)
                 {
                     if (ev.Attacker == juggernaut && ev.Player != juggernaut)
                     {
@@ -357,33 +415,26 @@ namespace RGM.Modes
 
                         ev.DamageHandler.Damage *= 3.35f;
                     }
-                    else if (ev.Attacker != juggernaut && ev.Player == juggernaut)
+                    else if (ev.Player == juggernaut)
                     {
                         if (!PlayerDamages.ContainsKey(ev.Attacker))
                             PlayerDamages.Add(ev.Attacker, 0);
-                        /*
-                         * RoleId가 Tutorial인 경우 juggernaut랑 서로 데미지를 입지 않아야 함.
-                         * (두 진영을 같은 팀으로 만들어야 하기 때문)
-                         */
+
                         PlayerDamages[ev.Attacker] += ev.DamageHandler.Damage;
                         stack += ev.DamageHandler.Damage;
 
-                        while (true) {
-                            if (stack > 300) {
-                                Respawn.GrantInfluence(Faction.FoundationStaff, 20);
-                                Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
-                                      
-                                if (stack > 3000) {
-                                    Respawn.GrantTokens(Faction.FoundationStaff, 1);
-                                    Respawn.GrantTokens(Faction.FoundationEnemy, 1);
-                                    /*
-                                     * stack이 3000이 넘을 경우, NTF 또는 CHAOS 중에서 랜덤으로 지원을 즉시 호출
-                                     * 단, Instant Respawn이 아닌 일반 Respawn으로 작동
-                                     */
-                                    stack = 0;
-                                    break;
-                                }
-
+                        if (stack > 300) {
+                            Respawn.GrantInfluence(Faction.FoundationStaff, 20);
+                            Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
+                                  
+                            if (stack > 3000) {
+                                Respawn.GrantTokens(Faction.FoundationStaff, 1);
+                                Respawn.GrantTokens(Faction.FoundationEnemy, 1);
+                                /*
+                                 * stack이 3000이 넘을 경우, NTF 또는 CHAOS 중에서 랜덤으로 지원을 즉시 호출
+                                 * 단, Instant Respawn이 아닌 일반 Respawn으로 작동
+                                 */
+                                stack = 0;
                             }
                         }
 
