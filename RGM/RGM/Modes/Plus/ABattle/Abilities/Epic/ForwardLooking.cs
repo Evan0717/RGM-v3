@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("전방주시태만", "총알을 막아주는 방패를 몸 뒤에 장착합니다. 누군가 근처에 오면 방패가 비활성화됩니다.", AbilityCategory.Epic, AbilityType.EPIC_FORWARDLOOKING)]
+//[Ability("전방주시태만", "총알을 막아주는 방패를 몸 뒤에 장착합니다. 누군가 근처에 오면 방패가 비활성화됩니다.", AbilityCategory.Epic, AbilityType.EPIC_FORWARDLOOKING)]
 public class ForwardLooking : Ability
 {
     CoroutineHandle _onStarted;

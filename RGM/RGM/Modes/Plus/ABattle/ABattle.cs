@@ -596,7 +596,7 @@ public class ABattle : Mode
         return GetAbility(player, type) != null;
     }
 
-    public List<AbilityType> GetRandomAbilities(Player player, AbilityCategory category, int count)
+    public List<AbilityType> GetRandomAbilities(Player player, AbilityCategory category, int count, IEnumerable<AbilityType> exceptTypes = null)
     {
         var abilities = Abilities
             .Where(x => x.Value.Category == category)
@@ -612,6 +612,12 @@ public class ABattle : Mode
 
         if (category == AbilityCategory.Dummy)
             abilities = Abilities.ToList();
+
+        if (exceptTypes != null)
+        {
+            var excludedAbilityTypes = exceptTypes.ToHashSet();
+            abilities = abilities.Where(x => !excludedAbilityTypes.Contains(x.Key)).ToList();
+        }
 
         abilities.ShuffleList();
 
@@ -887,38 +893,28 @@ public class ABattle : Mode
         if (player.Role == RoleTypeId.Scp079)
             return AbilityCategory.Scp079;
 
-        var random = Random.Range(1, 10001);
+        var random = Random.Range(1, 10001); //0.001 단위
 
         if (CurrentExtraModes.Contains("잔칫상"))
         {
-            switch (random)
+            return random switch
             {
-                case <= 10:
-                    return AbilityCategory.Mythic;
-                case <= 50:
-                    return AbilityCategory.Legend;
-                case <= 550:
-                    return AbilityCategory.Epic;
-                case <= 2950:
-                    return AbilityCategory.Rare;
-                default:
-                    return AbilityCategory.Common;
-            }
+                <= 12 => AbilityCategory.Mythic, // 0.012
+                <= 60 => AbilityCategory.Legend, // 0.06
+                <= 638 => AbilityCategory.Epic, // 6.38
+                <= 3420 => AbilityCategory.Rare, // 34.2
+                _ => AbilityCategory.Common // 59.42
+            };
         }
 
-        switch (random)
+        return random switch
         {
-            case <= 5:
-                return AbilityCategory.Mythic;
-            case <= 25:
-                return AbilityCategory.Legend;
-            case <= 535:
-                return AbilityCategory.Epic;
-            case <= 3005:
-                return AbilityCategory.Rare;
-            default:
-                return AbilityCategory.Common;
-        }
+            <= 5 => AbilityCategory.Mythic, // 0.005
+            <= 25 => AbilityCategory.Legend, // 0.025
+            <= 535 => AbilityCategory.Epic, // 5.35
+            <= 3005 => AbilityCategory.Rare, // 30.05
+            _ => AbilityCategory.Common // 64.57
+        };
     }
 
     public bool Select(Player player, int index, out string response)
@@ -1016,7 +1012,7 @@ public class ABattle : Mode
                 player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
 
             else
-                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1).First());
+                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1, [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
@@ -1039,7 +1035,7 @@ public class ABattle : Mode
                     return AbilityCategory.Epic;
                 }
 
-                player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1).First());
+                player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1,[AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
             }
         }
     }
