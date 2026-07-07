@@ -163,27 +163,44 @@ namespace RGM.Modes
             return false;
         }
 
+        bool TryGetRandomSupportWave(out SpawnableWaveBase wave)
+        {
+            if (Random.Range(1, 3) == 1)
+            {
+                return TryGetExternalSupportWave<NtfMiniWave>(out wave) || TryGetExternalSupportWave<ChaosMiniWave>(out wave);
+            }
+
+            return TryGetExternalSupportWave<ChaosMiniWave>(out wave) || TryGetExternalSupportWave<NtfMiniWave>(out wave);
+        }
+
         void CallJuggernautExternalSupport()
         {
             if (Round.IsEnded || !PlayerManager.List.Any(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch))
                 return;
 
-            SpawnableWaveBase wave;
-
-            if (UnityEngine.Random.Range(1, 3) == 1)
-            {
-                if (!TryGetExternalSupportWave<NtfMiniWave>(out wave) && !TryGetExternalSupportWave<ChaosMiniWave>(out wave))
-                    return;
-            }
-            else
-            {
-                if (!TryGetExternalSupportWave<ChaosMiniWave>(out wave) && !TryGetExternalSupportWave<NtfMiniWave>(out wave))
-                    return;
-            }
+            if (!TryGetRandomSupportWave(out SpawnableWaveBase wave))
+                return;
 
             juggernautExternalSupportWaves.Add(wave);
             Timing.CallDelayed(10f, () => juggernautExternalSupportWaves.Remove(wave));
             WaveManager.Spawn(wave);
+        }
+
+        void CallRegularSupport()
+        {
+            if (Round.IsEnded || !PlayerManager.List.Any(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch))
+                return;
+
+            if (!TryGetRandomSupportWave(out SpawnableWaveBase wave))
+                return;
+
+            Respawn.GrantTokens(wave.TargetFaction, 1);
+
+            if (!WaveTimer.TryGetWaveTimers(wave.TargetFaction, out List<WaveTimer> waves))
+                return;
+
+            foreach (var w in waves)
+                w.SetTime(0);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -230,9 +247,9 @@ namespace RGM.Modes
             juggernaut.EnableEffect(EffectType.NightVision, 100);
             juggernaut.EnableEffect(EffectType.Scp1344, 1);
             juggernaut.EnableEffect(EffectType.Scp1853, 1);
-            juggernaut.EnableEffect(EffectType.Scp207, 1);
+            juggernaut.EnableEffect(EffectType.Scp207, 2);
             juggernaut.EnableEffect(EffectType.FogControl, 1);
-            juggernaut.EnableEffect(EffectType.Bleeding, 1);
+            juggernaut.EnableEffect(EffectType.Bleeding, 5);
             PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신, 중독과 출혈 효과를 받습니다.</size>"));
             yield return Timing.WaitForSeconds(10f);
             
@@ -298,11 +315,13 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (Tools.TryGetNearestPlayer(juggernaut, out Player nearestPlayer, out float radius))
-                    juggernaut.AddHint("저거너트 레이더", $"<b>[ <color={nearestPlayer.Role.Color.ToHex()}>{( Trans.Role[nearestPlayer.Role.Type])}</color>, 거리: {radius.ToString("F1")}m ]</b>", 1.2f);
-
+                if (Tools.TryGetNearestPlayer(juggernaut, out _, out var radius))
+                {
+                    int alivePlayersCount = PlayerManager.List.Count(x => x.IsAlive && !x.IsNPC && !IsJuggernautTeam(x));
+                    juggernaut.AddHint("저거너트 레이더", $"<b>[ 남은 인원 : {alivePlayersCount}명 | 가장 가까운 유기체와의 거리 : {radius:F1}m ]</b>", 1.1f);
+                }
                 else
-                    juggernaut.AddHint("저거너트 승리", "당신은 임무를 완수하였습니다.", 1.2f);
+                    juggernaut.AddHint("저거너트 승리", "당신은 임무를 완수하였습니다.", 1.1f);
 
                 yield return Timing.WaitForSeconds(1f);
             }
@@ -337,7 +356,7 @@ namespace RGM.Modes
                     bool flag = WaveTimer.TryGetWaveTimers(wave.TargetFaction, out List<WaveTimer> waves);
 
                     foreach (var w in waves)
-                        w.SetTime((int)w.TimeLeft.TotalSeconds - 3);
+                        w.SetTime((int)w.TimeLeft.TotalSeconds - 5);
                 }
 
                 yield return Timing.WaitForSeconds(0.5f);
@@ -354,7 +373,7 @@ namespace RGM.Modes
             if (!juggernautExternalSupportWaves.Remove(ev.Wave))
                 return;
 
-            global::RGM.EventArgs.ServerEvents.CallTutorialSupport(ev.Players);
+            EventArgs.ServerEvents.CallTutorialSupport(ev.Players);
         }
 
         public void Spawned(Player player)
@@ -397,8 +416,8 @@ namespace RGM.Modes
         {
             if (ev.Attacker != null)
             {
-                bool isPlayerJuggernautTeam = IsJuggernautTeam(ev.Player);
-                bool isAttackerJuggernautTeam = IsJuggernautTeam(ev.Attacker);
+                var isPlayerJuggernautTeam = IsJuggernautTeam(ev.Player);
+                var isAttackerJuggernautTeam = IsJuggernautTeam(ev.Attacker);
 
                 if (isPlayerJuggernautTeam == isAttackerJuggernautTeam)
                 {
@@ -428,12 +447,7 @@ namespace RGM.Modes
                             Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
                                   
                             if (stack > 3000) {
-                                Respawn.GrantTokens(Faction.FoundationStaff, 1);
-                                Respawn.GrantTokens(Faction.FoundationEnemy, 1);
-                                /*
-                                 * stack이 3000이 넘을 경우, NTF 또는 CHAOS 중에서 랜덤으로 지원을 즉시 호출
-                                 * 단, Instant Respawn이 아닌 일반 Respawn으로 작동
-                                 */
+                                CallRegularSupport();
                                 stack = 0;
                             }
                         }
@@ -482,7 +496,8 @@ namespace RGM.Modes
             {
                 if (ev.Effect.GetEffectType() == EffectType.PocketCorroding) ev.IsAllowed = false;
 
-                else if (ev.Effect.GetEffectType().GetCategories() == EffectCategory.Negative)
+                else if (ev.Effect.GetEffectType().GetCategories() == EffectCategory.Harmful ||
+                         ev.Effect.GetEffectType().GetCategories() == EffectCategory.Negative)
                 {
                     if (Warhead.IsDetonated) return;
                     

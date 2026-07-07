@@ -18,13 +18,13 @@ public class CompetentDoctor : Ability
 
     public void OnFinishingRecall(FinishingRecallEventArgs ev)
     {
-        if (ev.Player != Owner)
-            return;
-        
-        Timing.CallDelayed(1f, () =>
+        if (ev.Player == Owner)
         {
-            ev.Target.MaxHealth *= 1.5f;
-            ev.Target.Health = ev.Target.MaxHealth;
-        });
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                ev.Target.MaxHealth *= 1.5f;
+                ev.Target.Health = ev.Target.MaxHealth;
+            });
+        }
     }
 }
