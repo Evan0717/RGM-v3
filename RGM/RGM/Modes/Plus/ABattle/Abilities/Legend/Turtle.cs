@@ -9,6 +9,7 @@ namespace RGM.Modes.Abilities.Legend;
 public class Turtle : Ability
 {
     const float MaxDamage = 40f;
+    const float GodModeDuration = 2.2f;
 
     public override void OnEnabled()
     {
@@ -29,25 +30,28 @@ public class Turtle : Ability
         {
             ev.IsAllowed = false;
             ev.Player.Hurt(MaxDamage, ev.DamageHandler.Type);
-            
-            GodModePlayers.Add(Owner);
-            Timing.CallDelayed(2.2f, () => 
-            {
-                if (GodModePlayers.Contains(Owner))
-                    GodModePlayers.Remove(Owner);
-            });
+
+            ActivateGodMode();
             return;
         }
 
         if (ev.DamageHandler.Damage > MaxDamage) {
             ev.DamageHandler.Damage = MaxDamage;
-            
-            GodModePlayers.Add(Owner);
-            Timing.CallDelayed(2.2f, () =>
-            {
-                if (GodModePlayers.Contains(Owner))
-                    GodModePlayers.Remove(Owner);
-            });
+
+            ActivateGodMode();
         }
+    }
+
+    private void ActivateGodMode()
+    {
+        if (GodModePlayers.Contains(Owner))
+            return;
+
+        GodModePlayers.Add(Owner);
+        Timing.CallDelayed(GodModeDuration, () =>
+        {
+            if (GodModePlayers.Contains(Owner))
+                GodModePlayers.Remove(Owner);
+        });
     }
 }

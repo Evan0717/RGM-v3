@@ -318,6 +318,7 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\BullsEye.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ContExpert.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\CSTC.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\HolyProtection.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Rambo.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\SpringfieldM1A.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Turtle.cs" />

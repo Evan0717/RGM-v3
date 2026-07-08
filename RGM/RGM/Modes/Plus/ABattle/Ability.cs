@@ -364,6 +364,7 @@ public enum AbilityType
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSTC, // [영웅] 대학수학능력시험
+    EPIC_HOLYPROTECTION, // [영웅] 신성방어
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건

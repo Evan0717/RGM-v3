@@ -10,9 +10,12 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("워 머신", "발사할 때마다 고폭 수류탄을 투하하는, 탄약이 무제한인 리볼버를 얻습니다.\n자신이 받는 폭발 데미지가 95% 감소합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_BOMBGUN)]
+[Ability("워 머신", "발사할 때마다 고폭 수류탄을 투하하는, 탄약이 무제한인 리볼버를 얻습니다.\n능력 획득 시 자신이 받는 폭발 데미지가 97% 감소합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_BOMBGUN)]
 public class BombGun : Ability
 {
+    const float OwnerExplosionDamageMultiplier = 0.03f;
+    const float WarMachineGrenadeDamageMultiplier = 0.6f;
+
     ushort itemSerial = 0;
     readonly List<ExplosionGrenadeProjectile> bombGunGrenades = new();
 
@@ -29,10 +32,6 @@ public class BombGun : Ability
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
-        Exiled.Events.Handlers.Player.Shooting -= OnShooting;
-        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-
         bombGunGrenades.Clear();
     }
 
@@ -62,11 +61,11 @@ public class BombGun : Ability
     {
         if (ev.DamageHandler.Type != DamageType.Explosion) return;
 
-        if (ev.Player == Owner)
-            ev.DamageHandler.Damage *= 0.05f;
+        if (ABattle.Instance.HasAbility(ev.Player, AbilityType.MYTHIC_BOMBGUN))
+            ev.DamageHandler.Damage *= OwnerExplosionDamageMultiplier;
 
         if (ev.Attacker == Owner && bombGunGrenades.Any(grenade => grenade != null && Vector3.Distance(grenade.Position, ev.Player.Position) <= 10f))
-            ev.DamageHandler.Damage *= 0.7f;
+            ev.DamageHandler.Damage *= WarMachineGrenadeDamageMultiplier;
     }
     public IEnumerator<float> ExplodeOnImpact(Throwable throwable)
     {

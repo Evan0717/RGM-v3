@@ -21,7 +21,7 @@ public class Test : Ability
 
                     for (int i = 0; i < 3; i++) {
                         var category = Random.Range(1, 101) <= 33 ? AbilityCategory.Rare : AbilityCategory.Common;
-                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1)[0]);
+                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1,[AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
                     }
                     Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);
                 }
