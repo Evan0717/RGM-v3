@@ -67,17 +67,24 @@ public class BALLISTAEM3 : Ability
         Waiting();     
         if (_serial != ev.Attacker.CurrentItem.Serial) return;
         if (!Tools.TryGetLookPlayers(ev.Attacker, 75f, out List<Player> players, out _)) return;
-        bool enemy = false;
 
         Log.Info(players.Count);
         
-        foreach (var player in players.Where(player => HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, player.ReferenceHub)).Where(player => player.Role != RoleTypeId.Spectator))
+        foreach (var player in players.Where(player => HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub,
+                         player.ReferenceHub))
+                     .Where(player => player.Role != RoleTypeId.Spectator))
         {
+            if (player.IsNPC)
+            {
+                Hit(player.ReferenceHub, ev.Attacker.ReferenceHub, 1.5f);
+                continue;
+            }          
+            
             if (!ABattle.Instance.PlayerAbilities.TryGetValue(player, out var ability) || ability.Count <= 0)
-                player.Hit(ev.Attacker, Damage);
+                Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
             else if (Mathf.Clamp01(Random.Range(0.0f, 1f)) >= .1f)
             {
-                player.Hit(ev.Attacker, Damage);
+                Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
                 
                 player.DisableAllEffects();
                 player.RemoveAllAbilities();
@@ -86,17 +93,29 @@ public class BALLISTAEM3 : Ability
                 ABattle.Instance.PlayerWorkstations[player].Clear();
             }
             else
-                player.Hit(ev.Attacker, 4105);
+                Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
             
-            enemy = true;
+            
         }
-        if (enemy)
-            Hitmarker.SendHitmarkerDirectly(ev.Attacker.ReferenceHub, 3f);
     }
 
     private void Waiting()
     {
         _isActive = true;
         Timing.CallDelayed(3f, () => _isActive = false);
+    }
+
+    private bool _isHitActive; 
+    private void Hit(ReferenceHub victim, ReferenceHub attacker, float size = 3f)
+    {
+        if (!Player.TryGet(victim, out var player)) return;
+        if (!Player.TryGet(attacker, out var attack)) return;
+        if (_isHitActive)
+            Timing.CallDelayed(0.1f, () => Hit(victim, attacker, size));
+        
+        _isHitActive = true;
+        player.Hit(attack, Damage);
+        Hitmarker.SendHitmarkerDirectly(attacker, size);
+        _isHitActive = false;
     }
 }
