@@ -6,17 +6,17 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("장미칼", "이 명검은 무한으로 발산하는 힘을 가지고 있습니다..\n27% 확률로 진영을 변경하며, 변경 실패 시 마다 공격력이 2배 증가합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
+[Ability("장미칼", "이 명검은 무한으로 발산하는 힘을 가지고 있습니다...\n(30% 확률로 진영을 변경하며, 변경 실패 시 마다 공격력이 2배 증가합니다. 기본 데미지가 50 증가합니다.)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
 public class Rosehip : Ability
 {
     ushort serial = 0;
-    float damageMultiplier = 1f;
+    float damageMultiplier = 2f;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.SCP1509);
         serial = item.Serial;
-        damageMultiplier = 1f;
+        damageMultiplier = 2f;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -38,9 +38,9 @@ public class Rosehip : Ability
         if (ev.Attacker == null ||
             ev.Attacker.CurrentItem == null ||
             ev.Attacker.CurrentItem.Serial != serial) return;
-        if (UnityEngine.Random.Range(1, 101) <= 27)
+        if (UnityEngine.Random.Range(1, 101) <= 30)
         {
-            damageMultiplier = 1f;
+            damageMultiplier = 2f;
             ev.IsAllowed = false;
             ev.Player.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
             return;

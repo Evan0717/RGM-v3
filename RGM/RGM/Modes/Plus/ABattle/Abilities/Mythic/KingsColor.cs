@@ -48,9 +48,9 @@ public class KingsColor : Ability
                         lightSource.Position = Owner.Position;
 
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
-                        player.EnableEffect(EffectType.Slowness, 80, 0.8f);
+                        player.EnableEffect(EffectType.Slowness, 80, 1f);
                         player.CurrentItem = null;
-                        player.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.019f : target.MaxHealth * 0.113f);
+                        player.Hit(Owner, target.IsScpRole() ? 10 + target.MaxHealth * 0.04f : 20 + target.MaxHealth * 0.16f);
                     }
                 }
             }

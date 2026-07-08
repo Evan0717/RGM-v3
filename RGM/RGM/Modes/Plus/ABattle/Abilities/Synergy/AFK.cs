@@ -6,7 +6,17 @@ public class AFK : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddAhp(1205, 1205, 0);
+        for (int i = 0; i < 3; i++) {
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Epic, 1)[0]);
+        }
+        for (int i = 0; i < 6; i++) {
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(
+                Owner, AbilityCategory.Rare, 1,[AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
+        }
+        for (int i = 0; i < 9; i++) {
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(
+                Owner, AbilityCategory.Common, 1,[AbilityType.NORMAL_REROLL])[0]);
+        }
     }
 
     public override void OnDisabled()

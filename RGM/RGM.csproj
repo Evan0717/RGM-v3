@@ -311,13 +311,19 @@
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbility.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\Rank.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\CSTCFail.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\CSTCSuccess.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\FinalExamFail.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\FinalExamSuccess.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\BullsEye.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ContExpert.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\CSTC.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Rambo.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\SpringfieldM1A.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Turtle.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Mythic\Anchor.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Rare\FinalExam.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
@@ -787,9 +793,7 @@
     <Reference Include="MultiBroadcast">
       <HintPath>$(EXILED_REFERENCES)\MultiBroadcast.dll</HintPath>
     </Reference>
-    <Reference Include="netstandard">
-      <HintPath>$(EXILED_REFERENCES)\netstandard.dll</HintPath>
-    </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
     </Reference>

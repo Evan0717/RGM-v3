@@ -262,6 +262,10 @@ public enum AbilityType
     DUMMY_NOAFK, // [더미] 자리 다비움
     DUMMY_USEDSNAKEHANDRADIO, // [더미] 뱀의 손 수장
     DUMMY_TELEPORTED, // [더미] 순간이동됨
+    DUMMY_FINALEXAMSUCCESS, // [더미] 기말고사 수석
+    DUMMY_FINALEXAMFAIL, // [더미] 기말고사 낙제
+    DUMMY_CSTCSUCCESS, // [더미] 대학수학능력시험 1등급
+    DUMMY_CSTCFAIL, // [더미] 대학수학능력시험 9등급
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -326,6 +330,7 @@ public enum AbilityType
     RARE_ORGANICMILK, // [희귀] 유기농 우유
     RARE_CANDYBAG, // [희귀] 사탕 봉지
     RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
+    RARE_FINALEXAM, // [희귀] 기말고사
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -336,7 +341,6 @@ public enum AbilityType
     EPIC_LUCKYVIKEY, // [영웅] 럭키비키
     EPIC_EXTREMEPOISON, // [영웅] 극독
     EPIC_SURVIVOR, // [영웅] 구사일생
-    EPIC_REGENERATION, // [영웅] 초재생
     EPIC_GHOSTRULE, // [영웅] 고스트룰
     EPIC_DIVER, // [영웅] 잠수부
     EPIC_BLINK, // [영웅] 점멸
@@ -359,6 +363,7 @@ public enum AbilityType
     EPIC_BULLSEYE, // [영웅] 불스아이
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
+    EPIC_CSTC, // [영웅] 대학수학능력시험
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
