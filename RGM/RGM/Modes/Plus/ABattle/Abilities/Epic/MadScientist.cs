@@ -59,7 +59,6 @@ public class MadScientist : Ability
     private void OnDetonating(DetonatingEventArgs e)
     {
         _isDetonatingState = true;
-
-        Timing.CallDelayed(Timing.WaitForOneFrame, () => _isDetonatingState = false);
+        Timing.CallDelayed(.5f, () => _isDetonatingState = false);
     }
 }
