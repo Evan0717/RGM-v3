@@ -158,7 +158,7 @@ namespace RGM.UserSettings
                         player.ClearInventory();
                         player.Kill("관전석으로 되돌아갑니다.");
                     }
-                    else if (Round.IsLobby ? true : player.IsDead)
+                    else if (Round.IsLobby || player.IsDead)
                     {
                         NonePlayer.Create(player);
                     }
