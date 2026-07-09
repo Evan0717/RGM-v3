@@ -374,7 +374,7 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Diver.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\EpicTransition.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ExtremePoison.cs" />
-    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ForwardLooking.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\AN94.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Gambler.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\GhostRule.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\GraveRobber.cs" />

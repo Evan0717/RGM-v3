@@ -365,6 +365,7 @@ public enum AbilityType
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSTC, // [영웅] 대학수학능력시험
     EPIC_HOLYPROTECTION, // [영웅] 신성방어
+    EPIC_AN94, // // [영웅] AN-94
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건

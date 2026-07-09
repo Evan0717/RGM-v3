@@ -31,7 +31,8 @@ public class HolyProtection : Ability
         EffectType.Lightweight,
         EffectType.NightVision,
         EffectType.FogControl,
-        EffectType.PitDeath
+        EffectType.PitDeath,
+        EffectType.Decontaminating
     ];
 
     public override void OnEnabled()

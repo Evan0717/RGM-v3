@@ -355,14 +355,17 @@ namespace RGM.EventArgs
 
                 string ranking(int r)
                 {
-                    if (r == 1)
-                        return "fffa66";
-                    else if (r == 2)
-                        return "808d8e";
-                    else if (r == 3)
-                        return "dfae4d";
-                    else
-                        return "ffffff";
+                    switch (r)
+                    {
+                        case 1:
+                            return "fffa66";
+                        case 2:
+                            return "808d8e";
+                        case 3:
+                            return "dfae4d";
+                        default:
+                            return "ffffff";
+                    }
                 }
 
                 foreach (var kv in top10)

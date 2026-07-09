@@ -33,7 +33,8 @@ public class OrganicMilk : Ability
         EffectType.Lightweight,
         EffectType.NightVision,
         EffectType.FogControl,
-        EffectType.PitDeath
+        EffectType.PitDeath,
+        EffectType.Decontaminating
     ];
     ushort CoinSerial = 0;
 

@@ -20,6 +20,9 @@ public class SpringfieldM1A : Ability
         FirearmTriggerStatePatch.Ensure();
 
         Item item = Owner.AddItem(ItemType.GunE11SR);
+        for (int i = 0; i < 3; i++) {
+            Owner.AddItem(ItemType.Ammo556x45);
+        }
 
         _m1ASerial = item.Serial;
         ApplySpringfieldSettings(item.As<Firearm>());

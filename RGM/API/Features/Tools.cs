@@ -559,7 +559,8 @@ $"""
                 ItemType.GunFSP9,
                 ItemType.GunRevolver,
                 ItemType.Adrenaline,
-                ItemType.AntiSCP207
+                ItemType.SCP500,
+                ItemType.ArmorLight
             };
 
             List<ItemType> Ammos = new List<ItemType>

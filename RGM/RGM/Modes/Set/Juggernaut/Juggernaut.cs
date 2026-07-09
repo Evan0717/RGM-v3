@@ -203,6 +203,13 @@ namespace RGM.Modes
                 w.SetTime(0);
         }
 
+        void TriggerAnnihilation()
+        {
+            foreach (var player in PlayerManager.List.Where(x => true))
+            {
+                player.Kill("패기에 의해 공중분해 되었습니다");
+            }
+        }
         public IEnumerator<float> OnModeStarted()
         {  
             Door.Get(DoorType.EscapeFinal).IsOpen = true;
@@ -216,7 +223,7 @@ namespace RGM.Modes
             
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            juggernaut.MaxHealth = 530 * PlayerManager.List.Count();
+            juggernaut.MaxHealth = 580 * PlayerManager.List.Count();
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
@@ -250,7 +257,8 @@ namespace RGM.Modes
             juggernaut.EnableEffect(EffectType.Scp207, 2);
             juggernaut.EnableEffect(EffectType.FogControl, 1);
             juggernaut.EnableEffect(EffectType.Bleeding, 5);
-            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신, 중독과 출혈 효과를 받습니다.</size>"));
+            juggernaut.EnableEffect(EffectType.Burned, 1);
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10, "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신 지속 피해를 받으며, 받는 피해가 25% 증가합니다.</size>"));
             yield return Timing.WaitForSeconds(10f);
             
             // 저거너트 외부 지원 호출 구현(2번에 나눠서)
@@ -265,6 +273,7 @@ namespace RGM.Modes
             // 초토화 작전 구현
             Timing.RunCoroutine(AnnihilationTimer()); 
             yield return Timing.WaitForSeconds(120f); // 외부지원 호출에도 게임이 끝나지 않을 경우
+            TriggerAnnihilation();
             
             
             bool IsEnd = false;
@@ -454,10 +463,10 @@ namespace RGM.Modes
 
                         foreach (var wave in WaveManager.Waves)
                         {
-                            bool flag = WaveTimer.TryGetWaveTimers(wave.TargetFaction, out List<WaveTimer> waves);
+                            WaveTimer.TryGetWaveTimers(wave.TargetFaction, out List<WaveTimer> waves);
 
                             foreach (var w in waves)
-                                w.SetTime((int)w.TimeLeft.TotalSeconds - 3);
+                                w.SetTime((int)w.TimeLeft.TotalSeconds - 5);
                         }
 
                         List<RoleTypeId> Scps = new List<RoleTypeId>() 
