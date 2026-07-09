@@ -296,6 +296,11 @@ namespace RGM.Variables
             ModeType.Spirit
         ];
 
+        public static readonly List<RoleTypeId> SuicideBlockedRoles = 
+        [
+            RoleTypeId.Tutorial
+        ];
+
         public static readonly List<ModeType> ScpSuicideAvailableModes =
         [
             ModeType.Infection
