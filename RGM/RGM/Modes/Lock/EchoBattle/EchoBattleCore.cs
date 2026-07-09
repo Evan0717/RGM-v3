@@ -70,7 +70,16 @@ public static class EchoBattleCore
         echo.Owner = player;
         echo.Level = EchoStats.Clamp(level, 1, EchoInfo.MaxLevel);
         echo.IsMainSlot = isMainSlot;
-        echo.SubOptions = EchoStats.GenerateSubOptions(echo.Level, (player.UserId?.GetHashCode() ?? 0) ^ (int)type ^ level);
+
+        if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
+        {
+            loadout = new EchoLoadout();
+            EchoInfo.PlayerLoadouts[player] = loadout;
+        }
+
+        // 기존 부가 옵션 유지 + 해금분만 추가 (레벨업 재적용 시 재롤/수치 하락 방지)
+        int seedBase = (player.UserId?.GetHashCode() ?? 0) ^ (int)type;
+        echo.SubOptions = EchoStats.EnsureSubOptions(loadout, type, echo.Level, seedBase);
 
         if (!EchoInfo.PlayerEchoes.ContainsKey(player))
             EchoInfo.PlayerEchoes[player] = new();
@@ -81,10 +90,13 @@ public static class EchoBattleCore
 
     public static void RemoveAllEchoes(Player player)
     {
-        Timing.KillCoroutines($"EchoRegen_{player.UserId}");
+        EchoStats.ClearPassiveEffects(player);
 
         if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var list))
+        {
+            EchoInfo.PlayerStats.Remove(player);
             return;
+        }
 
         foreach (var echo in list)
             echo.OnDisabled();
@@ -93,8 +105,20 @@ public static class EchoBattleCore
         EchoInfo.PlayerStats.Remove(player);
     }
 
+    /// <summary>
+    /// 역할 변경/리셋 시 호출. 기본 MaxHealth/HS 캐시도 함께 비웁니다.
+    /// </summary>
+    public static void ClearPlayerRuntime(Player player)
+    {
+        RemoveAllEchoes(player);
+        EchoInfo.PlayerBaseMaxHealth.Remove(player);
+        EchoInfo.PlayerBaseMaxHs.Remove(player);
+        EchoInfo.PlayerPassiveEffects.Remove(player);
+    }
+
     public static void ApplyLoadout(Player player)
     {
+        // 레벨업 재적용 시에도 역할 기본 MaxHealth는 유지해야 복리가 나지 않음
         RemoveAllEchoes(player);
 
         if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
@@ -122,13 +146,14 @@ public static class EchoBattleCore
         EchoInfo.PlayerStats[player] = snapshot;
         EchoStats.ApplyPassiveEffects(player, snapshot);
 
-        EchoQuest.StartSurviveTracking(player);
+        // 레벨업 재적용 시 생존 타이머가 리셋되지 않도록, 미추적일 때만 시작
+        EchoQuest.EnsureSurviveTracking(player);
     }
 
     public static void Reset(Player player)
     {
         EchoQuest.StopSurviveTracking(player);
-        RemoveAllEchoes(player);
+        ClearPlayerRuntime(player);
     }
 
     public static IEnumerator<float> HintDisplay(Player owner)

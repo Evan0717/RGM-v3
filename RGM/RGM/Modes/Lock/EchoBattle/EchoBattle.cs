@@ -32,16 +32,24 @@ Quest (반복)
     public override string Color => "023e8a";
     public override string Author => "Denia's First Project";
 
+    /// <summary>테스트용: true면 RoundLock + AFK 추방 방지를 켭니다.</summary>
+    const bool SoloTestMode = true;
+
     CoroutineHandle _onModeStarted;
     readonly Dictionary<Player, CoroutineHandle> _hintHandles = new();
     readonly Dictionary<Player, CoroutineHandle> _applyHandles = new();
 
     public override void OnEnabled()
     {
+        if (SoloTestMode)
+            Round.IsLocked = true;
+
         EchoBattleCore.RegisterEchoes();
 
         Exiled.Events.Handlers.Player.Verified += OnVerified;
         Exiled.Events.Handlers.Player.Hurting += EchoStats.OnHurting;
+        if (SoloTestMode)
+            Exiled.Events.Handlers.Player.Kicking += OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
         EchoQuest.Register();
@@ -53,9 +61,14 @@ Quest (반복)
 
     public override void OnDisabled()
     {
+        if (SoloTestMode)
+            Round.IsLocked = false;
+
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
         Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
         Exiled.Events.Handlers.Player.Hurting -= EchoStats.OnHurting;
+        if (SoloTestMode)
+            Exiled.Events.Handlers.Player.Kicking -= OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
         ServerSpecificSettingsSync.ServerOnSettingValueReceived -= EchoSetting.OnSSInput;
@@ -74,6 +87,7 @@ Quest (반복)
         foreach (var player in Player.List.ToList())
         {
             EchoQuest.ClearPlayer(player);
+            EchoGrowth.ClearPending(player);
             EchoBattleCore.Reset(player);
         }
 
@@ -81,6 +95,9 @@ Quest (반복)
         EchoInfo.PlayerEchoes.Clear();
         EchoInfo.PlayerStats.Clear();
         EchoInfo.PlayerShowHints.Clear();
+        EchoInfo.PlayerBaseMaxHealth.Clear();
+        EchoInfo.PlayerBaseMaxHs.Clear();
+        EchoInfo.PlayerPassiveEffects.Clear();
         EchoInfo.Echoes.Clear();
     }
 
@@ -137,6 +154,7 @@ Quest (반복)
             Timing.KillCoroutines(old);
 
         EchoQuest.StopSurviveTracking(ev.Player);
+        EchoGrowth.ClearPending(ev.Player);
         EchoBattleCore.Reset(ev.Player);
 
         if (!ev.NewRole.IsAlive())
@@ -168,7 +186,17 @@ Quest (반복)
         foreach (var player in Player.List.ToList())
         {
             EchoQuest.ClearPlayer(player);
+            EchoGrowth.ClearPending(player);
             EchoBattleCore.Reset(player);
         }
+    }
+
+    void OnKicking(KickingEventArgs ev)
+    {
+        if (!SoloTestMode)
+            return;
+
+        if (ev.Reason.ToLower().Contains("afk"))
+            ev.IsAllowed = false;
     }
 }

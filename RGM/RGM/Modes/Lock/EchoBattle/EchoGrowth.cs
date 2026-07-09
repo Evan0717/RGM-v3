@@ -15,6 +15,12 @@ public static class EchoGrowth
     public const float LevelExpMultiplier = 1.06f;
     public const float LevelExpAdd = 10f;
 
+    /// <summary>
+    /// 같은 프레임/짧은 구간에 GrantExp가 여러 번 호출되어도 ApplyLoadout은 1회만 예약.
+    /// 동시에 여러 Echo가 레벨업해도 한 번의 재적용으로 합산됩니다.
+    /// </summary>
+    static readonly HashSet<Player> PendingApplyLoadout = new();
+
     public static int GetBaseExp(EchoCost cost)
     {
         return cost switch
@@ -59,30 +65,67 @@ public static class EchoGrowth
         if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
             return;
 
-        var leveledUp = new List<(EchoType Type, int NewLevel)>();
+        var leveledUp = new List<(EchoType Type, int OldLevel, int NewLevel)>();
 
         foreach (var type in loadout.GetEquipped())
         {
-            if (AddExp(player, loadout, type, amount, out int newLevel))
-                leveledUp.Add((type, newLevel));
+            int oldLevel = loadout.GetLevel(type);
+            if (AddExp(player, loadout, type, amount, out int newLevel) && newLevel > oldLevel)
+                leveledUp.Add((type, oldLevel, newLevel));
         }
 
-        foreach (var (type, newLevel) in leveledUp)
+        if (leveledUp.Count == 0)
+            return;
+
+        // 다중 Echo 동시 레벨업: 브로드캐스트를 한 번에 묶어 표시
+        if (leveledUp.Count == 1)
         {
+            var (type, _, newLevel) = leveledUp[0];
             var data = type.GetData();
             string name = data?.Name ?? type.ToString();
             player.AddBroadcast(3, $"<size=25><color=#7CFC00>{name}</color> → Lv.<b>{newLevel}</b></size>");
         }
-
-        if (leveledUp.Count > 0 && EchoInfo.PlayerEchoes.ContainsKey(player))
+        else
         {
-            // Hurting 이벤트 중 즉시 재적용하면 핸들러 충돌 가능 → 다음 프레임에 적용
-            MEC.Timing.CallDelayed(MEC.Timing.WaitForOneFrame, () =>
+            var parts = new List<string>(leveledUp.Count);
+            foreach (var (type, _, newLevel) in leveledUp)
             {
-                if (player != null && player.IsAlive)
-                    EchoBattleCore.ApplyLoadout(player);
-            });
+                var data = type.GetData();
+                string name = data?.Name ?? type.ToString();
+                parts.Add($"<color=#7CFC00>{name}</color> Lv.<b>{newLevel}</b>");
+            }
+
+            player.AddBroadcast(3, $"<size=22>{string.Join(" / ", parts)}</size>");
         }
+
+        ScheduleApplyLoadout(player);
+    }
+
+    /// <summary>
+    /// ApplyLoadout 예약을 debounce. 이미 대기 중이면 추가 예약하지 않습니다.
+    /// </summary>
+    static void ScheduleApplyLoadout(Player player)
+    {
+        if (player == null || !EchoInfo.PlayerEchoes.ContainsKey(player))
+            return;
+
+        if (!PendingApplyLoadout.Add(player))
+            return;
+
+        // Hurting 이벤트 중 즉시 재적용하면 핸들러 충돌 가능 → 다음 프레임에 1회만 적용
+        MEC.Timing.CallDelayed(MEC.Timing.WaitForOneFrame, () =>
+        {
+            PendingApplyLoadout.Remove(player);
+
+            if (player != null && player.IsAlive && EchoInfo.PlayerLoadouts.ContainsKey(player))
+                EchoBattleCore.ApplyLoadout(player);
+        });
+    }
+
+    public static void ClearPending(Player player)
+    {
+        if (player != null)
+            PendingApplyLoadout.Remove(player);
     }
 
     /// <summary>

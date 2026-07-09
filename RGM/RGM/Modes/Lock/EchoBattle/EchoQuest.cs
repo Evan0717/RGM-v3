@@ -7,20 +7,20 @@ namespace RGM.Modes;
 
 /// <summary>
 /// 반복 가능 내부 Quest.
-/// 1) 30초 생존 → 130 XP
-/// 2) 적에게 50 데미지 → 100 XP
-/// 3) 25 데미지 받기 → 100 XP
+/// 1) 30초 생존 → 80 XP
+/// 2) 적에게 50 데미지 → 80 XP
+/// 3) 25 데미지 받기 → 80 XP
 /// </summary>
 public static class EchoQuest
 {
     public const int SurviveSeconds = 30;
-    public const int SurviveReward = 130;
+    public const int SurviveReward = 80;
 
     public const float DealDamageThreshold = 50f;
-    public const int DealDamageReward = 100;
+    public const int DealDamageReward = 80;
 
     public const float TakeDamageThreshold = 25f;
-    public const int TakeDamageReward = 100;
+    public const int TakeDamageReward = 80;
 
     static readonly Dictionary<Player, QuestProgress> Progress = new();
     static readonly Dictionary<Player, CoroutineHandle> SurviveHandles = new();
@@ -69,6 +69,44 @@ public static class EchoQuest
         SurviveHandles[player] = Timing.RunCoroutine(SurviveRoutine(player), $"EchoQuestSurvive_{player.UserId}");
     }
 
+    /// <summary>
+    /// 이미 생존 추적 중이면 타이머를 유지합니다. (레벨업 재적용 시 리셋 방지)
+    /// 장착 Echo가 전부 MaxLevel이면 추적을 중지합니다.
+    /// </summary>
+    public static void EnsureSurviveTracking(Player player)
+    {
+        if (player == null || !player.IsAlive)
+            return;
+
+        if (!CanProgressQuests(player))
+        {
+            StopSurviveTracking(player);
+            return;
+        }
+
+        if (SurviveHandles.TryGetValue(player, out var handle) && handle.IsRunning)
+            return;
+
+        StartSurviveTracking(player);
+    }
+
+    /// <summary>
+    /// Echo 장착 + 성장 가능한(Max 미만) Echo가 있을 때만 퀘스트 진행.
+    /// </summary>
+    public static bool CanProgressQuests(Player player)
+    {
+        if (player == null)
+            return false;
+
+        if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
+            return false;
+
+        if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
+            return false;
+
+        return loadout.HasGrowableEquipped();
+    }
+
     public static void StopSurviveTracking(Player player)
     {
         if (player == null)
@@ -95,12 +133,12 @@ public static class EchoQuest
 
         while (player != null && player.IsAlive)
         {
-            // Echo 미장착 시에는 생존 퀘스트 진행하지 않음
-            if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
+            // 미장착이거나 장착 Echo가 전부 Max면 생존 퀘스트 중단
+            if (!CanProgressQuests(player))
             {
                 progress.SurviveTimer = 0f;
-                yield return Timing.WaitForSeconds(1f);
-                continue;
+                SurviveHandles.Remove(player);
+                yield break;
             }
 
             progress.SurviveTimer += 1f;
@@ -125,8 +163,7 @@ public static class EchoQuest
         // 가해: 적에게 데미지
         if (ev.Attacker != null
             && ev.Attacker != ev.Player
-            && EchoInfo.PlayerEchoes.TryGetValue(ev.Attacker, out var atkEchoes)
-            && atkEchoes.Count > 0
+            && CanProgressQuests(ev.Attacker)
             && HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
         {
             var atkProgress = GetOrCreate(ev.Attacker);
@@ -141,7 +178,7 @@ public static class EchoQuest
         }
 
         // 피격: 데미지 받기
-        if (EchoInfo.PlayerEchoes.TryGetValue(ev.Player, out var defEchoes) && defEchoes.Count > 0)
+        if (CanProgressQuests(ev.Player))
         {
             var defProgress = GetOrCreate(ev.Player);
             defProgress.DamageTaken += damage;

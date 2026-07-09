@@ -17,6 +17,16 @@ public static class EchoInfo
     public static Dictionary<Player, EchoStatSnapshot> PlayerStats = new();
     public static Dictionary<Player, bool> PlayerShowHints = new();
 
+    /// <summary>역할 기본 MaxHealth. 레벨업 재적용 시 HP 복리 방지용.</summary>
+    public static Dictionary<Player, float> PlayerBaseMaxHealth = new();
+
+    /// <summary>역할 기본 MaxHumeShield. 재적용 시 HS 복리 방지용.</summary>
+    public static Dictionary<Player, float> PlayerBaseMaxHs = new();
+
+    /// <summary>직전에 적용한 패시브 이펙트 intensity. 재적용 전 제거용.</summary>
+    public static Dictionary<Player, EchoPassiveEffectState> PlayerPassiveEffects = new();
+
+
     public static readonly Dictionary<EchoType, (string Name, string Description)> EchoCatalog = new()
     {
         { EchoType.Gnome, ("노움", "사용 시 10초간 데미지 감소 40%, 재사용 대기시간 60초") },
@@ -48,6 +58,11 @@ public class EchoLoadout
     public EchoType?[] SubSlots { get; set; } = new EchoType?[4];
     public Dictionary<EchoType, int> Levels { get; set; } = new();
     public Dictionary<EchoType, int> Experience { get; set; } = new();
+
+    /// <summary>
+    /// Echo별 부가 옵션. 레벨업/재적용 시 기존 옵션은 유지하고 해금분만 추가합니다.
+    /// </summary>
+    public Dictionary<EchoType, List<EchoSubOptionInstance>> SubOptions { get; set; } = new();
 
     public IEnumerable<EchoType> GetEquipped()
     {
@@ -103,4 +118,32 @@ public class EchoLoadout
 
         return false;
     }
+
+    /// <summary>
+    /// 장착 중인 Echo가 하나라도 MaxLevel 미만이면 true.
+    /// 미장착이거나 전부 Max면 false.
+    /// </summary>
+    public bool HasGrowableEquipped()
+    {
+        bool any = false;
+        foreach (var type in GetEquipped())
+        {
+            any = true;
+            if (GetLevel(type) < EchoInfo.MaxLevel)
+                return true;
+        }
+
+        return false;
+    }
+}
+
+/// <summary>
+/// ApplyPassiveEffects가 건 이펙트 intensity 스냅샷.
+/// 재적용 시 동일 intensity만 제거해 액티브 스킬 이펙트와 충돌을 줄입니다.
+/// </summary>
+public class EchoPassiveEffectState
+{
+    public byte DefenseReduction;
+    public byte MovementBoost;
+    public byte Lightweight;
 }

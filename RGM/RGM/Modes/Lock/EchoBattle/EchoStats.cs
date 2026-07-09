@@ -106,6 +106,57 @@ public static class EchoStats
         return EchoStats.Clamp(level / 5, 0, 5);
     }
 
+    /// <summary>
+    /// 로드아웃에 저장된 부가 옵션을 유지한 채, 해금 개수만큼만 새로 굴립니다.
+    /// 레벨업으로 ApplyLoadout이 다시 돌아도 기존 옵션이 재롤되지 않습니다.
+    /// </summary>
+    public static List<EchoSubOptionInstance> EnsureSubOptions(EchoLoadout loadout, EchoType type, int level, int seedBase)
+    {
+        if (!loadout.SubOptions.TryGetValue(type, out var existing) || existing == null)
+        {
+            existing = new List<EchoSubOptionInstance>();
+            loadout.SubOptions[type] = existing;
+        }
+
+        int targetCount = GetUnlockedSubOptionCount(level);
+
+        // 레벨이 내려간 경우(거의 없음)에만 초과분 제거
+        while (existing.Count > targetCount)
+            existing.RemoveAt(existing.Count - 1);
+
+        var types = Enum.GetValues(typeof(EchoSubOptionType)).Cast<EchoSubOptionType>()
+            .Where(x => x != EchoSubOptionType.None).ToList();
+
+        while (existing.Count < targetCount)
+        {
+            // 슬롯 인덱스 기반 시드 → 같은 해금 슬롯은 항상 동일 결과, 레벨 변경과 무관
+            int slotIndex = existing.Count;
+            var rng = new System.Random(seedBase ^ (slotIndex * 397) ^ 0x5F3759DF);
+            var optionType = types[rng.Next(types.Count)];
+            int grade = RollGrade(rng);
+            float value = SubOptionValues[optionType][grade - 1];
+            existing.Add(new EchoSubOptionInstance
+            {
+                Type = optionType,
+                Grade = grade,
+                Value = value
+            });
+        }
+
+        // 호출부에서 수정해도 로드아웃이 깨지지 않도록 복사본 반환
+        return existing.Select(CloneSubOption).ToList();
+    }
+
+    public static EchoSubOptionInstance CloneSubOption(EchoSubOptionInstance option)
+    {
+        return new EchoSubOptionInstance
+        {
+            Type = option.Type,
+            Grade = option.Grade,
+            Value = option.Value
+        };
+    }
+
     public static List<EchoSubOptionInstance> GenerateSubOptions(int level, int? seed = null)
     {
         var result = new List<EchoSubOptionInstance>();
@@ -283,39 +334,83 @@ public static class EchoStats
         }
     }
 
+    public static void ClearPassiveEffects(Player player)
+    {
+        if (player == null)
+            return;
+
+        Timing.KillCoroutines($"EchoRegen_{player.UserId}");
+
+        if (!EchoInfo.PlayerPassiveEffects.TryGetValue(player, out var prev))
+            return;
+
+        if (prev.DefenseReduction > 0)
+            player.RemoveEffect(EffectType.DamageReduction, prev.DefenseReduction);
+        if (prev.MovementBoost > 0)
+            player.RemoveEffect(EffectType.MovementBoost, prev.MovementBoost);
+        if (prev.Lightweight > 0)
+            player.RemoveEffect(EffectType.Lightweight, prev.Lightweight);
+
+        EchoInfo.PlayerPassiveEffects.Remove(player);
+    }
+
     public static void ApplyPassiveEffects(Player player, EchoStatSnapshot snapshot)
     {
-        // HP
-        float baseMax = player.MaxHealth;
+        ClearPassiveEffects(player);
+
+        // HP: 역할 기본 MaxHealth 기준으로만 계산 (레벨업 재적용 시 복리 방지)
+        if (!EchoInfo.PlayerBaseMaxHealth.TryGetValue(player, out float baseMax) || baseMax <= 0f)
+        {
+            baseMax = player.MaxHealth;
+            EchoInfo.PlayerBaseMaxHealth[player] = baseMax;
+        }
+
         float newMax = baseMax * (1f + snapshot.HpPercent / 100f) + snapshot.HpFlat;
         float ratio = player.Health / Math.Max(1f, player.MaxHealth);
         player.MaxHealth = newMax;
         player.Health = Mathf.Clamp(newMax * ratio, 1f, newMax);
 
+        var effectState = new EchoPassiveEffectState();
+
         // Defense % via DamageReduction effect (intensity ≈ percent * 2, Rank 방어 참고)
         if (snapshot.DefensePercent > 0)
-            player.AddEffect(EffectType.DamageReduction, (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.DefensePercent * 2f), 1, 255));
+        {
+            effectState.DefenseReduction = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.DefensePercent * 2f), 1, 255);
+            player.AddEffect(EffectType.DamageReduction, effectState.DefenseReduction);
+        }
 
         if (snapshot.MoveSpeed > 0)
-            player.AddEffect(EffectType.MovementBoost, (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.MoveSpeed), 1, 255));
+        {
+            effectState.MovementBoost = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.MoveSpeed), 1, 255);
+            player.AddEffect(EffectType.MovementBoost, effectState.MovementBoost);
+        }
 
         // 점프력: Lightweight 효과로 구현 (Rank 예능 참고)
         if (snapshot.JumpPower > 0)
-            player.AddEffect(EffectType.Lightweight, (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.JumpPower), 1, 255));
+        {
+            effectState.Lightweight = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.JumpPower), 1, 255);
+            player.AddEffect(EffectType.Lightweight, effectState.Lightweight);
+        }
 
-        // AHP / HS
+        EchoInfo.PlayerPassiveEffects[player] = effectState;
+
+        // AHP / HS: 기본값 + 스냅샷만 설정 (재적용 시 Max/현재값 복리 방지)
         if (player.IsScp)
         {
-            if (snapshot.HsMax > 0)
+            if (!EchoInfo.PlayerBaseMaxHs.TryGetValue(player, out float baseHs))
             {
-                player.MaxHumeShield = Math.Max(player.MaxHumeShield, snapshot.HsMax);
-                player.HumeShield = Math.Min(player.HumeShield + snapshot.HsMax * 0.1f, player.MaxHumeShield);
+                baseHs = player.MaxHumeShield;
+                EchoInfo.PlayerBaseMaxHs[player] = baseHs;
             }
+
+            float targetHsMax = snapshot.HsMax > 0 ? Math.Max(baseHs, snapshot.HsMax) : baseHs;
+            player.MaxHumeShield = targetHsMax;
+            player.HumeShield = Math.Min(player.HumeShield, player.MaxHumeShield);
         }
         else if (snapshot.AhpMax > 0)
         {
-            player.MaxArtificialHealth = Math.Max(player.MaxArtificialHealth, snapshot.AhpMax);
-            player.ArtificialHealth = Math.Min(player.ArtificialHealth + snapshot.AhpMax * 0.1f, player.MaxArtificialHealth);
+            player.MaxArtificialHealth = snapshot.AhpMax;
+            player.ArtificialHealth = Math.Min(player.ArtificialHealth, player.MaxArtificialHealth);
         }
 
         if (snapshot.AhpRegen > 0 || snapshot.HsRegen > 0)
