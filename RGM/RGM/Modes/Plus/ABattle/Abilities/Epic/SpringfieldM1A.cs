@@ -20,6 +20,9 @@ public class SpringfieldM1A : Ability
         FirearmTriggerStatePatch.Ensure();
 
         Item item = Owner.AddItem(ItemType.GunE11SR);
+        for (int i = 0; i < 3; i++) {
+            Owner.AddItem(ItemType.Ammo556x45);
+        }
 
         _m1ASerial = item.Serial;
         ApplySpringfieldSettings(item.As<Firearm>());
@@ -34,7 +37,7 @@ public class SpringfieldM1A : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Item == null || ev.Item.Serial != _m1ASerial)
+        if (ev.Item == null || ev.Item.Serial != _m1ASerial)
             return;
 
         ev.Player.AddHint("Springfield M1A", $"<b><color={ABattle.RatingColor["영웅"]}>Springfield M1A</color></b> 능력이 있는 E11SR 입니다");
@@ -42,8 +45,7 @@ public class SpringfieldM1A : Ability
 
     public void OnShooting(ShootingEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Item.Serial != _m1ASerial)
-            return;
+        if (ev.Item.Serial != _m1ASerial) return;
 
         Firearm firearm = ev.Item.As<Firearm>();
         ApplySpringfieldSettings(firearm);

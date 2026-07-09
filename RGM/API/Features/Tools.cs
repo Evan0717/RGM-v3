@@ -282,9 +282,9 @@ $"""
 
             if (Server.PlayerCount >= 15)
             {
-                int is게임칩사용자(Player player)
+                int IsUsingGameChipUsers(Player player)
                 {
-                    if (게임칩사용자.Contains(player.UserId))
+                    if (UsingGameChipUsers.Contains(player.UserId))
                     {
                         PlaySound(player.Transform, "money-soundfx", 2);
                         return 10;
@@ -296,7 +296,7 @@ $"""
                 foreach (var player in playerList.Where(x => !x.IsNonePlayer() && UsersManager.UsersCache.ContainsKey(x.UserId)))
                 {
                     UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + amount).ToString();
-                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * is게임칩사용자(player)).ToString();
+                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * IsUsingGameChipUsers(player)).ToString();
                 }
 
                 UsersManager.SaveUsers();
@@ -560,7 +560,8 @@ $"""
                 ItemType.GunFSP9,
                 ItemType.GunRevolver,
                 ItemType.Adrenaline,
-                ItemType.AntiSCP207
+                ItemType.SCP500,
+                ItemType.ArmorLight
             };
 
             List<ItemType> Ammos = new List<ItemType>

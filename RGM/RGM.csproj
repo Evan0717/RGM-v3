@@ -130,6 +130,26 @@
     <Compile Include="API\Interfaces\PlayerInfo.cs" />
     <Compile Include="API\Interfaces\PlayerReport.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoBattle.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\Echo.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoInfo.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoStats.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoBattleCore.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoGrowth.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoQuest.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoAbility\EchoAbilityHelper.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost1\ClassD.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost1\Scientist.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost1\FacilityGuard.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost3\PetitDangdang.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost3\GoldenPig.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost4\Gnome.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost4\Salamandra.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost4\Undine.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost4\Sylph.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost4\Capybara.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost4\Berserker.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\D계급\또수코인.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\D계급\전력_질주.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\가젯\SCP_049\집결.cs" />
@@ -181,14 +201,14 @@
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_173\좋아_자연스러웠어.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_3114\단백질.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_3114\살점은_나의_힘.cs" />
-    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\흉내쟁이.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\발톱강화.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\SCP_939\암살_조장.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\지문_인식.cs" />
-    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\선임_연구원.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\과학자\스피드런.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\구미호\조직.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\구미호\베테랑.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\반란\송수신_해킹.cs" />
-    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\반란\방독면.cs" />
+    <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\반란\보호장비.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\시설_경비\변칙_감지.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\시설_경비\위기_감지.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\RankAbilityList\변칙성\튜토리얼\선천적_체질.cs" />
@@ -312,13 +332,20 @@
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbility.cs" />
     <Compile Include="RGM\Modes\Lock\Rank\Rank.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\CSTCFail.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\CSTCSuccess.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\FinalExamFail.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Dummy\FinalExamSuccess.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\BullsEye.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ContExpert.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\CSTC.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\HolyProtection.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Rambo.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\SpringfieldM1A.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Turtle.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Mythic\Anchor.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Rare\FinalExam.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
@@ -368,7 +395,7 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Diver.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\EpicTransition.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ExtremePoison.cs" />
-    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\ForwardLooking.cs" />
+    <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\AN94.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\Gambler.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\GhostRule.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Epic\GraveRobber.cs" />
@@ -788,9 +815,7 @@
     <Reference Include="MultiBroadcast">
       <HintPath>$(EXILED_REFERENCES)\MultiBroadcast.dll</HintPath>
     </Reference>
-    <Reference Include="netstandard">
-      <HintPath>$(EXILED_REFERENCES)\netstandard.dll</HintPath>
-    </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
     </Reference>

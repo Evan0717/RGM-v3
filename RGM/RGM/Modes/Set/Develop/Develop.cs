@@ -2,6 +2,7 @@
 using Exiled.Events.EventArgs.Scp1509;
 using MEC;
 using System.Collections.Generic;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -25,11 +26,13 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.PauseWaves();
             Exiled.API.Features.Map.IsDecontaminationEnabled = false;
+            
 
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
             
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            Tools.TryInstallMode(ModeType.SuperStar);
         }
 
         public override void OnDisabled()
@@ -42,6 +45,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Kicking -= OnKicking;
 
             Timing.KillCoroutines(_onModeStarted);
+            Tools.UnInstallMode(ModeType.SuperStar);
         }
 
         IEnumerator<float> OnModeStarted()

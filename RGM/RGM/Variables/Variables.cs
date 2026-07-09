@@ -65,7 +65,7 @@ namespace RGM.Variables
         public static List<Player> SuggestPlayers = new();
         public static List<Player> MuteBGMPlayers = new();
         public static List<string> UsedItems = new();
-        public static List<string> 게임칩사용자 = new();
+        public static List<string> UsingGameChipUsers = new();
         public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",
@@ -90,7 +90,7 @@ namespace RGM.Variables
         {
             //"TRRBR",
             "Moszka",
-            "Agar",
+            "Agar"
         };
         public static List<Product> Products = new()
         {
@@ -283,10 +283,10 @@ namespace RGM.Variables
                 Name = "게임 칩",
                 Description = $".사용 이번 라운드에서 승리 시 10배만큼 랜덤코인을 추가로 얻습니다.",
                 Price = 5,
-                Check = (player, arg) => { return Round.IsLobby && !게임칩사용자.Contains(player.UserId); },
+                Check = (player, arg) => { return Round.IsLobby && !UsingGameChipUsers.Contains(player.UserId); },
                 Script = (player, arg) =>
                 {
-                    게임칩사용자.Add(player.UserId);
+                    UsingGameChipUsers.Add(player.UserId);
                 }
             },
         };

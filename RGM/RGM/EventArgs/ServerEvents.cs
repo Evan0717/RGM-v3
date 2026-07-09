@@ -196,7 +196,7 @@ namespace RGM.EventArgs
             if (CurrentSubMode != ModeType.None)
                 Tools.TryInstallMode(CurrentSubMode);
 
-            if (StartupRandom == 3)
+            if (StartupRandom == 3 && CurrentMode != ModeType.Juggernaut)
                 Tools.CallSnakeHand(null, PlayerManager.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
 
             Timing.RunCoroutine(Detonation());
@@ -355,14 +355,17 @@ namespace RGM.EventArgs
 
                 string ranking(int r)
                 {
-                    if (r == 1)
-                        return "fffa66";
-                    else if (r == 2)
-                        return "808d8e";
-                    else if (r == 3)
-                        return "dfae4d";
-                    else
-                        return "ffffff";
+                    switch (r)
+                    {
+                        case 1:
+                            return "fffa66";
+                        case 2:
+                            return "808d8e";
+                        case 3:
+                            return "dfae4d";
+                        default:
+                            return "ffffff";
+                    }
                 }
 
                 foreach (var kv in top10)
@@ -432,13 +435,18 @@ namespace RGM.EventArgs
                 }
             }
 
-            if (UnityEngine.Random.Range(1, 21) == 1)
+            if (CurrentMode != ModeType.Juggernaut && UnityEngine.Random.Range(1, 21) == 1)
             {
-                Exiled.API.Features.Cassie.Clear();
-                Exiled.API.Features.Cassie.MessageTranslated("$pitch_0.10 .G7", "");
-
-                Tools.CallSnakeHand(null, ev.Players.ToList());
+                CallTutorialSupport(ev.Players);
             }
+        }
+
+        public static void CallTutorialSupport(IEnumerable<Player> players)
+        {
+            Exiled.API.Features.Cassie.Clear();
+            Exiled.API.Features.Cassie.MessageTranslated("$pitch_0.10 .G7", "");
+
+            Tools.CallSnakeHand(null, players.ToList());
         }
     }
 }

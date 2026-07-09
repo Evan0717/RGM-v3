@@ -10,10 +10,14 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("워 머신", "발사할 때마다 고폭 수류탄을 투하하는, 탄약이 무제한인 리볼버를 얻습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_BOMBGUN)]
+[Ability("워 머신", "발사할 때마다 고폭 수류탄을 투하하는, 탄약이 무제한인 리볼버를 얻습니다.\n능력 획득 시 자신이 받는 폭발 데미지가 97% 감소합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_BOMBGUN)]
 public class BombGun : Ability
 {
+    const float OwnerExplosionDamageMultiplier = 0.03f;
+    const float WarMachineGrenadeDamageMultiplier = 0.6f;
+
     ushort itemSerial = 0;
+    readonly List<ExplosionGrenadeProjectile> bombGunGrenades = new();
 
     public override void OnEnabled()
     {
@@ -28,20 +32,20 @@ public class BombGun : Ability
 
     public override void OnDisabled()
     {
+        bombGunGrenades.Clear();
     }
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (itemSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
-        {
-            if (itemSerial == ev.Item.Serial)
-                ev.Player.AddHint("워 머신", $"<b><color={ABattle.RatingColor["신화"]}>워 머신</color></b> 능력이 있는 <b>리볼버</b>입니다!");
-        }
+        if (ev.Player != Owner || ev.Item == null || ev.Player.CurrentItem == null) return;
+        if (itemSerial != ev.Player.CurrentItem.Serial) return;
+        if (itemSerial == ev.Item.Serial)
+            ev.Player.AddHint("워 머신", $"<b><color={ABattle.RatingColor["신화"]}>워 머신</color></b> 능력이 있는 <b>리볼버</b>입니다!");
     }
 
     public void OnShooting(ShootingEventArgs ev)
     {
-        if (ev.Item.Serial == itemSerial)
+        if (ev.Player == Owner && ev.Item.Serial == itemSerial)
         {
             Throwable throwable = ev.Player.ThrowGrenade(ProjectileType.FragGrenade);
 
@@ -55,9 +59,13 @@ public class BombGun : Ability
     }
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player != Owner) return;
-        if (ev.DamageHandler.Type == DamageType.Explosion)
-            ev.IsAllowed = false;
+        if (ev.DamageHandler.Type != DamageType.Explosion) return;
+
+        if (ABattle.Instance.HasAbility(ev.Player, AbilityType.MYTHIC_BOMBGUN))
+            ev.DamageHandler.Damage *= OwnerExplosionDamageMultiplier;
+
+        if (ev.Attacker == Owner && bombGunGrenades.Any(grenade => grenade != null && Vector3.Distance(grenade.Position, ev.Player.Position) <= 10f))
+            ev.DamageHandler.Damage *= WarMachineGrenadeDamageMultiplier;
     }
     public IEnumerator<float> ExplodeOnImpact(Throwable throwable)
     {
@@ -65,6 +73,8 @@ public class BombGun : Ability
 
         if (throwable.Projectile is not ExplosionGrenadeProjectile grenade)
             yield break;
+
+        bombGunGrenades.Add(grenade);
 
         while (!grenade.IsAlreadyDetonated)
         {
@@ -75,5 +85,7 @@ public class BombGun : Ability
 
             yield return Timing.WaitForOneFrame;
         }
+
+        Timing.CallDelayed(0.5f, () => bombGunGrenades.Remove(grenade));
     }
 }

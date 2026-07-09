@@ -162,7 +162,8 @@ public enum ModeType
     RandomBlockMode,
     Rank,
     Chess,
-    Store
+    Store,
+    EchoBattle
 }
 
 

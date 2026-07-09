@@ -5,7 +5,7 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("아드레날린", "10초간 데미지를 40% 적게 받습니다. (분노 중 한정)", RankAbilityType.아드레날린, RankCategory.SCP_096, "📴", 120)]
+    [RankGadget("아드레날린", "8초간 데미지를 50% 적게 받습니다. (분노 중 한정)", RankAbilityType.아드레날린, RankCategory.SCP_096, "📴", 120)]
     public class 아드레날린 : RankGadgetAbility
     {
         protected override bool CanUseGadget()
@@ -19,7 +19,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 
         protected override void OnGadgetUsed()
         {
-            Owner.AddEffect(EffectType.DamageReduction, 40, 10);
+            Owner.AddEffect(EffectType.DamageReduction, 100, 8);
         }
     }
 }

@@ -4,10 +4,11 @@ using MEC;
 using RGM.Modes;
 using RGM.API.Features;
 using Exiled.API.Features.Items;
+using UnityEngine;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("또수코인", "코인을 획득합니다. 이 코인을 튕기면 1% 빨라지거나, 1% 느려집니다.", RankAbilityType.또수코인, RankCategory.D계급, "🕜")]
+    [RankGadget("또수코인", "코인을 획득합니다. 이 코인을 튕기면 이동 속도가 +3% 누적되지만, 10% 확률로 초기화됩니다.", RankAbilityType.또수코인, RankCategory.D계급, "🕜")]
     public class 또수_코인 : RankGadgetAbility
     {
 
@@ -19,11 +20,11 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
             {
                 if (Owner == ev.Player && item == ev.Item)
                 {
-                    if (ev.IsTails)
-                        Owner.AddEffect(EffectType.MovementBoost, 1);
-
-                    else
-                        Owner.RemoveEffect(EffectType.MovementBoost, 1);
+                    Owner.AddEffect(EffectType.MovementBoost, 3);
+                    if (Random.Range(1, 101) <= 10)
+                    {
+                         Owner.DisableEffect(EffectType.MovementBoost);
+                    }
                 }
 
                 Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;

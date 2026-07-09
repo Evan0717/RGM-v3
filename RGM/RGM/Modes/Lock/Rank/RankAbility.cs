@@ -296,7 +296,7 @@ public enum RankAbilityType
     강렬한_의지,
 
     // 과학자
-    선임_연구원,
+    스피드런,
     지문_인식,
 
     // 시설 경비
@@ -308,7 +308,7 @@ public enum RankAbilityType
     조직,
 
     // 반란
-    방독면,
+    보호장비,
     송수신_해킹,
 
     // 튜토리얼
@@ -343,7 +343,7 @@ public enum RankAbilityType
 
     // SCP-939
     암살_조장,
-    흉내쟁이,
+    발톱강화,
 
     // SCP-3114
     살점은_나의_힘,

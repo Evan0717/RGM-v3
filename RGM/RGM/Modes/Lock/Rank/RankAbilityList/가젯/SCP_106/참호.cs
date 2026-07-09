@@ -11,7 +11,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
     {
         protected override bool CanUseGadget()
         {
-            if (Door.List.Count(x => Vector3.Distance(x.Position, Owner.Position) < 5) > 0)
+            if (Door.List.Any(x => Vector3.Distance(x.Position, Owner.Position) < 5 && !x.Type.ToString().Contains("Scp079")))
                 return true;
 
             else
@@ -20,7 +20,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 
         protected override void OnGadgetUsed()
         {
-            foreach (BreakableDoor door in Door.List.Where(x => Vector3.Distance(x.Position, Owner.Position) < 5).Select(x => x as BreakableDoor).ToList())
+            foreach (Door door in Door.List.Where(x => Vector3.Distance(x.Position, Owner.Position) < 5 && !x.Type.ToString().Contains("Scp079")).ToList())
             {
                 door.IsOpen = false;
                 door.Lock(5, DoorLockType.Regular079);
