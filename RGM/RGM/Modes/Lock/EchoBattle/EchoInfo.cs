@@ -56,6 +56,11 @@ public class EchoLoadout
 {
     public EchoType? MainSlot { get; set; }
     public EchoType?[] SubSlots { get; set; } = new EchoType?[4];
+
+    /// <summary>슬롯별 메인 스탯 선택. Echo와 1:1로 대응합니다.</summary>
+    public EchoMainStatType? MainSlotStat { get; set; }
+    public EchoMainStatType?[] SubSlotStats { get; set; } = new EchoMainStatType?[4];
+
     public Dictionary<EchoType, int> Levels { get; set; } = new();
     public Dictionary<EchoType, int> Experience { get; set; } = new();
 
@@ -119,16 +124,108 @@ public class EchoLoadout
         return false;
     }
 
+    public EchoMainStatType? GetSlotMainStat(int slotIndex)
+    {
+        // 0 = Main, 1~4 = Sub
+        if (slotIndex == 0)
+            return MainSlotStat;
+
+        int sub = slotIndex - 1;
+        if (sub < 0 || sub >= SubSlotStats.Length)
+            return null;
+
+        return SubSlotStats[sub];
+    }
+
+    public void SetSlotMainStat(int slotIndex, EchoMainStatType? stat)
+    {
+        if (slotIndex == 0)
+        {
+            MainSlotStat = stat;
+            return;
+        }
+
+        int sub = slotIndex - 1;
+        if (sub < 0 || sub >= SubSlotStats.Length)
+            return;
+
+        SubSlotStats[sub] = stat;
+    }
+
+    public EchoType? GetSlotEcho(int slotIndex)
+    {
+        if (slotIndex == 0)
+            return MainSlot;
+
+        int sub = slotIndex - 1;
+        if (sub < 0 || sub >= SubSlots.Length)
+            return null;
+
+        return SubSlots[sub];
+    }
+
+    /// <summary>
+    /// 슬롯에 적용할 메인 스탯. 선택값이 Cost에 유효하면 그대로, 아니면 Echo 기본값.
+    /// Cost에 없는 스탯은 절대 반환하지 않습니다.
+    /// </summary>
+    public EchoMainStatType ResolveMainStat(int slotIndex, EchoData data)
+    {
+        if (data == null)
+            return EchoMainStatType.None;
+
+        var selected = GetSlotMainStat(slotIndex);
+        if (selected.HasValue
+            && selected.Value != EchoMainStatType.None
+            && EchoStats.IsMainStatAvailable(data.Cost, selected.Value))
+            return selected.Value;
+
+        // 무효한 잔존 선택값은 제거
+        if (selected.HasValue && selected.Value != EchoMainStatType.None)
+            SetSlotMainStat(slotIndex, null);
+
+        if (EchoStats.IsMainStatAvailable(data.Cost, data.MainStatType))
+            return data.MainStatType;
+
+        var available = EchoStats.GetAvailableMainStats(data.Cost);
+        return available.Count > 0 ? available[0] : EchoMainStatType.None;
+    }
+
+    /// <summary>모든 슬롯의 Cost 불일치 메인 스탯을 제거합니다.</summary>
+    public void SanitizeAllMainStats()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            var echoType = GetSlotEcho(i);
+            if (!echoType.HasValue)
+            {
+                SetSlotMainStat(i, null);
+                continue;
+            }
+
+            var data = echoType.Value.GetData();
+            if (data == null)
+            {
+                SetSlotMainStat(i, null);
+                continue;
+            }
+
+            var current = GetSlotMainStat(i);
+            if (!current.HasValue || current.Value == EchoMainStatType.None)
+                continue;
+
+            if (!EchoStats.IsMainStatAvailable(data.Cost, current.Value))
+                SetSlotMainStat(i, null);
+        }
+    }
+
     /// <summary>
     /// 장착 중인 Echo가 하나라도 MaxLevel 미만이면 true.
     /// 미장착이거나 전부 Max면 false.
     /// </summary>
     public bool HasGrowableEquipped()
     {
-        bool any = false;
         foreach (var type in GetEquipped())
         {
-            any = true;
             if (GetLevel(type) < EchoInfo.MaxLevel)
                 return true;
         }

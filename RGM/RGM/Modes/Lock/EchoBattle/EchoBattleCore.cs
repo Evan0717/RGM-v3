@@ -44,7 +44,7 @@ public static class EchoBattleCore
         Log.Info($"[EchoBattle] Registered {EchoInfo.Echoes.Count} echoes.");
     }
 
-    public static void AddEcho(Player player, EchoType type, int level, bool isMainSlot)
+    public static void AddEcho(Player player, EchoType type, int level, bool isMainSlot, int slotIndex = 0)
     {
         if (!EchoInfo.Echoes.TryGetValue(type, out var data))
         {
@@ -76,6 +76,8 @@ public static class EchoBattleCore
             loadout = new EchoLoadout();
             EchoInfo.PlayerLoadouts[player] = loadout;
         }
+
+        echo.SelectedMainStat = loadout.ResolveMainStat(slotIndex, data);
 
         // 기존 부가 옵션 유지 + 해금분만 추가 (레벨업 재적용 시 재롤/수치 하락 방지)
         int seedBase = (player.UserId?.GetHashCode() ?? 0) ^ (int)type;
@@ -127,13 +129,16 @@ public static class EchoBattleCore
             return;
         }
 
-        if (loadout.MainSlot.HasValue)
-            AddEcho(player, loadout.MainSlot.Value, loadout.GetLevel(loadout.MainSlot.Value), true);
+        // 적용 직전 Cost 불일치 메인 스탯 잔존값 제거
+        loadout.SanitizeAllMainStats();
 
-        foreach (var slot in loadout.SubSlots)
+        if (loadout.MainSlot.HasValue)
+            AddEcho(player, loadout.MainSlot.Value, loadout.GetLevel(loadout.MainSlot.Value), true, 0);
+
+        for (int i = 0; i < loadout.SubSlots.Length; i++)
         {
-            if (slot.HasValue)
-                AddEcho(player, slot.Value, loadout.GetLevel(slot.Value), false);
+            if (loadout.SubSlots[i].HasValue)
+                AddEcho(player, loadout.SubSlots[i].Value, loadout.GetLevel(loadout.SubSlots[i].Value), false, i + 1);
         }
 
         if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
@@ -250,7 +255,7 @@ public static class EchoBattleCore
             {
                 if (echo?.Data == null)
                     continue;
-                equippedLines.Add($"{echo.Data.Emoji}{echo.Data.Name} Lv.{echo.Level} ({EchoGrowth.FormatProgress(loadout, echo.Data.EchoType)})");
+                equippedLines.Add($"{echo.Data.Emoji}{echo.Data.Name} Lv.{echo.Level} [{EchoStats.GetMainStatDisplayName(echo.SelectedMainStat)}] ({EchoGrowth.FormatProgress(loadout, echo.Data.EchoType)})");
             }
 
             if (equippedLines.Count > 0)

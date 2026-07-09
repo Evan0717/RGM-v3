@@ -85,6 +85,80 @@ public static class EchoStats
         };
     }
 
+    /// <summary>Cost별로 선택 가능한 메인 스탯 목록.</summary>
+    public static IReadOnlyList<EchoMainStatType> GetAvailableMainStats(EchoCost cost)
+    {
+        return cost switch
+        {
+            EchoCost.Cost4 => Cost4MainStats,
+            EchoCost.Cost3 => Cost3MainStats,
+            EchoCost.Cost1 => Cost1MainStats,
+            _ => Array.Empty<EchoMainStatType>()
+        };
+    }
+
+    static readonly EchoMainStatType[] Cost4MainStats =
+    {
+        EchoMainStatType.AttackPercent,
+        EchoMainStatType.HpPercent,
+        EchoMainStatType.Defense,
+        EchoMainStatType.ScpDamagePercent,
+        EchoMainStatType.HumanDamagePercent,
+        EchoMainStatType.CriticalChance,
+        EchoMainStatType.MoveSpeedAndJump,
+    };
+
+    static readonly EchoMainStatType[] Cost3MainStats =
+    {
+        EchoMainStatType.AttackPercent,
+        EchoMainStatType.HpPercent,
+        EchoMainStatType.Defense,
+        EchoMainStatType.StaminaDrainReduction,
+        EchoMainStatType.HeadshotDamage,
+        EchoMainStatType.AhpRegenAndMax,
+    };
+
+    static readonly EchoMainStatType[] Cost1MainStats =
+    {
+        EchoMainStatType.AttackPercent,
+        EchoMainStatType.HpPercent,
+        EchoMainStatType.Defense,
+    };
+
+    public static bool IsMainStatAvailable(EchoCost cost, EchoMainStatType type)
+    {
+        if (type == EchoMainStatType.None)
+            return false;
+
+        foreach (var available in GetAvailableMainStats(cost))
+        {
+            if (available == type)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>Server-Specific 드롭다운용: 모든 Cost에서 등장하는 메인 스탯 합집합.</summary>
+    public static IReadOnlyList<EchoMainStatType> GetAllSelectableMainStats()
+    {
+        return AllSelectableMainStats;
+    }
+
+    static readonly EchoMainStatType[] AllSelectableMainStats =
+    {
+        EchoMainStatType.AttackPercent,
+        EchoMainStatType.HpPercent,
+        EchoMainStatType.Defense,
+        EchoMainStatType.ScpDamagePercent,
+        EchoMainStatType.HumanDamagePercent,
+        EchoMainStatType.CriticalChance,
+        EchoMainStatType.MoveSpeedAndJump,
+        EchoMainStatType.StaminaDrainReduction,
+        EchoMainStatType.HeadshotDamage,
+        EchoMainStatType.AhpRegenAndMax,
+    };
+
     public static float GetSubStatValue(EchoCost cost, int level)
     {
         return cost switch
@@ -106,9 +180,16 @@ public static class EchoStats
         return EchoStats.Clamp(level / 5, 0, 5);
     }
 
+    static List<EchoSubOptionType> GetAllSubOptionTypes()
+    {
+        return Enum.GetValues(typeof(EchoSubOptionType)).Cast<EchoSubOptionType>()
+            .Where(x => x != EchoSubOptionType.None)
+            .ToList();
+    }
+
     /// <summary>
     /// 로드아웃에 저장된 부가 옵션을 유지한 채, 해금 개수만큼만 새로 굴립니다.
-    /// 레벨업으로 ApplyLoadout이 다시 돌아도 기존 옵션이 재롤되지 않습니다.
+    /// 단일 Echo 안에서는 같은 종류의 부가 옵션이 중복되지 않습니다.
     /// </summary>
     public static List<EchoSubOptionInstance> EnsureSubOptions(EchoLoadout loadout, EchoType type, int level, int seedBase)
     {
@@ -118,21 +199,25 @@ public static class EchoStats
             loadout.SubOptions[type] = existing;
         }
 
+        // 이미 저장된 중복 타입은 첫 번째만 유지
+        DeduplicateSubOptions(existing);
+
         int targetCount = GetUnlockedSubOptionCount(level);
 
-        // 레벨이 내려간 경우(거의 없음)에만 초과분 제거
         while (existing.Count > targetCount)
             existing.RemoveAt(existing.Count - 1);
 
-        var types = Enum.GetValues(typeof(EchoSubOptionType)).Cast<EchoSubOptionType>()
-            .Where(x => x != EchoSubOptionType.None).ToList();
+        var used = new HashSet<EchoSubOptionType>(existing.Select(x => x.Type));
+        var pool = GetAllSubOptionTypes().Where(x => !used.Contains(x)).ToList();
 
-        while (existing.Count < targetCount)
+        while (existing.Count < targetCount && pool.Count > 0)
         {
-            // 슬롯 인덱스 기반 시드 → 같은 해금 슬롯은 항상 동일 결과, 레벨 변경과 무관
             int slotIndex = existing.Count;
             var rng = new System.Random(seedBase ^ (slotIndex * 397) ^ 0x5F3759DF);
-            var optionType = types[rng.Next(types.Count)];
+            int pick = rng.Next(pool.Count);
+            var optionType = pool[pick];
+            pool.RemoveAt(pick);
+
             int grade = RollGrade(rng);
             float value = SubOptionValues[optionType][grade - 1];
             existing.Add(new EchoSubOptionInstance
@@ -143,8 +228,20 @@ public static class EchoStats
             });
         }
 
-        // 호출부에서 수정해도 로드아웃이 깨지지 않도록 복사본 반환
         return existing.Select(CloneSubOption).ToList();
+    }
+
+    /// <summary>같은 Echo 내 중복 타입은 먼저 해금된(앞쪽) 옵션만 남깁니다.</summary>
+    static void DeduplicateSubOptions(List<EchoSubOptionInstance> options)
+    {
+        var seen = new HashSet<EchoSubOptionType>();
+        for (int i = 0; i < options.Count;)
+        {
+            if (!seen.Add(options[i].Type))
+                options.RemoveAt(i);
+            else
+                i++;
+        }
     }
 
     public static EchoSubOptionInstance CloneSubOption(EchoSubOptionInstance option)
@@ -162,12 +259,14 @@ public static class EchoStats
         var result = new List<EchoSubOptionInstance>();
         int count = GetUnlockedSubOptionCount(level);
         var rng = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
-        var types = Enum.GetValues(typeof(EchoSubOptionType)).Cast<EchoSubOptionType>()
-            .Where(x => x != EchoSubOptionType.None).ToList();
+        var pool = GetAllSubOptionTypes();
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count && pool.Count > 0; i++)
         {
-            var optionType = types[rng.Next(types.Count)];
+            int pick = rng.Next(pool.Count);
+            var optionType = pool[pick];
+            pool.RemoveAt(pick);
+
             int grade = RollGrade(rng);
             float value = SubOptionValues[optionType][grade - 1];
             result.Add(new EchoSubOptionInstance
@@ -208,10 +307,21 @@ public static class EchoStats
 
             int level = echo.Level;
             var cost = echo.Data.Cost;
-            var mainType = echo.Data.MainStatType;
-            float mainValue = GetMainStatValue(cost, mainType, level);
 
-            ApplyMainStat(snapshot, mainType, mainValue, cost, level);
+            // Cost에 등록된 메인 스탯만 적용. 미등록/잔존 값은 무시.
+            var mainType = echo.SelectedMainStat;
+            if (!IsMainStatAvailable(cost, mainType))
+                mainType = IsMainStatAvailable(cost, echo.Data.MainStatType)
+                    ? echo.Data.MainStatType
+                    : EchoMainStatType.None;
+
+            if (mainType != EchoMainStatType.None)
+            {
+                float mainValue = GetMainStatValue(cost, mainType, level);
+                if (mainValue > 0f || mainType == EchoMainStatType.AhpRegenAndMax)
+                    ApplyMainStat(snapshot, mainType, mainValue, cost, level);
+            }
+
             ApplySubStat(snapshot, cost, level, player);
 
             foreach (var option in echo.SubOptions)
@@ -223,6 +333,10 @@ public static class EchoStats
 
     static void ApplyMainStat(EchoStatSnapshot snapshot, EchoMainStatType type, float value, EchoCost cost, int level)
     {
+        // 이중 방어: Cost에 없는 타입은 절대 반영하지 않음
+        if (!IsMainStatAvailable(cost, type))
+            return;
+
         switch (type)
         {
             case EchoMainStatType.AttackPercent:
@@ -254,7 +368,7 @@ public static class EchoStats
                 snapshot.HeadshotDamage += value;
                 break;
             case EchoMainStatType.AhpRegenAndMax:
-                // Cost3 AHP: regen 1~5 / max 25~125 (SCP: HS regen 4~20 / max 140~700)
+                // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
                 snapshot.AhpMax += LerpStat(25f, 125f, level);
                 snapshot.HsRegen += LerpStat(4f, 20f, level);
@@ -372,20 +486,21 @@ public static class EchoStats
 
         var effectState = new EchoPassiveEffectState();
 
-        // Defense % via DamageReduction effect (intensity ≈ percent * 2, Rank 방어 참고)
+        // 방어력%: DamageReduction (intensity ≈ percent * 2, Rank 방어 참고)
+        // 스냅샷에 이미 모든 Echo 합산값이 들어 있으므로 한 번만 적용
         if (snapshot.DefensePercent > 0)
         {
             effectState.DefenseReduction = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.DefensePercent * 2f), 1, 255);
             player.AddEffect(EffectType.DamageReduction, effectState.DefenseReduction);
         }
 
+        // 이동속도 / 점프력: 스냅샷 합산값을 이펙트로 1회 적용
         if (snapshot.MoveSpeed > 0)
         {
             effectState.MovementBoost = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.MoveSpeed), 1, 255);
             player.AddEffect(EffectType.MovementBoost, effectState.MovementBoost);
         }
 
-        // 점프력: Lightweight 효과로 구현 (Rank 예능 참고)
         if (snapshot.JumpPower > 0)
         {
             effectState.Lightweight = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.JumpPower), 1, 255);
@@ -468,6 +583,7 @@ public static class EchoStats
 
         if (EchoInfo.PlayerStats.TryGetValue(ev.Player, out var defStats))
         {
+            // 방어력 정수: 고정 데미지 감소. 방어력%는 DamageReduction 이펙트로 처리.
             float dmg = ev.DamageHandler.Damage;
             dmg = Math.Max(0f, dmg - defStats.DefenseFlat);
             ev.DamageHandler.Damage = dmg;

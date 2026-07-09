@@ -15,6 +15,10 @@ public abstract class Echo
     public Player Owner { get; set; }
     public int Level { get; set; } = 1;
     public bool IsMainSlot { get; set; }
+
+    /// <summary>플레이어가 Server-Specific에서 고른 메인 스탯. 미선택 시 Data.MainStatType 사용.</summary>
+    public EchoMainStatType SelectedMainStat { get; set; } = EchoMainStatType.None;
+
     public List<EchoSubOptionInstance> SubOptions { get; set; } = new();
 }
 
