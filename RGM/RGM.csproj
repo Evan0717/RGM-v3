@@ -79,6 +79,7 @@
     <Compile Include="RGM\Commands\ClientCommands\BasicFeatures\Link.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyIcon.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\CandyParty.cs" />
+    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\RandomItem.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\ToolGun.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Pet.cs" />
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\ApplyBadge.cs" />
@@ -889,6 +890,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayerManages\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />

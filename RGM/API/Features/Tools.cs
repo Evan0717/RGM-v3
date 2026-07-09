@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using YamlDotNet.Core;
 using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
@@ -673,14 +674,13 @@ $"""
             }
         }
 
-        public static AudioClipPlayback PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
+        public static AudioClipPlayback PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true, bool isNoNotice = false)
         {
             string notice = $"로드된 오디오: {clipName}";
 
-            foreach (var player in PlayerManager.List)
-            {
-                player.AddBroadcast(10, $"<size=20>{notice}</size>");
-            }
+            if (!isNoNotice)
+                foreach (var player in PlayerManager.List)
+                    player.AddBroadcast(10, $"<size=20>{notice}</size>");
 
             Log.Info(notice);
 
@@ -689,29 +689,37 @@ $"""
 
         public static MapSchematic LoadMap(string mapName, bool notice = true)
         {
-            Log.Info($"로드 시도중인 맵: {mapName}");
-            MapSchematic map = MapUtils.GetMapData(mapName);
+            try
+            {
+                Log.Info($"로드 시도중인 맵: {mapName}");
+                MapSchematic map = MapUtils.GetMapData(mapName);
 
-            if (map == null)
+
+                if (!MapUtils.LoadedMaps.ContainsKey(mapName))
+                    MapUtils.LoadMap(mapName);
+
+                Log.Info($"로드된 맵: {mapName}");
+
+                if (notice)
+                {
+                    foreach (var player in PlayerManager.List)
+                    {
+                        player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
+                    }
+                }
+
+                return map;
+            }
+            catch (FileNotFoundException e)
             {
                 Log.Error($"맵 '{mapName}'을(를) 찾을 수 없습니다. 로드 실패.");
                 return null;
             }
-
-            if (!MapUtils.LoadedMaps.ContainsKey(mapName))
-                MapUtils.LoadMap(mapName);
-
-            Log.Info($"로드된 맵: {mapName}");
-
-            if (notice)
+            catch (Exception e)
             {
-                foreach (var player in PlayerManager.List)
-                {
-                    player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
-                }
+                Log.Error($"맵 '{mapName}'을(를) 로드하는 중에 오류가 발생했습니다. 로드 실패. {e.Message}");
+                return null;
             }
-
-            return map;
         }
 
         public static string GenerateRandomString(int length)
@@ -772,7 +780,7 @@ $"""
             AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform.position}", condition: (ReferenceHub hub) =>
             {
                 return !MuteBGMPlayers.Contains(Player.Get(hub));
-            },onIntialCreation: (p) =>
+            },onIntialCreation: p =>
             {
                 p.transform.parent = transform;
 

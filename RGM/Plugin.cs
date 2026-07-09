@@ -48,11 +48,12 @@ namespace RGM
                 if (modeAttribute == null)
                     continue;
 
-                if (modeAttribute.Holiday == ModeHoliday.Halloween && !HolidayUtils.IsHolidayActive(HolidayType.Halloween))
-                    continue;
-
-                if (modeAttribute.Holiday == ModeHoliday.Christmas && !HolidayUtils.IsHolidayActive(HolidayType.Christmas))
-                    continue;
+                switch (modeAttribute.Holiday)
+                {
+                    case ModeHoliday.Halloween when !HolidayUtils.IsHolidayActive(HolidayType.Halloween):
+                    case ModeHoliday.Christmas when !HolidayUtils.IsHolidayActive(HolidayType.Christmas):
+                        continue;
+                }
 
                 if (!typeof(Mode).IsAssignableFrom(type))
                     continue;
@@ -84,7 +85,7 @@ namespace RGM
 
             // ------------------------------------------------------------------------------------------------------
 
-            if (Instance.Config.FixedModes.Count() == 0)
+            if (!Instance.Config.FixedModes.Any())
             {
                 Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;

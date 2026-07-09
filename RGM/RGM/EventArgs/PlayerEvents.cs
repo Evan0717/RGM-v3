@@ -55,10 +55,10 @@ namespace RGM.EventArgs
                     if (isNewRecord)
                         max = current;
 
-                    uc[29] = "1";                 // 오늘 출석 처리
-                    uc[27] = total.ToString();    // 누적 출석
-                    uc[30] = current.ToString();  // 현재 연속
-                    uc[28] = max.ToString();      // 최대 연속
+                    uc[29] = "1"; // 오늘 출석 처리
+                    uc[27] = total.ToString(); // 누적 출석
+                    uc[30] = current.ToString(); // 현재 연속
+                    uc[28] = max.ToString(); // 최대 연속
 
                     if (isNewRecord)
                         PlayersAudio[ev.Player].TryPlay("출석 체크 굿");
@@ -127,13 +127,14 @@ namespace RGM.EventArgs
                 if (uc[22] != "0")
                 {
                     string value = $"""
-<b><color=red>경고! 제재당할 위기입니다. 아래 내용을 확인해보세요.</color></b>
-{string.Join("\n", uc[22].Split('/'))}
-""";
+                                    <b><color=red>경고! 제재당할 위기입니다. 아래 내용을 확인해보세요.</color></b>
+                                    {string.Join("\n", uc[22].Split('/'))}
+                                    """;
                     ev.Player.AddHint($"경고", $"{value}", 100);
                     ev.Player.SendConsoleMessage($"\n{value}", "white");
                 }
             }
+
             ev.Player.AddBroadcast(10, Notions.WelcomeMessage);
 
             // ---------------------------------------------------------------------------------------
@@ -152,11 +153,14 @@ namespace RGM.EventArgs
                 string Detail = ModeList[CurrentMode].Detail;
 
                 string Message = Notions.LateJoinModeDescription
-                .Replace("{ModeColor}", Color)
-                .Replace("{CurrentMode}", Name)
-                .Replace("{CurrentSubMode}", CurrentSubMode != ModeType.None ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode].Color}>{CurrentSubMode.GetModeData().Name}</color></size>\n" : "")
-                .Replace("{ModeDescription}", Description)
-                .Replace("{ModeInfo}", CurrentMode.GetModeData().Info.ToString());
+                    .Replace("{ModeColor}", Color)
+                    .Replace("{CurrentMode}", Name)
+                    .Replace("{CurrentSubMode}",
+                        CurrentSubMode != ModeType.None
+                            ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[CurrentSubMode].Color}>{CurrentSubMode.GetModeData().Name}</color></size>\n"
+                            : "")
+                    .Replace("{ModeDescription}", Description)
+                    .Replace("{ModeInfo}", CurrentMode.GetModeData().Info.ToString());
 
                 ev.Player.AddBroadcast(10, Message);
 
@@ -205,27 +209,27 @@ namespace RGM.EventArgs
                             if (hit.transform.name == "Credit")
                             {
                                 ev.Player.AddHint("로비",
-    """
-<size=50><b>[ ⭐ 랜덤게임모드(RGM) 크레딧 ⭐ ]</b></size>
+                                    """
+                                    <size=50><b>[ ⭐ 랜덤게임모드(RGM) 크레딧 ⭐ ]</b></size>
 
-<align=left><size=30>
-<b><size=35><color=#F7FE2E>관리진</color></size></b>
-@alvar_noah - 서버 소유자
-@normal._.person - 총 관리자 (베테랑)
-정규 관리자 - @bluefox2322, @wanjeon_chobo
+                                    <align=left><size=30>
+                                    <b><size=35><color=#F7FE2E>관리진</color></size></b>
+                                    @alvar_noah - 서버 소유자
+                                    @normal._.person - 총 관리자 (베테랑)
+                                    정규 관리자 - @bluefox2322, @wanjeon_chobo
 
-<b><size=35><color=#C8FE2E>개발진</color></size></b>
-@mercedes83 - 총괄 개발자
-@cocoa_1.19 - 서브 개발자
+                                    <b><size=35><color=#C8FE2E>개발진</color></size></b>
+                                    @mercedes83 - 총괄 개발자
+                                    @cocoa_1.19 - 서브 개발자
 
-<b><size=35><color=#F79F81>후원자</color></size></b>
-<size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @solminb27, @LESI_2010, @handsome_dobby</size>
+                                    <b><size=35><color=#F79F81>후원자</color></size></b>
+                                    <size=20>@dotory001, @milkyway_0119, @1__neeko__1, @yeeeee222, @tampast, @decoding_, @hs_bini, @solminb27, @LESI_2010, @handsome_dobby</size>
 
-<b><size=35><color=#F8E0F7>도움 주신 분들</color></size><b>
-<size=20>@cocoa_1.19, @leejihyuk, @mujishungplay, @changwonfirebird</size>
-</size></align>
-\n\n\n\n\n\n\n\n\n
-""", 1.2f);
+                                    <b><size=35><color=#F8E0F7>도움 주신 분들</color></size><b>
+                                    <size=20>@cocoa_1.19, @leejihyuk, @mujishungplay, @changwonfirebird</size>
+                                    </size></align>
+                                    \n\n\n\n\n\n\n\n\n
+                                    """, 1.2f);
                             }
                             else if (hit.transform.name == "Mode")
                             {
@@ -249,7 +253,8 @@ namespace RGM.EventArgs
                                         Modes.Add($"<color=#{Color}>{Name}</color>");
                                 }
 
-                                ev.Player.AddHint("로비", $"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
+                                ev.Player.AddHint("로비",
+                                    $"\n\n\n\n\n\n<size=40><b>[ ⭐ 랜덤게임모드(RGM) 모드 목록 ⭐ ]</b></size>\n\n<size=25>{string.Join(", ", Modes)}</size>");
                             }
                             else if (hit.transform.name == "ExpLeaderBoard")
                             {
@@ -274,17 +279,18 @@ namespace RGM.EventArgs
                                 }
 
                                 foreach (var user in UsersManager.UsersCache.OrderByDescending(x =>
-                                {
-                                    int exp;
-                                    return int.TryParse(x.Value[0], out exp) ? exp : 0;
-                                }).Take(10))
+                                         {
+                                             int exp;
+                                             return int.TryParse(x.Value[0], out exp) ? exp : 0;
+                                         }).Take(10))
                                 {
                                     try
                                     {
                                         string Name = user.Value[12];
                                         string Exp = user.Value[0];
 
-                                        queue.Add($"{c(queue.Count() + 1)} - <i>{Name}</i>(<color=yellow>{Exp}</color>)");
+                                        queue.Add(
+                                            $"{c(queue.Count() + 1)} - <i>{Name}</i>(<color=yellow>{Exp}</color>)");
                                     }
                                     catch (Exception e)
                                     {
@@ -292,7 +298,8 @@ namespace RGM.EventArgs
                                     }
                                 }
 
-                                ev.Player.AddHint("로비", $"<align=left><size=30><b>[ ⭐ 랜덤게임모드(RGM) EXP 순위표 ⭐ ]</b></size>\n\n<size=25>{string.Join("\n", queue)}</size></align>\n\n\n\n\n");
+                                ev.Player.AddHint("로비",
+                                    $"<align=left><size=30><b>[ ⭐ 랜덤게임모드(RGM) EXP 순위표 ⭐ ]</b></size>\n\n<size=25>{string.Join("\n", queue)}</size></align>\n\n\n\n\n");
                             }
                             else
                             {
@@ -302,11 +309,13 @@ namespace RGM.EventArgs
 
                                 for (int i = 0; i < 4; i++)
                                 {
-                                    if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
+                                    if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) &&
+                                        ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
                                         ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
                                 }
 
-                                if (new List<string>() { "First", "Second", "Third", "Fourth" }.Contains(hit.collider.name))
+                                if (new List<string>() { "First", "Second", "Third", "Fourth" }.Contains(hit.collider
+                                        .name))
                                 {
                                     if (hit.collider.name == "First")
                                     {
@@ -337,26 +346,32 @@ namespace RGM.EventArgs
                                     string FirstDesc()
                                     {
                                         if (SelectMode == "RandomSelect")
-                                            return "<b>[선택 모드 : 무작위]</b> <color=#F6CECE>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
+                                            return
+                                                "<b>[선택 모드 : 무작위]</b> <color=#F6CECE>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
 
                                         else if (SelectMode == "SimpleSelect")
-                                            return "<b>[선택 모드 : 롤토체스]</b> <color=#F5D0A9>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
+                                            return
+                                                "<b>[선택 모드 : 롤토체스]</b> <color=#F5D0A9>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
 
                                         else if (SelectMode == "MostVote")
-                                            return "<b>[선택 모드 : 다수결]</b> <color=#E6E0F8>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
+                                            return
+                                                "<b>[선택 모드 : 다수결]</b> <color=#E6E0F8>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
 
                                         else if (SelectMode == "SecretVote")
-                                            return "<b>[선택 모드 : 비밀 선거]</b> <color=#E6F8E0>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
+                                            return
+                                                "<b>[선택 모드 : 비밀 선거]</b> <color=#E6F8E0>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
 
                                         else if (SelectMode == "FightVote")
-                                            return "<b>[선택 모드 : 공포 정치]</b> <color=#FA5858>소수가 지배하는 모드 투표장이 되었습니다.</color>";
+                                            return
+                                                "<b>[선택 모드 : 공포 정치]</b> <color=#FA5858>소수가 지배하는 모드 투표장이 되었습니다.</color>";
 
                                         else
                                             return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
                                     }
 
                                     Color = "ffffff";
-                                    Description = $"{FirstDesc()}\n<size=25>[ESC] -> [Settings] -> [Server-specific]에서 유용한 정보를 확인해보세요.</size>";
+                                    Description =
+                                        $"{FirstDesc()}\n<size=25>[ESC] -> [Settings] -> [Server-specific]에서 유용한 정보를 확인해보세요.</size>";
                                 }
 
                                 string createBy()
@@ -364,7 +379,8 @@ namespace RGM.EventArgs
                                     if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode].Author == "")
                                         return "";
                                     else
-                                        return $" <size=20><color=white>Made by <i>{ModeList[SelectedMode].Author}</i></color></size>";
+                                        return
+                                            $" <size=20><color=white>Made by <i>{ModeList[SelectedMode].Author}</i></color></size>";
                                 }
 
                                 string IdeaBy()
@@ -372,7 +388,8 @@ namespace RGM.EventArgs
                                     if (!ModeList.ContainsKey(SelectedMode) || ModeList[SelectedMode].Suggester == "")
                                         return "";
                                     else
-                                        return $" <size=20><color=white>Idea by <i>{ModeList[SelectedMode].Suggester}</i></color></size>";
+                                        return
+                                            $" <size=20><color=white>Idea by <i>{ModeList[SelectedMode].Suggester}</i></color></size>";
                                 }
 
                                 string s(int num)
@@ -390,15 +407,44 @@ namespace RGM.EventArgs
                                     .Replace("{SecondMark}", ModeVote[iv(2)].Contains(ev.Player) ? "■" : "□")
                                     .Replace("{ThirdMark}", ModeVote[iv(3)].Contains(ev.Player) ? "■" : "□")
                                     .Replace("{FourthMark}", ModeVote[iv(4)].Contains(ev.Player) ? "■" : "□")
-                                    .Replace("{First}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(1)].Color}>{iv(1).GetModeData().Name}</color>") + (SubModeVote[0] != ModeType.None ? $" + <b> <size=20><color=#{ModeList[SubModeVote[0]].Color}>{SubModeVote[0].GetModeData().Name}</color></size></b>" : ""))
-                                    .Replace("{FirstVote}", ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{s(1)}</color>" : s(1))
-                                    .Replace("{Second}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(2)].Color}>{iv(2).GetModeData().Name}</color>") + (SubModeVote[1] != ModeType.None ? $" + <b><size=20><color=#{ModeList[SubModeVote[1]].Color}>{SubModeVote[1].GetModeData().Name}</color></size></b>" : ""))
-                                    .Replace("{SecondVote}", ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{s(2)}</color>" : s(2))
-                                    .Replace("{Third}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name :$"<color=#{ModeList[iv(3)].Color}>{iv(3).GetModeData().Name}</color>") + (SubModeVote[2] != ModeType.None ? $" + <b> <size=20><color=#{ModeList[SubModeVote[2]].Color}>{SubModeVote[2].GetModeData().Name}</color></size></b>" : ""))
-                                    .Replace("{ThirdVote}", ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{s(3)}</color>" : s(3))
-                                    .Replace("{Fourth}", (CurrentMode != ModeType.None ? CurrentMode.GetModeData().Name : $"<color=#{ModeList[iv(4)].Color}>{iv(4).GetModeData().Name}</color>") + (SubModeVote[3] != ModeType.None ? $" + <b> <size=20><color=#{ModeList[SubModeVote[3]].Color}>{SubModeVote[3].GetModeData().Name}</color></size></b>" : ""))
-                                    .Replace("{FourthVote}", ModeVote[iv(4)].Contains(ev.Player) ? $"<color=yellow>{s(4)}</color>" : s(4))
-                                    .Replace("{ModeName}", $"{(SelectedMode == ModeType.None ? "참고" : SelectedMode.GetModeData().Name)}{createBy()}{IdeaBy()}")
+                                    .Replace("{First}",
+                                        (CurrentMode != ModeType.None
+                                            ? CurrentMode.GetModeData().Name
+                                            : $"<color=#{ModeList[iv(1)].Color}>{iv(1).GetModeData().Name}</color>") +
+                                        (SubModeVote[0] != ModeType.None
+                                            ? $" + <b> <size=20><color=#{ModeList[SubModeVote[0]].Color}>{SubModeVote[0].GetModeData().Name}</color></size></b>"
+                                            : ""))
+                                    .Replace("{FirstVote}",
+                                        ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{s(1)}</color>" : s(1))
+                                    .Replace("{Second}",
+                                        (CurrentMode != ModeType.None
+                                            ? CurrentMode.GetModeData().Name
+                                            : $"<color=#{ModeList[iv(2)].Color}>{iv(2).GetModeData().Name}</color>") +
+                                        (SubModeVote[1] != ModeType.None
+                                            ? $" + <b><size=20><color=#{ModeList[SubModeVote[1]].Color}>{SubModeVote[1].GetModeData().Name}</color></size></b>"
+                                            : ""))
+                                    .Replace("{SecondVote}",
+                                        ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{s(2)}</color>" : s(2))
+                                    .Replace("{Third}",
+                                        (CurrentMode != ModeType.None
+                                            ? CurrentMode.GetModeData().Name
+                                            : $"<color=#{ModeList[iv(3)].Color}>{iv(3).GetModeData().Name}</color>") +
+                                        (SubModeVote[2] != ModeType.None
+                                            ? $" + <b> <size=20><color=#{ModeList[SubModeVote[2]].Color}>{SubModeVote[2].GetModeData().Name}</color></size></b>"
+                                            : ""))
+                                    .Replace("{ThirdVote}",
+                                        ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{s(3)}</color>" : s(3))
+                                    .Replace("{Fourth}",
+                                        (CurrentMode != ModeType.None
+                                            ? CurrentMode.GetModeData().Name
+                                            : $"<color=#{ModeList[iv(4)].Color}>{iv(4).GetModeData().Name}</color>") +
+                                        (SubModeVote[3] != ModeType.None
+                                            ? $" + <b> <size=20><color=#{ModeList[SubModeVote[3]].Color}>{SubModeVote[3].GetModeData().Name}</color></size></b>"
+                                            : ""))
+                                    .Replace("{FourthVote}",
+                                        ModeVote[iv(4)].Contains(ev.Player) ? $"<color=yellow>{s(4)}</color>" : s(4))
+                                    .Replace("{ModeName}",
+                                        $"{(SelectedMode == ModeType.None ? "참고" : SelectedMode.GetModeData().Name)}{createBy()}{IdeaBy()}")
                                     .Replace("{ModeColor}", $"{Color}").Replace("{ModeDescription}", $"{Description}")
                                     .Replace("{Lines}", $"{(Description.Contains("\n") ? "\n" : "\n\n")}")
                                     .Replace("{Exp}", $"{uc[0]}")
@@ -454,7 +500,8 @@ namespace RGM.EventArgs
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) && ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
+                    if (ModeVote.ContainsKey(ModeVote.Keys.ToList()[i]) &&
+                        ModeVote[ModeVote.Keys.ToList()[i]].Contains(ev.Player))
                         ModeVote[ModeVote.Keys.ToList()[i]].Remove(ev.Player);
                 }
             }
@@ -488,14 +535,18 @@ namespace RGM.EventArgs
                                 foreach (var item in PlayersInfo[userId].Items)
                                     player.AddItem(item.Type);
 
-                                player.CurrentItem = player.Items.ToList().Find(x => x.Type == PlayersInfo[userId].CurrentItem.Type);
+                                player.CurrentItem = player.Items.ToList()
+                                    .Find(x => x.Type == PlayersInfo[userId].CurrentItem.Type);
 
-                                player.Position = new Vector3(PlayersInfo[userId].Position.x, PlayersInfo[userId].Position.y, PlayersInfo[userId].Position.z);
+                                player.Position = new Vector3(PlayersInfo[userId].Position.x,
+                                    PlayersInfo[userId].Position.y, PlayersInfo[userId].Position.z);
 
                                 if (PlayersInfo.ContainsKey(userId))
                                     PlayersInfo.Remove(userId);
 
-                                PlayerManager.List.Where(x => x.IsDead).ToList().ForEach(x => x.AddBroadcast(10, $"<size=20>❤️ SCP 재접속 -> <b><i>{player.DisplayNickname}</i></b>(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
+                                PlayerManager.List.Where(x => x.IsDead).ToList().ForEach(x =>
+                                    x.AddBroadcast(10,
+                                        $"<size=20>❤️ SCP 재접속 -> <b><i>{player.DisplayNickname}</i></b>(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)</size>"));
                                 Webhook.Send($"**✅ 재접속 완료**ㅣ`{nickname}`({role}, {userId})");
                                 yield break;
                             }
@@ -525,17 +576,19 @@ namespace RGM.EventArgs
         public static void OnChangingRole(ChangingRoleEventArgs ev)
         {
             if (ev.Player.IsDND() && ev.NewRole.IsFlamingo())
-            {
                 ev.IsAllowed = false;
-            }
         }
 
         public static void OnSpawned(SpawnedEventArgs ev)
         {
+            if (ev.Player.IsNPC || ev.Player.IsNonePlayer())
+                return;
+
             ev.Player.EnableEffect(EffectType.FogControl, 1);
 
             if (MapUtils.LoadedMaps.Keys.Any(Maps.Contains))
                 ev.Player.EnableEffect(EffectType.NightVision, 255);
+
 
             if (ev.Player.IsAlive)
             {
@@ -557,7 +610,8 @@ namespace RGM.EventArgs
 
                             ev.Player.UserId.AddProduct(name, out string response);
 
-                            Map.Broadcast(20, $"<size=30><b>🎁 축하드립니다!</b> <i>{ev.Player.DisplayNickname}</i>님께서 {name}(을)를 획득했습니다!</size>");
+                            Map.Broadcast(20,
+                                $"<size=30><b>🎁 축하드립니다!</b> <i>{ev.Player.DisplayNickname}</i>님께서 {name}(을)를 획득했습니다!</size>");
                             GlobalPlayer.TryPlay("6AM", 1.5f);
                         }
                         else if (UnityEngine.Random.Range(1, 51) == 1)
@@ -569,7 +623,6 @@ namespace RGM.EventArgs
 
                 if (Round.IsLobby || ev.Reason == SpawnReason.RoundStart)
                 {
-
                 }
                 else
                     PlayersReport[ev.Player.UserId].Revive += 1;
@@ -606,8 +659,10 @@ namespace RGM.EventArgs
                                 ActiveEffects = ev.Player.ActiveEffects.ToList(),
                                 Items = ev.Player.Items.ToList(),
                                 CurrentItem = ev.Player.CurrentItem,
-                                Position = new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z),
-                                Rotation = new Quaternion(ev.Player.Rotation.x, ev.Player.Rotation.y, ev.Player.Rotation.z, ev.Player.Rotation.w),
+                                Position =
+                                    new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z),
+                                Rotation = new Quaternion(ev.Player.Rotation.x, ev.Player.Rotation.y,
+                                    ev.Player.Rotation.z, ev.Player.Rotation.w),
                             });
                         }
                     }
@@ -619,6 +674,7 @@ namespace RGM.EventArgs
                         if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
                             ev.Player.Role.Set(RoleTypeId.ChaosConscript);
                     }
+
                     if (StartupRandom == 2) // 시작 NTF
                     {
                         if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
@@ -634,20 +690,22 @@ namespace RGM.EventArgs
                         ev.Player.Health = ev.Player.MaxHealth;
                     }
 
-                    if (UnityEngine.Random.Range(1, 101) == 1 && !(HolidayUtils.IsHolidayActive(HolidayType.Halloween) || HolidayUtils.IsHolidayActive(HolidayType.Christmas))) // SCP-3114 추가
+                    if (UnityEngine.Random.Range(1, 101) == 1 &&
+                        !(HolidayUtils.IsHolidayActive(HolidayType.Halloween) ||
+                          HolidayUtils.IsHolidayActive(HolidayType.Christmas))) // SCP-3114 추가
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp3114);
                     }
                 }
             }
 
-            if (ev.Player.IsAlive && Round.IsStarted && 
-                new List<SpawnReason> 
+            if (ev.Player.IsAlive && Round.IsStarted &&
+                new List<SpawnReason>
                 {
-                    SpawnReason.RoundStart, 
+                    SpawnReason.RoundStart,
                     SpawnReason.Respawn,
                     SpawnReason.RespawnMiniwave,
-                    SpawnReason.ItemUsage, 
+                    SpawnReason.ItemUsage,
                     SpawnReason.Escaped
                 }.Contains(ev.Reason) &&
                 CurrentMode.GetModeData().Info == ModeInfo.Plus)
@@ -667,14 +725,12 @@ namespace RGM.EventArgs
 
                     if (ev.Door.IsFullyClosed)
                     {
-                        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-                        {
-                            ev.Door.IsOpen = true;
-                        });
+                        Timing.CallDelayed(Timing.WaitForOneFrame, () => { ev.Door.IsOpen = true; });
                     }
                 }
 
-                else if (ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Door.IsOpen && !ev.Door.Type.ToString().Contains("Scp079"))
+                else if (ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Door.IsOpen &&
+                         !ev.Door.Type.ToString().Contains("Scp079"))
                 {
                     Timing.CallDelayed(0.1f, () =>
                     {
@@ -692,20 +748,25 @@ namespace RGM.EventArgs
                                 InteractedDoors.Remove(ev.Door);
                             }
                             else
-                                ev.Player.AddHint("SCP 문 강제 개폐", $"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
+                                ev.Player.AddHint("SCP 문 강제 개폐",
+                                    $"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
                         }
                     });
                 }
             }
         }
-        
+
         public static void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.DamageHandler.Type == DamageType.Falldown && ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) && lightweight.IsEnabled)
+            if (ev.Player.IsNPC || ev.Player.IsNonePlayer()) return;
+            
+            if (ev.DamageHandler.Type == DamageType.Falldown &&
+                ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) &&
+                lightweight.IsEnabled)
             {
-                if (HolidayUtils.IsHolidayActive(HolidayType.Halloween) && ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) && metal.IsEnabled)
+                if (HolidayUtils.IsHolidayActive(HolidayType.Halloween) &&
+                    ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) && metal.IsEnabled)
                 {
-
                 }
                 else
                     ev.IsAllowed = false;
@@ -724,9 +785,13 @@ namespace RGM.EventArgs
                 if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type.IsWeapon())
                     ev.DamageHandler.Damage /= 2;
 
-                float damage = ev.IsInstantKill ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield : ev.DamageHandler.Damage;
+                float damage = ev.IsInstantKill
+                    ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
+                    : ev.DamageHandler.Damage;
 
-                if ((HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || ev.Attacker.LeadingTeam != ev.Player.LeadingTeam || Server.FriendlyFire) && ev.Attacker != ev.Player && damage < 10000)
+                if ((HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
+                     ev.Attacker.LeadingTeam != ev.Player.LeadingTeam || Server.FriendlyFire) &&
+                    ev.Attacker != ev.Player && damage < 10000)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
             }
         }
@@ -771,9 +836,9 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
-            if (ev.Attacker == null || 
-                ev.Attacker.IsNonePlayer() || 
-                ev.Player.IsNonePlayer() || 
+            if (ev.Attacker == null ||
+                ev.Attacker.IsNonePlayer() ||
+                ev.Player.IsNonePlayer() ||
                 SelectMode == "FightVote" ||
                 Round.IsEnded)
                 return;
@@ -795,9 +860,11 @@ namespace RGM.EventArgs
                 string MessageFormat()
                 {
                     if (ev.Attacker == null)
-                        return $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                        return
+                            $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
 
-                    return $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                    return
+                        $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
                 }
 
                 foreach (var player in PlayerManager.List.Where(x => x.IsDead || x == ev.Attacker))
@@ -892,7 +959,8 @@ namespace RGM.EventArgs
                         {
                             if (scp173.IsObserved)
                             {
-                                ev.ClaimedTarget.Hurt(new PlayerStatsSystem.ScpDamageHandler(ev.Player.ReferenceHub, ev.Firearm.Damage / 2, DeathTranslations.Scp173));
+                                ev.ClaimedTarget.Hurt(new PlayerStatsSystem.ScpDamageHandler(ev.Player.ReferenceHub,
+                                    ev.Firearm.Damage / 2, DeathTranslations.Scp173));
 
                                 ev.Player.ShowHitMarker();
                             }
@@ -910,7 +978,8 @@ namespace RGM.EventArgs
                 return;
             }
 
-            MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>추방</color>되었습니다. (사유: {ev.Reason})</size>");
+            MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10,
+                $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>추방</color>되었습니다. (사유: {ev.Reason})</size>");
         }
 
         public static void OnBanning(BanningEventArgs ev)
@@ -921,7 +990,8 @@ namespace RGM.EventArgs
                 return;
             }
 
-            MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10, $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>차단</color>되었습니다. (사유: {ev.Reason})</size>");
+            MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10,
+                $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>차단</color>되었습니다. (사유: {ev.Reason})</size>");
         }
 
         public static void OnChangingGroup(ChangingGroupEventArgs ev)
@@ -930,10 +1000,7 @@ namespace RGM.EventArgs
             {
                 ulong permission = ev.Player.Group.Permissions;
 
-                Timing.CallDelayed(1, () =>
-                {
-                    ev.Player.Group.Permissions = permission;
-                });
+                Timing.CallDelayed(1, () => { ev.Player.Group.Permissions = permission; });
             }
         }
 

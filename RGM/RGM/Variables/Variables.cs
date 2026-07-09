@@ -291,6 +291,21 @@ namespace RGM.Variables
             },
         };
 
+        public static readonly List<ModeType> SuicideBlockedModes =
+        [
+            ModeType.Spirit
+        ];
+
+        public static readonly List<RoleTypeId> SuicideBlockedRoles = 
+        [
+            RoleTypeId.Tutorial
+        ];
+
+        public static readonly List<ModeType> ScpSuicideAvailableModes =
+        [
+            ModeType.Infection
+        ];
+        
         // -------------------------------------------------------------------------------------------------
 
         public static Dictionary<ModeType, ModeData> ModeList = new();

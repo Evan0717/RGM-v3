@@ -1008,14 +1008,17 @@ public class ABattle : Mode
     {
         if (CurrentExtraModes.Contains("골드 전주곡"))
         {
-            if (player.Role.Type == RoleTypeId.Scp079)
-                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
+            if (player.IsNonePlayer()) return;
 
-            else
-                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1, [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
+            player.AddAbility(player.Role.Type == RoleTypeId.Scp079
+                ? Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First()
+                : Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+                    [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
+            if (player.IsNonePlayer()) return;
+            
             if (player.Role.Type == RoleTypeId.Scp079)
             {
                 for (int i = 0; i < Random.Range(1, 3); i++)

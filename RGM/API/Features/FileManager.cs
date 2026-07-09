@@ -217,7 +217,7 @@ namespace RGM.API.Features
         /// <summary>
         /// 유저 캐시
         /// </summary>
-        public static Dictionary<string, List<string>> UsersCache = new Dictionary<string, List<string>>();
+        public static Dictionary<string, List<string>> UsersCache = new();
         
         /**
          * <summary>유저에 대한 정보를 불러옵니다</summary>
