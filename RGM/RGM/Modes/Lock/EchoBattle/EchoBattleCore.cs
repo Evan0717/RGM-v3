@@ -134,7 +134,8 @@ public static class EchoBattleCore
             return;
         }
 
-        // 적용 직전 Cost 불일치 메인 스탯 잔존값 제거
+        // 적용 직전 슬롯/스탯 잔존값 제거
+        loadout.SanitizeMainSlot();
         loadout.SanitizeAllMainStats();
 
         if (loadout.MainSlot.HasValue)

@@ -73,12 +73,12 @@ public static class EchoSetting
 
     static void AddEchoAndStatPair(List<SettingBase> list, ref int nextId, string echoLabel, EchoSlotKind slot, int slotIndex)
     {
-        var echoOptions = BuildEchoOptions().Prepend(NoneOption).ToList();
+        var echoOptions = BuildEchoOptions(slot).Prepend(NoneOption).ToList();
         int echoId = nextId++;
         list.Add(new DropdownSetting(
             id: echoId,
             label: echoLabel,
-            hintDescription: BuildEchoHintDescription(),
+            hintDescription: BuildEchoHintDescription(slot),
             options: echoOptions,
             header: Header
         ));
@@ -108,10 +108,15 @@ public static class EchoSetting
         };
     }
 
-    static IEnumerable<string> BuildEchoOptions()
+    static IEnumerable<string> BuildEchoOptions(EchoSlotKind slot)
     {
         foreach (var pair in EchoInfo.Echoes.OrderByDescending(x => (int)x.Value.Cost).ThenBy(x => x.Value.Name))
+        {
+            if (!IsEchoAllowedInSlot(slot, pair.Value))
+                continue;
+
             yield return FormatEchoOption(pair.Value);
+        }
     }
 
     static IEnumerable<string> BuildMainStatOptions()
@@ -120,21 +125,26 @@ public static class EchoSetting
             yield return FormatMainStatOption(type);
     }
 
-    static string BuildEchoHintDescription()
+    static string BuildEchoHintDescription(EchoSlotKind slot)
     {
         var lines = EchoInfo.Echoes.Values
+            .Where(x => IsEchoAllowedInSlot(slot, x))
             .OrderByDescending(x => (int)x.Cost)
             .Select(x => $"• {FormatEchoOption(x)}: {x.Description}");
 
-        return string.Join("\n", lines) + $"\n\n최대 {EchoInfo.MaxEquippedEchoes}개 / 합산 Cost {EchoInfo.MaxTotalCost}";
+        string slotLimit = slot == EchoSlotKind.Main
+            ? "\n메인 슬롯은 Cost4/Cost3 Echo만 장착할 수 있습니다."
+            : "";
+
+        return string.Join("\n", lines) + $"\n\n최대 {EchoInfo.MaxEquippedEchoes}개 / 합산 Cost {EchoInfo.MaxTotalCost}{slotLimit}";
     }
 
     static string BuildMainStatHintDescription()
     {
         return
             "장착한 Echo의 Cost에 맞는 메인 스탯을 고르세요.\n" +
-            "• Cost4: 공격%/HP%/방어%/SCP데미지%/인간데미지%/크리%/이속·점프\n" +
-            "• Cost3: 공격%/HP%/방어%/스태미나감소%/헤드샷%/AHP·HS\n" +
+            "• Cost4: 공격%/HP%/방어%/크리%/이속·점프\n" +
+            "• Cost3: 공격%/HP%/방어%/SCP데미지%/인간데미지%/스태미나감소%/헤드샷%/AHP·HS\n" +
             "• Cost1: 공격%/HP%/방어%\n" +
             $"• '{AutoOption}'이면 Echo 기본 메인 스탯을 사용합니다.\n" +
             "• Cost에 없는 스탯을 고르면 적용되지 않습니다.";
@@ -148,6 +158,16 @@ public static class EchoSetting
     static string FormatMainStatOption(EchoMainStatType type)
     {
         return EchoStats.GetMainStatDisplayName(type);
+    }
+
+    static bool IsEchoAllowedInSlot(EchoSlotKind slot, EchoData data)
+    {
+        if (data == null)
+            return false;
+
+        return slot != EchoSlotKind.Main
+            || data.Cost == EchoCost.Cost4
+            || data.Cost == EchoCost.Cost3;
     }
 
     public static void OnSSInput(ReferenceHub sender, ServerSpecificSettingBase setting)
@@ -216,6 +236,12 @@ public static class EchoSetting
             var match = EchoInfo.Echoes.Values.FirstOrDefault(x => FormatEchoOption(x) == selected);
             if (match == null)
                 return;
+
+            if (!IsEchoAllowedInSlot(meta.Slot, match))
+            {
+                player.ShowHint("<color=red>메인 슬롯에는 Cost4/Cost3 Echo만 장착할 수 있습니다.</color>", 3);
+                return;
+            }
 
             selectedType = match.EchoType;
 

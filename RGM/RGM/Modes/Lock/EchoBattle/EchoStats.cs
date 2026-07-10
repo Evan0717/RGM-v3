@@ -39,19 +39,19 @@ public static class EchoStats
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
-        { EchoSubOptionType.AttackPercent, new[] { 6.5f, 7.4f, 8.3f, 9.2f, 10.1f, 11.0f } },
-        { EchoSubOptionType.AttackFlat, new[] { 2f, 4f, 6f, 8f, 10f, 12f } },
-        { EchoSubOptionType.DefensePercent, new[] { 2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f } },
-        { EchoSubOptionType.DefenseFlat, new[] { 3.0f, 3.4f, 3.8f, 4.2f, 4.6f, 5.0f } },
-        { EchoSubOptionType.HpPercent, new[] { 8.1f, 9.2f, 10.3f, 11.4f, 12.5f, 13.6f } },
-        { EchoSubOptionType.HpFlat, new[] { 20f, 26f, 32f, 38f, 44f, 50f } },
-        { EchoSubOptionType.CriticalChance, new[] { 3.3f, 3.7f, 4.1f, 4.5f, 4.9f, 5.3f } },
-        { EchoSubOptionType.ScpDamagePercent, new[] { 8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f } },
-        { EchoSubOptionType.HumanDamagePercent, new[] { 8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f } },
-        { EchoSubOptionType.MoveSpeed, new[] { 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f } },
-        { EchoSubOptionType.JumpPower, new[] { 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f } },
-        { EchoSubOptionType.StaminaDrainReduction, new[] { 8.3f, 9.2f, 10.1f, 11.0f, 11.9f, 12.8f } },
-        { EchoSubOptionType.HeadshotDamage, new[] { 20.8f, 22.5f, 24.2f, 25.9f, 27.6f, 29.3f } },
+        { EchoSubOptionType.AttackPercent, [6.5f, 7.4f, 8.3f, 9.2f, 10.1f, 11.0f] },
+        { EchoSubOptionType.AttackFlat, [2f, 4f, 6f, 8f, 10f, 12f] },
+        { EchoSubOptionType.DefensePercent, [2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f] },
+        { EchoSubOptionType.DefenseFlat, [3.0f, 3.4f, 3.8f, 4.2f, 4.6f, 5.0f] },
+        { EchoSubOptionType.HpPercent, [8.1f, 9.2f, 10.3f, 11.4f, 12.5f, 13.6f] },
+        { EchoSubOptionType.HpFlat, [20f, 26f, 32f, 38f, 44f, 50f] },
+        { EchoSubOptionType.CriticalChance, [3.3f, 3.7f, 4.1f, 4.5f, 4.9f, 5.3f] },
+        { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
+        { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
+        { EchoSubOptionType.MoveSpeed, [5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f] },
+        { EchoSubOptionType.JumpPower, [2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f] },
+        { EchoSubOptionType.StaminaDrainReduction, [8.3f, 9.2f, 10.1f, 11.0f, 11.9f, 12.8f] },
+        { EchoSubOptionType.HeadshotDamage, [20.8f, 22.5f, 24.2f, 25.9f, 27.6f, 29.3f] },
     };
 
     public static float LerpStat(float min, float max, int level)
@@ -75,20 +75,20 @@ public static class EchoStats
             (EchoCost.Cost4, EchoMainStatType.AttackPercent) => LerpStat(6.6f, 33.0f, level),
             (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(12.5f, 62.5f, level),
             (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(4.0f, 20.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.ScpDamagePercent) => LerpStat(8.5f, 42.5f, level),
-            (EchoCost.Cost4, EchoMainStatType.HumanDamagePercent) => LerpStat(8.5f, 42.5f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalChance) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(10.0f, 60.0f, level),
 
             (EchoCost.Cost3, EchoMainStatType.AttackPercent) => LerpStat(5.2f, 26.0f, level),
             (EchoCost.Cost3, EchoMainStatType.HpPercent) => LerpStat(8.6f, 43.0f, level),
             (EchoCost.Cost3, EchoMainStatType.Defense) => LerpStat(2.0f, 10.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(8.5f, 42.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(8.5f, 42.5f, level),
             (EchoCost.Cost3, EchoMainStatType.StaminaDrainReduction) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(16.0f, 80.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(1.0f, 5.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(17.0f, 85.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(1.6f, 8.0f, level),
 
             (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.2f, 16.0f, level),
-            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(4.8f, 24.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(5.4f, 27.0f, level),
             (EchoCost.Cost1, EchoMainStatType.Defense) => LerpStat(1.0f, 5.0f, level),
 
             _ => 0f
@@ -112,8 +112,6 @@ public static class EchoStats
         EchoMainStatType.AttackPercent,
         EchoMainStatType.HpPercent,
         EchoMainStatType.Defense,
-        EchoMainStatType.ScpDamagePercent,
-        EchoMainStatType.HumanDamagePercent,
         EchoMainStatType.CriticalChance,
         EchoMainStatType.MoveSpeedAndJump,
     };
@@ -123,6 +121,8 @@ public static class EchoStats
         EchoMainStatType.AttackPercent,
         EchoMainStatType.HpPercent,
         EchoMainStatType.Defense,
+        EchoMainStatType.ScpDamagePercent,
+        EchoMainStatType.HumanDamagePercent,
         EchoMainStatType.StaminaDrainReduction,
         EchoMainStatType.HeadshotDamage,
         EchoMainStatType.AhpRegenAndMax,
@@ -380,9 +380,9 @@ public static class EchoStats
             case EchoMainStatType.AhpRegenAndMax:
                 // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
-                snapshot.AhpMax += LerpStat(25f, 125f, level);
-                snapshot.HsRegen += LerpStat(4f, 20f, level);
-                snapshot.HsMax += LerpStat(140f, 700f, level);
+                snapshot.AhpMax += LerpStat(20f, 150f, level);
+                snapshot.HsRegen += LerpStat(2f, 15f, level);
+                snapshot.HsMax += LerpStat(120f, 1000f, level);
                 break;
         }
     }
@@ -432,7 +432,7 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 11f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 8f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
@@ -464,6 +464,7 @@ public static class EchoStats
             return;
 
         Timing.KillCoroutines($"EchoRegen_{player.UserId}");
+        Timing.KillCoroutines($"EchoStamina_{player.UserId}");
 
         if (!EchoInfo.PlayerPassiveEffects.TryGetValue(player, out var prev))
             return;
@@ -474,6 +475,8 @@ public static class EchoStats
             player.RemoveEffect(EffectType.MovementBoost, prev.MovementBoost);
         if (prev.Lightweight > 0)
             player.RemoveEffect(EffectType.Lightweight, prev.Lightweight);
+        if (prev.StaminaDrainToggled)
+            player.IsUsingStamina = true;
 
         if (prev.EchoAhpKillCode.HasValue)
             KillEchoAhpProcess(player, prev.EchoAhpKillCode.Value);
@@ -563,6 +566,12 @@ public static class EchoStats
             player.AddEffect(EffectType.Lightweight, effectState.Lightweight);
         }
 
+        if (snapshot.StaminaDrainReduction > 0)
+        {
+            effectState.StaminaDrainToggled = true;
+            Timing.RunCoroutine(StaminaDrainReductionRoutine(player, snapshot.StaminaDrainReduction), $"EchoStamina_{player.UserId}");
+        }
+
         EchoInfo.PlayerPassiveEffects[player] = effectState;
 
         // AHP / HS: 역할 기본값 + 스냅샷 증가량 (재적용 시 Max/현재값 복리 방지)
@@ -593,6 +602,31 @@ public static class EchoStats
 
         if (snapshot.AhpRegen > 0 || snapshot.HsRegen > 0)
             Timing.RunCoroutine(RegenRoutine(player, snapshot), $"EchoRegen_{player.UserId}");
+    }
+
+    static IEnumerator<float> StaminaDrainReductionRoutine(Player player, float reductionPercent)
+    {
+        const float cycleSeconds = 1f;
+        float noDrainSeconds = cycleSeconds * Mathf.Clamp(reductionPercent, 0f, 100f) / 100f;
+        float drainSeconds = cycleSeconds - noDrainSeconds;
+
+        while (player != null && player.IsAlive && EchoInfo.PlayerStats.ContainsKey(player))
+        {
+            if (noDrainSeconds > 0f)
+            {
+                player.IsUsingStamina = false;
+                yield return Timing.WaitForSeconds(noDrainSeconds);
+            }
+
+            if (drainSeconds > 0f)
+            {
+                player.IsUsingStamina = true;
+                yield return Timing.WaitForSeconds(drainSeconds);
+            }
+        }
+
+        if (player != null)
+            player.IsUsingStamina = true;
     }
 
     static IEnumerator<float> RegenRoutine(Player player, EchoStatSnapshot snapshot)

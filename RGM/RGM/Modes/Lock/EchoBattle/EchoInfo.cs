@@ -124,6 +124,19 @@ public class EchoLoadout
         return false;
     }
 
+    public void SanitizeMainSlot()
+    {
+        if (!MainSlot.HasValue)
+            return;
+
+        var data = MainSlot.Value.GetData();
+        if (data == null || (data.Cost != EchoCost.Cost4 && data.Cost != EchoCost.Cost3))
+        {
+            MainSlot = null;
+            MainSlotStat = null;
+        }
+    }
+
     public EchoMainStatType? GetSlotMainStat(int slotIndex)
     {
         // 0 = Main, 1~4 = Sub
@@ -243,6 +256,7 @@ public class EchoPassiveEffectState
     public byte DefenseReduction;
     public byte MovementBoost;
     public byte Lightweight;
+    public bool StaminaDrainToggled;
 
     /// <summary>스탯으로 지급한 AHP 프로세스 KillCode.</summary>
     public int? EchoAhpKillCode;
