@@ -228,11 +228,17 @@ public enum EchoType
     Berserker,
 
     // Cost3
-    PetitDangdang,
+    Chibi049,
+    Chibi096,
+    Chibi106,
+    Chibi173,
+    Chibi939,
     GoldenPig,
 
     // Cost1
     ClassD,
     Scientist,
-    FacilityGuard
+    FacilityGuard,
+    Chaos,
+    Mtf
 }

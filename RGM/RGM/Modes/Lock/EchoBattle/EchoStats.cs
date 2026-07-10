@@ -35,7 +35,7 @@ public static class EchoStats
         DamageType.Scp106
     };
 
-    static readonly float[] SubOptionGradeWeights = { 250, 220, 190, 150, 110, 80 };
+    static readonly float[] SubOptionGradeWeights = [250, 220, 190, 150, 110, 80];
     static readonly System.Random SubOptionRandom = new();
     static readonly object SubOptionRandomLock = new();
 
@@ -50,10 +50,10 @@ public static class EchoStats
         { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
         { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
-        { EchoSubOptionType.MoveSpeed, [5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f] },
-        { EchoSubOptionType.JumpPower, [2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f] },
+        { EchoSubOptionType.MoveSpeed, [7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f] },
+        { EchoSubOptionType.JumpPower, [3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f] },
         { EchoSubOptionType.StaminaDrainReduction, [8.3f, 9.2f, 10.1f, 11.0f, 11.9f, 12.8f] },
-        { EchoSubOptionType.HeadshotDamage, [20.8f, 22.5f, 24.2f, 25.9f, 27.6f, 29.3f] },
+        { EchoSubOptionType.HeadshotDamage, [22.8f, 24.5f, 26.2f, 27.9f, 29.6f, 31.3f] },
         { EchoSubOptionType.SizeReduction, [2.8f, 3.5f, 4.2f, 4.9f, 5.6f, 6.3f] },
     };
 

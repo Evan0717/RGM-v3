@@ -4,8 +4,8 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.EchoBattle.EchoList.cost3;
 
-[Echo("쁘띠 댕댕이", "사용 시 15초간 시야 개선 및 스태미너 무제한, 재사용 대기시간 60초", EchoType.PetitDangdang, EchoCost.Cost3, EchoMainStatType.StaminaDrainReduction, "🐶")]
-public class PetitDangdang : EchoActiveAbility
+[Echo("쁘띠 939", "사용 시 15초간 시야 개선 및 스태미너 무제한, 재사용 대기시간 60초", EchoType.Chibi939, EchoCost.Cost3, EchoMainStatType.StaminaDrainReduction, "🐶")]
+public class Chibi939 : EchoActiveAbility
 {
     public override float Duration => 15f;
     public override float Cooldown => 60f;
