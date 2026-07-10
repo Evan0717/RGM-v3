@@ -21,7 +21,7 @@ using Random = UnityEngine.Random;
 
 namespace RGM.Modes;
 
-[Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.ABattle)]  
+[Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.ABattle)]  
 public class ABattle : Mode
 {
     public override string Name => "워크스테이션 업그레이드";
@@ -101,6 +101,15 @@ public class ABattle : Mode
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 20% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
         {"난장판", "두가지의 추가 모드(난장판 포함)가 적용되며, 관리자의 제약이 모두 풀립니다."}
+    };
+
+    public static Dictionary<string, string> AdditionalModes = new Dictionary<string, string>()
+    {
+        //{"승천", "능력을 획득하려고 시도할 시 저 하늘로 승천합니다."},
+        //{"추가 SCP", "추가적인 SCP와 사물이 추가됩니다."},
+        //{"저거너트", "워크를 혐오하는 저거너트가 워크스테이션을 전부 부숴버리기 위해 시설을 침공하였습니다."},
+        //{"무제한", "모두가 [신화]무제한 능력을 획득합니다."},
+        //{"로켓 런처", "모두가 [신화]로켓 런처 능력을 획득합니다."},
     };
     public static List<ICommand> DotCommands = new()
     {
