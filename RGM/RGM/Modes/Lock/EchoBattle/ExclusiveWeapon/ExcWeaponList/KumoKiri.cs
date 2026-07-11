@@ -10,7 +10,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "KumoKiri",
-    "\uACF5\uACA9\uB825 Flat + \uD06C\uB9AC\uD2F0\uCEEC. \uB0AE\uC740 \uD655\uB960\uB85C \uACE0\uC815 \uD53C\uD574 618.03.",
+    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 (0.2% * 공진 수치) 확률로 618.03 고정 피해.",
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
@@ -50,6 +50,6 @@ public class KumoKiri : ExcWeapon
             return;
 
         ev.DamageHandler.Damage += FixedDamage;
-        Owner.ShowHint($"<color=#cc88ff>KumoKiri</color> \uACE0\uC815 \uD53C\uD574 +{FixedDamage:0.##}", 1.2f);
+        Owner.ShowHint($"<color=#cc88ff>KumoKiri</color> 고정 피해 +{FixedDamage:0.##}", 1.2f);
     }
 }

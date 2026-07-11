@@ -11,8 +11,8 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// Passive: HP 12%+(res*4%). On AHP/HS loss, heal HP by (12%*res) of pure shield loss.
 /// </summary>
 [ExclusiveWeapon(
-    "\uBC24\uD558\uB298 \uC5F0\uC0B0 \uCE21\uC815\uAE30",
-    "\uACF5\uACA9\uB825 Flat + HP%. AHP/HS \uD53C\uD574 \uC2DC \uCC28\uAC10\uB7C9\uC758 \uC77C\uBD80\uB9CC\uD07C HP \uD68C\uBCF5.",
+    "밤하늘 연산 측정기",
+    "HP 12% + (공진 수치 * 4%) 증가. AHP(또는 HS)가 피해를 입을 경우, AHP(HS)의 순수 차감량의 (12% * 공진 수치)만큼 HP 회복. 단, HP 최대치를 초과하여 회복할 수 없음.",
     ExclusiveWeaponType.NightskyCalculator)]
 public class NightskyCalculator : ExcWeapon
 {

@@ -13,8 +13,8 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// Flame stacks (3s CD, 8s duration). 6 stacks explode + 7m splash 60%.
 /// </summary>
 [ExclusiveWeapon(
-    "\uC704\uC870\uB41C \uC791\uC740 \uBCC4",
-    "\uACF5\uACA9\uB825 Flat + \uD06C\uB9AC\uD2F0\uCEEC. \uD654\uC0C1 \uB300\uC0C1 \uD06C\uB9AC \uB370\uBBF8\uC9C0 \uC99D\uAC00, \uBD88\uAF43 \uC2A4\uD0DD \uD3ED\uBC1C.",
+    "위조된 작은 별",
+    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (12% * 공진 수치) 증가. 불꽃 6스택 폭발 + 7m 스플래시(60%).",
     ExclusiveWeaponType.ForgedStar)]
 public class ForgedStar : ExcWeapon
 {
@@ -146,7 +146,7 @@ public class ForgedStar : ExcWeapon
             DealDamage(other, explosion * SplashRatio);
         }
 
-        Owner.ShowHint($"<color=#ff8844>\uBD88\uAF43 \uD3ED\uBC1C</color> {explosion:0.#}", 1.5f);
+        Owner.ShowHint($"<color=#ff8844>불꽃 폭발</color> {explosion:0.#}", 1.5f);
     }
 
     void DealDamage(Player target, float amount)

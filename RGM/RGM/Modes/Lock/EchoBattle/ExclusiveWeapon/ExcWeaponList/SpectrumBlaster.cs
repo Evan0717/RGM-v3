@@ -11,8 +11,8 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// Uses damage multiplier instead of native ArmorPenetration.
 /// </summary>
 [ExclusiveWeapon(
-    "\uC2A4\uD399\uD2B8\uB7FC \uBE14\uB798\uC2A4\uD130",
-    "\uACF5\uACA9\uB825 Flat + \uD06C\uB9AC\uD2F0\uCEEC. 10\uD68C \uD0C0\uACA9\uB9C8\uB2E4 \uB2E4\uC74C \uACF5\uACA9\uC5D0 \uAD00\uD1B5(\uB370\uBBF8\uC9C0 \uBC30\uC728) \uBD80\uC5EC.",
+    "스펙트럼 블래스터",
+    "공격력 8% + (공진 수치 * 2%) 증가. 적에게 10회 타격을 입힐 때마다 다음 공격은 관통력이 (10% * 공진 수치)만큼 증가.",
     ExclusiveWeaponType.SpectrumBlaster)]
 public class SpectrumBlaster : ExcWeapon
 {
@@ -64,7 +64,7 @@ public class SpectrumBlaster : ExcWeapon
         {
             _hitCount = 0;
             _pierceArmed = true;
-            Owner.ShowHint($"<color=#88aaff>\uC2A4\uD399\uD2B8\uB7FC</color> \uB2E4\uC74C \uACF5\uACA9 \uAD00\uD1B5 +{10 * Resonance}%", 1.5f);
+            Owner.ShowHint($"<color=#88aaff>스펙트럼</color> 다음 공격 관통 +{10 * Resonance}%", 1.5f);
         }
     }
 }

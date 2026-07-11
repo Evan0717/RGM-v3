@@ -14,8 +14,8 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// On trigger: heal MaxHP * (10% + 5%*res).
 /// </summary>
 [ExclusiveWeapon(
-    "\uD53C\uC548\uD654",
-    "\uACF5\uACA9\uB825 Flat + HP%. \uCE58\uBA85\uD0C0 \uC0DD\uC874(\uBB34\uC801/\uD22C\uBA85/\uC774\uC18D), \uCD5C\uB300 3\uD68C.",
+    "피안화",
+    "HP 12% + (공진 수치 * 4%) 증가. 사망에 이르는 피해 시 (1초 * 공진 수치)간 무적·투명·이속 증가(최대 3회). 발동 시 최대 체력의 10% + (5% * 공진 수치) 회복.",
     ExclusiveWeaponType.DeathFlower)]
 public class DeathFlower : ExcWeapon
 {
@@ -92,7 +92,7 @@ public class DeathFlower : ExcWeapon
         Timing.RunCoroutine(InvulnerabilityRoutine(duration), $"DeathFlower_{Owner.UserId}");
 
         Owner.ShowHint(
-            $"<color=#ff6699>\uD53C\uC548\uD654</color> \uBC1C\uB3D9 ({_triggersUsed}/{MaxTriggers}) \u00B7 {duration:0.#}\uCD08 \uBB34\uC801",
+            $"<color=#ff6699>피안화</color> 발동 ({_triggersUsed}/{MaxTriggers}) · {duration:0.#}초 무적",
             2f);
     }
 

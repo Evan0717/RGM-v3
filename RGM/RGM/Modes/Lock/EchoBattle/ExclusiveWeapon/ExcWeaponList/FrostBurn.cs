@@ -14,8 +14,8 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// At 10 stacks: Ensnared for 3+(0.6*res) seconds.
 /// </summary>
 [ExclusiveWeapon(
-    "\uC11C\uB9AC",
-    "\uACF5\uACA9\uB825 Flat + \uD06C\uB9AC\uD2F0\uCEEC. \uD0C0\uACA9 \uC2DC \uAC10\uC18D \uC911\uCCA9, 10\uC2A4\uD0DD \uC18D\uBC15.",
+    "서리",
+    "공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 Slowness를 1% + (1% * 공진 수치) 중첩(3초 미타격 시 해제). 10스택 시 3초 + (0.6초 * 공진 수치) 속박.",
     ExclusiveWeaponType.FrostBurn)]
 public class FrostBurn : ExcWeapon
 {
@@ -103,7 +103,7 @@ public class FrostBurn : ExcWeapon
             target.EnableEffect(EffectType.Ensnared, 1, rootDuration);
             ClearFrost(target, state);
             _states.Remove(id);
-            Owner.ShowHint($"<color=#66ccff>\uC11C\uB9AC \uC18D\uBC15</color> {rootDuration:0.#}\uCD08", 1.5f);
+            Owner.ShowHint($"<color=#66ccff>서리 속박</color> {rootDuration:0.#}초", 1.5f);
             return;
         }
 

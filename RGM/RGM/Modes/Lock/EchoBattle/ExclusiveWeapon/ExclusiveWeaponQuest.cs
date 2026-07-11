@@ -14,7 +14,7 @@ namespace RGM.Modes;
 /// 2) 생존 540초 누적 (SCP: +180 → 720)
 /// 3) 가한 데미지 3600 (SCP: 받은 데미지 4500)
 /// 4) 치료량 1000 (SCP: HS 회복 10000)
-/// 동시 달성 시 while 루프로 공진이 스킵되지 않게 처리합니다.
+/// 퀘스트는 순서와 관계없이 각각 1회 완료할 수 있으며, 완료할 때마다 공진이 증가합니다.
 /// </summary>
 public static class ExclusiveWeaponQuest
 {
@@ -176,8 +176,8 @@ public static class ExclusiveWeaponQuest
     }
 
     /// <summary>
-    /// 현재 공진에서 요구하는 퀘스트부터 순서대로 완료를 청구하며 승급합니다.
-    /// 한 프레임에 여러 퀘스트가 충족돼도 while로 연속 승급합니다.
+    /// 완료된 미청구 퀘스트를 순서와 관계없이 각각 청구하며 승급합니다.
+    /// Claimed 플래그로 같은 퀘스트가 여러 이벤트에서 중복 청구되는 것을 방지합니다.
     /// </summary>
     public static void TryAdvanceResonance(Player player, ExclusiveWeaponType type, ExclusiveWeaponProgress progress)
     {
@@ -187,26 +187,17 @@ public static class ExclusiveWeaponQuest
         var quest = progress.GetOrCreateQuest(type);
         bool advanced = false;
 
-        while (true)
+        for (int questIndex = 0; questIndex < quest.Claimed.Length; questIndex++)
         {
             int resonance = progress.GetResonance(type);
             if (resonance >= ExclusiveWeaponInfo.MaxResonance)
                 break;
 
-            int questIndex = resonance - 1; // 공진 1 → quest0, ... 공진 4 → quest3
-            if (questIndex < 0 || questIndex >= quest.Claimed.Length)
-                break;
-
             if (quest.Claimed[questIndex])
-            {
-                // 이미 청구됐는데 공진이 안 오른 비정상 상태 복구
-                progress.Resonance[type] = ExclusiveWeaponStats.Clamp(resonance + 1, 1, ExclusiveWeaponInfo.MaxResonance);
-                advanced = true;
                 continue;
-            }
 
             if (!IsQuestComplete(player, questIndex, quest))
-                break;
+                continue;
 
             quest.Claimed[questIndex] = true;
             int newResonance = ExclusiveWeaponStats.Clamp(resonance + 1, 1, ExclusiveWeaponInfo.MaxResonance);
@@ -268,12 +259,26 @@ public static class ExclusiveWeaponQuest
         if (resonance >= ExclusiveWeaponInfo.MaxResonance)
             return "공진 MAX";
 
-        int questIndex = resonance - 1;
         var quest = progress.GetOrCreateQuest(type);
-        bool scp = player.IsScpRole();
+        var lines = new List<string>();
 
-        string label = GetQuestDescription(player, questIndex);
-        string value = questIndex switch
+        for (int questIndex = 0; questIndex < quest.Claimed.Length; questIndex++)
+        {
+            if (quest.Claimed[questIndex])
+                continue;
+
+            string label = GetQuestDescription(player, questIndex);
+            string value = GetQuestProgress(player, questIndex, quest);
+            lines.Add($"{label} ({value})");
+        }
+
+        return string.Join("\n", lines);
+    }
+
+    static string GetQuestProgress(Player player, int questIndex, ResonanceQuestState quest)
+    {
+        bool scp = player.IsScpRole();
+        return questIndex switch
         {
             0 => $"{quest.Kills}/{(scp ? KillTargetScp : KillTargetHuman)}",
             1 => $"{quest.SurviveSeconds:0}/{(scp ? SurviveTargetScp : SurviveTargetHuman):0}",
@@ -285,8 +290,6 @@ public static class ExclusiveWeaponQuest
                 : $"{quest.HealingDone:0}/{HealTargetHuman:0}",
             _ => "?"
         };
-
-        return $"{label} ({value})";
     }
 
     static bool TryGetEquipped(Player player, out ExclusiveWeaponType type, out ExclusiveWeaponProgress progress)
