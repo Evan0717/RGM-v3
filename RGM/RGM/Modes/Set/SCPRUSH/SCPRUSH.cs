@@ -7,6 +7,7 @@ using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Server;
 using RGM.API.Features;
 using Exiled.API.Extensions;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -41,6 +42,9 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
 
         public IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             List<RoleTypeId> ScpRoles = new List<RoleTypeId>
             {
                 RoleTypeId.Scp049,

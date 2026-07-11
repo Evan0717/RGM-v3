@@ -2,7 +2,7 @@ using Exiled.API.Features;
 using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
 
-namespace RGM.Modes.Plus.ABattle
+namespace RGM.Modes.Lock.ABattle
 {
     public static class ABattleSetting
     {

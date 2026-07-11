@@ -4,6 +4,7 @@ using MEC;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Enums;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -46,6 +47,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             yield return 0f;
         }
         

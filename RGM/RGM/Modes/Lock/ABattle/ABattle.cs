@@ -14,7 +14,7 @@ using PlayerRoles;
 using RemoteAdmin;
 using RGM.API.Features;
 using RGM.Modes.Commands;
-using RGM.Modes.Plus.ABattle;
+using RGM.Modes.Lock.ABattle;
 using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
 using Random = UnityEngine.Random;

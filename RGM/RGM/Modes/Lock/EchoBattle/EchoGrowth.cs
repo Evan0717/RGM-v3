@@ -7,13 +7,13 @@ namespace RGM.Modes;
 
 /// <summary>
 /// Echo 성장 XP 공식.
-/// 1→2 기준: Cost4=150, Cost3=115, Cost1=60
-/// 이후: y = ceil(1.06x + 10)
+/// 1→2 기준: Cost4=200, Cost3=140, Cost1=100
+/// 이후: y = ceil(1.07x + 15)
 /// </summary>
 public static class EchoGrowth
 {
-    public const float LevelExpMultiplier = 1.06f;
-    public const float LevelExpAdd = 10f;
+    public const float LevelExpMultiplier = 1.07f;
+    public const float LevelExpAdd = 15f;
 
     /// <summary>
     /// 같은 프레임/짧은 구간에 GrantExp가 여러 번 호출되어도 ApplyLoadout은 1회만 예약.
@@ -25,10 +25,10 @@ public static class EchoGrowth
     {
         return cost switch
         {
-            EchoCost.Cost4 => 150,
-            EchoCost.Cost3 => 115,
-            EchoCost.Cost1 => 60,
-            _ => 60
+            EchoCost.Cost4 => 200,
+            EchoCost.Cost3 => 140,
+            EchoCost.Cost1 => 100,
+            _ => 100
         };
     }
 

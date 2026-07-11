@@ -19,10 +19,9 @@ namespace RGM.Modes;
 /// </summary>
 public static class EchoStats
 {
-    static readonly RoleTypeId[] AttackFlatIgnoredRoles =
+    static readonly RoleTypeId[] AttackFlagIgnoredRoles =
     {
         RoleTypeId.Scp173,
-        RoleTypeId.Scp049,
         RoleTypeId.Scp079
     };
 
@@ -45,8 +44,8 @@ public static class EchoStats
         { EchoSubOptionType.AttackFlat, [10f, 14f, 18f, 22f, 26f, 30f] },
         { EchoSubOptionType.DefensePercent, [5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f] },
         { EchoSubOptionType.DefenseFlat, [9.4f, 10.0f, 10.6f, 11.2f, 11.8f, 12.4f] },
-        { EchoSubOptionType.HpPercent, [8.1f, 9.2f, 10.3f, 11.4f, 12.5f, 13.6f] },
-        { EchoSubOptionType.HpFlat, [25f, 32f, 39f, 46f, 53f, 60f] },
+        { EchoSubOptionType.HpPercent, [10.2f, 11.1f, 12.0f, 12.9f, 13.8f, 14.7f] },
+        { EchoSubOptionType.HpFlat, [45f, 54f, 63f, 72f, 81f, 90f] },
         { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
         { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
@@ -180,8 +179,8 @@ public static class EchoStats
         return cost switch
         {
             EchoCost.Cost4 => LerpStat(3f, 30f, level),
-            EchoCost.Cost3 => LerpStat(1f, 12f, level),
-            EchoCost.Cost1 => LerpStat(12f, 150f, level),
+            EchoCost.Cost3 => LerpStat(1f, 15f, level),
+            EchoCost.Cost1 => LerpStat(15f, 180f, level),
             _ => 0f
         };
     }
@@ -395,9 +394,9 @@ public static class EchoStats
             case EchoMainStatType.AhpRegenAndMax:
                 // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
-                snapshot.AhpMax += LerpStat(20f, 150f, level);
-                snapshot.HsRegen += LerpStat(2f, 15f, level);
-                snapshot.HsMax += LerpStat(120f, 1000f, level);
+                snapshot.AhpMax += LerpStat(20f, 180f, level);
+                snapshot.HsRegen += LerpStat(2f, 20f, level);
+                snapshot.HsMax += LerpStat(150f, 1000f, level);
                 break;
             case EchoMainStatType.SizeReduction:
                 snapshot.SizeReduction += value;
@@ -413,12 +412,12 @@ public static class EchoStats
         {
             float hp = value;
             if (player.IsScp)
-                hp *= 8f;
+                hp *= 7f;
             snapshot.HpFlat += hp;
         }
         else
         {
-            if (AttackFlatIgnoredRoles.Contains(player.Role.Type))
+            if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
                 return;
 
             float attack = value;
@@ -436,7 +435,7 @@ public static class EchoStats
                 snapshot.AttackPercent += option.Value;
                 break;
             case EchoSubOptionType.AttackFlat:
-                if (AttackFlatIgnoredRoles.Contains(player.Role.Type))
+                if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
                     break;
                 snapshot.AttackFlat += player.Role.Type == RoleTypeId.Scp939 ? option.Value * 2f : option.Value;
                 break;
@@ -450,7 +449,7 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 8f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 7f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
@@ -683,35 +682,38 @@ public static class EchoStats
         }
         else if (ev.Attacker != null && HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
         {
-            float damage = ev.DamageHandler.Damage;
+            if (!AttackFlagIgnoredRoles.Contains(ev.Attacker.Role.Type))
+            {
+                float damage = ev.DamageHandler.Damage;
 
-            damage *= 1f + atkStats.AttackPercent / 100f;
-            damage += atkStats.AttackFlat;
+                damage *= 1f + atkStats.AttackPercent / 100f;
+                damage += atkStats.AttackFlat;
 
-            if (ev.Player.IsScp)
-                damage *= 1f + atkStats.ScpDamagePercent / 100f;
-            else
-                damage *= 1f + atkStats.HumanDamagePercent / 100f;
+                if (ev.Player.IsScp)
+                    damage *= 1f + atkStats.ScpDamagePercent / 100f;
+                else
+                    damage *= 1f + atkStats.HumanDamagePercent / 100f;
 
-            // Headshot: 기존 200%에 합산 적용 (ABattle BullsEye 참고)
-            // PlayerStatsSystem.FirearmDamageHandler와 모호하므로 Exiled 타입을 명시
-            if (atkStats.HeadshotDamage > 0
-                && ev.DamageHandler.CustomBase is Exiled.API.Features.DamageHandlers.FirearmDamageHandler
+                // Headshot: 기존 200%에 합산 적용 (ABattle BullsEye 참고)
+                // PlayerStatsSystem.FirearmDamageHandler와 모호하므로 Exiled 타입을 명시
+                if (atkStats.HeadshotDamage > 0
+                    && ev.DamageHandler.CustomBase is Exiled.API.Features.DamageHandlers.FirearmDamageHandler
+                    {
+                        Hitbox: HitboxType.Headshot
+                    })
                 {
-                    Hitbox: HitboxType.Headshot
-                })
-            {
-                damage *= 1f + atkStats.HeadshotDamage / 200f;
-            }
+                    damage *= 1f + atkStats.HeadshotDamage / 200f;
+                }
 
-            // Critical (Ambush style)
-            if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
-            {
-                damage *= 2f;
-                Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Attacker.ShowHitMarker(2));
-            }
+                // Critical (Ambush style)
+                if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
+                {
+                    damage *= 2f;
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Attacker.ShowHitMarker(2));
+                }
 
-            ev.DamageHandler.Damage = damage;
+                ev.DamageHandler.Damage = damage;
+            }
         }
 
         if (EchoInfo.PlayerStats.TryGetValue(ev.Player, out var defStats)

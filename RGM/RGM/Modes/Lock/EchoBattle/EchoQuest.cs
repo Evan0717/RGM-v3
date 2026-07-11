@@ -10,31 +10,31 @@ namespace RGM.Modes;
 
 /// <summary>
 /// 반복 가능 내부 Quest.
-/// 1) 30초 생존 → 80 XP
-/// 2) 적에게 80 데미지 → 50 XP
-/// 3) 40 데미지 받기 → 50 XP
-/// 4) SCP 아이템 획득 → 200 XP
-/// 5) 적 1명 처치 → 80 XP
-/// 6) SCP로 적 1회 타격 → 15 XP
-/// 7) SCP 격리(049-2 제외) → 1200 XP
-/// 8) SCP-049-2 처치 → 150 XP
+/// 1) 30초 생존 → 60 XP
+/// 2) 적에게 100 데미지 → 100 XP
+/// 3) 50 데미지 받기 → 150 XP
+/// 4) SCP 아이템 획득 → 400 XP
+/// 5) 적 1명 처치 → 200 XP
+/// 6) SCP로 적 1회 타격 → 50 XP
+/// 7) SCP 격리(049-2 제외) → 4000 XP
+/// 8) SCP-049-2 처치 → 400 XP
 /// </summary>
 public static class EchoQuest
 {
     public const int SurviveSeconds = 30;
-    public const int SurviveReward = 80;
+    public const int SurviveReward = 60;
 
-    public const float DealDamageThreshold = 80f;
-    public const int DealDamageReward = 50;
+    public const float DealDamageThreshold = 100f;
+    public const int DealDamageReward = 100;
 
-    public const float TakeDamageThreshold = 40f;
-    public const int TakeDamageReward = 50;
+    public const float TakeDamageThreshold = 50f;
+    public const int TakeDamageReward = 150;
 
-    public const int ScpItemReward = 200;
-    public const int KillEnemyReward = 80;
-    public const int ScpHitReward = 15;
-    public const int ContainScpReward = 1200;
-    public const int KillScp0492Reward = 150;
+    public const int ScpItemReward = 400;
+    public const int KillEnemyReward = 200;
+    public const int ScpHitReward = 50;
+    public const int ContainScpReward = 4000;
+    public const int KillScp0492Reward = 400;
 
     enum QuestSide
     {
@@ -45,7 +45,7 @@ public static class EchoQuest
 
     static readonly Dictionary<Player, QuestProgress> Progress = new();
     static readonly Dictionary<Player, CoroutineHandle> SurviveHandles = new();
-    static readonly HashSet<(Player Player, ItemType ItemType)> RecentScpItemQuestGrants = new();
+    static readonly HashSet<ushort> ClaimedScpItemSerials = new();
 
     public class QuestProgress
     {
@@ -77,7 +77,7 @@ public static class EchoQuest
             Timing.KillCoroutines(handle);
 
         SurviveHandles.Clear();
-        RecentScpItemQuestGrants.Clear();
+        ClaimedScpItemSerials.Clear();
         Progress.Clear();
     }
 
@@ -176,7 +176,6 @@ public static class EchoQuest
     {
         StopSurviveTracking(player);
         Progress.Remove(player);
-        RecentScpItemQuestGrants.RemoveWhere(x => x.Player == player);
     }
 
     static IEnumerator<float> SurviveRoutine(Player player)
@@ -257,7 +256,7 @@ public static class EchoQuest
         if (ev.Player == null || ev.Pickup == null)
             return;
 
-        TryGrantScpItemReward(ev.Player, ev.Pickup.Type, ev.IsAllowed);
+        TryGrantScpItemReward(ev.Player, ev.Pickup.Type, ev.Pickup.Serial, ev.IsAllowed);
     }
 
     static void OnItemAdded(ItemAddedEventArgs ev)
@@ -265,7 +264,7 @@ public static class EchoQuest
         if (ev.Player == null || ev.Item == null)
             return;
 
-        TryGrantScpItemReward(ev.Player, ev.Item.Type, true);
+        TryGrantScpItemReward(ev.Player, ev.Item.Type, ev.Item.Serial, true);
     }
 
     static void OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
@@ -329,18 +328,16 @@ public static class EchoQuest
         return roleType is RoleTypeId.Scp049 or RoleTypeId.Scp106;
     }
 
-    static void TryGrantScpItemReward(Player player, ItemType itemType, bool isAllowed)
+    static void TryGrantScpItemReward(Player player, ItemType itemType, ushort serial, bool isAllowed)
     {
         if (!isAllowed
             || !CanProgressQuests(player, QuestSide.Human)
             || !IsScpItem(itemType))
             return;
 
-        var key = (player, itemType);
-        if (!RecentScpItemQuestGrants.Add(key))
+        if (!ClaimedScpItemSerials.Add(serial))
             return;
 
-        Timing.CallDelayed(0.25f, () => RecentScpItemQuestGrants.Remove(key));
         GrantQuestReward(player, ScpItemReward, "SCP 아이템 획득");
     }
 
