@@ -193,7 +193,8 @@ public enum EchoSubStatType
 {
     None,
     AttackFlat,
-    HpFlat
+    HpFlat,
+    HealingBonus
 }
 
 public enum EchoSubOptionType
@@ -212,7 +213,8 @@ public enum EchoSubOptionType
     JumpPower,
     StaminaDrainReduction,
     HeadshotDamage,
-    SizeReduction
+    SizeReduction,
+    HealingBonus
 }
 
 public enum EchoType

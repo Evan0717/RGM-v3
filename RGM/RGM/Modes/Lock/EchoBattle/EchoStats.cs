@@ -54,6 +54,7 @@ public static class EchoStats
         { EchoSubOptionType.StaminaDrainReduction, [8.3f, 9.2f, 10.1f, 11.0f, 11.9f, 12.8f] },
         { EchoSubOptionType.HeadshotDamage, [22.8f, 24.5f, 26.2f, 27.9f, 29.6f, 31.3f] },
         { EchoSubOptionType.SizeReduction, [2.8f, 3.5f, 4.2f, 4.9f, 5.6f, 6.3f] },
+        { EchoSubOptionType.HealingBonus, [30.0f, 36.0f, 42.0f, 48.0f, 54.0f, 60.0f] },
     };
 
     public static float LerpStat(float min, float max, int level)
@@ -87,7 +88,7 @@ public static class EchoStats
             (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(9.1f, 45.5f, level),
             (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(9.1f, 45.5f, level),
             (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(21.0f, 105.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(1.6f, 8.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(2.0f, 10.0f, level),
             (EchoCost.Cost3, EchoMainStatType.SizeReduction) => LerpStat(3.3f, 16.5f, level),
 
             (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.4f, 18.0f, level),
@@ -178,8 +179,8 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(3f, 30f, level),
-            EchoCost.Cost3 => LerpStat(1f, 15f, level),
+            EchoCost.Cost4 => LerpStat(8f, 80f, level),
+            EchoCost.Cost3 => LerpStat(40f, 200f, level),
             EchoCost.Cost1 => LerpStat(15f, 180f, level),
             _ => 0f
         };
@@ -187,7 +188,13 @@ public static class EchoStats
 
     public static EchoSubStatType GetSubStatType(EchoCost cost)
     {
-        return cost == EchoCost.Cost1 ? EchoSubStatType.HpFlat : EchoSubStatType.AttackFlat;
+        return cost switch
+        {
+            EchoCost.Cost1 => EchoSubStatType.HpFlat,
+            EchoCost.Cost3 => EchoSubStatType.HealingBonus,
+            EchoCost.Cost4 => EchoSubStatType.AttackFlat,
+            _ => EchoSubStatType.None
+        };
     }
 
     public static int GetUnlockedSubOptionCount(int level)
@@ -415,6 +422,10 @@ public static class EchoStats
                 hp *= 7f;
             snapshot.HpFlat += hp;
         }
+        else if (cost == EchoCost.Cost3)
+        {
+            snapshot.HealingBonus += value;
+        }
         else
         {
             if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
@@ -474,6 +485,9 @@ public static class EchoStats
                 break;
             case EchoSubOptionType.SizeReduction:
                 snapshot.SizeReduction += option.Value;
+                break;
+            case EchoSubOptionType.HealingBonus:
+                snapshot.HealingBonus += option.Value;
                 break;
         }
     }
@@ -705,10 +719,14 @@ public static class EchoStats
                     damage *= 1f + atkStats.HeadshotDamage / 200f;
                 }
 
-                // Critical (Ambush style)
+                // Critical (Ambush style) + 전용무기 크리티컬 데미지 보너스
                 if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
                 {
-                    damage *= 2f;
+                    float critMult = 2f;
+                    if (ExclusiveWeaponInfo.PlayerWeapons.TryGetValue(ev.Attacker, out var weapon) && weapon != null)
+                        critMult += weapon.GetCriticalDamageBonus(ev.Player) / 100f;
+
+                    damage *= critMult;
                     Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Attacker.ShowHitMarker(2));
                 }
 
@@ -724,6 +742,17 @@ public static class EchoStats
             dmg = Math.Max(0f, dmg - defStats.DefenseFlat);
             ev.DamageHandler.Damage = dmg;
         }
+    }
+
+    public static void OnHealing(HealingEventArgs ev)
+    {
+        if (ev.Player == null || !EchoInfo.PlayerStats.TryGetValue(ev.Player, out var stats))
+            return;
+
+        if (stats.HealingBonus <= 0f)
+            return;
+
+        ev.Amount *= 1f + stats.HealingBonus / 100f;
     }
 
     public static string GetMainStatDisplayName(EchoMainStatType type)
@@ -763,6 +792,7 @@ public static class EchoStats
             EchoSubOptionType.StaminaDrainReduction => "스태미나 소모 감소%",
             EchoSubOptionType.HeadshotDamage => "헤드샷 데미지%",
             EchoSubOptionType.SizeReduction => "크기 감소%",
+            EchoSubOptionType.HealingBonus => "치료 효과 보너스%",
             _ => "?"
         };
     }
@@ -791,6 +821,7 @@ public class EchoStatSnapshot
     public float StaminaDrainReduction;
     public float HeadshotDamage;
     public float SizeReduction;
+    public float HealingBonus;
     public float AhpRegen;
     public float AhpMax;
     public float HsRegen;
@@ -827,6 +858,7 @@ public class EchoStatSnapshot
         add("스태미나 소모 감소%", StaminaDrainReduction);
         add("헤드샷 데미지%", HeadshotDamage);
         add("크기 감소%", SizeReduction);
+        add("치료 효과 보너스%", HealingBonus);
         add("AHP 회복", AhpRegen);
         add("AHP 최대", AhpMax);
         add("HS 회복", HsRegen);

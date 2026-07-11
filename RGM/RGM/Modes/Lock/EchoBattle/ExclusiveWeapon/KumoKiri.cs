@@ -1,0 +1,55 @@
+using Exiled.Events.EventArgs.Player;
+using RGM.Modes;
+using UnityEngine;
+
+namespace RGM.Modes.ExclusiveWeapon;
+
+/// <summary>
+/// KumoKiri.
+/// Passive: Attack 11%+(res*2%). On hit (0.2%*res) chance for 618.03 fixed damage.
+/// </summary>
+[ExclusiveWeapon(
+    "KumoKiri",
+    "\uACF5\uACA9\uB825 Flat + \uD06C\uB9AC\uD2F0\uCEEC. \uB0AE\uC740 \uD655\uB960\uB85C \uACE0\uC815 \uD53C\uD574 618.03.",
+    ExclusiveWeaponType.KumoKiri)]
+public class KumoKiri : ExcWeapon
+{
+    public override float AttackFlatMin => 5.7f;
+    public override float AttackFlatMax => 71.4f;
+    public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.CriticalChance;
+    public override float SecondaryStatMin => 8.0f;
+    public override float SecondaryStatMax => 36.0f;
+
+    public override float PassiveAttackPercent => 11f + Resonance * 2f;
+
+    const float FixedDamage = 618.03f;
+
+    public override void OnEnabled()
+    {
+        Exiled.Events.Handlers.Player.Hurting += OnHurting;
+    }
+
+    public override void OnDisabled()
+    {
+        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+    }
+
+    void OnHurting(HurtingEventArgs ev)
+    {
+        if (ev.Attacker != Owner || Owner == null)
+            return;
+
+        if (ev.DamageHandler == null || ev.DamageHandler.Damage <= 0f)
+            return;
+
+        if (!HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
+            return;
+
+        float chance = 0.2f * Resonance;
+        if (Random.Range(0f, 100f) >= chance)
+            return;
+
+        ev.DamageHandler.Damage += FixedDamage;
+        Owner.ShowHint($"<color=#cc88ff>KumoKiri</color> \uACE0\uC815 \uD53C\uD574 +{FixedDamage:0.##}", 1.2f);
+    }
+}

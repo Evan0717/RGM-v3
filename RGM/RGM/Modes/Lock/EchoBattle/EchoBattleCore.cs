@@ -126,10 +126,12 @@ public static class EchoBattleCore
 
         // 레벨업 재적용 시에도 역할 기본 MaxHealth는 유지해야 복리가 나지 않음
         RemoveAllEchoes(player);
+        ExclusiveWeaponCore.RemoveWeapon(player);
 
         if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
         {
             EchoQuest.StopSurviveTracking(player);
+            ExclusiveWeaponQuest.StopTracking(player);
             return;
         }
 
@@ -146,23 +148,35 @@ public static class EchoBattleCore
                 AddEcho(player, loadout.SubSlots[i].Value, loadout.GetLevel(loadout.SubSlots[i].Value), false, i + 1);
         }
 
-        if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
+        ExclusiveWeaponCore.ApplyWeapon(player);
+
+        bool hasEchoes = EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) && echoes.Count > 0;
+        bool hasWeapon = ExclusiveWeaponInfo.PlayerWeapons.ContainsKey(player);
+
+        if (!hasEchoes && !hasWeapon)
         {
             EchoQuest.StopSurviveTracking(player);
+            ExclusiveWeaponQuest.StopTracking(player);
             return;
         }
 
-        var snapshot = EchoStats.BuildSnapshot(player, echoes);
+        var snapshot = hasEchoes
+            ? EchoStats.BuildSnapshot(player, echoes)
+            : new EchoStatSnapshot();
+
+        ExclusiveWeaponCore.MergeStats(player, snapshot);
         EchoInfo.PlayerStats[player] = snapshot;
         EchoStats.ApplyPassiveEffects(player, snapshot, preservedEchoAhp);
 
         // 레벨업 재적용 시 생존 타이머가 리셋되지 않도록, 미추적일 때만 시작
         EchoQuest.EnsureSurviveTracking(player);
+        ExclusiveWeaponQuest.EnsureTracking(player);
     }
 
     public static void Reset(Player player)
     {
         EchoQuest.StopSurviveTracking(player);
+        ExclusiveWeaponCore.Reset(player);
         ClearPlayerRuntime(player);
     }
 
@@ -220,10 +234,25 @@ public static class EchoBattleCore
     {
         var lines = new List<string>();
 
+        string weaponHint = ExclusiveWeaponCore.BuildHintSection(player);
+        if (!string.IsNullOrEmpty(weaponHint))
+            lines.Add(weaponHint);
+
         if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
         {
-            lines.Add("<color=#88aaff>[ESC] → Settings → Server-specific</color>");
-            lines.Add("Echo를 장착하세요.");
+            if (lines.Count == 0)
+            {
+                lines.Add("<color=#88aaff>[ESC] → Settings → Server-specific</color>");
+                lines.Add("전용무기 / Echo를 장착하세요.");
+            }
+
+            if (EchoInfo.PlayerStats.TryGetValue(player, out var weaponOnlyStats))
+            {
+                lines.Add("<color=#aaaaaa>── 강화 합산 ──</color>");
+                foreach (var pair in weaponOnlyStats.GetAggregatedDisplay())
+                    lines.Add($"{pair.Key}: <b>{pair.Value:0.#}</b>");
+            }
+
             return string.Join("\n", lines);
         }
 
