@@ -54,14 +54,17 @@ Quest (반복)
             Round.IsLocked = true;
 
         EchoBattleCore.RegisterEchoes();
+        ExclusiveWeaponCore.RegisterWeapons();
 
         Exiled.Events.Handlers.Player.Verified += OnVerified;
         Exiled.Events.Handlers.Player.Hurting += EchoStats.OnHurting;
+        Exiled.Events.Handlers.Player.Healing += EchoStats.OnHealing;
         if (SoloTestMode)
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
         EchoQuest.Register();
+        ExclusiveWeaponQuest.Register();
         EchoSetting.Init();
         ServerSpecificSettingsSync.ServerOnSettingValueReceived += EchoSetting.OnSSInput;
 
@@ -76,12 +79,14 @@ Quest (반복)
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
         Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
         Exiled.Events.Handlers.Player.Hurting -= EchoStats.OnHurting;
+        Exiled.Events.Handlers.Player.Healing -= EchoStats.OnHealing;
         if (SoloTestMode)
             Exiled.Events.Handlers.Player.Kicking -= OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
         ServerSpecificSettingsSync.ServerOnSettingValueReceived -= EchoSetting.OnSSInput;
         EchoQuest.Unregister();
+        ExclusiveWeaponQuest.Unregister();
 
         Timing.KillCoroutines(_onModeStarted);
 
@@ -97,6 +102,8 @@ Quest (반복)
         {
             EchoQuest.ClearPlayer(player);
             EchoGrowth.ClearPending(player);
+            ExclusiveWeaponGrowth.ClearPending(player);
+            ExclusiveWeaponCore.ClearAll(player);
             EchoBattleCore.Reset(player);
         }
 
@@ -108,6 +115,9 @@ Quest (반복)
         EchoInfo.PlayerBaseMaxHs.Clear();
         EchoInfo.PlayerPassiveEffects.Clear();
         EchoInfo.Echoes.Clear();
+        ExclusiveWeaponInfo.Weapons.Clear();
+        ExclusiveWeaponInfo.PlayerWeapons.Clear();
+        ExclusiveWeaponInfo.PlayerProgress.Clear();
     }
 
     IEnumerator<float> OnModeStarted()
@@ -167,6 +177,7 @@ Quest (반복)
 
         EchoQuest.StopSurviveTracking(ev.Player);
         EchoGrowth.ClearPending(ev.Player);
+        ExclusiveWeaponGrowth.ClearPending(ev.Player);
         EchoBattleCore.Reset(ev.Player);
 
         if (!ev.NewRole.IsAlive())
@@ -212,8 +223,9 @@ Quest (반복)
 
             player.AddBroadcast(1,
                 $"<size=30>Echo 적용까지 <size=50><b>{EchoInfo.ApplyDelaySeconds - i}</b></size>초</size>\n" +
-                $"<size=20>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
-                $"<size=18><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 '자동' 또는 원하는 값으로 다시 고르세요.</color></size>");
+                $"<size=21>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
+                $"<size=20><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 임의로 고른 뒤 다시 원하는 값으로 고르세요.</color></size>\n" +
+                $"<size=19><color=#ffcc66>Echo의 Cost는 총합 12를 넘을 수 없습니다.</color></size>");
 
             yield return Timing.WaitForSeconds(1);
         }
@@ -228,8 +240,17 @@ Quest (반복)
         {
             EchoQuest.ClearPlayer(player);
             EchoGrowth.ClearPending(player);
+            ExclusiveWeaponGrowth.ClearPending(player);
+            ExclusiveWeaponCore.ClearAll(player);
             EchoBattleCore.Reset(player);
         }
+        IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+
+        if (players.Count() == 1)
+            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 15));
+
+        else if (players.Count() > 1)
+            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
     }
 
     void OnKicking(KickingEventArgs ev)

@@ -11,11 +11,13 @@ public static class EchoSetting
 {
     const int SettingIdStart = 3100;
     const int InfoKeyId = 31001001;
+    const int WeaponSettingId = 3099;
 
     const string NoneOption = "없음";
     const string AutoOption = "자동 (Echo 기본)";
 
     static readonly Dictionary<int, SettingMeta> Meta = new();
+    static List<string> WeaponOptions;
 
     public static HeaderSetting Header { get; private set; } = new HeaderSetting(190031, "에코 전투");
     public static KeybindSetting InfoKey { get; private set; }
@@ -32,7 +34,8 @@ public static class EchoSetting
     enum SettingKind
     {
         Echo,
-        MainStat
+        MainStat,
+        Weapon
     }
 
     class SettingMeta
@@ -58,6 +61,21 @@ public static class EchoSetting
             header: Header
         );
         list.Add(InfoKey);
+
+        // 전용무기: 메인 Echo 슬롯 위
+        WeaponOptions = BuildWeaponOptions().Prepend(NoneOption).ToList();
+        list.Add(new DropdownSetting(
+            id: WeaponSettingId,
+            label: "<color=#ffcc66>전용무기</color>",
+            hintDescription: BuildWeaponHintDescription(),
+            options: WeaponOptions,
+            header: Header
+        ));
+        Meta[WeaponSettingId] = new SettingMeta
+        {
+            Kind = SettingKind.Weapon,
+            Options = WeaponOptions
+        };
 
         int nextId = SettingIdStart;
 
@@ -123,6 +141,28 @@ public static class EchoSetting
     {
         foreach (var type in EchoStats.GetAllSelectableMainStats())
             yield return FormatMainStatOption(type);
+    }
+
+    static IEnumerable<string> BuildWeaponOptions()
+    {
+        foreach (var data in ExclusiveWeaponCore.GetAllOrdered())
+            yield return FormatWeaponOption(data);
+    }
+
+    static string BuildWeaponHintDescription()
+    {
+        var lines = ExclusiveWeaponCore.GetAllOrdered()
+            .Select(x => $"• {x.Name}: {x.Description}");
+
+        return string.Join("\n", lines) +
+               "\n\n능력치 레벨 1~90 / 공진 1~5\n" +
+               "공진은 전용 1회성 퀘스트 완료 시 자동 승급됩니다.";
+    }
+
+    static string FormatWeaponOption(ExclusiveWeaponData data)
+    {
+        // 스펙: Server-Specific 선택창에 이모지 추가하지 않음
+        return data.Name;
     }
 
     static string BuildEchoHintDescription(EchoSlotKind slot)
@@ -201,6 +241,8 @@ public static class EchoSetting
 
         if (meta.Kind == SettingKind.Echo)
             HandleEchoSelection(player, loadout, meta, selected);
+        else if (meta.Kind == SettingKind.Weapon)
+            HandleWeaponSelection(player, loadout, selected);
         else
             HandleMainStatSelection(player, loadout, meta, selected);
     }
@@ -225,6 +267,26 @@ public static class EchoSetting
 
         selected = dropdown.SyncSelectionText;
         return !string.IsNullOrWhiteSpace(selected);
+    }
+
+    static void HandleWeaponSelection(Player player, EchoLoadout loadout, string selected)
+    {
+        if (selected == NoneOption)
+        {
+            loadout.EquippedWeapon = null;
+            player.ShowHint("전용무기 해제", 2);
+            return;
+        }
+
+        var match = ExclusiveWeaponInfo.Weapons.Values.FirstOrDefault(x => FormatWeaponOption(x) == selected);
+        if (match == null)
+            return;
+
+        loadout.EquippedWeapon = match.WeaponType;
+        var progress = ExclusiveWeaponInfo.GetOrCreateProgress(player);
+        int level = progress.GetLevel(match.WeaponType);
+        int resonance = progress.GetResonance(match.WeaponType);
+        player.ShowHint($"전용무기: {match.Name}  Lv.{level}  공진 {resonance}", 3);
     }
 
     static void HandleEchoSelection(Player player, EchoLoadout loadout, SettingMeta meta, string selected)

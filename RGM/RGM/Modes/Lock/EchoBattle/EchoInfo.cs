@@ -57,6 +57,9 @@ public class EchoLoadout
     public EchoType? MainSlot { get; set; }
     public EchoType?[] SubSlots { get; set; } = new EchoType?[4];
 
+    /// <summary>장착 전용무기. Server-Specific에서 메인 Echo 위에 표시.</summary>
+    public ExclusiveWeaponType? EquippedWeapon { get; set; }
+
     /// <summary>슬롯별 메인 스탯 선택. Echo와 1:1로 대응합니다.</summary>
     public EchoMainStatType? MainSlotStat { get; set; }
     public EchoMainStatType?[] SubSlotStats { get; set; } = new EchoMainStatType?[4];
@@ -245,6 +248,8 @@ public class EchoLoadout
 
         return false;
     }
+
+    public bool HasEquippedWeapon() => EquippedWeapon.HasValue && EquippedWeapon.Value != ExclusiveWeaponType.None;
 }
 
 /// <summary>

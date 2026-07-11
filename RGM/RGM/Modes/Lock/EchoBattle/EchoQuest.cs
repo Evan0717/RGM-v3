@@ -124,7 +124,7 @@ public static class EchoQuest
     }
 
     /// <summary>
-    /// Echo 장착 + 성장 가능한(Max 미만) Echo가 있을 때만 퀘스트 진행.
+    /// Echo 장착 + 성장 가능한(Max 미만) Echo가 있거나, 전용무기가 성장 가능하면 퀘스트 진행.
     /// </summary>
     public static bool CanProgressQuests(Player player)
     {
@@ -139,13 +139,15 @@ public static class EchoQuest
         if (!CanProgressQuestSide(player, questSide))
             return false;
 
-        if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
-            return false;
+        bool echoGrowable = EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes)
+            && echoes.Count > 0
+            && EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout)
+            && loadout.HasGrowableEquipped();
 
-        if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
-            return false;
+        if (echoGrowable)
+            return true;
 
-        return loadout.HasGrowableEquipped();
+        return ExclusiveWeaponGrowth.CanGrow(player);
     }
 
     static bool CanProgressQuestSide(Player player, QuestSide questSide)
@@ -362,6 +364,7 @@ public static class EchoQuest
     static void GrantQuestReward(Player player, int reward, string questName)
     {
         EchoGrowth.GrantExpToEquipped(player, reward, questName);
+        ExclusiveWeaponGrowth.GrantExp(player, reward, questName);
         player.ShowHint($"<color=#88aaff>Quest</color> {questName} <color=#7CFC00>+{reward} XP</color>", 2);
     }
 }

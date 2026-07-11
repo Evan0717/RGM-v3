@@ -1,0 +1,312 @@
+using Exiled.API.Features;
+using Exiled.API.Extensions;
+using Exiled.Events.EventArgs.Player;
+using MEC;
+using PlayerRoles;
+using RGM.API.Features;
+using System.Collections.Generic;
+
+namespace RGM.Modes;
+
+/// <summary>
+/// 전용무기 공진(1→5) 1회성 퀘스트.
+/// 1) 적 8명 처치 (SCP: 20)
+/// 2) 생존 540초 누적 (SCP: +180 → 720)
+/// 3) 가한 데미지 3600 (SCP: 받은 데미지 4500)
+/// 4) 치료량 1000 (SCP: HS 회복 10000)
+/// 동시 달성 시 while 루프로 공진이 스킵되지 않게 처리합니다.
+/// </summary>
+public static class ExclusiveWeaponQuest
+{
+    const int KillTargetHuman = 8;
+    const int KillTargetScp = 20;
+    const float SurviveTargetHuman = 540f;
+    const float SurviveTargetScp = 720f;
+    const float DealDamageTarget = 3600f;
+    const float TakeDamageTargetScp = 4500f;
+    const float HealTargetHuman = 1000f;
+    const float HsRecoverTargetScp = 10000f;
+
+    static readonly Dictionary<Player, CoroutineHandle> TrackHandles = new();
+    static readonly Dictionary<Player, float> PrevHs = new();
+
+    public static void Register()
+    {
+        Exiled.Events.Handlers.Player.Hurting += OnHurting;
+        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Healing += OnHealing;
+    }
+
+    public static void Unregister()
+    {
+        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Healing -= OnHealing;
+
+        foreach (var handle in TrackHandles.Values)
+            Timing.KillCoroutines(handle);
+
+        TrackHandles.Clear();
+        PrevHs.Clear();
+    }
+
+    public static void EnsureTracking(Player player)
+    {
+        if (player == null || !player.IsAlive)
+            return;
+
+        if (!TryGetEquipped(player, out _, out _))
+        {
+            StopTracking(player);
+            return;
+        }
+
+        if (TrackHandles.TryGetValue(player, out var handle) && handle.IsRunning)
+            return;
+
+        PrevHs[player] = player.HumeShield;
+        TrackHandles[player] = Timing.RunCoroutine(TrackRoutine(player), $"ExcWeaponQuest_{player.UserId}");
+    }
+
+    public static void StopTracking(Player player)
+    {
+        if (player == null)
+            return;
+
+        Timing.KillCoroutines($"ExcWeaponQuest_{player.UserId}");
+        TrackHandles.Remove(player);
+        PrevHs.Remove(player);
+    }
+
+    public static void ClearPlayer(Player player)
+    {
+        StopTracking(player);
+    }
+
+    static IEnumerator<float> TrackRoutine(Player player)
+    {
+        while (player != null && player.IsAlive)
+        {
+            if (!TryGetEquipped(player, out var type, out var progress))
+            {
+                TrackHandles.Remove(player);
+                yield break;
+            }
+
+            // 공진 Max면 추적만 유지할 필요 없음
+            if (progress.GetResonance(type) >= ExclusiveWeaponInfo.MaxResonance)
+            {
+                TrackHandles.Remove(player);
+                yield break;
+            }
+
+            var quest = progress.GetOrCreateQuest(type);
+            quest.SurviveSeconds += 1f;
+
+            if (player.IsScp)
+            {
+                float hs = player.HumeShield;
+                if (PrevHs.TryGetValue(player, out float prev) && hs > prev)
+                    quest.HsRecovered += hs - prev;
+                PrevHs[player] = hs;
+            }
+
+            TryAdvanceResonance(player, type, progress);
+            yield return Timing.WaitForSeconds(1f);
+        }
+
+        // 사망 시 생존 누적은 유지 (SurviveSeconds는 건드리지 않음)
+        if (player != null)
+            TrackHandles.Remove(player);
+    }
+
+    static void OnHurting(HurtingEventArgs ev)
+    {
+        float damage = ev.DamageHandler?.Damage ?? 0f;
+        if (damage <= 0f)
+            return;
+
+        bool isEnemy = ev.Attacker != null
+            && ev.Attacker != ev.Player
+            && HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub);
+
+        if (isEnemy && TryGetEquipped(ev.Attacker, out var atkType, out var atkProgress))
+        {
+            var quest = atkProgress.GetOrCreateQuest(atkType);
+            quest.DamageDealt += damage;
+            TryAdvanceResonance(ev.Attacker, atkType, atkProgress);
+        }
+
+        if (TryGetEquipped(ev.Player, out var defType, out var defProgress))
+        {
+            var quest = defProgress.GetOrCreateQuest(defType);
+            quest.DamageTaken += damage;
+            TryAdvanceResonance(ev.Player, defType, defProgress);
+        }
+    }
+
+    static void OnDied(DiedEventArgs ev)
+    {
+        if (ev.Attacker == null
+            || ev.Player == null
+            || ev.Attacker == ev.Player
+            || !TryGetEquipped(ev.Attacker, out var type, out var progress)
+            || !IsEnemyRole(ev.Attacker.Role.Type, ev.TargetOldRole))
+            return;
+
+        var quest = progress.GetOrCreateQuest(type);
+        quest.Kills++;
+        TryAdvanceResonance(ev.Attacker, type, progress);
+    }
+
+    static void OnHealing(HealingEventArgs ev)
+    {
+        if (ev.Player == null || ev.Amount <= 0f)
+            return;
+
+        if (!TryGetEquipped(ev.Player, out var type, out var progress))
+            return;
+
+        if (ev.Player.IsScp)
+            return;
+
+        var quest = progress.GetOrCreateQuest(type);
+        quest.HealingDone += ev.Amount;
+        TryAdvanceResonance(ev.Player, type, progress);
+    }
+
+    /// <summary>
+    /// 현재 공진에서 요구하는 퀘스트부터 순서대로 완료를 청구하며 승급합니다.
+    /// 한 프레임에 여러 퀘스트가 충족돼도 while로 연속 승급합니다.
+    /// </summary>
+    public static void TryAdvanceResonance(Player player, ExclusiveWeaponType type, ExclusiveWeaponProgress progress)
+    {
+        if (player == null || progress == null)
+            return;
+
+        var quest = progress.GetOrCreateQuest(type);
+        bool advanced = false;
+
+        while (true)
+        {
+            int resonance = progress.GetResonance(type);
+            if (resonance >= ExclusiveWeaponInfo.MaxResonance)
+                break;
+
+            int questIndex = resonance - 1; // 공진 1 → quest0, ... 공진 4 → quest3
+            if (questIndex < 0 || questIndex >= quest.Claimed.Length)
+                break;
+
+            if (quest.Claimed[questIndex])
+            {
+                // 이미 청구됐는데 공진이 안 오른 비정상 상태 복구
+                progress.Resonance[type] = ExclusiveWeaponStats.Clamp(resonance + 1, 1, ExclusiveWeaponInfo.MaxResonance);
+                advanced = true;
+                continue;
+            }
+
+            if (!IsQuestComplete(player, questIndex, quest))
+                break;
+
+            quest.Claimed[questIndex] = true;
+            int newResonance = ExclusiveWeaponStats.Clamp(resonance + 1, 1, ExclusiveWeaponInfo.MaxResonance);
+            progress.Resonance[type] = newResonance;
+            advanced = true;
+
+            var data = type.GetData();
+            string name = data?.Name ?? type.ToString();
+            player.AddBroadcast(4,
+                $"<size=24><color=#ffcc66>{name}</color> 공진 <b>{resonance}</b> → <b>{newResonance}</b></size>\n" +
+                $"<size=18>{GetQuestDescription(player, questIndex)}</size>");
+        }
+
+        if (advanced && ExclusiveWeaponInfo.PlayerWeapons.ContainsKey(player))
+        {
+            MEC.Timing.CallDelayed(MEC.Timing.WaitForOneFrame, () =>
+            {
+                if (player != null && player.IsAlive)
+                    EchoBattleCore.ApplyLoadout(player);
+            });
+        }
+    }
+
+    static bool IsQuestComplete(Player player, int questIndex, ResonanceQuestState quest)
+    {
+        bool scp = player.IsScpRole();
+
+        return questIndex switch
+        {
+            0 => quest.Kills >= (scp ? KillTargetScp : KillTargetHuman),
+            1 => quest.SurviveSeconds >= (scp ? SurviveTargetScp : SurviveTargetHuman),
+            2 => scp
+                ? quest.DamageTaken >= TakeDamageTargetScp
+                : quest.DamageDealt >= DealDamageTarget,
+            3 => scp
+                ? quest.HsRecovered >= HsRecoverTargetScp
+                : quest.HealingDone >= HealTargetHuman,
+            _ => false
+        };
+    }
+
+    public static string GetQuestDescription(Player player, int questIndex)
+    {
+        bool scp = player != null && player.IsScpRole();
+        return questIndex switch
+        {
+            0 => scp ? "적 20명 처치" : "적 8명 처치",
+            1 => scp ? "생존 720초 누적" : "생존 540초 누적",
+            2 => scp ? "받은 데미지 4500" : "가한 데미지 3600",
+            3 => scp ? "HS 회복 10000" : "치료량 1000",
+            _ => "?"
+        };
+    }
+
+    public static string FormatCurrentQuest(Player player, ExclusiveWeaponType type)
+    {
+        var progress = ExclusiveWeaponInfo.GetOrCreateProgress(player);
+        int resonance = progress.GetResonance(type);
+        if (resonance >= ExclusiveWeaponInfo.MaxResonance)
+            return "공진 MAX";
+
+        int questIndex = resonance - 1;
+        var quest = progress.GetOrCreateQuest(type);
+        bool scp = player.IsScpRole();
+
+        string label = GetQuestDescription(player, questIndex);
+        string value = questIndex switch
+        {
+            0 => $"{quest.Kills}/{(scp ? KillTargetScp : KillTargetHuman)}",
+            1 => $"{quest.SurviveSeconds:0}/{(scp ? SurviveTargetScp : SurviveTargetHuman):0}",
+            2 => scp
+                ? $"{quest.DamageTaken:0}/{TakeDamageTargetScp:0}"
+                : $"{quest.DamageDealt:0}/{DealDamageTarget:0}",
+            3 => scp
+                ? $"{quest.HsRecovered:0}/{HsRecoverTargetScp:0}"
+                : $"{quest.HealingDone:0}/{HealTargetHuman:0}",
+            _ => "?"
+        };
+
+        return $"{label} ({value})";
+    }
+
+    static bool TryGetEquipped(Player player, out ExclusiveWeaponType type, out ExclusiveWeaponProgress progress)
+    {
+        type = ExclusiveWeaponType.None;
+        progress = null;
+
+        if (player == null)
+            return false;
+
+        if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout) || !loadout.EquippedWeapon.HasValue)
+            return false;
+
+        type = loadout.EquippedWeapon.Value;
+        progress = ExclusiveWeaponInfo.GetOrCreateProgress(player);
+        return true;
+    }
+
+    static bool IsEnemyRole(RoleTypeId attackerRole, RoleTypeId targetRole)
+    {
+        return HitboxIdentity.IsEnemy(RoleExtensions.GetTeam(attackerRole), RoleExtensions.GetTeam(targetRole));
+    }
+}
