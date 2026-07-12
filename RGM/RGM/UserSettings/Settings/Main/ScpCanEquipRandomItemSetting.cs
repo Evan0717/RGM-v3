@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.UserSettings;
 
-public static partial class SettingManager
+public static partial class MainSettingManager
 {
     public sealed partial class ScpCanEquipRandomItemSetting() : CustomKeybindSetting(12050,
         "SCP의 아이템 장착ㅣEquipping SCP items", KeyCode.H, allowSpectatorTrigger: false,

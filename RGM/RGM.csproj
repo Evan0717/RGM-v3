@@ -761,8 +761,19 @@
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
-    <Compile Include="RGM\UserSettings\SettingManager.cs" />
-    <Compile Include="RGM\UserSettings\ScpCanEquipRandomItemSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\SettingVariables.cs" />
+    <Compile Include="RGM\UserSettings\UserSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\BGMVolumeSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\DetailInfoKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\DownKeySeting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\EnterKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\LeftKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\MuteBGMSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\RightKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\ScpCanEquipRandomItemSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\SettingManager.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\UpKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Managers\MainSettingManager.cs" />
     <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -915,7 +926,6 @@
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
-    <Folder Include="RGM\UserSettings\Settings\Main\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SecretAPI.dll" />
