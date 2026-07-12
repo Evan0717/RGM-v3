@@ -164,7 +164,7 @@ public static class EchoBattleCore
         }
 
         foreach (var echo in list)
-            echo.OnDisabled();
+            echo.ONActiveEffect();
 
         list.Clear();
         EchoInfo.PlayerStats.Remove(player);

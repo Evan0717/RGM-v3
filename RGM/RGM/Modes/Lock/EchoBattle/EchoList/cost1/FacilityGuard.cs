@@ -9,7 +9,7 @@ public class FacilityGuard : Echo
     {
     }
 
-    public override void OnDisabled()
+    public override void ONActiveEffect()
     {
     }
 }
