@@ -9,7 +9,7 @@ public class ClassD : Echo
     {
     }
 
-    public override void OnDisabled()
+    public override void ONActiveEffect()
     {
     }
 }

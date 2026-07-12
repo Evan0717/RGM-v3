@@ -9,7 +9,7 @@ namespace RGM.Modes;
 public abstract class Echo
 {
     public abstract void OnEnabled();
-    public abstract void OnDisabled();
+    public abstract void ONActiveEffect();
 
     public EchoData Data { get; set; }
     public Player Owner { get; set; }
@@ -41,7 +41,7 @@ public abstract class EchoActiveAbility : Echo
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
     }
 
-    public override void OnDisabled()
+    public override void ONActiveEffect()
     {
         if (IsMainSlot)
             Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;

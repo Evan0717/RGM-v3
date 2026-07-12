@@ -19,11 +19,11 @@ public class Berserker : EchoActiveAbility
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
-    public override void OnDisabled()
+    public override void ONActiveEffect()
     {
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         _armed = false;
-        base.OnDisabled();
+        base.ONActiveEffect();
     }
 
     protected override void OnActiveUsed()

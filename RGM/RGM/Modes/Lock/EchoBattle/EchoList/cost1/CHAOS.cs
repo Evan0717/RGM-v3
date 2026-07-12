@@ -10,7 +10,7 @@ public class CHAOS : Echo
     {
     }
 
-    public override void OnDisabled()
+    public override void ONActiveEffect()
     {
     }
 }
