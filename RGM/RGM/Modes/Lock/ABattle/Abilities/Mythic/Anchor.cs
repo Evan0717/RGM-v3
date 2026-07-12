@@ -19,7 +19,7 @@ namespace RGM.Modes.Abilities.Mythic;
 public class Anchor : Ability
 {
     ushort itemSerial = 0;
-    private List<Player> TargetPlayer = new();
+    public List<Player> TargetPlayer = new();
     private Dictionary<Player, byte> LWPlayerIntensity = new();
     private Dictionary<Player, float> LWPlayerDuration = new();
     private Dictionary<Player, byte> FPlayerIntensity = new();
@@ -42,6 +42,7 @@ public class Anchor : Ability
 
     public override void OnDisabled()
     {
+        Timing.RunCoroutine(Disable());
     }
 
     public void OnChangedItem(ChangedItemEventArgs ev)
@@ -70,27 +71,14 @@ public class Anchor : Ability
             if (player.Role == RoleTypeId.Spectator) continue;
             if (!HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub)) continue;
             if (TargetPlayer.Contains(player)) continue;
-            Ability EnemyAnchor = ABattle.Instance.GetAbility(player, AbilityType.MYTHIC_ANCHOR);
 
-
-            if (EnemyAnchor != null && ((Anchor)EnemyAnchor).TargetPlayer.Contains(Owner))
+            if (Owner.IsCaptured())
             {
-                Owner.AddHint("알림", $"구속당한 상태에서 구속한 플레이어를 구속할 수 없습니다.", 3f); //이론상으로 서로 구속하면 날라댕길껄요
+                Owner.AddHint("알림", $"구속당한 상태에서 다른 플레이어를 구속할 수 없습니다.", 3f);
                 continue;
             }
 
-            bool isAlreadyCaptured = false;
-            foreach (var otherPlayer in PlayerManager.List)
-            {
-                var otherAnchor = ABattle.Instance.GetAbility(otherPlayer, AbilityType.MYTHIC_ANCHOR) as Anchor;
-
-                if (otherAnchor != null && otherAnchor.TargetPlayer.Contains(player))
-                {
-                    isAlreadyCaptured = true;
-                    break;
-                }
-            }
-            if (isAlreadyCaptured)
+            if (player.IsCaptured())
             {
                 Owner.AddHint("알림", $"다른 플레이어에게 구속당한 플레이어는 구속할 수 없습니다.", 3f);
                 continue;
@@ -162,27 +150,9 @@ public class Anchor : Ability
     }
 
 
-    public IEnumerator<float> OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
-        if (ev.Player != Owner) Timing.WaitForSeconds(1f);
-
-        foreach (var player in TargetPlayer.ToList())
-        {
-            if (player == null) continue;
-            Timing.CallDelayed(0.3f, () =>
-            {
-                player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
-                player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
-            });
-            
-        }
-        LWPlayerDuration.Clear();
-        LWPlayerIntensity.Clear();
-        FPlayerIntensity.Clear();
-        FPlayerDuration.Clear();
-        TargetPlayer.Clear();
-
-        yield break;
+        Timing.RunCoroutine(Disable());
     }
 
     public void OnHurting(HurtingEventArgs ev)
@@ -207,6 +177,25 @@ public class Anchor : Ability
     {
         if (ev.Target == null || ev.Player == null) return;
         if (ev.Target == Owner) ev.IsAllowed = false;
+    }
+
+    public IEnumerator<float> Disable()
+    {
+        foreach (var player in TargetPlayer.ToList())
+        {
+            if (player == null) continue;
+
+            Timing.WaitForSeconds(0.3f);
+            player.EnableEffect(EffectType.Lightweight, LWPlayerIntensity[player], LWPlayerDuration[player]);
+            player.EnableEffect(EffectType.Fade, FPlayerIntensity[player], FPlayerDuration[player]);
+        }
+        LWPlayerDuration.Clear();
+        LWPlayerIntensity.Clear();
+        FPlayerIntensity.Clear();
+        FPlayerDuration.Clear();
+        TargetPlayer.Clear();
+
+        yield break;
     }
 }
 

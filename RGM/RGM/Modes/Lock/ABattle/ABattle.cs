@@ -641,11 +641,11 @@ public class ABattle : Mode
 
     public void StartSelect(Player player, List<AbilityType> abilities = null, int count = 3)
     {
-        if (CurrentExtraModes.Contains("1 + 1"))
+        /*if (CurrentExtraModes.Contains("1 + 1"))
         {
             count = 1;
-        }    
-        else if (CurrentExtraModes.Contains("수저"))
+        }    */
+        if (CurrentExtraModes.Contains("수저"))
         {
             switch (Random.Range(1, 4))
             {
@@ -674,10 +674,10 @@ public class ABattle : Mode
         if (category == AbilityCategory.Dummy)
             return;
 
-        if (CurrentExtraModes.Contains("1 + 1"))
+        /*if (CurrentExtraModes.Contains("1 + 1"))
         {
             player.AddAbility(GetRandomAbilities(player, category, 1).First());
-        }
+        }*/
 
         abilities = abilities == null ? GetRandomAbilities(player, category, count) : abilities;
         var ignoredIndexes = new List<int>();
@@ -706,7 +706,10 @@ public class ABattle : Mode
 
             ignoredIndexes.Add(index);
 
-            var ability = GetRandomAbilities(player, player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) ? Tools.EnumToList<AbilityCategory>().GetRandomValue(x => !new List<AbilityCategory> { AbilityCategory.None, AbilityCategory.Dummy, AbilityCategory.Synergy }.Contains(x)) : player.GetAbilityCategory(), 1).First();
+            var ability = GetRandomAbilities(player, 
+                                             player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
+                                             ? Tools.EnumToList<AbilityCategory>().GetRandomValue(x => !new List<AbilityCategory> { AbilityCategory.None, AbilityCategory.Dummy, AbilityCategory.Synergy }.Contains(x)) 
+                                             : player.GetAbilityCategory(), 1).First();
 
             abilities[index] = ability;
         }
@@ -1088,5 +1091,25 @@ public static class ABattleExtensions
     public static bool HasAbility(this Player player, AbilityType type)
     {
         return ABattle.Instance.HasAbility(player, type);
+    }
+
+    public static bool IsCaptured(this Player player) //[신화] 구속에 의해 붙잡혔는지 확인
+    {
+        foreach (var p in PlayerManager.List)
+        {
+            if (p == player) continue;
+
+            Ability EnemyAnchor = ABattle.Instance.GetAbility(p, AbilityType.MYTHIC_ANCHOR);
+            if (EnemyAnchor == null) continue;
+
+            if (EnemyAnchor is Abilities.Mythic.Anchor anchor && anchor.TargetPlayer != null)
+            {
+                if (anchor.TargetPlayer.Contains(player))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
