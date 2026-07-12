@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -602,6 +602,7 @@
     <Compile Include="RGM\Modes\Lock\Rank\Rank.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
+    <Compile Include="RGM\Modes\Plus\KoreanSpeed\SettingManager.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
     <Compile Include="RGM\Modes\Plus\Store\Store.cs" />
@@ -760,7 +761,19 @@
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
-    <Compile Include="RGM\UserSettings\MainSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\SettingVariables.cs" />
+    <Compile Include="RGM\UserSettings\UserSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\BGMVolumeSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\DetailInfoKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\DownKeySeting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\EnterKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\LeftKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\MuteBGMSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\RightKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\ScpCanEquipRandomItemSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\SettingManager.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\UpKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Managers\MainSettingManager.cs" />
     <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
