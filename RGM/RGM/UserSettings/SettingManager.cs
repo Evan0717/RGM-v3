@@ -13,7 +13,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.UserSettings
 {
-    public static class MainSetting
+    public static partial class SettingManager
     {
         private static CoroutineHandle _reloader;
         
@@ -30,6 +30,8 @@ namespace RGM.UserSettings
         public static CustomKeybindSetting RightKey { get; private set; }
         public static CustomKeybindSetting EnterKey { get; private set; }
         public static CustomKeybindSetting DetailInfoKey { get; private set; }  
+        
+        public static CustomSliderSetting BGMVolume { get; private set; }
 
         public static void Init()
         {
@@ -98,46 +100,12 @@ namespace RGM.UserSettings
             }
         }
 
-        private sealed class ScpCanEquipRandomItemSetting : CustomKeybindSetting
+        public sealed partial class ScpCanEquipRandomItemSetting;
+        
+        private sealed class SpectatorToNoneSetting() : CustomButtonSetting(12051,
+            "관전석 <-> 훈련장ㅣSpectator <-> Training ground", "GO!", 0.5f,
+            "관전석에서 훈련장으로 이동합니다.\n• Set 모드 또는 특정 모드에서 사용 불가\n• 사망 후 10초가 지나야 사용 가능\n\nMove from the spectator seats to the training grounds.\n• Not available in Set mode or certain modes.\n• Available 10 seconds after death.")
         {
-            public ScpCanEquipRandomItemSetting()
-                : base(12050, "SCP의 아이템 장착ㅣEquipping SCP items", KeyCode.H, allowSpectatorTrigger: false, hint: "SCP가 보유한 아이템 중 무작위로 하나를 장착합니다.\n\nEquip a random item from the SCP's inventory.")
-            {
-            }
-
-            public override CustomHeader Header => Setting;
-
-            protected override CustomSetting CreateDuplicate() => new ScpCanEquipRandomItemSetting();
-
-            protected override void HandleSettingUpdate()
-            {
-                if (!IsPressed || KnownOwner == null)
-                    return;
-
-                Player player = Player.Get(KnownOwner.ReferenceHub);
-                if (!player.IsScpRole())
-                    return;
-
-                var candidates = player.Items
-                    .Where(x => player.CurrentItem != x)
-                    .ToList();
-
-                candidates.Add(null);
-
-                if (candidates.Count == 0)
-                    return;
-
-                player.CurrentItem = candidates.GetRandomValue();
-            }
-        }
-
-        private sealed class SpectatorToNoneSetting : CustomButtonSetting
-        {
-            public SpectatorToNoneSetting()
-                : base(12051, "관전석 <-> 훈련장ㅣSpectator <-> Training ground", "GO!", 0.5f, "관전석에서 훈련장으로 이동합니다.\n• Set 모드 또는 특정 모드에서 사용 불가\n• 사망 후 10초가 지나야 사용 가능\n\nMove from the spectator seats to the training grounds.\n• Not available in Set mode or certain modes.\n• Available 10 seconds after death.")
-            {
-            }
-
             public override CustomHeader Header => Setting;
 
             protected override CustomSetting CreateDuplicate() => new SpectatorToNoneSetting();
@@ -174,13 +142,11 @@ namespace RGM.UserSettings
             }
         }
 
-        private sealed class SwitchToSpectatorSetting : CustomButtonSetting
-        {
-            public SwitchToSpectatorSetting()
-                : base(12052, "관전자 <-> 오버워치ㅣSpectator <-> Overwatch", "<->", 0.5f, "관전자와 오버워치 상태를 변경합니다.\n• 사망 후 10초가 지나야 사용 가능\n\nChanges between spectator and Overwatch status.\n• Available 10 seconds after death.")
-            {
-            }
 
+        private sealed class SwitchToSpectatorSetting() : CustomButtonSetting(12052,
+            "관전자 <-> 오버워치ㅣSpectator <-> Overwatch", "<->", 0.5f,
+            "관전자와 오버워치 상태를 변경합니다.\n• 사망 후 10초가 지나야 사용 가능\n\nChanges between spectator and Overwatch status.\n• Available 10 seconds after death.")
+        {
             public override CustomHeader Header => Setting;
 
             protected override CustomSetting CreateDuplicate() => new SwitchToSpectatorSetting();
@@ -214,7 +180,7 @@ namespace RGM.UserSettings
             }
         }
 
-        private sealed class MuteBGMSetting : CustomTwoButtonSetting
+        public sealed partial class MuteBGMSetting : CustomTwoButtonSetting
         {
             public MuteBGMSetting()
                 : base(12053, "BGM 음소거ㅣBGM mute", "ON", "OFF", defaultIsB: true, hint: "음악이 유튜브 저작권에 걸릴 것 같다고요? 이 기능을 사용하세요.\n\nAre you worried BGM might be copyrighted by YouTube? Use this feature.")

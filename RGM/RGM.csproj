@@ -346,7 +346,9 @@
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Mythic\Anchor.cs" />
     <Compile Include="RGM\Modes\Plus\ABattle\Abilities\Rare\FinalExam.cs" />
+    <Compile Include="RGM\Modes\Plus\KoreanSpeed\GameManager.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
+    <Compile Include="RGM\Modes\Plus\KoreanSpeed\SettingManager.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
     <Compile Include="RGM\Modes\Plus\Store\Store.cs" />
@@ -742,7 +744,8 @@
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
-    <Compile Include="RGM\UserSettings\MainSetting.cs" />
+    <Compile Include="RGM\UserSettings\SettingManager.cs" />
+    <Compile Include="RGM\UserSettings\ScpCanEquipRandomItemSetting.cs" />
     <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -895,6 +898,7 @@
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
+    <Folder Include="RGM\UserSettings\Settings\Main\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SecretAPI.dll" />
