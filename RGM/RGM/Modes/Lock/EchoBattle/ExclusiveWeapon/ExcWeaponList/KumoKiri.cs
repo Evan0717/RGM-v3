@@ -6,11 +6,11 @@ namespace RGM.Modes.ExclusiveWeapon;
 
 /// <summary>
 /// KumoKiri.
-/// Passive: Attack 11%+(res*2%). On hit (0.6%*res) chance for 618.03 fixed damage.
+/// Passive: Attack 11%+(res*2%). On hit (1%*res) chance for 618.03 fixed damage.
 /// </summary>
 [ExclusiveWeapon(
-    "KumoKiri",
-    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 (0.6% * 공진 수치) 확률로 618.03 고정 피해.",
+    "쿠모키리",
+    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 (1% * 공진 수치) 확률로 618.03 고정 피해.",
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
@@ -48,7 +48,7 @@ public class KumoKiri : ExcWeapon
         if (EchoStats.AreAttackModifiersIgnored(Owner))
             return;
 
-        float chance = 0.6f * Resonance;
+        float chance = 1f * Resonance;
         if (Random.Range(0f, 100f) >= chance)
             return;
 
