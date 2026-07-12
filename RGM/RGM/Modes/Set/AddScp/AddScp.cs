@@ -60,6 +60,9 @@ namespace RGM.Modes
 
         IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             Scp294.OnEnabled();
             Scp1162.OnEnabled();
 

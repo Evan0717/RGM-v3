@@ -15,7 +15,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.TailCatcter)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.TailCatcter)]
     public class TailCatcter : Mode
     {
         public override string Name => "꼬리 잡기";
@@ -61,7 +61,7 @@ namespace RGM.Modes
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
 
-            audio = Tools.PlayGlobalAudio("Initial_D_Dancing", 1, true);
+            audio = Tools.PlayGlobalAudio("Initial-D-Dancing", 1, true);
         }
 
         public override void OnDisabled()

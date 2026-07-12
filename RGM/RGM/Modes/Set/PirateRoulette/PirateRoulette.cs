@@ -115,7 +115,7 @@ namespace RGM.Modes
         {
             while (Scp049.IsAlive)
             {
-                Scp049.Hurt(Bomb.MaxHealth / 150);
+                Scp049.Hurt(Scp049.MaxHealth / 150);
 
                 yield return Timing.WaitForSeconds(1);
             }

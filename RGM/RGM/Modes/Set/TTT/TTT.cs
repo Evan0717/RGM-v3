@@ -38,10 +38,8 @@ Trouble in Terrorist Town의 약자.
 
 <b><size=30>[참고]</size></b>
 • 탐정은 <color={RoleTypeId.FacilityGuard.GetColor().ToHex()}>시설 경비</color>의 모습을 하고 있습니다. <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>들은 가급적이면 그의 명령을 따라야 합니다.
-• <color=red>배신자</color>들에게는 무전기와 SCP-1853(이)가 추가로 지급됩니다.
 • 가끔씩 진통제, 고폭 수류탄, 섬광탄이 추가로 지급될 수 있습니다.
 • <b><color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>은 잘못된 유저를 죽이면 심각한 피해를 입습니다!</b>
-• <color={RoleTypeId.ClassD.GetColor().ToHex()}>전과자</color>는 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color> 팀이지만 <color=red>배신자</color>에게는 <color=red>배신자</color>로 보입니다. 주의하세요!
 • <color=#c753d9>소울메이트</color>들은 서로의 위치를 확인할 수 있습니다.
 • <color=#000000>O5 평의회</color>는 혼자서 살아남아야 하는 대신, 많은 체력과 아이템들을 가지고 시작합니다.
 • <color=#f178fc>광대</color>도 혼자서 살아남아야 하는 대신, <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>에게 사망하면 1번 부활합니다.
@@ -54,27 +52,26 @@ Trouble in Terrorist Town의 약자.
         Player O5;
         Player jester;
         List<Player> traitors = new List<Player>();
-        List<Player> mimics = new List<Player>();
         List<Player> soulMates = new List<Player>();
+        List<Player> innocentRewardTargets = new List<Player>();
         List<Player> instantKillCooldown = new List<Player>();
         List<ItemType> main = new List<ItemType> 
         {
-            ItemType.GunA7,
-            ItemType.GunCrossvec,
-            ItemType.GunFSP9,
             ItemType.GunAK,
             ItemType.GunShotgun,
-            ItemType.GunE11SR
+            ItemType.GunE11SR,
+            ItemType.GunLogicer,
+            ItemType.GunFRMG0
         };
         List<ItemType> secondary = new List<ItemType> 
-        { 
-            ItemType.GunCom45,
-            ItemType.GunCOM15,
+        {
+            ItemType.GunRevolver,
             ItemType.GunCOM18,
-            ItemType.GunRevolver
+            ItemType.GunCrossvec,
+            ItemType.GunFSP9
         };
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -128,6 +125,16 @@ Trouble in Terrorist Town의 약자.
             }
         }
 
+        List<Player> GetInnocentRewardTargets()
+        {
+            return PlayerManager.List.Where(x =>
+                innocentRewardTargets.Contains(x) ||
+                x.RankName == "무죄인" ||
+                x.RankName == "탐정" ||
+                x.RankName == "소울메이트"
+            ).ToList();
+        }
+
         public IEnumerator<float> OnModeStarted()
         {
             Tools.LoadMap($"{Maps.GetRandomValue()}");
@@ -137,7 +144,7 @@ Trouble in Terrorist Town의 약자.
                 spawn(player);
             }
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 30; i++)
             {
                 foreach (var player in PlayerManager.List)
                     player.AddHint("TTT 안내", $"""
@@ -145,7 +152,7 @@ Trouble in Terrorist Town의 약자.
 {desc}
 </size></align>
 
-{20 - i}초 후 게임이 시작됩니다.
+{30 - i}초 후 게임이 시작됩니다.
 
 
 
@@ -163,6 +170,7 @@ Trouble in Terrorist Town의 약자.
             }
 
             GodModePlayers.Clear();
+            innocentRewardTargets.Clear();
 
             int traitorCount = 0;
             int playerCount = PlayerManager.List.Count();
@@ -183,40 +191,32 @@ Trouble in Terrorist Town의 약자.
             for (int i = 0; i < traitorCount; i++)
             {
                 Player traitor = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
-                traitor.AddItem(ItemType.Radio);
-                traitor.AddItem(ItemType.SCP1853);
 
                 traitors.Add(traitor);
             }
 
-            if (playerCount >= 25)
-            {
-                Player mimic = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
-
-                mimics.Add(mimic);
-            }
-
             if (playerCount >= 20)
             {
-                jester = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x)).GetRandomValue();
+                jester = PlayerManager.List.Where(x => !traitors.Contains(x)).GetRandomValue();
             }
 
             if (playerCount >= 15)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
+                    Player soulMate = PlayerManager.List.Where(x => !traitors.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
 
                     soulMates.Add(soulMate);
                 }
 
-                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
+                O5 = PlayerManager.List.Where(x => !traitors.Contains(x) && !soulMates.Contains(x) && jester != x).GetRandomValue();
             }
 
-            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !mimics.Contains(x) && !soulMates.Contains(x) && jester != x && O5 != x).GetRandomValue();
+            detective = PlayerManager.List.Where(x => !traitors.Contains(x) && !soulMates.Contains(x) && jester != x && O5 != x).GetRandomValue();
             detective.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
             detective.RankName = "탐정";
             detective.RankColor = "cyan";
+            innocentRewardTargets.Add(detective);
             foreach (var item in new List<ItemType>
             {
                 ItemType.ArmorCombat,
@@ -236,6 +236,7 @@ Trouble in Terrorist Town의 약자.
                 }
                 else if (soulMates.Contains(player))
                 {
+                    innocentRewardTargets.Add(player);
                     player.AddHint("TTT 소울메이트", $"당신은 <color=#c753d9>소울메이트</color>입니다. 당신의 짝이 어디있는지 실시간으로 확인할 수 있습니다.", 20);
                 }
                 else if (player == detective)
@@ -247,7 +248,7 @@ Trouble in Terrorist Town의 약자.
                     player.AddHint("TTT O5", $"당신은 <color=#000000>O5 평의회</color>입니다. 끝까지 생존하거나, 나머지를 전부 죽이세요!", 20);
                     player.MaxHealth = 250;
                     player.Health = player.MaxHealth;
-                    player.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
+                    player.AddItem(ItemType.Painkillers);
                 }
                 else if (player == jester)
                 {
@@ -255,6 +256,7 @@ Trouble in Terrorist Town의 약자.
                 }
                 else
                 {
+                    innocentRewardTargets.Add(player);
                     player.AddHint("TTT 무죄인", $"당신은 <color={RoleTypeId.ClassD.GetColor().ToHex()}>무죄인</color>입니다. <color=#2ECCFA>탐정</color>과 함께 <color=red>배신자</color>들을 처단하세요.", 20);
                 }
             }
@@ -264,22 +266,22 @@ Trouble in Terrorist Town의 약자.
 
         public IEnumerator<float> Timer()
         {
-            for (int i = 1; i < 600; i++)
+            for (int i = 1; i < 480; i++)
             {
                 if (Round.IsEnded)
                     yield break;
 
-                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>게임 종료까지 {600 - i}초</size>"));
+                PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(1, $"<size=25>게임 종료까지 {480 - i}초</size>"));
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
             // 게임 종료 시점: 무죄인이 살아있으면 무죄인 승리
             var innocents = PlayerManager.List.Where(x =>
-                x.IsAlive &&
                 !traitors.Contains(x) &&
                 x != O5 &&
-                x != jester
+                x != jester &&
+                x.IsAlive
             ).ToList();
 
             if (innocents.Count > 0)
@@ -296,7 +298,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.AddBroadcast(20, $"<color=orange>무죄인</color> 팀의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(innocents, 1));
+                Timing.RunCoroutine(Tools.SetWinner(GetInnocentRewardTargets(), 1));
                 yield break;
             }
 
@@ -311,7 +313,7 @@ Trouble in Terrorist Town의 약자.
                     player.Kill("광대가 승리를 탈취해갔습니다!");
                 }
                 jester.AddBroadcast(20, $"<color=#f178fc>광대</color>의 승리입니다!");
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 5));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 13));
             }
             else if (O5 != null && O5.IsAlive)
             {
@@ -323,7 +325,7 @@ Trouble in Terrorist Town의 약자.
                     player.Kill("아뿔싸! O5 평의회가 살아있었군요!");
                 }
                 O5.AddBroadcast(20, $"<color=#000000>O5 평의회</color>의 승리입니다!");
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == O5).ToList(), 5));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == O5).ToList(), 8));
             }
         }
 
@@ -335,7 +337,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     if (Tools.TryGetLookPlayer(traitor, 100, out Player t, out RaycastHit? hit))
                     {
-                        if (traitors.Contains(t) || mimics.Contains(t))
+                        if (traitors.Contains(t))
                             traitor.AddHint("TTT 배신자 확인", $"그는 당신의 동료, 같은 <color=red>배신자</color>입니다.", 1.2f);
 
                         else if (t == jester)
@@ -352,11 +354,6 @@ Trouble in Terrorist Town의 약자.
 
                     else
                         traitor.AddHint("TTT 배신자 임무 완수", "당신은 임무를 완수하였습니다.", 1.2f);
-                }
-
-                foreach (var mimic in mimics.Where(x => x.IsAlive))
-                {
-                    mimic.AddHint("TTT 전과자", $"당신은 <color=red>배신자</color>에게 같은 <color=red>배신자</color>로 보입니다.", 1.2f);
                 }
 
                 foreach (var soulMate in soulMates.Where(x => x.IsAlive))
@@ -387,11 +384,6 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.RankName = "소울메이트";
                     player.RankColor = "pink";
-                }
-                else if (mimics.Contains(player))
-                {
-                    player.RankName = "전과자";
-                    player.RankColor = "orange";
                 }
                 else if (player == O5)
                 {
@@ -482,11 +474,6 @@ Trouble in Terrorist Town의 약자.
 
                 soulMates.Remove(ev.Player);
             }
-            else if (mimics.Contains(ev.Player))
-            {
-                ev.Player.RankName = "전과자";
-                ev.Player.RankColor = "orange";
-            }
             else if (ev.Player == O5)
             {
                 ev.Player.RankName = "O5 평의회";
@@ -539,7 +526,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.AddBroadcast(20, $"<color=orange>무죄인</color> 팀의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => !traitors.Contains(x) && O5 != x && jester != x).ToList(), 1));
+                Timing.RunCoroutine(Tools.SetWinner(GetInnocentRewardTargets(), 1));
             }
             else if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == jester)
             {
@@ -550,7 +537,7 @@ Trouble in Terrorist Town의 약자.
                     player.AddBroadcast(20, $"<color=#f178fc>광대</color>의 승리입니다!");
                 }
 
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 5));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == jester).ToList(), 13));
             }
             else if (PlayerManager.List.Count(x => x.IsAlive) == 1 && PlayerManager.List.FirstOrDefault(x => x.IsAlive) == O5)
             {
@@ -560,7 +547,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.AddBroadcast(20, $"<color=#000000>O5 평의회</color>의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == O5).ToList(), 5));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x == O5).ToList(), 8));
             }
             else if (PlayerManager.List.Where(x => !traitors.Contains(x)).Where(x => x.IsAlive).Count() == 0)
             {
@@ -570,7 +557,7 @@ Trouble in Terrorist Town의 약자.
                 {
                     player.AddBroadcast(20, $"<color=red>배신자</color> 팀의 승리입니다!");
                 }
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(traitors.Contains).ToList(), 3));
+                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(traitors.Contains).ToList(), 4));
             }
         }
     }

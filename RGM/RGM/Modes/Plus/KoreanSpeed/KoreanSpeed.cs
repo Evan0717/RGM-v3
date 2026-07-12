@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Linq;
-using Exiled.API.Enums;
-using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
-using MEC;
-using RGM.API.Features;
+using HarmonyLib;
+using PlayerRoles.PlayableScps.Scp049;
+using RGM.Modes.Patches;
 
 namespace RGM.Modes;
 
@@ -18,84 +15,63 @@ public class KoreanSpeed : Mode
         "<b><color=#FB00FF>슈</color><color=#D200D5>우</color><color=#A901AB>우</color><color=#800282>우</color><color=#570358>웅</color><color=#2E042E>화</color></b>";
 
     public override string Color => "5882FA";
+    public override string Author { get; set; } = "아기고양이";
 
     public static KoreanSpeed Instance;
 
-    int count;
+    private ScpFeatures _scpFeatures;
+
+    private static Harmony _harmony;
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Player.Spawned -= OnSpawn;
-        Exiled.Events.Handlers.Player.Died -= OnDied;
-        Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
-        Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
-        UnloadEffects();
+        SpeedStore.Disable();
+        PlayerFeatures.DeActivate();
+        ScpFeatures.Start -= AddPatches;
+        RemovePatches();
+        
+        _scpFeatures?.OnDisabled();
+        _scpFeatures = null;
     }
 
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Player.Spawned += OnSpawn;
-        Exiled.Events.Handlers.Player.Died += OnDied;
-        Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
-        Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
+        SpeedStore.Ignition();
+        PlayerFeatures.Activate();
+        ScpFeatures.Start += AddPatches;
+
+        _scpFeatures ??= new ScpFeatures();
+        _scpFeatures?.OnEnabled();
     }
 
-    private void OnDied(DiedEventArgs ev)
+    ///<summary>    
+    /// Harmony 패치를 활성화하기 위한 Event 호환 매서드입니다.
+    /// <br />
+    /// 만약 Harmony가 null일 경우, 새 Harmony 인스턴스를 대입 또는 초기화합니다.
+    /// </summary>
+    private static void AddPatches(object sender, System.EventArgs e)
     {
-        if (count != 125)
-            count++;
+        _harmony ??= new Harmony($"Harmony - {DateTime.Now.Ticks} - KoreanSpeed");
 
-        AddEffects();
+        Scp049Patch();
     }
 
-    private void OnSearchingPickup(SearchingPickupEventArgs ev)
+    ///<summary>
+    /// 내부 모듈의 harmony 패치를 제거합니다.
+    /// </summary>
+    private static void RemovePatches()
     {
-        ev.SearchTime -= count * 0.1f;
+        _harmony?.UnpatchAll();
+        _harmony = null;
     }
 
-    private void OnThrowingRequest(ThrowingRequestEventArgs ev)
+    ///<summary>
+    /// SCP-049 관련 Harmony 패치입니다.
+    /// </summary>
+    private static void Scp049Patch()
     {
-        ev.Throwable.PinPullTime -= count * 0.1f;
+        _harmony.Patch(AccessTools.PropertyGetter(
+                typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
+            postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
     }
-
-    private void OnSpawn(SpawnedEventArgs ev)
-    {
-        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-        {
-            if (ev.Player == null || !ev.Player.IsAlive || ev.Player.IsNonePlayer()) return;
-            AddEffects();
-        });
-    }
-
-    private void AddEffects()
-    {
-        try
-        {
-            foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
-            {
-                player.EnableEffect(EffectType.MovementBoost, (byte)(count * 2));
-                player.EnableEffect(EffectType.Scp1853, count <= 5 ? (byte)count : (byte)5);
-            }
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Error while adding effects, Deception: {e.Message}");
-        }
-    }
-
-    private void UnloadEffects()
-    {
-        try
-        {
-            foreach (var player in PlayerManager.List.Where(player => player != null && !player.IsDead))
-            {
-                player.DisableEffect(EffectType.MovementBoost);
-                player.DisableEffect(EffectType.Scp1853);
-            }
-        }
-        catch (Exception e)
-        {
-            Log.Error($"Error while removing effects, Deception: {e.Message}");
-        }
-    }
-}
+}   

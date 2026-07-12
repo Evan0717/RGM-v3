@@ -280,25 +280,28 @@ namespace RGM.Donator
 
         public IEnumerator<float> OnSpawned(SpawnedEventArgs ev)
         {
-            if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
+            if (ev.Player.IsAlive)
             {
-                Vector3 _pos = hit.point;
-
-                List<string> Data = UsersManager.UsersCache[ev.Player.UserId];
-                string sE = Data[20];
-
-                if (Data[21] == "1" && Data[19] != "0")
+                if (Physics.Raycast(ev.Player.Position, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
                 {
-                    sE = Data[19].Split('/').GetRandomValue();
+                    Vector3 _pos = hit.point;
+
+                    List<string> Data = UsersManager.UsersCache[ev.Player.UserId];
+                    string sE = Data[20];
+
+                    if (Data[21] == "1" && Data[19] != "0")
+                    {
+                        sE = Data[19].Split('/').GetRandomValue();
+                    }
+
+                    if (sE != "0")
+                    {
+                        Timing.RunCoroutine(SpawnEffect(sE, ev.Player, _pos));
+                    }
                 }
 
-                if (sE != "0")
-                {
-                    Timing.RunCoroutine(SpawnEffect(sE, ev.Player, _pos));
-                }
+                yield break;
             }
-
-            yield break;
         }
 
         public IEnumerator<float> CustomermizingRotation()

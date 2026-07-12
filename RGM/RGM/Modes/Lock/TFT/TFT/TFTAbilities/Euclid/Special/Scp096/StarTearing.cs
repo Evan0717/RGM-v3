@@ -4,7 +4,7 @@ using static DAONTFT.Core.Variables.Base;
 
 namespace DAONTFT.Core.TFT.Euclid.Scp096;
 
-[TFTAbility("별자리 찢기", "공격 시 25% 확률로 대상을 즉시 사망시킵니다.", TFTAbilityLevel.Euclid, TFTAbilityCategory.Scp096, TFTAbilityPoint.Continuous, TFTAbilityType.StarTearing, "🌟")]
+[TFTAbility("별자리 찢기", "공격 시 23% 확률로 대상을 즉시 사망시킵니다.", TFTAbilityLevel.Euclid, TFTAbilityCategory.Scp096, TFTAbilityPoint.Continuous, TFTAbilityType.StarTearing, "🌟")]
 public class StarTearing : TFTAbility
 {
     public override void OnEnabled()
@@ -22,7 +22,7 @@ public class StarTearing : TFTAbility
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;
 
-        if (UnityEngine.Random.Range(1, 5) == 1)
+        if (UnityEngine.Random.Range(1, 101) <= 23)
         {
             if (GodModePlayers.Contains(ev.Player))
                 GodModePlayers.Remove(ev.Player);

@@ -29,6 +29,9 @@ namespace DAONTFT.Core.IEnumerators
                     {
                         foreach (var ability in abilities)
                         {
+                            if (ability?.Data == null)
+                                continue;
+
                             queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
                         }
                     }
@@ -60,6 +63,9 @@ namespace DAONTFT.Core.IEnumerators
                     {
                         foreach (var ability in abilities)
                         {
+                            if (ability?.Data == null)
+                                continue;
+
                             queue.Add($"{ability.Data.GetFormattedName()}ㅣ{ability.Data.Description}");
                         }
                     }

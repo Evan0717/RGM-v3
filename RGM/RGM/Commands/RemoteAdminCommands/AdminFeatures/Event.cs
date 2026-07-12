@@ -5,6 +5,7 @@ using MEC;
 
 using PlayerRoles;
 using RGM.API.Features;
+using RGM.RGM.Modes.Tiny.대인전;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,6 @@ namespace RGM.Commands.RemoteAdminCommands
 
             List<Player> TeamA = new List<Player>();
             List<Player> TeamB = new List<Player>();
-
 
             var players = PlayerManager.List.Where(x => !x.IsTutorial).ToList();
             players.ShuffleList();
@@ -133,6 +133,27 @@ namespace RGM.Commands.RemoteAdminCommands
         public string[] Aliases { get; } = { "뽑기" };
 
         public string Description { get; } = "룰렛을 돌립니다. 결과는 모두가 확인할 수 있습니다.";
+
+        public bool SanitizeResponse { get; } = true;
+    }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class 대인전대회모의전 : ICommand
+    {
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            대인전.Start();
+
+            response = "대회 모의전을 시작합니다!";
+
+            return true;
+        }
+
+        public string Command { get; } = "대회";
+
+        public string[] Aliases { get; } = { "모의전" };
+
+        public string Description { get; } = "대회 모의전을 시작합니다.";
 
         public bool SanitizeResponse { get; } = true;
     }

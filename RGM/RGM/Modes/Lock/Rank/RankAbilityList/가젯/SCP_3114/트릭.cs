@@ -1,19 +1,10 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.API.Features.Doors;
+﻿using Exiled.API.Extensions;
 using Exiled.API.Features.Roles;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp049;
-using Exiled.Events.EventArgs.Scp173;
 using MEC;
-using MultiBroadcast.Commands.Subcommands;
 using PlayerRoles;
 using RGM.API.Features;
 using RGM.Modes;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {

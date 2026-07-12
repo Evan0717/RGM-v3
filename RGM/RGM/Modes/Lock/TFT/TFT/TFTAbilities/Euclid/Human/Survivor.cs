@@ -7,7 +7,7 @@ using RGM.API.Features;
 
 namespace DAONTFT.Core.TFT.Euclid.Human;
 
-[TFTAbility("생존 전문가", "죽음에 이르는 피해를 받았을 때, 1초 간 살아남습니다. (쿨타임 2분)", TFTAbilityLevel.Euclid, TFTAbilityCategory.Human, TFTAbilityPoint.Continuous, TFTAbilityType.Survivor, "💝")]
+[TFTAbility("생존 전문가", "죽음에 이르는 피해를 받았을 때, 3초 간 살아남습니다. (쿨타임 2분)", TFTAbilityLevel.Euclid, TFTAbilityCategory.Human, TFTAbilityPoint.Continuous, TFTAbilityType.Survivor, "💝")]
 public class Survivor : TFTAbility
 {
     bool isEnabled = false;
@@ -35,7 +35,7 @@ public class Survivor : TFTAbility
             if (cooldown > 0)
                 cooldown--;
 
-            Data.Description = $"죽음에 이르는 피해를 받았을 때, 1초 간 살아남습니다. ({(cooldown == 0 ? "사용 가능" : $"재사용까지 { cooldown}초")})";
+            Data.Description = $"죽음에 이르는 피해를 받았을 때, 3초 간 살아남습니다. ({(cooldown == 0 ? "사용 가능" : $"재사용까지 { cooldown}초")})";
 
             yield return Timing.WaitForSeconds(1f);
         }
@@ -59,7 +59,7 @@ public class Survivor : TFTAbility
 
                 GodModePlayers.Add(ev.Player);
 
-                Timing.CallDelayed(2f, () =>
+                Timing.CallDelayed(4f, () =>
                 {
                     if (GodModePlayers.Contains(ev.Player))
                         GodModePlayers.Remove(ev.Player);

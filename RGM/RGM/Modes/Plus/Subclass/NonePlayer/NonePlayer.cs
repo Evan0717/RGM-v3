@@ -36,7 +36,7 @@ namespace RGM.Modes.SubClass
                     Players.Add(player);
 
                 player.Role.Set(RoleTypeId.Tutorial);
-                player.Position = new Vector3(76.74454f, 27.96138f, 12.53338f);
+                player.Position = new Vector3(65.572f, 184.303513f, -44.9636536f);
                 player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => x.IsWeapon() && !black.Contains(x)));
                 player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue(x => !black.Contains(x)));
 

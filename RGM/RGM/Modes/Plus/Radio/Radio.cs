@@ -4,7 +4,6 @@ using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
 using Exiled.API.Extensions;
-using static RGM.Variables.Variable;
 using UnityEngine;
 using System.IO;
 
@@ -35,14 +34,15 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             while (true)
             {
-                string audioDir = Paths.Plugins + "/audio/";
+                string audioDir = $"{Paths.Plugins}/audio/";
                 string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
-
-                AudioClipPlayback clip = GlobalPlayer.TryPlay(audioFiles.GetRandomValue(), 1f, false);
+        
+                AudioClipPlayback clip =
+                    Tools.PlayGlobalAudio(audioFiles.GetRandomValue().Replace(".ogg", ""), isNoNotice: true);
 
                 yield return Timing.WaitForSeconds((int)clip.Duration.TotalSeconds + Random.Range(1, 21));
             }

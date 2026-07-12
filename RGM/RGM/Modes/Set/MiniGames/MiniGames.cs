@@ -49,7 +49,8 @@ namespace RGM.Modes
             //"tdm", - 모드로 이미 존재함
             "lava",
             "zombie",
-            "zombie2"
+            "zombie2",
+            //"amongus" - 24인 이하 제한 걸려 있어서 제외
         };
         Vector3 pos = new Vector3(14.07672f, 328.4382f, 11.39262f);
 

@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using static RGM.Variables.Variable;
 using RGM.API.Features;
 using MapGeneration.Holidays;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -50,6 +51,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             while (true)
             {
                 foreach (var player in PlayerManager.List)
@@ -79,7 +83,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnDied(DiedEventArgs ev)
         {
-            if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown)
+            if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown || ev.DamageHandler.Type == DamageType.Warhead)
             {
                 ev.Player.AddHint("스피릿 성불", $"성불했습니다..", 3);
                 spirits.Remove(ev.Player);

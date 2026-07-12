@@ -28,11 +28,11 @@ namespace RGM.Modes
 
         public static DeadLine Instance;
 
-        public List<Player> pl = new List<Player>();
+        private readonly List<Player> _pl = [];
 
         CoroutineHandle _onModeStarted;
 
-        AudioClipPlayback audio;
+        private AudioClipPlayback _audio;
 
         public override void OnEnabled()
         {
@@ -45,7 +45,7 @@ namespace RGM.Modes
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
 
-            audio = Tools.PlayGlobalAudio("LineLite", 1, true);
+            _audio = Tools.PlayGlobalAudio("LineLite", 1, true);
         }
 
         public override void OnDisabled()
@@ -59,12 +59,12 @@ namespace RGM.Modes
 
             Timing.KillCoroutines(_onModeStarted);
 
-            audio.IsPaused = true;
+            _audio.IsPaused = true;
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
-            PlayerManager.List.CopyTo(pl);
+            PlayerManager.List.CopyTo(_pl);
 
             foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
             {
@@ -77,52 +77,42 @@ namespace RGM.Modes
             {
                 foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive))
                 {
-                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1, (LayerMask)1))
+                    if (!Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1, (LayerMask)1)) continue;
+                    if (!hit.transform.name.Contains("Dead")) continue;
+                    if (!_pl.Contains(player)) continue;
+                    _pl.Remove(player);
+
+                    if (_pl.Count < 2)
                     {
-                        if (hit.transform.name.Contains("Dead"))
-                        {
-                            if (pl.Contains(player))
-                            {
-                                pl.Remove(player);
+                        Round.IsLocked = false;
 
-                                if (pl.Count() < 2)
-                                {
-                                    Round.IsLocked = false;
-
-                                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
-                                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
-                                }
-
-                                player.Kill("선을 넘어버렸다네~");
-                            }
-                        }
+                        PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {_pl[0].DisplayNickname}"));
+                        Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { _pl[0] }, 5));
                     }
+
+                    player.Kill("선을 넘어버렸다네~");
                 }
 
                 yield return Timing.WaitForOneFrame;
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        private void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
             IntercomPlayers.Add(ev.Player);
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        private void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            if (pl.Contains(ev.Player))
-            {
-                pl.Remove(ev.Player);
+            if (!_pl.Contains(ev.Player)) return;
+            _pl.Remove(ev.Player);
 
-                if (pl.Count() < 2)
-                {
-                    Round.IsLocked = false;
+            if (_pl.Count >= 2) return;
+            Round.IsLocked = false;
 
-                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
-                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
-                }
-            }
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {_pl[0].DisplayNickname}"));
+            Timing.RunCoroutine(Tools.SetWinner([_pl[0]], 5));
         }
     }
 }

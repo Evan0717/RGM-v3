@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using UserSettings.ServerSpecific;
 using static RGM.EventArgs.MEREvents;
 using static RGM.EventArgs.PlayerEvents;
 using static RGM.EventArgs.Scp079Events;
@@ -30,7 +29,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 21, 28);
+        public override Version Version { get; } = new(3, 22, 7);
         public override Version RequiredExiledVersion { get; } = new(1, 2, 0, 5);
 
         public override void OnEnabled()
@@ -49,11 +48,12 @@ namespace RGM
                 if (modeAttribute == null)
                     continue;
 
-                if (modeAttribute.Holiday == ModeHoliday.Halloween && !HolidayUtils.IsHolidayActive(HolidayType.Halloween))
-                    continue;
-
-                if (modeAttribute.Holiday == ModeHoliday.Christmas && !HolidayUtils.IsHolidayActive(HolidayType.Christmas))
-                    continue;
+                switch (modeAttribute.Holiday)
+                {
+                    case ModeHoliday.Halloween when !HolidayUtils.IsHolidayActive(HolidayType.Halloween):
+                    case ModeHoliday.Christmas when !HolidayUtils.IsHolidayActive(HolidayType.Christmas):
+                        continue;
+                }
 
                 if (!typeof(Mode).IsAssignableFrom(type))
                     continue;
@@ -85,7 +85,7 @@ namespace RGM
 
             // ------------------------------------------------------------------------------------------------------
 
-            if (Instance.Config.FixedModes.Count() == 0)
+            if (!Instance.Config.FixedModes.Any())
             {
                 Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
@@ -114,6 +114,7 @@ namespace RGM
                 Exiled.Events.Handlers.Player.ChangingGroup += OnChangingGroup;
                 Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
                 Exiled.Events.Handlers.Player.DamagingShootingTarget += OnDamagingShootingTarget;
+                Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
                 Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
 
@@ -132,9 +133,7 @@ namespace RGM
 
                 // ------------------------------------------------------------------------------------------------------
 
-                ServerSpecificSettings.Init();
-
-                ServerSpecificSettingsSync.ServerOnSettingValueReceived += ServerSpecificSettings.OnSSInput;
+                MainSetting.Init();
 
                 // ------------------------------------------------------------------------------------------------------
 

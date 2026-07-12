@@ -28,7 +28,7 @@ namespace RGM.Modes
 10분에 자동핵이 작동됩니다.
 """;
         public override string Color => "FF8000";
-        public override string Suggester => "idea by 몬키키(@monkiki)";
+        public override string Suggester => "몬키키";
 
         public static BomberMan Instance;
 

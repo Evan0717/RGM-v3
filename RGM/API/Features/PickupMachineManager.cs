@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace RGM.API.Features
 {
+    /**
+     * <summary>뽑기 기계 명령어</summary>
+     */
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class SetPickupMachine : ICommand
     {
@@ -27,14 +30,24 @@ namespace RGM.API.Features
 
         public string Description { get; } = "뽑기 기계ㅣ뽑기 기계를 추가합니다.";
     }
-
+    
+    /**
+     * <summary>뽑기 기계와 관련된 작업을 처리합니다</summary>
+     */
     public static class PickupMachineManager
     {
+        /**
+         * <summary>시작 시 로직</summary>
+         */
         public static void OnEnabled()
         {
             Create(new Vector3(40f, 314.08f, -32.6f));
         }
-
+        
+        /**
+         * <summary>스키마를 기반으로 뽑기 기계를 주어진 위치에 생성하고 관련된 로직을 처리합니다</summary>
+         * <param name="pos">뽑기 기계가 위치할 3차원 위치</param>
+         */
         static void Create(Vector3 pos)
         {
             SchematicObject pickupMachine = ObjectSpawner.SpawnSchematic("DollGrabber", pos);

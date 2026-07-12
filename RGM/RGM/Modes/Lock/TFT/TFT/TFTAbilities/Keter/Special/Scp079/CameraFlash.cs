@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Keter.Scp079;
 
-[TFTAbility("카메라 플래시", "핑ㅣ해당 위치에 섬광탄을 떨굽니다. (쿨타임 20초)", TFTAbilityLevel.Keter, TFTAbilityCategory.Scp079, TFTAbilityPoint.Continuous, TFTAbilityType.CameraFlash, "📷")]
+[TFTAbility("카메라 플래시", "핑ㅣ해당 위치에 섬광탄을 떨굽니다. (쿨타임 24초)", TFTAbilityLevel.Keter, TFTAbilityCategory.Scp079, TFTAbilityPoint.Continuous, TFTAbilityType.CameraFlash, "📷")]
 public class CameraFlash : TFTAbility
 {
     float cooldown = 0;
@@ -65,7 +65,7 @@ public class CameraFlash : TFTAbility
                     light.Destroy();
                 });
 
-                cooldown = 20;
+                cooldown = 24;
             });
         }
     }

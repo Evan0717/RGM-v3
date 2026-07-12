@@ -65,12 +65,12 @@ namespace RGM.Variables
         public static List<Player> SuggestPlayers = new();
         public static List<Player> MuteBGMPlayers = new();
         public static List<string> UsedItems = new();
-        public static List<string> 게임칩사용자 = new();
+        public static List<string> UsingGameChipUsers = new();
         public static List<string> Maps = new()
         {
             "BarotraumaWinterhalter3",
             "City17v3",
-            "DeathInAir4",
+            // "DeathInAir4",
             "NoMercyCP1v1",
             "Airship",
             "Lighthouse1",
@@ -81,15 +81,16 @@ namespace RGM.Variables
             "Airplane6",
             "OperationHarvest",
             "OperationNightFlight",
-            "China",
+            //"China",
             "CityPlusCITY",
-            "Castle"
+            "Castle",
+            "FNAF2"
         };
         public static List<string> Specials = new()
         {
-            "TRRBR",
+            //"TRRBR",
             "Moszka",
-            "Agar",
+            "Agar"
         };
         public static List<Product> Products = new()
         {
@@ -282,14 +283,29 @@ namespace RGM.Variables
                 Name = "게임 칩",
                 Description = $".사용 이번 라운드에서 승리 시 10배만큼 랜덤코인을 추가로 얻습니다.",
                 Price = 5,
-                Check = (player, arg) => { return Round.IsLobby && !게임칩사용자.Contains(player.UserId); },
+                Check = (player, arg) => { return Round.IsLobby && !UsingGameChipUsers.Contains(player.UserId); },
                 Script = (player, arg) =>
                 {
-                    게임칩사용자.Add(player.UserId);
+                    UsingGameChipUsers.Add(player.UserId);
                 }
             },
         };
 
+        public static readonly List<ModeType> SuicideBlockedModes =
+        [
+            ModeType.Spirit
+        ];
+
+        public static readonly List<RoleTypeId> SuicideBlockedRoles = 
+        [
+            RoleTypeId.Tutorial
+        ];
+
+        public static readonly List<ModeType> ScpSuicideAvailableModes =
+        [
+            ModeType.Infection
+        ];
+        
         // -------------------------------------------------------------------------------------------------
 
         public static Dictionary<ModeType, ModeData> ModeList = new();
@@ -388,7 +404,8 @@ namespace RGM.Variables
             {"포기는 금물", "(대충 길어서 설명은 디스코드 확인하세요)"},
             {"도파민 우선", "하지만 재밌었죠?"},
             {"2026", "아무도 알아주지 않을 길을 걷는 자"},
-            {"2025 Last Survivor", "2025 연말 이벤트의 마지막 생존자"}
+            {"2025 Last Survivor", "2025 연말 이벤트의 마지막 생존자"},
+            {"마음만큼은 어린이", "2026년도 어린이날(5월 5일) 기념"}
         };
         public static Dictionary<string, string> Icons = new Dictionary<string, string>()
         {

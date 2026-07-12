@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using YamlDotNet.Core;
 using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
@@ -121,7 +122,7 @@ namespace RGM.API.Features
                 {
                     case 1:
                         player.AddItem(ItemType.GunRevolver);
-                        player.AddAmmo(AmmoType.Ammo44Cal, 1205);
+                        player.AddAmmo(AmmoType.Ammo44Cal, 120);
                         break;
 
                     case 2:
@@ -281,9 +282,9 @@ $"""
 
             if (Server.PlayerCount >= 15)
             {
-                int is게임칩사용자(Player player)
+                int IsUsingGameChipUsers(Player player)
                 {
-                    if (게임칩사용자.Contains(player.UserId))
+                    if (UsingGameChipUsers.Contains(player.UserId))
                     {
                         PlaySound(player.Transform, "money-soundfx", 2);
                         return 10;
@@ -295,7 +296,7 @@ $"""
                 foreach (var player in playerList.Where(x => !x.IsNonePlayer() && UsersManager.UsersCache.ContainsKey(x.UserId)))
                 {
                     UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + amount).ToString();
-                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * is게임칩사용자(player)).ToString();
+                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * IsUsingGameChipUsers(player)).ToString();
                 }
 
                 UsersManager.SaveUsers();
@@ -551,42 +552,46 @@ $"""
             SuggestPlayers.Clear();
         }
 
-        public static void CallSnakeHand(Player Convener, List<Player> PlayerList)
+        public static void MakeSnake(Player player)
         {
-            List<Player> SnakeHands = PlayerList;
-
             List<ItemType> Items = new List<ItemType>
-                {
-                    ItemType.KeycardFacilityManager,
-                    ItemType.GunFSP9,
-                    ItemType.GunRevolver,
-                    ItemType.Adrenaline,
-                    ItemType.AntiSCP207
-                };
+            {
+                ItemType.KeycardFacilityManager,
+                ItemType.GunFSP9,
+                ItemType.GunRevolver,
+                ItemType.Adrenaline,
+                ItemType.SCP500,
+                ItemType.ArmorLight
+            };
 
             List<ItemType> Ammos = new List<ItemType>
-                {
-                    ItemType.Ammo44cal,
-                    ItemType.Ammo9x19
-                };
-
-            foreach (var p in SnakeHands)
             {
-                p.Role.Set(RoleTypeId.Tutorial);
-                p.Position = new Vector3(0.125f, 300.9572f, 4.960938f);
+                ItemType.Ammo44cal,
+                ItemType.Ammo9x19
+            };
 
-                foreach (ItemType Item in Items)
-                    p.AddItem(Item);
+            player.Role.Set(RoleTypeId.Tutorial);
+            player.Position = new Vector3(0.125f, 300.9572f, 4.960938f);
 
-                for (int i = 1; i < 3; i++)
-                {
-                    foreach (var Ammo in Ammos)
-                        p.AddItem(Ammo);
-                }
+            foreach (ItemType Item in Items)
+                player.AddItem(Item);
+
+            for (int i = 1; i < 3; i++)
+            {
+                foreach (var Ammo in Ammos)
+                    player.AddItem(Ammo);
             }
+        }
 
-            if (Convener != null)
-                Convener.AddHint("뱀의 손", $"{SnakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..", 5f);
+        public static void CallSnakeHand(Player convener, List<Player> playerList)
+        {
+            List<Player> snakeHands = playerList;
+
+            foreach (var p in snakeHands)
+                MakeSnake(p);
+
+            if (convener != null)
+                convener.AddHint("뱀의 손", $"{snakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..", 5f);
         }
 
         public static string ColorFormat(string cn)
@@ -669,14 +674,13 @@ $"""
             }
         }
 
-        public static AudioClipPlayback PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
+        public static AudioClipPlayback PlayGlobalAudio(string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true, bool isNoNotice = false)
         {
             string notice = $"로드된 오디오: {clipName}";
 
-            foreach (var player in PlayerManager.List)
-            {
-                player.AddBroadcast(10, $"<size=20>{notice}</size>");
-            }
+            if (!isNoNotice)
+                foreach (var player in PlayerManager.List)
+                    player.AddBroadcast(10, $"<size=20>{notice}</size>");
 
             Log.Info(notice);
 
@@ -685,39 +689,37 @@ $"""
 
         public static MapSchematic LoadMap(string mapName, bool notice = true)
         {
-            Log.Info($"로드 시도중인 맵: {mapName}");
-            MapSchematic map = MapUtils.GetMapData(mapName);
+            try
+            {
+                Log.Info($"로드 시도중인 맵: {mapName}");
+                MapSchematic map = MapUtils.GetMapData(mapName);
 
-            if (map == null)
+
+                if (!MapUtils.LoadedMaps.ContainsKey(mapName))
+                    MapUtils.LoadMap(mapName);
+
+                Log.Info($"로드된 맵: {mapName}");
+
+                if (notice)
+                {
+                    foreach (var player in PlayerManager.List)
+                    {
+                        player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
+                    }
+                }
+
+                return map;
+            }
+            catch (FileNotFoundException e)
             {
                 Log.Error($"맵 '{mapName}'을(를) 찾을 수 없습니다. 로드 실패.");
                 return null;
             }
-
-            if (!MapUtils.LoadedMaps.ContainsKey(mapName))
+            catch (Exception e)
             {
-                if (Maps.Contains(mapName))
-                {
-                    if (UnityEngine.Random.Range(1, 3) == 1)
-                    {
-                        ObjectSpawner.SpawnSchematic("Sun", new Vector3(0, 1500, 0));
-                    }
-                }
-
-                MapUtils.LoadMap(mapName);
+                Log.Error($"맵 '{mapName}'을(를) 로드하는 중에 오류가 발생했습니다. 로드 실패. {e.Message}");
+                return null;
             }
-
-            Log.Info($"로드된 맵: {mapName}");
-
-            if (notice)
-            {
-                foreach (var player in PlayerManager.List)
-                {
-                    player.AddBroadcast(10, $"<size=20>로드된 맵: {mapName}</size>");
-                }
-            }
-
-            return map;
         }
 
         public static string GenerateRandomString(int length)
@@ -778,7 +780,7 @@ $"""
             AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Transform - {transform.position}", condition: (ReferenceHub hub) =>
             {
                 return !MuteBGMPlayers.Contains(Player.Get(hub));
-            },onIntialCreation: (p) =>
+            },onIntialCreation: p =>
             {
                 p.transform.parent = transform;
 

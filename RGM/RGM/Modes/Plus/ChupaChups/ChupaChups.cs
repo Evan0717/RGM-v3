@@ -43,22 +43,22 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            foreach (var player in PlayerManager.List)
-            {
-                Timing.RunCoroutine(Spawned(player));
-            }
+            yield return Timing.WaitForSeconds(1f);
+
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
+                Spawned(player);
 
             yield break;
         }
 
         public void OnSpawned(SpawnedEventArgs ev)
         {
-            Timing.RunCoroutine(Spawned(ev.Player));
+            Spawned(ev.Player);
         }
 
-        public IEnumerator<float> Spawned(Player player)
+        public void Spawned(Player player)
         {
-            yield return Timing.WaitForSeconds(1);
+            Timing.WaitForSeconds(1);
 
             player.AddItem(ItemType.Jailbird);
         }

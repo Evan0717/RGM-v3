@@ -11,6 +11,7 @@ using ProjectMER.Features;
 using RGM.API.Components;
 using RGM.API.Features;
 using RGM.Modes.Sets.AddScp.Scps;
+using RGM.RGM.Modes.Tiny.대인전;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,7 +62,6 @@ namespace RGM.EventArgs
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Tools.LoadMap($"RGMLobby");
-            Tools.LoadMap($"RGMBase");
 
             var donator = new Donator.Main();
             donator.OnEnabled();
@@ -195,7 +195,7 @@ namespace RGM.EventArgs
             if (CurrentSubMode != ModeType.None)
                 Tools.TryInstallMode(CurrentSubMode);
 
-            if (StartupRandom == 3)
+            if (StartupRandom == 3 && CurrentMode != ModeType.Juggernaut)
                 Tools.CallSnakeHand(null, PlayerManager.List.Where(x => x.Role == RoleTypeId.FacilityGuard).ToList());
 
             Timing.RunCoroutine(Detonation());
@@ -354,14 +354,17 @@ namespace RGM.EventArgs
 
                 string ranking(int r)
                 {
-                    if (r == 1)
-                        return "fffa66";
-                    else if (r == 2)
-                        return "808d8e";
-                    else if (r == 3)
-                        return "dfae4d";
-                    else
-                        return "ffffff";
+                    switch (r)
+                    {
+                        case 1:
+                            return "fffa66";
+                        case 2:
+                            return "808d8e";
+                        case 3:
+                            return "dfae4d";
+                        default:
+                            return "ffffff";
+                    }
                 }
 
                 foreach (var kv in top10)
@@ -422,11 +425,27 @@ namespace RGM.EventArgs
         {
             if (HolidayUtils.IsHolidayActive(HolidayType.Christmas) && UnityEngine.Random.Range(0, 100) < 10)
             {
+                Exiled.API.Features.Cassie.Clear();
+                Exiled.API.Features.Cassie.MessageTranslated("$pitch_0.10 .G6", "");
+
                 foreach (var player in ev.Players)
                 {
                     player.Role.Set(ev.Wave.TargetFaction == Faction.FoundationStaff ? RoleTypeId.NtfFlamingo : RoleTypeId.ChaosFlamingo, RoleSpawnFlags.AssignInventory);
                 }
             }
+
+            if (CurrentMode != ModeType.Juggernaut && UnityEngine.Random.Range(1, 21) == 1)
+            {
+                CallTutorialSupport(ev.Players);
+            }
+        }
+
+        public static void CallTutorialSupport(IEnumerable<Player> players)
+        {
+            Exiled.API.Features.Cassie.Clear();
+            Exiled.API.Features.Cassie.MessageTranslated("$pitch_0.10 .G7", "");
+
+            Tools.CallSnakeHand(null, players.ToList());
         }
     }
 }

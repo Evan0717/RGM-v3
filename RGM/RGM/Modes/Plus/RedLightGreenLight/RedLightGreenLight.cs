@@ -5,6 +5,7 @@ using Exiled.API.Features.Roles;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
+using RGM.Variables;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -66,12 +67,12 @@ namespace RGM.Modes
 
             while (true)
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 51));
+                yield return Timing.WaitForSeconds(Random.Range(1, 51));
 
                 Light = "Red";
                 PlayerManager.List.ToList().ForEach(x => x.AddHint("불", $"<color=red>빨간 불</color>! 움직이지 마세요!", 250));
 
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 6));
+                yield return Timing.WaitForSeconds(Random.Range(1, 6));
 
                 Light = "Green";
                 PlayerManager.List.ToList().ForEach(x => x.AddHint("불", $"<color=green>초록 불</color>! 움직여도 됩니다.", 250));
@@ -124,6 +125,9 @@ namespace RGM.Modes
                         {
                             if (PlayerPosition[player] != player.Position || PlayerRotation[player] != rot(player))
                             {
+                                if (Variable.GodModePlayers.Contains(player))
+                                    Variable.GodModePlayers.Remove(player);
+
                                 if (player.Role.Type == RoleTypeId.Scp079)
                                 {
                                     player.Role.Set(RoleTypeId.Tutorial);

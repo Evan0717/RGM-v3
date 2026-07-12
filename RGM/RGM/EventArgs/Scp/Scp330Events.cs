@@ -156,8 +156,8 @@ namespace RGM.EventArgs
                     }
                     else if (c == 7)
                     {
-                        ev.Player.AddEffect(EffectType.SeveredHands, 1);
-                        ev.Player.AddEffect(EffectType.MovementBoost, 255);
+                        ev.Player.EnableEffect(EffectType.SeveredHands, 1);
+                        ev.Player.EnableEffect(EffectType.MovementBoost, 255);
                     }
                     else if (c == 8)
                     {

@@ -7,7 +7,7 @@ using Exiled.API.Enums;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Clairvoyance)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Clairvoyance)]
     class Clairvoyance : Mode
     {
         public override string Name => "야간 작전";

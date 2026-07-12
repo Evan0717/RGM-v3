@@ -1,19 +1,27 @@
 ﻿using Exiled.API.Features.Roles;
+using Exiled.Events.EventArgs.Player;
 
 namespace DAONTFT.Core.TFT.Euclid.Scp939;
 
-[TFTAbility("안아줘요", "갈고리 발톱ㅣ능력의 쿨타임이 25% 감소합니다.", TFTAbilityLevel.Euclid, TFTAbilityCategory.Scp939, TFTAbilityPoint.Once, TFTAbilityType.Attack, "⚔️")]
+[TFTAbility("흡혈 발톱", "갈고리 발톱ㅣ공격 시 16의 HS를 회복합니다.(최대 800, 초과 시 효과 감소)", TFTAbilityLevel.Euclid, TFTAbilityCategory.Scp939, TFTAbilityPoint.Once, TFTAbilityType.Attack, "⚔️")]
 public class Attack : TFTAbility
 {
     public override void OnEnabled()
     {
-        if (Owner.Role is Scp939Role scp939)
-        {
-            scp939.AttackCooldown *= 0.75f;
-        }
+        Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.Hurting += OnHurting;
+    }
+    
+    private void OnHurting(HurtingEventArgs ev)
+    {
+        if (Owner.Role is not Scp939Role scp939) return;
+        if (ev.Attacker.ReferenceHub == scp939.Owner.ReferenceHub && scp939.Owner.HumeShield < 800)
+            scp939.Owner.HumeShield += 16;
+        else
+            scp939.Owner.HumeShield += 1;
     }
 }

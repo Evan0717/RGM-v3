@@ -3,7 +3,7 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
 {
-    [RankAbility("Upgrade", "경험치 획득량이 20% 증가합니다.", RankAbilityType.Upgrade, RankCategory.SCP_079, RankAbilityCategory.변칙성, "🔧")]
+    [RankAbility("Upgrade", "경험치 획득량이 17% 증가합니다.", RankAbilityType.Upgrade, RankCategory.SCP_079, RankAbilityCategory.변칙성, "🔧")]
     public class Upgrade : RankAbility
     {
         public override void OnEnabled()
@@ -20,7 +20,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
         {
             if (ev.Player == Owner)
             {
-                ev.Amount = (int)(ev.Amount * 1.2f);
+                ev.Amount = (int)(ev.Amount * 1.17f);
             }
         }
     }

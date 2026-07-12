@@ -79,14 +79,14 @@ namespace RGM.Modes
                     monster.Position = new Vector3(-0.6015625f, 332.9026f, -32.56641f);
                     Server.ExecuteCommand($"/open ESCAPE_PRIMARY");
 
-                    float health = 15 * PlayerManager.List.Count + 5 * PlayerManager.List.Count;
+                    float health = 15 * PlayerManager.List.Count;
                     monster.MaxHealth = health;
                     monster.Health = health;
                     monster.IsUsingStamina = false;
-                    monster.MaxHumeShield = 0;
+                    monster.MaxHumeShield = 50;
                     monster.HumeShield = monster.MaxHumeShield;
-                    monster.EnableEffect(EffectType.MovementBoost, 50);
-                    monster.EnableEffect(EffectType.Fade, 230);
+                    monster.EnableEffect(EffectType.MovementBoost, 70);
+                    monster.EnableEffect(EffectType.Fade, 220);
                     monster.EnableEffect(EffectType.Lightweight, 150);
 
                     foreach (var player in PlayerManager.List)
@@ -134,8 +134,10 @@ namespace RGM.Modes
 
         public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type != DamageType.Strangled)
-                ev.DamageHandler.Damage += 60;
+            if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type != DamageType.Strangled) {
+                ev.DamageHandler.Damage += 79;
+                ev.Attacker.HumeShield += 12;
+            }
         }
 
         public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)

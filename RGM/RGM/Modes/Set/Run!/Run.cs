@@ -13,6 +13,7 @@ using Exiled.API.Extensions;
 using ProjectMER.Features.Objects;
 
 using Exiled.API.Enums;
+using Mirror;
 
 namespace RGM.Modes
 {
@@ -23,7 +24,7 @@ namespace RGM.Modes
         public override string Description => "뛰세요, 따라잡히기 전에!";
         public override string Detail =>
 """
-모든 플레이어는 SCP-096이 되며, 뒤따라오는 무언가에 잡히지 않도록 도망가야 합니다.
+모든 플레이어는 ClassD 가 되며, 뒤따라오는 무언가에 잡히지 않도록 도망가야 합니다.
 하지만 앞은 장애물들이 가로막고 있죠. 과연 무사히 도착 지점으로 갈 수 있을까요?
 """;
         public override string Color => "da0101";
@@ -60,6 +61,7 @@ namespace RGM.Modes
             "Washer",
             "Whiteboard",
         };
+        List<SchematicObject> spawnedObjects = new();
 
         Vector3 pos;
         Vector3 finalDoor;
@@ -87,11 +89,14 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
 
             if (audio != null) audio.IsPaused = true;
+
+            foreach (var obj in spawnedObjects)
+                NetworkServer.Destroy(obj.gameObject);
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            if (UnityEngine.Random.Range(1, 11) == 1)
+            if (Random.Range(1, 101) <= 45)
             {
                 hellMode = true;
 
@@ -105,9 +110,10 @@ namespace RGM.Modes
             {
                 SchematicObject schematic = ObjectSpawner.SpawnSchematic(
                     $"{objects.GetRandomValue()}", 
-                    new Vector3(UnityEngine.Random.Range(-235.5703f, 121.7918f), UnityEngine.Random.Range(336.903f, 346.5427f), UnityEngine.Random.Range(-42.98623f, -51.62109f)), 
-                    new Quaternion(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360))
+                    new Vector3(Random.Range(-235.5703f, 121.7918f), Random.Range(336.903f, 346.5427f), Random.Range(-42.98623f, -51.62109f)), 
+                    new Quaternion(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))
                 );
+                spawnedObjects.Add(schematic);
             }
 
             lightSources = Tools.GetObjectList("LightSource");
@@ -144,12 +150,16 @@ namespace RGM.Modes
 
             var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
-            if (players.Count() == 1)
-            {
+            if (players.Count() == 1 && hellMode) {
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 15));
+            }
+            else if (players.Count() > 1 && hellMode) {
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
+            }
+            else if (players.Count() == 1) {
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
             }
-            else
-            {
+            else {
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
             }
         }
@@ -178,15 +188,21 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (hellMode ? true : UnityEngine.Random.Range(1, 3) == 1)
+                if (hellMode ? true : Random.Range(1, 3) == 1)
                 {
                     SchematicObject raser = ObjectSpawner.SpawnSchematic(
-                        $"Raser{UnityEngine.Random.Range(1, 11)}",
+                        $"Raser{Random.Range(1, 11)}",
                         new Vector3(finalDoor.x, finalDoor.y - 2.5f, finalDoor.z),
                         new Quaternion(0, new List<int> { 0, 180 }.GetRandomValue(), 0, 0)
                     );
 
-                    raser.AttachedBlocks.Where(x => x.name == "Oh no").ToList().ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = new Color(12.5f, 0, 0));
+                    spawnedObjects.Add(raser);
+
+                    foreach (var block in raser.AttachedBlocks)
+                    {
+                        if (block.name == "Oh no")
+                            block.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = new Color(12.5f, 0, 0);
+                    }
 
                     IEnumerator<float> enumerator()
                     {
@@ -216,9 +232,7 @@ namespace RGM.Modes
                         if (Physics.Raycast(player.Position, vector, out RaycastHit hit, 0.8f))
                         {
                             if (new List<string> { "Oh no", "BorderForSomething" }.Contains(hit.transform.name))
-                            {
                                 player.Kill("안타깝군요..");
-                            }
                         }
                     }
                 }

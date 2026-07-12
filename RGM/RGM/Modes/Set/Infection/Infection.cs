@@ -13,6 +13,7 @@ using static RGM.Variables.Variable;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Warhead;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes
 {
@@ -23,7 +24,7 @@ namespace RGM.Modes
         public override string Description => "모두를 감염시키려는 숙주와 살아남으려는 인류의 대립";
         public override string Detail =>
 """
-<b>인류</b>는 무슨 수를 써서라도 10분을 버텨야 합니다.
+<b>인류</b>는 무슨 수를 써서라도 9분을 버텨야 합니다.
 <b><color=red>숙주</color></b>는 무슨 수를 써서라도 모든 인류를 감염시켜야 합니다.
 
 * <b><color=red>숙주</color></b>는 일반 감염자보다 더 강력합니다.
@@ -74,6 +75,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             audio = Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
             for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count() / 7); i++)
@@ -114,9 +118,9 @@ namespace RGM.Modes
                 }
             }
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 540; i++)
             {
-                MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(1, $"<b><size=25>{500 - i}초 뒤 인류가 승리합니다.</size></b>");
+                MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(1, $"<b><size=25>{540 - i}초 뒤 인류가 승리합니다.</size></b>");
 
                 yield return Timing.WaitForSeconds(1);
             }

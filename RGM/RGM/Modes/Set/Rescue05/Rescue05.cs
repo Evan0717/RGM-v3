@@ -7,6 +7,7 @@ using PlayerRoles;
 using Exiled.API.Enums;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
+using UnityEngine;
 
 namespace RGM.Modes
 {
@@ -61,6 +62,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             Level05 = Tools.GetRandomValue(PlayerManager.List.ToList());
             Assassin = Tools.GetRandomValue(PlayerManager.List.Where(x => x != Level05).ToList());
 

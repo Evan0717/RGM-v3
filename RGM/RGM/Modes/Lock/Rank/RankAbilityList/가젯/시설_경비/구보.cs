@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 {
-    [RankGadget("구보", "5초간 아무런 아이템을 들 수 없는 대신, 이동 속도가 12% 증가합니다.", RankAbilityType.구보, RankCategory.시설_경비, "🎽", 30)]
+    [RankGadget("구보", "8초간 아무런 아이템을 들 수 없는 대신, 이동 속도가 40% 증가합니다. 이후, 1.5초간 움직일 수 없습니다.", RankAbilityType.구보, RankCategory.시설_경비, "🎽", 60)]
     public class 구보 : RankGadgetAbility
     {
         protected override void OnGadgetUsed()
@@ -21,11 +21,12 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
 
             Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
 
-            Owner.AddEffect(EffectType.MovementBoost, 12, 5);
+            Owner.AddEffect(EffectType.MovementBoost, 40, 8);
 
-            Timing.CallDelayed(5, () =>
+            Timing.CallDelayed(8, () =>
             {
                 Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
+                Owner.AddEffect(EffectType.Ensnared, 1, 1.5f);
             });
         }
     }

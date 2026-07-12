@@ -18,7 +18,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.가젯
             {
                 for (int i = 0; i < count; i++)
                 {
-                    Tools.PlaySound(Owner.Transform, "RankCheckAlive", 1.5f);
+                    Tools.PlaySound(Owner.Transform, "RankCheckAlive", 2f);
 
                     yield return Timing.WaitForSeconds(1);
                 }    
