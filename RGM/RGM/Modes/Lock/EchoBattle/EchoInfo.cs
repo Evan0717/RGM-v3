@@ -35,7 +35,7 @@ public static class EchoInfo
         { EchoType.Sylph, ("실프", "12초간 이동 속도 50% 증가 및 Ghostly, Fade 효과 적용, 재사용 대기시간 60초") },
         { EchoType.Capybara, ("카피바라", "사용 시 20초간 최대 체력의 3%씩 회복, 재사용 대기시간 60초") },
         { EchoType.Berserker, ("광전사", "사용 시 다음 공격은 자신의 최대 체력의 50%만큼 추가 데미지, 재사용 대기시간 60초") },
-        { EchoType.PetitDangdang, ("쁘띠 댕댕이", "사용 시 15초간 시야 개선 및 스태미너 무제한, 재사용 대기시간 60초") },
+        { EchoType.Chibi939, ("쁘띠 댕댕이", "사용 시 15초간 시야 개선 및 스태미너 무제한, 재사용 대기시간 60초") },
         { EchoType.GoldenPig, ("황금 돼지", "사용 시 체력 1205 회복(최대치 초과 불가), 재사용 대기시간 60초") },
         { EchoType.ClassD, ("ClassD", "Cost 1 샘플 Echo") },
         { EchoType.Scientist, ("과학자", "Cost 1 샘플 Echo") },
@@ -56,6 +56,9 @@ public class EchoLoadout
 {
     public EchoType? MainSlot { get; set; }
     public EchoType?[] SubSlots { get; set; } = new EchoType?[4];
+
+    /// <summary>장착 전용무기. Server-Specific에서 메인 Echo 위에 표시.</summary>
+    public ExclusiveWeaponType? EquippedWeapon { get; set; }
 
     /// <summary>슬롯별 메인 스탯 선택. Echo와 1:1로 대응합니다.</summary>
     public EchoMainStatType? MainSlotStat { get; set; }
@@ -122,6 +125,19 @@ public class EchoLoadout
         }
 
         return false;
+    }
+
+    public void SanitizeMainSlot()
+    {
+        if (!MainSlot.HasValue)
+            return;
+
+        var data = MainSlot.Value.GetData();
+        if (data == null || (data.Cost != EchoCost.Cost4 && data.Cost != EchoCost.Cost3))
+        {
+            MainSlot = null;
+            MainSlotStat = null;
+        }
     }
 
     public EchoMainStatType? GetSlotMainStat(int slotIndex)
@@ -232,6 +248,8 @@ public class EchoLoadout
 
         return false;
     }
+
+    public bool HasEquippedWeapon() => EquippedWeapon.HasValue && EquippedWeapon.Value != ExclusiveWeaponType.None;
 }
 
 /// <summary>
@@ -243,4 +261,9 @@ public class EchoPassiveEffectState
     public byte DefenseReduction;
     public byte MovementBoost;
     public byte Lightweight;
+    public bool StaminaDrainToggled;
+    public float SizeReduction;
+
+    /// <summary>스탯으로 지급한 AHP 프로세스 KillCode.</summary>
+    public int? EchoAhpKillCode;
 }

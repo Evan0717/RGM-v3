@@ -9,7 +9,7 @@ namespace RGM.Modes;
 public abstract class Echo
 {
     public abstract void OnEnabled();
-    public abstract void OnDisabled();
+    public abstract void ONActiveEffect();
 
     public EchoData Data { get; set; }
     public Player Owner { get; set; }
@@ -41,7 +41,7 @@ public abstract class EchoActiveAbility : Echo
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
     }
 
-    public override void OnDisabled()
+    public override void ONActiveEffect()
     {
         if (IsMainSlot)
             Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
@@ -185,14 +185,16 @@ public enum EchoMainStatType
     MoveSpeedAndJump,
     StaminaDrainReduction,
     HeadshotDamage,
-    AhpRegenAndMax
+    AhpRegenAndMax,
+    SizeReduction
 }
 
 public enum EchoSubStatType
 {
     None,
     AttackFlat,
-    HpFlat
+    HpFlat,
+    HealingBonus
 }
 
 public enum EchoSubOptionType
@@ -210,7 +212,9 @@ public enum EchoSubOptionType
     MoveSpeed,
     JumpPower,
     StaminaDrainReduction,
-    HeadshotDamage
+    HeadshotDamage,
+    SizeReduction,
+    HealingBonus
 }
 
 public enum EchoType
@@ -226,11 +230,17 @@ public enum EchoType
     Berserker,
 
     // Cost3
-    PetitDangdang,
+    Chibi049,
+    Chibi096,
+    Chibi106,
+    Chibi173,
+    Chibi939,
     GoldenPig,
 
     // Cost1
     ClassD,
     Scientist,
-    FacilityGuard
+    FacilityGuard,
+    Chaos,
+    Mtf
 }

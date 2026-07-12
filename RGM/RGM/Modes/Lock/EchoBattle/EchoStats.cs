@@ -4,6 +4,7 @@ using Exiled.API.Features.DamageHandlers;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
+using PlayerStatsSystem;
 using RGM.API.Features;
 using System;
 using System.Collections.Generic;
@@ -18,30 +19,47 @@ namespace RGM.Modes;
 /// </summary>
 public static class EchoStats
 {
-    static readonly RoleTypeId[] AttackFlatIgnoredRoles =
+    static readonly RoleTypeId[] AttackFlagIgnoredRoles =
     {
         RoleTypeId.Scp173,
-        RoleTypeId.Scp049,
         RoleTypeId.Scp079
     };
 
-    static readonly float[] SubOptionGradeWeights = { 250, 220, 190, 150, 110, 80 };
+    public static bool AreAttackModifiersIgnored(Player player)
+    {
+        return player != null && AttackFlagIgnoredRoles.Contains(player.Role.Type);
+    }
+
+    static readonly DamageType[] DefenseFlatIgnoredDamageTypes =
+    {
+        DamageType.Warhead,
+        DamageType.Crushed,
+        DamageType.PocketDimension,
+        DamageType.Falldown,
+        DamageType.Scp106
+    };
+
+    static readonly float[] SubOptionGradeWeights = [250, 220, 190, 150, 110, 80];
+    static readonly System.Random SubOptionRandom = new();
+    static readonly object SubOptionRandomLock = new();
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
-        { EchoSubOptionType.AttackPercent, new[] { 6.5f, 7.4f, 8.3f, 9.2f, 10.1f, 11.0f } },
-        { EchoSubOptionType.AttackFlat, new[] { 2f, 4f, 6f, 8f, 10f, 12f } },
-        { EchoSubOptionType.DefensePercent, new[] { 2.0f, 2.5f, 3.0f, 3.5f, 4.0f, 4.5f } },
-        { EchoSubOptionType.DefenseFlat, new[] { 3.0f, 3.4f, 3.8f, 4.2f, 4.6f, 5.0f } },
-        { EchoSubOptionType.HpPercent, new[] { 8.1f, 9.2f, 10.3f, 11.4f, 12.5f, 13.6f } },
-        { EchoSubOptionType.HpFlat, new[] { 20f, 26f, 32f, 38f, 44f, 50f } },
-        { EchoSubOptionType.CriticalChance, new[] { 3.3f, 3.7f, 4.1f, 4.5f, 4.9f, 5.3f } },
-        { EchoSubOptionType.ScpDamagePercent, new[] { 8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f } },
-        { EchoSubOptionType.HumanDamagePercent, new[] { 8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f } },
-        { EchoSubOptionType.MoveSpeed, new[] { 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f } },
-        { EchoSubOptionType.JumpPower, new[] { 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f } },
-        { EchoSubOptionType.StaminaDrainReduction, new[] { 8.3f, 9.2f, 10.1f, 11.0f, 11.9f, 12.8f } },
-        { EchoSubOptionType.HeadshotDamage, new[] { 20.8f, 22.5f, 24.2f, 25.9f, 27.6f, 29.3f } },
+        { EchoSubOptionType.AttackPercent, [6.5f, 7.4f, 8.3f, 9.2f, 10.1f, 11.0f] },
+        { EchoSubOptionType.AttackFlat, [5f, 7f, 9f, 11f, 13f, 15f] },
+        { EchoSubOptionType.DefensePercent, [8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f] },
+        { EchoSubOptionType.DefenseFlat, [9.4f, 10.0f, 10.6f, 11.2f, 11.8f, 12.4f] },
+        { EchoSubOptionType.HpPercent, [10.2f, 11.1f, 12.0f, 12.9f, 13.8f, 14.7f] },
+        { EchoSubOptionType.HpFlat, [90f, 102f, 114f, 126f, 138f, 150f] },
+        { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
+        { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
+        { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
+        { EchoSubOptionType.MoveSpeed, [7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f] },
+        { EchoSubOptionType.JumpPower, [3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f] },
+        { EchoSubOptionType.StaminaDrainReduction, [8.3f, 9.2f, 10.1f, 11.0f, 11.9f, 12.8f] },
+        { EchoSubOptionType.HeadshotDamage, [22.8f, 24.5f, 26.2f, 27.9f, 29.6f, 31.3f] },
+        { EchoSubOptionType.SizeReduction, [2.8f, 3.5f, 4.2f, 4.9f, 5.6f, 6.3f] },
+        { EchoSubOptionType.HealingBonus, [30.0f, 36.0f, 42.0f, 48.0f, 54.0f, 60.0f] },
     };
 
     public static float LerpStat(float min, float max, int level)
@@ -64,21 +82,22 @@ public static class EchoStats
         {
             (EchoCost.Cost4, EchoMainStatType.AttackPercent) => LerpStat(6.6f, 33.0f, level),
             (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(12.5f, 62.5f, level),
-            (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(4.0f, 20.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.ScpDamagePercent) => LerpStat(8.5f, 42.5f, level),
-            (EchoCost.Cost4, EchoMainStatType.HumanDamagePercent) => LerpStat(8.5f, 42.5f, level),
+            (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(5.0f, 25.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalChance) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(12.0f, 60.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.StaminaDrainReduction) => LerpStat(8.8f, 44.0f, level),
 
-            (EchoCost.Cost3, EchoMainStatType.AttackPercent) => LerpStat(5.2f, 26.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.AttackPercent) => LerpStat(5.6f, 28.0f, level),
             (EchoCost.Cost3, EchoMainStatType.HpPercent) => LerpStat(8.6f, 43.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.Defense) => LerpStat(2.0f, 10.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.StaminaDrainReduction) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(16.0f, 80.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(1.0f, 5.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.Defense) => LerpStat(3.0f, 15.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(9.1f, 45.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(9.1f, 45.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(21.0f, 105.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(2.0f, 10.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.SizeReduction) => LerpStat(3.3f, 16.5f, level),
 
-            (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.2f, 16.0f, level),
-            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(4.8f, 24.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.4f, 18.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(5.4f, 27.0f, level),
             (EchoCost.Cost1, EchoMainStatType.Defense) => LerpStat(1.0f, 5.0f, level),
 
             _ => 0f
@@ -102,10 +121,9 @@ public static class EchoStats
         EchoMainStatType.AttackPercent,
         EchoMainStatType.HpPercent,
         EchoMainStatType.Defense,
-        EchoMainStatType.ScpDamagePercent,
-        EchoMainStatType.HumanDamagePercent,
         EchoMainStatType.CriticalChance,
         EchoMainStatType.MoveSpeedAndJump,
+        EchoMainStatType.StaminaDrainReduction,
     };
 
     static readonly EchoMainStatType[] Cost3MainStats =
@@ -113,9 +131,11 @@ public static class EchoStats
         EchoMainStatType.AttackPercent,
         EchoMainStatType.HpPercent,
         EchoMainStatType.Defense,
-        EchoMainStatType.StaminaDrainReduction,
+        EchoMainStatType.ScpDamagePercent,
+        EchoMainStatType.HumanDamagePercent,
         EchoMainStatType.HeadshotDamage,
         EchoMainStatType.AhpRegenAndMax,
+        EchoMainStatType.SizeReduction,
     };
 
     static readonly EchoMainStatType[] Cost1MainStats =
@@ -157,22 +177,29 @@ public static class EchoStats
         EchoMainStatType.StaminaDrainReduction,
         EchoMainStatType.HeadshotDamage,
         EchoMainStatType.AhpRegenAndMax,
+        EchoMainStatType.SizeReduction,
     };
 
     public static float GetSubStatValue(EchoCost cost, int level)
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(3f, 30f, level),
-            EchoCost.Cost3 => LerpStat(1f, 12f, level),
-            EchoCost.Cost1 => LerpStat(12f, 150f, level),
+            EchoCost.Cost4 => LerpStat(7f, 70f, level),
+            EchoCost.Cost3 => LerpStat(35f, 175f, level),
+            EchoCost.Cost1 => LerpStat(15f, 200f, level),
             _ => 0f
         };
     }
 
     public static EchoSubStatType GetSubStatType(EchoCost cost)
     {
-        return cost == EchoCost.Cost1 ? EchoSubStatType.HpFlat : EchoSubStatType.AttackFlat;
+        return cost switch
+        {
+            EchoCost.Cost1 => EchoSubStatType.HpFlat,
+            EchoCost.Cost3 => EchoSubStatType.HealingBonus,
+            EchoCost.Cost4 => EchoSubStatType.AttackFlat,
+            _ => EchoSubStatType.None
+        };
     }
 
     public static int GetUnlockedSubOptionCount(int level)
@@ -191,7 +218,7 @@ public static class EchoStats
     /// 로드아웃에 저장된 부가 옵션을 유지한 채, 해금 개수만큼만 새로 굴립니다.
     /// 단일 Echo 안에서는 같은 종류의 부가 옵션이 중복되지 않습니다.
     /// </summary>
-    public static List<EchoSubOptionInstance> EnsureSubOptions(EchoLoadout loadout, EchoType type, int level, int seedBase)
+    public static List<EchoSubOptionInstance> EnsureSubOptions(EchoLoadout loadout, EchoType type, int level)
     {
         if (!loadout.SubOptions.TryGetValue(type, out var existing) || existing == null)
         {
@@ -212,20 +239,23 @@ public static class EchoStats
 
         while (existing.Count < targetCount && pool.Count > 0)
         {
-            int slotIndex = existing.Count;
-            var rng = new System.Random(seedBase ^ (slotIndex * 397) ^ 0x5F3759DF);
-            int pick = rng.Next(pool.Count);
-            var optionType = pool[pick];
-            pool.RemoveAt(pick);
-
-            int grade = RollGrade(rng);
-            float value = SubOptionValues[optionType][grade - 1];
-            existing.Add(new EchoSubOptionInstance
+            EchoSubOptionInstance option;
+            lock (SubOptionRandomLock)
             {
-                Type = optionType,
-                Grade = grade,
-                Value = value
-            });
+                int pick = SubOptionRandom.Next(pool.Count);
+                var optionType = pool[pick];
+                pool.RemoveAt(pick);
+
+                int grade = RollGrade(SubOptionRandom);
+                option = new EchoSubOptionInstance
+                {
+                    Type = optionType,
+                    Grade = grade,
+                    Value = SubOptionValues[optionType][grade - 1]
+                };
+            }
+
+            existing.Add(option);
         }
 
         return existing.Select(CloneSubOption).ToList();
@@ -258,23 +288,29 @@ public static class EchoStats
     {
         var result = new List<EchoSubOptionInstance>();
         int count = GetUnlockedSubOptionCount(level);
-        var rng = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
+        var rng = seed.HasValue ? new System.Random(seed.Value) : null;
         var pool = GetAllSubOptionTypes();
 
         for (int i = 0; i < count && pool.Count > 0; i++)
         {
-            int pick = rng.Next(pool.Count);
-            var optionType = pool[pick];
-            pool.RemoveAt(pick);
-
-            int grade = RollGrade(rng);
-            float value = SubOptionValues[optionType][grade - 1];
-            result.Add(new EchoSubOptionInstance
+            EchoSubOptionInstance option;
+            lock (SubOptionRandomLock)
             {
-                Type = optionType,
-                Grade = grade,
-                Value = value
-            });
+                var activeRng = rng ?? SubOptionRandom;
+                int pick = activeRng.Next(pool.Count);
+                var optionType = pool[pick];
+                pool.RemoveAt(pick);
+
+                int grade = RollGrade(activeRng);
+                option = new EchoSubOptionInstance
+                {
+                    Type = optionType,
+                    Grade = grade,
+                    Value = SubOptionValues[optionType][grade - 1]
+                };
+            }
+
+            result.Add(option);
         }
 
         return result;
@@ -370,9 +406,12 @@ public static class EchoStats
             case EchoMainStatType.AhpRegenAndMax:
                 // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
-                snapshot.AhpMax += LerpStat(25f, 125f, level);
-                snapshot.HsRegen += LerpStat(4f, 20f, level);
-                snapshot.HsMax += LerpStat(140f, 700f, level);
+                snapshot.AhpMax += LerpStat(18f, 175f, level);
+                snapshot.HsRegen += LerpStat(2f, 25f, level);
+                snapshot.HsMax += LerpStat(200f, 1000f, level);
+                break;
+            case EchoMainStatType.SizeReduction:
+                snapshot.SizeReduction += value;
                 break;
         }
     }
@@ -385,12 +424,16 @@ public static class EchoStats
         {
             float hp = value;
             if (player.IsScp)
-                hp *= 11f;
+                hp *= 8f;
             snapshot.HpFlat += hp;
+        }
+        else if (cost == EchoCost.Cost3)
+        {
+            snapshot.HealingBonus += value;
         }
         else
         {
-            if (AttackFlatIgnoredRoles.Contains(player.Role.Type))
+            if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
                 return;
 
             float attack = value;
@@ -408,7 +451,7 @@ public static class EchoStats
                 snapshot.AttackPercent += option.Value;
                 break;
             case EchoSubOptionType.AttackFlat:
-                if (AttackFlatIgnoredRoles.Contains(player.Role.Type))
+                if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
                     break;
                 snapshot.AttackFlat += player.Role.Type == RoleTypeId.Scp939 ? option.Value * 2f : option.Value;
                 break;
@@ -422,7 +465,7 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 11f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 8f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
@@ -445,6 +488,12 @@ public static class EchoStats
             case EchoSubOptionType.HeadshotDamage:
                 snapshot.HeadshotDamage += option.Value;
                 break;
+            case EchoSubOptionType.SizeReduction:
+                snapshot.SizeReduction += option.Value;
+                break;
+            case EchoSubOptionType.HealingBonus:
+                snapshot.HealingBonus += option.Value;
+                break;
         }
     }
 
@@ -454,6 +503,7 @@ public static class EchoStats
             return;
 
         Timing.KillCoroutines($"EchoRegen_{player.UserId}");
+        Timing.KillCoroutines($"EchoStamina_{player.UserId}");
 
         if (!EchoInfo.PlayerPassiveEffects.TryGetValue(player, out var prev))
             return;
@@ -464,12 +514,62 @@ public static class EchoStats
             player.RemoveEffect(EffectType.MovementBoost, prev.MovementBoost);
         if (prev.Lightweight > 0)
             player.RemoveEffect(EffectType.Lightweight, prev.Lightweight);
+        if (prev.StaminaDrainToggled)
+            player.IsUsingStamina = true;
+        if (prev.SizeReduction > 0f)
+            player.Scale += Vector3.one * prev.SizeReduction;
+
+        if (prev.EchoAhpKillCode.HasValue)
+            KillEchoAhpProcess(player, prev.EchoAhpKillCode.Value);
 
         EchoInfo.PlayerPassiveEffects.Remove(player);
     }
 
-    public static void ApplyPassiveEffects(Player player, EchoStatSnapshot snapshot)
+    static void KillEchoAhpProcess(Player player, int killCode)
     {
+        if (player?.ReferenceHub?.playerStats == null)
+            return;
+
+        var ahpStat = player.ReferenceHub.playerStats.GetModule<AhpStat>();
+        ahpStat?.ServerKillProcess(killCode);
+    }
+
+    static bool TryGetEchoAhpProcess(Player player, int? killCode, out AhpProcess process)
+    {
+        process = null;
+        if (!killCode.HasValue || player?.ReferenceHub?.playerStats == null)
+            return false;
+
+        var ahpStat = player.ReferenceHub.playerStats.GetModule<AhpStat>();
+        return ahpStat != null && ahpStat.ServerTryGetProcess(killCode.Value, out process);
+    }
+
+    /// <summary>
+    /// ClearPassiveEffects / RemoveAllEchoes 호출 전에 스탯 AHP 현재량을 읽습니다.
+    /// </summary>
+    public static bool TryPeekEchoAhpAmount(Player player, out float amount)
+    {
+        amount = 0f;
+        if (player == null
+            || !EchoInfo.PlayerPassiveEffects.TryGetValue(player, out var state)
+            || !TryGetEchoAhpProcess(player, state.EchoAhpKillCode, out var process))
+            return false;
+
+        amount = process.CurrentAmount;
+        return true;
+    }
+
+    public static void ApplyPassiveEffects(Player player, EchoStatSnapshot snapshot, float? preservedEchoAhp = null)
+    {
+        // 호출 측에서 넘기지 않은 경우(직접 재적용)에만 여기서 보존 시도
+        bool hadEchoAhp = preservedEchoAhp.HasValue;
+        float echoAhpAmount = preservedEchoAhp ?? 0f;
+        if (!hadEchoAhp && TryPeekEchoAhpAmount(player, out float peeked))
+        {
+            hadEchoAhp = true;
+            echoAhpAmount = peeked;
+        }
+
         ClearPassiveEffects(player);
 
         // HP: 역할 기본 MaxHealth 기준으로만 계산 (레벨업 재적용 시 복리 방지)
@@ -486,14 +586,6 @@ public static class EchoStats
 
         var effectState = new EchoPassiveEffectState();
 
-        // 방어력%: DamageReduction (intensity ≈ percent * 2, Rank 방어 참고)
-        // 스냅샷에 이미 모든 Echo 합산값이 들어 있으므로 한 번만 적용
-        if (snapshot.DefensePercent > 0)
-        {
-            effectState.DefenseReduction = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.DefensePercent * 2f), 1, 255);
-            player.AddEffect(EffectType.DamageReduction, effectState.DefenseReduction);
-        }
-
         // 이동속도 / 점프력: 스냅샷 합산값을 이펙트로 1회 적용
         if (snapshot.MoveSpeed > 0)
         {
@@ -507,29 +599,73 @@ public static class EchoStats
             player.AddEffect(EffectType.Lightweight, effectState.Lightweight);
         }
 
+        if (snapshot.StaminaDrainReduction > 0)
+        {
+            effectState.StaminaDrainToggled = true;
+            Timing.RunCoroutine(StaminaDrainReductionRoutine(player, snapshot.StaminaDrainReduction), $"EchoStamina_{player.UserId}");
+        }
+
+        if (snapshot.SizeReduction > 0f)
+        {
+            effectState.SizeReduction = snapshot.SizeReduction / 100f;
+            player.Scale -= Vector3.one * effectState.SizeReduction;
+        }
+
         EchoInfo.PlayerPassiveEffects[player] = effectState;
 
-        // AHP / HS: 기본값 + 스냅샷만 설정 (재적용 시 Max/현재값 복리 방지)
+        // AHP / HS: 역할 기본값 + 스냅샷 증가량 (재적용 시 Max/현재값 복리 방지)
         if (player.IsScp)
         {
+            // Role/SCP별 기본 HS를 최초 1회 저장한 뒤, 증가량만 더함
             if (!EchoInfo.PlayerBaseMaxHs.TryGetValue(player, out float baseHs))
             {
                 baseHs = player.MaxHumeShield;
                 EchoInfo.PlayerBaseMaxHs[player] = baseHs;
             }
 
-            float targetHsMax = snapshot.HsMax > 0 ? Math.Max(baseHs, snapshot.HsMax) : baseHs;
+            float targetHsMax = baseHs + snapshot.HsMax;
             player.MaxHumeShield = targetHsMax;
             player.HumeShield = Math.Min(player.HumeShield, player.MaxHumeShield);
         }
         else if (snapshot.AhpMax > 0)
         {
-            player.MaxArtificialHealth = snapshot.AhpMax;
-            player.ArtificialHealth = Math.Min(player.ArtificialHealth, player.MaxArtificialHealth);
+            // 스탯 AHP만 decay=0 별도 프로세스로 지급. 아드레날린 등 다른 AHP는 그대로 decay.
+            float amount = hadEchoAhp
+                ? Mathf.Min(echoAhpAmount, snapshot.AhpMax)
+                : snapshot.AhpMax;
+
+            var ahpStat = player.ReferenceHub.playerStats.GetModule<AhpStat>();
+            var process = ahpStat.ServerAddProcess(amount, snapshot.AhpMax, 0f, 0.7f, 0f, true);
+            effectState.EchoAhpKillCode = process.KillCode;
         }
 
         if (snapshot.AhpRegen > 0 || snapshot.HsRegen > 0)
             Timing.RunCoroutine(RegenRoutine(player, snapshot), $"EchoRegen_{player.UserId}");
+    }
+
+    static IEnumerator<float> StaminaDrainReductionRoutine(Player player, float reductionPercent)
+    {
+        const float cycleSeconds = 1f;
+        float noDrainSeconds = cycleSeconds * Mathf.Clamp(reductionPercent, 0f, 100f) / 100f;
+        float drainSeconds = cycleSeconds - noDrainSeconds;
+
+        while (player != null && player.IsAlive && EchoInfo.PlayerStats.ContainsKey(player))
+        {
+            if (noDrainSeconds > 0f)
+            {
+                player.IsUsingStamina = false;
+                yield return Timing.WaitForSeconds(noDrainSeconds);
+            }
+
+            if (drainSeconds > 0f)
+            {
+                player.IsUsingStamina = true;
+                yield return Timing.WaitForSeconds(drainSeconds);
+            }
+        }
+
+        if (player != null)
+            player.IsUsingStamina = true;
     }
 
     static IEnumerator<float> RegenRoutine(Player player, EchoStatSnapshot snapshot)
@@ -538,8 +674,12 @@ public static class EchoStats
         {
             if (player.IsScp && snapshot.HsRegen > 0)
                 player.HumeShield = Math.Min(player.HumeShield + snapshot.HsRegen, player.MaxHumeShield);
-            else if (!player.IsScp && snapshot.AhpRegen > 0)
-                player.ArtificialHealth = Math.Min(player.ArtificialHealth + snapshot.AhpRegen, player.MaxArtificialHealth);
+            else if (!player.IsScp && snapshot.AhpRegen > 0
+                     && EchoInfo.PlayerPassiveEffects.TryGetValue(player, out var state)
+                     && TryGetEchoAhpProcess(player, state.EchoAhpKillCode, out var echoAhp))
+            {
+                echoAhp.CurrentAmount = Math.Min(echoAhp.CurrentAmount + snapshot.AhpRegen, echoAhp.Limit);
+            }
 
             yield return Timing.WaitForSeconds(1f);
         }
@@ -547,47 +687,77 @@ public static class EchoStats
 
     public static void OnHurting(HurtingEventArgs ev)
     {
+        bool ignoresAttackModifiers = AreAttackModifiersIgnored(ev.Attacker);
+
         if (ev.Attacker == null || !EchoInfo.PlayerStats.TryGetValue(ev.Attacker, out var atkStats))
         {
             // defender-only path
         }
         else if (ev.Attacker != null && HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
         {
-            float damage = ev.DamageHandler.Damage;
-
-            damage *= 1f + atkStats.AttackPercent / 100f;
-            damage += atkStats.AttackFlat;
-
-            if (ev.Player.IsScp)
-                damage *= 1f + atkStats.ScpDamagePercent / 100f;
-            else
-                damage *= 1f + atkStats.HumanDamagePercent / 100f;
-
-            // Headshot: 기존 200%에 합산 적용 (ABattle BullsEye 참고)
-            if (atkStats.HeadshotDamage > 0
-                && ev.DamageHandler.CustomBase is FirearmDamageHandler firearm
-                && firearm.Hitbox == HitboxType.Headshot)
+            if (!ignoresAttackModifiers)
             {
-                damage *= 1f + atkStats.HeadshotDamage / 200f;
-            }
+                float damage = ev.DamageHandler.Damage;
 
-            // Critical (Ambush style)
-            if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
-            {
-                damage *= 2f;
-                Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Attacker.ShowHitMarker(2));
-            }
+                damage *= 1f + atkStats.AttackPercent / 100f;
+                damage += atkStats.AttackFlat;
 
-            ev.DamageHandler.Damage = damage;
+                if (ev.Player.IsScp)
+                    damage *= 1f + atkStats.ScpDamagePercent / 100f;
+                else
+                    damage *= 1f + atkStats.HumanDamagePercent / 100f;
+
+                // Headshot: 기존 200%에 합산 적용 (ABattle BullsEye 참고)
+                // PlayerStatsSystem.FirearmDamageHandler와 모호하므로 Exiled 타입을 명시
+                if (atkStats.HeadshotDamage > 0
+                    && ev.DamageHandler.CustomBase is Exiled.API.Features.DamageHandlers.FirearmDamageHandler
+                    {
+                        Hitbox: HitboxType.Headshot
+                    })
+                {
+                    damage *= 1f + atkStats.HeadshotDamage / 200f;
+                }
+
+                // Critical (Ambush style) + 전용무기 크리티컬 데미지 보너스
+                if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
+                {
+                    float critMult = 2f;
+                    if (ExclusiveWeaponInfo.PlayerWeapons.TryGetValue(ev.Attacker, out var weapon) && weapon != null)
+                        critMult += weapon.GetCriticalDamageBonus(ev.Player) / 100f;
+
+                    damage *= critMult;
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Attacker.ShowHitMarker(2));
+                }
+
+                ev.DamageHandler.Damage = damage;
+            }
         }
 
-        if (EchoInfo.PlayerStats.TryGetValue(ev.Player, out var defStats))
+        if (EchoInfo.PlayerStats.TryGetValue(ev.Player, out var defStats)
+            && !ignoresAttackModifiers)
         {
-            // 방어력 정수: 고정 데미지 감소. 방어력%는 DamageReduction 이펙트로 처리.
             float dmg = ev.DamageHandler.Damage;
-            dmg = Math.Max(0f, dmg - defStats.DefenseFlat);
+
+            // 이벤트에서 직접 계산해야 특정 공격자 역할이 방어력%와 고정 방어력을 모두 우회할 수 있다.
+            if (defStats.DefensePercent > 0f)
+                dmg *= Mathf.Max(0f, 1f - defStats.DefensePercent / 100f);
+
+            if (!DefenseFlatIgnoredDamageTypes.Contains(ev.DamageHandler.Type))
+                dmg = Math.Max(0f, dmg - defStats.DefenseFlat);
+
             ev.DamageHandler.Damage = dmg;
         }
+    }
+
+    public static void OnHealing(HealingEventArgs ev)
+    {
+        if (ev.Player == null || !EchoInfo.PlayerStats.TryGetValue(ev.Player, out var stats))
+            return;
+
+        if (stats.HealingBonus <= 0f)
+            return;
+
+        ev.Amount *= 1f + stats.HealingBonus / 100f;
     }
 
     public static string GetMainStatDisplayName(EchoMainStatType type)
@@ -604,6 +774,7 @@ public static class EchoStats
             EchoMainStatType.StaminaDrainReduction => "스태미나 소모 감소%",
             EchoMainStatType.HeadshotDamage => "헤드샷 데미지%",
             EchoMainStatType.AhpRegenAndMax => "AHP/HS 회복",
+            EchoMainStatType.SizeReduction => "크기 감소%",
             _ => "?"
         };
     }
@@ -625,6 +796,8 @@ public static class EchoStats
             EchoSubOptionType.JumpPower => "점프력%",
             EchoSubOptionType.StaminaDrainReduction => "스태미나 소모 감소%",
             EchoSubOptionType.HeadshotDamage => "헤드샷 데미지%",
+            EchoSubOptionType.SizeReduction => "크기 감소%",
+            EchoSubOptionType.HealingBonus => "치료 효과 보너스%",
             _ => "?"
         };
     }
@@ -652,6 +825,8 @@ public class EchoStatSnapshot
     public float JumpPower;
     public float StaminaDrainReduction;
     public float HeadshotDamage;
+    public float SizeReduction;
+    public float HealingBonus;
     public float AhpRegen;
     public float AhpMax;
     public float HsRegen;
@@ -687,6 +862,8 @@ public class EchoStatSnapshot
         add("점프력%", JumpPower);
         add("스태미나 소모 감소%", StaminaDrainReduction);
         add("헤드샷 데미지%", HeadshotDamage);
+        add("크기 감소%", SizeReduction);
+        add("치료 효과 보너스%", HealingBonus);
         add("AHP 회복", AhpRegen);
         add("AHP 최대", AhpMax);
         add("HS 회복", HsRegen);

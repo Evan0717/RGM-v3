@@ -14,10 +14,74 @@ namespace RGM.Modes;
 
 public static class EchoBattleCore
 {
-    // 화면 5x5 그리드에서 19번 위치 (0-index: row3 col3 → 우측 하단에서 약간 위)
-    // Rank 힌트(-300, 80) 대비 우측 하단 쪽으로 배치
-    const float HintX = 420f;
-    const float HintY = 620f;
+    // 상태표는 우측 상단, 알림은 화면 중앙에 분리해 서로 가리지 않도록 배치합니다.
+    const float HintX = 240f;
+    const float HintY = 310f;
+    const float NotificationX = 0f;
+    const float NotificationY = 750f;
+    const int MaxNotifications = 5;
+
+    sealed class Notification
+    {
+        public string Text;
+        public DateTime ExpiresAt;
+    }
+
+    static readonly Dictionary<Player, List<Notification>> Notifications = new();
+
+    public static void ShowNotification(Player player, string text, float duration = 3f)
+    {
+        if (player == null || string.IsNullOrWhiteSpace(text))
+            return;
+
+        DateTime now = DateTime.UtcNow;
+        if (!Notifications.TryGetValue(player, out var queue))
+        {
+            queue = new List<Notification>();
+            Notifications[player] = queue;
+        }
+
+        queue.RemoveAll(x => x.ExpiresAt <= now);
+
+        // 같은 알림이 연속으로 들어오면 줄을 늘리지 않고 표시 시간만 갱신합니다.
+        var duplicate = queue.FirstOrDefault(x => x.Text == text);
+        if (duplicate != null)
+        {
+            duplicate.ExpiresAt = now.AddSeconds(Math.Max(0.1f, duration));
+            return;
+        }
+
+        queue.Add(new Notification
+        {
+            Text = text,
+            ExpiresAt = now.AddSeconds(Math.Max(0.1f, duration))
+        });
+
+        while (queue.Count > MaxNotifications)
+            queue.RemoveAt(0);
+    }
+
+    static string BuildNotificationText(Player player)
+    {
+        if (player == null || !Notifications.TryGetValue(player, out var queue))
+            return null;
+
+        DateTime now = DateTime.UtcNow;
+        queue.RemoveAll(x => x.ExpiresAt <= now);
+        if (queue.Count == 0)
+        {
+            Notifications.Remove(player);
+            return null;
+        }
+
+        return string.Join("\n", queue.Select(x => x.Text));
+    }
+
+    public static void ClearNotifications(Player player)
+    {
+        if (player != null)
+            Notifications.Remove(player);
+    }
 
     public static void RegisterEchoes()
     {
@@ -80,8 +144,7 @@ public static class EchoBattleCore
         echo.SelectedMainStat = loadout.ResolveMainStat(slotIndex, data);
 
         // 기존 부가 옵션 유지 + 해금분만 추가 (레벨업 재적용 시 재롤/수치 하락 방지)
-        int seedBase = (player.UserId?.GetHashCode() ?? 0) ^ (int)type;
-        echo.SubOptions = EchoStats.EnsureSubOptions(loadout, type, echo.Level, seedBase);
+        echo.SubOptions = EchoStats.EnsureSubOptions(loadout, type, echo.Level);
 
         if (!EchoInfo.PlayerEchoes.ContainsKey(player))
             EchoInfo.PlayerEchoes[player] = new();
@@ -101,7 +164,7 @@ public static class EchoBattleCore
         }
 
         foreach (var echo in list)
-            echo.OnDisabled();
+            echo.ONActiveEffect();
 
         list.Clear();
         EchoInfo.PlayerStats.Remove(player);
@@ -120,16 +183,24 @@ public static class EchoBattleCore
 
     public static void ApplyLoadout(Player player)
     {
+        // RemoveAllEchoes가 스탯 AHP를 지우므로, 재적용 전 현재량을 보존
+        float? preservedEchoAhp = EchoStats.TryPeekEchoAhpAmount(player, out float echoAhp)
+            ? echoAhp
+            : null;
+
         // 레벨업 재적용 시에도 역할 기본 MaxHealth는 유지해야 복리가 나지 않음
         RemoveAllEchoes(player);
+        ExclusiveWeaponCore.RemoveWeapon(player);
 
         if (!EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
         {
             EchoQuest.StopSurviveTracking(player);
+            ExclusiveWeaponQuest.StopTracking(player);
             return;
         }
 
-        // 적용 직전 Cost 불일치 메인 스탯 잔존값 제거
+        // 적용 직전 슬롯/스탯 잔존값 제거
+        loadout.SanitizeMainSlot();
         loadout.SanitizeAllMainStats();
 
         if (loadout.MainSlot.HasValue)
@@ -141,46 +212,59 @@ public static class EchoBattleCore
                 AddEcho(player, loadout.SubSlots[i].Value, loadout.GetLevel(loadout.SubSlots[i].Value), false, i + 1);
         }
 
-        if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
+        ExclusiveWeaponCore.ApplyWeapon(player);
+
+        bool hasEchoes = EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) && echoes.Count > 0;
+        bool hasWeapon = ExclusiveWeaponInfo.PlayerWeapons.ContainsKey(player);
+
+        if (!hasEchoes && !hasWeapon)
         {
             EchoQuest.StopSurviveTracking(player);
+            ExclusiveWeaponQuest.StopTracking(player);
             return;
         }
 
-        var snapshot = EchoStats.BuildSnapshot(player, echoes);
+        var snapshot = hasEchoes
+            ? EchoStats.BuildSnapshot(player, echoes)
+            : new EchoStatSnapshot();
+
+        ExclusiveWeaponCore.MergeStats(player, snapshot);
         EchoInfo.PlayerStats[player] = snapshot;
-        EchoStats.ApplyPassiveEffects(player, snapshot);
+        EchoStats.ApplyPassiveEffects(player, snapshot, preservedEchoAhp);
 
         // 레벨업 재적용 시 생존 타이머가 리셋되지 않도록, 미추적일 때만 시작
         EchoQuest.EnsureSurviveTracking(player);
+        ExclusiveWeaponQuest.EnsureTracking(player);
     }
 
     public static void Reset(Player player)
     {
         EchoQuest.StopSurviveTracking(player);
+        ExclusiveWeaponCore.Reset(player);
+        ClearNotifications(player);
         ClearPlayerRuntime(player);
     }
 
     public static IEnumerator<float> HintDisplay(Player owner)
     {
-        Hint hint = new() { Text = "" };
-
         while (true)
         {
             Player target = owner;
-            bool shown = false;
+            Hint statusHint = null;
+            Hint notificationHint = null;
 
             try
             {
                 if (owner.Role is SpectatorRole spectator && spectator.SpectatedPlayer != null)
                     target = spectator.SpectatedPlayer;
 
-                if (target != null && target.IsAlive)
+                bool showStatus = !EchoInfo.PlayerShowHints.TryGetValue(owner, out bool enabled) || enabled;
+                if (showStatus && target != null && target.IsAlive)
                 {
                     string text = BuildHintText(target);
                     if (!string.IsNullOrEmpty(text))
                     {
-                        hint = new Hint
+                        statusHint = new Hint
                         {
                             Text = $"<size=14>{text}</size>",
                             Id = "EchoBattleHint",
@@ -189,9 +273,23 @@ public static class EchoBattleCore
                             Alignment = HintAlignment.Right
                         };
 
-                        owner.AddCustomHint(hint);
-                        shown = true;
+                        owner.AddCustomHint(statusHint);
                     }
+                }
+
+                string notificationText = BuildNotificationText(owner);
+                if (!string.IsNullOrEmpty(notificationText))
+                {
+                    notificationHint = new Hint
+                    {
+                        Text = $"<size=22>{notificationText}</size>",
+                        Id = "EchoBattleNotification",
+                        XCoordinate = NotificationX,
+                        YCoordinate = NotificationY,
+                        Alignment = HintAlignment.Center
+                    };
+
+                    owner.AddCustomHint(notificationHint);
                 }
             }
             catch (Exception e)
@@ -199,15 +297,12 @@ public static class EchoBattleCore
                 Log.Debug($"[EchoBattle] Hint error: {e.Message}");
             }
 
-            if (shown)
-            {
-                yield return Timing.WaitForOneFrame;
-                owner.RemoveHint(hint);
-            }
-            else
-            {
-                yield return Timing.WaitForOneFrame;
-            }
+            yield return Timing.WaitForOneFrame;
+
+            if (statusHint != null)
+                owner.RemoveHint(statusHint);
+            if (notificationHint != null)
+                owner.RemoveHint(notificationHint);
         }
     }
 
@@ -215,10 +310,25 @@ public static class EchoBattleCore
     {
         var lines = new List<string>();
 
+        string weaponHint = ExclusiveWeaponCore.BuildHintSection(player);
+        if (!string.IsNullOrEmpty(weaponHint))
+            lines.Add(weaponHint);
+
         if (!EchoInfo.PlayerEchoes.TryGetValue(player, out var echoes) || echoes.Count == 0)
         {
-            lines.Add("<color=#88aaff>[ESC] → Settings → Server-specific</color>");
-            lines.Add("Echo를 장착하세요.");
+            if (lines.Count == 0)
+            {
+                lines.Add("<color=#88aaff>[ESC] → Settings → Server-specific</color>");
+                lines.Add("전용무기 / Echo를 장착하세요.");
+            }
+
+            if (EchoInfo.PlayerStats.TryGetValue(player, out var weaponOnlyStats))
+            {
+                lines.Add("<color=#aaaaaa>── 강화 합산 ──</color>");
+                foreach (var pair in weaponOnlyStats.GetAggregatedDisplay())
+                    lines.Add($"{pair.Key}: <b>{pair.Value:0.#}</b>");
+            }
+
             return string.Join("\n", lines);
         }
 

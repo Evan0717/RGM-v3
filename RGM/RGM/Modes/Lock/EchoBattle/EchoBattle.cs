@@ -27,13 +27,18 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
 (Echo만 바꾸면 메인 스탯 UI가 이전 값으로 남을 수 있습니다.)
 
 Quest (반복)
-• 30초 생존 → 130 XP
-• 적에게 50 데미지 → 100 XP
-• 25 데미지 받기 → 100 XP
+• 30초 생존 → 80 XP
+• 적에게 80 데미지 → 50 XP
+• 40 데미지 받기 → 50 XP
+• SCP 아이템 획득 → 200 XP
+• 적 1명 처치 → 80 XP
+• SCP로 적 1회 타격 → 15 XP
+• SCP 격리(049-2 제외) → 1200 XP
+• SCP-049-2 처치 → 150 XP
 
-[ESC] -> [Settings] -> [Server-specific]
+[ESC] -> [Settings] -> [Server-specific] 하단부에서 설정을 변경하세요.
 """;
-    public override string Color => "023e8a";
+    public override string Color => "0077b6";
     public override string Author => "Denia's First Project";
 
     /// <summary>테스트용: true면 RoundLock + AFK 추방 방지를 켭니다.</summary>
@@ -49,14 +54,17 @@ Quest (반복)
             Round.IsLocked = true;
 
         EchoBattleCore.RegisterEchoes();
+        ExclusiveWeaponCore.RegisterWeapons();
 
         Exiled.Events.Handlers.Player.Verified += OnVerified;
         Exiled.Events.Handlers.Player.Hurting += EchoStats.OnHurting;
+        Exiled.Events.Handlers.Player.Healing += EchoStats.OnHealing;
         if (SoloTestMode)
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
         EchoQuest.Register();
+        ExclusiveWeaponQuest.Register();
         EchoSetting.Init();
         ServerSpecificSettingsSync.ServerOnSettingValueReceived += EchoSetting.OnSSInput;
 
@@ -71,12 +79,14 @@ Quest (반복)
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
         Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
         Exiled.Events.Handlers.Player.Hurting -= EchoStats.OnHurting;
+        Exiled.Events.Handlers.Player.Healing -= EchoStats.OnHealing;
         if (SoloTestMode)
             Exiled.Events.Handlers.Player.Kicking -= OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
         ServerSpecificSettingsSync.ServerOnSettingValueReceived -= EchoSetting.OnSSInput;
         EchoQuest.Unregister();
+        ExclusiveWeaponQuest.Unregister();
 
         Timing.KillCoroutines(_onModeStarted);
 
@@ -92,6 +102,8 @@ Quest (반복)
         {
             EchoQuest.ClearPlayer(player);
             EchoGrowth.ClearPending(player);
+            ExclusiveWeaponGrowth.ClearPending(player);
+            ExclusiveWeaponCore.ClearAll(player);
             EchoBattleCore.Reset(player);
         }
 
@@ -103,6 +115,9 @@ Quest (반복)
         EchoInfo.PlayerBaseMaxHs.Clear();
         EchoInfo.PlayerPassiveEffects.Clear();
         EchoInfo.Echoes.Clear();
+        ExclusiveWeaponInfo.Weapons.Clear();
+        ExclusiveWeaponInfo.PlayerWeapons.Clear();
+        ExclusiveWeaponInfo.PlayerProgress.Clear();
     }
 
     IEnumerator<float> OnModeStarted()
@@ -115,9 +130,10 @@ Quest (반복)
             foreach (var player in Player.List)
             {
                 player.AddBroadcast(1,
-                    $"<size=30>Echo 적용까지 <size=50><b>{EchoInfo.ApplyDelaySeconds - i}</b></size>초</size>\n" +
-                    $"<size=20>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
-                    $"<size=18><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 '자동' 또는 원하는 값으로 다시 고르세요.</color></size>");
+                    $"<size=30>Echo 적용까지 <b>{EchoInfo.ApplyDelaySeconds - i}</b>초</size>\n" +
+                    $"<size=21>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
+                    $"<size=20><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 임의로 고른 뒤 다시 원하는 값으로 고르세요.</color></size>\n" +
+                    $"<size=19><color=#ffcc66>Echo의 Cost는 총합 12를 넘을 수 없습니다.</color></size>");
 
                 player.AddEffect(EffectType.Ensnared, 1, 1);
                 player.AddEffect(EffectType.HeavyFooted, 100, 1);
@@ -135,6 +151,7 @@ Quest (반복)
                 continue;
 
             player.ClearEffect();
+            player.AddEffect(EffectType.FogControl, 1);
             EchoBattleCore.ApplyLoadout(player);
         }
     }
@@ -160,6 +177,7 @@ Quest (반복)
 
         EchoQuest.StopSurviveTracking(ev.Player);
         EchoGrowth.ClearPending(ev.Player);
+        ExclusiveWeaponGrowth.ClearPending(ev.Player);
         EchoBattleCore.Reset(ev.Player);
 
         if (!ev.NewRole.IsAlive())
@@ -204,9 +222,10 @@ Quest (반복)
                 yield break;
 
             player.AddBroadcast(1,
-                $"<size=30>Echo 적용까지 <size=50><b>{EchoInfo.ApplyDelaySeconds - i}</b></size>초</size>\n" +
-                $"<size=20>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
-                $"<size=18><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 '자동' 또는 원하는 값으로 다시 고르세요.</color></size>");
+                $"<size=30>Echo 적용까지 <b>{EchoInfo.ApplyDelaySeconds - i}</b>초</size>\n" +
+                $"<size=21>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
+                $"<size=20><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 임의로 고른 뒤 다시 원하는 값으로 고르세요.</color></size>\n" +
+                $"<size=19><color=#ffcc66>Echo의 Cost는 총합 12를 넘을 수 없습니다.</color></size>");
 
             yield return Timing.WaitForSeconds(1);
         }
@@ -221,8 +240,17 @@ Quest (반복)
         {
             EchoQuest.ClearPlayer(player);
             EchoGrowth.ClearPending(player);
+            ExclusiveWeaponGrowth.ClearPending(player);
+            ExclusiveWeaponCore.ClearAll(player);
             EchoBattleCore.Reset(player);
         }
+        IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+
+        if (players.Count() == 1)
+            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 15));
+
+        else if (players.Count() > 1)
+            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
     }
 
     void OnKicking(KickingEventArgs ev)

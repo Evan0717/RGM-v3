@@ -26,6 +26,9 @@ public class Kick : Ability
         if (ev.Player != Owner)
             return;
 
+        if (ev.Player.IsCaptured())
+            return;
+
         if (Tools.TryGetLookPlayer(ev.Player, 4f, out Player player, out RaycastHit? hit))
         {
             if (ev.Player != player && MeleeCooldown <= 0 && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))

@@ -80,7 +80,7 @@ public class RepairMan : Ability
             return;
 
         ev.IsAllowed = false;
-        ev.Generator.IsOpen = false;
+        ev.Generator.IsOpen = true;
     }
 
     public void OnClosingGenerator(ClosingGeneratorEventArgs ev)
@@ -89,6 +89,6 @@ public class RepairMan : Ability
             return;
 
         ev.IsAllowed = false;
-        ev.Generator.IsOpen = true;
+        ev.Generator.IsOpen = false;
     }
 }

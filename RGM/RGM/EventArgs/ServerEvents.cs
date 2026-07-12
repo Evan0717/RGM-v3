@@ -62,7 +62,6 @@ namespace RGM.EventArgs
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
             Tools.LoadMap($"RGMLobby");
-            Tools.LoadMap($"RGMBase");
 
             var donator = new Donator.Main();
             donator.OnEnabled();

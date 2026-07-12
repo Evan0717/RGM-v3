@@ -20,8 +20,6 @@ namespace RGM.UserSettings
         public static CustomHeader Setting { get; } = new("<b>랜덤게임모드</b>");
 
         public static CustomKeybindSetting ScpCanEquipRandomItem { get; private set; }
-        public static CustomButtonSetting SpectatorToNone { get; private set; }
-        public static CustomButtonSetting SwitchToSpectator { get; private set; }
         public static CustomTwoButtonSetting MuteBGM { get; private set; }
         public static CustomDropdownSetting Translation { get; private set; }
         public static CustomKeybindSetting UpKey { get; private set; }
@@ -42,8 +40,6 @@ namespace RGM.UserSettings
                 return;
 
             ScpCanEquipRandomItem = new ScpCanEquipRandomItemSetting();
-            SpectatorToNone = new SpectatorToNoneSetting();
-            SwitchToSpectator = new SwitchToSpectatorSetting();
             MuteBGM = new MuteBGMSetting();
             Translation = new TranslationSetting();
             UpKey = new UpKeySetting();
@@ -55,8 +51,6 @@ namespace RGM.UserSettings
 
             CustomSetting.Register(
                 ScpCanEquipRandomItem,
-                SpectatorToNone,
-                SwitchToSpectator,
                 MuteBGM,
                 Translation,
                 UpKey,
@@ -75,8 +69,6 @@ namespace RGM.UserSettings
                 
                 CustomSetting.UnRegister(
                     ScpCanEquipRandomItem,
-                    SpectatorToNone,
-                    SwitchToSpectator,
                     MuteBGM,
                     Translation,
                     UpKey,
@@ -87,8 +79,6 @@ namespace RGM.UserSettings
                     DetailInfoKey);
                 CustomSetting.Register(
                     ScpCanEquipRandomItem,
-                    SpectatorToNone,
-                    SwitchToSpectator,
                     MuteBGM,
                     Translation,
                     UpKey,
@@ -100,6 +90,40 @@ namespace RGM.UserSettings
             }
         }
 
+        private sealed class ScpCanEquipRandomItemSetting : CustomKeybindSetting
+        {
+            public ScpCanEquipRandomItemSetting()
+                : base(12050, "SCP의 아이템 장착ㅣEquipping SCP items", KeyCode.H, allowSpectatorTrigger: false, hint: "SCP가 보유한 아이템 중 무작위로 하나를 장착합니다.\n\nEquip a random item from the SCP's inventory.")
+            {
+            }
+
+            public override CustomHeader Header => Setting;
+
+            protected override CustomSetting CreateDuplicate() => new ScpCanEquipRandomItemSetting();
+
+            protected override void HandleSettingUpdate()
+            {
+                if (!IsPressed || KnownOwner == null)
+                    return;
+
+                Player player = Player.Get(KnownOwner.ReferenceHub);
+                if (!player.IsScpRole())
+                    return;
+
+                var candidates = player.Items
+                    .Where(x => player.CurrentItem != x)
+                    .ToList();
+
+                candidates.Add(null);
+
+                if (candidates.Count == 0)
+                    return;
+
+                player.CurrentItem = candidates.GetRandomValue();
+            }
+        }
+        
+        private sealed class MuteBGMSetting : CustomTwoButtonSetting
         public sealed partial class ScpCanEquipRandomItemSetting;
         
         private sealed class SpectatorToNoneSetting() : CustomButtonSetting(12051,

@@ -13,6 +13,7 @@ using static RGM.Variables.Variable;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Warhead;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes
 {
@@ -74,6 +75,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
+            if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
+                Tools.TryInstallMode(ModeType.ABattle);
+            }
             audio = Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
             for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count() / 7); i++)

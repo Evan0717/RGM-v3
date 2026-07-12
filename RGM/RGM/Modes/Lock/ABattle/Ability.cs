@@ -130,6 +130,64 @@ public enum AbilityCategory
     Synergy,
 }
 
+public enum RoleAbility
+{
+    None,
+    ClassD,
+    Scientist,
+    NTF,
+    CHI,
+    Tutorial,
+    Scp173,
+    Scp049,
+    Scp0492,
+    Scp096,
+    Scp106,
+    Scp939,
+    Scp3114,
+    Scp079,
+    Flamingo
+}
+
+/* 
+
+전용 능력에 등급 추가 구상
+
+위의 Enum사용
+AbilityData에 bool 79Allowed, RoleAbility RoleAbility 추가
+물론 Attribute에도
+79Allowed는 럭키비키 등이 포함될 것입니다.
+
+등급에 따른 전용 능력의 확률
+일반 ->5퍼
+희귀 ->5퍼
+영웅 ->10퍼
+전설 -> 33퍼
+신화 -> 33퍼
+위 확률로 선택지들 중 그 선택지를 등급에 맞는 전용 능력으로 바꿉니다.
+
+바꿔야 될게 많은데,
+
+Ability.cs
+1. GetAbilityCategory
+2. GetTranslation
+3. GetColor
+4. Enum AbilityType -> 전용등급의 이름만 변경
+
+ABattle.cs
+1. RatingColor
+2. ColorFormat
+3. OnEnabled()
+4. StartSelect() -> 제일 중요 ***
+5. SelectionCoroutine 내부 로컬함수 -> 2번째로 중요 **
+6. GetCategory() 3번째로 중요 *
+7. ApplyPrelude()
+
+이거 말고 더 있을 수 있습니다 제가 찾은 거는.
+일단 AbilityCategory 쓰는 거는 다 잡아야 돼요.
+
+ */
+
 public static class AbilityCategoryExtensions
 {
     public static AbilityCategory GetAbilityCategory(this Player player)
