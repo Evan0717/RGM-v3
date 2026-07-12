@@ -10,7 +10,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// <summary>
 /// Forged Star.
 /// Passive: Attack 11%+(res*2%). Burned target crit damage +(12%*res).
-/// Flame stacks (3s CD, 8s duration). 6 stacks explode + 7m splash 60%.
+/// Flame stacks (2s CD, 8s duration). 6 stacks explode + 7m splash 60%.
 /// </summary>
 [ExclusiveWeapon(
     "위조된 작은 별",
@@ -18,15 +18,15 @@ namespace RGM.Modes.ExclusiveWeapon;
     ExclusiveWeaponType.ForgedStar)]
 public class ForgedStar : ExcWeapon
 {
-    public override float AttackFlatMin => 4.0f;
-    public override float AttackFlatMax => 50.0f;
+    public override float AttackFlatMin => 3.3f;
+    public override float AttackFlatMax => 41.7f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.CriticalChance;
     public override float SecondaryStatMin => 8.0f;
     public override float SecondaryStatMax => 36.0f;
 
     public override float PassiveAttackPercent => 11f + Resonance * 2f;
 
-    const float FlameCooldown = 3f;
+    const float FlameCooldown = 2f;
     const float FlameDuration = 8f;
     const int FlameMaxStacks = 6;
     const float SplashRadius = 7f;

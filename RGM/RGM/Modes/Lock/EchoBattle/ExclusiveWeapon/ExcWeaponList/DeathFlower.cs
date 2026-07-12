@@ -19,8 +19,8 @@ namespace RGM.Modes.ExclusiveWeapon;
     ExclusiveWeaponType.DeathFlower)]
 public class DeathFlower : ExcWeapon
 {
-    public override float AttackFlatMin => 4f;
-    public override float AttackFlatMax => 50f;
+    public override float AttackFlatMin => 3.3f;
+    public override float AttackFlatMax => 41.7f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.HpPercent;
     public override float SecondaryStatMin => 13.2f;
     public override float SecondaryStatMax => 59.6f;
