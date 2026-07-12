@@ -44,6 +44,15 @@ Quest (반복)
     /// <summary>테스트용: true면 RoundLock + AFK 추방 방지를 켭니다.</summary>
     const bool SoloTestMode = true;
 
+    static readonly List<RoleTypeId> ScpSpawnPoolWithout079 =
+    [
+        RoleTypeId.Scp049,
+        RoleTypeId.Scp096,
+        RoleTypeId.Scp106,
+        RoleTypeId.Scp173,
+        RoleTypeId.Scp939,
+    ];
+
     CoroutineHandle _onModeStarted;
     readonly Dictionary<Player, CoroutineHandle> _hintHandles = new();
     readonly Dictionary<Player, CoroutineHandle> _applyHandles = new();
@@ -57,6 +66,7 @@ Quest (반복)
         ExclusiveWeaponCore.RegisterWeapons();
 
         Exiled.Events.Handlers.Player.Verified += OnVerified;
+        Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         Exiled.Events.Handlers.Player.Hurting += EchoStats.OnHurting;
         Exiled.Events.Handlers.Player.Healing += EchoStats.OnHealing;
         if (SoloTestMode)
@@ -77,6 +87,7 @@ Quest (반복)
             Round.IsLocked = false;
 
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
+        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
         Exiled.Events.Handlers.Player.Hurting -= EchoStats.OnHurting;
         Exiled.Events.Handlers.Player.Healing -= EchoStats.OnHealing;
@@ -123,7 +134,10 @@ Quest (반복)
     IEnumerator<float> OnModeStarted()
     {
         foreach (var p in Player.List)
+        {
+            ReplaceScp079(p);
             Verified(p);
+        }
 
         for (int i = 0; i < EchoInfo.ApplyDelaySeconds; i++)
         {
@@ -157,6 +171,16 @@ Quest (반복)
     }
 
     void OnVerified(VerifiedEventArgs ev) => Verified(ev.Player);
+
+    void OnSpawned(SpawnedEventArgs ev) => ReplaceScp079(ev.Player);
+
+    static void ReplaceScp079(Player player)
+    {
+        if (player?.Role.Type != RoleTypeId.Scp079)
+            return;
+
+        player.Role.Set(Tools.GetRandomValue(ScpSpawnPoolWithout079));
+    }
 
     void Verified(Player player)
     {

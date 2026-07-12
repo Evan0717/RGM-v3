@@ -1,4 +1,5 @@
 using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -50,8 +51,12 @@ public class Chibi096 : EchoActiveAbility
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (_damageReductionActive && ev.Player == Owner)
+        if (_damageReductionActive
+            && ev.Player == Owner
+            && ev.DamageHandler?.Type != DamageType.Crushed)
+        {
             ev.Amount *= 0.75f;
+        }
     }
 
     private void DisableDamageReduction()

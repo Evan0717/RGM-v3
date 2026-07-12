@@ -186,7 +186,8 @@ public enum EchoMainStatType
     StaminaDrainReduction,
     HeadshotDamage,
     AhpRegenAndMax,
-    SizeReduction
+    SizeReduction,
+    CriticalDamage
 }
 
 public enum EchoSubStatType
@@ -214,7 +215,8 @@ public enum EchoSubOptionType
     StaminaDrainReduction,
     HeadshotDamage,
     SizeReduction,
-    HealingBonus
+    HealingBonus,
+    CriticalDamage
 }
 
 public enum EchoType
