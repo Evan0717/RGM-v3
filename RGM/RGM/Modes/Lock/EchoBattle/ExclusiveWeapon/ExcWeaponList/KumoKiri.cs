@@ -10,7 +10,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "쿠모키리",
-    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 (2% * 공진 수치) 확률로 618.03 고정 피해.",
+    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 공진 수치 * (공진 수치 + 1) / 2 확률로 618.03 고정 피해.",
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
@@ -51,7 +51,7 @@ public class KumoKiri : ExcWeapon
         if (EchoStats.AreAttackModifiersIgnored(Owner))
             return;
 
-        float chance = 2f * Resonance;
+        float chance = Resonance * (Resonance + 1) % 2;
         if (Random.Range(0f, 100f) >= chance)
             return;
 
