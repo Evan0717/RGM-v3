@@ -9,7 +9,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("툴건", "지급된 동전을 튕기면 보는 방향에 워크스테이션을 설치합니다. 단, 5% 확률로 즉사합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
+[Ability("딸깍", "지급된 동전을 튕기면 보는 방향에 워크스테이션을 설치합니다. 단, 3% 확률로 즉사합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
 public class ToolGun : Ability
 {
     private const float ForwardOffset = 1.5f;
@@ -45,7 +45,7 @@ public class ToolGun : Ability
             return;
 
         Player player = ev.Player;
-        if (Random.Range(1, 101) <= 5)
+        if (Random.Range(1, 101) <= 3)
         {
             if (GodModePlayers.Contains(player))
                 GodModePlayers.Remove(player);
