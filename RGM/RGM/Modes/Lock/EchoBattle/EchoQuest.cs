@@ -12,24 +12,17 @@ namespace RGM.Modes;
 /// <summary>
 /// 반복 가능 내부 Quest.
 /// 1) 30초 생존 → 60 XP
-/// 2) 적에게 100 데미지 → 100 XP
-/// 3) 50 데미지 받기 → 150 XP
-/// 4) SCP 아이템 획득 → 400 XP
-/// 5) 적 1명 처치 → 200 XP
-/// 6) SCP로 적 1회 타격 → 50 XP
-/// 7) SCP 격리(049-2 제외) → 4000 XP
-/// 8) SCP-049-2 처치 → 400 XP
+/// 2) SCP 아이템 획득 → 400 XP
+/// 3) 적 1명 처치 → 200 XP
+/// 4) SCP로 적 1회 타격 → 50 XP
+/// 5) SCP 격리(049-2 제외) → 4000 XP
+/// 6) SCP-049-2 처치 → 400 XP
+/// 적 플레이어에게 가하거나 받은 피해량은 별도 퀘스트 없이 동일한 양의 XP로 즉시 지급합니다.
 /// </summary>
 public static class EchoQuest
 {
     public const int SurviveSeconds = 30;
     public const int SurviveReward = 50;
-
-    public const float DealDamageThreshold = 100f;
-    public const int DealDamageReward = 100;
-
-    public const float TakeDamageThreshold = 100f;
-    public const int TakeDamageReward = 100;
 
     public const int ScpItemReward = 400;
     public const int KillEnemyReward = 200;
@@ -50,8 +43,6 @@ public static class EchoQuest
 
     public class QuestProgress
     {
-        public float DamageDealt;
-        public float DamageTaken;
         public float SurviveTimer;
     }
 
@@ -228,31 +219,12 @@ public static class EchoQuest
         if (damage <= 0f)
             return;
 
-        // 가해: 적에게 데미지
+        // 적에게 가한 피해량과 적에게 받은 피해량을 각각 동일한 XP로 즉시 지급합니다.
         if (isDirectEnemyAttack && CanProgressQuests(ev.Attacker))
-        {
-            var atkProgress = GetOrCreate(ev.Attacker);
-            atkProgress.DamageDealt += damage;
+            GrantDamageExp(ev.Attacker, damage);
 
-            while (atkProgress.DamageDealt >= DealDamageThreshold)
-            {
-                atkProgress.DamageDealt -= DealDamageThreshold;
-                GrantQuestReward(ev.Attacker, DealDamageReward, "데미지 80 가함");
-            }
-        }
-
-        // 피격: 적 플레이어에게 직접 받은 데미지만 인정 (아군 사격/환경/Tesla 제외)
         if (isDirectEnemyAttack && CanProgressQuests(ev.Player))
-        {
-            var defProgress = GetOrCreate(ev.Player);
-            defProgress.DamageTaken += damage;
-
-            while (defProgress.DamageTaken >= TakeDamageThreshold)
-            {
-                defProgress.DamageTaken -= TakeDamageThreshold;
-                GrantQuestReward(ev.Player, TakeDamageReward, "데미지 40 받음");
-            }
-        }
+            GrantDamageExp(ev.Player, damage);
     }
 
     static void OnPickingUpItem(PickingUpItemEventArgs ev)
@@ -371,5 +343,14 @@ public static class EchoQuest
             player,
             $"<color=#88aaff>Quest</color> {questName} <color=#7CFC00>+{reward} XP</color>",
             2);
+    }
+
+    /// <summary>
+    /// 피해 이벤트마다 알림을 띄우면 전투 중 화면을 가리므로, 레벨업 알림만 각 성장 시스템에 맡깁니다.
+    /// </summary>
+    static void GrantDamageExp(Player player, float damage)
+    {
+        EchoGrowth.GrantExpToEquipped(player, damage);
+        ExclusiveWeaponGrowth.GrantExp(player, damage);
     }
 }

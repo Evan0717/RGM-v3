@@ -7,8 +7,8 @@ public static class ExclusiveWeaponInfo
 {
     public const int MaxLevel = 90;
     public const int MaxResonance = 5;
-    public const int BaseExp = 20;
-    public const float LevelExpMultiplier = 1.02f;
+    public const int BaseExp = 25;
+    public const float LevelExpMultiplier = 1.025f;
     public const float LevelExpAdd = 8f;
 
     public static Dictionary<ExclusiveWeaponType, ExclusiveWeaponData> Weapons = new();
@@ -37,7 +37,8 @@ public static class ExclusiveWeaponInfo
 public class ExclusiveWeaponProgress
 {
     public Dictionary<ExclusiveWeaponType, int> Levels { get; set; } = new();
-    public Dictionary<ExclusiveWeaponType, int> Experience { get; set; } = new();
+    /// <summary>누적 경험치. 피해량 기반 보상을 정확히 반영하기 위해 소수점도 보존합니다.</summary>
+    public Dictionary<ExclusiveWeaponType, float> Experience { get; set; } = new();
     public Dictionary<ExclusiveWeaponType, int> Resonance { get; set; } = new();
     public Dictionary<ExclusiveWeaponType, ResonanceQuestState> Quests { get; set; } = new();
 
@@ -55,9 +56,9 @@ public class ExclusiveWeaponProgress
         return 1;
     }
 
-    public int GetExperience(ExclusiveWeaponType type)
+    public float GetExperience(ExclusiveWeaponType type)
     {
-        return Experience.TryGetValue(type, out int exp) ? exp : 0;
+        return Experience.TryGetValue(type, out float exp) ? exp : 0f;
     }
 
     public ResonanceQuestState GetOrCreateQuest(ExclusiveWeaponType type)

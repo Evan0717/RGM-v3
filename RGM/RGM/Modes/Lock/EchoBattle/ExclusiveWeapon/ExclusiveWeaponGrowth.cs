@@ -42,7 +42,7 @@ public static class ExclusiveWeaponGrowth
         return progress.GetLevel(loadout.EquippedWeapon.Value) < ExclusiveWeaponInfo.MaxLevel;
     }
 
-    public static void GrantExp(Player player, int amount, string reason = null)
+    public static void GrantExp(Player player, float amount, string reason = null)
     {
         if (player == null || amount <= 0)
             return;
@@ -64,7 +64,7 @@ public static class ExclusiveWeaponGrowth
         ScheduleApply(player);
     }
 
-    public static bool AddExp(ExclusiveWeaponProgress progress, ExclusiveWeaponType type, int amount, out int newLevel)
+    public static bool AddExp(ExclusiveWeaponProgress progress, ExclusiveWeaponType type, float amount, out int newLevel)
     {
         newLevel = progress.GetLevel(type);
         if (amount <= 0 || newLevel >= ExclusiveWeaponInfo.MaxLevel)
@@ -101,9 +101,9 @@ public static class ExclusiveWeaponGrowth
         if (level >= ExclusiveWeaponInfo.MaxLevel)
             return "MAX";
 
-        int current = progress.GetExperience(type);
+        float current = progress.GetExperience(type);
         int required = GetRequiredExp(level);
-        return $"{current}/{required}";
+        return $"{current:0.##}/{required}";
     }
 
     static void ScheduleApply(Player player)

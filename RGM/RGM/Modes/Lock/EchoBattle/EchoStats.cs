@@ -84,7 +84,7 @@ public static class EchoStats
         {
             (EchoCost.Cost4, EchoMainStatType.AttackPercent) => LerpStat(6.6f, 33.0f, level),
             (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(13.6f, 68.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(5.0f, 25.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalChance) => LerpStat(4.4f, 22.0f, level),
             (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(10.0f, 50.0f, level),
             (EchoCost.Cost4, EchoMainStatType.StaminaDrainReduction) => LerpStat(12.0f, 60.0f, level),
@@ -100,8 +100,8 @@ public static class EchoStats
             (EchoCost.Cost3, EchoMainStatType.SizeReduction) => LerpStat(3.3f, 16.5f, level),
 
             (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.4f, 18.0f, level),
-            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(5.4f, 27.0f, level),
-            (EchoCost.Cost1, EchoMainStatType.Defense) => LerpStat(1.0f, 5.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.Defense) => LerpStat(2.0f, 10.0f, level),
 
             _ => 0f
         };

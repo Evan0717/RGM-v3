@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("시험", "49% 확률로 일반(33% 확률로 희귀) 능력을 3개 더 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_TEST)]
+[Ability("시험", "35% 확률로 일반(30% 확률로 희귀) 능력을 3개 더 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_TEST)]
 public class Test : Ability
 {
     public override void OnEnabled()
@@ -15,12 +15,12 @@ public class Test : Ability
         {
             if (Owner.IsAlive)
             {
-                if (Random.Range(1, 101) <= 49)
+                if (Random.Range(1, 101) <= 35)
                 {
                     Owner.AddHint("시험 성공", "<b>능력을 3개 더 얻었습니다!</b>");
 
                     for (int i = 0; i < 3; i++) {
-                        var category = Random.Range(1, 101) <= 33 ? AbilityCategory.Rare : AbilityCategory.Common;
+                        var category = Random.Range(1, 101) <= 30 ? AbilityCategory.Rare : AbilityCategory.Common;
                         Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1,[AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
                     }
                     Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);

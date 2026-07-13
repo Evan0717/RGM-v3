@@ -23,7 +23,7 @@ public static class ExclusiveWeaponQuest
     const int KillTargetScp = 16;
     const float SurviveTargetHuman = 540f;
     const float SurviveTargetScp = 720f;
-    const float DealDamageTarget = 10000f;
+    const float DealDamageTarget = 11500f;
     const float TakeDamageTargetScp = 7000f;
     const float HealTargetHuman = 1200f;
     const float HsRecoverTargetScp = 6000f;

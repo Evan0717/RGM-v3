@@ -7,13 +7,13 @@ namespace RGM.Modes;
 
 /// <summary>
 /// Echo 성장 XP 공식.
-/// 1→2 기준: Cost4=200, Cost3=140, Cost1=100
-/// 이후: y = ceil(1.075x + 15)
+/// 1→2 기준: Cost4=150, Cost3=100, Cost1=70
+/// 이후: y = ceil(1.085x + 25)
 /// </summary>
 public static class EchoGrowth
 {
-    public const float LevelExpMultiplier = 1.075f;
-    public const float LevelExpAdd = 15f;
+    public const float LevelExpMultiplier = 1.085f;
+    public const float LevelExpAdd = 25f;
 
     /// <summary>
     /// 같은 프레임/짧은 구간에 GrantExp가 여러 번 호출되어도 ApplyLoadout은 1회만 예약.
@@ -25,10 +25,10 @@ public static class EchoGrowth
     {
         return cost switch
         {
-            EchoCost.Cost4 => 200,
-            EchoCost.Cost3 => 140,
-            EchoCost.Cost1 => 100,
-            _ => 100
+            EchoCost.Cost4 => 150,
+            EchoCost.Cost3 => 100,
+            EchoCost.Cost1 => 70,
+            _ => 70
         };
     }
 
@@ -57,7 +57,7 @@ public static class EchoGrowth
     /// <summary>
     /// 장착 중인 모든 Echo에 XP를 지급하고, 레벨업 시 로드아웃/인스턴스를 갱신합니다.
     /// </summary>
-    public static void GrantExpToEquipped(Player player, int amount, string reason = null)
+    public static void GrantExpToEquipped(Player player, float amount, string reason = null)
     {
         if (player == null || amount <= 0)
             return;
@@ -134,7 +134,7 @@ public static class EchoGrowth
     /// <summary>
     /// 특정 Echo에 XP 추가. 레벨업 발생 시 true.
     /// </summary>
-    public static bool AddExp(Player player, EchoLoadout loadout, EchoType type, int amount, out int newLevel)
+    public static bool AddExp(Player player, EchoLoadout loadout, EchoType type, float amount, out int newLevel)
     {
         newLevel = loadout.GetLevel(type);
         if (amount <= 0 || newLevel >= EchoInfo.MaxLevel)
@@ -168,9 +168,9 @@ public static class EchoGrowth
         return leveled;
     }
 
-    public static int GetCurrentExp(EchoLoadout loadout, EchoType type)
+    public static float GetCurrentExp(EchoLoadout loadout, EchoType type)
     {
-        return loadout.Experience.TryGetValue(type, out int exp) ? exp : 0;
+        return loadout.Experience.TryGetValue(type, out float exp) ? exp : 0f;
     }
 
     public static string FormatProgress(EchoLoadout loadout, EchoType type)
@@ -183,8 +183,8 @@ public static class EchoGrowth
         if (data == null)
             return "?";
 
-        int current = GetCurrentExp(loadout, type);
+        float current = GetCurrentExp(loadout, type);
         int required = GetRequiredExp(data.Cost, level);
-        return $"{current}/{required}";
+        return $"{current:0.##}/{required}";
     }
 }

@@ -37,9 +37,6 @@ public static class EchoInfo
         { EchoType.Berserker, ("광전사", "사용 시 다음 공격은 자신의 최대 체력의 50%만큼 추가 데미지, 재사용 대기시간 60초") },
         { EchoType.Chibi939, ("쁘띠 댕댕이", "사용 시 15초간 시야 개선 및 스태미너 무제한, 재사용 대기시간 60초") },
         { EchoType.GoldenPig, ("황금 돼지", "사용 시 체력 1205 회복(최대치 초과 불가), 재사용 대기시간 60초") },
-        { EchoType.ClassD, ("ClassD", "Cost 1 샘플 Echo") },
-        { EchoType.Scientist, ("과학자", "Cost 1 샘플 Echo") },
-        { EchoType.FacilityGuard, ("시설 경비", "Cost 1 샘플 Echo") },
     };
 
     public static IEnumerable<EchoType> GetEchoesByCost(EchoCost cost)
@@ -65,7 +62,8 @@ public class EchoLoadout
     public EchoMainStatType?[] SubSlotStats { get; set; } = new EchoMainStatType?[4];
 
     public Dictionary<EchoType, int> Levels { get; set; } = new();
-    public Dictionary<EchoType, int> Experience { get; set; } = new();
+    /// <summary>누적 경험치. 피해량 기반 보상을 정확히 반영하기 위해 소수점도 보존합니다.</summary>
+    public Dictionary<EchoType, float> Experience { get; set; } = new();
 
     /// <summary>
     /// Echo별 부가 옵션. 레벨업/재적용 시 기존 옵션은 유지하고 해금분만 추가합니다.
