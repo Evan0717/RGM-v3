@@ -13,7 +13,7 @@ namespace RGM.Modes;
 /// 전용무기 공진(1→5) 1회성 퀘스트.
 /// 1) 적 8명 처치 (SCP: 16)
 /// 2) 생존 540초 누적 (SCP: +180 → 720)
-/// 3) 가한 데미지 5400 (SCP: 받은 데미지 7000)
+/// 3) 가한 데미지 10000 (SCP: 받은 데미지 7000)
 /// 4) 치료량 1200 (SCP: HS 회복 6000)
 /// 퀘스트는 순서와 관계없이 각각 1회 완료할 수 있으며, 완료할 때마다 공진이 증가합니다.
 /// </summary>
@@ -23,7 +23,7 @@ public static class ExclusiveWeaponQuest
     const int KillTargetScp = 16;
     const float SurviveTargetHuman = 540f;
     const float SurviveTargetScp = 720f;
-    const float DealDamageTarget = 5400f;
+    const float DealDamageTarget = 10000f;
     const float TakeDamageTargetScp = 7000f;
     const float HealTargetHuman = 1200f;
     const float HsRecoverTargetScp = 6000f;
@@ -248,7 +248,7 @@ public static class ExclusiveWeaponQuest
         {
             0 => scp ? "적 16명 처치" : "적 8명 처치",
             1 => scp ? "생존 720초 누적" : "생존 540초 누적",
-            2 => scp ? "받은 데미지 7000" : "가한 데미지 5400",
+            2 => scp ? "받은 데미지 7000" : "가한 데미지 10000",
             3 => scp ? "HS 회복 6000" : "치료량 1200",
             _ => "?"
         };

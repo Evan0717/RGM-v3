@@ -23,13 +23,13 @@ namespace RGM.Modes;
 public static class EchoQuest
 {
     public const int SurviveSeconds = 30;
-    public const int SurviveReward = 60;
+    public const int SurviveReward = 50;
 
     public const float DealDamageThreshold = 100f;
     public const int DealDamageReward = 100;
 
-    public const float TakeDamageThreshold = 50f;
-    public const int TakeDamageReward = 150;
+    public const float TakeDamageThreshold = 100f;
+    public const int TakeDamageReward = 100;
 
     public const int ScpItemReward = 400;
     public const int KillEnemyReward = 200;
