@@ -82,7 +82,8 @@ public class DeathFlower : ExcWeapon
 
         float room = Owner.MaxHealth - Owner.Health;
         if (room > 0f)
-            Owner.Heal(Mathf.Min(heal, room));
+            // Heal()은 Healing 이벤트를 발생시켜 치료 효과 보너스가 적용된다.
+            Owner.Health += Mathf.Min(heal, room);
 
         _invulnerable = true;
         Owner.EnableEffect(EffectType.Invisible, 1, duration);

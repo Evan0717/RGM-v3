@@ -139,12 +139,12 @@ Quest (반복)
             Verified(p);
         }
 
-        for (int i = 0; i < EchoInfo.ApplyDelaySeconds; i++)
+        for (int i = 0; i < EchoInfo.InitialApplyDelaySeconds; i++)
         {
             foreach (var player in Player.List)
             {
                 player.AddBroadcast(1,
-                    $"<size=30>Echo 적용까지 <b>{EchoInfo.ApplyDelaySeconds - i}</b>초</size>\n" +
+                    $"<size=30>Echo 적용까지 <b>{EchoInfo.InitialApplyDelaySeconds - i}</b>초</size>\n" +
                     $"<size=21>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
                     $"<size=20><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 임의로 고른 뒤 다시 원하는 값으로 고르세요.</color></size>\n" +
                     $"<size=19><color=#ffcc66>Echo의 Cost는 총합 12를 넘을 수 없습니다.</color></size>");
@@ -240,13 +240,13 @@ Quest (반복)
         if (player == null || !player.IsAlive)
             yield break;
 
-        for (int i = 0; i < EchoInfo.ApplyDelaySeconds; i++)
+        for (int i = 0; i < EchoInfo.RespawnApplyDelaySeconds; i++)
         {
             if (player == null || !player.IsAlive)
                 yield break;
 
             player.AddBroadcast(1,
-                $"<size=30>Echo 적용까지 <b>{EchoInfo.ApplyDelaySeconds - i}</b>초</size>\n" +
+                $"<size=30>Echo 적용까지 <b>{EchoInfo.RespawnApplyDelaySeconds - i}</b>초</size>\n" +
                 $"<size=21>[ESC] -> [Settings] -> [Server-specific]ㅣEcho + 메인 스탯을 선택하세요.</size>\n" +
                 $"<size=20><color=#ffcc66>Echo를 바꾼 뒤에는 대응 메인 스탯을 임의로 고른 뒤 다시 원하는 값으로 고르세요.</color></size>\n" +
                 $"<size=19><color=#ffcc66>Echo의 Cost는 총합 12를 넘을 수 없습니다.</color></size>");
