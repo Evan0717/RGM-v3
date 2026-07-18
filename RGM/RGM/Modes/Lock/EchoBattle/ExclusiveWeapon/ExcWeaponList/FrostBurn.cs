@@ -10,12 +10,12 @@ namespace RGM.Modes.ExclusiveWeapon;
 
 /// <summary>
 /// Frost Burn.
-/// Passive: Attack 8%+(res*2%). On hit apply Slowness stacks at most once every 0.7s, clear after 5s no-hit.
-/// At 10 stacks: Ensnared for 3+(0.6*res) seconds.
+/// Passive: Attack 8%+(res*2%). On hit apply Slowness stacks at most once every 0.5s, clear after 5s no-hit.
+/// At 10 stacks: Ensnared for 2+(0.6*res) seconds and prevent further stacks for 5 seconds.
 /// </summary>
 [ExclusiveWeapon(
     "서리",
-    "공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 0.5초마다 최대 1회 Slowness를 (1% * 공진 수치) 중첩(5초 미타격 시 해제). 10스택 시 3초 + (0.6초 * 공진 수치) 속박.",
+    "공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 0.5초마다 최대 1회 Slowness를 (1% * 공진 수치) 중첩(5초 미타격 시 해제).\n10스택 시 2초 + (0.6초 * 공진 수치) 속박, 이후 5초간 중첩 불가.",
     ExclusiveWeaponType.FrostBurn)]
 public class FrostBurn : ExcWeapon
 {
@@ -29,6 +29,7 @@ public class FrostBurn : ExcWeapon
 
     const float StackIntervalSeconds = 0.5f;
     const float DecaySeconds = 5f;
+    const float PostRootStackLockoutSeconds = 5f;
     const int MaxStacks = 10;
 
     class FrostState
@@ -40,6 +41,7 @@ public class FrostBurn : ExcWeapon
     }
 
     readonly Dictionary<uint, FrostState> _states = new();
+    readonly Dictionary<uint, float> _stackLockouts = new();
 
     public override void OnEnabled()
     {
@@ -58,6 +60,7 @@ public class FrostBurn : ExcWeapon
         }
 
         _states.Clear();
+        _stackLockouts.Clear();
     }
 
     void OnHurting(HurtingEventArgs ev)
@@ -80,6 +83,14 @@ public class FrostBurn : ExcWeapon
             return;
 
         uint id = target.NetId;
+        if (_stackLockouts.TryGetValue(id, out var lockoutUntil))
+        {
+            if (Time.time < lockoutUntil)
+                return;
+
+            _stackLockouts.Remove(id);
+        }
+
         if (!_states.TryGetValue(id, out var state))
         {
             state = new FrostState();
@@ -103,10 +114,11 @@ public class FrostBurn : ExcWeapon
 
         if (state.Stacks >= MaxStacks)
         {
-            float rootDuration = 3f + 0.6f * Resonance;
+            float rootDuration = 2f + 0.6f * Resonance;
             target.EnableEffect(EffectType.Ensnared, 1, rootDuration);
             ClearFrost(target, state);
             _states.Remove(id);
+            _stackLockouts[id] = Time.time + PostRootStackLockoutSeconds;
             EchoBattleCore.ShowNotification(
                 Owner,
                 $"<color=#66ccff>서리 속박</color> {rootDuration:0.#}초",

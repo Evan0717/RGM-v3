@@ -2,8 +2,8 @@
 
 namespace RGM.Modes.Abilities.Synergy;
 
-[RequiresAbility(AbilityType.RARE_DND, AbilityType.RARE_DND, AbilityType.RARE_DND)]
-[Ability("AFK", "<자리 비움 x3> 게임 하고 싶은 거 맞죠..? 용기가 가상하시니 선물을 드릴게요.", AbilityCategory.Synergy, AbilityType.SYNERGY_AFK)]
+[RequiresAbility(AbilityType.DUMMY_NOAFK, AbilityType.DUMMY_NOAFK, AbilityType.DUMMY_NOAFK)]
+[Ability("AFK", "<자리 비움 3회 완료> 게임 하고 싶은 거 맞죠..? 용기가 가상하시니 선물을 드릴게요.", AbilityCategory.Synergy, AbilityType.SYNERGY_AFK)]
 public class AFK : Ability
 {
     public override void OnEnabled()

@@ -30,10 +30,10 @@ public class Chibi173 : EchoActiveAbility
         Exiled.Events.Handlers.Scp173.Blinking += OnBlinking;
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
         RestoreCooldown();
-        base.ONActiveEffect();
+        base.OnActiveEffect();
     }
 
     private void OnBlinking(BlinkingEventArgs ev)

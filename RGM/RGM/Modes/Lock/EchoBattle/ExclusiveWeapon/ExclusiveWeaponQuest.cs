@@ -19,14 +19,14 @@ namespace RGM.Modes;
 /// </summary>
 public static class ExclusiveWeaponQuest
 {
-    const int KillTargetHuman = 8;
-    const int KillTargetScp = 16;
+    const int KillTargetHuman = 7;
+    const int KillTargetScp = 14;
     const float SurviveTargetHuman = 540f;
     const float SurviveTargetScp = 720f;
-    const float DealDamageTarget = 11500f;
+    const float DealDamageTarget = 12000f;
     const float TakeDamageTargetScp = 7500f;
-    const float HealTargetHuman = 1200f;
-    const float HsRecoverTargetScp = 5000f;
+    const float HealTargetHuman = 1500f;
+    const float HsRecoverTargetScp = 4500f;
 
     static readonly Dictionary<Player, CoroutineHandle> TrackHandles = new();
     static readonly Dictionary<Player, float> PrevHs = new();
@@ -246,10 +246,10 @@ public static class ExclusiveWeaponQuest
         bool scp = player != null && player.IsScpRole();
         return questIndex switch
         {
-            0 => scp ? "적 16명 처치" : "적 8명 처치",
+            0 => scp ? "적 14명 처치" : "적 7명 처치",
             1 => scp ? "생존 720초 누적" : "생존 540초 누적",
-            2 => scp ? "받은 데미지 7000" : "가한 데미지 10000",
-            3 => scp ? "HS 회복 6000" : "치료량 1200",
+            2 => scp ? "받은 데미지 7500" : "가한 데미지 12500",
+            3 => scp ? "HS 회복 4500" : "치료량 1500",
             _ => "?"
         };
     }

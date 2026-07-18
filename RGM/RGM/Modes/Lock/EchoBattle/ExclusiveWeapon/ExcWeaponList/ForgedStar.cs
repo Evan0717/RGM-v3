@@ -30,7 +30,7 @@ public class ForgedStar : ExcWeapon
     const float FlameDuration = 8f;
     const int FlameMaxStacks = 6;
     const float SplashRadius = 7f;
-    const float SplashRatio = 0.6f;
+    const float SplashRatio = 0.7f;
 
     class FlameState
     {
@@ -130,7 +130,7 @@ public class ForgedStar : ExcWeapon
         float explosion =
             50f
             + 10f * Resonance
-            + primary.MaxHealth * (0.09f + 0.02f * Resonance);
+            + primary.MaxHealth * (0.1f + 0.02f * Resonance);
 
         DealDamage(primary, explosion);
 

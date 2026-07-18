@@ -24,10 +24,10 @@ public class Chibi049 : EchoActiveAbility
         Exiled.Events.Handlers.Scp049.FinishingRecall += OnFinishingRecall;
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
         Disarm();
-        base.ONActiveEffect();
+        base.OnActiveEffect();
     }
 
     private void OnFinishingRecall(FinishingRecallEventArgs ev)

@@ -9,7 +9,7 @@ public class Scientist : Echo
     {
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
     }
 }

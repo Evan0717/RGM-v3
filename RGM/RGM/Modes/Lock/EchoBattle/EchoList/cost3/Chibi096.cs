@@ -43,10 +43,10 @@ public class Chibi096 : EchoActiveAbility
         scp096.Enrage(Duration);
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
         DisableDamageReduction();
-        base.ONActiveEffect();
+        base.OnActiveEffect();
     }
 
     private void OnHurting(HurtingEventArgs ev)

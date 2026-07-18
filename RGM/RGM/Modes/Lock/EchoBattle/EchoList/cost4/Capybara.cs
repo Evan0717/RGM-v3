@@ -16,10 +16,10 @@ public class Capybara : EchoActiveAbility
         Timing.RunCoroutine(HealRoutine(), $"EchoCapybara_{Owner.UserId}");
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
         Timing.KillCoroutines($"EchoCapybara_{Owner?.UserId}");
-        base.ONActiveEffect();
+        base.OnActiveEffect();
     }
 
     IEnumerator<float> HealRoutine()

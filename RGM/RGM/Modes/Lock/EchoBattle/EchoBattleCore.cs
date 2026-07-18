@@ -164,7 +164,7 @@ public static class EchoBattleCore
         }
 
         foreach (var echo in list)
-            echo.ONActiveEffect();
+            echo.OnActiveEffect();
 
         list.Clear();
         EchoInfo.PlayerStats.Remove(player);

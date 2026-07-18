@@ -10,7 +10,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "쿠모키리",
-    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 공진 수치 * (공진 수치 + 1) / 2 확률로 618.03 고정 피해.",
+    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 공진 수치 * (공진 수치 + 1) / 2 확률로 618.03 * (0.5 + 0.5 * 공진 수치) 만큼 고정 피해.",
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
@@ -55,7 +55,7 @@ public class KumoKiri : ExcWeapon
         if (Random.Range(0f, 100f) >= chance)
             return;
 
-        EchoStats.DealFixedDamage(ev.Player, Owner, FixedDamage);
+        EchoStats.DealFixedDamage(ev.Player, Owner, FixedDamage * (0.5f + 0.5f * Resonance));
         EchoBattleCore.ShowNotification(
             Owner,
             $"<color=#cc88ff>쿠모키리</color> 고정 피해 +{FixedDamage:0.##}",
