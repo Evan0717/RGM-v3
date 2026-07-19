@@ -58,7 +58,7 @@ public class KumoKiri : ExcWeapon
         EchoStats.DealFixedDamage(ev.Player, Owner, FixedDamage * (0.5f + 0.5f * Resonance));
         EchoBattleCore.ShowNotification(
             Owner,
-            $"<color=#cc88ff>쿠모키리</color> 고정 피해 +{FixedDamage:0.##}",
+            $"<color=#cc88ff>쿠모키리</color> 고정 피해 +{FixedDamage * (0.5f + 0.5f * Resonance):0.##}",
             1.2f);
     }
 }

@@ -55,7 +55,7 @@ public static class EchoStats
         { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
         { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
-        { EchoSubOptionType.MoveSpeed, [10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f] },
+        { EchoSubOptionType.MoveSpeed, [9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f] },
         { EchoSubOptionType.JumpPower, [5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f] },
         { EchoSubOptionType.StaminaDrainReduction, [10.7f, 11.5f, 12.3f, 13.1f, 13.9f, 14.7f] },
         { EchoSubOptionType.HeadshotDamage, [23.8f, 26.1f, 28.4f, 30.7f, 33.0f, 35.3f] },
@@ -86,7 +86,7 @@ public static class EchoStats
             (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(13.6f, 68.0f, level),
             (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(5.0f, 25.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalChance) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(10.0f, 50.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(6.0f, 30.0f, level),
             (EchoCost.Cost4, EchoMainStatType.StaminaDrainReduction) => LerpStat(12.0f, 60.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalDamage) => LerpStat(8.8f, 44.0f, level),
 
@@ -446,7 +446,7 @@ public static class EchoStats
 
             float attack = value;
             if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
-                attack *= 0.5f;
+                attack *= 0.4f;
             snapshot.AttackFlat += attack;
         }
     }
@@ -463,7 +463,7 @@ public static class EchoStats
                     break;
                 float attack = option.Value;
                 if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
-                    attack *= 0.5f;
+                    attack *= 0.4f;
                 snapshot.AttackFlat += attack;
                 break;
             case EchoSubOptionType.DefensePercent:
@@ -745,7 +745,7 @@ public static class EchoStats
                 // Critical (Ambush style) + 에코/전용무기 크리티컬 데미지 보너스
                 if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
                 {
-                    float critMult = 2f + atkStats.CriticalDamage / 100f;
+                    float critMult = 1.5f + atkStats.CriticalDamage / 100f;
                     if (ExclusiveWeaponInfo.PlayerWeapons.TryGetValue(ev.Attacker, out var weapon) && weapon != null)
                         critMult += weapon.GetCriticalDamageBonus(ev.Player) / 100f;
 
