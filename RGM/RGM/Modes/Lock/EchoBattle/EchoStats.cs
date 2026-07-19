@@ -51,7 +51,7 @@ public static class EchoStats
         { EchoSubOptionType.DefensePercent, [10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f] },
         { EchoSubOptionType.DefenseFlat, [9.4f, 10.0f, 10.6f, 11.2f, 11.8f, 12.4f] },
         { EchoSubOptionType.HpPercent, [10.5f, 11.6f, 12.7f, 13.8f, 14.9f, 16.0f] },
-        { EchoSubOptionType.HpFlat, [90f, 102f, 114f, 126f, 138f, 150f] },
+        { EchoSubOptionType.HpFlat, [80f, 92f, 104f, 116f, 128f, 140f] },
         { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
         { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
@@ -93,8 +93,8 @@ public static class EchoStats
             (EchoCost.Cost3, EchoMainStatType.AttackPercent) => LerpStat(5.6f, 28.0f, level),
             (EchoCost.Cost3, EchoMainStatType.HpPercent) => LerpStat(8.6f, 43.0f, level),
             (EchoCost.Cost3, EchoMainStatType.Defense) => LerpStat(3.0f, 15.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(9.1f, 45.5f, level),
-            (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(9.1f, 45.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(8.3f, 41.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(8.3f, 41.5f, level),
             (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(21.0f, 105.0f, level),
             (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(2.0f, 10.0f, level),
             (EchoCost.Cost3, EchoMainStatType.SizeReduction) => LerpStat(3.3f, 16.5f, level),
@@ -189,7 +189,7 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(4f, 40f, level),
+            EchoCost.Cost4 => LerpStat(3f, 30f, level),
             EchoCost.Cost3 => LerpStat(50f, 200f, level),
             EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f
@@ -445,8 +445,8 @@ public static class EchoStats
                 return;
 
             float attack = value;
-            if (player.Role.Type == RoleTypeId.Scp939)
-                attack *= 2f;
+            if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
+                attack *= 0.5f;
             snapshot.AttackFlat += attack;
         }
     }
@@ -461,7 +461,10 @@ public static class EchoStats
             case EchoSubOptionType.AttackFlat:
                 if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
                     break;
-                snapshot.AttackFlat += player.Role.Type == RoleTypeId.Scp939 ? option.Value * 2f : option.Value;
+                float attack = option.Value;
+                if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
+                    attack *= 0.5f;
+                snapshot.AttackFlat += attack;
                 break;
             case EchoSubOptionType.DefensePercent:
                 snapshot.DefensePercent += option.Value;

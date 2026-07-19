@@ -25,10 +25,10 @@ public static class EchoGrowth
     {
         return cost switch
         {
-            EchoCost.Cost4 => 150,
-            EchoCost.Cost3 => 100,
-            EchoCost.Cost1 => 70,
-            _ => 70
+            EchoCost.Cost4 => 160,
+            EchoCost.Cost3 => 110,
+            EchoCost.Cost1 => 80,
+            _ => 80
         };
     }
 

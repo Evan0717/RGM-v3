@@ -9,7 +9,7 @@ public static class EchoInfo
     public const int MaxEquippedEchoes = 5;
     public const int MaxTotalCost = 12;
     public const int MaxLevel = 25;
-    public const int InitialApplyDelaySeconds = 40;
+    public const int InitialApplyDelaySeconds = 30;
     public const int RespawnApplyDelaySeconds = 10;
 
     public static Dictionary<EchoType, EchoData> Echoes = new();

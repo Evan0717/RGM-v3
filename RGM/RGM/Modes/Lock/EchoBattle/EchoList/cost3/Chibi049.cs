@@ -6,7 +6,7 @@ using RGM.Modes;
 
 namespace RGM.RGM.Modes.Lock.EchoBattle.EchoList.cost3;
 
-[Echo("쁘띠 049", "SCP-049가 사용 시, 스킬 사용 후 다음 소생한 049-2의 체력이 50% 증가. 재사용 대기시간 60초", EchoType.Chibi049, EchoCost.Cost3, EchoMainStatType.SizeReduction, "🐶")]
+[Echo("쁘띠 049", "SCP-049가 사용 시, 스킬 사용 후 다음 소생한 049-2의 체력이 50% 증가. 재사용 대기시간 30초", EchoType.Chibi049, EchoCost.Cost3, EchoMainStatType.SizeReduction, "🐶")]
 public class Chibi049 : EchoActiveAbility
 {
     private bool _armed;
