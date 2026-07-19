@@ -14,7 +14,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "위조된 작은 별",
-    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (12% * 공진 수치) 증가. 불꽃 6스택 폭발 + 7m 스플래시(60%).",
+    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (12% * 공진 수치) 증가. 불꽃 7스택 폭발 + 8.5m 스플래시(85%).",
     ExclusiveWeaponType.ForgedStar)]
 public class ForgedStar : ExcWeapon
 {
@@ -26,11 +26,11 @@ public class ForgedStar : ExcWeapon
 
     public override float PassiveAttackPercent => 11f + Resonance * 2f;
 
-    const float FlameCooldown = 2f;
+    const float FlameCooldown = 1f;
     const float FlameDuration = 8f;
-    const int FlameMaxStacks = 6;
-    const float SplashRadius = 7f;
-    const float SplashRatio = 0.7f;
+    const int FlameMaxStacks = 7;
+    const float SplashRadius = 8.5f;
+    const float SplashRatio = 0.85f;
 
     class FlameState
     {
