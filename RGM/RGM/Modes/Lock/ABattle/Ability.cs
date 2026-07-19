@@ -447,31 +447,32 @@ public enum AbilityType
     MYTHIC_UNLIMITED, // [신화] 무제한
     MYTHIC_ANCHOR, //[신화] 구속
 
+
     // 전용 //
     // D계급
     COMMON_CLASSD_LARCENY, // [전용 일반] 절도죄
-    RARE_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
     COMMON_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
+    RARE_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
     RARE_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
 
     // 과학자
-    RARE_SCIENTIST_05, // [전용 희귀] 05 평의회
     COMMON_SCIENTIST_ENGINEERINGMAJOR, // [전용 일반] 공학 전공
     COMMON_SCIENTIST_SEEDSOFMTF, // [전용 일반] 특무부대의 씨앗
+    RARE_SCIENTIST_05, // [전용 희귀] 05 평의회
 
     // NTF
-    RARE_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
     COMMON_NTF_HEALTHCENTERSTAFF, // [전용 일반] 보건소 직원
-    RARE_NTF_INDUSTRIALACCIDENTINSURANCE, // [전용 희귀] 산업재해보험
     COMMON_NTF_QUARANTINEOBLIGATION, // [전용 일반] 격리 의무자
-    RARE_NTF_MEDICALOFFICER, // [전용 희귀] 의무병
     COMMON_NTF_COLLECTIVEINTELLIGENCE, // [전용 일반] 집단 지성
+    RARE_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
+    RARE_NTF_INDUSTRIALACCIDENTINSURANCE, // [전용 희귀] 산업재해보험
+    RARE_NTF_MEDICALOFFICER, // [전용 희귀] 의무병
     RARE_NTF_RADAR, // [전용 희귀] 레이더
 
     // 혼돈의 반란
-    RARE_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
     COMMON_CHI_TOUCHOFCHAOS, // [전용 일반] 혼돈의 손길
     COMMON_CHI_BAGOFCHAOS, // [전용 일반] 혼돈의 가방
+    RARE_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
 
     // 뱀의 손
     COMMON_TUTORIAL_TONGUE, // [전용 일반] 세치 혀
@@ -490,59 +491,60 @@ public enum AbilityType
     RARE_SCP049_MADDOCTOR, // [전용 희귀] 실험체
 
     // SCP-0492
-    RARE_SCP0492_HUNGER, // [전용 희귀] 허기
     COMMON_SCP0492_MEALS, // [전용 일반] 급식
     COMMON_SCP0492_CONFUSION, // [전용 일반] 당혹감
     COMMON_SCP0492_INFECTION, // [전용 일반] 감염
+    RARE_SCP0492_HUNGER, // [전용 희귀] 허기
 
     // SCP-096
-    RARE_SCP096_RAGE, // [전용 희귀] 격노
-    EPIC_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
-    EPIC_SCP096_SEER, // [전용 영웅] 천리안
     COMMON_SCP096_ENEMY, // [전용 일반] 원수
     COMMON_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
     COMMON_SCP096_OUTSIDER, // [전용 일반] 아웃사이더
+    RARE_SCP096_RAGE, // [전용 희귀] 격노
+    EPIC_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
+    EPIC_SCP096_SEER, // [전용 영웅] 천리안
 
     // SCP-106
     RARE_SCP106_RECOVERY, // [전용 희귀] 회춘
-    EPIC_SCP106_STICKYSWAMP, // [전용 영웅] 끈적한 늪
     RARE_SCP106_HUNTINGPREY, // [전용 희귀] 사냥감 모색
+    EPIC_SCP106_STICKYSWAMP, // [전용 영웅] 끈적한 늪
 
     // SCP-939
-    RARE_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
     COMMON_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이
-    RARE_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
     COMMON_SCP939_NOEYES, // [전용 일반] 실명
+    RARE_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
+    RARE_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
 
     // SCP-3114
-    RARE_SCP3114_SKILLEDASSASSIN, // [전용 희귀] 숙련된 암살자
     COMMON_SCP3114_HALFBLOCK, // [전용 일반] 반블럭
+    RARE_SCP3114_SKILLEDASSASSIN, // [전용 희귀] 숙련된 암살자
     RARE_SCP3114_DORAEMONPOCKET, // [전용 희귀] 도라에몽 주머니
     RARE_SCP3114_SHOWMANSHIP, // [전용 희귀] 쇼맨쉽
 
     // SCP-079
     COMMON_SCP079_PINGREMOTE, // [전용 일반] 핑 리모컨
     COMMON_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
-    RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     COMMON_SCP079_RANDOMFUNCTION, // [전용 일반] 랜덤 함수
+    COMMON_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
+    COMMON_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
+    COMMON_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
+    COMMON_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
+    COMMON_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
+    COMMON_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
-    EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
     RARE_SCP079_PINGHOOK, // [전용 희귀] 핑 갈고리
     RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
     RARE_SCP079_REPAIR, // [전용 희귀] 수리수리 마수리
     RARE_SCP079_RESTAREA, // [전용 희귀] 휴게소
-    LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
-    COMMON_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
-    COMMON_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
-    COMMON_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
     RARE_SCP079_FREEDOM, // [전용 희귀] 자유
     RARE_SCP079_MOBILESTRIKEFORCE, // [전용 희귀] 기동타격대
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
-    COMMON_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
-    COMMON_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
-    COMMON_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
+    LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
+    MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
 
     // 플라밍고
     COMMON_FLAMINGO_MINIFACTORY, // [전용 일반] 미니 공장
