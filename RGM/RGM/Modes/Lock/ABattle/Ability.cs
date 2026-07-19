@@ -256,7 +256,7 @@ public static class RoleAbilityExtensions
             RoleTypeId.ChaosFlamingo => RoleAbility.Flamingo,
             RoleTypeId.NtfFlamingo => RoleAbility.Flamingo,
             RoleTypeId.ZombieFlamingo => RoleAbility.Flamingo,
-            _ => 0
+            _ => RoleAbility.None
         };
     }
 }

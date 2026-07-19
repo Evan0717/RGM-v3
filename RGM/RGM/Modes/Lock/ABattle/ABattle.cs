@@ -630,6 +630,15 @@ public class ABattle : Mode
         {
             abilities = Abilities
                .Where(x => x.Value._79Allowed == true || x.Value.RoleAbility == RoleAbility.Scp079)
+               .Where(x => x.Value.Category == category)
+               .Where(x =>
+               {
+                   var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
+                   if (conditionAttr == null)
+                       return true;
+
+                   return conditionAttr.Abilities.All(req => player.HasAbility(req));
+               })
                .ToList();
         }
 

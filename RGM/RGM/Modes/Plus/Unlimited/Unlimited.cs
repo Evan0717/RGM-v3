@@ -43,6 +43,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp939.PlayingSound += OnPlayingSound;
 
             Exiled.Events.Handlers.Scp079.ChangingCamera += OnChangingCamera;
+            Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
             Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
             Exiled.Events.Handlers.Scp049.Attacking += OnScp049Attacking;
@@ -74,6 +75,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp939.PlayingSound -= OnPlayingSound;
 
             Exiled.Events.Handlers.Scp079.ChangingCamera -= OnChangingCamera;
+            Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
 
             Exiled.Events.Handlers.Scp049.StartingRecall -= OnStartingRecall;
             Exiled.Events.Handlers.Scp049.Attacking -= OnScp049Attacking;
@@ -228,6 +230,11 @@ namespace RGM.Modes
         }
 
         public void OnChangingCamera(Exiled.Events.EventArgs.Scp079.ChangingCameraEventArgs ev)
+        {
+            ev.Scp079.Energy = 100000;
+        }
+
+        public void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
         {
             ev.Scp079.Energy = 100000;
         }

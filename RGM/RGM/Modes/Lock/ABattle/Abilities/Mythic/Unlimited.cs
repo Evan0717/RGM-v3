@@ -8,7 +8,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("무제한", "제한이 사라집니다. (무제한 모드와 동일)", AbilityCategory.Mythic, AbilityType.MYTHIC_UNLIMITED)]
+[Ability("무제한", "제한이 사라집니다. (무제한 모드와 동일)", AbilityCategory.Mythic, AbilityType.MYTHIC_UNLIMITED, RoleAbility.None, true)]
 public class Unlimited : Ability
 {
     public int Tantrum = 0;
@@ -32,6 +32,7 @@ public class Unlimited : Ability
         Exiled.Events.Handlers.Scp939.PlayingSound += OnPlayingSound;
 
         Exiled.Events.Handlers.Scp079.ChangingCamera += OnChangingCamera;
+        Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
         Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
         Exiled.Events.Handlers.Scp049.Attacking += OnScp049Attacking;
@@ -63,6 +64,8 @@ public class Unlimited : Ability
         Exiled.Events.Handlers.Scp939.PlayingSound -= OnPlayingSound;
 
         Exiled.Events.Handlers.Scp079.ChangingCamera -= OnChangingCamera;
+        Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
+
 
         Exiled.Events.Handlers.Scp049.StartingRecall -= OnStartingRecall;
         Exiled.Events.Handlers.Scp049.Attacking -= OnScp049Attacking;
@@ -203,6 +206,13 @@ public class Unlimited : Ability
         ev.Scp079.Energy = 100000;
     }
 
+    public void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+        ev.Scp079.Energy = 100000;
+    }
+
     public IEnumerator<float> OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
     {
         if (ev.Player != Owner)
@@ -302,4 +312,5 @@ public class Unlimited : Ability
         ev.Jailbird.TotalCharges = 0;
         ev.Jailbird.TotalDamageDealt = 0;
     }
+
 }
