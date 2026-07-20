@@ -81,6 +81,7 @@ public class ABattle : Mode
         {"영웅", "#FF00FF"},
         {"전설", "#ffd700"},
         {"신화", "#DF0101"},
+        {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
     };
     public static Dictionary<string, string> SelectFormat = new Dictionary<string, string>()
@@ -90,6 +91,7 @@ public class ABattle : Mode
         {"영웅", "<b><color=#F185FF>영웅</color></b>"},
         {"전설", "<b><color=#FFF70A>전설</color></b>"},
         {"신화", "<b><color=#F52500>신화</color></b>"},
+        {"전용", "<b><color=#F7819F>전용</color></b>" },
         {"알 수 없음", "<b><color=#000000>알수없음</b>"}
     };
     public static Dictionary<string, string> ExtraModes = new Dictionary<string, string>()
