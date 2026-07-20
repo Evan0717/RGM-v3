@@ -5,7 +5,7 @@ using System;
 
 namespace RGM.Modes.Abilities.Unique.Scp939;
 
-[Ability("발톱 강화", "발톱 공격으로 연속 공격 시 데미지가 15씩 증가합니다.\n3초 이내에 타격이 없을 경우 수치가 초기화됩니다.", AbilityCategory.Scp939, AbilityType.SCP939_REINFORCECLAW)]
+[Ability("발톱 강화", "발톱 공격으로 연속 공격 시 데미지가 15씩 증가합니다.\n3초 이내에 타격이 없을 경우 수치가 초기화됩니다.", AbilityCategory.Common, AbilityType.COMMON_SCP939_REINFORCECLAW, RoleAbility.Scp939)]
 public class ReinforceClaw : Ability
 {
     private const float DamageIncrease = 15f;

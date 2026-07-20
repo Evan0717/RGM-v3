@@ -1,4 +1,5 @@
 using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -42,16 +43,21 @@ public class Chibi096 : EchoActiveAbility
         scp096.Enrage(Duration);
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
         DisableDamageReduction();
-        base.ONActiveEffect();
+        base.OnActiveEffect();
     }
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (_damageReductionActive && ev.Player == Owner)
+        if (_damageReductionActive
+            && ev.Player == Owner
+            && !EchoStats.IsApplyingFixedDamage(ev.Player)
+            && ev.DamageHandler?.Type != DamageType.Crushed)
+        {
             ev.Amount *= 0.75f;
+        }
     }
 
     private void DisableDamageReduction()

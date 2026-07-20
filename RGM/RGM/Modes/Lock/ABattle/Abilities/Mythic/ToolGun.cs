@@ -1,34 +1,72 @@
 ﻿using Exiled.API.Features;
-using LabApi.Events.Arguments.PlayerEvents;
-using ProjectMER.Features.Extensions;
-using ProjectMER.Features.ToolGun;
+using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Player;
+using ProjectMER.Features.Serializable;
 using RGM.API.Features;
+using UnityEngine;
+
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("툴건", "아무 기능도 없는 권총을 얻습니다. 사용을 시도할 때마다 20%의 체력을 소실합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
+[Ability("딸깍", "지급된 동전을 튕기면 보는 방향에 워크스테이션을 설치합니다. 단, 2% 확률로 즉사합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
 public class ToolGun : Ability
 {
+    private const float ForwardOffset = 1.5f;
+    private const float DownwardOffset = 0.5f;
+
+    private ushort coinSerial;
+
     public override void OnEnabled()
     {
-        if (ToolGunItem.TryAdd(Owner))
-        {
-        }
+        Item coin = Owner.AddItem(ItemType.Coin);
+        coinSerial = coin.Serial;
 
-        LabApi.Events.Handlers.PlayerEvents.DryFiringWeapon += OnPlayerDryFiringWeapon;
+        Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
+        Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
     public override void OnDisabled()
     {
+        
     }
 
-    public void OnPlayerDryFiringWeapon(PlayerDryFiringWeaponEventArgs ev)
+    public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.FirearmItem.IsToolGun(out ToolGunItem toolGun))
+        if (ev.Item?.Serial == coinSerial)
         {
-            Player player = (Player)ev.Player;
-
-            player.Hit(player, player.MaxHealth / 5);
+            ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["신화"]}>워크스테이션</color></b>을 설치합니다.");
         }
+    }
+
+    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    {
+        if (ev.Item.Serial != coinSerial)
+            return;
+
+        Player player = ev.Player;
+        if (Random.Range(1, 101) <= 2)
+        {
+            if (GodModePlayers.Contains(player))
+                GodModePlayers.Remove(player);
+
+            player.Hit(player, player.MaxHealth * 2);
+        }
+
+        Vector3 forward = player.CameraTransform.forward;
+        forward.y = 0;
+        forward.Normalize();
+
+        Vector3 rayOrigin = player.Position + forward * ForwardOffset + Vector3.up;
+        if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
+            return;
+
+        new SerializableWorkstation
+        {
+            IsInteractable = true,
+            Position = hit.point + Vector3.down * DownwardOffset,
+            Rotation = new Vector3(0, player.Rotation.eulerAngles.y, 0),
+            Scale = Vector3.one
+        }.SpawnOrUpdateObject();
     }
 }

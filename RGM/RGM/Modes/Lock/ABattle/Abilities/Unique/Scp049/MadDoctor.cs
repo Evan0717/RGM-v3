@@ -3,7 +3,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp049;
 
-[Ability("실험체", "'[일반] 보험' 능력을 획득하면 '[영웅] 매드 사이언티스트' 능력을 획득합니다.", AbilityCategory.Scp049, AbilityType.SCP049_MADDOCTOR)]
+[Ability("실험체", "'[일반] 보험' 능력을 획득하면 '[영웅] 매드 사이언티스트' 능력을 획득합니다.", AbilityCategory.Common, AbilityType.COMMON_SCP049_MADDOCTOR, RoleAbility.Scp049)]
 public class MadDoctor : Ability
 {
     CoroutineHandle _mad;

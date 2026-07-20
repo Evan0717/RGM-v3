@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp173;
 
-[Ability("공포", "인간을 죽이면 근처에 있는 인간들이 0.75초 동안 움직일 수 없게 됩니다.", AbilityCategory.Scp173, AbilityType.SCP173_FEAR)]
+[Ability("공포", "인간을 죽이면 근처에 있는 인간들이 0.75초 동안 움직일 수 없게 됩니다.", AbilityCategory.Common, AbilityType.COMMON_SCP173_FEAR, RoleAbility.Scp173)]
 public class Fear : Ability
 {
     public override void OnEnabled()
@@ -28,7 +28,7 @@ public class Fear : Ability
         {
             if (Vector3.Distance(player.Position, ev.Attacker.Position) <= 10)
             {
-                player.EnableEffect(EffectType.Ensnared, 1, 0.75f * Owner.AbilityCount(AbilityType.SCP173_FEAR));
+                player.EnableEffect(EffectType.Ensnared, 1, 0.75f * Owner.AbilityCount(AbilityType.COMMON_SCP173_FEAR));
             }
         }
     }

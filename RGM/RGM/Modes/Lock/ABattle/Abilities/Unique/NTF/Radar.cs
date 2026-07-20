@@ -7,7 +7,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("레이더", "지급된 무전기를 들면 가장 가까운 유기체와의 거리를 확인할 수 있습니다.", AbilityCategory.NTF, AbilityType.NTF_RADAR)]
+[Ability("레이더", "지급된 무전기를 들면 가장 가까운 유기체와의 거리를 확인할 수 있습니다.", AbilityCategory.Common, AbilityType.COMMON_NTF_RADAR, RoleAbility.NTF)]
 public class Radar : Ability
 {
     ushort RadarSerial;

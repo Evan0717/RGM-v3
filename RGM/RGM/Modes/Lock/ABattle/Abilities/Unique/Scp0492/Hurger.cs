@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.Scp0492;
 
-[Ability("허기", "인간을 섭취할 때 얻는 회복량이 80HP 추가되고, 회복량 만큼 최대 체력이 증가합니다.", AbilityCategory.Scp0492, AbilityType.SCP0492_HUNGER)]
+[Ability("허기", "인간을 섭취할 때 얻는 회복량이 80HP 추가되고, 회복량 만큼 최대 체력이 증가합니다.", AbilityCategory.Common, AbilityType.COMMON_SCP0492_HUNGER, RoleAbility.Scp0492)]
 public class Hurger : Ability
 {
     public override void OnEnabled()

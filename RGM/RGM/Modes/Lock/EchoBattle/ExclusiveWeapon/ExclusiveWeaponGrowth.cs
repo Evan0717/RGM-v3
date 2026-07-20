@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace RGM.Modes;
 
 /// <summary>
-/// 전용무기 XP. 1레벨 기준 40, 이후 ceil(1.05x + 15). 최대 90.
+/// 전용무기 XP. 1레벨 기준 20, 이후 ceil(1.05x + 15). 최대 90.
 /// </summary>
 public static class ExclusiveWeaponGrowth
 {
@@ -42,7 +42,7 @@ public static class ExclusiveWeaponGrowth
         return progress.GetLevel(loadout.EquippedWeapon.Value) < ExclusiveWeaponInfo.MaxLevel;
     }
 
-    public static void GrantExp(Player player, int amount, string reason = null)
+    public static void GrantExp(Player player, float amount, string reason = null)
     {
         if (player == null || amount <= 0)
             return;
@@ -64,7 +64,7 @@ public static class ExclusiveWeaponGrowth
         ScheduleApply(player);
     }
 
-    public static bool AddExp(ExclusiveWeaponProgress progress, ExclusiveWeaponType type, int amount, out int newLevel)
+    public static bool AddExp(ExclusiveWeaponProgress progress, ExclusiveWeaponType type, float amount, out int newLevel)
     {
         newLevel = progress.GetLevel(type);
         if (amount <= 0 || newLevel >= ExclusiveWeaponInfo.MaxLevel)
@@ -101,9 +101,9 @@ public static class ExclusiveWeaponGrowth
         if (level >= ExclusiveWeaponInfo.MaxLevel)
             return "MAX";
 
-        int current = progress.GetExperience(type);
+        float current = progress.GetExperience(type);
         int required = GetRequiredExp(level);
-        return $"{current}/{required}";
+        return $"{current:0.##}/{required}";
     }
 
     static void ScheduleApply(Player player)
@@ -119,7 +119,7 @@ public static class ExclusiveWeaponGrowth
             PendingApply.Remove(player);
 
             if (player != null && player.IsAlive && EchoInfo.PlayerLoadouts.ContainsKey(player))
-                EchoBattleCore.ApplyLoadout(player);
+                EchoBattleCore.RefreshGrowthStats(player);
         });
     }
 

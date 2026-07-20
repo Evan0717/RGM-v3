@@ -21,11 +21,11 @@ public class Salamandra : EchoActiveAbility
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
-    public override void ONActiveEffect()
+    public override void OnActiveEffect()
     {
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         _active = false;
-        base.ONActiveEffect();
+        base.OnActiveEffect();
     }
 
     protected override void OnActiveUsed()

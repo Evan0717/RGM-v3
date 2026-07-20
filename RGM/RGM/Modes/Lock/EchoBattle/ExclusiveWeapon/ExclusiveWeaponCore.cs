@@ -142,6 +142,8 @@ public static class ExclusiveWeaponCore
             lines.Add($"패시브 공격력 +{weapon.PassiveAttackPercent:0.#}%");
         if (weapon.PassiveHpPercent > 0.01f)
             lines.Add($"패시브 HP +{weapon.PassiveHpPercent:0.#}%");
+        if (weapon.PassiveCriticalChance > 0.01f)
+            lines.Add($"패시브 크리티컬 +{weapon.PassiveCriticalChance:0.#}%");
 
         return string.Join("\n", lines);
     }

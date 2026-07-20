@@ -10,27 +10,27 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// <summary>
 /// Forged Star.
 /// Passive: Attack 11%+(res*2%). Burned target crit damage +(12%*res).
-/// Flame stacks (3s CD, 8s duration). 6 stacks explode + 7m splash 60%.
+/// Flame stacks (2s CD, 8s duration). 6 stacks explode + 7m splash 60%.
 /// </summary>
 [ExclusiveWeapon(
     "위조된 작은 별",
-    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (12% * 공진 수치) 증가. 불꽃 6스택 폭발 + 7m 스플래시(60%).",
+    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (12% * 공진 수치) 증가. 불꽃 7스택 폭발 + 8.5m 스플래시(85%).",
     ExclusiveWeaponType.ForgedStar)]
 public class ForgedStar : ExcWeapon
 {
-    public override float AttackFlatMin => 4.0f;
-    public override float AttackFlatMax => 50.0f;
+    public override float AttackFlatMin => 2.5f;
+    public override float AttackFlatMax => 31.3f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.CriticalChance;
-    public override float SecondaryStatMin => 8.0f;
-    public override float SecondaryStatMax => 36.0f;
+    public override float SecondaryStatMin => 13.0f;
+    public override float SecondaryStatMax => 41.0f;
 
     public override float PassiveAttackPercent => 11f + Resonance * 2f;
 
-    const float FlameCooldown = 3f;
+    const float FlameCooldown = 1f;
     const float FlameDuration = 8f;
-    const int FlameMaxStacks = 6;
-    const float SplashRadius = 7f;
-    const float SplashRatio = 0.6f;
+    const int FlameMaxStacks = 7;
+    const float SplashRadius = 8.5f;
+    const float SplashRatio = 0.85f;
 
     class FlameState
     {
@@ -130,7 +130,7 @@ public class ForgedStar : ExcWeapon
         float explosion =
             50f
             + 10f * Resonance
-            + primary.MaxHealth * (0.09f + 0.02f * Resonance);
+            + primary.MaxHealth * (0.1f + 0.02f * Resonance);
 
         DealDamage(primary, explosion);
 

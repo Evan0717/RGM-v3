@@ -352,6 +352,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Shutdown.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\StartWarhead.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\SystemHacking.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\ToolPing.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\CantManageAnger.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Enemy.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Outsider.cs" />

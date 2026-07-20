@@ -5,7 +5,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Tutorial;
 
-[Ability("제 3세력", "뱀의 손 지원을 3명 더 부릅니다.", AbilityCategory.Tutorial, AbilityType.TUTORIAL_THIRDFORCE)]
+[Ability("제 3세력", "뱀의 손 지원을 3명 더 부릅니다.", AbilityCategory.Common, AbilityType.COMMON_TUTORIAL_THIRDFORCE, RoleAbility.Tutorial)]
 public class ThirdForce : Ability
 {
     public override void OnEnabled()

@@ -8,21 +8,22 @@ namespace RGM.Modes.ExclusiveWeapon;
 
 /// <summary>
 /// Nightsky Calculator.
-/// Passive: HP 12%+(res*4%). On AHP/HS loss, heal HP by (12%*res) of pure shield loss.
+/// Passive: HP 16%+(res*4%) and critical chance 5%. On AHP/HS loss, heal HP by (16%*res) of pure shield loss.
 /// </summary>
 [ExclusiveWeapon(
     "밤하늘 연산 측정기",
-    "HP 12% + (공진 수치 * 4%) 증가. AHP(또는 HS)가 피해를 입을 경우, AHP(HS)의 순수 차감량의 (12% * 공진 수치)만큼 HP 회복. 단, HP 최대치를 초과하여 회복할 수 없음.",
+    "HP 16% + (공진 수치 * 4%) 및 크리티컬 확률 5% 증가. AHP(또는 HS)가 피해를 입을 경우, AHP(HS)의 순수 차감량의 (16% * 공진 수치)만큼 HP 회복. 단, HP 최대치를 초과하여 회복할 수 없음.",
     ExclusiveWeaponType.NightskyCalculator)]
 public class NightskyCalculator : ExcWeapon
 {
-    public override float AttackFlatMin => 3.3f;
-    public override float AttackFlatMax => 41.2f;
+    public override float AttackFlatMin => 2.1f;
+    public override float AttackFlatMax => 25.8f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.HpPercent;
     public override float SecondaryStatMin => 16.0f;
     public override float SecondaryStatMax => 72.2f;
 
-    public override float PassiveHpPercent => 12f + Resonance * 4f;
+    public override float PassiveHpPercent => 16f + Resonance * 4f;
+    public override float PassiveCriticalChance => 5f;
 
     readonly Dictionary<Player, (float Ahp, float Hs)> _before = new();
 
@@ -66,7 +67,7 @@ public class NightskyCalculator : ExcWeapon
         if (pureShieldLost <= 0f)
             return;
 
-        float heal = pureShieldLost * (0.12f * Resonance);
+        float heal = pureShieldLost * (0.16f * Resonance);
         if (heal <= 0f)
             return;
 

@@ -73,20 +73,26 @@ public class AbilityData
     public AbilityHolidayType HolidayType { get; set; }
     public List<AbilityType> Requires { get; set; }
     public bool Keep { get; set; }
+    public bool _79Allowed { get; set; }
+    public RoleAbility RoleAbility { get; set; }
 
     public string GetFormattedName()
     {
-        return $"<color={Category.GetColor()}>[{Category.GetTranslation()}]</color> {Name}";
+        string CategoryName = Category.GetCategoryTranslation();
+        string Text = "전용";
+        return $"<color={Category.GetColor()}>[{(RoleAbility == RoleAbility.None ? CategoryName : $"{Text} {CategoryName}")}]</color> {Name}";
     }
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class AbilityAttribute(string name, string description, AbilityCategory category, AbilityType type, AbilityHolidayType holidayType = AbilityHolidayType.None, bool keep = false) : Attribute
+public class AbilityAttribute(string name, string description, AbilityCategory category, AbilityType type, RoleAbility roleAbility = RoleAbility.None, bool _79Allowed = false, AbilityHolidayType holidayType = AbilityHolidayType.None, bool keep = false) : Attribute
 {
     public string Name { get; } = name;
     public string Description { get; } = description;
     public AbilityCategory Category { get; } = category;
     public AbilityType Type { get; set; } = type;
+    public bool _79Allowed { get; } = _79Allowed;
+    public RoleAbility RoleAbility { get; } = roleAbility;
     public AbilityHolidayType HolidayType { get; set; } = holidayType;
     public bool Keep { get; set; } = false;
 }
@@ -113,20 +119,6 @@ public enum AbilityCategory
     Epic,
     Legend,
     Mythic,
-    ClassD,
-    Scientist,
-    NTF,
-    CHI,
-    Tutorial,
-    Scp173,
-    Scp049,
-    Scp0492,
-    Scp096,
-    Scp106,
-    Scp939,
-    Scp3114,
-    Scp079,
-    Flamingo,
     Synergy,
 }
 
@@ -160,10 +152,10 @@ AbilityData에 bool 79Allowed, RoleAbility RoleAbility 추가
 
 등급에 따른 전용 능력의 확률
 일반 ->5퍼
-희귀 ->5퍼
+희귀 ->7퍼
 영웅 ->10퍼
-전설 -> 33퍼
-신화 -> 33퍼
+전설 -> 20퍼
+신화 -> 25퍼
 위 확률로 선택지들 중 그 선택지를 등급에 맞는 전용 능력으로 바꿉니다.
 
 바꿔야 될게 많은데,
@@ -190,42 +182,7 @@ ABattle.cs
 
 public static class AbilityCategoryExtensions
 {
-    public static AbilityCategory GetAbilityCategory(this Player player)
-    {
-        RoleTypeId role = player.Role.Type;
-
-        return role switch
-        {
-            RoleTypeId.ClassD => AbilityCategory.ClassD,
-            RoleTypeId.Scientist => AbilityCategory.Scientist,
-            RoleTypeId.FacilityGuard => AbilityCategory.NTF,
-            RoleTypeId.NtfPrivate => AbilityCategory.NTF,
-            RoleTypeId.NtfSergeant => AbilityCategory.NTF,
-            RoleTypeId.NtfCaptain => AbilityCategory.NTF,
-            RoleTypeId.NtfSpecialist => AbilityCategory.NTF,
-            RoleTypeId.ChaosRifleman => AbilityCategory.CHI,
-            RoleTypeId.ChaosMarauder => AbilityCategory.CHI,
-            RoleTypeId.ChaosRepressor => AbilityCategory.CHI,
-            RoleTypeId.ChaosConscript => AbilityCategory.CHI,
-            RoleTypeId.Scp173 => AbilityCategory.Scp173,
-            RoleTypeId.Scp049 => AbilityCategory.Scp049,
-            RoleTypeId.Scp0492 => AbilityCategory.Scp0492,
-            RoleTypeId.Scp096 => AbilityCategory.Scp096,
-            RoleTypeId.Scp106 => AbilityCategory.Scp106,
-            RoleTypeId.Scp939 => AbilityCategory.Scp939,
-            RoleTypeId.Scp3114 => AbilityCategory.Scp3114,
-            RoleTypeId.Scp079 => AbilityCategory.Scp079,
-            RoleTypeId.Flamingo => AbilityCategory.Flamingo,
-            RoleTypeId.AlphaFlamingo => AbilityCategory.Flamingo,
-            RoleTypeId.ChaosFlamingo => AbilityCategory.Flamingo,
-            RoleTypeId.NtfFlamingo => AbilityCategory.Flamingo,
-            RoleTypeId.ZombieFlamingo => AbilityCategory.Flamingo,
-            RoleTypeId.Tutorial => AbilityCategory.Tutorial,
-            _ => AbilityCategory.Dummy
-        };
-    }
-
-    public static string GetTranslation(this AbilityCategory category)
+    public static string GetCategoryTranslation(this AbilityCategory category)
     {
         return category switch
         {
@@ -234,20 +191,6 @@ public static class AbilityCategoryExtensions
             AbilityCategory.Epic => "영웅",
             AbilityCategory.Legend => "전설",
             AbilityCategory.Mythic => "신화",
-            AbilityCategory.ClassD => "전용",
-            AbilityCategory.Scientist => "전용",
-            AbilityCategory.NTF => "전용",
-            AbilityCategory.CHI => "전용",
-            AbilityCategory.Tutorial => "전용",
-            AbilityCategory.Scp173 => "전용",
-            AbilityCategory.Scp049 => "전용",
-            AbilityCategory.Scp0492 => "전용",
-            AbilityCategory.Scp096 => "전용",
-            AbilityCategory.Scp106 => "전용",
-            AbilityCategory.Scp939 => "전용",
-            AbilityCategory.Scp3114 => "전용",
-            AbilityCategory.Scp079 => "전용",
-            AbilityCategory.Flamingo => "전용",
             AbilityCategory.Synergy => "시너지",
             _ => "?"
         };
@@ -262,22 +205,44 @@ public static class AbilityCategoryExtensions
             AbilityCategory.Epic => "#FF00FF",
             AbilityCategory.Legend => "#ffd700",
             AbilityCategory.Mythic => "#DF0101",
-            AbilityCategory.ClassD => "#F7819F",
-            AbilityCategory.Scientist => "#F7819F",
-            AbilityCategory.NTF => "#F7819F",
-            AbilityCategory.CHI => "#F7819F",
-            AbilityCategory.Tutorial => "#F7819F",
-            AbilityCategory.Scp173 => "#F7819F",
-            AbilityCategory.Scp049 => "#F7819F",
-            AbilityCategory.Scp0492 => "#F7819F",
-            AbilityCategory.Scp096 => "#F7819F",
-            AbilityCategory.Scp106 => "#F7819F",
-            AbilityCategory.Scp939 => "#F7819F",
-            AbilityCategory.Scp3114 => "#F7819F",
-            AbilityCategory.Scp079 => "#F7819F",
-            AbilityCategory.Flamingo => "#F7819F",
             AbilityCategory.Synergy => "#DEEFED",
             _ => "white"
+        };
+    }
+}
+
+public static class RoleAbilityExtensions
+{
+    public static RoleAbility GetRoleAbility(this Player player)
+    {
+        RoleTypeId role = player.Role.Type;
+        return role switch
+        {
+            RoleTypeId.ClassD => RoleAbility.ClassD,
+            RoleTypeId.Scientist => RoleAbility.Scientist,
+            RoleTypeId.FacilityGuard => RoleAbility.NTF,
+            RoleTypeId.NtfPrivate => RoleAbility.NTF,
+            RoleTypeId.NtfSergeant => RoleAbility.NTF,
+            RoleTypeId.NtfCaptain => RoleAbility.NTF,
+            RoleTypeId.NtfSpecialist => RoleAbility.NTF,
+            RoleTypeId.ChaosRifleman => RoleAbility.CHI,
+            RoleTypeId.ChaosMarauder => RoleAbility.CHI,
+            RoleTypeId.ChaosRepressor => RoleAbility.CHI,
+            RoleTypeId.ChaosConscript => RoleAbility.CHI,
+            RoleTypeId.Scp173 => RoleAbility.Scp173,
+            RoleTypeId.Scp049 => RoleAbility.Scp049,
+            RoleTypeId.Scp0492 => RoleAbility.Scp0492,
+            RoleTypeId.Scp096 => RoleAbility.Scp096,
+            RoleTypeId.Scp106 => RoleAbility.Scp106,
+            RoleTypeId.Scp939 => RoleAbility.Scp939,
+            RoleTypeId.Scp3114 => RoleAbility.Scp3114,
+            RoleTypeId.Scp079 => RoleAbility.Scp079,
+            RoleTypeId.Flamingo => RoleAbility.Flamingo,
+            RoleTypeId.AlphaFlamingo => RoleAbility.Flamingo,
+            RoleTypeId.ChaosFlamingo => RoleAbility.Flamingo,
+            RoleTypeId.NtfFlamingo => RoleAbility.Flamingo,
+            RoleTypeId.ZombieFlamingo => RoleAbility.Flamingo,
+            _ => RoleAbility.None
         };
     }
 }
@@ -468,105 +433,107 @@ public enum AbilityType
     MYTHIC_UNLIMITED, // [신화] 무제한
     MYTHIC_ANCHOR, //[신화] 구속
 
+
     // 전용 //
     // D계급
-    CLASSD_LARCENY, // [전용] 절도죄
-    CLASSD_TRESPASSING, // [전용] 주거침입죄
-    CLASSD_SEEDSOFCHI, // [전용] 반란의 씨앗
-    CLASSD_ILLEGALWEAPON, // [전용] 불법개조무기소지죄
+    COMMON_CLASSD_LARCENY, // [전용 일반] 절도죄
+    COMMON_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
+    COMMON_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
+    COMMON_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
 
     // 과학자
-    SCIENTIST_05, // [전용] 05 평의회
-    SCIENTIST_ENGINEERINGMAJOR, // [전용] 공학 전공
-    SCIENTIST_SEEDSOFMTF, // [전용] 특무부대의 씨앗
+    COMMON_SCIENTIST_ENGINEERINGMAJOR, // [전용 일반] 공학 전공
+    COMMON_SCIENTIST_SEEDSOFMTF, // [전용 일반] 특무부대의 씨앗
+    COMMON_SCIENTIST_05, // [전용 희귀] 05 평의회
 
     // NTF
-    NTF_MANAGERIALOBLIGATIONPERSON, // [전용] 관리 의무자
-    NTF_HEALTHCENTERSTAFF, // [전용] 보건소 직원
-    NTF_INDUSTRIALACCIDENTINSURANCE, // [전용] 산업재해보험
-    NTF_QUARANTINEOBLIGATION, // [전용] 격리 의무자
-    NTF_MEDICALOFFICER, // [전용] 의무병
-    NTF_COLLECTIVEINTELLIGENCE, // [전용] 집단 지성
-    NTF_RADAR, // [전용] 레이더
+    COMMON_NTF_HEALTHCENTERSTAFF, // [전용 일반] 보건소 직원
+    COMMON_NTF_QUARANTINEOBLIGATION, // [전용 일반] 격리 의무자
+    COMMON_NTF_COLLECTIVEINTELLIGENCE, // [전용 일반] 집단 지성
+    COMMON_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
+    COMMON_NTF_INDUSTRIALACCIDENTINSURANCE, // [전용 희귀] 산업재해보험
+    COMMON_NTF_MEDICALOFFICER, // [전용 희귀] 의무병
+    COMMON_NTF_RADAR, // [전용 희귀] 레이더
 
     // 혼돈의 반란
-    CHI_CHAOSOFCHAOS, // [전용] 혼돈의 카오스
-    CHI_TOUCHOFCHAOS, // [전용] 혼돈의 손길
-    CHI_BAGOFCHAOS, // [전용] 혼돈의 가방
+    COMMON_CHI_TOUCHOFCHAOS, // [전용 일반] 혼돈의 손길
+    COMMON_CHI_BAGOFCHAOS, // [전용 일반] 혼돈의 가방
+    COMMON_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
 
     // 뱀의 손
-    TUTORIAL_TONGUE, // [전용] 세치 혀
-    TUTORIAL_THIRDFORCE, // [전용] 제3세력
-    TUTORIAL_RESEARCHER, // [전용] SCP 연구자
+    COMMON_TUTORIAL_TONGUE, // [전용 일반] 세치 혀
+    COMMON_TUTORIAL_THIRDFORCE, // [전용 일반] 제3세력
+    COMMON_TUTORIAL_RESEARCHER, // [전용 희귀] SCP 연구자
 
     // SCP-173
-    SCP173_FEAR, // [전용] 공포
-    SCP173_ABERRATION, // [전용] 괴이
-    SCP173_MIRAGE, // [전용] 신기루
+    COMMON_SCP173_FEAR, // [전용 일반] 공포
+    COMMON_SCP173_ABERRATION, // [전용 희귀] 괴이
+    COMMON_SCP173_MIRAGE, // [전용 희귀] 신기루
 
     // SCP-049
-    SCP049_DEATH, // [전용] 사신
-    SCP049_COMPETENTDOCTOR, // [전용] 유능한 의사
-    SCP049_PROFICIENCY, // [전용] 능수능란
-    SCP049_MADDOCTOR, // [전용] 실험체
+    COMMON_SCP049_DEATH, // [전용 희귀] 사신
+    COMMON_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
+    COMMON_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
+    COMMON_SCP049_MADDOCTOR, // [전용 희귀] 실험체
 
     // SCP-0492
-    SCP0492_HUNGER, // [전용] 허기
-    SCP0492_MEALS, // [전용] 급식
-    SCP0492_CONFUSION, // [전용] 당혹감
-    SCP_0492_INFECTION, // [전용] 감염
+    COMMON_SCP0492_MEALS, // [전용 일반] 급식
+    COMMON_SCP0492_CONFUSION, // [전용 일반] 당혹감
+    COMMON_SCP0492_INFECTION, // [전용 일반] 감염
+    COMMON_SCP0492_HUNGER, // [전용 희귀] 허기
 
     // SCP-096
-    SCP096_RAGE, // [전용] 격노
-    SCP096_STARTEARING, // [전용] 별자리 찢기
-    SCP096_SEER, // [전용] 천리안
-    SCP096_ENEMY, // [전용] 원수
-    SCP096_CANTMANAGEANGER, // [전용] 분노 조절 문제
-    SCP096_OUTSIDER, // [전용] 아웃사이더
+    COMMON_SCP096_ENEMY, // [전용 일반] 원수
+    COMMON_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
+    COMMON_SCP096_OUTSIDER, // [전용 일반] 아웃사이더
+    COMMON_SCP096_RAGE, // [전용 희귀] 격노
+    COMMON_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
+    COMMON_SCP096_SEER, // [전용 영웅] 천리안
 
     // SCP-106
-    SCP106_RECOVERY, // [전용] 회춘
-    SCP106_STICKYSWAMP, // [전용] 끈적한 늪
-    SCP106_HUNTINGPREY, // [전용] 사냥감 모색
+    COMMON_SCP106_RECOVERY, // [전용 희귀] 회춘
+    COMMON_SCP106_HUNTINGPREY, // [전용 희귀] 사냥감 모색
+    COMMON_SCP106_STICKYSWAMP, // [전용 영웅] 끈적한 늪
 
     // SCP-939
-    SCP939_REINFORCECLAW, // [전용] 발톱 강화
-    SCP939_HUGME, // [전용] 안아줘요
-    SCP939_VAMPIRECLAW, // [전용] 흡혈 발톱
-    SCP939_NOEYES, // [전용] 실명
+    COMMON_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이
+    COMMON_SCP939_NOEYES, // [전용 일반] 실명
+    COMMON_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
+    COMMON_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
 
     // SCP-3114
-    SCP3114_SKILLEDASSASSIN, // [전용] 숙련된 암살자
-    SCP3114_HALFBLOCK, // [전용] 반블럭
-    SCP3114_DORAEMONPOCKET, // [전용] 도라에몽 주머니
-    SCP3114_SHOWMANSHIP, // [전용] 쇼맨쉽
+    COMMON_SCP3114_HALFBLOCK, // [전용 일반] 반블럭
+    COMMON_SCP3114_SKILLEDASSASSIN, // [전용 희귀] 숙련된 암살자
+    COMMON_SCP3114_DORAEMONPOCKET, // [전용 희귀] 도라에몽 주머니
+    COMMON_SCP3114_SHOWMANSHIP, // [전용 희귀] 쇼맨쉽
 
     // SCP-079
-    SCP079_PINGREMOTE, // [전용] 핑 리모컨
-    SCP079_PORTABLECHARGER, // [전용] 간이 충전기
-    SCP079_OVERCURRENT, // [전용] 과전류
-    SCP079_RANDOMFUNCTION, // [전용] 랜덤 함수
-    SCP079_OVERWHELMING, // [전용] 고대의 존재 압도
-    SCP079_CALLSCP, // [전용] SCP 지원 호출기
-    SCP079_POWERABSORPTION, // [전용] 전력 흡수
-    SCP079_PINGHOOK, // [전용] 핑 갈고리
-    SCP079_LOCKDOWN, // [전용] 봉쇄
-    SCP079_REPAIR, // [전용] 수리수리 마수리
-    SCP079_RESTAREA, // [전용] 휴게소
-    SCP079_STARTWARHEAD, // [전용] 자폭 시퀸스
-    SCP079_SHUTDOWN, // [전용] 셧다운제
-    SCP079_OVERCLOCKING, // [전용] 오버클럭
-    SCP079_JUSTPRICE, // [전용] 응당한 대가
-    SCP079_FREEDOM, // [전용] 자유
-    SCP079_MOBILESTRIKEFORCE, // [전용] 기동타격대
-    SCP079_AIRSTRIKE, // [전용] 폭격
-    SCP079_SYSTEMHACKING, // [전용] 시스템 해킹
-    SCP079_CAMERAFLASH, // [전용] 카메라 플래시
-    SCP079_CASSIE, // [전용] C.A.S.S.I.E.
-    SCP079_AUTOTESLA, // [전용] 자동 방어 시스템
+    COMMON_SCP079_PINGREMOTE, // [전용 일반] 핑 리모컨
+    COMMON_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
+    COMMON_SCP079_RANDOMFUNCTION, // [전용 일반] 랜덤 함수
+    COMMON_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
+    COMMON_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
+    COMMON_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
+    COMMON_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
+    COMMON_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
+    COMMON_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
+    RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
+    RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
+    RARE_SCP079_PINGHOOK, // [전용 희귀] 핑 갈고리
+    RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
+    RARE_SCP079_REPAIR, // [전용 희귀] 수리수리 마수리
+    RARE_SCP079_RESTAREA, // [전용 희귀] 휴게소
+    RARE_SCP079_FREEDOM, // [전용 희귀] 자유
+    RARE_SCP079_MOBILESTRIKEFORCE, // [전용 희귀] 기동타격대
+    RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
+    RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
+    EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
+    LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
+    MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
 
     // 플라밍고
-    FLAMINGO_MINIFACTORY, // [전용] 미니 공장
+    COMMON_FLAMINGO_MINIFACTORY, // [전용 일반] 미니 공장
 
     // 시너지 //
     SYNERGY_SURVIVALEXPERT, // [시너지] 생존 전문가

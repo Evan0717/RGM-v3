@@ -4,7 +4,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Tutorial;
 
-[Ability("SCP 연구자", "SCP 아이템 중 하나를 지급받습니다.", AbilityCategory.Tutorial, AbilityType.TUTORIAL_RESEARCHER)]
+[Ability("SCP 연구자", "SCP 아이템 중 하나를 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_TUTORIAL_RESEARCHER, RoleAbility.Tutorial)]
 public class Researcher : Ability
 {
     public override void OnEnabled()

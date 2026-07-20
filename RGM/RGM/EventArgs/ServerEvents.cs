@@ -10,6 +10,7 @@ using PlayerRoles;
 using ProjectMER.Features;
 using RGM.API.Components;
 using RGM.API.Features;
+using RGM.Modes;
 using RGM.Modes.Sets.AddScp.Scps;
 using RGM.RGM.Modes.Tiny.대인전;
 using System;
@@ -228,7 +229,11 @@ namespace RGM.EventArgs
                     }
                 }
 
-                yield return Timing.WaitForSeconds(20 * 60);
+                int warheadDelaySeconds = 20 * 60;
+                if (CurrentMode == ModeType.EchoBattle)
+                    warheadDelaySeconds += EchoBattle.RoundStartDelaySeconds;
+
+                yield return Timing.WaitForSeconds(warheadDelaySeconds);
 
                 if (!Warhead.IsDetonated && CurrentMode.GetModeData().Type != ModeType.Develop)
                 {

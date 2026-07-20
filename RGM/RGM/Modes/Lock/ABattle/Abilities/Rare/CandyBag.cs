@@ -4,7 +4,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("사탕 봉지", "랜덤한 사탕을 1~3개 받습니다.", AbilityCategory.Rare, AbilityType.RARE_CANDYBAG, AbilityHolidayType.Halloween)]
+[Ability("사탕 봉지", "랜덤한 사탕을 1~3개 받습니다.", AbilityCategory.Rare, AbilityType.RARE_CANDYBAG, RoleAbility.None, false, AbilityHolidayType.Halloween)]
 public class CandyBag : Ability
 {
     public override void OnEnabled()

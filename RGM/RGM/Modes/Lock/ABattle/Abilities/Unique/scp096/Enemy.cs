@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.Scp096;
 
-[Ability("원수", "분노 충전 시간이 50% 줄어듭니다.", AbilityCategory.Scp096, AbilityType.SCP096_ENEMY)]
+[Ability("원수", "분노 충전 시간이 50% 줄어듭니다.", AbilityCategory.Common, AbilityType.COMMON_SCP096_ENEMY, RoleAbility.Scp096)]
 public class Enemy : Ability
 {
     public override void OnEnabled()

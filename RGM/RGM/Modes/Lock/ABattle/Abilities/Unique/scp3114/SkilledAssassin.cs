@@ -3,7 +3,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes.Abilities.Unique.Scp3114;
 
-[Ability("숙련된 암살자", "교살 데미지가 6배 증가합니다.", AbilityCategory.Scp3114, AbilityType.SCP3114_SKILLEDASSASSIN)]
+[Ability("숙련된 암살자", "교살 데미지가 6배 증가합니다.", AbilityCategory.Common, AbilityType.COMMON_SCP3114_SKILLEDASSASSIN, RoleAbility.Scp3114)]
 public class Minic : Ability
 {
     public override void OnEnabled()
