@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.ClassD;
 
-[Ability("불법개조무기소지죄", "지면에 닿으면 폭발하는 수류탄을 지급받습니다.", AbilityCategory.ClassD, AbilityType.CLASSD_ILLEGALWEAPON)]
+[Ability("불법개조무기소지죄", "지면에 닿으면 폭발하는 수류탄을 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_CLASSD_ILLEGALWEAPON,  RoleAbility.ClassD)]
 public class IllegalWeapon : Ability
 {
     ushort id = 0;

@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("수리수리 마수리", "부서진 모든 문이 복구됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_REPAIR)]
+[Ability("수리수리 마수리", "부서진 모든 문이 복구됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_REPAIR, RoleAbility.Scp079)]
 public class Repair : Ability
 {
     public override void OnEnabled()

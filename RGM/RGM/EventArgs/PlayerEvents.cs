@@ -587,7 +587,7 @@ namespace RGM.EventArgs
             ev.Player.EnableEffect(EffectType.FogControl, 1);
 
             if (MapUtils.LoadedMaps.Keys.Any(Maps.Contains))
-                ev.Player.EnableEffect(EffectType.NightVision, 255);
+                ev.Player.EnableEffect(EffectType.NightVision, 100);
 
 
             if (ev.Player.IsAlive)
@@ -681,9 +681,7 @@ namespace RGM.EventArgs
                             ev.Player.Role.Set(RoleTypeId.NtfPrivate);
                     }
 
-                    int rand = UnityEngine.Random.Range(1, 1001); // 시작 049-2
-
-                    if (rand == 1)
+                    if (UnityEngine.Random.Range(1, 1001) == 1) // 시작 049-2
                     {
                         ev.Player.Role.Set(RoleTypeId.Scp0492);
                         ev.Player.MaxHealth = 1000;
@@ -699,7 +697,8 @@ namespace RGM.EventArgs
                 }
             }
 
-            if (ev.Player.IsAlive && Round.IsStarted &&
+            if (ev.Player.IsAlive && 
+                Round.IsStarted &&
                 new List<SpawnReason>
                 {
                     SpawnReason.RoundStart,
@@ -708,7 +707,10 @@ namespace RGM.EventArgs
                     SpawnReason.ItemUsage,
                     SpawnReason.Escaped
                 }.Contains(ev.Reason) &&
-                CurrentMode.GetModeData().Info == ModeInfo.Plus)
+                (CurrentMode.GetModeData().Info == ModeInfo.Plus ||
+                 (CurrentMode.GetModeData().Info == ModeInfo.Lock &&
+                  CurrentMode != ModeType.RussianRoulette &&
+                  CurrentMode != ModeType.WitGame)))
             {
                 ev.Player.ApplyGodMode(9);
             }

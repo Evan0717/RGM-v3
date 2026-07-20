@@ -37,8 +37,13 @@ public class ABattle : Mode
 • <color=#FF00FF>영웅</color> - 5.05%
 • <color=#ffd700>전설</color> - 0.2%
 • <color=#DF0101>신화</color> - 0.05%
-• <color=#F7819F>전용</color> - 5% (능력 선택 옵션 독립)
 • <color=#DEEFED>시너지</color> - ???
+
+• <color=#F7819F>전용</color> - 일반 - 5%
+                                희귀 - 7%
+                                영웅 - 10%
+                                전설 - 20%
+                                신화 - 25% (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
 66.6% 확률로 추가 모드가 활성화됩니다.
 워크스테이션이 시설에 더 추가됩니다.
@@ -86,6 +91,7 @@ public class ABattle : Mode
         {"영웅", "<b><color=#F185FF>영웅</color></b>"},
         {"전설", "<b><color=#FFF70A>전설</color></b>"},
         {"신화", "<b><color=#F52500>신화</color></b>"},
+        {"전용", "<b><color=#F7819F>전용</color></b>" },
         {"알 수 없음", "<b><color=#000000>알수없음</b>"}
     };
     public static Dictionary<string, string> ExtraModes = new Dictionary<string, string>()
@@ -102,7 +108,7 @@ public class ABattle : Mode
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
         {"난장판", "두가지의 추가 모드(난장판 포함)가 적용되며, 관리자의 제약이 모두 풀립니다."}
     };
-
+    //ColorFormat
     public static Dictionary<string, string> AdditionalModes = new Dictionary<string, string>()
     {
         //{"승천", "능력을 획득하려고 시도할 시 저 하늘로 승천합니다."},
@@ -130,7 +136,6 @@ public class ABattle : Mode
     public static string ColorFormat(string text)
     {
         return text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
-                    .Replace("[전용]", $"<color={RatingColor["전용"]}>[전용]</color>")
                     .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
                     .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
                     .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
@@ -214,7 +219,9 @@ public class ABattle : Mode
                 Category = abilityAttribute.Category,
                 AbilityType = abilityAttribute.Type,
                 HolidayType = abilityAttribute.HolidayType,
-                Keep = abilityAttribute.Keep
+                Keep = abilityAttribute.Keep,
+                _79Allowed = abilityAttribute._79Allowed,
+                RoleAbility = abilityAttribute.RoleAbility
             });
 
             var requiresAbilityAttribute = type.GetCustomAttribute<RequiresAbilityAttribute>();
@@ -605,7 +612,7 @@ public class ABattle : Mode
         return GetAbility(player, type) != null;
     }
 
-    public List<AbilityType> GetRandomAbilities(Player player, AbilityCategory category, int count, IEnumerable<AbilityType> exceptTypes = null)
+    public List<AbilityType> GetRandomAbilities(Player player, AbilityCategory category, int count, IEnumerable<AbilityType> exceptTypes = null, RoleAbility roleAbility = RoleAbility.None, bool _79Allowed = false)
     {
         var abilities = Abilities
             .Where(x => x.Value.Category == category)
@@ -617,10 +624,31 @@ public class ABattle : Mode
 
                 return conditionAttr.Abilities.All(req => player.HasAbility(req));
             })
+            .Where(x => x.Value.RoleAbility == roleAbility)
             .ToList();
+
+
+        if (player.Role == RoleTypeId.Scp079)
+        {
+            abilities = Abilities
+               .Where(x => x.Value._79Allowed == true || x.Value.RoleAbility == RoleAbility.Scp079)
+               .Where(x => x.Value.Category == category)
+               .Where(x =>
+               {
+                   var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
+                   if (conditionAttr == null)
+                       return true;
+
+                   return conditionAttr.Abilities.All(req => player.HasAbility(req));
+               })
+               .ToList();
+        }
 
         if (category == AbilityCategory.Dummy)
             abilities = Abilities.ToList();
+
+        if (abilities.Count <= 0)
+            return new List<AbilityType>();
 
         if (exceptTypes != null)
         {
@@ -674,6 +702,8 @@ public class ABattle : Mode
         if (category == AbilityCategory.Dummy)
             return;
 
+        int RoleAbilityChance = GetRoleAbilityChance(category);
+
         /*if (CurrentExtraModes.Contains("1 + 1"))
         {
             player.AddAbility(GetRandomAbilities(player, category, 1).First());
@@ -685,35 +715,6 @@ public class ABattle : Mode
         if (abilities.Count == 0)
             return;
 
-        if (abilities.Distinct().Count() == 1 && abilities.Count() > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
-        {
-            player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
-
-            foreach (var ability in abilities)
-            {
-                player.AddAbility(ability);
-            }
-        }
-
-        if (Random.Range(1, 21) == 1) // 전용 능력
-        {
-            int index;
-
-            do
-            {
-                index = Random.Range(0, 3);
-            } while (ignoredIndexes.Contains(index));
-
-            ignoredIndexes.Add(index);
-
-            var ability = GetRandomAbilities(player, 
-                                             player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
-                                             ? Tools.EnumToList<AbilityCategory>().GetRandomValue(x => !new List<AbilityCategory> { AbilityCategory.None, AbilityCategory.Dummy, AbilityCategory.Synergy }.Contains(x)) 
-                                             : player.GetAbilityCategory(), 1).First();
-
-            abilities[index] = ability;
-        }
-
         if (player.HasAbility(AbilityType.RARE_TRANSITION))
         {
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
@@ -722,20 +723,8 @@ public class ABattle : Mode
 
             if (transition)
             {
-                int index;
-
-                do
-                {
-                    index = Random.Range(0, 3);
-                } while (ignoredIndexes.Contains(index));
-
-                ignoredIndexes.Add(index);
-
-                for (int i = 0; i < 3; i++)
-                {
-                    abilities[i] = GetRandomAbilities(player, AbilityCategory.Epic, 1).First();
-                }
-
+                abilities = GetRandomAbilities(player, AbilityCategory.Epic, count);
+                category = AbilityCategory.Epic;
                 player.AddAbility(AbilityType.DUMMY_RARETRANSITIONSUCCESS);
             }
             else
@@ -750,20 +739,8 @@ public class ABattle : Mode
 
             if (transition)
             {
-                int index;
-
-                do
-                {
-                    index = Random.Range(0, 3);
-                } while (ignoredIndexes.Contains(index));
-
-                ignoredIndexes.Add(index);
-
-                for (int i = 0; i < 3; i++)
-                {
-                    abilities[i] = GetRandomAbilities(player, AbilityCategory.Legend, 1).First();
-                }
-
+                abilities = GetRandomAbilities(player, AbilityCategory.Legend, count);
+                category = AbilityCategory.Legend;
                 player.AddAbility(AbilityType.DUMMY_EPICTRANSITIONSUCCESS);
             }
             else
@@ -778,32 +755,47 @@ public class ABattle : Mode
 
             if (transition)
             {
-                int index;
-
-                do
-                {
-                    index = Random.Range(0, 3);
-                } while (ignoredIndexes.Contains(index));
-
-                ignoredIndexes.Add(index);
-
-                for (int i = 0; i < 3; i++)
-                {
-                    abilities[i] = GetRandomAbilities(player, AbilityCategory.Mythic, 1).First();
-                }
-
+                abilities = GetRandomAbilities(player, AbilityCategory.Mythic, count);
+                category = AbilityCategory.Mythic;
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONSUCCESS);
             }
             else
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONFAILURE);
         }
 
+        if (abilities.Distinct().Count() == 1 && abilities.Count() > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
+        {
+            player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
+
+            foreach (var ability in abilities)
+            {
+                player.AddAbility(ability);
+            }
+        }
         lock (_selectionLock)
         {
             Selections[player] = abilities;
             SelectionCursor[player] = 0;
         }
 
+        if (Random.Range(1, 101) <= RoleAbilityChance) // 전용 능력
+        {
+            int index;
+
+            do
+            {
+                index = Random.Range(0, 3);
+            } while (ignoredIndexes.Contains(index));
+
+            ignoredIndexes.Add(index);
+
+            var ability = GetRandomAbilities(player, category, 1,
+                                             roleAbility: player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
+                                             ? Tools.EnumToList<RoleAbility>().GetRandomValue()
+                                             : player.GetRoleAbility()).FirstOrDefault();
+            if (ability != AbilityType.NONE)
+                abilities[index] = ability;
+        }
         // 다음 타자, 코루틴!!!
         Timing.RunCoroutine(SelectionCoroutine(player));
     }
@@ -902,9 +894,6 @@ public class ABattle : Mode
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
 
-        if (player.Role == RoleTypeId.Scp079)
-            return AbilityCategory.Scp079;
-
         var random = Random.Range(1, 10001); //0.001 단위
 
         if (CurrentExtraModes.Contains("잔칫상"))
@@ -926,6 +915,19 @@ public class ABattle : Mode
             <= 535 => AbilityCategory.Epic, // 5.35
             <= 3005 => AbilityCategory.Rare, // 30.05
             _ => AbilityCategory.Common // 64.57
+        };
+    }
+
+    public int GetRoleAbilityChance(AbilityCategory category)
+    {
+        return category switch
+        {
+            AbilityCategory.Mythic => 25,
+            AbilityCategory.Legend => 20,
+            AbilityCategory.Epic => 10,
+            AbilityCategory.Rare => 7,
+            AbilityCategory.Common => 5,
+            _ => 5
         };
     }
 
@@ -1022,36 +1024,26 @@ public class ABattle : Mode
         {
             if (player.IsNonePlayer()) return;
 
-            player.AddAbility(player.Role.Type == RoleTypeId.Scp079
-                ? Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First()
-                : Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+            player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
                     [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.IsNonePlayer()) return;
-            
-            if (player.Role.Type == RoleTypeId.Scp079)
+             
+            AbilityCategory getRandom()
             {
-                for (int i = 0; i < Random.Range(1, 3); i++)
-                    player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Scp079, 1).First());
-            }
-
-            else
-            {
-                AbilityCategory getRandom()
-                {
-                    if (Random.Range(1, 31) == 1)
+                if (Random.Range(1, 31) == 1)
                         return AbilityCategory.Mythic;
 
-                    if (Random.Range(1, 21) == 1)
+                if (Random.Range(1, 21) == 1)
                         return AbilityCategory.Legend;
 
-                    return AbilityCategory.Epic;
-                }
-
-                player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1,[AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
+                return AbilityCategory.Epic;
             }
+
+            player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1,[AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
+            
         }
     }
 }

@@ -1,6 +1,5 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.DamageHandlers;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Modules;
 using MEC;
@@ -43,6 +42,7 @@ public static class EchoStats
     static readonly float[] SubOptionGradeWeights = [250, 220, 190, 150, 110, 80];
     static readonly System.Random SubOptionRandom = new();
     static readonly object SubOptionRandomLock = new();
+    static readonly HashSet<Player> FixedDamageTargets = new();
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
@@ -51,16 +51,17 @@ public static class EchoStats
         { EchoSubOptionType.DefensePercent, [10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f] },
         { EchoSubOptionType.DefenseFlat, [9.4f, 10.0f, 10.6f, 11.2f, 11.8f, 12.4f] },
         { EchoSubOptionType.HpPercent, [10.5f, 11.6f, 12.7f, 13.8f, 14.9f, 16.0f] },
-        { EchoSubOptionType.HpFlat, [90f, 102f, 114f, 126f, 138f, 150f] },
+        { EchoSubOptionType.HpFlat, [80f, 92f, 104f, 116f, 128f, 140f] },
         { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
         { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
-        { EchoSubOptionType.MoveSpeed, [10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f] },
+        { EchoSubOptionType.MoveSpeed, [9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f] },
         { EchoSubOptionType.JumpPower, [5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f] },
         { EchoSubOptionType.StaminaDrainReduction, [10.7f, 11.5f, 12.3f, 13.1f, 13.9f, 14.7f] },
         { EchoSubOptionType.HeadshotDamage, [23.8f, 26.1f, 28.4f, 30.7f, 33.0f, 35.3f] },
         { EchoSubOptionType.SizeReduction, [4.8f, 5.5f, 6.2f, 6.9f, 7.6f, 8.3f] },
         { EchoSubOptionType.HealingBonus, [55.0f, 64.0f, 73.0f, 82.0f, 91.0f, 100.0f] },
+        { EchoSubOptionType.CriticalDamage, [15.0f, 16.2f, 17.4f, 18.6f, 19.8f, 21.0f] },
     };
 
     public static float LerpStat(float min, float max, int level)
@@ -82,24 +83,25 @@ public static class EchoStats
         return (cost, type) switch
         {
             (EchoCost.Cost4, EchoMainStatType.AttackPercent) => LerpStat(6.6f, 33.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(12.5f, 62.5f, level),
-            (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(13.6f, 68.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(5.0f, 25.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalChance) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(12.0f, 60.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.StaminaDrainReduction) => LerpStat(8.8f, 44.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.StaminaDrainReduction) => LerpStat(12.0f, 60.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.CriticalDamage) => LerpStat(8.8f, 44.0f, level),
 
             (EchoCost.Cost3, EchoMainStatType.AttackPercent) => LerpStat(5.6f, 28.0f, level),
             (EchoCost.Cost3, EchoMainStatType.HpPercent) => LerpStat(8.6f, 43.0f, level),
             (EchoCost.Cost3, EchoMainStatType.Defense) => LerpStat(3.0f, 15.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(9.1f, 45.5f, level),
-            (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(9.1f, 45.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(8.3f, 41.5f, level),
+            (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(8.3f, 41.5f, level),
             (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(21.0f, 105.0f, level),
             (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(2.0f, 10.0f, level),
             (EchoCost.Cost3, EchoMainStatType.SizeReduction) => LerpStat(3.3f, 16.5f, level),
 
             (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.4f, 18.0f, level),
-            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(5.4f, 27.0f, level),
-            (EchoCost.Cost1, EchoMainStatType.Defense) => LerpStat(1.0f, 5.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.HpPercent) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost1, EchoMainStatType.Defense) => LerpStat(2.0f, 10.0f, level),
 
             _ => 0f
         };
@@ -123,6 +125,7 @@ public static class EchoStats
         EchoMainStatType.HpPercent,
         EchoMainStatType.Defense,
         EchoMainStatType.CriticalChance,
+        EchoMainStatType.CriticalDamage,
         EchoMainStatType.MoveSpeedAndJump,
         EchoMainStatType.StaminaDrainReduction,
     };
@@ -174,6 +177,7 @@ public static class EchoStats
         EchoMainStatType.ScpDamagePercent,
         EchoMainStatType.HumanDamagePercent,
         EchoMainStatType.CriticalChance,
+        EchoMainStatType.CriticalDamage,
         EchoMainStatType.MoveSpeedAndJump,
         EchoMainStatType.StaminaDrainReduction,
         EchoMainStatType.HeadshotDamage,
@@ -185,9 +189,9 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(7f, 75f, level),
-            EchoCost.Cost3 => LerpStat(40f, 200f, level),
-            EchoCost.Cost1 => LerpStat(20f, 200f, level),
+            EchoCost.Cost4 => LerpStat(3f, 30f, level),
+            EchoCost.Cost3 => LerpStat(50f, 200f, level),
+            EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f
         };
     }
@@ -394,6 +398,9 @@ public static class EchoStats
             case EchoMainStatType.CriticalChance:
                 snapshot.CriticalChance += value;
                 break;
+            case EchoMainStatType.CriticalDamage:
+                snapshot.CriticalDamage += value;
+                break;
             case EchoMainStatType.MoveSpeedAndJump:
                 snapshot.MoveSpeed += value;
                 snapshot.JumpPower += Mathf.Floor(value * 0.5f);
@@ -425,7 +432,7 @@ public static class EchoStats
         {
             float hp = value;
             if (player.IsScp)
-                hp *= 8f;
+                hp *= 12f;
             snapshot.HpFlat += hp;
         }
         else if (cost == EchoCost.Cost3)
@@ -438,8 +445,8 @@ public static class EchoStats
                 return;
 
             float attack = value;
-            if (player.Role.Type == RoleTypeId.Scp939)
-                attack *= 2f;
+            if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
+                attack *= 0.4f;
             snapshot.AttackFlat += attack;
         }
     }
@@ -454,7 +461,10 @@ public static class EchoStats
             case EchoSubOptionType.AttackFlat:
                 if (AttackFlagIgnoredRoles.Contains(player.Role.Type))
                     break;
-                snapshot.AttackFlat += player.Role.Type == RoleTypeId.Scp939 ? option.Value * 2f : option.Value;
+                float attack = option.Value;
+                if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
+                    attack *= 0.4f;
+                snapshot.AttackFlat += attack;
                 break;
             case EchoSubOptionType.DefensePercent:
                 snapshot.DefensePercent += option.Value;
@@ -466,10 +476,13 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 8f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 12f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
+                break;
+            case EchoSubOptionType.CriticalDamage:
+                snapshot.CriticalDamage += option.Value;
                 break;
             case EchoSubOptionType.ScpDamagePercent:
                 snapshot.ScpDamagePercent += option.Value;
@@ -688,6 +701,15 @@ public static class EchoStats
 
     public static void OnHurting(HurtingEventArgs ev)
     {
+        // 별도 고정 피해는 공격력 증가와 대상의 에코 피해 감소를 모두 무시한다.
+        if (IsApplyingFixedDamage(ev.Player))
+            return;
+
+        // Crushed는 수치 기반 피해가 아닌 게임의 특수 사망 판정이므로,
+        // 핸들러의 Damage 값을 읽거나 다시 할당하지 않고 원본 처리를 유지한다.
+        if (ev.DamageHandler?.Type == DamageType.Crushed)
+            return;
+
         bool ignoresAttackModifiers = AreAttackModifiersIgnored(ev.Attacker);
 
         if (ev.Attacker == null || !EchoInfo.PlayerStats.TryGetValue(ev.Attacker, out var atkStats))
@@ -720,10 +742,10 @@ public static class EchoStats
                     damage *= 1f + atkStats.HeadshotDamage / 200f;
                 }
 
-                // Critical (Ambush style) + 전용무기 크리티컬 데미지 보너스
+                // Critical (Ambush style) + 에코/전용무기 크리티컬 데미지 보너스
                 if (atkStats.CriticalChance > 0 && UnityEngine.Random.Range(0f, 100f) < atkStats.CriticalChance)
                 {
-                    float critMult = 2f;
+                    float critMult = 1.5f + atkStats.CriticalDamage / 100f;
                     if (ExclusiveWeaponInfo.PlayerWeapons.TryGetValue(ev.Attacker, out var weapon) && weapon != null)
                         critMult += weapon.GetCriticalDamageBonus(ev.Player) / 100f;
 
@@ -749,6 +771,27 @@ public static class EchoStats
                 dmg = Math.Max(0f, dmg - defStats.DefenseFlat);
 
             ev.DamageHandler.Damage = dmg;
+        }
+    }
+
+    public static bool IsApplyingFixedDamage(Player player)
+    {
+        return player != null && FixedDamageTargets.Contains(player);
+    }
+
+    public static void DealFixedDamage(Player target, Player attacker, float amount)
+    {
+        if (target == null || !target.IsAlive || amount <= 0f)
+            return;
+
+        FixedDamageTargets.Add(target);
+        try
+        {
+            target.Hurt(attacker: attacker, amount: amount, damageType: DamageType.Custom);
+        }
+        finally
+        {
+            FixedDamageTargets.Remove(target);
         }
     }
 
@@ -802,6 +845,7 @@ public static class EchoStats
             EchoMainStatType.ScpDamagePercent => "SCP 대상 데미지%",
             EchoMainStatType.HumanDamagePercent => "인간 대상 데미지%",
             EchoMainStatType.CriticalChance => "크리티컬 확률%",
+            EchoMainStatType.CriticalDamage => "크리티컬 데미지%",
             EchoMainStatType.MoveSpeedAndJump => "이동속도/점프력",
             EchoMainStatType.StaminaDrainReduction => "스태미나 소모 감소%",
             EchoMainStatType.HeadshotDamage => "헤드샷 데미지%",
@@ -822,6 +866,7 @@ public static class EchoStats
             EchoSubOptionType.HpPercent => "HP%",
             EchoSubOptionType.HpFlat => "HP",
             EchoSubOptionType.CriticalChance => "크리티컬%",
+            EchoSubOptionType.CriticalDamage => "크리티컬 데미지%",
             EchoSubOptionType.ScpDamagePercent => "SCP 대상 데미지%",
             EchoSubOptionType.HumanDamagePercent => "인간 대상 데미지%",
             EchoSubOptionType.MoveSpeed => "이동속도%",
@@ -853,6 +898,7 @@ public class EchoStatSnapshot
     public float ScpDamagePercent;
     public float HumanDamagePercent;
     public float CriticalChance;
+    public float CriticalDamage;
     public float MoveSpeed;
     public float JumpPower;
     public float StaminaDrainReduction;
@@ -890,6 +936,7 @@ public class EchoStatSnapshot
         add("SCP 대상 데미지%", ScpDamagePercent);
         add("인간 대상 데미지%", HumanDamagePercent);
         add("크리티컬 확률%", CriticalChance);
+        add("크리티컬 데미지%", CriticalDamage);
         add("이동속도%", MoveSpeed);
         add("점프력%", JumpPower);
         add("스태미나 소모 감소%", StaminaDrainReduction);

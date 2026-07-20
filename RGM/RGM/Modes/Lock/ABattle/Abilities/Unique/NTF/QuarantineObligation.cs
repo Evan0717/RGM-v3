@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("격리 의무자", "고폭 수류탄과 섬광탄을 지급받습니다.", AbilityCategory.NTF, AbilityType.NTF_QUARANTINEOBLIGATION)]
+[Ability("격리 의무자", "고폭 수류탄과 섬광탄을 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_NTF_QUARANTINEOBLIGATION, RoleAbility.NTF)]
 public class QuarantineObligation : Ability
 {
     public override void OnEnabled()

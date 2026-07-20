@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("의무병", "주변에 있는 아군들을 매 초마다 1HP씩 치료합니다.", AbilityCategory.NTF, AbilityType.NTF_MEDICALOFFICER)]
+[Ability("의무병", "주변에 있는 아군들을 매 초마다 1HP씩 치료합니다.", AbilityCategory.Common, AbilityType.COMMON_NTF_MEDICALOFFICER, RoleAbility.NTF)]
 public class MedicalOfficer : Ability
 {
     CoroutineHandle _medical;

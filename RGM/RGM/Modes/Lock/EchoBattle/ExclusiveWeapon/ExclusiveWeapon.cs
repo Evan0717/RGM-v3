@@ -26,6 +26,9 @@ public abstract class ExcWeapon
     /// <summary>패시브 HP% 보너스. 없으면 0.</summary>
     public virtual float PassiveHpPercent => 0f;
 
+    /// <summary>패시브 크리티컬 확률% 보너스. 없으면 0.</summary>
+    public virtual float PassiveCriticalChance => 0f;
+
     public abstract void OnEnabled();
     public abstract void OnDisabled();
 
@@ -50,7 +53,10 @@ public abstract class ExcWeapon
         }
 
         if (includeAttackStats)
+        {
             snapshot.AttackPercent += PassiveAttackPercent;
+            snapshot.CriticalChance += PassiveCriticalChance;
+        }
 
         snapshot.HpPercent += PassiveHpPercent;
     }

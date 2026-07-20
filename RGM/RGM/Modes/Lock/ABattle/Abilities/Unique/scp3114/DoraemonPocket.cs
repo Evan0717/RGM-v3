@@ -5,7 +5,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp3114;
 
-[Ability("도라에몽 주머니", "변신을 해제할 때마다 아이템을 하나 지급받습니다.", AbilityCategory.Scp3114, AbilityType.SCP3114_DORAEMONPOCKET)]
+[Ability("도라에몽 주머니", "변신을 해제할 때마다 아이템을 하나 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_SCP3114_DORAEMONPOCKET, RoleAbility.Scp3114)]
 public class DoraemonPocket : Ability
 {
     public override void OnEnabled()

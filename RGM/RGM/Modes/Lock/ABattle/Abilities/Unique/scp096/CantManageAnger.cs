@@ -3,7 +3,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp096;
 
-[Ability("분노 조절 문제", "분노 시간에 제한이 사라집니다.", AbilityCategory.Scp096, AbilityType.SCP096_CANTMANAGEANGER)]
+[Ability("분노 조절 문제", "분노 시간에 제한이 사라집니다.", AbilityCategory.Common, AbilityType.COMMON_SCP096_CANTMANAGEANGER, RoleAbility.Scp096)]
 public class CantManageAnger : Ability
 {
     public override void OnEnabled()

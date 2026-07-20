@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp106;
 
-[Ability("끈적한 늪", "4m 내의 인간들을 느리게 만듭니다.", AbilityCategory.Scp106, AbilityType.SCP106_STICKYSWAMP)]
+[Ability("끈적한 늪", "4m 내의 인간들을 느리게 만듭니다.", AbilityCategory.Common, AbilityType.COMMON_SCP106_STICKYSWAMP, RoleAbility.Scp106)]
 public class StickySwamp : Ability
 {
     CoroutineHandle _stickySwamp1;

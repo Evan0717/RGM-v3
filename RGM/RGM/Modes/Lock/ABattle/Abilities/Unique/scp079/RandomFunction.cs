@@ -5,7 +5,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("랜덤 함수", "정전 시, 랜덤한 방 5개를 추가로 정전합니다.", AbilityCategory.Scp079, AbilityType.SCP079_RANDOMFUNCTION)]
+[Ability("랜덤 함수", "정전 시, 랜덤한 방 5개를 추가로 정전합니다.", AbilityCategory.Common, AbilityType.COMMON_SCP079_RANDOMFUNCTION, RoleAbility.Scp079)]
 public class RandomFunction : Ability
 {
     public override void OnEnabled()

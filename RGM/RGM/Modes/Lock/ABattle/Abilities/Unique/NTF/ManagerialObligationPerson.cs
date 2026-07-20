@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("관리 의무자", "손전등, Crossvec, 9x19mm 2세트, 섬광탄을 지급받습니다.", AbilityCategory.NTF, AbilityType.NTF_MANAGERIALOBLIGATIONPERSON)]
+[Ability("관리 의무자", "손전등, Crossvec, 9x19mm 2세트, 섬광탄을 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_NTF_MANAGERIALOBLIGATIONPERSON, RoleAbility.NTF)]
 public class ManagerialObligationPerson : Ability
 {
     public override void OnEnabled()

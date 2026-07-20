@@ -10,15 +10,15 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "쿠모키리",
-    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 (1.4% * 공진 수치) 확률로 618.03 고정 피해.",
+    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 공진 수치 * (공진 수치 + 1) / 2 확률로 618.03 * (0.5 + 0.5 * 공진 수치) 만큼 고정 피해.",
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
-    public override float AttackFlatMin => 4.0f;
-    public override float AttackFlatMax => 50.0f;
+    public override float AttackFlatMin => 2.5f;
+    public override float AttackFlatMax => 31.3f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.CriticalChance;
-    public override float SecondaryStatMin => 8.0f;
-    public override float SecondaryStatMax => 36.0f;
+    public override float SecondaryStatMin => 13.0f;
+    public override float SecondaryStatMax => 41.0f;
 
     public override float PassiveAttackPercent => 11f + Resonance * 2f;
 
@@ -39,6 +39,9 @@ public class KumoKiri : ExcWeapon
         if (ev.Attacker != Owner || Owner == null)
             return;
 
+        if (EchoStats.IsApplyingFixedDamage(ev.Player))
+            return;
+
         if (ev.DamageHandler == null || ev.DamageHandler.Damage <= 0f)
             return;
 
@@ -48,14 +51,14 @@ public class KumoKiri : ExcWeapon
         if (EchoStats.AreAttackModifiersIgnored(Owner))
             return;
 
-        float chance = 1.4f * Resonance;
+        float chance = Resonance * (Resonance + 1) / 2f;
         if (Random.Range(0f, 100f) >= chance)
             return;
 
-        ev.DamageHandler.Damage += FixedDamage;
+        EchoStats.DealFixedDamage(ev.Player, Owner, FixedDamage * (0.5f + 0.5f * Resonance));
         EchoBattleCore.ShowNotification(
             Owner,
-            $"<color=#cc88ff>KumoKiri</color> 고정 피해 +{FixedDamage:0.##}",
+            $"<color=#cc88ff>쿠모키리</color> 고정 피해 +{FixedDamage * (0.5f + 0.5f * Resonance):0.##}",
             1.2f);
     }
 }

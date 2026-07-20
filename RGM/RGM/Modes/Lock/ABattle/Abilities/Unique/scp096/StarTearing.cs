@@ -5,7 +5,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Unique.Scp096;
 
-[Ability("별자리 찢기", "18% 확률로 공격한 대상을 즉사시킵니다.", AbilityCategory.Scp096, AbilityType.SCP096_STARTEARING)]
+[Ability("별자리 찢기", "18% 확률로 공격한 대상을 즉사시킵니다.", AbilityCategory.Common, AbilityType.COMMON_SCP096_STARTEARING, RoleAbility.Scp096)]
 public class StarTearing : Ability
 {
     public override void OnEnabled()

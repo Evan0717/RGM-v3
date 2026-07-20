@@ -3,7 +3,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("철퇴 자크", "점프하는 순간 일대가 초토화됩니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_HAMMER, AbilityHolidayType.Halloween)]
+[Ability("철퇴 자크", "점프하는 순간 일대가 초토화됩니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_HAMMER, RoleAbility.None, false, AbilityHolidayType.Halloween)]
 public class Hammer : Ability
 {
     public override void OnEnabled()

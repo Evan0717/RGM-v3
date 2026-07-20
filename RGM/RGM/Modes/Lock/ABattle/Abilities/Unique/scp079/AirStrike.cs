@@ -6,7 +6,7 @@ using LabApi.Features.Wrappers;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("폭격", "다음 핑의 위치에 고폭 수류탄을 투척합니다.", AbilityCategory.Scp079, AbilityType.SCP079_AIRSTRIKE)]
+[Ability("폭격", "다음 핑의 위치에 고폭 수류탄을 투척합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_AIRSTRIKE, RoleAbility.Scp079)]
 public class AirStrike : Ability
 {
     public override void OnEnabled()

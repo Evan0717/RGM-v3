@@ -3,7 +3,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp096;
 
-[Ability("아웃사이더", "몸이 25% 투명해집니다.", AbilityCategory.Scp096, AbilityType.SCP096_OUTSIDER)]
+[Ability("아웃사이더", "몸이 25% 투명해집니다.", AbilityCategory.Common, AbilityType.COMMON_SCP096_OUTSIDER, RoleAbility.Scp096)]
 public class Outsider : Ability
 {
     public override void OnEnabled()

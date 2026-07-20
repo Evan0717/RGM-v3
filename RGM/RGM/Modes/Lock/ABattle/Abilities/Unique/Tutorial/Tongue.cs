@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Unique.Tutorial;
 
-[Ability("세치 혀", "SCP-1576을 지급받습니다.", AbilityCategory.Tutorial, AbilityType.TUTORIAL_TONGUE)]
+[Ability("세치 혀", "SCP-1576을 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_TUTORIAL_TONGUE, RoleAbility.Tutorial)]
 public class Tongue : Ability
 {
     public override void OnEnabled()

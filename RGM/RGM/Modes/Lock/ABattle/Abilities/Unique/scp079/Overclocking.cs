@@ -5,7 +5,7 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("오버클럭", "1초마다 전력을 0.2 얻습니다.", AbilityCategory.Scp079, AbilityType.SCP079_OVERCLOCKING)]
+[Ability("오버클럭", "1초마다 전력을 0.2 얻습니다.", AbilityCategory.Common, AbilityType.COMMON_SCP079_OVERCLOCKING, RoleAbility.Scp079)]
 public class Overclocking : Ability
 {
     public override void OnEnabled()

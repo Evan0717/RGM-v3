@@ -5,7 +5,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("자유", "이미 작동된 발전기를 제외한 나머지 발전기는 2분 간 잠깁니다.", AbilityCategory.Scp079, AbilityType.SCP079_FREEDOM)]
+[Ability("자유", "이미 작동된 발전기를 제외한 나머지 발전기는 2분 간 잠깁니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_FREEDOM, RoleAbility.Scp079)]
 public class Freedom : Ability
 {
     public override void OnEnabled()

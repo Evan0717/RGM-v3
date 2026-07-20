@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("셧다운제", "정전 시, 해당 방의 문들은 각각 50% 확률로 닫히고 잠기게 됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_SHUTDOWN)]
+[Ability("셧다운제", "정전 시, 해당 방의 문들은 각각 50% 확률로 닫히고 잠기게 됩니다.", AbilityCategory.Common, AbilityType.COMMON_SCP079_SHUTDOWN, RoleAbility.Scp079)]
 public class Shutdown : Ability
 {
     public override void OnEnabled()

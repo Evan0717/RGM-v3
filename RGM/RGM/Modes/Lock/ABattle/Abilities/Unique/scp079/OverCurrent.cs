@@ -4,7 +4,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("과전류", "1분 간 전력이 무제한이 됩니다.", AbilityCategory.Scp079, AbilityType.SCP079_OVERCURRENT)]
+[Ability("과전류", "1분 간 전력이 무제한이 됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_OVERCURRENT, RoleAbility.Scp079)]
 public class OverCurrent : Ability
 {
     CoroutineHandle _onStarted;
