@@ -13,7 +13,7 @@ public class ManagerialObligationPerson : Ability
             ItemType.Flashlight,
             ItemType.Ammo9x19,
             ItemType.Ammo9x19,
-            ItemType.Flashlight,
+            ItemType.GrenadeFlash
         };
 
         foreach (var item in ManageDuty)

@@ -12,6 +12,8 @@ using Exiled.Events.EventArgs.Scp1507;
 
 using static RGM.Variables.Variable;
 using Exiled.API.Enums;
+using Exiled.Events.EventArgs.Server;
+using RGM.API.Features;
 
 namespace RGM.Modes;
 
@@ -21,6 +23,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     internal void RegisterEvents()
     {
+        Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         Exiled.Events.Handlers.Player.Verified += OnVerified;
         Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         Exiled.Events.Handlers.Player.Jumping += OnJumping;
@@ -34,6 +37,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     internal void UnregisterEvents()
     {
+        Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
         Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         Exiled.Events.Handlers.Player.Jumping -= OnJumping;
@@ -226,5 +230,15 @@ public class ABattleEventHandler(ABattle aBattle)
     private void OnSpawningFlamingos(SpawningFlamingosEventArgs ev)
     {
         Timing.RunCoroutine(aBattle.RestoreAbilities(ev.SpawnablePlayers.ToList()));
+    }
+    public void OnRoundEnded(RoundEndedEventArgs ev)
+    {
+        IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+
+        if (players.Count() == 1)
+            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+        else if (players.Count() > 1)
+            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
     }
 }
