@@ -4,7 +4,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079;
 
-[Ability("자동 방어 시스템", "테슬라가 가끔씩 자동으로 작동됩니다.", AbilityCategory.Common, AbilityType.COMMON_SCP079_AUTOTESLA, RoleAbility.Scp079)]
+[Ability("자동 방어 시스템", "테슬라가 가끔씩 자동으로 작동됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_AUTOTESLA, RoleAbility.Scp079)]
 public class AutoTesla : Ability
 {
     CoroutineHandle _autoTesla;
