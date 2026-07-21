@@ -17,6 +17,8 @@ public static class EchoSetting
     const string AutoOption = "자동 (Echo 기본)";
 
     static readonly Dictionary<int, SettingMeta> Meta = new();
+    // 클라이언트가 같은 설정값을 재동기화할 수 있으므로, 처리한 선택값을 기억합니다.
+    static readonly Dictionary<Player, Dictionary<int, string>> LastProcessedSelections = new();
     static List<string> WeaponOptions;
 
     public static HeaderSetting Header { get; private set; } = new HeaderSetting(190031, "에코 전투");
@@ -49,6 +51,7 @@ public static class EchoSetting
     public static void Init()
     {
         Meta.Clear();
+        LastProcessedSelections.Clear();
 
         var list = new List<SettingBase>();
 
@@ -237,6 +240,11 @@ public static class EchoSetting
         if (!TryResolveSelection(dropdown, meta, out string selected))
             return;
 
+        // ServerOnSettingValueReceived는 사용자의 변경 외에도 기존 선택값 재동기화로 호출될 수 있습니다.
+        // 동일한 값은 이미 로드아웃에 반영되어 있으므로, 알림과 메인 스탯 초기화를 반복하지 않습니다.
+        if (IsPreviouslyProcessedSelection(player, setting.SettingId, selected))
+            return;
+
         if (!EchoInfo.PlayerLoadouts.ContainsKey(player))
             EchoInfo.PlayerLoadouts[player] = new EchoLoadout();
 
@@ -248,6 +256,21 @@ public static class EchoSetting
             HandleWeaponSelection(player, loadout, selected);
         else
             HandleMainStatSelection(player, loadout, meta, selected);
+    }
+
+    static bool IsPreviouslyProcessedSelection(Player player, int settingId, string selected)
+    {
+        if (!LastProcessedSelections.TryGetValue(player, out var selections))
+        {
+            selections = new Dictionary<int, string>();
+            LastProcessedSelections[player] = selections;
+        }
+
+        if (selections.TryGetValue(settingId, out string previous) && previous == selected)
+            return true;
+
+        selections[settingId] = selected;
+        return false;
     }
 
     /// <summary>

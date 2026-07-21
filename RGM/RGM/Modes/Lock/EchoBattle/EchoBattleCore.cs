@@ -304,7 +304,8 @@ public static class EchoBattleCore
                 if (owner.Role is SpectatorRole spectator && spectator.SpectatedPlayer != null)
                     target = spectator.SpectatedPlayer;
 
-                bool showStatus = !EchoInfo.PlayerShowHints.TryGetValue(owner, out bool enabled) || enabled;
+                bool showStatus = !Round.IsEnded &&
+                    (!EchoInfo.PlayerShowHints.TryGetValue(owner, out bool enabled) || enabled);
                 if (showStatus && target != null && target.IsAlive)
                 {
                     string text = BuildHintText(target);

@@ -280,7 +280,7 @@ $"""
 
             IsWinnerSelected = true;
 
-            if (Server.PlayerCount >= 15)
+            if (Server.PlayerCount >= 10)
             {
                 int IsUsingGameChipUsers(Player player)
                 {
@@ -305,7 +305,7 @@ $"""
             }
             else
             {
-                WinMessage = $"<size=25>서버 인원이 15명 이하이므로 우승 보상은 지급되지 않습니다.</size>";
+                WinMessage = $"<size=25>서버 인원이 10명 이하이므로 우승 보상은 지급되지 않습니다.</size>";
             }
         }
 

@@ -25,8 +25,8 @@ public static class EchoQuest
     public const int SurviveReward = 50;
 
     public const int ScpItemReward = 400;
-    public const int KillEnemyReward = 200;
-    public const int ScpHitReward = 50;
+    public const int KillEnemyReward = 100;
+    public const int ScpHitReward = 60;
     public const int ContainScpReward = 4000;
     public const int KillScp0492Reward = 400;
 

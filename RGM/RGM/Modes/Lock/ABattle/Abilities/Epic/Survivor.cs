@@ -8,7 +8,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("구사일생", "사망 판정을 받을 경우, 3초간 투명 상태와 무적이 됩니다. (최대 3번)", AbilityCategory.Epic, AbilityType.EPIC_SURVIVOR)]
+[Ability("구사일생", "사망 판정을 받을 경우, 2초간 투명 상태와 무적이 되며, 체력을 20% 회복합니다. (최대 3번)", AbilityCategory.Epic, AbilityType.EPIC_SURVIVOR)]
 public class Survivor : Ability
 {
     int power = 3;
@@ -35,13 +35,14 @@ public class Survivor : Ability
 
             ev.IsAllowed = false;
 
-            ev.Player.EnableEffect(EffectType.Blinded, 1, 3);
-            ev.Player.EnableEffect(EffectType.Invisible, 1, 3);
-            ev.Player.AddEffect(EffectType.MovementBoost, 20, 3);
+            ev.Player.EnableEffect(EffectType.Invisible, 1, 2);
+            ev.Player.EnableEffect(EffectType.Ghostly, 1, 2);
+            ev.Player.AddEffect(EffectType.MovementBoost, 20, 2);
 
             GodModePlayers.Add(ev.Player);
-
-            Timing.CallDelayed(3f, () =>
+            ev.Player.Heal(ev.Player.MaxHealth * 0.2f);
+            
+            Timing.CallDelayed(2f, () =>
             {
                 if (GodModePlayers.Contains(ev.Player))
                     GodModePlayers.Remove(ev.Player);
