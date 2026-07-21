@@ -110,13 +110,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
         _applyHandles.Clear();
 
         foreach (var player in Player.List.ToList())
-        {
-            EchoQuest.ClearPlayer(player);
-            EchoGrowth.ClearPending(player);
-            ExclusiveWeaponGrowth.ClearPending(player);
-            ExclusiveWeaponCore.ClearAll(player);
-            EchoBattleCore.Reset(player);
-        }
+            ClearPlayerState(player, "모드 비활성화");
 
         EchoInfo.PlayerLoadouts.Clear();
         EchoInfo.PlayerEchoes.Clear();
@@ -449,14 +443,6 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
 
     void OnRoundEnded(RoundEndedEventArgs ev)
     {
-        foreach (var player in Player.List.ToList())
-        {
-            EchoQuest.ClearPlayer(player);
-            EchoGrowth.ClearPending(player);
-            ExclusiveWeaponGrowth.ClearPending(player);
-            ExclusiveWeaponCore.ClearAll(player);
-            EchoBattleCore.Reset(player);
-        }
         IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
         switch (players.Count())
@@ -467,6 +453,39 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             case > 1:
                 Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 4));
                 break;
+        }
+        
+        foreach (var player in Player.List.ToList())
+            ClearPlayerState(player, "라운드 종료");
+    }
+
+    void ClearPlayerState(Player player, string reason)
+    {
+        string playerId = player?.UserId ?? "null";
+
+        RunCleanupStep(playerId, reason, nameof(EchoQuest.ClearPlayer),
+            () => EchoQuest.ClearPlayer(player));
+        RunCleanupStep(playerId, reason, nameof(EchoGrowth.ClearPending),
+            () => EchoGrowth.ClearPending(player));
+        RunCleanupStep(playerId, reason, nameof(ExclusiveWeaponGrowth.ClearPending),
+            () => ExclusiveWeaponGrowth.ClearPending(player));
+        RunCleanupStep(playerId, reason, nameof(ExclusiveWeaponCore.ClearAll),
+            () => ExclusiveWeaponCore.ClearAll(player));
+        RunCleanupStep(playerId, reason, nameof(EchoBattleCore.Reset),
+            () => EchoBattleCore.Reset(player));
+    }
+
+    static void RunCleanupStep(string playerId, string reason, string step, System.Action action)
+    {
+        try
+        {
+            Log.Error($"[EchoBattle] {reason} 정리 시작: {step} (Player: {playerId})");
+            action();
+            Log.Error($"[EchoBattle] {reason} 정리 완료: {step} (Player: {playerId})");
+        }
+        catch (System.Exception exception)
+        {
+            Log.Error($"[EchoBattle] {reason} 정리 실패: {step} (Player: {playerId})\n{exception}");
         }
     }
 
