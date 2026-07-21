@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("대학수학능력시험", "20% 확률로 영웅(15% 확률로 전설) 능력을 3개 더 얻습니다.", AbilityCategory.Epic, AbilityType.EPIC_CSTC)]
+[Ability("대학수학능력시험", "20% 확률로 영웅(15% 확률로 전설) 능력을 3개 더 얻습니다.", AbilityCategory.Epic, AbilityType.EPIC_CSTC, RoleAbility.None, true)]
 public class CSTC : Ability
 {
     public override void OnEnabled()

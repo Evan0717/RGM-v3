@@ -119,6 +119,8 @@ public class Unlimited : Ability
             {
                 scp079.BlackoutZoneCooldown = 0;
                 scp079.RoomLockdownCooldown = 0;
+                
+                scp079.PingAbility._instantCooldown = 0;
             }
             else if (Owner.Role is Scp0492Role scp0492)
             {

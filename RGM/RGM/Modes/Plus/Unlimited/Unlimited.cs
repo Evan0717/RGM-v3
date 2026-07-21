@@ -154,6 +154,9 @@ namespace RGM.Modes
 
                         if (scp079.RoomLockdownCooldown > 0)
                             scp079.RoomLockdownCooldown = 0;
+
+                        if (scp079.PingAbility._instantCooldown > 0)
+                            scp079.PingAbility._instantCooldown = 0;
                     }
                     else if (player.Role is Scp0492Role scp0492)
                     {

@@ -14,7 +14,7 @@ namespace RGM.Modes.Abilities.Unique.Scp079;
 
 
 [Ability("따아알깍", "핑을 찍으면 워크스테이션을 설치합니다. (쿨타임 3초)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TOOLPING, RoleAbility.Scp079)]
-public class ToolGun : Ability
+public class ToolPing : Ability
 {
     bool isScp079Cooldown = false;
     public override void OnEnabled()
@@ -24,7 +24,7 @@ public class ToolGun : Ability
 
     public override void OnDisabled()
     {
-
+        Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
     public void OnPinging(PingingEventArgs ev)
