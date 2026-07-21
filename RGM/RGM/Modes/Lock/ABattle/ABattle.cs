@@ -619,10 +619,7 @@ public class ABattle : Mode
             .Where(x =>
             {
                 var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
-                if (conditionAttr == null)
-                    return true;
-
-                return conditionAttr.Abilities.All(req => player.HasAbility(req));
+                return conditionAttr == null || conditionAttr.Abilities.All(player.HasAbility);
             })
             .Where(x => x.Value.RoleAbility == roleAbility)
             .ToList();
@@ -631,15 +628,13 @@ public class ABattle : Mode
         if (player.Role == RoleTypeId.Scp079)
         {
             abilities = Abilities
-               .Where(x => x.Value._79Allowed == true || x.Value.RoleAbility == RoleAbility.Scp079)
-               .Where(x => x.Value.Category == category)
+               .Where(x => (x.Value._79Allowed
+                            || x.Value.RoleAbility == RoleAbility.Scp079)
+                           && x.Value.Category == category)
                .Where(x =>
                {
                    var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
-                   if (conditionAttr == null)
-                       return true;
-
-                   return conditionAttr.Abilities.All(req => player.HasAbility(req));
+                   return conditionAttr == null || conditionAttr.Abilities.All(player.HasAbility);
                })
                .ToList();
         }
@@ -709,7 +704,7 @@ public class ABattle : Mode
             player.AddAbility(GetRandomAbilities(player, category, 1).First());
         }*/
 
-        abilities = abilities == null ? GetRandomAbilities(player, category, count) : abilities;
+        abilities ??= GetRandomAbilities(player, category, count);
         var ignoredIndexes = new List<int>();
 
         if (abilities.Count == 0)
@@ -782,10 +777,9 @@ public class ABattle : Mode
         {
             int index;
 
-            do
-            {
+            do                
                 index = Random.Range(0, 3);
-            } while (ignoredIndexes.Contains(index));
+            while (ignoredIndexes.Contains(index));
 
             ignoredIndexes.Add(index);
 
