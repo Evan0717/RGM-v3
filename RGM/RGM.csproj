@@ -64,6 +64,7 @@
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
+    <Compile Include="API\Features\EffectManager.cs" />
     <Compile Include="API\Features\ServerManager.cs" />
     <Compile Include="API\Features\RoomReplacer.cs" />
     <Compile Include="API\Features\TranslationManager.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Psychics.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\RandomPackage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reflector.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reincarnation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Replication.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp008.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp035.cs" />
