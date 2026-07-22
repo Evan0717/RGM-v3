@@ -1029,6 +1029,7 @@ public class ABattle : Mode
             player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
                     [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
         }
+        /*
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.IsNonePlayer()) return;
@@ -1047,6 +1048,7 @@ public class ABattle : Mode
             player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1,[AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
             
         }
+        */
     }
 }
 
