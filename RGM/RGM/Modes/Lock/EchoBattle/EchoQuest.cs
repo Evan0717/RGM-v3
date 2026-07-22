@@ -17,18 +17,19 @@ namespace RGM.Modes;
 /// 4) SCP로 적 1회 타격 → 50 XP
 /// 5) SCP 격리(049-2 제외) → 4000 XP
 /// 6) SCP-049-2 처치 → 400 XP
+/// 7) D계급/과학자 시설 탈출(무장 해제 상태 포함) → 3000 XP
 /// 적 플레이어에게 가하거나 받은 피해량은 별도 퀘스트 없이 동일한 양의 XP로 즉시 지급합니다.
 /// </summary>
 public static class EchoQuest
 {
     public const int SurviveSeconds = 30;
     public const int SurviveReward = 50;
-
     public const int ScpItemReward = 400;
     public const int KillEnemyReward = 100;
     public const int ScpHitReward = 60;
     public const int ContainScpReward = 4000;
     public const int KillScp0492Reward = 400;
+    public const int HumanEscapeReward = 3000;
 
     enum QuestSide
     {
@@ -52,6 +53,7 @@ public static class EchoQuest
         Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
         Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
         Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Escaping += OnEscaping;
         Exiled.Events.Handlers.Scp049.Attacking += OnScp049Attacking;
         Exiled.Events.Handlers.Scp106.Attacking += OnScp106Attacking;
     }
@@ -62,6 +64,7 @@ public static class EchoQuest
         Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
         Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
         Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
         Exiled.Events.Handlers.Scp049.Attacking -= OnScp049Attacking;
         Exiled.Events.Handlers.Scp106.Attacking -= OnScp106Attacking;
 
@@ -275,6 +278,17 @@ public static class EchoQuest
         {
             GrantQuestReward(ev.Attacker, ContainScpReward, "SCP 격리");
         }
+    }
+
+    static void OnEscaping(EscapingEventArgs ev)
+    {
+        if (!ev.IsAllowed
+            || ev.Player == null
+            || !CanProgressQuests(ev.Player, QuestSide.Human)
+            || ev.Player.Role.Type is not (RoleTypeId.ClassD or RoleTypeId.Scientist))
+            return;
+
+        GrantQuestReward(ev.Player, HumanEscapeReward, "시설 탈출");
     }
 
     static bool IsScpItem(ItemType itemType)
