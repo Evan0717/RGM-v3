@@ -540,13 +540,22 @@ public enum AbilityType
     EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
-    EPIC_ATTACKCOMMAND, // [전용 영웅] 공격 명령
+    EPIC_SCP079_ATTACKORDER, // [전용 영웅] 공격 명령*
+    EPIC_SCP079_DEFENSEORDER, // [전용 영웅] 방어 명령*
+    EPIC_SCP079_AVOIDORDER, // [전용 영웅] 회피 명령*
+    EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령*
+    EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령*
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
-    LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다\
+    LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다
+    LEGEND_SCP079_VIRUS, // [전용 전설] 바이러스*
 
     MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
+    MYTHIC_SCP079_TRANSENDENCE, // [전용 신화] 초월*
+    MYTHIC_SCP079_SEVEREVIRUS, // [전용 신화] 치명적인 바이러스*
+    MYTHIC_SCP079_FUSIONBOMB, // [전용 신화] 융단 폭격*
+    MYTHIC_SCP079_BACKDOOR, // [전용 신화] 백도어*
 
     //79가 먹을 수 있는 범용 능력
     /*
