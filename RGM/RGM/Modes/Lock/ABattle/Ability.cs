@@ -418,6 +418,7 @@ public enum AbilityType
     LEGEND_JOHNWICK, // [전설] 존 윅
     LEGEND_TURTLE, // [전설] 거북 도사
     LEGEND_REPLICATION, // [전설] 복제
+    LEGEND_CLEARCACHE, // [전설] 캐시 청소
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -541,7 +542,7 @@ public enum AbilityType
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
-    LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다
+    LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다\
 
     MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
 

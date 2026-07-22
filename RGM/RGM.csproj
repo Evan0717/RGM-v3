@@ -194,6 +194,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyPower.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CataclysmGenerator.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\ClearCache.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\FlameThrower.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\FlashLight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\KillStreak.cs" />
