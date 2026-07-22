@@ -318,7 +318,7 @@ public class ABattle : Mode
         }
     }
 
-    private IEnumerator<float> ClearCache()
+    public IEnumerator<float> ClearCache()
     {
         while (true)
         {
@@ -334,7 +334,7 @@ public class ABattle : Mode
         }
     }
 
-    private IEnumerator<float> Backup()
+    public IEnumerator<float> Backup()
     {
         while (true)
         {

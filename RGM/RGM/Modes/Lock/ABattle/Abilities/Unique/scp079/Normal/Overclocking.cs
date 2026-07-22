@@ -3,7 +3,7 @@ using Exiled.API.Features.Roles;
 using MEC;
 using PlayerRoles;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
 [Ability("오버클럭", "1초마다 전력을 0.2 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_OVERCLOCKING, RoleAbility.Scp079)]
 public class Overclocking : Ability

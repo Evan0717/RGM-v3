@@ -2,7 +2,7 @@
 using Exiled.Events.EventArgs.Scp079;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
 [Ability("휴게소", "[경험치 획득]ㅣ생존한 SCP의 체력이 획득한 경험치의 10%만큼 회복됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_RESTAREA, RoleAbility.Scp079)]
 public class RestArea : Ability

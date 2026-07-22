@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("기말고사", "25% 확률로 희귀(20% 확률로 영웅) 능력을 3개 더 얻습니다.", AbilityCategory.Rare, AbilityType.RARE_FINALEXAM)]
+[Ability("기말고사", "25% 확률로 희귀(20% 확률로 영웅) 능력을 3개 더 얻습니다.", AbilityCategory.Rare, AbilityType.RARE_FINALEXAM, RoleAbility.None, true)]
 public class FinalExam : Ability
 {
     public override void OnEnabled()

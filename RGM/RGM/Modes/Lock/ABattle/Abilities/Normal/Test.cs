@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("시험", "35% 확률로 일반(30% 확률로 희귀) 능력을 3개 더 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_TEST)]
+[Ability("시험", "35% 확률로 일반(30% 확률로 희귀) 능력을 3개 더 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_TEST, RoleAbility.None, true)]
 public class Test : Ability
 {
     public override void OnEnabled()

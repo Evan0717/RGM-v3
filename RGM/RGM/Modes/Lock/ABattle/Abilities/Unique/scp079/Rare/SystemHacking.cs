@@ -3,7 +3,7 @@ using Exiled.API.Enums;
 using PlayerRoles;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
 [Ability("시스템 해킹", "아군 SCP의 투명도를 2분 간 36% 증가시킵니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_SYSTEMHACKING, RoleAbility.Scp079)]
 public class SystemHacking : Ability

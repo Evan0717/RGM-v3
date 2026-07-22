@@ -289,6 +289,8 @@ public enum AbilityType
     DUMMY_FINALEXAMFAIL, // [더미] 기말고사 낙제
     DUMMY_CSTCSUCCESS, // [더미] 대학수학능력시험 1등급
     DUMMY_CSTCFAIL, // [더미] 대학수학능력시험 9등급
+    DUMMY_INFILTRATIONSUCCESS, // [더미] 침투 성공
+    DUMMY_INFILTRATIONFAIL, // [더미] 침투 실패
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -415,6 +417,8 @@ public enum AbilityType
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
     LEGEND_TURTLE, // [전설] 거북 도사
+    LEGEND_REPLICATION, // [전설] 복제
+    LEGEND_CLEARCACHE, // [전설] 캐시 청소
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -517,6 +521,7 @@ public enum AbilityType
     NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
     NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+
     RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
@@ -528,20 +533,32 @@ public enum AbilityType
     RARE_SCP079_MOBILESTRIKEFORCE, // [전용 희귀] 기동타격대
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
+
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
-    EPIC_SCP079_LEVELUP, //[전용 영웅] 레벨업
+    EPIC_SCP079_LEVELUP, //[전용 영웅] 만렙
     EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
+    EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
+    EPIC_ATTACKCOMMAND, // [전용 영웅] 공격 명령
+
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
+    LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
+    LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다\
+
     MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
 
     //79가 먹을 수 있는 범용 능력
     /*
-     * 변이
+      시험
+      봄버맨
+      기말고사
+      변이
       대학수학능력시험
       럭키비키
       반사경
       상급변이
+      복제
+      대격변 생성기
       무제한
      */
 

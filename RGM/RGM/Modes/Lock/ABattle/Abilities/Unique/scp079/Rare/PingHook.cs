@@ -5,7 +5,7 @@ using RGM.API.Features;
 using RGM.Modes.SubClass;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
 [Ability("핑 갈고리", "다음 핑의 위치에 랜덤한 플레이어를 소환시킵니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_PINGHOOK, RoleAbility.Scp079)]
 public class PingHook : Ability

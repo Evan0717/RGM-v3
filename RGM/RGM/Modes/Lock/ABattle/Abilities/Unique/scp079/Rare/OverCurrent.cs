@@ -2,7 +2,7 @@
 using Exiled.API.Features.Roles;
 using MEC;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
 [Ability("과전류", "1분 간 전력이 무제한이 됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_OVERCURRENT, RoleAbility.Scp079)]
 public class OverCurrent : Ability
