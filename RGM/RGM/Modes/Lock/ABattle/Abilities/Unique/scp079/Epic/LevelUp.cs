@@ -9,7 +9,7 @@ public class LevelUp : Ability
     public override void OnEnabled()
     {
         if (Owner.Role is Scp079Role scp079)
-            scp079.TierManager.AccessTierIndex = 4;
+            scp079.Level = 5;
 
     }
 

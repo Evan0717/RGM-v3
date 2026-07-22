@@ -40,7 +40,7 @@ public class Importunity : Ability
 
         if (Owner.Role is Scp079Role Bscp079)
         {
-            tier = Bscp079.TierManager.AccessTierIndex;
+            tier = Bscp079.Level;
             experience = Bscp079.Experience;
         }
     }
@@ -60,7 +60,7 @@ public class Importunity : Ability
 
             if (Owner.Role is Scp079Role Ascp079)
             {
-                Ascp079.TierManager.AccessTierIndex = tier;
+                Ascp079.Level = tier;
                 Ascp079.Experience = experience;
             }
         });
