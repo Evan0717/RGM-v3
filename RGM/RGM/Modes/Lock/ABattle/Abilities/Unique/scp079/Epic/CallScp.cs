@@ -5,7 +5,7 @@ using PlayerRoles;
 using RGM.API.DataBases;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
 // [Ability("SCP 지원 호출기", "A.I. 지능이 탑재된 SCP를 1개체 부릅니다. 이 개체는 모든 데미지를 50%만 받습니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_CALLSCP, RoleAbility.Scp079)]
 public class CallScp : Ability

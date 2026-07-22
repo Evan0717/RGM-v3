@@ -3,7 +3,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using MEC;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
 [Ability("자유", "이미 작동된 발전기를 제외한 나머지 발전기는 2분 간 잠깁니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_FREEDOM, RoleAbility.Scp079)]
 public class Freedom : Ability

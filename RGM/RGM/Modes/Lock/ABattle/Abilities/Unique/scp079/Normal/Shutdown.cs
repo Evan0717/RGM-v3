@@ -3,7 +3,7 @@ using Exiled.Events.EventArgs.Scp079;
 using MEC;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
 [Ability("셧다운제", "정전 시, 해당 방의 문들은 각각 50% 확률로 닫히고 잠기게 됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_SHUTDOWN, RoleAbility.Scp079)]
 public class Shutdown : Ability

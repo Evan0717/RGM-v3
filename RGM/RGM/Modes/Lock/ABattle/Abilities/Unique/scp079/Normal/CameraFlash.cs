@@ -4,7 +4,7 @@ using MEC;
 using UnityEngine;
 using LabApi.Features.Wrappers;
 
-namespace RGM.Modes.Abilities.Unique.Scp079;
+namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
 [Ability("카메라 플래시", "핑이 찍힌 장소에 점화된 섬광탄이 생성됩니다. (쿨타임 24초)", AbilityCategory.Common, AbilityType.NORMAL_SCP079_CAMERAFLASH, RoleAbility.Scp079)]
 public class CameraFlash : Ability
