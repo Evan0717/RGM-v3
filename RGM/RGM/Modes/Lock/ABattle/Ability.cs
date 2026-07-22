@@ -419,6 +419,7 @@ public enum AbilityType
     LEGEND_TURTLE, // [전설] 거북 도사
     LEGEND_REPLICATION, // [전설] 복제
     LEGEND_CLEARCACHE, // [전설] 캐시 청소
+    LEGEND_REINCARNATION, // [전설] 리인카네이션
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처

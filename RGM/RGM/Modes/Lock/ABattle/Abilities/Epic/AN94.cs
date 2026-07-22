@@ -176,5 +176,6 @@ public class AN94 : Ability
             return;
 
         firearm.DamageFalloffDistance = 500f;
+        firearm.Damage = 24.5f;
     }
 }
