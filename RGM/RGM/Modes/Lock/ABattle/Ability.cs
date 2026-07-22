@@ -535,10 +535,11 @@ public enum AbilityType
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
 
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
-    EPIC_SCP079_LEVELUP, //[전용 영웅] 레벨업
+    EPIC_SCP079_LEVELUP, //[전용 영웅] 만렙
     EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
+    EPIC_ATTACKCOMMAND, // [전용 영웅] 공격 명령
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
