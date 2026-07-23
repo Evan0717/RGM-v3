@@ -2,7 +2,9 @@ using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp106;
 using MEC;
+using PlayerRoles;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
@@ -11,10 +13,10 @@ namespace RGM.Modes.Abilities.Legend;
 public class Reincarnation : Ability
 {
     private const float ContractDuration = 60f;
-    private const float CooldownDuration = 180f;
-    private const int RequiredHits = 90;
-    private const int RequiredKills = 7;
-    private const int MovementBoostIntensity = 30;
+    private const float CooldownDuration = 120f;
+    private const int RequiredHits = 70;
+    private const int RequiredKills = 5;
+    private const int MovementBoostIntensity = 40;
 
     private bool _isContractActive;
     private bool _isCoolingDown;
@@ -28,6 +30,7 @@ public class Reincarnation : Ability
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         Exiled.Events.Handlers.Player.Hurt += OnHurt;
         Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Scp106.Attacking += OnScp106Attacking;
     }
 
     public override void OnDisabled()
@@ -36,6 +39,7 @@ public class Reincarnation : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         Exiled.Events.Handlers.Player.Hurt -= OnHurt;
         Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Scp106.Attacking -= OnScp106Attacking;
 
         _contractVersion++;
 
@@ -59,23 +63,31 @@ public class Reincarnation : Ability
             return;
         }
 
-        if (_isCoolingDown || ABattle.Instance.IsLifeUsed[Owner])
-            return;
-
-        ev.IsAllowed = false;
-        ABattle.Instance.IsLifeUsed[Owner] = true;
-        Timing.CallDelayed(Timing.WaitForOneFrame, () => ABattle.Instance.IsLifeUsed[Owner] = false);
-
-        StartContract();
+        if (TryStartContract())
+            ev.IsAllowed = false;
     }
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (_isContractActive && ev.Player == Owner && !IsContractExemptDamage(ev.DamageHandler.Type))
+        if (ev.Player == Owner &&
+            !_isContractActive &&
+            !IsContractExemptDamage(ev.DamageHandler.Type) &&
+            IsLethalDamage(ev) &&
+            TryStartContract())
+        {
+            ev.IsAllowed = false;
+            ev.DamageHandler.Damage = 0f;
+            return;
+        }
+
+        if (_isContractActive &&
+            ev.Player == Owner &&
+            (!IsContractExemptDamage(ev.DamageHandler.Type) ||
+             ev.DamageHandler.Type == DamageType.PocketDimension && !ev.IsInstantKill))
             ev.IsAllowed = false;
 
         if (_isContractActive && ev.Attacker == Owner)
-            ev.DamageHandler.Damage *= 1.5f;
+            ev.DamageHandler.Damage *= 1.35f;
     }
 
     private void OnHurt(HurtEventArgs ev)
@@ -97,13 +109,52 @@ public class Reincarnation : Ability
     {
         if (!_isContractActive ||
             ev.Attacker != Owner ||
-            !HitboxIdentity.IsEnemy(Owner.ReferenceHub, ev.Player.ReferenceHub))
+            !HitboxIdentity.IsEnemy(RoleExtensions.GetTeam(Owner.Role.Type), RoleExtensions.GetTeam(ev.TargetOldRole)))
             return;
 
         _killCount++;
 
         if (_killCount >= RequiredKills)
             EndContract(success: true);
+    }
+
+    private void OnScp106Attacking(AttackingEventArgs ev)
+    {
+        if (ev.Target != Owner || !_isContractActive)
+            return;
+
+        ev.IsAllowed = false;
+    }
+
+    private bool TryStartContract()
+    {
+        if (_isCoolingDown)
+            return false;
+
+        if (!ABattle.Instance.IsLifeUsed.TryGetValue(Owner, out bool isLifeUsed))
+            ABattle.Instance.IsLifeUsed[Owner] = false;
+        else if (isLifeUsed)
+            return false;
+
+        ABattle.Instance.IsLifeUsed[Owner] = true;
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+        {
+            if (ABattle.Instance.IsLifeUsed.ContainsKey(Owner))
+                ABattle.Instance.IsLifeUsed[Owner] = false;
+        });
+
+        StartContract();
+        return true;
+    }
+
+    private bool IsLethalDamage(HurtingEventArgs ev)
+    {
+        float damage = ev.DamageHandler.Damage;
+        if (damage <= 0f && !ev.IsInstantKill)
+            return false;
+
+        float totalHealth = Owner.Health + Owner.ArtificialHealth + Owner.HumeShield;
+        return ev.IsInstantKill || damage >= totalHealth;
     }
 
     private void StartContract()
