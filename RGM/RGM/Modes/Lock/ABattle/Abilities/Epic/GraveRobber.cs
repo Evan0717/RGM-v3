@@ -26,7 +26,9 @@ public class GraveRobber : Ability
         if (ev.Player.LeadingTeam != Owner.LeadingTeam || ev.Player.GetAbilities().Count() == 0)
             return;
 
-        List<AbilityType> abilityTypes = ev.Player.GetAbilities().Select(x => x.Data.AbilityType).ToList();
+        List<AbilityType> abilityTypes = ev.Player.GetAbilities().Where(x=> x.Data.RoleAbility == RoleAbility.None).Select(x => x.Data.AbilityType).ToList();
+        if (abilityTypes.Count == 0)
+            return;
 
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
