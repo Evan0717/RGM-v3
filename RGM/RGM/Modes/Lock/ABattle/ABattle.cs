@@ -1089,7 +1089,7 @@ public static class ABattleExtensions
         return ABattle.Instance.HasAbility(player, type);
     }
 
-    public static bool IsCaptured(this Player player) //[신화] 구속에 의해 붙잡혔는지 확인
+    public static bool IsCaptured(this Player player, out Player anchorOwner) //[신화] 구속에 의해 붙잡혔는지 확인
     {
         foreach (var p in PlayerManager.List)
         {
@@ -1102,10 +1102,12 @@ public static class ABattleExtensions
             {
                 if (anchor.TargetPlayer.Contains(player))
                 {
+                    anchorOwner = p;
                     return true;
                 }
             }
         }
+        anchorOwner = null;
         return false;
     }
 }
