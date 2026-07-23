@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace RGM.RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("은신", "SCP들에게 [<color=#2ECCFA>희귀</color>] 투명망토 능력을 지급합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_HIDEORDER, RoleAbility.Scp079)]
+[Ability("은폐", "SCP들에게 [<color=#2ECCFA>희귀</color>] 투명망토 능력을 지급합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_HIDE, RoleAbility.Scp079)]
 
-public class HideOrder : Ability
+public class Hide : Ability
 {
     public override void OnEnabled()
     {

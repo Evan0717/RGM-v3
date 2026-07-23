@@ -536,7 +536,7 @@ public enum AbilityType
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
     RARE_SCP079_PROTECTION, // [전용 희귀] 보호
     RARE_SCP079_AVOIDORDER, // [전용 희귀] 회피 명령
-    RARE_SCP079_HIDEORDER, // [전용 희귀] 은신 명령
+    RARE_SCP079_HIDE, // [전용 희귀] 은폐
 
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
     EPIC_SCP079_LEVELUP, //[전용 영웅] 만렙
