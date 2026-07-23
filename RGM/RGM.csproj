@@ -147,6 +147,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\FinalExamSuccess.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\InfiltrationFail.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\InfiltrationSuccess.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\InformationLeak.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\LegendTransitionFailure.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\LegendTransitionSuccess.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\NoAFK.cs" />

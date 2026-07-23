@@ -19,7 +19,7 @@ using System;
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 
-[Ability("백도어", "핑을 찍으면 근처의 가장 가까운 인간의 능력을 하나 삭제 후 랜덤한 Scp에게 지급합니다. (사거리 5m)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_BACKDOOR, RoleAbility.Scp079)]
+[Ability("백도어", "핑을 찍으면 근처의 가장 가까운 인간의 능력을 3개 삭제 후 랜덤한 Scp에게 지급합니다. (사거리 5m)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_BACKDOOR, RoleAbility.Scp079)]
 public class BackDoor : Ability
 {
     public override void OnEnabled()
@@ -59,9 +59,6 @@ public class BackDoor : Ability
                 return;
             }
 
-            List<Ability> TargetList = player.GetAbilities().Where(a => a.Data.RoleAbility == RoleAbility.None).ToList();
-            Ability TargetAbility = TargetList.GetRandomValue();
-
             Player scp = PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079 && x.IsAlive).GetRandomValue();
             if (scp == null)
             {
@@ -69,13 +66,26 @@ public class BackDoor : Ability
                 return;
             }
 
+            for (int i = 0; i < 3; i++)
+            {
+                List<Ability> TargetList = player.GetAbilities().Where(a => a.Data.RoleAbility == RoleAbility.None).ToList();
 
-            player.RemoveAbility(TargetAbility.Data.AbilityType);
-            scp.AddAbility(TargetAbility.Data.AbilityType);
+                Ability TargetAbility = TargetList.GetRandomValue();
+                if (TargetAbility == null) break;
 
+                if (scp == null)
+                {
+                    Owner.AddHint("힌트", "능력을 줄 SCP가 없습니다.", 1f);
+                    return;
+                }
 
-            Owner.AddHint("힌트", $"{scp.DisplayNickname}(<color={scp.Role.Color.ToHex()}>{Trans.Role[scp.Role.Type]}</color>)에게 [{ABattle.SelectFormat[TargetAbility.Data.Category.GetCategoryTranslation()]}]{TargetAbility.Data.Name} 능력을 주었습니다!", 1f);
-
+                player.RemoveAbility(TargetAbility.Data.AbilityType);
+                player.AddAbility(AbilityType.DUMMY_INFORMATIONLEAK);
+                scp.AddAbility(TargetAbility.Data.AbilityType);
+                
+                scp.AddHint("힌트", $"<size=20><color={scp.Role.Color.ToHex()}>SCP-079</color>에게 [{ABattle.SelectFormat[TargetAbility.Data.Category.GetCategoryTranslation()]}]{TargetAbility.Data.Name} 능력을 받았습니다!</size>", 1f);
+                Owner.AddHint("힌트", $"<size=20>{scp.DisplayNickname}(<color={scp.Role.Color.ToHex()}>{Trans.Role[scp.Role.Type]}</color>)에게 [{ABattle.SelectFormat[TargetAbility.Data.Category.GetCategoryTranslation()]}]{TargetAbility.Data.Name} 능력을 주었습니다!</size>", 1f);
+            }
         }  
 
         catch (Exception e)

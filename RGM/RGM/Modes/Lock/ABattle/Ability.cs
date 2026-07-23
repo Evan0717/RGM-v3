@@ -291,6 +291,7 @@ public enum AbilityType
     DUMMY_CSTCFAIL, // [더미] 대학수학능력시험 9등급
     DUMMY_INFILTRATIONSUCCESS, // [더미] 침투 성공
     DUMMY_INFILTRATIONFAIL, // [더미] 침투 실패
+    DUMMY_INFORMATIONLEAK, // [더미] 개인 정보 유출
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
