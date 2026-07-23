@@ -59,13 +59,6 @@ public class BackDoor : Ability
                 return;
             }
 
-            Player scp = PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079 && x.IsAlive).GetRandomValue();
-            if (scp == null)
-            {
-                Owner.AddHint("힌트", "능력을 줄 SCP가 없습니다.", 1f);
-                return;
-            }
-
             for (int i = 0; i < 3; i++)
             {
                 List<Ability> TargetList = player.GetAbilities().Where(a => a.Data.RoleAbility == RoleAbility.None).ToList();
@@ -73,6 +66,7 @@ public class BackDoor : Ability
                 Ability TargetAbility = TargetList.GetRandomValue();
                 if (TargetAbility == null) break;
 
+                Player scp = PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079 && x.IsAlive).GetRandomValue();
                 if (scp == null)
                 {
                     Owner.AddHint("힌트", "능력을 줄 SCP가 없습니다.", 1f);
