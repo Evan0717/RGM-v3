@@ -72,13 +72,13 @@ public class Anchor : Ability
             if (!HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub)) continue;
             if (TargetPlayer.Contains(player)) continue;
 
-            if (Owner.IsCaptured())
+            if (Owner.IsCaptured(out Player b))
             {
                 Owner.AddHint("알림", $"구속당한 상태에서 다른 플레이어를 구속할 수 없습니다.", 3f);
                 continue;
             }
 
-            if (player.IsCaptured())
+            if (player.IsCaptured(out Player a))
             {
                 Owner.AddHint("알림", $"다른 플레이어에게 구속당한 플레이어는 구속할 수 없습니다.", 3f);
                 continue;
@@ -153,6 +153,7 @@ public class Anchor : Ability
     public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
         if (ev.Player != Owner) return;
+        if (ev.Player.CurrentItem.Serial != itemSerial) return;
         Timing.RunCoroutine(Disable());
     }
 

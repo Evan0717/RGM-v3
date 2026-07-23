@@ -119,8 +119,17 @@ public class Unlimited : Ability
             {
                 scp079.BlackoutZoneCooldown = 0;
                 scp079.RoomLockdownCooldown = 0;
-                
-                scp079.PingAbility._instantCooldown = 0;
+
+                if (scp079.PingAbility != null)
+                {
+                    var field = typeof(PlayerRoles.PlayableScps.Scp079.Pinging.Scp079PingAbility)
+                        .GetField("_rateLimiter", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+
+                    if (field != null)
+                    {
+                        field.SetValue(scp079.PingAbility, new RateLimiter(0f));
+                    }
+                }
             }
             else if (Owner.Role is Scp0492Role scp0492)
             {
