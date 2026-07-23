@@ -18,7 +18,7 @@ using Exiled.Events.Patches.Generic;
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 
-[Ability("초월", "핑을 찍으면 핑 근처 가장 가까운 인간 1명이 20% 확률로 승천합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TRANSENDENCE, RoleAbility.Scp079)]
+[Ability("초월", "핑을 찍으면 핑 근처 가장 가까운 인간 1명이 20% 확률로 승천합니다. (사거리 5m)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TRANSENDENCE, RoleAbility.Scp079)]
 public class Transendence : Ability
 {
     List<Player> isInRocket = new();
