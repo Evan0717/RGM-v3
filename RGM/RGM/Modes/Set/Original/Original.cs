@@ -1,4 +1,11 @@
-﻿namespace RGM.Modes
+﻿using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Server;
+using MEC;
+using RGM.API.Features;
+
+namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Original)]
     public class Original : Mode
@@ -15,11 +22,23 @@
 
         public override void OnEnabled()
         {
-            // 히히 날먹
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         }
 
         public override void OnDisabled()
         {
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+        }
+
+        public void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+
+            if (players.Count() == 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+
+            else if (players.Count() > 1)
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
         }
     }
 }
