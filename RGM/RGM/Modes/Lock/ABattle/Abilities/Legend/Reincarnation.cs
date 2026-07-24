@@ -195,6 +195,7 @@ public class Reincarnation : Ability
         if (!success)
         {
             _isCoolingDown = true;
+            Owner.RemoveAllAbilities();
             Owner.Kill("영혼 계약에 실패하여 산화되었습니다.");
             return;
         }
