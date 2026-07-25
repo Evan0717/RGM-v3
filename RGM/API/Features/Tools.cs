@@ -741,17 +741,6 @@ $"""
         public static IEnumerator<float> DoRocket(Player attacker, Player player, float speed)
         {
             int amnt = 0;
-            if (player.IsCaptured(out Player AnchorOwner))
-            {
-                Ability Anchor = ABattle.Instance.GetAbility(AnchorOwner, AbilityType.MYTHIC_ANCHOR);
-                if (Anchor != null)
-                {
-                    if (Anchor is Modes.Abilities.Mythic.Anchor anchor && anchor.TargetPlayer != null && anchor.TargetPlayer.Contains(player))
-                    {
-                        anchor.TargetPlayer.Remove(player);
-                    }
-                }
-            }
             while (player.Role != RoleTypeId.Spectator)
             {
                 player.Position += Vector3.up * speed;
