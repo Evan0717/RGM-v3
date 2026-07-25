@@ -26,7 +26,7 @@ public static class EchoQuest
     public const int SurviveReward = 50;
     public const int ScpItemReward = 400;
     public const int KillEnemyReward = 100;
-    public const int ScpHitReward = 60;
+    public const int ScpHitReward = 50;
     public const int ContainScpReward = 4000;
     public const int KillScp0492Reward = 400;
     public const int HumanEscapeReward = 3000;
@@ -284,11 +284,24 @@ public static class EchoQuest
     {
         if (!ev.IsAllowed
             || ev.Player == null
-            || !CanProgressQuests(ev.Player, QuestSide.Human)
             || ev.Player.Role.Type is not (RoleTypeId.ClassD or RoleTypeId.Scientist))
             return;
 
+        // 탈출로 인한 역할 변경 중에는 기존 Echo 런타임 인스턴스가 먼저 제거되고,
+        // 새 진영 Echo 적용은 지연됩니다. 저장된 로드아웃을 기준으로 보상 가능 여부를
+        // 판정해야 이 공백 동안에도 탈출 보상을 놓치지 않습니다.
+        if (!CanProgressEscapeQuest(ev.Player))
+            return;
+
         GrantQuestReward(ev.Player, HumanEscapeReward, "시설 탈출");
+    }
+
+    static bool CanProgressEscapeQuest(Player player)
+    {
+        if (player == null || !EchoInfo.PlayerLoadouts.TryGetValue(player, out var loadout))
+            return false;
+
+        return loadout.HasGrowableEquipped() || ExclusiveWeaponGrowth.CanGrow(player);
     }
 
     static bool IsScpItem(ItemType itemType)

@@ -2,6 +2,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp173;
 using InventorySystem.Items.Firearms.Modules;
 using MEC;
 using PlayerRoles;
@@ -40,14 +41,14 @@ public static class EchoStats
         DamageType.Scp106
     };
 
-    static readonly float[] SubOptionGradeWeights = [240, 240, 160, 160, 100, 100];
+    static readonly float[] SubOptionGradeWeights = [24, 24, 16, 16, 10, 10];
     static readonly System.Random SubOptionRandom = new();
     static readonly object SubOptionRandomLock = new();
     static readonly HashSet<Player> FixedDamageTargets = new();
     const float Scp173BaseBlinkCooldown = 3f;
     const float Scp173MinimumBlinkCooldown = 1f;
     const float Scp173MaximumMoveSpeed = 100f;
-    const float Scp173BlinkCooldownReductionPerMoveSpeed = 0.01f;
+    const float Scp173BlinkCooldownReductionPerMoveSpeed = 0.014f;
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
@@ -537,8 +538,8 @@ public static class EchoStats
             player.IsUsingStamina = true;
         if (prev.SizeReduction > 0f)
             player.Scale += Vector3.one * prev.SizeReduction;
-        if (prev.Scp173BlinkCooldown.HasValue && player.Role is Scp173Role scp173)
-            scp173.BlinkCooldown = prev.Scp173BlinkCooldown.Value;
+        if (prev.Scp173BlinkCooldownModified)
+            Exiled.Events.Handlers.Scp173.Blinking -= OnScp173Blinking;
 
         if (prev.EchoAhpKillCode.HasValue)
             KillEchoAhpProcess(player, prev.EchoAhpKillCode.Value);
@@ -614,10 +615,12 @@ public static class EchoStats
             player.AddEffect(EffectType.MovementBoost, effectState.MovementBoost);
         }
 
-        if (player.Role is Scp173Role scp173)
+        if (player.Role is Scp173Role && snapshot.MoveSpeed > 0f)
         {
-            effectState.Scp173BlinkCooldown = scp173.BlinkCooldown;
-            scp173.BlinkCooldown = GetScp173BlinkCooldown(snapshot.MoveSpeed);
+            // BlinkCooldown은 현재 진행 중인 대기시간입니다. 여기서 변경하면 레벨업
+            // 재적용 시 대기시간이 초기화되므로, Blinking 이벤트에서 다음 대기시간만 변경합니다.
+            effectState.Scp173BlinkCooldownModified = true;
+            Exiled.Events.Handlers.Scp173.Blinking += OnScp173Blinking;
         }
 
         if (snapshot.JumpPower > 0)
@@ -670,8 +673,18 @@ public static class EchoStats
             Timing.RunCoroutine(RegenRoutine(player, snapshot), $"EchoRegen_{player.UserId}");
     }
 
+    static void OnScp173Blinking(BlinkingEventArgs ev)
+    {
+        if (ev?.Player == null
+            || !EchoInfo.PlayerStats.TryGetValue(ev.Player, out var snapshot)
+            || snapshot.MoveSpeed <= 0f)
+            return;
+
+        ev.BlinkCooldown = GetScp173BlinkCooldown(snapshot.MoveSpeed);
+    }
+
     /// <summary>
-    /// SCP-173의 이동속도 1당 순간이동 쿨타임을 0.8% 줄이며, 1초보다 짧아지지 않게 합니다.
+    /// SCP-173의 이동속도 1당 순간이동 쿨타임을 1.4% 줄이며, 1초보다 짧아지지 않게 합니다.
     /// </summary>
     static float GetScp173BlinkCooldown(float moveSpeed)
     {
