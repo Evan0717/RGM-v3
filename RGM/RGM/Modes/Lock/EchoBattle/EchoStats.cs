@@ -195,7 +195,7 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(2f, 45f, level),
+            EchoCost.Cost4 => LerpStat(2f, 50f, level),
             EchoCost.Cost3 => LerpStat(50f, 250f, level),
             EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f
@@ -421,8 +421,8 @@ public static class EchoStats
                 // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
                 snapshot.AhpMax += LerpStat(25f, 300f, level);
-                snapshot.HsRegen += LerpStat(20f, 100f, level);
-                snapshot.HsMax += LerpStat(500f, 2500f, level);
+                snapshot.HsRegen += LerpStat(16f, 80f, level);
+                snapshot.HsMax += LerpStat(400f, 2000f, level);
                 break;
             case EchoMainStatType.SizeReduction:
                 snapshot.SizeReduction += value;
@@ -452,7 +452,7 @@ public static class EchoStats
 
             float attack = value;
             if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
-                attack *= 0.4f;
+                attack *= 0.45f;
             snapshot.AttackFlat += attack;
         }
     }
@@ -469,7 +469,7 @@ public static class EchoStats
                     break;
                 float attack = option.Value;
                 if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
-                    attack *= 0.4f;
+                    attack *= 0.45f;
                 snapshot.AttackFlat += attack;
                 break;
             case EchoSubOptionType.DefensePercent:
@@ -512,7 +512,7 @@ public static class EchoStats
                 snapshot.SizeReduction += option.Value;
                 break;
             case EchoSubOptionType.HealingBonus:
-                snapshot.HealingBonus += option.Value;
+                snapshot.HealingBonus += player.Role.Type == RoleTypeId.Scp0492 ? option.Value * 4f : option.Value;
                 break;
         }
     }
