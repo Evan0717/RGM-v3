@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using MEC;
@@ -63,7 +64,7 @@ namespace RGM.Modes
 
             while (true)
             {
-                Player badLucky = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
+                Player badLucky = PlayerManager.List.Where(x => x.IsAlive).ToList().GetRandomValue();
 
                 Throwable scp018 = (Throwable)badLucky.AddItem(ItemType.SCP018);
                 Scp018 scp = (Scp018)scp018;

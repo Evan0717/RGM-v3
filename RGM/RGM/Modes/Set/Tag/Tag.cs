@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
@@ -56,7 +57,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
         public IEnumerator<float> OnModeStarted()
         {
             for (float i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
-                finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !finders.Contains(x)).ToList()));
+                finders.Add(PlayerManager.List.Where(x => !finders.Contains(x)).ToList().GetRandomValue());
 
             PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
 

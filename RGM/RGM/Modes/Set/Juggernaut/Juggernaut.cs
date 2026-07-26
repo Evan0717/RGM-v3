@@ -222,7 +222,7 @@ namespace RGM.Modes
                 Spawned(player);
             }
 
-            juggernaut = Tools.GetRandomValue(PlayerManager.List.ToList());
+            juggernaut = PlayerManager.List.ToList().GetRandomValue();
             
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
@@ -400,8 +400,7 @@ namespace RGM.Modes
                 };
 
                 if (ScpsList.Contains(player.Role)) {
-                    player.Role.Set(Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>() 
-                        .Where(x => !ScpsList.Contains(x) && x.IsScpRole()).ToList()));
+                    player.Role.Set(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x) && x.IsScpRole()).ToList().GetRandomValue());
                 }
             }
         }

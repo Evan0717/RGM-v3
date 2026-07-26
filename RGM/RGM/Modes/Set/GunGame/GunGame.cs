@@ -5,6 +5,7 @@ using Exiled.API.Features.Doors;
 using MEC;
 using UnityEngine;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using PlayerRoles;
 
 using RGM.API.Features;
@@ -163,8 +164,8 @@ COM-15
 
         public void PlayerSpawn(Player player)
         {
-            Door SelectedDoor = Tools.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
-            !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList());
+            Door SelectedDoor = Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
+                                                     !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList().GetRandomValue();
 
             player.Role.Set(RoleTypeId.ClassD);
             player.Health = player.MaxHealth;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;
@@ -40,7 +41,7 @@ namespace RGM.Modes
             List<ItemType> CDItems = new List<ItemType>() { ItemType.Medkit, ItemType.Painkillers, ItemType.Radio, ItemType.GrenadeFlash };
             List<ItemType> Items = new List<ItemType>();
 
-            Items.Add(Tools.GetRandomValue(Guns));
+            Items.Add(Guns.GetRandomValue());
 
             foreach (var item in CDItems)
             {
@@ -82,7 +83,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            door = Tools.GetRandomValue(Door.List.ToList());
+            door = Door.List.ToList().GetRandomValue();
             StartupItems = Items();
 
             PlayerManager.List.ToList().CopyTo(pl);
@@ -90,7 +91,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(180f);
 
-            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = PlayerManager.List.Where(x => x.IsAlive).ToList().GetRandomValue();
 
             foreach (var player in PlayerManager.List)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
@@ -18,7 +19,7 @@ public class Supply : Ability
         };
 
         for (int i = 1; i < 4; i++)
-            Owner.AddItem(Tools.GetRandomValue(Ammos));
+            Owner.AddItem(Ammos.GetRandomValue());
     }
 
     public override void OnDisabled()

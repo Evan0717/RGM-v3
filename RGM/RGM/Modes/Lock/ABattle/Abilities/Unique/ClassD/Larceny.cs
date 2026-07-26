@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
@@ -34,7 +35,7 @@ public class Larceny : Ability
 
             if (!player.IsInventoryEmpty)
             {
-                Item Item = Tools.GetRandomValue(player.Items.ToList());
+                Item Item = player.Items.ToList().GetRandomValue();
 
                 player.RemoveItem(Item);
                 player.AddHint("소매치기", "주머니가 허전합니다..", 1.2f);

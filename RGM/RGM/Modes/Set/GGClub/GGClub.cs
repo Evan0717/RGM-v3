@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using Mirror;
@@ -117,7 +118,7 @@ namespace RGM.Modes
 
                 for (int i = 1; i < 12 - Phase; i++)
                 {
-                    Transform goldPad = Tools.GetRandomValue(Pads);
+                    Transform goldPad = Pads.GetRandomValue();
 
                     if (!goldPads.Contains(goldPad))
                         goldPads.Add(goldPad);

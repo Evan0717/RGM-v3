@@ -5,6 +5,7 @@ using MEC;
 
 using PlayerRoles;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
 using UnityEngine;
@@ -65,8 +66,8 @@ namespace RGM.Modes
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
             }
-            Level05 = Tools.GetRandomValue(PlayerManager.List.ToList());
-            Assassin = Tools.GetRandomValue(PlayerManager.List.Where(x => x != Level05).ToList());
+            Level05 = PlayerManager.List.ToList().GetRandomValue();
+            Assassin = PlayerManager.List.Where(x => x != Level05).ToList().GetRandomValue();
 
             List<ItemType> Level05Items = new List<ItemType>() 
             {
@@ -97,7 +98,7 @@ namespace RGM.Modes
 
             for (int i = 0; i < PlayerManager.List.Count / 1.5f; i++)
             {
-                Player player = Tools.GetRandomValue(PlayerManager.List.Where(x => x != Level05 && x != Assassin).ToList());
+                Player player = PlayerManager.List.Where(x => x != Level05 && x != Assassin).ToList().GetRandomValue();
                 player.Role.Set(RoleTypeId.ChaosRifleman);
 
                 player.AddBroadcast(10, $"<size=25>당신은 <color=#04B404><b>혼돈의 반란</b></color>, <color=#FE9A2E><b>암살자</b></color>에 협조하여 <color=#000000><b>05 평의회</b></color>를 사살하십시오.</size>");

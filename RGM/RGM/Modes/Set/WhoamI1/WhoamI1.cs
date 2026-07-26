@@ -7,7 +7,7 @@ using MEC;
 using PlayerRoles;
 using UnityEngine;
 using CustomPlayerEffects;
-
+using Exiled.API.Extensions;
 using RGM.API.Interfaces;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
@@ -92,7 +92,7 @@ namespace RGM.Modes
                 {
                     try
                     {
-                        Player p = Tools.GetRandomValue(PlayersInfo.Keys.Where(x => x != player).ToList());
+                        Player p = PlayersInfo.Keys.Where(x => x != player).ToList().GetRandomValue();
 
                         player.Role.Set(PlayersInfo[p].RoleType);
                         player.MaxHealth = PlayersInfo[p].MaxHealth;

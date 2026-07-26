@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
@@ -85,7 +86,7 @@ namespace RGM.Modes
             {
                 bool end = true;
 
-                Server.ExecuteCommand($"/ev run {Tools.GetRandomValue(Games)}");
+                Server.ExecuteCommand($"/ev run {Games.GetRandomValue()}");
 
                 while (end)
                 {

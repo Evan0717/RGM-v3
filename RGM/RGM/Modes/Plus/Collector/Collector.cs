@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
@@ -65,7 +66,7 @@ namespace RGM.Modes
 
             for (int i=1; i<4; i++)
             {
-                player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP") && !Datas.ExceptItems.Contains(x)).ToList()));
+                player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP") && !Datas.ExceptItems.Contains(x)).ToList().GetRandomValue());
 
                 yield return Timing.WaitForSeconds(1);
             }
