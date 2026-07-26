@@ -7,7 +7,6 @@ namespace RGM.UserSettings
     public static partial class SettingManager
     {
         private static CoroutineHandle _reloader;
-
         public static partial void Init();
         
         public static partial void Init()
