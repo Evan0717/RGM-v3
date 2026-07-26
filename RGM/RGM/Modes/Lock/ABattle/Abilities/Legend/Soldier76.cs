@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("솔져: 76", "적군 주변 8m 이내에 발사된 총알은 모두 맞은 판정으로 처리됩니다. 단, 최종 데미지가 60% 감소합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SOLDIER76)]
+[Ability("솔져: 76", "적군 주변 6m 이내에 발사된 총알은 모두 맞은 판정으로 처리됩니다. 단, 최종 데미지가 50% 감소합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SOLDIER76)]
 public class Soldier76 : Ability
 {
     public override void OnEnabled()
@@ -26,7 +26,7 @@ public class Soldier76 : Ability
         Player target = PlayerManager.List
             .Where(x => x.IsAlive && !x.IsNPC && HitboxIdentity.IsEnemy(Owner.ReferenceHub, x.ReferenceHub))
             .Select(x => (Player: x, Distance: Vector3.Distance(Owner.Position, x.Position)))
-            .Where(x => x.Distance < 8f)
+            .Where(x => x.Distance < 6f)
             .OrderBy(x => x.Distance)
             .Select(x => x.Player)
             .FirstOrDefault();
@@ -36,7 +36,7 @@ public class Soldier76 : Ability
         if (ev.Firearm.MagazineAmmo > 0)
             ev.Firearm.MagazineAmmo--;
 
-        target.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub, ev.Firearm.Damage * .6f, DeathTranslations.BulletWounds));
+        target.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub, ev.Firearm.Damage * .5f, DeathTranslations.BulletWounds));
         ev.Player.ShowHitMarker();
     }
 }
