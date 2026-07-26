@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Synergy;
@@ -16,7 +17,7 @@ public class RandomCollection : Ability
             AbilityType.LEGEND_RANDOMPACKAGE
         };
 
-        Owner.AddAbility(Tools.GetRandomValue(Randoms));
+        Owner.AddAbility(Randoms.GetRandomValue());
     }
 
     public override void OnDisabled()

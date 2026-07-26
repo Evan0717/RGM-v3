@@ -6,6 +6,7 @@ using RGM.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 
 namespace RGM.Modes
 {
@@ -134,8 +135,8 @@ namespace RGM.Modes
 
                 while (waitingPlayers.Count > 1)
                 {
-                    Player first = Tools.GetRandomValue(waitingPlayers);
-                    Player second = Tools.GetRandomValue(waitingPlayers.Where(x => x != first).ToList());
+                    Player first = waitingPlayers.GetRandomValue();
+                    Player second = waitingPlayers.Where(x => x != first).ToList().GetRandomValue();
 
                     waitingPlayers.Remove(first);
                     waitingPlayers.Remove(second);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class HealthCenterStaff : Ability
         };
 
         foreach (var team in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == Owner.LeadingTeam && Vector3.Distance(Owner.Position, x.Position) < 11))
-            team.AddItem(Tools.GetRandomValue(HealItem));
+            team.AddItem(HealItem.GetRandomValue());
     }
 
     public override void OnDisabled()

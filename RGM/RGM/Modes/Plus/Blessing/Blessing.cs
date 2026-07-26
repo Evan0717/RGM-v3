@@ -4,6 +4,7 @@ using System.Linq;
 using MEC;
 using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 
 using PlayerRoles;
@@ -103,7 +104,7 @@ namespace RGM.Modes
                             t = "다수의 관전자들이 당신을 후원합니다.";
                             if (UnityEngine.Random.Range(1, 51) == 1)
                             {
-                                Item Item = player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
+                                Item Item = player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
                             }
                         }
 

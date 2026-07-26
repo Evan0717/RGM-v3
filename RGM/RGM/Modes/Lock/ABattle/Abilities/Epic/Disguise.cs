@@ -60,7 +60,7 @@ public class Disguise : Ability
             {
                 currentTeam = mostCommonTeam;
 
-                RoleTypeId role = Tools.GetRandomValue(Tools.EnumToList<RoleTypeId>().Where(x => RoleExtensions.GetTeam(x) == mostCommonTeam && !_blockedRoles.Contains(x)).ToList());
+                RoleTypeId role = Tools.EnumToList<RoleTypeId>().Where(x => RoleExtensions.GetTeam(x) == mostCommonTeam && !_blockedRoles.Contains(x)).ToList().GetRandomValue();
 
                 MirrorExtensions.ChangeAppearance(Owner, role);
                 Owner.AddBroadcast(10, $"<size=20><color={role.GetRoleColor().ToHex()}>{Trans.Role[role]}</color>(으)로 변장했습니다.</size>");

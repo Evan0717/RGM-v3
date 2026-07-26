@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using MEC;
@@ -103,7 +104,7 @@ namespace RGM.Modes
                 {
                     if (UnityEngine.Random.Range(1, 4) == 1)
                     {
-                        var scp244 = (Scp244)Item.Create(Tools.GetRandomValue(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }), Server.Host);
+                        var scp244 = (Scp244)Item.Create(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }.GetRandomValue(), Server.Host);
                         scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
                     }
                 }

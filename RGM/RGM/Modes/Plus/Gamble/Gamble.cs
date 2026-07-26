@@ -4,6 +4,7 @@ using MEC;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -67,7 +68,7 @@ namespace RGM.Modes
                 return;
 
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
-            ItemType Item = Tools.GetRandomValue(ItemList);
+            ItemType Item = ItemList.GetRandomValue();
 
             int rand = UnityEngine.Random.Range(1, 101);
 

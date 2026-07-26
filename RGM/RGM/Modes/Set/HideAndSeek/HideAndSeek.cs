@@ -10,6 +10,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -79,7 +80,7 @@ namespace RGM.Modes
 
             for (float i = 1; i < PlayerManager.List.Count / 6 + 2; i++)
             {
-                finders.Add(Tools.GetRandomValue(PlayerManager.List.Where(x => !finders.Contains(x)).ToList()));
+                finders.Add(PlayerManager.List.Where(x => !finders.Contains(x)).ToList().GetRandomValue());
             }
 
             foreach (var finder in finders)

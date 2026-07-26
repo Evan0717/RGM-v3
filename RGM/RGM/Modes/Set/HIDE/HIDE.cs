@@ -7,6 +7,7 @@ using Mirror;
 using PlayerRoles;
 using UnityEngine;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
 using static RGM.Variables.Variable;
@@ -67,7 +68,7 @@ namespace RGM.Modes
         public IEnumerator<float> OnModeStarted()
         {
             PlayerManager.List.ToList().CopyTo(pl);
-            monster = Tools.GetRandomValue(PlayerManager.List.ToList());
+            monster = PlayerManager.List.ToList().GetRandomValue();
 
             try
             {

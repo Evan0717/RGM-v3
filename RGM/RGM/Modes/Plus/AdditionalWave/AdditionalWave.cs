@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
@@ -61,7 +62,7 @@ namespace RGM.Modes
                 foreach (var player in ev.Players)
                 {
                     if (UnityEngine.Random.Range(1, 4) == 1)
-                        player.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>()));
+                        player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
                 }
             }
         }

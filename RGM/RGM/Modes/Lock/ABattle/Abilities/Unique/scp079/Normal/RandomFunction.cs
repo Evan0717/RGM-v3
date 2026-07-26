@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp079;
 using RGM.API.Features;
@@ -25,7 +26,7 @@ public class RandomFunction : Ability
 
         for (int i = 1; i < 6; i++)
         {
-            Room SelectedRoom = Tools.GetRandomValue(Room.List.ToList());
+            Room SelectedRoom = Room.List.ToList().GetRandomValue();
 
             SelectedRoom.TurnOffLights(10);
         }

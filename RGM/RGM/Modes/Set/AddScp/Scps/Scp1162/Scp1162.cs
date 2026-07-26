@@ -5,6 +5,7 @@ using UnityEngine;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 
 namespace RGM.Modes.Sets.AddScp.Scps
 {
@@ -31,7 +32,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 if (hit.transform.name == "Scp1162")
                 {
                     List<ItemType> ItemList = Tools.EnumToList<ItemType>();
-                    ItemType Item = Tools.GetRandomValue(ItemList);
+                    ItemType Item = ItemList.GetRandomValue();
 
                     int rand = UnityEngine.Random.Range(1, 101);
 
