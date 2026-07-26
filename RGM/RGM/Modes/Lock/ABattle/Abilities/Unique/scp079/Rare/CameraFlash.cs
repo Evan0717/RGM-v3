@@ -4,9 +4,9 @@ using MEC;
 using UnityEngine;
 using LabApi.Features.Wrappers;
 
-namespace RGM.Modes.Abilities.Unique.Scp079.Common;
+namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("카메라 플래시", "핑이 찍힌 장소에 점화된 섬광탄이 생성됩니다. (쿨타임 24초)", AbilityCategory.Common, AbilityType.NORMAL_SCP079_CAMERAFLASH, RoleAbility.Scp079)]
+[Ability("카메라 플래시", "핑이 찍힌 장소에 점화된 섬광탄이 생성됩니다. (쿨타임 24초)", AbilityCategory.Rare, AbilityType.NORMAL_SCP079_CAMERAFLASH, RoleAbility.Scp079)]
 public class CameraFlash : Ability
 {
     bool isScp079Cooldown = false;
@@ -34,17 +34,21 @@ public class CameraFlash : Ability
                 g.FuseTime = 4f;
                 g.SpawnActive(ev.Position, ev.Player);
 
-                LightSourceToy light = LightSourceToy.Create(ev.Position);
-                light.Position = ev.Position;
-                light.Range = 5;
-                light.Color = new Color(1, 1, 0, 1);
-                light.Rotation = Quaternion.Euler(0, 0, 0);
+                if (!Owner.HasAbility(AbilityType.EPIC_SCP079_SURPRISEATTACK))
+                { 
+                    LightSourceToy light = LightSourceToy.Create(ev.Position);
+                    light.Position = ev.Position;
+                    light.Range = 5;
+                    light.Color = new Color(1, 1, 0, 1);
+                    light.Rotation = Quaternion.Euler(0, 0, 0);
 
+                    Timing.CallDelayed(5, () =>
+                    {
+                        light.Destroy();
+                    });
 
-                Timing.CallDelayed(5, () =>
-                {
-                    light.Destroy();
-                });
+                }
+
 
                 isScp079Cooldown = true;
 

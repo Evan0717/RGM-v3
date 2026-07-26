@@ -158,7 +158,7 @@ public class ABattle : Mode
         }   
         else
         {
-            string extraMode = Tools.GetRandomValue(ExtraModes.Keys.Where(x => !exceptModes.Contains(x)).ToList());
+            string extraMode = ExtraModes.Keys.Where(x => !exceptModes.Contains(x)).ToList().GetRandomValue();
 
             if (!CurrentExtraModes.Contains(extraMode))
                 CurrentExtraModes.Add(extraMode);

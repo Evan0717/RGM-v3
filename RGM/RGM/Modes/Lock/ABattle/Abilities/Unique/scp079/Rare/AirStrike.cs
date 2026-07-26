@@ -28,18 +28,19 @@ public class AirStrike : Ability
         {
             var g = (ExplosiveGrenade)Exiled.API.Features.Items.Item.Create(ItemType.GrenadeHE, ev.Player);
             g.SpawnActive(ev.Position, ev.Player);
-
-            LightSourceToy light = LightSourceToy.Create(ev.Position);
-            light.Position = ev.Position;
-            light.Range = 5;
-            light.Color = new Color(1, 0, 0, 1);
-            light.Rotation = Quaternion.Euler(0, 0, 0);
-
-
-            Timing.CallDelayed(5, () =>
+            if (!Owner.HasAbility(AbilityType.EPIC_SCP079_SURPRISEATTACK))
             {
-                light.Destroy();
-            });
+                LightSourceToy light = LightSourceToy.Create(ev.Position);
+                light.Position = ev.Position;
+                light.Range = 5;
+                light.Color = new Color(1, 0, 0, 1);
+                light.Rotation = Quaternion.Euler(0, 0, 0);
+
+                Timing.CallDelayed(5, () =>
+                {
+                    light.Destroy();
+                });
+            }
 
             OnDisabled();
         });

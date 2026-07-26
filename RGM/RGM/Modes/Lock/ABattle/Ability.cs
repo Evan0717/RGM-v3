@@ -547,6 +547,7 @@ public enum AbilityType
     EPIC_SCP079_ATTACKORDER, // [전용 영웅] 공격 명령
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
     EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
+    EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃

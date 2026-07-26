@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
+using SecretAPI.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
@@ -11,7 +12,7 @@ using static PlayerList;
 namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
 
-[Ability("시스템 침투", "20% 확률로 추가 모드를 추가합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_SystemInfiltration, RoleAbility.Scp079)]
+[Ability("시스템 침투", "20% 확률로 [워크스테이션 업그레이드]추가 모드를 추가합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_SystemInfiltration, RoleAbility.Scp079)]
 public class SystemInfiltration : Ability
 {
     public override void OnEnabled()
@@ -28,7 +29,7 @@ public class SystemInfiltration : Ability
     private string PickExtraMode_79()
     {
         if (ABattle.CurrentExtraModes.Count >= ABattle.ExtraModes.Count) return "";
-        string extraMode = Tools.GetRandomValue(ABattle.ExtraModes.Keys.Where(x => !ABattle.CurrentExtraModes.Contains(x)).ToList());
+        string extraMode = ABattle.ExtraModes.Keys.Where(x => !ABattle.CurrentExtraModes.Contains(x)).ToList().GetRandomValue();
         ABattle.CurrentExtraModes.Add(extraMode);
 
         Webhook.Send($"추가 모드: {extraMode}");
