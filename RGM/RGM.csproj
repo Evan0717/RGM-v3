@@ -354,7 +354,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\CameraFlash.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\CASSIE.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SystemInfiltration.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\AvoidOrder.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AvoidOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Hide.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Protection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Freedom.cs" />
