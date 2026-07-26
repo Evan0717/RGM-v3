@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
+using SecretAPI.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
@@ -28,7 +29,7 @@ public class SystemInfiltration : Ability
     private string PickExtraMode_79()
     {
         if (ABattle.CurrentExtraModes.Count >= ABattle.ExtraModes.Count) return "";
-        string extraMode = Tools.GetRandomValue(ABattle.ExtraModes.Keys.Where(x => !ABattle.CurrentExtraModes.Contains(x)).ToList());
+        string extraMode = ABattle.ExtraModes.Keys.Where(x => !ABattle.CurrentExtraModes.Contains(x)).ToList().GetRandomValue();
         ABattle.CurrentExtraModes.Add(extraMode);
 
         Webhook.Send($"추가 모드: {extraMode}");

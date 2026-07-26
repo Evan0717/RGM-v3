@@ -1,20 +1,9 @@
-﻿using Exiled.API.Extensions;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
-using Exiled.Events.Patches.Events.Player;
 using MEC;
-using PlayerRoles;
-using ProjectMER.Features.Serializable;
-using RGM.API.Features;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static RGM.Variables.Variable;
-using RGM.API.DataBases;
-using ProjectMER;
-
 using System;
 using ProjectMER.Features.Objects;
 using ProjectMER.Features;
@@ -46,7 +35,7 @@ public class FusionBomb : Ability
             {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    Vector3 centerPos = ev.Position;
+                    Vector3 centerPos = ev.Position + new Vector3(0, 0.1f, 0);
                     Timing.RunCoroutine(StartBombardment(centerPos));
 
                     isScp079Cooldown = true;

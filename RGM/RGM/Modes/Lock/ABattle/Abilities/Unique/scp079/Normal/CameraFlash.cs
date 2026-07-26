@@ -34,17 +34,21 @@ public class CameraFlash : Ability
                 g.FuseTime = 4f;
                 g.SpawnActive(ev.Position, ev.Player);
 
-                LightSourceToy light = LightSourceToy.Create(ev.Position);
-                light.Position = ev.Position;
-                light.Range = 5;
-                light.Color = new Color(1, 1, 0, 1);
-                light.Rotation = Quaternion.Euler(0, 0, 0);
+                if (!Owner.HasAbility(AbilityType.EPIC_SCP079_SURPRISEATTACK))
+                { 
+                    LightSourceToy light = LightSourceToy.Create(ev.Position);
+                    light.Position = ev.Position;
+                    light.Range = 5;
+                    light.Color = new Color(1, 1, 0, 1);
+                    light.Rotation = Quaternion.Euler(0, 0, 0);
 
+                    Timing.CallDelayed(5, () =>
+                    {
+                        light.Destroy();
+                    });
 
-                Timing.CallDelayed(5, () =>
-                {
-                    light.Destroy();
-                });
+                }
+
 
                 isScp079Cooldown = true;
 
