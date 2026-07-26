@@ -11,7 +11,7 @@ using ProjectMER.Features;
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 
-[Ability("융단 폭격", "핑을 찍은 지점 20m 이내에서 10초간 0.25초 간격으로 미사일이 쏟아집니다. (쿨타임 15초)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079)]
+[Ability("융단 폭격", "핑을 찍은 지점 20m 이내에서 10초간 0.1초 간격으로 미사일이 쏟아집니다. (쿨타임 15초)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079)]
 public class FusionBomb : Ability
 {
     bool isScp079Cooldown = false;
@@ -57,7 +57,7 @@ public class FusionBomb : Ability
     public IEnumerator<float> StartBombardment(Vector3 centerPos)
     {
         float duration = 10f;
-        float interval = 0.25f;
+        float interval = 0.1f;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
