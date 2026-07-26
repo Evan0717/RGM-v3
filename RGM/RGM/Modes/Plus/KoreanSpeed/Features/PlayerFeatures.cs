@@ -43,7 +43,7 @@ public static class PlayerFeatures
         try
         {
             foreach (var player in PlayerManager.List.Where(player =>
-                         player != null && !player.IsNonePlayer() && !player.IsDead && !player.IsNPC))
+                         player != null && !player.IsDead && !player.IsNPC))
             {
                 UnloadEffects();
                 player.AddEffect(EffectType.MovementBoost, (byte)(SpeedStore.Count * 2));
@@ -61,7 +61,7 @@ public static class PlayerFeatures
         try
         {
             foreach (var player in PlayerManager.List.Where(player =>
-                         player != null && !player.IsDead && !player.IsNonePlayer() && !player.IsNPC))
+                         player != null && !player.IsDead && !player.IsNPC))
             {
                 player.RemoveEffect(EffectType.MovementBoost, 255);
                 player.RemoveEffect(EffectType.Scp1853, 5);
@@ -87,7 +87,7 @@ public static class PlayerFeatures
                              x.Type == ItemType.MicroHID))
                 {
                     if (items is not MicroHid hid) continue;
-                    if (hid.Owner.IsNPC && hid.Owner.IsNonePlayer()) continue;
+                    if (hid.Owner.IsNPC ) continue;
                     if (hid.State is not MicroHidPhase.WindingUp) continue;
                     if (hid.WindUpProgress >= 1) continue;
 
@@ -98,7 +98,7 @@ public static class PlayerFeatures
                              x.Type == ItemType.MicroHID))
                 {
                     if (items is not MicroHid hid) continue;
-                    if (hid.Owner.IsNPC && hid.Owner.IsNonePlayer()) continue;
+                    if (hid.Owner.IsNPC ) continue;
                     if (hid.State is not MicroHidPhase.WindingDown) continue;
                     if (hid.WindUpProgress <= 0) continue;
 
@@ -132,7 +132,7 @@ public static class PlayerFeatures
     {
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            if (ev.Player == null || !ev.Player.IsAlive || ev.Player.IsNonePlayer()) return;
+            if (ev.Player == null || !ev.Player.IsAlive) return;
             AddEffects();
         });
     }

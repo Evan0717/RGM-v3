@@ -604,7 +604,6 @@
     <Compile Include="RGM\Modes\Lock\Rank\Rank.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Variables\Base.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
-    <Compile Include="RGM\Modes\Plus\KoreanSpeed\SettingManager.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
     <Compile Include="RGM\Modes\Plus\Store\Store.cs" />
@@ -760,6 +759,7 @@
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
     <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
+    <Compile Include="RGM\Patches\UserSettings.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
@@ -906,13 +906,13 @@
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\..\EXILED_REFERENCES\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>..\..\EXILED_REFERENCES\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.UIElementsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -928,9 +928,6 @@
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SecretAPI.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
