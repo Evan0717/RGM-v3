@@ -36,11 +36,6 @@ public class AN94 : Ability
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
-    public override void OnDisabled()
-    {
-
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item == null || ev.Item.Serial != _an94Serial)

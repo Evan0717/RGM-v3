@@ -33,8 +33,4 @@ public class CSTC : Ability
             }
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

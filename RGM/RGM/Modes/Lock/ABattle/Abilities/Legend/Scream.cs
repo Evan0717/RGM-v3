@@ -12,28 +12,24 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("괴성", "적을 보고 있을 때 마이크를 키면 시설 내의 적들을 일시적으로 둔해지게 만듭니다. (쿨타임 100초)", AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
 public class GmanRoaringSound : Ability
 {
-    int RoaringSoundCooldown = 0;
+    private int _roaringSoundCooldown = 0;
 
     public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
-    }
+        => Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
 
-    public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
-    }
+    public override void OnDisabled() 
+        => Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
 
     public IEnumerator<float> OnVoiceChatting(VoiceChattingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
 
-        if (RoaringSoundCooldown <= 0)
+        if (_roaringSoundCooldown <= 0)
         {
             if (Tools.TryGetLookPlayer(ev.Player, 10f, out Player target, out RaycastHit? hit) && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, target.ReferenceHub))
             {
-                RoaringSoundCooldown = 180;
+                _roaringSoundCooldown = 180;
 
                 Tools.PlayGlobalAudio("GmanRoaringSound");
 
@@ -58,7 +54,7 @@ public class GmanRoaringSound : Ability
 
                 Timing.CallDelayed(100, () =>
                 {
-                    RoaringSoundCooldown = 0;
+                    _roaringSoundCooldown = 0;
                 });
             }
         }

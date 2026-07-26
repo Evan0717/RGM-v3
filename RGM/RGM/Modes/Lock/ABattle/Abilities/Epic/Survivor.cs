@@ -15,14 +15,10 @@ public class Survivor : Ability
     bool isEnabled = false;
 
     public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.Dying += OnDying;
-    }
+        => Exiled.Events.Handlers.Player.Dying += OnDying;
 
-    public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.Dying -= OnDying;
-    }
+    public override void OnDisabled() 
+        => Exiled.Events.Handlers.Player.Dying -= OnDying;
 
     public void OnDying(DyingEventArgs ev)
     {

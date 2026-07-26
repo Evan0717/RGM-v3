@@ -10,14 +10,10 @@ namespace RGM.Modes.Abilities.Epic;
 public class SuicideBomber : Ability
 {
     public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.Dying += OnDying;
-    }
+        => Exiled.Events.Handlers.Player.Dying += OnDying;
 
     public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.Dying -= OnDying;
-    }
+        => Exiled.Events.Handlers.Player.Dying -= OnDying;
 
     public void OnDying(DyingEventArgs ev)
     {

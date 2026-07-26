@@ -19,14 +19,10 @@ public class ContExpert : Ability
     };  
 
     public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.Hurting += OnHurting;
-    }
+        => Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
     public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-    }
+        => Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
     public void OnHurting(HurtingEventArgs ev)
     {

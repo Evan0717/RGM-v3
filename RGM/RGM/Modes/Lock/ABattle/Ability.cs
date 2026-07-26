@@ -10,9 +10,15 @@ namespace RGM.Modes;
 
 public abstract class Ability
 {
-    public abstract void OnEnabled();
+    public virtual void OnEnabled()
+    {
+        Log.Info("뭐... base.OnEnabled()를 시도하신 이유가 있으시겠죠..?");
+    }
 
-    public abstract void OnDisabled();
+    public virtual void OnDisabled()
+    {
+        Log.Info("뭐... base.OnDisabled()를 시도하신 이유가 있으시겠죠..?");
+    }
 
     public AbilityData Data { get; set; }
     public Player Owner { get; set; }

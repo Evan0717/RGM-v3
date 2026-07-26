@@ -25,10 +25,6 @@ public class FlashLight : Ability
         _onStarted = Timing.RunCoroutine(OnStarted());
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item != null)

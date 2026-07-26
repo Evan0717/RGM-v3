@@ -14,8 +14,4 @@ public class Replication : Ability
             Owner.AddAbility(ability.Data.AbilityType);
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

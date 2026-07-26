@@ -31,8 +31,4 @@ public class CataclysmGenerator : Ability
         foreach (var ac in abilityList)
             Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, ac, 3).Where(x => x != AbilityType.LEGEND_CATACLYSMGENERATOR).GetRandomValue());
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

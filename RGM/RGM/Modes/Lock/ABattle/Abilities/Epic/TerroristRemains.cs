@@ -19,8 +19,4 @@ public class TerroristRemains : Ability
         PinkCandy.AddCandy(CandyKindID.Pink);
         Owner.AddItem(PinkCandy);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

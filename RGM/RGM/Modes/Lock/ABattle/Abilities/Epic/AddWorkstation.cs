@@ -27,8 +27,4 @@ public class AddWorkstation : Ability
             Scale = Vector3.one
         }.SpawnOrUpdateObject();
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

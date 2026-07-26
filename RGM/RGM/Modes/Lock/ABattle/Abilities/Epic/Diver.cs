@@ -9,10 +9,8 @@ public class Diver : Ability
 {
     CoroutineHandle _diverRotation;
 
-    public override void OnEnabled()
-    {
-        _diverRotation = Timing.RunCoroutine(DiverRotation());
-    }
+    public override void OnEnabled() 
+        => _diverRotation = Timing.RunCoroutine(DiverRotation());
 
     public override void OnDisabled()
     {

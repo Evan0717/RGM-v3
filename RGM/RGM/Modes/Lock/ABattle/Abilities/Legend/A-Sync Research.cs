@@ -30,11 +30,6 @@ public class ASync : Ability
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
-
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item != null)

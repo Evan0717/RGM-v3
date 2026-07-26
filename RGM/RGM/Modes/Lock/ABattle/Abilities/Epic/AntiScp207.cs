@@ -10,8 +10,4 @@ public class AntiScp207 : Ability
         if (UnityEngine.Random.Range(1, 6) == 1)
             Owner.AddItem(ItemType.AntiSCP207);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

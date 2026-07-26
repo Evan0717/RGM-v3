@@ -11,15 +11,11 @@ public class GraveRobber : Ability
 {
     int count = 4;
 
-    public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.Dying += OnDying;
-    }
+    public override void OnEnabled() 
+        => Exiled.Events.Handlers.Player.Dying += OnDying;
 
-    public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.Dying -= OnDying;
-    }
+    public override void OnDisabled() 
+        => Exiled.Events.Handlers.Player.Dying -= OnDying;
 
     public void OnDying(DyingEventArgs ev)
     {
