@@ -19,7 +19,10 @@ public class Dopamine : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Player != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+        if (ev.Player != Owner ||
+            ev.Attacker == null ||
+            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
+            Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
         ev.IsAllowed = false;

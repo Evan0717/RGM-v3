@@ -26,16 +26,15 @@ public class InfinityGun : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (InfinityGunSerial == ev.Player.CurrentItem.Serial && ev.Item != null)
-        {
-            if (InfinityGunSerial == ev.Item.Serial)
-                ev.Player.AddHint("훌륭한 대화수단", $"<b><color={ABattle.RatingColor["영웅"]}>훌륭한 대화수단</color></b> 능력이 있는 A7입니다.");
-        }
+        if (ev.Item?.Serial != InfinityGunSerial)
+            return;
+        
+        ev.Player.AddHint("훌륭한 대화수단", $"<b><color={ABattle.RatingColor["영웅"]}>훌륭한 대화수단</color></b> 능력이 있는 A7입니다.");
     }
 
     public void OnShooting(ShootingEventArgs ev)
     {
         if (ev.Item.Serial == InfinityGunSerial)
-            ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
+            ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 31;
     }
 }
