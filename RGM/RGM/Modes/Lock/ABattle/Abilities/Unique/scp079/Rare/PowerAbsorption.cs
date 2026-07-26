@@ -4,7 +4,7 @@ using Exiled.Events.EventArgs.Scp079;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("전력 흡수", "[핑 -> 레일건]ㅣ전력을 50 얻습니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_POWERABSORPTION, RoleAbility.Scp079)]
+[Ability("전력 흡수", "[핑 -> 레일건]ㅣ전력을 50 얻습니다. [핑 -> 발전기] | 전력을 20 얻습니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_POWERABSORPTION, RoleAbility.Scp079)]
 public class PowerAbsorption : Ability
 {
     public override void OnEnabled()
@@ -26,6 +26,11 @@ public class PowerAbsorption : Ability
         {
             if (ev.Player.Role is Scp079Role scp079)
                 scp079.Energy += 50;
+        }
+        if (ev.Type == PingType.Generator)
+        {
+            if (ev.Player.Role is Scp079Role scp079)
+                scp079.Energy += 20;
         }
     }
 }

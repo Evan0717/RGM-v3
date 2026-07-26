@@ -408,7 +408,7 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_ASYNC, // [전설] A-Sync Research
-    LEGEND_AIMHACK, // [전설] 솔져: 76
+    LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
     LEGEND_SCP294, // [전설] SCP-294, 커피 자판기
@@ -480,7 +480,7 @@ public enum AbilityType
     NORMAL_SCP049_DEATH, // [전용 희귀] 사신
     NORMAL_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
     NORMAL_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
-    NORMAL_SCP049_MADDOCTOR, // [전용 희귀] 실험체
+    NORMAL_SCP049_MEDICALKNIFE, // [전용 희귀] 메스
 
     // SCP-0492
     NORMAL_SCP0492_MEALS, // [전용 일반] 급식
@@ -515,20 +515,22 @@ public enum AbilityType
 
     // SCP-079
     NORMAL_SCP079_PINGREMOTE, // [전용 일반] 핑 리모컨
-    NORMAL_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
+    //NORMAL_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
     NORMAL_SCP079_RANDOMFUNCTION, // [전용 일반] 랜덤 함수
     NORMAL_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
     NORMAL_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
     NORMAL_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
     NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
-    NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    NORMAL_SCP079_AVOIDORDER, // [전용 일반] 회피 명령
+    NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
+    //NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
 
-    RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
+    //RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
     RARE_SCP079_PINGHOOK, // [전용 희귀] 핑 갈고리
-    RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
+   // RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
     RARE_SCP079_REPAIR, // [전용 희귀] 수리수리 마수리
     RARE_SCP079_RESTAREA, // [전용 희귀] 휴게소
     RARE_SCP079_FREEDOM, // [전용 희귀] 자유
@@ -536,7 +538,6 @@ public enum AbilityType
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
     RARE_SCP079_PROTECTION, // [전용 희귀] 보호
-    RARE_SCP079_AVOIDORDER, // [전용 희귀] 회피 명령
     RARE_SCP079_HIDE, // [전용 희귀] 은폐
 
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
@@ -544,7 +545,6 @@ public enum AbilityType
     EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
-    EPIC_SCP079_ATTACKORDER, // [전용 영웅] 공격 명령
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
     EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
     EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
@@ -558,7 +558,7 @@ public enum AbilityType
     MYTHIC_SCP079_TRANSENDENCE, // [전용 신화] 초월
     MYTHIC_SCP079_SEVEREVIRUS, // [전용 신화] 치명적인 바이러스
     MYTHIC_SCP079_BACKDOOR, // [전용 신화] 백도어
-    MYTHIC_SCP079_FUSIONBOMB, // [전용 신화] 융단 폭격*
+    MYTHIC_SCP079_FUSIONBOMB, // [전용 신화] 융단 폭격
 
     //79가 먹을 수 있는 범용 능력
     /*
