@@ -408,7 +408,7 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_ASYNC, // [전설] A-Sync Research
-    LEGEND_AIMHACK, // [전설] 솔져: 76
+    LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
     LEGEND_SCP294, // [전설] SCP-294, 커피 자판기
@@ -480,7 +480,7 @@ public enum AbilityType
     NORMAL_SCP049_DEATH, // [전용 희귀] 사신
     NORMAL_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
     NORMAL_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
-    NORMAL_SCP049_MADDOCTOR, // [전용 희귀] 실험체
+    NORMAL_SCP049_MEDICALKNIFE, // [전용 희귀] 메스
 
     // SCP-0492
     NORMAL_SCP0492_MEALS, // [전용 일반] 급식

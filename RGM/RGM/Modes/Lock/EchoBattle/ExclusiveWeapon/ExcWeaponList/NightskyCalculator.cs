@@ -67,7 +67,7 @@ public class NightskyCalculator : ExcWeapon
         if (pureShieldLost <= 0f)
             return;
 
-        float heal = pureShieldLost * (0.46f * Resonance);
+        float heal = pureShieldLost * (0.5f * Resonance);
         if (heal <= 0f)
             return;
 

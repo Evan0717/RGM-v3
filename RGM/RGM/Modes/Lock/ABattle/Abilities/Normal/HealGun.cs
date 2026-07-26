@@ -30,9 +30,10 @@ public class HealGun : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (HealGunSerial != ev.Player.CurrentItem.Serial || ev.Item == null) return;
-        if (HealGunSerial == ev.Item.Serial)
-            ev.Player.AddHint("치유 사제", $"<b><color={ABattle.RatingColor["일반"]}>치유 사제</color></b> 능력이 있는 COM-18입니다.");
+        if (ev.Item?.Serial != HealGunSerial)
+            return;
+
+        ev.Player.AddHint("치유 사제", $"<b><color={ABattle.RatingColor["일반"]}>치유 사제</color></b> 능력이 있는 COM-18입니다.");
     }
 
     public void OnHurting(HurtingEventArgs ev)
