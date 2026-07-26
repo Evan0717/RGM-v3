@@ -113,7 +113,7 @@ SCP-079
             {
                 if (Random.Range(1, 11) == 1)
                 {
-                    RoleTypeId _roleId = Tools.GetRandomValue(_roleList);
+                    RoleTypeId _roleId = _roleList.GetRandomValue();
 
                     _disguisedList[player] = _roleId;
 

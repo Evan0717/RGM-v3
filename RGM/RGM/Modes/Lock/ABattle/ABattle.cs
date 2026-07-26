@@ -285,6 +285,8 @@ public class ABattle : Mode
     {
         yield return Timing.WaitForOneFrame;
 
+        Tools.LoadMap("AddCamera");
+
         foreach (var player in PlayerManager.List)
         {
             try

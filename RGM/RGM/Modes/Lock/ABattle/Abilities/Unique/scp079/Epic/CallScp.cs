@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
@@ -12,7 +13,7 @@ public class CallScp : Ability
 {
     public override void OnEnabled()
     {
-        RoleTypeId _role = Tools.GetRandomValue(Datas.AIRoles.Where(x => !PlayerManager.List.ToList().Where(x => x.IsNPC).Select(x1 => x1.Role.Type).ToList().Contains(x)).ToList());
+        RoleTypeId _role = Datas.AIRoles.Where(x => !PlayerManager.List.ToList().Where(x => x.IsNPC).Select(x1 => x1.Role.Type).ToList().Contains(x)).ToList().GetRandomValue();
 
         Server.ExecuteCommand($"/spawnai {_role.ToString()}");
 

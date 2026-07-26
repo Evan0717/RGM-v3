@@ -118,7 +118,7 @@ namespace RGM.Modes
                         break;
 
                     case 10:
-                        Item item = Item.Create(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => !Datas.ExceptItems.Contains(x)).ToList()));
+                        Item item = Item.Create(Tools.EnumToList<ItemType>().Where(x => !Datas.ExceptItems.Contains(x)).ToList().GetRandomValue());
                         item.CreatePickup(door.Position, new Quaternion(a, a, a, a));
                         break;
 
@@ -133,7 +133,7 @@ namespace RGM.Modes
                             speaker.transform.position = door.Position;
                         });
 
-                        audioPlayer.TryPlay(Tools.GetRandomValue(AudioClipStorage.AudioClips.Select(x => x.Key).ToList()));
+                        audioPlayer.TryPlay(AudioClipStorage.AudioClips.Select(x => x.Key).ToList().GetRandomValue());
                         break;
 
                     case 12:

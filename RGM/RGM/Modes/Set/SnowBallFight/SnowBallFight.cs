@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
@@ -106,7 +107,7 @@ namespace RGM.Modes
 
                 if (UnityEngine.Random.Range(1, 31) == 1)
                 {
-                    Item Item = Item.Create(Tools.GetRandomValue(new List<ItemType>() { ItemType.Coal, ItemType.Snowball, ItemType.SpecialCoal }));
+                    Item Item = Item.Create(new List<ItemType>() { ItemType.Coal, ItemType.Snowball, ItemType.SpecialCoal }.GetRandomValue());
 
                     Item.CreatePickup(new Vector3(UnityEngine.Random.Range(x1, x2), UnityEngine.Random.Range(y1, y2), UnityEngine.Random.Range(z1, z2)));
                 }

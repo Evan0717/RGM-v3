@@ -7,6 +7,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using UserSettings.ServerSpecific;
 
 namespace RGM.Modes;
@@ -193,7 +194,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
         if (player?.Role.Type != RoleTypeId.Scp079)
             return;
 
-        player.Role.Set(Tools.GetRandomValue(ScpSpawnPoolWithout079));
+        player.Role.Set(ScpSpawnPoolWithout079.GetRandomValue());
     }
 
     void Verified(Player player)
@@ -239,7 +240,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
                 continue;
 
             RoleTypeId restoredRole = role == RoleTypeId.Scp079
-                ? Tools.GetRandomValue(ScpSpawnPoolWithout079)
+                ? ScpSpawnPoolWithout079.GetRandomValue()
                 : role;
 
             if (player.Role.Type == RoleTypeId.Spectator && restoredRole != RoleTypeId.Spectator)

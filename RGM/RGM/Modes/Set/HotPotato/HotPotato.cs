@@ -12,6 +12,7 @@ using RGM.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using UnityEngine;
 using static RGM.Variables.Variable;
 
@@ -92,7 +93,7 @@ namespace RGM.Modes
                 {
                     try
                     {
-                        Player BomberMan = Tools.GetRandomValue(pl.Where(x => pl.Contains(x) && !BomberMans.Contains(x)).ToList());
+                        Player BomberMan = pl.Where(x => pl.Contains(x) && !BomberMans.Contains(x)).ToList().GetRandomValue();
 
                         if (BomberMan != null && BomberMan.IsConnected)
                         {

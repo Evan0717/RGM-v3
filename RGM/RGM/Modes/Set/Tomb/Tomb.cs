@@ -68,7 +68,7 @@ namespace RGM.Modes
             {
                 try
                 {
-                    Item item = Item.Create(Tools.GetRandomValue(ItemTypes));
+                    Item item = Item.Create(ItemTypes.GetRandomValue());
 
                     if (item is Firearm firearm)
                         firearm.MagazineAmmo = firearm.MaxMagazineAmmo;
@@ -84,7 +84,7 @@ namespace RGM.Modes
             {
                 try
                 {
-                    Item item = Item.Create(Tools.GetRandomValue(ammoTypes));
+                    Item item = Item.Create(ammoTypes.GetRandomValue());
 
                     item.CreatePickup(RandomPosition());
                 }
@@ -108,7 +108,7 @@ namespace RGM.Modes
             
             yield return Timing.WaitForSeconds(120f);
 
-            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = PlayerManager.List.Where(x => x.IsAlive).ToList().GetRandomValue();
 
             foreach (var player in PlayerManager.List)
             {

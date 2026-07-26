@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using PlayerRoles;
@@ -11,7 +12,7 @@ public class Teleportation : Ability
 {
     public override void OnEnabled()
     {
-        Player target = Tools.GetRandomValue(PlayerManager.List.Where(x => x != Owner && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList());
+        Player target = PlayerManager.List.Where(x => x != Owner && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList().GetRandomValue();
         Owner.Position = target.Position;
 
         Timing.CallDelayed(1, () =>

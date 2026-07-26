@@ -151,7 +151,7 @@ namespace RGM.EventArgs
 
                         if (filiteredPlayers.Count > 0)
                         {
-                            Player player = Tools.GetRandomValue(filiteredPlayers);
+                            Player player = filiteredPlayers.GetRandomValue();
                             CurrentMode = ModeVote.FirstOrDefault(x => x.Value.Contains(player)).Key;
                             CurrentSubMode = SubModeVote[ModeVote.Keys.ToList().IndexOf(CurrentMode)];
 
@@ -167,7 +167,7 @@ namespace RGM.EventArgs
                 {
                     if (!ModeList.ContainsKey(CurrentMode))
                     {
-                        CurrentMode = Tools.GetRandomValue(ModeList.Keys.Where(x => ModeList[x].Category == ModeCategory.Public).ToList());
+                        CurrentMode = ModeList.Keys.Where(x => ModeList[x].Category == ModeCategory.Public).ToList().GetRandomValue();
 
                         foreach (var p in PlayerManager.List)
                             p.AddBroadcast(10, $"<size=25><b>알 수 없는 이유로 모드가 선택되지 않았으므로, 모드가 랜덤으로 선택되었습니다.</size>");

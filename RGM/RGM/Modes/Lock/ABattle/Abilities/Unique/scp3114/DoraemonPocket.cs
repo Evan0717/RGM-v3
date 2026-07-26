@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Extensions;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Scp3114;
 using RGM.API.Features;
@@ -25,7 +26,7 @@ public class DoraemonPocket : Ability
 
         List<ItemType> ItemTypes = Tools.EnumToList<ItemType>();
 
-        Item Item = ev.Player.AddItem(Tools.GetRandomValue(ItemTypes));
+        Item Item = ev.Player.AddItem(ItemTypes.GetRandomValue());
 
         ev.Player.CurrentItem = Item;
     }

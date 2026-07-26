@@ -15,7 +15,7 @@ public class BagOfChaos : Ability
 
         for (int i = 1; i < Count + 1; i++)
         {
-            try { Owner.AddItem(Tools.GetRandomValue(Tools.EnumToList<ItemType>().Where(x => !x.IsAmmo()).ToList())); }
+            try { Owner.AddItem(Tools.EnumToList<ItemType>().Where(x => !x.IsAmmo()).ToList()).GetRandomValue(); }
             catch { }
         }
     }

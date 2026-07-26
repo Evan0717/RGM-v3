@@ -93,7 +93,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(120f);
 
-            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = PlayerManager.List.Where(x => x.IsAlive).ToList().GetRandomValue();
 
             foreach (var player in PlayerManager.List)
             {
@@ -126,7 +126,7 @@ namespace RGM.Modes
             };
             List<ItemType> Items = new List<ItemType>();
 
-            Items.Add(Tools.GetRandomValue(Guns));
+            Items.Add(Guns.GetRandomValue());
 
             foreach (var item in CDItems)
             {

@@ -15,7 +15,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "서리",
-    "공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 0.5초마다 최대 1회 Slowness를 (1% * 공진 수치) 중첩(5초 미타격 시 해제).\n10스택 시 2초 + (0.6초 * 공진 수치) 속박, 이후 5초간 중첩 불가.",
+    "공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 0.5초마다 최대 1회 Slowness를 (1% * 공진 수치) 중첩(5초 미타격 시 해제).\n10스택 시 2초 + (0.4초 * 공진 수치) 속박, 이후 6초간 중첩 불가.",
     ExclusiveWeaponType.FrostBurn)]
 public class FrostBurn : ExcWeapon
 {
@@ -27,9 +27,9 @@ public class FrostBurn : ExcWeapon
 
     public override float PassiveAttackPercent => 8f + Resonance * 2f;
 
-    const float StackIntervalSeconds = 0.5f;
+    const float StackIntervalSeconds = 0.6f;
     const float DecaySeconds = 5f;
-    const float PostRootStackLockoutSeconds = 5f;
+    const float PostRootStackLockoutSeconds = 6f;
     const int MaxStacks = 10;
 
     class FrostState
@@ -114,7 +114,7 @@ public class FrostBurn : ExcWeapon
 
         if (state.Stacks >= MaxStacks)
         {
-            float rootDuration = 2f + 0.6f * Resonance;
+            float rootDuration = 2f + 0.4f * Resonance;
             target.EnableEffect(EffectType.Ensnared, 1, rootDuration);
             ClearFrost(target, state);
             _states.Remove(id);

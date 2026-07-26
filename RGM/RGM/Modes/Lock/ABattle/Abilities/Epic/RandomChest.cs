@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Extensions;
 using Exiled.API.Features.Items;
 using RGM.API.Features;
 
@@ -27,7 +28,7 @@ public class RandomChest : Ability
 
         for (int i = 1; i < 4; i++)
         {
-            Item RandomChestItem = Owner.AddItem(Tools.GetRandomValue(RandomChest));
+            Item RandomChestItem = Owner.AddItem(RandomChest.GetRandomValue());
         }
     }
 

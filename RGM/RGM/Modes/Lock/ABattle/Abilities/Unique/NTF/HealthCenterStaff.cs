@@ -1,3 +1,6 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Extensions;
 ﻿using System.Linq;
 using RGM.API.Features;
 
@@ -8,11 +11,17 @@ public class HealthCenterStaff : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var team in PlayerManager.List.Where(x => 
-                     !x.IsNPC && 
-                     x.IsAlive && 
-                     !HitboxIdentity.IsEnemy(Owner.ReferenceHub, x.ReferenceHub)))
-            team.AddItem(ItemType.SCP500);
+        List<ItemType> HealItem = new List<ItemType>()
+        {
+            ItemType.Medkit,
+            ItemType.Painkillers,
+            ItemType.Adrenaline,
+            ItemType.SCP500,
+            ItemType.SCP330
+        };
+
+        foreach (var team in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == Owner.LeadingTeam && Vector3.Distance(Owner.Position, x.Position) < 11))
+            team.AddItem(HealItem.GetRandomValue());
     }
 
     public override void OnDisabled()
