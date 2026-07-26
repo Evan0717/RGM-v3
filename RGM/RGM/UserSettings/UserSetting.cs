@@ -1,16 +1,16 @@
 ﻿using SecretAPI.Features.UserSettings;
 using System.Collections.Generic;
-using Exiled.API.Features;
 using MEC;
-using UnityEngine;
 
 namespace RGM.UserSettings
 {
     public static partial class SettingManager
     {
         private static CoroutineHandle _reloader;
+
+        public static partial void Init();
         
-        public static void Init()
+        public static partial void Init()
         {
             if (!Timing.IsRunning(_reloader))
                 _reloader = Timing.RunCoroutine(Reloader());
