@@ -5,7 +5,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("시스템 해킹", "아군 SCP의 투명도를 영구적으로 50퍼 증가시킵니다.(중첩 불가)", AbilityCategory.Rare, AbilityType.RARE_SCP079_SYSTEMHACKING, RoleAbility.Scp079)]
+[Ability("시스템 해킹", "아군 SCP의 투명도를 영구적으로 50% 증가시킵니다.(중첩 불가)", AbilityCategory.Rare, AbilityType.RARE_SCP079_SYSTEMHACKING, RoleAbility.Scp079)]
 public class SystemHacking : Ability
 {
     public override void OnEnabled()
