@@ -11,7 +11,7 @@ using ProjectMER.Features;
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 
-[Ability("융단 폭격", "핑을 찍은 지점 20m 이내에서 10초간 0.25초 간격으로 미사일이 쏟아집니다. (쿨타임 5초)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079)]
+[Ability("융단 폭격", "핑을 찍은 지점 20m 이내에서 10초간 0.25초 간격으로 미사일이 쏟아집니다. (쿨타임 15초)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079)]
 public class FusionBomb : Ability
 {
     bool isScp079Cooldown = false;
@@ -39,7 +39,7 @@ public class FusionBomb : Ability
                     Timing.RunCoroutine(StartBombardment(centerPos));
 
                     isScp079Cooldown = true;
-                    Timing.CallDelayed(5f, () =>
+                    Timing.CallDelayed(15f, () =>
                     {
                         isScp079Cooldown = false;
                     });
@@ -91,19 +91,12 @@ public class FusionBomb : Ability
         if (Missile != null) 
             Missile.Destroy();
 
-        SchematicObject Effect = ObjectSpawner.SpawnSchematic("Explosion", RealPosition);
-
         var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
         if (g != null)
         {
             g.FuseTime = 0.1f;
             g.SpawnActive(RealPosition, Owner);
         }
-
-        Timing.CallDelayed(6f, () => 
-        {
-            if (Effect != null) Effect.Destroy();
-        });
 
         yield break;
     }
