@@ -523,6 +523,7 @@ public enum AbilityType
     NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
     NORMAL_SCP079_AVOIDORDER, // [전용 일반] 회피 명령
+    NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
     //NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
 
     //RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
@@ -544,7 +545,6 @@ public enum AbilityType
     EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
-    EPIC_SCP079_ATTACKORDER, // [전용 영웅] 공격 명령
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
     EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
     EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
