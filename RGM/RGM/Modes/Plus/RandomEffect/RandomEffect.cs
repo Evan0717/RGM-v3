@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
@@ -70,7 +71,7 @@ namespace RGM.Modes
         {
             List<EffectType> effects = Tools.EnumToList<EffectType>().Where(x => !ignoredEffect.Contains(x)).ToList();
 
-            EffectType Effect = Tools.GetRandomValue(effects);
+            EffectType Effect = effects.GetRandomValue();
             byte Intensity = (byte)UnityEngine.Random.Range(1, UnityEngine.Random.Range(12, UnityEngine.Random.Range(48, UnityEngine.Random.Range(64, UnityEngine.Random.Range(100, 255)))));
 
             player.EnableEffect(Effect, Intensity);

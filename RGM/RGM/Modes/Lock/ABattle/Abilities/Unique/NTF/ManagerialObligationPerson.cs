@@ -2,21 +2,22 @@
 
 namespace RGM.Modes.Abilities.Unique.NTF;
 
-[Ability("관리 의무자", "손전등, Crossvec, 9x19mm 2세트, 섬광탄을 지급받습니다.", AbilityCategory.Common, AbilityType.COMMON_NTF_MANAGERIALOBLIGATIONPERSON, RoleAbility.NTF)]
+[Ability("관리 의무자", " E11sr, 방탄복, 5.56mm 3세트, 섬광탄을 지급받습니다.", AbilityCategory.Common, AbilityType.NORMAL_NTF_MANAGERIALOBLIGATIONPERSON, RoleAbility.NTF)]
 public class ManagerialObligationPerson : Ability
 {
     public override void OnEnabled()
     {
-        List<ItemType> ManageDuty = new List<ItemType>()
-        {
-            ItemType.GunCrossvec,
-            ItemType.Flashlight,
-            ItemType.Ammo9x19,
-            ItemType.Ammo9x19,
-            ItemType.GrenadeFlash
-        };
+        List<ItemType> manageDuty =
+        [
+            ItemType.GunE11SR,
+            ItemType.ArmorCombat,
+            ItemType.GrenadeFlash,
+            ItemType.Ammo556x45,
+            ItemType.Ammo556x45,
+            ItemType.Ammo556x45
+        ];
 
-        foreach (var item in ManageDuty)
+        foreach (var item in manageDuty)
             Owner.AddItem(item);
     }
 

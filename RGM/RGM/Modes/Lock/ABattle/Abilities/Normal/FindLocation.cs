@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
@@ -11,7 +12,7 @@ public class FindLocation : Ability
 {
     public override void OnEnabled()
     {
-        Timing.RunCoroutine(FindLocationCoroutine(Tools.GetRandomValue(PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)).ToList())));
+        Timing.RunCoroutine(FindLocationCoroutine(PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)).ToList().GetRandomValue()));
     }
 
     public override void OnDisabled()

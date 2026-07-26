@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Flamingo;
 
-[Ability("미니 공장", "죽은 플레이어 중 하나를 플라밍고로 부활시킵니다.", AbilityCategory.Common, AbilityType.COMMON_FLAMINGO_MINIFACTORY, RoleAbility.Flamingo)]
+[Ability("미니 공장", "죽은 플레이어 중 하나를 플라밍고로 부활시킵니다.", AbilityCategory.Common, AbilityType.NORMAL_FLAMINGO_MINIFACTORY, RoleAbility.Flamingo)]
 public class MiniFactory : Ability
 {
     public override void OnEnabled()

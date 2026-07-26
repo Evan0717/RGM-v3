@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.ClassD;
 
-[Ability("절도죄", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)", AbilityCategory.Common, AbilityType.COMMON_CLASSD_LARCENY, RoleAbility.ClassD)]
+[Ability("절도죄", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)", AbilityCategory.Common, AbilityType.NORMAL_CLASSD_LARCENY, RoleAbility.ClassD)]
 public class Larceny : Ability
 {
     int PickPocketCooldown = 0;
@@ -34,7 +35,7 @@ public class Larceny : Ability
 
             if (!player.IsInventoryEmpty)
             {
-                Item Item = Tools.GetRandomValue(player.Items.ToList());
+                Item Item = player.Items.ToList().GetRandomValue();
 
                 player.RemoveItem(Item);
                 player.AddHint("소매치기", "주머니가 허전합니다..", 1.2f);

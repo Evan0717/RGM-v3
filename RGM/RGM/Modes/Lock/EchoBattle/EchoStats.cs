@@ -1,6 +1,8 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp173;
 using InventorySystem.Items.Firearms.Modules;
 using MEC;
 using PlayerRoles;
@@ -39,10 +41,14 @@ public static class EchoStats
         DamageType.Scp106
     };
 
-    static readonly float[] SubOptionGradeWeights = [250, 220, 190, 150, 110, 80];
+    static readonly float[] SubOptionGradeWeights = [24, 24, 16, 16, 10, 10];
     static readonly System.Random SubOptionRandom = new();
     static readonly object SubOptionRandomLock = new();
     static readonly HashSet<Player> FixedDamageTargets = new();
+    const float Scp173BaseBlinkCooldown = 3f;
+    const float Scp173MinimumBlinkCooldown = 1f;
+    const float Scp173MaximumMoveSpeed = 100f;
+    const float Scp173BlinkCooldownReductionPerMoveSpeed = 0.014f;
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
@@ -96,7 +102,7 @@ public static class EchoStats
             (EchoCost.Cost3, EchoMainStatType.ScpDamagePercent) => LerpStat(8.3f, 41.5f, level),
             (EchoCost.Cost3, EchoMainStatType.HumanDamagePercent) => LerpStat(8.3f, 41.5f, level),
             (EchoCost.Cost3, EchoMainStatType.HeadshotDamage) => LerpStat(21.0f, 105.0f, level),
-            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(2.0f, 10.0f, level),
+            (EchoCost.Cost3, EchoMainStatType.AhpRegenAndMax) => LerpStat(4.0f, 20.0f, level),
             (EchoCost.Cost3, EchoMainStatType.SizeReduction) => LerpStat(3.3f, 16.5f, level),
 
             (EchoCost.Cost1, EchoMainStatType.AttackPercent) => LerpStat(3.4f, 18.0f, level),
@@ -189,8 +195,8 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(3f, 30f, level),
-            EchoCost.Cost3 => LerpStat(50f, 200f, level),
+            EchoCost.Cost4 => LerpStat(2f, 50f, level),
+            EchoCost.Cost3 => LerpStat(50f, 250f, level),
             EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f
         };
@@ -414,9 +420,9 @@ public static class EchoStats
             case EchoMainStatType.AhpRegenAndMax:
                 // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
-                snapshot.AhpMax += LerpStat(18f, 175f, level);
-                snapshot.HsRegen += LerpStat(2f, 25f, level);
-                snapshot.HsMax += LerpStat(200f, 1000f, level);
+                snapshot.AhpMax += LerpStat(25f, 300f, level);
+                snapshot.HsRegen += LerpStat(16f, 80f, level);
+                snapshot.HsMax += LerpStat(400f, 2000f, level);
                 break;
             case EchoMainStatType.SizeReduction:
                 snapshot.SizeReduction += value;
@@ -446,7 +452,7 @@ public static class EchoStats
 
             float attack = value;
             if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
-                attack *= 0.4f;
+                attack *= 0.45f;
             snapshot.AttackFlat += attack;
         }
     }
@@ -463,7 +469,7 @@ public static class EchoStats
                     break;
                 float attack = option.Value;
                 if (player.Role.Type is RoleTypeId.Scp049 or RoleTypeId.Scp106)
-                    attack *= 0.4f;
+                    attack *= 0.45f;
                 snapshot.AttackFlat += attack;
                 break;
             case EchoSubOptionType.DefensePercent:
@@ -506,7 +512,7 @@ public static class EchoStats
                 snapshot.SizeReduction += option.Value;
                 break;
             case EchoSubOptionType.HealingBonus:
-                snapshot.HealingBonus += option.Value;
+                snapshot.HealingBonus += player.Role.Type == RoleTypeId.Scp0492 ? option.Value * 4f : option.Value;
                 break;
         }
     }
@@ -532,6 +538,8 @@ public static class EchoStats
             player.IsUsingStamina = true;
         if (prev.SizeReduction > 0f)
             player.Scale += Vector3.one * prev.SizeReduction;
+        if (prev.Scp173BlinkCooldownModified)
+            Exiled.Events.Handlers.Scp173.Blinking -= OnScp173Blinking;
 
         if (prev.EchoAhpKillCode.HasValue)
             KillEchoAhpProcess(player, prev.EchoAhpKillCode.Value);
@@ -607,6 +615,14 @@ public static class EchoStats
             player.AddEffect(EffectType.MovementBoost, effectState.MovementBoost);
         }
 
+        if (player.Role is Scp173Role && snapshot.MoveSpeed > 0f)
+        {
+            // BlinkCooldown은 현재 진행 중인 대기시간입니다. 여기서 변경하면 레벨업
+            // 재적용 시 대기시간이 초기화되므로, Blinking 이벤트에서 다음 대기시간만 변경합니다.
+            effectState.Scp173BlinkCooldownModified = true;
+            Exiled.Events.Handlers.Scp173.Blinking += OnScp173Blinking;
+        }
+
         if (snapshot.JumpPower > 0)
         {
             effectState.Lightweight = (byte)Mathf.Clamp(Mathf.RoundToInt(snapshot.JumpPower), 1, 255);
@@ -655,6 +671,27 @@ public static class EchoStats
 
         if (snapshot.AhpRegen > 0 || snapshot.HsRegen > 0)
             Timing.RunCoroutine(RegenRoutine(player, snapshot), $"EchoRegen_{player.UserId}");
+    }
+
+    static void OnScp173Blinking(BlinkingEventArgs ev)
+    {
+        if (ev?.Player == null
+            || !EchoInfo.PlayerStats.TryGetValue(ev.Player, out var snapshot)
+            || snapshot.MoveSpeed <= 0f)
+            return;
+
+        ev.BlinkCooldown = GetScp173BlinkCooldown(snapshot.MoveSpeed);
+    }
+
+    /// <summary>
+    /// SCP-173의 이동속도 1당 순간이동 쿨타임을 1.4% 줄이며, 1초보다 짧아지지 않게 합니다.
+    /// </summary>
+    static float GetScp173BlinkCooldown(float moveSpeed)
+    {
+        float clampedMoveSpeed = Mathf.Clamp(moveSpeed, 0f, Scp173MaximumMoveSpeed);
+        float cooldown = Scp173BaseBlinkCooldown
+            * (1f - clampedMoveSpeed * Scp173BlinkCooldownReductionPerMoveSpeed);
+        return Mathf.Max(Scp173MinimumBlinkCooldown, cooldown);
     }
 
     static IEnumerator<float> StaminaDrainReductionRoutine(Player player, float reductionPercent)

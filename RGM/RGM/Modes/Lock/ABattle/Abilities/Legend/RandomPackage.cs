@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using RGM.API.Features;
@@ -18,7 +19,7 @@ public class RandomPackage : Ability
         {
             try
             {
-                Item Item = Item.Create(Tools.GetRandomValue(ItemTypes));
+                Item Item = Item.Create(ItemTypes.GetRandomValue());
 
                 Item.CreatePickup(new Vector3(Owner.Position.x, Owner.Position.y + 2, Owner.Position.z));
             }

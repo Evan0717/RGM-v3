@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using MEC;
@@ -99,7 +100,7 @@ namespace RGM.Modes
                     if (player.Role.Type == RoleTypeId.Scp079 && PlayerManager.List.Where(x => x.IsScpRole()).Count() < 2)
                     {
                         player.Role.Set(RoleTypeId.Tutorial);
-                        player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsHuman).ToList()).Position;
+                        player.Position = PlayerManager.List.Where(x => x.IsHuman).ToList().GetRandomValue().Position;
                         Timing.RunCoroutine(Tools.DoRocket(player, player, 1f));
                     }
                 }
@@ -131,7 +132,7 @@ namespace RGM.Modes
                                 if (player.Role.Type == RoleTypeId.Scp079)
                                 {
                                     player.Role.Set(RoleTypeId.Tutorial);
-                                    player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsHuman).ToList()).Position;
+                                    player.Position = PlayerManager.List.Where(x => x.IsHuman).ToList().GetRandomValue().Position;
                                     Timing.RunCoroutine(Tools.DoRocket(player, player, 1f));
                                 }
                                 else

@@ -5,6 +5,7 @@ using Exiled.API.Features.Doors;
 using MEC;
 using UnityEngine;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
 
@@ -62,10 +63,10 @@ namespace RGM.Modes
             Door SelectedDoor = null;
 
             if (Exiled.API.Features.Map.IsLczDecontaminated)
-                SelectedDoor = Tools.GetRandomValue(Door.List.Where(x => !x.IsElevator && x.Zone != ZoneType.LightContainment && !x.Type.ToString().Contains("Scp079")).ToList());
+                SelectedDoor = Door.List.Where(x => !x.IsElevator && x.Zone != ZoneType.LightContainment && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue();
 
             else
-                SelectedDoor = Tools.GetRandomValue(Door.List.Where(x => !x.IsElevator && !x.Type.ToString().Contains("Scp079")).ToList());
+                SelectedDoor = Door.List.Where(x => !x.IsElevator && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue();
 
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
         }

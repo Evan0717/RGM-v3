@@ -49,8 +49,9 @@ public class ToolGun : Ability
         {
             if (GodModePlayers.Contains(player))
                 GodModePlayers.Remove(player);
-
-            player.Hit(player, player.MaxHealth * 2);
+            
+            player.RemoveAllAbilities();
+            player.Kill("욕심을 부리다가 아사했습니다.");
         }
 
         Vector3 forward = player.CameraTransform.forward;

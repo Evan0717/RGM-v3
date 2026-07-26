@@ -8,11 +8,11 @@ namespace RGM.Modes.ExclusiveWeapon;
 
 /// <summary>
 /// Nightsky Calculator.
-/// Passive: HP 16%+(res*4%) and critical chance 5%. On AHP/HS loss, heal HP by (16%*res) of pure shield loss.
+/// Passive: HP 16%+(res*4%) and critical chance 5%. On AHP/HS loss, heal HP by (50%*res) of pure shield loss. No HP Regen Bonus Included.
 /// </summary>
 [ExclusiveWeapon(
     "밤하늘 연산 측정기",
-    "HP 16% + (공진 수치 * 4%) 및 크리티컬 확률 5% 증가. AHP(또는 HS)가 피해를 입을 경우, AHP(HS)의 순수 차감량의 (16% * 공진 수치)만큼 HP 회복. 단, HP 최대치를 초과하여 회복할 수 없음.",
+    "HP 16% + (공진 수치 * 4%) 및 크리티컬 확률 5% 증가. AHP(또는 HS)가 피해를 입을 경우, AHP(HS)의 순수 차감량의 (50% * 공진 수치)만큼 HP 회복.\n단, HP 최대치를 초과하여 회복할 수 없고 치료 효과 보너스를 받지 않음.",
     ExclusiveWeaponType.NightskyCalculator)]
 public class NightskyCalculator : ExcWeapon
 {
@@ -67,7 +67,7 @@ public class NightskyCalculator : ExcWeapon
         if (pureShieldLost <= 0f)
             return;
 
-        float heal = pureShieldLost * (0.16f * Resonance);
+        float heal = pureShieldLost * (0.5f * Resonance);
         if (heal <= 0f)
             return;
 
@@ -75,6 +75,6 @@ public class NightskyCalculator : ExcWeapon
         if (room <= 0f)
             return;
 
-        Owner.Heal(Mathf.Min(heal, room));
+        Owner.Health += Mathf.Min(heal, room);
     }
 }

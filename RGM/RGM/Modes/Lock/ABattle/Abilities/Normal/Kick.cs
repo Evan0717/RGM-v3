@@ -26,7 +26,7 @@ public class Kick : Ability
         if (ev.Player != Owner)
             return;
 
-        if (ev.Player.IsCaptured())
+        if (ev.Player.IsCaptured(out Player None))
             return;
 
         if (Tools.TryGetLookPlayer(ev.Player, 4f, out Player player, out RaycastHit? hit))

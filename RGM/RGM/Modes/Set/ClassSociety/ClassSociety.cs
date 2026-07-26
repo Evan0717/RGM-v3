@@ -8,6 +8,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 
 namespace RGM.Modes
 {
@@ -89,7 +90,7 @@ namespace RGM.Modes
 
             yield return Timing.WaitForSeconds(1);
 
-            Player BusterCall = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive).ToList());
+            Player BusterCall = PlayerManager.List.Where(x => x.IsAlive).ToList().GetRandomValue();
 
             foreach (var player in PlayerManager.List)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Extensions;
 using InventorySystem.Items.Usables.Scp330;
 using MEC;
 using RGM.API.Features;
@@ -24,7 +25,7 @@ public class CandyAddict : Ability
     {
         while (true)
         {
-            Owner.AddCandy(Tools.GetRandomValue(Tools.EnumToList<CandyKindID>()));
+            Owner.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
 
             yield return Timing.WaitForSeconds(8f);
         } 

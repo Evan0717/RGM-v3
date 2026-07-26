@@ -7,6 +7,7 @@ using MEC;
 using PlayerRoles;
 using UnityEngine;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using RGM.API.Features;
 
 using static RGM.Variables.Variable;
@@ -82,7 +83,7 @@ namespace RGM.Modes
 
             for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count() / 7); i++)
             {
-                Player hostZombie = Tools.GetRandomValue(PlayerManager.List.Where(x => x.IsAlive && !HostZombies.Contains(x)).ToList());
+                Player hostZombie = PlayerManager.List.Where(x => x.IsAlive && !HostZombies.Contains(x)).ToList().GetRandomValue();
 
                 HostZombies.Add(hostZombie);
 
@@ -232,14 +233,14 @@ namespace RGM.Modes
                     IEnumerable<Player> zombies = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
 
                     if (zombies.Count() < 1)
-                        ev.Player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList());
+                        ev.Player.Position = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList().GetRandomValue();
 
                     else
-                        ev.Player.Position = Tools.GetRandomValue(zombies.Select(x => x.Position).ToList());
+                        ev.Player.Position = zombies.Select(x => x.Position).ToList().GetRandomValue();
                 }
                 catch (Exception ex)
                 {
-                    ev.Player.Position = Tools.GetRandomValue(PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList());
+                    ev.Player.Position = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList().GetRandomValue();
                 }
             }
             else

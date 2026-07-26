@@ -14,7 +14,10 @@ public class Friendship : Ability
         if (Tools.TryGetNearestPlayer(Owner, out Player nearestPlayer, out float radius))
         {
             Item own = Owner.Items.GetRandomValue();
-
+            if (own == null)
+            {
+                Owner.AddHint("우애","인벤토리에 나누어 줄 만한 아이템이 없습니다");
+            }
             nearestPlayer.AddItem(own.Type);
 
             Owner.AddHint("우애", $"{nearestPlayer.DisplayNickname}(에)게 {( Trans.Item[own.Type])}(을)를 나누어 주었습니다.");

@@ -14,6 +14,7 @@ using ProjectMER.Features.Serializable;
 using RGM.API.Components;
 using RGM.API.DataBases;
 using RGM.API.Interfaces;
+using RGM.Modes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,6 +29,7 @@ namespace RGM.API.Features
 {
     public static class Tools
     {
+        [Obsolete("이 메서드 대신 Exiled 의 확장 메서드 GetRandomValue를 사용하세요")]
         public static T GetRandomValue<T>(List<T> list)
         {
             System.Random random = new System.Random();
