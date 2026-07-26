@@ -5,26 +5,20 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("자유", "이미 작동된 발전기를 제외한 나머지 발전기는 2분 간 잠깁니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_FREEDOM, RoleAbility.Scp079)]
+[Ability("자유", "모든 발전기를 초기화 하고 발전기 가동시간을 1분 늘립니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_FREEDOM, RoleAbility.Scp079)]
 public class Freedom : Ability
 {
     public override void OnEnabled()
     {
-        IEnumerator<float> enumerator()
-        {
-            for (int i = 0; i < 120; i++)
-            {
-                foreach (var generator in Generator.List)
-                {
-                    if (generator.State != GeneratorState.Engaged)
-                        generator.State = GeneratorState.Unlocked;
-                }
+       foreach (var generator in Generator.List)
+       {
+         generator.IsEngaged = false;
+         generator.IsActivating = false;
+         generator.CurrentTime = 0;
 
-                yield return Timing.WaitForSeconds(1f);
-            }
-        }
-
-        Timing.RunCoroutine(enumerator());
+         generator.ActivationTime += 60f;
+       }
+       
     }
 
     public override void OnDisabled()
