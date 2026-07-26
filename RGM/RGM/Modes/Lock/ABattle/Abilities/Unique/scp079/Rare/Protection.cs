@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("보호", "SCP들에게 [<color=#2ECCFA>희귀</color>] 강첩껍질 능력 3개를 지급합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_PROTECTION, RoleAbility.Scp079)]
+[Ability("보호", "SCP들에게 [<color=#2ECCFA>희귀</color>] 하이패스, [<color=#2ECCFA>희귀</color>] 강첩껍질 능력 3개 지급합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_PROTECTION, RoleAbility.Scp079)]
 public class Protection : Ability
 {
     public override void OnEnabled()
@@ -20,9 +20,9 @@ public class Protection : Ability
         {
             for (int i = 0; i < 3; i++)
             {
-
                 scp.AddAbility(AbilityType.RARE_STEELSHELL);
             }
+            scp.AddAbility(AbilityType.RARE_HYPASS);
         }
     }
 
