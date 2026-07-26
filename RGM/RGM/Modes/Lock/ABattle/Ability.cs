@@ -289,6 +289,9 @@ public enum AbilityType
     DUMMY_FINALEXAMFAIL, // [더미] 기말고사 낙제
     DUMMY_CSTCSUCCESS, // [더미] 대학수학능력시험 1등급
     DUMMY_CSTCFAIL, // [더미] 대학수학능력시험 9등급
+    DUMMY_INFILTRATIONSUCCESS, // [더미] 침투 성공
+    DUMMY_INFILTRATIONFAIL, // [더미] 침투 실패
+    DUMMY_INFORMATIONLEAK, // [더미] 개인 정보 유출
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -405,7 +408,7 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_ASYNC, // [전설] A-Sync Research
-    LEGEND_AIMHACK, // [전설] 솔져: 76
+    LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
     LEGEND_SCP294, // [전설] SCP-294, 커피 자판기
@@ -415,6 +418,9 @@ public enum AbilityType
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
     LEGEND_TURTLE, // [전설] 거북 도사
+    LEGEND_REPLICATION, // [전설] 복제
+    LEGEND_CLEARCACHE, // [전설] 캐시 청소
+    LEGEND_REINCARNATION, // [전설] 리인카네이션
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -436,87 +442,88 @@ public enum AbilityType
 
     // 전용 //
     // D계급
-    COMMON_CLASSD_LARCENY, // [전용 일반] 절도죄
-    COMMON_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
-    COMMON_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
-    COMMON_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
+    NORMAL_CLASSD_LARCENY, // [전용 일반] 절도죄
+    NORMAL_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
+    NORMAL_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
+    NORMAL_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
 
     // 과학자
-    COMMON_SCIENTIST_ENGINEERINGMAJOR, // [전용 일반] 공학 전공
-    COMMON_SCIENTIST_SEEDSOFMTF, // [전용 일반] 특무부대의 씨앗
-    COMMON_SCIENTIST_05, // [전용 희귀] 05 평의회
+    NORMAL_SCIENTIST_ENGINEERINGMAJOR, // [전용 일반] 공학 전공
+    NORMAL_SCIENTIST_SEEDSOFMTF, // [전용 일반] 특무부대의 씨앗
+    NORMAL_SCIENTIST_05, // [전용 희귀] 05 평의회
 
     // NTF
-    COMMON_NTF_HEALTHCENTERSTAFF, // [전용 일반] 보건소 직원
-    COMMON_NTF_QUARANTINEOBLIGATION, // [전용 일반] 격리 의무자
-    COMMON_NTF_COLLECTIVEINTELLIGENCE, // [전용 일반] 집단 지성
-    COMMON_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
-    COMMON_NTF_INDUSTRIALACCIDENTINSURANCE, // [전용 희귀] 산업재해보험
-    COMMON_NTF_MEDICALOFFICER, // [전용 희귀] 의무병
-    COMMON_NTF_RADAR, // [전용 희귀] 레이더
+    NORMAL_NTF_HEALTHCENTERSTAFF, // [전용 일반] 보건소 직원
+    NORMAL_NTF_QUARANTINEOBLIGATION, // [전용 일반] 격리 의무자
+    NORMAL_NTF_COLLECTIVEINTELLIGENCE, // [전용 일반] 집단 지성
+    NORMAL_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
+    NORMAL_NTF_INDUSTRIALACCIDENTINSURANCE, // [전용 희귀] 산업재해보험
+    NORMAL_NTF_MEDICALOFFICER, // [전용 희귀] 의무병
+    NORMAL_NTF_RADAR, // [전용 희귀] 레이더
 
     // 혼돈의 반란
-    COMMON_CHI_TOUCHOFCHAOS, // [전용 일반] 혼돈의 손길
-    COMMON_CHI_BAGOFCHAOS, // [전용 일반] 혼돈의 가방
-    COMMON_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
+    NORMAL_CHI_TOUCHOFCHAOS, // [전용 일반] 혼돈의 손길
+    NORMAL_CHI_BAGOFCHAOS, // [전용 일반] 혼돈의 가방
+    NORMAL_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
 
     // 뱀의 손
-    COMMON_TUTORIAL_TONGUE, // [전용 일반] 세치 혀
-    COMMON_TUTORIAL_THIRDFORCE, // [전용 일반] 제3세력
-    COMMON_TUTORIAL_RESEARCHER, // [전용 희귀] SCP 연구자
+    NORMAL_TUTORIAL_TONGUE, // [전용 일반] 세치 혀
+    NORMAL_TUTORIAL_THIRDFORCE, // [전용 일반] 제3세력
+    NORMAL_TUTORIAL_RESEARCHER, // [전용 희귀] SCP 연구자
 
     // SCP-173
-    COMMON_SCP173_FEAR, // [전용 일반] 공포
-    COMMON_SCP173_ABERRATION, // [전용 희귀] 괴이
-    COMMON_SCP173_MIRAGE, // [전용 희귀] 신기루
+    NORMAL_SCP173_FEAR, // [전용 일반] 공포
+    NORMAL_SCP173_ABERRATION, // [전용 희귀] 괴이
+    NORMAL_SCP173_MIRAGE, // [전용 희귀] 신기루
 
     // SCP-049
-    COMMON_SCP049_DEATH, // [전용 희귀] 사신
-    COMMON_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
-    COMMON_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
-    COMMON_SCP049_MADDOCTOR, // [전용 희귀] 실험체
+    NORMAL_SCP049_DEATH, // [전용 희귀] 사신
+    NORMAL_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
+    NORMAL_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
+    NORMAL_SCP049_MEDICALKNIFE, // [전용 희귀] 메스
 
     // SCP-0492
-    COMMON_SCP0492_MEALS, // [전용 일반] 급식
-    COMMON_SCP0492_CONFUSION, // [전용 일반] 당혹감
-    COMMON_SCP0492_INFECTION, // [전용 일반] 감염
-    COMMON_SCP0492_HUNGER, // [전용 희귀] 허기
+    NORMAL_SCP0492_MEALS, // [전용 일반] 급식
+    NORMAL_SCP0492_CONFUSION, // [전용 일반] 당혹감
+    NORMAL_SCP0492_INFECTION, // [전용 일반] 감염
+    NORMAL_SCP0492_HUNGER, // [전용 희귀] 허기
 
     // SCP-096
-    COMMON_SCP096_ENEMY, // [전용 일반] 원수
-    COMMON_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
-    COMMON_SCP096_OUTSIDER, // [전용 일반] 아웃사이더
-    COMMON_SCP096_RAGE, // [전용 희귀] 격노
-    COMMON_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
-    COMMON_SCP096_SEER, // [전용 영웅] 천리안
+    NORMAL_SCP096_ENEMY, // [전용 일반] 원수
+    NORMAL_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
+    NORMAL_SCP096_OUTSIDER, // [전용 일반] 아웃사이더
+    NORMAL_SCP096_RAGE, // [전용 희귀] 격노
+    NORMAL_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
+    NORMAL_SCP096_SEER, // [전용 영웅] 천리안
 
     // SCP-106
-    COMMON_SCP106_RECOVERY, // [전용 희귀] 회춘
-    COMMON_SCP106_HUNTINGPREY, // [전용 희귀] 사냥감 모색
-    COMMON_SCP106_STICKYSWAMP, // [전용 영웅] 끈적한 늪
+    NORMAL_SCP106_RECOVERY, // [전용 희귀] 회춘
+    NORMAL_SCP106_HUNTINGPREY, // [전용 희귀] 사냥감 모색
+    NORMAL_SCP106_STICKYSWAMP, // [전용 영웅] 끈적한 늪
 
     // SCP-939
-    COMMON_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이
-    COMMON_SCP939_NOEYES, // [전용 일반] 실명
-    COMMON_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
-    COMMON_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
+    NORMAL_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이
+    NORMAL_SCP939_NOEYES, // [전용 일반] 실명
+    NORMAL_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
+    NORMAL_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
 
     // SCP-3114
-    COMMON_SCP3114_HALFBLOCK, // [전용 일반] 반블럭
-    COMMON_SCP3114_SKILLEDASSASSIN, // [전용 희귀] 숙련된 암살자
-    COMMON_SCP3114_DORAEMONPOCKET, // [전용 희귀] 도라에몽 주머니
-    COMMON_SCP3114_SHOWMANSHIP, // [전용 희귀] 쇼맨쉽
+    NORMAL_SCP3114_HALFBLOCK, // [전용 일반] 반블럭
+    NORMAL_SCP3114_SKILLEDASSASSIN, // [전용 희귀] 숙련된 암살자
+    NORMAL_SCP3114_DORAEMONPOCKET, // [전용 희귀] 도라에몽 주머니
+    NORMAL_SCP3114_SHOWMANSHIP, // [전용 희귀] 쇼맨쉽
 
     // SCP-079
-    COMMON_SCP079_PINGREMOTE, // [전용 일반] 핑 리모컨
-    COMMON_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
-    COMMON_SCP079_RANDOMFUNCTION, // [전용 일반] 랜덤 함수
-    COMMON_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
-    COMMON_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
-    COMMON_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
-    COMMON_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
-    COMMON_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
-    COMMON_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    NORMAL_SCP079_PINGREMOTE, // [전용 일반] 핑 리모컨
+    NORMAL_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
+    NORMAL_SCP079_RANDOMFUNCTION, // [전용 일반] 랜덤 함수
+    NORMAL_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
+    NORMAL_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
+    NORMAL_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
+    NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
+    NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
+    NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+
     RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
@@ -528,12 +535,48 @@ public enum AbilityType
     RARE_SCP079_MOBILESTRIKEFORCE, // [전용 희귀] 기동타격대
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
+    RARE_SCP079_PROTECTION, // [전용 희귀] 보호
+    RARE_SCP079_AVOIDORDER, // [전용 희귀] 회피 명령
+    RARE_SCP079_HIDE, // [전용 희귀] 은폐
+
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
+    EPIC_SCP079_LEVELUP, //[전용 영웅] 만렙
+    EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
+    EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
+    EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
+    EPIC_SCP079_ATTACKORDER, // [전용 영웅] 공격 명령
+    EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
+    EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
+    EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
+
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
+    LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
+    LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다
+    LEGEND_SCP079_VIRUS, // [전용 전설] 바이러스
+
     MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
+    MYTHIC_SCP079_TRANSENDENCE, // [전용 신화] 초월
+    MYTHIC_SCP079_SEVEREVIRUS, // [전용 신화] 치명적인 바이러스
+    MYTHIC_SCP079_BACKDOOR, // [전용 신화] 백도어
+    MYTHIC_SCP079_FUSIONBOMB, // [전용 신화] 융단 폭격*
+
+    //79가 먹을 수 있는 범용 능력
+    /*
+      시험
+      봄버맨
+      기말고사
+      변이
+      대학수학능력시험
+      럭키비키
+      반사경
+      상급변이
+      복제
+      대격변 생성기
+      무제한
+     */
 
     // 플라밍고
-    COMMON_FLAMINGO_MINIFACTORY, // [전용 일반] 미니 공장
+    NORMAL_FLAMINGO_MINIFACTORY, // [전용 일반] 미니 공장
 
     // 시너지 //
     SYNERGY_SURVIVALEXPERT, // [시너지] 생존 전문가
@@ -553,6 +596,7 @@ public enum AbilityType
     SYNERGY_AFK, // [시너지] AFK
     SYNERGY_BOMBPARTY, // [시너지] 폭탄 파티
     SYNERGY_BLACKMARKET, // [시너지] 암시장
+    SYNERGY_COMMANDER, // [시너지] 지휘관
 }
 
 public static class AbilityTypeExtensions

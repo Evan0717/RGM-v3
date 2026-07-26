@@ -39,11 +39,13 @@ public class ABattle : Mode
 • <color=#DF0101>신화</color> - 0.05%
 • <color=#DEEFED>시너지</color> - ???
 
-• <color=#F7819F>전용</color> - 일반 - 5%
-                                희귀 - 7%
-                                영웅 - 10%
-                                전설 - 20%
-                                신화 - 25% (등급에 따라 확률 변동, 능력 선택 옵션 독립)
+• <color=#F7819F>전용</color> 
+<color=#A4A4A4>일반</color> - 5%
+<color=#2ECCFA>희귀</color> - 7%
+<color=#FF00FF>영웅</color> - 10%
+<color=#ffd700>전설</color> - 20%
+<color=#DF0101>신화</color> - 25%
+(등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
 66.6% 확률로 추가 모드가 활성화됩니다.
 워크스테이션이 시설에 더 추가됩니다.
@@ -156,7 +158,7 @@ public class ABattle : Mode
         }   
         else
         {
-            string extraMode = Tools.GetRandomValue(ExtraModes.Keys.Where(x => !exceptModes.Contains(x)).ToList());
+            string extraMode = ExtraModes.Keys.Where(x => !exceptModes.Contains(x)).ToList().GetRandomValue();
 
             if (!CurrentExtraModes.Contains(extraMode))
                 CurrentExtraModes.Add(extraMode);
@@ -316,7 +318,7 @@ public class ABattle : Mode
         }
     }
 
-    private IEnumerator<float> ClearCache()
+    public IEnumerator<float> ClearCache()
     {
         while (true)
         {
@@ -332,7 +334,7 @@ public class ABattle : Mode
         }
     }
 
-    private IEnumerator<float> Backup()
+    public IEnumerator<float> Backup()
     {
         while (true)
         {
@@ -1027,6 +1029,7 @@ public class ABattle : Mode
             player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
                     [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
         }
+        /*
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.IsNonePlayer()) return;
@@ -1045,6 +1048,7 @@ public class ABattle : Mode
             player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1,[AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
             
         }
+        */
     }
 }
 
@@ -1085,7 +1089,7 @@ public static class ABattleExtensions
         return ABattle.Instance.HasAbility(player, type);
     }
 
-    public static bool IsCaptured(this Player player) //[신화] 구속에 의해 붙잡혔는지 확인
+    public static bool IsCaptured(this Player player, out Player anchorOwner) //[신화] 구속에 의해 붙잡혔는지 확인
     {
         foreach (var p in PlayerManager.List)
         {
@@ -1098,10 +1102,12 @@ public static class ABattleExtensions
             {
                 if (anchor.TargetPlayer.Contains(player))
                 {
+                    anchorOwner = p;
                     return true;
                 }
             }
         }
+        anchorOwner = null;
         return false;
     }
 }

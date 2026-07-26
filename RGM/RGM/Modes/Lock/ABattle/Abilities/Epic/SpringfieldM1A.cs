@@ -6,7 +6,7 @@ using RGM.Patches;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("Springfield M1A", "반자동 소총을 얻습니다.", AbilityCategory.Epic, AbilityType.EPIC_SPRINGFIELDM1A)]
+//[Ability("Springfield M1A", "반자동 소총을 얻습니다.", AbilityCategory.Epic, AbilityType.EPIC_SPRINGFIELDM1A)]
 public class SpringfieldM1A : Ability
 {
     private ushort _m1ASerial;
@@ -56,6 +56,25 @@ public class SpringfieldM1A : Ability
         // 같은 누름에서 이어지는 연사는 모두 취소한다. 시간 간격이 아닌 입력 엣지로 판별하므로 네트워크 지터에 영향을 받지 않는다.
         if (!IsFreshTriggerPull(firearm))
             ev.IsAllowed = false;
+        else
+            ReleaseTrigger(firearm);
+    }
+
+    private static void ReleaseTrigger(Firearm firearm)
+    {
+        if (firearm?.Base == null)
+            return;
+
+        foreach (ModuleBase module in firearm.Base.Modules)
+        {
+            if (module is SimpleTriggerModule trigger)
+            {
+                // 첫 발 직후 클라이언트에도 트리거 해제를 전파해, 다음 자동 발사 패킷 자체를 막는다.
+                // 아래 IsFreshTriggerPull 검사는 네트워크 지연으로 이미 도착한 반복 발사의 안전망이다.
+                trigger.ServerSetTrigger(false);
+                return;
+            }
+        }
     }
 
     private bool IsFreshTriggerPull(Firearm firearm)
@@ -96,6 +115,6 @@ public class SpringfieldM1A : Ability
             return;
 
         firearm.DamageFalloffDistance = 500f;
-        firearm.Damage = 48.7f;
+        firearm.Damage = 53.7f;
     }
 }

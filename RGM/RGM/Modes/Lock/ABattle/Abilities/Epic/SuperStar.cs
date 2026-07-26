@@ -9,7 +9,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("슈퍼 스타", "자신의 마이크가 모두에게 공유되고, 사망 시 사망한 사실이 모두에게 공개됩니다.", AbilityCategory.Epic, AbilityType.EPIC_SUPERSTAR)]
+[Ability("슈퍼 스타", "자신의 마이크가 모두에게 공유되고, 사망 시 사망한 사실이 모두에게 공개됩니다.", AbilityCategory.Epic, AbilityType.EPIC_SUPERSTAR, RoleAbility.None, true)]
 public class SuperStar : Ability
 {
     public override void OnEnabled()

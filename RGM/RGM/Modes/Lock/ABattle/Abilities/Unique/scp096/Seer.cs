@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp096;
 
-[Ability("천리안", "분노 시에 30m 내의 인간들을 목격자에 포함시킵니다. (최대 4명)", AbilityCategory.Common, AbilityType.COMMON_SCP096_SEER, RoleAbility.Scp096)]
+[Ability("천리안", "분노 시에 30m 내의 인간들을 목격자에 포함시킵니다. (최대 4명)", AbilityCategory.Common, AbilityType.NORMAL_SCP096_SEER, RoleAbility.Scp096)]
 public class Seer : Ability
 {
     public override void OnEnabled()

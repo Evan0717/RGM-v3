@@ -9,7 +9,7 @@ using RGM.Patches;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("AN-94", "2점사 소총을 얻습니다.", AbilityCategory.Epic, AbilityType.EPIC_AN94)]
+//[Ability("AN-94", "2점사 소총을 얻습니다.", AbilityCategory.Epic, AbilityType.EPIC_AN94)]
 
 public class AN94 : Ability
 {
@@ -69,6 +69,8 @@ public class AN94 : Ability
 
         if (TryConsumeBurstAmmo())
             RegisterPendingBurstDamage();
+
+        ReleaseTrigger(firearm);
     }
 
     public void OnHurting(HurtingEventArgs ev)
@@ -139,6 +141,23 @@ public class AN94 : Ability
         return true;
     }
 
+    private static void ReleaseTrigger(Firearm firearm)
+    {
+        if (firearm?.Base == null)
+            return;
+
+        foreach (ModuleBase module in firearm.Base.Modules)
+        {
+            if (module is SimpleTriggerModule trigger)
+            {
+                // 첫 발 직후 클라이언트에도 트리거 해제를 전파해, 다음 자동 발사 패킷 자체를 막는다.
+                // 위의 IsFreshTriggerPull 검사는 네트워크 지연으로 이미 도착한 반복 발사의 안전망이다.
+                trigger.ServerSetTrigger(false);
+                return;
+            }
+        }
+    }
+
     private bool IsFreshTriggerPull(Firearm firearm)
     {
         if (firearm?.Base == null)
@@ -176,5 +195,6 @@ public class AN94 : Ability
             return;
 
         firearm.DamageFalloffDistance = 500f;
+        firearm.Damage = 24.5f;
     }
 }
