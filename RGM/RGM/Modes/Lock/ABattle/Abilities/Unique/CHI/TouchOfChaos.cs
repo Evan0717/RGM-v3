@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features.Items;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
 
@@ -45,5 +46,7 @@ public class TouchOfChaos : Ability
 
         ABattle.Instance.PlayerWorkstations[ev.Player].Clear();
         ABattle.Instance.PlayerAbilities[ev.Player].Clear();
+
+        ev.Player.EnableEffect(EffectType.FogControl, 1);
     }
 }

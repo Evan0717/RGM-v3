@@ -192,7 +192,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Survivor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\TerroristRemains.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\A-Sync Research.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\AimHack.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Soldier76.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyPower.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CataclysmGenerator.cs" />
@@ -335,7 +335,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Meals.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\CompetentDoctor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Death.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\MadDoctor.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\MedicalKnife.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Proficiency.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AttackOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SuicideOrder.cs" />
