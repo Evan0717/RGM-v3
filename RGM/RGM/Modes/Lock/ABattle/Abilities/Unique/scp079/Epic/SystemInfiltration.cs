@@ -12,7 +12,7 @@ using static PlayerList;
 namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
 
-[Ability("시스템 침투", "20% 확률로 [워크스테이션 업그레이드]추가 모드를 추가합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_SystemInfiltration, RoleAbility.Scp079)]
+[Ability("시스템 침투", "35% 확률로 [워크스테이션 업그레이드]추가 모드를 추가합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_SystemInfiltration, RoleAbility.Scp079)]
 public class SystemInfiltration : Ability
 {
     public override void OnEnabled()
@@ -68,7 +68,7 @@ public class SystemInfiltration : Ability
         {
             if (Owner.IsAlive)
             {
-                if (Random.Range(1, 6) == 1)
+                if (Random.Range(1, 101) <= 35)
                 { 
                     string extraMode = PickExtraMode_79();
                     if (!string.IsNullOrEmpty(extraMode))
