@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("민첩", "회피율이 3% 증가합니다.", AbilityCategory.Common, AbilityType.NORMAL_AGILITY)]
+[Ability("민첩", "회피율이 5% 증가합니다. SCP 진영은 기존의 40% 확률로 적용됩니다.", AbilityCategory.Common, AbilityType.NORMAL_AGILITY)]
 public class Agility : Ability
 {
     public override void OnEnabled()
@@ -20,10 +20,15 @@ public class Agility : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || ev.Player != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+        if (ev.Attacker == null || 
+            ev.Player != Owner || 
+            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || 
+            Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             return;
 
-        if (Random.Range(1, 101) < 4)
+        int dodgeChance = Owner.IsScpRole() ? 2 : 5;
+
+        if (Random.Range(1, 101) <= dodgeChance)
         {
             ev.IsAllowed = false;
 
