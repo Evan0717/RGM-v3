@@ -28,7 +28,7 @@ public class Magician : Ability
         if (ev.Player != Owner || !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Attacker.ReferenceHub))
             return;
 
-        float add = ev.DamageHandler.Damage * 0.5f;
+        var add = ev.DamageHandler.Damage * 0.5f;
         ev.Player.MaxHealth += add;
         ev.Player.Health += add;
     }

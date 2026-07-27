@@ -10,12 +10,12 @@ namespace RGM.Modes.Abilities.Rare;
 [Ability("유기농 우유", "자신에게 해로운 효과만 제거합니다.", AbilityCategory.Rare, AbilityType.RARE_ORGANICMILK)]
 public class OrganicMilk : Ability
 {
-    ushort CoinSerial = 0;
+    private ushort _coinSerial;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.Coin);
-        CoinSerial = item.Serial;
+        _coinSerial = item.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -27,16 +27,15 @@ public class OrganicMilk : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item != null)
-        {
-            if (CoinSerial == ev.Item.Serial)
-                ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>유기농 우유</color></b> 능력을 사용할 수 있습니다.");
-        }
+        if (ev.Item?.Serial != _coinSerial)
+            return;
+        
+        ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>유기농 우유</color></b> 능력을 사용할 수 있습니다.");
     }
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (CoinSerial == ev.Item.Serial && ev.Player.CurrentRoom.Type != RoomType.Pocket)
+        if (_coinSerial == ev.Item.Serial && ev.Player.CurrentRoom.Type != RoomType.Pocket)
         {
             foreach (var effectType in Owner.ActiveEffects
                          .Select(effect => effect.GetEffectType())

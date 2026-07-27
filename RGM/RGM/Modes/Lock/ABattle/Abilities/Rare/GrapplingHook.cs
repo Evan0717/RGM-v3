@@ -9,12 +9,12 @@ namespace RGM.Modes.Abilities.Rare;
 [Ability("갈고리", "지급된 동전을 튕기면 대상을 끌어옵니다. (사거리 9)", AbilityCategory.Rare, AbilityType.RARE_GRAPPLINGHOOK)]
 public class GrapplingHook : Ability
 {
-    ushort serial = 0;
+    private ushort _serial;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.Coin);
-        serial = item.Serial;
+        _serial = item.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -26,16 +26,15 @@ public class GrapplingHook : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item != null)
-        {
-            if (serial == ev.Item.Serial)
-                ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.");
-        }
+        if (ev.Item?.Serial != _serial)
+            return;
+        
+        ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>갈고리</color></b> 능력을 사용할 수 있습니다.");
     }
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (ev.Item.Serial == serial)
+        if (ev.Item.Serial == _serial)
         {
             if (Tools.TryGetLookPlayer(ev.Player, 9f, out Player target, out RaycastHit? hit))
             {
