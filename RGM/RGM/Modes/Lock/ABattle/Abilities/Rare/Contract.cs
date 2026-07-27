@@ -11,12 +11,12 @@ namespace RGM.Modes.Abilities.Rare;
 [Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다.", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
 public class Contract : Ability
 {
-    ushort ContractCoinSerial = 0;
+    private ushort _contractCoinSerial;
 
     public override void OnEnabled()
     {
         Item cc = Owner.AddItem(ItemType.Coin);
-        ContractCoinSerial = cc.Serial;
+        _contractCoinSerial = cc.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -28,18 +28,17 @@ public class Contract : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item != null)
-        {
-            if (ContractCoinSerial == ev.Item.Serial)
-                ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.");
-        }
+        if (ev.Item?.Serial != _contractCoinSerial)
+            return;
+        
+        ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.");
     }
 
     public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         ushort Serial = ev.Item.Serial;
 
-        if (ContractCoinSerial == Serial)
+        if (_contractCoinSerial == Serial)
         {
             ev.Item.Destroy();
 

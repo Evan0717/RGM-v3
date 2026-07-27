@@ -16,7 +16,7 @@ public class BombGun : Ability
     const float OwnerExplosionDamageMultiplier = 0.03f;
     const float WarMachineGrenadeDamageMultiplier = 0.6f;
 
-    ushort itemSerial = 0;
+    ushort itemSerial;
     readonly List<ExplosionGrenadeProjectile> bombGunGrenades = new();
 
     public override void OnEnabled()
@@ -37,10 +37,10 @@ public class BombGun : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Item == null || ev.Player.CurrentItem == null) return;
-        if (itemSerial != ev.Player.CurrentItem.Serial) return;
-        if (itemSerial == ev.Item.Serial)
-            ev.Player.AddHint("워 머신", $"<b><color={ABattle.RatingColor["신화"]}>워 머신</color></b> 능력이 있는 <b>리볼버</b>입니다!");
+        if (ev.Item?.Serial != itemSerial)
+            return;
+        
+        ev.Player.AddHint("워 머신", $"<b><color={ABattle.RatingColor["신화"]}>워 머신</color></b> 능력이 있는 <b>리볼버</b>입니다!");
     }
 
     public void OnShooting(ShootingEventArgs ev)
