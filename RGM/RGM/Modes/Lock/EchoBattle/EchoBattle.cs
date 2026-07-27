@@ -33,8 +33,8 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
     public override string Author => "Denia's First Project";
 
     /// <summary>테스트용: true면 RoundLock + AFK 추방 방지를 켭니다.</summary>
-    const bool SoloTestMode = true;
-    const int InstructionDurationSeconds = 150;
+    const bool SoloTestMode = false;
+    const int InstructionDurationSeconds = 130;
     public const int RoundStartDelaySeconds = InstructionDurationSeconds + EchoInfo.InitialApplyDelaySeconds;
     // Hint의 기본 줄 간격보다 조금 좁게 지정해, 긴 안내문을 자연스럽게 읽을 수 있게 합니다.
     const string InstructionHintFormat = "<voffset=360><align=left><width=900><line-height=85%>{0}</line-height></width></align></voffset>";
@@ -271,7 +271,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "Cost 1 에코는 액티브 스킬이 없습니다.\n\n" +
             "에코 장착에는 최대 Cost 제한이 있으며, 총합 Cost는 12까지 구성 가능합니다.\n" +
             "같은 이름의 에코는 중복 장착이 불가합니다.\n" +
-            "각 Cost별 에코는 장착할 수 있는 메인 스탯이 정해져 있으며, 다른 Cost의 메인 스탯을 장착할 수 없습니다.</size>", 10)));
+            "각 Cost별 에코는 장착할 수 있는 메인 스탯이 정해져 있으며, 다른 Cost의 메인 스탯을 장착할 수 없습니다.</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>3. 에코 전투 성장 시스템</b></size>\n\n" +
@@ -280,7 +280,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "레벨은 퀘스트를 통해 경험치를 획득하여 올릴 수 있으며, 대부분의 행동으로 획득 가능합니다.\n\n" +
             "에코 레벨이 1 오를 때마다 메인 스탯이 선형 증가하며,\n" +
             "에코 레벨이 5의 배수일 때 마다 부옵션이 해금됩니다.\n" +
-            "부옵션은 자동으로 부여되며, 한번 부여된 부옵션은 변경할 수 없습니다.</size>", 10)));
+            "부옵션은 자동으로 부여되며, 한번 부여된 부옵션은 변경할 수 없습니다.</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>4. 에코 전투 액티브 스킬 목록 <color=#D2042D>(Cost 4)</color></b></size>\n\n" +
@@ -289,7 +289,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "<color=#D2042D>노움</color>: 5초간 데미지 감소 70%, 재사용 대기시간 60초\n" +
             "<color=#D2042D>살라만드라</color>: 30초간 공격에 화상 효과 부여, 재사용 대기시간 60초\n" +
             "<color=#D2042D>운디네</color>: 주변 15m 적에게 2초간 감속, 재사용 대기시간 40초\n" +
-            "<color=#D2042D>실프</color>: 10초간 이동속도 증가 및 반투명/문 통과/발소리 제거, 재사용 대기시간 60초</size>", 10)));
+            "<color=#D2042D>실프</color>: 10초간 이동속도 증가 및 반투명/문 통과/발소리 제거, 재사용 대기시간 60초</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>4. 에코 전투 액티브 스킬 목록 <color=#FFBF00>(Cost 3)</color></b></size>\n\n" +
@@ -298,7 +298,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "<color=#FFBF00>쁘띠 096</color>: SCP-096이 사용 시 즉시 분노, 주변 20m 대상 전체 목격자 포함, 받는 데미지 25% 감소, 재사용 대기시간 90초\n" +
             "<color=#FFBF00>쁘띠 106</color>: SCP-106이 사용 시 에너지 70% 회복, 재사용 대기시간 60초\n" +
             "<color=#FFBF00>쁘띠 173</color>: SCP-173이 사용 시 다음 순간이동 시간 1초로 감소, 재사용 대기시간 60초\n" +
-            "<color=#FFBF00>쁘띠 939</color>: 15초간 스태미너 무제한, 재사용 대기시간 60초</size>", 10)));
+            "<color=#FFBF00>쁘띠 939</color>: 15초간 스태미너 무제한, 재사용 대기시간 60초</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>5. 에코 전투 스탯 목록 (메인 스탯)</b></size>\n\n" +
@@ -306,7 +306,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "<color=#D2042D>Cost 4</color>: 크리티컬 확률, 크리티컬 데미지, 이동속도/점프력, 스태미너 소모 속도 감소\n" +
             "<color=#FFBF00>Cost 3</color>: SCP 대상 데미지, 인간 대상 데미지, 헤드샷 데미지, AHP 회복 및 최대치 증가, 크기 감소\n" +
             "Cost 1: 없음 (공격력, HP, 방어력 사용 가능)\n\n" +
-            "부가 스탯 — <color=#D2042D>Cost 4</color>: 공격력 / <color=#FFBF00>Cost 3</color>: 치료 효과 보너스 / Cost 1: HP</size>", 10)));
+            "부가 스탯 — <color=#D2042D>Cost 4</color>: 공격력 / <color=#FFBF00>Cost 3</color>: 치료 효과 보너스 / Cost 1: HP</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>5. 에코 전투 스탯 목록 (부옵션)</b></size>\n\n" +
@@ -328,7 +328,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "전용무기는 최대 90레벨까지 성장 가능합니다.\n\n" +
             "전용무기는 레벨 이외에 공진 수치라는 특별 강화 수치가 있으며,\n" +
             "특정 퀘스트 달성으로 올릴 수 있습니다.\n" +
-            "특정 퀘스트는 에코 전투 상태창에서 확인 가능합니다.</size>", 10)));
+            "특정 퀘스트는 에코 전투 상태창에서 확인 가능합니다.</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>7. 에코 전투 전용무기 목록</b></size>\n\n" +
@@ -338,7 +338,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "공격 적중 시 대상에게 불꽃 효과를 부여하며, 최대 6스택 중첩 가능. 2초 이내에 재적용 불가.\n" +
             "최대 스택 도달 시 불꽃을 폭파시키며, 주변 7m 적에게 50 + (10 x 공진 수치) + (최대 체력의 10% + 2% x 공진 수치) 의 피해를 입힘.\n\n" +
             "<color=#DC143C>쿠모키리</color>: 공격력 11% + (공진 수치 x 2%) 증가.\n" +
-            "공격 적중 시 (1/3/6/10/15)%의 확률로 618.03 x (0.5 + 0.5 x 공진 수치)만큼 고정 피해.</size>", 10)));
+            "공격 적중 시 (1/3/6/10/15)%의 확률로 618.03 x (0.5 + 0.5 x 공진 수치)만큼 고정 피해.</size>", 8)));
 
         yield return Timing.WaitUntilDone(Timing.RunCoroutine(ShowInstruction(
             "<size=27><b>7. 에코 전투 전용무기 목록</b></size>\n\n" +
@@ -350,7 +350,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             "AHP(또는 HS)가 피해를 입을 경우, AHP(HS)의 순수 차감량의 (16% x 공진 수치)만큼 HP 회복.\n\n" +
             "<color=#FAFA33>스펙트럼 블래스터</color>: 공격력 8% + (공진 수치 x 2%) 증가.\n" +
             "적 공격 시 0.8초 간격으로 이동속도 (1 x 공진 수치)%만큼 증가. 최대 8스택 중첩, 5초 지속.\n" +
-            "5초 내에 적 공격 시 효과 지속 시간 갱신.</size>", 10)));
+            "5초 내에 적 공격 시 효과 지속 시간 갱신.</size>", 8)));
 
         for (int i = 5; i > 0; i--)
         {

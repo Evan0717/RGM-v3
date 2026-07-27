@@ -13,6 +13,7 @@ public class RepairMan : Ability
         Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
         Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
         Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
+        Exiled.Events.Handlers.Player.UnlockingGenerator += OnUnlockingGenerator;
         Exiled.Events.Handlers.Player.OpeningGenerator += OnOpeningGenerator;
         Exiled.Events.Handlers.Player.ClosingGenerator += OnClosingGenerator;
     }
@@ -22,6 +23,7 @@ public class RepairMan : Ability
         Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
         Exiled.Events.Handlers.Player.TriggeringTesla -= OnTriggeringTesla;
         Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
+        Exiled.Events.Handlers.Player.UnlockingGenerator -= OnUnlockingGenerator;
         Exiled.Events.Handlers.Player.OpeningGenerator -= OnOpeningGenerator;
         Exiled.Events.Handlers.Player.ClosingGenerator -= OnClosingGenerator;
     }
@@ -43,13 +45,7 @@ public class RepairMan : Ability
             return;
         }
 
-        ev.IsAllowed = false;
-
-        if (ev.Door.IsOpen)
-            ev.Door.IsOpen = false;
-
-        else
-            ev.Door.IsOpen = true;
+        ev.IsAllowed = true;
     }
 
     public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
@@ -65,13 +61,15 @@ public class RepairMan : Ability
         if (ev.Player != Owner)
             return;
 
-        ev.IsAllowed = false;
+        ev.IsAllowed = true;
+    }
 
-        if (ev.InteractingChamber.IsOpen)
-            ev.InteractingChamber.IsOpen = false;
+    public void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
 
-        else
-            ev.InteractingChamber.IsOpen = true;
+        ev.IsAllowed = true;
     }
 
     public void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
@@ -79,8 +77,7 @@ public class RepairMan : Ability
         if (ev.Player != Owner)
             return;
 
-        ev.IsAllowed = false;
-        ev.Generator.IsOpen = true;
+        ev.IsAllowed = true;
     }
 
     public void OnClosingGenerator(ClosingGeneratorEventArgs ev)
@@ -88,7 +85,6 @@ public class RepairMan : Ability
         if (ev.Player != Owner)
             return;
 
-        ev.IsAllowed = false;
-        ev.Generator.IsOpen = false;
+        ev.IsAllowed = true;
     }
 }

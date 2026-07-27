@@ -13,12 +13,12 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("뱀의 손 무전기", "무전기를 든 상태로 우클릭하면 뱀의 손 지원을 부르며, 자신도 뱀의 손 소속이 됩니다. 이후 럭키비키를 획득합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SNAKEHANDRADIO)]
 public class SnakeHandRadio : Ability
 {
-    ushort CallSnakeHandsSerial = 0;
+    private ushort _callSnakeHandsSerial;
 
     public override void OnEnabled()
     {
         Item SH = Owner.AddItem(ItemType.Radio);
-        CallSnakeHandsSerial = SH.Serial;
+        _callSnakeHandsSerial = SH.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
@@ -30,16 +30,15 @@ public class SnakeHandRadio : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item != null)
-        {
-            if (CallSnakeHandsSerial == ev.Item.Serial)
-                ev.Player.AddHint("뱀의 손 무전기", $"<b><color={ABattle.RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력이 있는 <b>무전기</b>입니다!");
-        }
+        if (ev.Item?.Serial != _callSnakeHandsSerial)
+            return;
+        
+        ev.Player.AddHint("뱀의 손 무전기", $"<b><color={ABattle.RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력이 있는 <b>무전기</b>입니다!");
     }
 
     public void OnTogglingRadio(TogglingRadioEventArgs ev)
     {
-        if (CallSnakeHandsSerial == ev.Item.Serial)
+        if (_callSnakeHandsSerial == ev.Item.Serial)
         {
             ev.Item.Destroy();
 

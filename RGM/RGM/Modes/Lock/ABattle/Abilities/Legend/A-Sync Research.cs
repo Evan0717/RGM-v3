@@ -14,13 +14,13 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("A-Sync Research", "지급된 영구적인 동전을 튕기면 최대 1분간 대상과 자신을 다른 공간으로 이동시킵니다.", AbilityCategory.Legend, AbilityType.LEGEND_ASYNC)]
 public class ASync : Ability
 {
-    ushort serial = 0;
-    int time = 0;
+    private ushort _serial;
+    private int _time;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.Coin);
-        serial = item.Serial;
+        _serial = item.Serial;
 
         if (!MapUtils.LoadedMaps.ContainsKey("Backroom"))
         {
@@ -37,22 +37,21 @@ public class ASync : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item != null)
-        {
-            if (serial == ev.Item.Serial)
-                ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["전설"]}>A-Sync Research</color></b> 능력을 사용할 수 있습니다.");
-        }
+        if (ev.Item?.Serial != _serial)
+            return;
+        
+        ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["전설"]}>A-Sync Research</color></b> 능력을 사용할 수 있습니다.");
     }
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (ev.Item.Serial == serial)
+        if (ev.Item.Serial == _serial)
         {
             if (Tools.TryGetLookPlayers(ev.Player, 100f, out List<Player> players, out RaycastHit? hit))
             {
-                if (time > 0)
+                if (_time > 0)
                 {
-                    ev.Player.AddHint("동전 사용 실패", $"{time}초 뒤 다시 시도해주세요.");
+                    ev.Player.AddHint("동전 사용 실패", $"{_time}초 뒤 다시 시도해주세요.");
                 }
                 else
                 {
@@ -71,13 +70,13 @@ public class ASync : Ability
                         player.AddEffect(EffectType.Flashed, 1, 1);
                     }
 
-                    time = 60;
+                    _time = 60;
 
                     IEnumerator<float> timer()
                     {
-                        while (time > 0)
+                        while (_time > 0)
                         {
-                            time--;
+                            _time--;
 
                             yield return Timing.WaitForSeconds(1f);
                         }

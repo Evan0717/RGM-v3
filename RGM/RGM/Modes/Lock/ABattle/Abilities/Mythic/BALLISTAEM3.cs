@@ -55,10 +55,10 @@ public class BALLISTAEM3 : Ability
 
     private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item == null) return;
+        if (ev.Item?.Serial != _serial)
+            return;
         
-        if (_serial != ev.Player.CurrentItem.Serial) return;
-            ev.Player.AddHint("발리스타 MP3",  $"<b><color={ABattle.RatingColor["신화"]}>발리스타 MP3</color></b> 능력이 있는 <b>입자 분열기</b>입니다!");
+        ev.Player.AddHint("발리스타 MP3",  $"<b><color={ABattle.RatingColor["신화"]}>발리스타 MP3</color></b> 능력이 있는 <b>입자 분열기</b>입니다!");
     }
     
     private void OnHurting(HurtingEventArgs ev)

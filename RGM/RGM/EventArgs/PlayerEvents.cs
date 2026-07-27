@@ -784,8 +784,11 @@ namespace RGM.EventArgs
             }
             else if (ev.Attacker != null && !ev.Attacker.IsNonePlayer())
             {
-                if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type.IsWeapon())
-                    ev.DamageHandler.Damage /= 2;
+                if (ev.Attacker.IsScpRole() && 
+                    (ev.DamageHandler.Type.IsWeapon() || 
+                     ev.DamageHandler.Type == DamageType.Scp127 || 
+                     ev.DamageHandler.Type == DamageType.Scp1509))
+                    ev.DamageHandler.Damage *= 0.65f;
 
                 float damage = ev.IsInstantKill
                     ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
@@ -932,8 +935,7 @@ namespace RGM.EventArgs
         {
             Timing.CallDelayed(5 * 60, () =>
             {
-                if (ev.Pickup != null)
-                    ev.Pickup.Destroy();
+                ev.Pickup?.Destroy();
             });
         }
 
@@ -943,33 +945,22 @@ namespace RGM.EventArgs
             {
                 foreach (var ammo in ev.AmmoPickups)
                 {
-                    if (ammo != null)
-                        ammo.Destroy();
+                    ammo?.Destroy();
                 }
             });
         }
 
         public static void OnShooting(ShootingEventArgs ev)
         {
-            if (ev.ClaimedTarget != null)
-            {
-                if (ev.Player.Role is Scp173Role scp173)
-                {
-                    if (Tools.TryGetLookPlayer(ev.Player, 1000, out Player target, out RaycastHit? hit))
-                    {
-                        if (ev.ClaimedTarget == target)
-                        {
-                            if (scp173.IsObserved)
-                            {
-                                ev.ClaimedTarget.Hurt(new PlayerStatsSystem.ScpDamageHandler(ev.Player.ReferenceHub,
-                                    ev.Firearm.Damage / 2, DeathTranslations.Scp173));
+            if (ev.ClaimedTarget == null) return;
+            if (ev.Player.Role is not Scp173Role scp173) return;
+            if (!Tools.TryGetLookPlayer(ev.Player, 1000, out Player target, out RaycastHit? hit)) return;
+            if (ev.ClaimedTarget != target) return;
+            if (!scp173.IsObserved) return;
+            ev.ClaimedTarget.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub,
+                ev.Firearm.Damage *= 0.65f, DeathTranslations.Scp173));
 
-                                ev.Player.ShowHitMarker();
-                            }
-                        }
-                    }
-                }
-            }
+            ev.Player.ShowHitMarker();
         }
 
         public static void OnKicking(KickingEventArgs ev)

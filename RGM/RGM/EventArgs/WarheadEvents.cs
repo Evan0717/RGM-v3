@@ -45,7 +45,7 @@ namespace RGM.EventArgs
             {
                 foreach (var player in PlayerManager.List)
                 {
-                    player.Health -= player.MaxHealth / 20;
+                    player.Health -= player.MaxHealth * 0.05f;
                     
                     if (player.Health <= 0 && player.IsAlive)
                         player.Kill("게임을 질질 끌어서 죽었습니다.");

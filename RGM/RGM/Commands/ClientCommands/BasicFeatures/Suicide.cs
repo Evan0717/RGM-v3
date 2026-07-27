@@ -2,6 +2,7 @@
 using CommandSystem;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using PlayerRoles;
 using static RGM.Variables.Variable;
 
 namespace RGM.Commands.ClientCommands
@@ -13,15 +14,14 @@ namespace RGM.Commands.ClientCommands
         {
             var player = Player.Get(sender);
 
-            if (!EnabledModeList.Exists(x => ScpSuicideAvailableModes.Contains(x.Data.Type))
-                                             && player.IsScp)
+            if (!EnabledModeList.Exists(x => ScpSuicideAvailableModes.Contains(x.Data.Type)) && 
+                player.IsScp && player.Role.Type != RoleTypeId.Scp0492)
             {
                 response = "SCP는 이 명령어를 사용할 수 없습니다.";
                 return false;
             }
 
-            if (EnabledModeList.Exists(x => SuicideBlockedModes.Contains(x.Data.Type))
-                || SuicideBlockedRoles.Contains(player.Role.Type))
+            if (EnabledModeList.Exists(x => SuicideBlockedModes.Contains(x.Data.Type)))
             {
                 response = "이 모드에서는 이 명령어를 사용할 수 없습니다.";
                 return false;
