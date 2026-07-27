@@ -13,9 +13,9 @@ public static partial class MainSettingManager
     private static CustomKeybindSetting LeftKey { get; set; }
     private static CustomKeybindSetting RightKey { get; set; }
     private static CustomKeybindSetting EnterKey { get; set; }
-    private static CustomKeybindSetting DetailInfoKey { get; set; }
+    private static CustomKeybindSetting DetailInfoKey { get; set; }  
     private static CustomSliderSetting BGMVolume { get; set; }
-
+    
     public static void Init()
     {
         if (ScpCanEquipRandomItem != null)
@@ -31,8 +31,8 @@ public static partial class MainSettingManager
         EnterKey = new EnterKeySetting();
         DetailInfoKey = new DetailInfoKeySetting();
         
-        SettingVariables.Settings.Add(0, 
-        [
+
+        CustomSetting.Register(
             ScpCanEquipRandomItem,
             MuteBGM,
             Translation,
@@ -41,16 +41,15 @@ public static partial class MainSettingManager
             LeftKey,
             RightKey,
             EnterKey,
-            DetailInfoKey
-        ]);
+            DetailInfoKey);  
     }
-
+    
+    
     public sealed partial class MuteBGMSetting;
-
+        
     public sealed partial class MuteBGMSetting;
-
     public sealed partial class ScpCanEquipRandomItemSetting;
-
+        
     private sealed partial class TranslationSetting;
 
     private sealed partial class UpKeySetting;
