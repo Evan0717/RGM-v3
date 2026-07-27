@@ -1,6 +1,7 @@
 ﻿using SecretAPI.Features.UserSettings;
 using System.Collections.Generic;
 using MEC;
+using UserSettings.GUIElements;
 
 namespace RGM.UserSettings
 {
@@ -14,6 +15,9 @@ namespace RGM.UserSettings
         {
             if (!Timing.IsRunning(_reloader))
                 _reloader = Timing.RunCoroutine(Reloader());
+
+            MainSettingManager.Init();
+            Timing.CallDelayed(Timing.WaitForOneFrame * 5,() => CustomSetting.Register(SettingVariables.Settings[0]));
         }
 
         private static IEnumerator<float> Reloader()

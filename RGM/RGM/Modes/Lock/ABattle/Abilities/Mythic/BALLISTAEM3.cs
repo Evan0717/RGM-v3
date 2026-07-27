@@ -33,8 +33,6 @@ public class BALLISTAEM3 : Ability
 
         Timing.RunCoroutine(PlanBAmmo());
     }
-
-    public override void OnDisabled() { }
     
     private IEnumerator<float> PlanBAmmo()
     {
@@ -55,6 +53,7 @@ public class BALLISTAEM3 : Ability
 
     private void OnChangedItem(ChangedItemEventArgs ev)
     {
+        if (ev.Item == null || ev.Player == null) return;
         if (ev.Item?.Serial != _serial)
             return;
         
@@ -63,6 +62,10 @@ public class BALLISTAEM3 : Ability
     
     private void OnHurting(HurtingEventArgs ev)
     {
+        if (ev.Player == null 
+            || ev.Attacker == null 
+            || ev.DamageHandler == null) return;
+        
         if (_isActive) return;
         Waiting();     
         if (_serial != ev.Attacker.CurrentItem.Serial) return;

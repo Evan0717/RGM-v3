@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
@@ -17,6 +18,8 @@ namespace RGM.Modes;
 public static class PlayerFeatures
 {
     private static CoroutineHandle _hidCoroutine;
+    private static Mutex _unloadMutex;
+    private static Mutex _loadMutex;
 
     public static void Activate()
     {
@@ -24,7 +27,10 @@ public static class PlayerFeatures
         PlayerHandler.Spawned += OnSpawn;
         PlayerHandler.Died += OnDied;
         PlayerHandler.SearchingPickup += OnSearchingPickup;
-        PlayerHandler.ThrowingRequest += OnThrowingRequest; 
+        PlayerHandler.ThrowingRequest += OnThrowingRequest;
+
+        _loadMutex = new();
+        _unloadMutex = new();
     }
 
     public static void DeActivate()
@@ -35,31 +41,45 @@ public static class PlayerFeatures
         PlayerHandler.SearchingPickup -= OnSearchingPickup;
         PlayerHandler.ThrowingRequest -= OnThrowingRequest;
 
+        _unloadMutex.ReleaseMutex();
         UnloadEffects();
+        
+        _loadMutex.Dispose();
+        _unloadMutex.Dispose();
     }
 
     internal static void AddEffects()
     {
+        var mutexOnline = _loadMutex.WaitOne(3000);
         try
         {
+            if (!mutexOnline) return;
+            
             foreach (var player in PlayerManager.List.Where(player =>
                          player != null && !player.IsDead && !player.IsNPC))
             {
                 UnloadEffects();
-                player.AddEffect(EffectType.MovementBoost, (byte)(SpeedStore.Count * 2));
-                player.AddEffect(EffectType.Scp1853, Mathf.Min(SpeedStore.Count, 5));
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
+                    player.AddEffect(EffectType.MovementBoost, (byte)(SpeedStore.Count * 2));
+                    player.AddEffect(EffectType.Scp1853, Mathf.Min(SpeedStore.Count, 5));
+                });
             }
         }
         catch (Exception e)
         {
             Log.Error($"Error while adding effects, Deception: {e.Message}");
         }
+        _loadMutex.ReleaseMutex();
     }
 
     internal static void UnloadEffects()
     {
+        var mutexOnline = _unloadMutex.WaitOne(3000);
         try
         {
+            if (!mutexOnline) return;
+            
             foreach (var player in PlayerManager.List.Where(player =>
                          player != null && !player.IsDead && !player.IsNPC))
             {
@@ -71,6 +91,7 @@ public static class PlayerFeatures
         {
             Log.Error($"Error while removing effects, Deception: {e.Message}");
         }
+        _unloadMutex.ReleaseMutex();
     }
 
     private static void OnChanging(ChangingMicroHIDStateEventArgs ev)
@@ -111,14 +132,10 @@ public static class PlayerFeatures
     }
 
     private static void OnSearchingPickup(SearchingPickupEventArgs ev)
-    {
-        ev.SearchTime -= SpeedStore.Count * 0.1f;
-    }
+        => ev.SearchTime -= SpeedStore.Count * 0.1f;
 
-    private static void OnThrowingRequest(ThrowingRequestEventArgs ev)
-    {
-        ev.Throwable.PinPullTime -= SpeedStore.Count * 0.1f;
-    }
+    private static void OnThrowingRequest(ThrowingRequestEventArgs ev) 
+        => ev.Throwable.PinPullTime -= SpeedStore.Count * 0.1f;
 
     private static void OnDied(DiedEventArgs ev)
     {

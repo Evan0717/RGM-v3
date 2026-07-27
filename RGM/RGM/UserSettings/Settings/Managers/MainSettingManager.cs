@@ -31,8 +31,8 @@ public static partial class MainSettingManager
         EnterKey = new EnterKeySetting();
         DetailInfoKey = new DetailInfoKeySetting();
         
-
-        CustomSetting.Register(
+        SettingVariables.Settings.Add(0, 
+        [
             ScpCanEquipRandomItem,
             MuteBGM,
             Translation,
@@ -41,7 +41,8 @@ public static partial class MainSettingManager
             LeftKey,
             RightKey,
             EnterKey,
-            DetailInfoKey);  
+            DetailInfoKey
+        ]);
     }
     
     
