@@ -33,8 +33,4 @@ public class FinalExam : Ability
             }
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }
