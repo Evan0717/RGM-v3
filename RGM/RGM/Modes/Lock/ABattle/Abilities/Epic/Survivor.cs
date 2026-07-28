@@ -2,7 +2,6 @@
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
 using MEC;
-using RGM.API.DataBases;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Epic;
@@ -44,7 +43,7 @@ public class Survivor : Ability
             return;
         }
 
-        if (TrySurvive(ev.DamageHandler.Type))
+        if (TrySurvive())
             ev.IsAllowed = false;
     }
 
@@ -54,7 +53,7 @@ public class Survivor : Ability
             !isEnabled &&
             !IsExemptDamage(ev.DamageHandler.Type) &&
             IsLethalDamage(ev) &&
-            TrySurvive(ev.DamageHandler.Type))
+            TrySurvive())
         {
             ev.IsAllowed = false;
             ev.DamageHandler.Damage = 0f;
@@ -76,11 +75,8 @@ public class Survivor : Ability
         ev.IsAllowed = false;
     }
 
-    private bool TrySurvive(DamageType damageType)
+    private bool TrySurvive()
     {
-        if (Datas.BlockDamageTypes.Contains(damageType))
-            return false;
-
         if (!ABattle.Instance.IsLifeUsed.TryGetValue(Owner, out bool isLifeUsed))
             ABattle.Instance.IsLifeUsed[Owner] = false;
         else if (isLifeUsed)
