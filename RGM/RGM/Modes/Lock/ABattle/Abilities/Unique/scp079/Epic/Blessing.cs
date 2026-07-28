@@ -20,7 +20,7 @@ public class Blessing : Ability
         foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole()))
         {
             scp.AddAbility(AbilityType.NORMAL_LUCKY);
-            scp.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
+            if (scp.Role != RoleTypeId.Scp079)  scp.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
         }
     }
 
