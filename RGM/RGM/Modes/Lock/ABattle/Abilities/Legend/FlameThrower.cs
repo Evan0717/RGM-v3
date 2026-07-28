@@ -12,13 +12,13 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("화염 방사기", "위력은 42%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.", AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
 public class FlameThrower : Ability
 {
-    ushort FlamethrowerSerial = 0;
+    private ushort _flamethrowerSerial;
     CoroutineHandle _onStarted;
 
     public override void OnEnabled()
     {
         Item ft = Owner.AddItem(ItemType.MicroHID);
-        FlamethrowerSerial = ft.Serial;
+        _flamethrowerSerial = ft.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
@@ -37,7 +37,7 @@ public class FlameThrower : Ability
         {
             foreach (var Item in Item.List.Where(x => x.Type == ItemType.MicroHID))
             {
-                if (FlamethrowerSerial == Item.Serial)
+                if (_flamethrowerSerial == Item.Serial)
                 {
                     MicroHid MicroHID = (MicroHid)Item;
 
@@ -52,16 +52,15 @@ public class FlameThrower : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item != null)
-        {
-            if (FlamethrowerSerial == ev.Item.Serial)
-                ev.Player.AddHint("화염 방사기", $"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
-        }
+        if (ev.Item?.Serial != _flamethrowerSerial)
+            return;
+        
+        ev.Player.AddHint("화염 방사기", $"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
     }
 
     public void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
     {
-        if (FlamethrowerSerial == ev.Item.Serial && ev.NewPhase == MicroHidPhase.WindingUp)
+        if (_flamethrowerSerial == ev.Item.Serial && ev.NewPhase == MicroHidPhase.WindingUp)
             ev.NewPhase = MicroHidPhase.Firing;
     }
 
@@ -70,7 +69,7 @@ public class FlameThrower : Ability
         if (ev.Attacker == null || ev.Player == ev.Attacker)
             return;
 
-        if (ev.Attacker.CurrentItem != null && FlamethrowerSerial == ev.Attacker.CurrentItem.Serial)
+        if (ev.Attacker.CurrentItem != null && _flamethrowerSerial == ev.Attacker.CurrentItem.Serial)
         {
             ev.DamageHandler.Damage *= 0.42f;
 
