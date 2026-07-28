@@ -191,7 +191,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SuperStar.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Survivor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\TerroristRemains.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\A-Sync Research.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\OtherworldLight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Soldier76.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyPower.cs" />

@@ -407,7 +407,7 @@ public enum AbilityType
     LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
-    LEGEND_ASYNC, // [전설] A-Sync Research
+    LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
     LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
