@@ -9,6 +9,7 @@ using MEC;
 using Mirror;
 using NetworkManagerUtils.Dummies;
 using PlayerRoles;
+using PlayerRoles.PlayableScps;
 using ProjectMER.Features;
 using ProjectMER.Features.Serializable;
 using RGM.API.Components;
@@ -383,6 +384,55 @@ $"""
 
             return targets.Count > 0;
         }
+
+
+        /// <summary>
+        /// observer(관찰자)가 target(대상)을 실제로 바라보고 있는지 확인합니다.
+        /// </summary>
+        /// <param name="observer">보는 사람(확장)</param>
+        /// <param name="target">대상 플레이어</param>
+        /// <param name="maxDistance">최대 거리 (기본값: 30m)</param>
+        /// <param name="fov">시야각 (기본값: 60도)</param>
+        /// <returns>장애물 없이 바라보고 있다면 true</returns>
+        public static bool IsLookingAt(this Player observer, Player target, float maxDistance = 30f, float fov = 60f)
+        {
+            if (observer == null || target == null || observer == target)
+                return false;
+
+            if (!observer.IsAlive || !target.IsAlive)
+                return false;
+
+            Vector3 observerEyePos = observer.CameraTransform.position;
+            Vector3 targetPos = target.Position;
+
+            float distance = Vector3.Distance(observerEyePos, targetPos);
+            if (distance > maxDistance)
+                return false;
+
+            Vector3 directionToTarget = (targetPos - observerEyePos).normalized;
+            Vector3 forwardDirection = observer.CameraTransform.forward;
+
+            if (Vector3.Angle(forwardDirection, directionToTarget) > fov)
+                return false;
+
+            Vector3 targetHead = target.CameraTransform.position;
+            Vector3 targetChest = targetPos + Vector3.up * 1.0f;
+            Vector3 targetFeet = targetPos + Vector3.up * 0.1f;
+
+            int visionMask = VisionInformation.VisionLayerMask;
+
+            if (!Physics.Linecast(observerEyePos, targetHead, visionMask))
+                return true;
+
+            if (!Physics.Linecast(observerEyePos, targetChest, visionMask))
+                return true;
+
+            if (!Physics.Linecast(observerEyePos, targetFeet, visionMask))
+                return true;
+
+            return false;
+        } //dnspy로 땅콩이 로직 뜯어서 AI시켜서 만듦
+
 
         public static bool TryInstallMode(ModeType ModeType)
         {

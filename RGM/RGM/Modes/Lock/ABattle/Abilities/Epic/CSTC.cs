@@ -15,12 +15,12 @@ public class CSTC : Ability
         {
             if (Owner.IsAlive)
             {
-                if (Random.Range(1, 101) <= 17)
+                if (Random.Range(1, 101) <= 20)
                 {
                     Owner.AddHint("대학수학능력시험 1등급", "<b>능력을 3개 더 얻었습니다!</b>");
 
                     for (int i = 0; i < 3; i++) {
-                        var category = Random.Range(1, 101) <= 17 ? AbilityCategory.Legend : AbilityCategory.Epic;
+                        var category = Random.Range(1, 101) <= 15 ? AbilityCategory.Legend : AbilityCategory.Epic;
                         Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1)[0]);
                     }
                     Owner.AddAbility(AbilityType.DUMMY_CSTCSUCCESS);

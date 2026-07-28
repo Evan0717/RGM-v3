@@ -407,7 +407,7 @@ public enum AbilityType
     LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
-    LEGEND_ASYNC, // [전설] A-Sync Research
+    LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
     LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
@@ -522,7 +522,6 @@ public enum AbilityType
     NORMAL_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
     NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
-    NORMAL_SCP079_AVOIDORDER, // [전용 일반] 회피 명령
     NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
     //NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
 
@@ -530,6 +529,7 @@ public enum AbilityType
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
     RARE_SCP079_PINGHOOK, // [전용 희귀] 핑 갈고리
+    RARE_SCP079_AVOIDORDER, // [전용 희귀] 회피 명령
    // RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
     RARE_SCP079_REPAIR, // [전용 희귀] 수리수리 마수리
     RARE_SCP079_RESTAREA, // [전용 희귀] 휴게소
