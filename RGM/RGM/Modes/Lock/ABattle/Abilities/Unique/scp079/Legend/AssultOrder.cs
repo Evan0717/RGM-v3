@@ -4,7 +4,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Legend;
 
-[Ability("돌격 명령", "SCP들에게 [<color=#FF00FF>영웅</color>]람보, [<color=#FF00FF>영웅</color>]불스아이, [일반]단련 5개 능력을 지급합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SCP079_BLACKOUT, RoleAbility.Scp079)]
+[Ability("돌격 명령", "SCP들에게 [<color=#FF00FF>영웅</color>]람보, [<color=#FF00FF>영웅</color>]불스아이, [일반]단련 5개 능력을 지급합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SCP079_ASSULTORDER, RoleAbility.Scp079)]
 
 public class AssultOrder : Ability
 {
