@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
+using UnityEngine;
 
 using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 3개를 가진 채로 시작합니다.", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
+[Ability("계약", "지급된 동전을 튕기면 당장 죽지만, 다음 생에 능력 5개를 가진 채로 시작합니다.(별도 등급 확률 적용)", AbilityCategory.Rare, AbilityType.RARE_CONTRACT)]
 public class Contract : Ability
 {
     private ushort _contractCoinSerial;
@@ -36,29 +38,50 @@ public class Contract : Ability
 
     public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        ushort Serial = ev.Item.Serial;
+        if (_contractCoinSerial != ev.Item.Serial)
+            yield break;
 
-        if (_contractCoinSerial == Serial)
-        {
-            ev.Item.Destroy();
+        Player player = ev.Player;
+        ev.Item.Destroy();
 
-            Owner.RemoveAllAbilities();
+        if (GodModePlayers.Contains(player))
+            GodModePlayers.Remove(player);
+            
+        player.RemoveAllAbilities();
+        player.Kill("계약에 따라 당신은 죽었습니다.");
 
-            if (GodModePlayers.Contains(Owner))
-                GodModePlayers.Remove(Owner);
-
-            ev.Player.Kill("계약에 따라 당신은 죽었습니다.");
-
-            while (!ev.Player.IsAlive)
-                yield return Timing.WaitForOneFrame;
-
-            for (int i = 1; i < 4; i++)
+        while (!player.IsAlive)
+            yield return Timing.WaitForOneFrame;
+            
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                ABattle.Instance.StartSelect(ev.Player);
-
-                while (ABattle.Instance.IsSelecting[ev.Player])
-                    yield return Timing.WaitForOneFrame;
+                for (int i = 0; i < 5; i++)
+                {
+                    var rand = Random.Range(1, 201);
+                    switch (rand)
+                    {
+                        case 1: // 0.5%
+                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Mythic, 1)[0]);
+                            break;
+                    
+                        case <= 7: // 3.5%
+                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Legend, 1)[0]);
+                            break;
+                    
+                        case <= 20: // 10.0%
+                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1)[0]);
+                            break;
+                    
+                        case <= 70: // 35.0%
+                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Rare, 1)[0]);
+                            break;
+                    
+                        default: // 51.0%
+                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Common, 1)[0]);
+                            break;
+                    }
+                }
             }
-        }
+        );
     }
 }
