@@ -7,6 +7,7 @@ using RGM.Variables;
 namespace RGM.API.Features;
 
 // Classes
+[Obsolete("Under Construction")]
 public class DevManager
 {
     /// <summary>
@@ -131,6 +132,7 @@ public class DevManager
 }
 
 // Attributes
+[Obsolete("Under Construction")]
 [AttributeUsage(AttributeTargets.Class)]
 public class DevClassAttribute(
     string name = null,
@@ -150,13 +152,16 @@ public class DevClassAttribute(
     public bool ActiveNow { get; set; } = activeNow;
 }
 
+[Obsolete("Under Construction")]
 [AttributeUsage(AttributeTargets.Method)]
 public class DevOnEnabledAttribute : Attribute;
 
+[Obsolete("Under Construction")]
 [AttributeUsage(AttributeTargets.Method)]
 public class DevOnDisabledAttribute : Attribute;
 
 // Enums
+[Obsolete("Under Construction")]
 public enum DevType : byte
 {
     ReleaseCandidate = 0,
