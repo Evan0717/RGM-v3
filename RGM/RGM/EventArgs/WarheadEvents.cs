@@ -1,7 +1,9 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Warhead;
 using MEC;
+using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +22,13 @@ namespace RGM.EventArgs
                     breakableDoor.IsDestroyed = true;
             }
 
-            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Zone != ZoneType.Surface || 
-             Physics.RaycastAll(x.Position, Vector3.down, 5, (LayerMask)1).Any(hit =>
-                hit.transform.parent != null &&
-                hit.transform.parent.name ==
-                "ElevatorChamber Gates(Clone)")
-            ))
+            foreach (var player in PlayerManager.List.Where(ShouldDieFromWarhead))
             {
                 if (GodModePlayers.Contains(player))
                     GodModePlayers.Remove(player);
 
-                player.Kill(Random.Range(1, 6) == 1 ? "핵폭발이 당신을 죽음으로 가는 KTX에 태웠습니다." : "핵폭발로 인해 사망하였습니다.");
+                // Custom(string) Kill은 DamageType.Warhead가 아니어서 무적 예외가 적용되지 않음
+                player.Kill(DamageType.Warhead);
             }
 
             Timing.CallDelayed(2 * 60, () => 
@@ -53,6 +51,23 @@ namespace RGM.EventArgs
 
                 yield return Timing.WaitForSeconds(1);
             }
+        }
+
+        private static bool ShouldDieFromWarhead(Player player)
+        {
+            if (!player.IsAlive)
+                return false;
+
+            // SCP-079 Zone은 현재 카메라 기준이라 Surface면 기존 필터에서 빠짐
+            if (player.Role.Type == RoleTypeId.Scp079)
+                return true;
+
+            if (player.Zone != ZoneType.Surface)
+                return true;
+
+            return Physics.RaycastAll(player.Position, Vector3.down, 5, (LayerMask)1).Any(hit =>
+                hit.transform.parent != null &&
+                hit.transform.parent.name == "ElevatorChamber Gates(Clone)");
         }
     }
 }

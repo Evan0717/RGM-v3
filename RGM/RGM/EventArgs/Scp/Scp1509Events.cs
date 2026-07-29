@@ -9,19 +9,17 @@ namespace RGM.EventArgs
     {
         public static void OnResurrecting(ResurrectingEventArgs ev)
         {
-            if (ev.Player.IsScpRole())
+            if (!ev.Player.IsScpRole()) return;
+            ev.IsAllowed = false;
+                
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                ev.IsAllowed = false;
+                if (ev.Player.IsScp)
+                    ev.Victim.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
 
-                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-                {
-                    if (ev.Player.IsScp)
-                        ev.Victim.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
-
-                    else
-                        ev.Victim.Role.Set(ev.Player.Role.Type, RoleSpawnFlags.None);
-                });
-            }
+                else
+                    ev.Victim.Role.Set(ev.Player.Role.Type, RoleSpawnFlags.None);
+            });
         }
     }
 }

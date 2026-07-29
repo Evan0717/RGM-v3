@@ -33,7 +33,7 @@ public class Salamandra : Ability
 
             light.NetworkLightColor = color;
             light.NetworkLightRange = 50;
-            light.NetworkLightIntensity = 20;
+            light.NetworkLightIntensity = 8;
 
             Timing.CallDelayed(5, schematic.Destroy);
         }
