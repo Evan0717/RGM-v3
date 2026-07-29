@@ -119,8 +119,8 @@ public class ABattle : Mode
         //{"무제한", "모두가 [신화]무제한 능력을 획득합니다."},
         //{"로켓 런처", "모두가 [신화]로켓 런처 능력을 획득합니다."},
     };
-    public static List<ICommand> DotCommands = new()
-    {
+    public static List<ICommand> DotCommands =
+    [
         new SelectFirst(),
         new SelectSecond(),
         new SelectThird(),
@@ -128,12 +128,13 @@ public class ABattle : Mode
         new SelectFifth(),
         new GetExtraMode(),
         new CASSIE()
-    };
-    public static List<ICommand> RemoteAdminCommands = new()
-    {
+    ];
+    
+    public static readonly List<ICommand> RemoteAdminCommands =
+    [
         new AddAbility(),
         new AddExtraMode()
-    };
+    ];
 
     public static string ColorFormat(string text)
     {

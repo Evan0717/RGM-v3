@@ -20,20 +20,24 @@ public class AddExtraMode : ICommand
                 response = $"올바른 추가 모드를 입력해주세요.\n{string.Join(", ", ABattle.ExtraModes.Keys)}\nSetExtraMode";
                 return false;
             }
-            else
+            
+            if (ABattle.CurrentExtraModes.Contains(args))
             {
-                ABattle.CurrentExtraModes.Add(args);
-                string extraMode = $"<size=25><b><color=#fecdcd>{args}</color></b></size>\n<size=20>{ABattle.ExtraModes[args]}</size>";
-                
-                foreach (var p in PlayerManager.List)
-                {
-                    p.AddBroadcast(10, extraMode);
-                    p.SendConsoleMessage(extraMode, "");
-                }
-
-                response = "SetExtraMode Complete!";
-                return true;
+                response = $"이미 추가된 모드입니다.";
+                return false;
             }
+            
+            ABattle.CurrentExtraModes.Add(args);
+            string extraMode = $"<size=25><b><color=#fecdcd>{args}</color></b></size>\n<size=20>{ABattle.ExtraModes[args]}</size>";
+                
+            foreach (var p in PlayerManager.List)
+            {
+                p.AddBroadcast(10, extraMode);
+                p.SendConsoleMessage(extraMode, "");
+            }
+
+            response = "SetExtraMode Complete!";
+            return true;
         }
 
         response = "라운드 시작 전에는 사용할 수 없습니다.";
