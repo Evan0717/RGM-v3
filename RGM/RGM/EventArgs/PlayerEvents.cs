@@ -28,6 +28,11 @@ namespace RGM.EventArgs
     {
         public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
+            if (ev.Player == null)
+                yield return Timing.WaitForOneFrame;
+            
+            if (ev.Player == null) yield break;
+            
             ev.Player.Setup();
 
             List<string> defaultValues = Enumerable.Repeat("0", 35).ToList();

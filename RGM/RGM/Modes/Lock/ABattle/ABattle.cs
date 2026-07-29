@@ -403,6 +403,8 @@ public class ABattle : Mode
 
     public void ExtraModeNotion(Player player, bool enableBroadcast = true)
     {
+        if (player == null) return;
+        
         foreach (var cem in CurrentExtraModes)
         {
             string extraMode = $"<size=25><b><color=#fecdcd>{cem}</color></b></size>\n<size=20>{ExtraModes[cem]}</size>";
@@ -417,6 +419,8 @@ public class ABattle : Mode
     // 플레이어에게 특정 능력을 부여
     public void AddAbility(Player player, AbilityType type)
     {
+        if (player == null) return;
+        
         if (type.ToString().Contains("LEGEND"))
         {
             string name;
