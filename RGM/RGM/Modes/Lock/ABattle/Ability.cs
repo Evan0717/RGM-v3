@@ -497,7 +497,6 @@ public enum AbilityType
     RARE_SCP079_MOBILESTRIKEFORCE, // [전용 희귀] 기동타격대
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
-    RARE_SCP079_PROTECTION, // [전용 희귀] 보호
     RARE_SCP079_HIDE, // [전용 희귀] 은폐
 
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
@@ -508,6 +507,7 @@ public enum AbilityType
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
     EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
     EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
+    EPIC_SCP079_PROTECTION, // [전용 영웅] 보호
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
