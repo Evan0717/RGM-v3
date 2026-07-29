@@ -23,7 +23,7 @@ public class AddExtraMode : ICommand
             else
             {
                 ABattle.CurrentExtraModes.Add(args);
-                string extraMode = $"<size=25><b><color=#fecdcd>{ABattle.CurrentExtraModes}</color></b></size>\n<size=20>{ABattle.ExtraModes[args]}</size>";
+                string extraMode = $"<size=25><b><color=#fecdcd>{args}</color></b></size>\n<size=20>{ABattle.ExtraModes[args]}</size>";
                 
                 foreach (var p in PlayerManager.List)
                 {
