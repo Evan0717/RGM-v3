@@ -505,12 +505,14 @@ public enum AbilityType
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
+    EPIC_SCP079_BLESSING, // [전용 영웅] 가호
     EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
     EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
     EPIC_SCP079_PROTECTION, // [전용 영웅] 보호
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
+    LEGEND_SCP079_ASSULTORDER, // [전용 전설] 돌격 명령
     LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다
     LEGEND_SCP079_VIRUS, // [전용 전설] 바이러스
 
