@@ -20,7 +20,9 @@ public class SuicideOrder : Ability
         foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
         {
             for (int i = 0; i < 4; i++)
-            scp.AddAbility(AbilityType.EPIC_TERRORISTREMAINS);
+            {
+                scp.AddAbility(AbilityType.EPIC_TERRORISTREMAINS);
+            }
         }
     }
 
