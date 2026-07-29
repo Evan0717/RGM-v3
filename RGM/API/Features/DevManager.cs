@@ -16,6 +16,9 @@ public class DevManager
     /// </summary>
     public static void Initialize()
     {
+        // TODO: 미리보기로 공개, 로직 작동 불가.
+        return;
+        
         var assembly = Assembly.GetExecutingAssembly();
 
         var scannedTypes = assembly.GetTypes()
@@ -27,24 +30,35 @@ public class DevManager
             .Where(x =>
                 x.Attributes != null &&
                 Variable.DevBlockedAttributes.Contains(x.Type.CustomAttributes.GetType())).ToList();
-
-        foreach (var items in scannedTypes)
+        
+        if (!scannedTypes.Any()) return;
+        
+        Log.Info($"총 {scannedTypes.Count}개의 개발 클래스를 스캔함.");
+        try
         {
-            if (items?.Type == null || items.Attributes == null) return;
-            
-            items.Attributes.First(x => string.IsNullOrEmpty(x.Name)).Name = items.Type.Name;
-            items.Attributes.First(x => x.Version == null).Version = new Version(0, 0, 0, 0);
-            
-            if (items.Attributes.Any(x => x.ActiveNow))
+            foreach (var items in scannedTypes)
             {
-                if (items.Attributes.All(x => x.Type == DevType.DevModeOnly) &&
-                    !Main.Instance.Config.IsDevMode) continue;
-                var instance = Activator.CreateInstance(items.Type);
-                Run(instance);
-                 Variable.DevInstances.Add(items.Attributes.First(_ => true).Name, instance);
-            }
+                if (items?.Type == null || items.Attributes == null) return;
 
-            Variable.DevScannedTypes.Add((items.Type, items.Attributes));
+                items.Attributes.First(x => string.IsNullOrEmpty(x.Name)).Name = items.Type.Name;
+                items.Attributes.First(x => x.Version == null).Version = new Version(0, 0, 0, 0);
+
+                if (items.Attributes.Any(x => x.ActiveNow))
+                {
+                    if (items.Attributes.All(x => x.Type == DevType.DevModeOnly) &&
+                        !Main.Instance.Config.IsDevMode) continue;
+                    var instance = Activator.CreateInstance(items.Type);
+                    Run(instance);
+                    Variable.DevInstances.Add(items.Attributes.First(_ => true).Name, instance);
+                }
+
+                Variable.DevScannedTypes.Add((items.Type, items.Attributes));
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"스켄 도중 알 수 없는 오류 발생: {e.Message}");
+            throw e.InnerException!;
         }
     }
 
@@ -70,6 +84,9 @@ public class DevManager
     /// <param name="isDisabled">비활성화 여부입니다. <c>DevOnDisabled</c> Attribute가 없을 경우 실행되지 않습니다.</param>
     public static void Run(object instance, bool isDisabled = false)
     {
+        // TODO: 미리보기로 공개, 아직 작동하지 않음.
+        return;
+        
         if (!instance.GetType().IsClass ||
             instance.GetType().IsDefined(typeof(DevClassAttribute))) return;
         try
@@ -105,6 +122,9 @@ public class DevManager
 
     internal static void Remove(string name)
     {
+        // TODO: 미리보기로 공개, 아직 작동하지 않음
+        return;
+        
         if (!Variable.DevInstances.TryGetValue(name, out var instance)) return;
         Run(instance, true);
     }
