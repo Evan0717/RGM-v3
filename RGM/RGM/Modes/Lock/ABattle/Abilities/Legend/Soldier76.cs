@@ -60,8 +60,7 @@ public class Soldier76 : Ability
     {
         if (ev.Item == null || ev.Firearm.Serial != _serial) return;
 
-        ev.Player.TryGetNearestPlayer(out var player, out _,
-            [.. PlayerManager.List.Where(x => x == ev.Player || x.IsDead)]);
+        ev.Player.TryGetNearestVisiblePlayer(out var player, out _, 10f, 60f, [.. PlayerManager.List.Where(x => x == ev.Player || x.IsDead)]);
 
         ev.IsAllowed = false;
         if (player == null) return;
