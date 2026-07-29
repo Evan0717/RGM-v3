@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
+using Exiled.Events.EventArgs.Warhead;
 using MEC;
 using RGM.API.Features;
 
@@ -11,6 +12,8 @@ public class Survivor : Ability
 {
     private const float InvincibilityDuration = 2f;
 
+    private static bool _isDetonatingState;
+
     private int power = 3;
     private bool isEnabled;
     private int _version;
@@ -20,6 +23,7 @@ public class Survivor : Ability
         Exiled.Events.Handlers.Player.Dying += OnDying;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         Exiled.Events.Handlers.Scp106.Attacking += OnScp106Attacking;
+        Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
     }
 
     public override void OnDisabled()
@@ -27,9 +31,19 @@ public class Survivor : Ability
         Exiled.Events.Handlers.Player.Dying -= OnDying;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         Exiled.Events.Handlers.Scp106.Attacking -= OnScp106Attacking;
+        Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
 
         _version++;
         isEnabled = false;
+    }
+
+    private void OnDetonating(DetonatingEventArgs _)
+    {
+        if (_isDetonatingState)
+            return;
+
+        _isDetonatingState = true;
+        Timing.CallDelayed(Timing.WaitForOneFrame, () => _isDetonatingState = false);
     }
 
     private void OnDying(DyingEventArgs ev)
@@ -134,6 +148,7 @@ public class Survivor : Ability
 
     private static bool IsExemptDamage(DamageType damageType)
     {
-        return damageType is DamageType.Warhead or DamageType.PocketDimension or DamageType.Crushed;
+        return _isDetonatingState ||
+               damageType is DamageType.Warhead or DamageType.PocketDimension or DamageType.Crushed;
     }
 }
