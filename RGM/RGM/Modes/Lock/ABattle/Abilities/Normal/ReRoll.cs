@@ -14,7 +14,7 @@ public class ReRoll : Ability
 
         Timing.CallDelayed(7f, () =>
         {
-            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Common, 3).Where(x => x != AbilityType.NORMAL_REROLL).GetRandomValue());
+            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Common, 1, [AbilityType.NORMAL_REROLL])[0]);
         });
     }
 

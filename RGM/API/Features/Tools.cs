@@ -25,6 +25,7 @@ using System.Text;
 using UnityEngine;
 using YamlDotNet.Core;
 using static RGM.Variables.Variable;
+using Random = System.Random;
 
 namespace RGM.API.Features
 {
@@ -884,72 +885,64 @@ $"""
 
         public static CandyKindID PickRandomCandy()
         {
-            List<CandyKindID> poll = new();
-
-            List<CandyKindID> L = new()
-            {
-                CandyKindID.Evil,
-            };
-            List<CandyKindID> S = new()
-            {
+            // 맵의 시드를 활용하여 난수 생성 오브젝트 생성
+            Random rand = new(Map.Seed);
+            List<CandyKindID> poll = [];
+            // 추후 constant로 옮길 예정
+            List<CandyKindID> mythos =
+            [
+                CandyKindID.Evil
+            ];
+            
+            List<CandyKindID> legendary =
+            [
                 CandyKindID.Black,
                 CandyKindID.Pink
-            };
-            List<CandyKindID> A = new()
-            {
+            ];
+            
+            List<CandyKindID> epic =
+            [
                 CandyKindID.White,
                 CandyKindID.Orange,
-                CandyKindID.Gray,
-            };
-            List<CandyKindID> B = new()
-            {
-                CandyKindID.Rainbow,
-            };
-            List<CandyKindID> C = new()
-            {
+                CandyKindID.Gray
+            ];
+            
+            List<CandyKindID> rare =
+            [
+                CandyKindID.Rainbow
+            ];
+            
+            List<CandyKindID> general =
+            [
                 CandyKindID.Blue,
                 CandyKindID.Green,
                 CandyKindID.Red,
                 CandyKindID.Yellow,
-                CandyKindID.Purple,
-            };
-            List<CandyKindID> D = new()
-            {
+                CandyKindID.Purple
+            ];
+            
+            List<CandyKindID> etc =
+            [
                 CandyKindID.Brown
-            };
+            ];
+            
+            poll.AddRange(mythos.Where(_ => Mathf.Clamp01((float)rand.NextDouble()) <= .1f));
+            
+            for (int i = 0; i < 2; i++)
+                if (Mathf.Clamp01((float) rand.NextDouble()) <= .2f)
+                    poll.AddRange(legendary);
+            
+            for (int i = 0; i < 8; i++) 
+                poll.AddRange(epic);
 
-            foreach (var iL in L)
-                poll.Add(iL);
+            for (int i = 0; i < 13; i++) 
+                poll.AddRange(rare);
 
+            for (int i = 0; i < 23; i++) 
+                poll.AddRange(general);
+            
             for (int i = 0; i < 3; i++)
-            {
-                foreach (var iS in S)
-                    poll.Add(iS);
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                foreach (var iA in A)
-                    poll.Add(iA);
-            }
-
-            for (int i = 0; i < 12; i++)
-            {
-                foreach (var iB in B)
-                    poll.Add(iB);
-            }
-
-            for (int i = 0; i < 15; i++)
-            {
-                foreach (var iC in C)
-                    poll.Add(iC);
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                foreach (var iD in D)
-                    poll.Add(iD);
-            }
+                 poll.AddRange(etc);
 
             return poll.GetRandomValue();
         }
