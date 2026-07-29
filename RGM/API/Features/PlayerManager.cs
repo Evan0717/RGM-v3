@@ -700,11 +700,11 @@ namespace RGM.API.Features
             // 추후 constant로 옮길 예정
             List<ItemType> mythos =
             [
-                ItemType.SCP018,
                 ItemType.GunSCP127,
                 ItemType.SCP1509,
                 ItemType.SCP268,
                 ItemType.SCP1344,
+                ItemType.AntiSCP207,
 
                 // 무기
                 ItemType.Jailbird,
@@ -713,8 +713,8 @@ namespace RGM.API.Features
             ];
             List<ItemType> legendary =
             [
-                ItemType.AntiSCP207,
-                ItemType.SCP2176,
+                ItemType.SCP018,
+                ItemType.SCP1853,
                 ItemType.SCP500,
 
                 // 카드
@@ -734,7 +734,7 @@ namespace RGM.API.Features
                 ItemType.SCP244a,
                 ItemType.SCP244b,
                 ItemType.SCP1576,
-                ItemType.SCP1853,
+                ItemType.SCP2176,
 
                 // 카드
                 ItemType.KeycardMTFOperative,
@@ -885,7 +885,7 @@ namespace RGM.API.Features
 
                     light.NetworkLightColor = color;
                     light.NetworkLightRange = 50;
-                    light.NetworkLightIntensity = 10;
+                    light.NetworkLightIntensity = 8;
 
                     Timing.CallDelayed(3, schematic.Destroy);
                 }

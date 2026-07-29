@@ -337,6 +337,9 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Death.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\MedicalKnife.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Proficiency.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\Blessing.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\Protection.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\AssultOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AttackOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SuicideOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SurpriseAttack.cs" />
@@ -356,7 +359,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\CASSIE.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SystemInfiltration.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Hide.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Protection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Freedom.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\JustPrice.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\Importunity.cs" />
@@ -862,6 +864,9 @@
     </Reference>
     <Reference Include="LabApi">
       <HintPath>$(EXILED_REFERENCES)\LabApi.dll</HintPath>
+    </Reference>
+    <Reference Include="LabApiExtensions">
+      <HintPath>$(EXILED_REFERENCES)\LabApiExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

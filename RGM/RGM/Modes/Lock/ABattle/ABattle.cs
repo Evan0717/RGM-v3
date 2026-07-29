@@ -213,6 +213,12 @@ public class ABattle : Mode
             if (abilityAttribute.HolidayType == AbilityHolidayType.Halloween && !HolidayUtils.IsHolidayActive(HolidayType.Halloween))
                 continue;
 
+            if (Abilities.ContainsKey(abilityAttribute.Type))
+            {
+                Log.Error($"Duplicate AbilityType '{abilityAttribute.Type}' on {type.FullName}. Already registered by {Abilities[abilityAttribute.Type].Type.FullName}.");
+                continue;
+            }
+
             Abilities.Add(abilityAttribute.Type, new AbilityData
             {
                 Type = type,

@@ -10,7 +10,7 @@ namespace RGM.Modes.Abilities.Mythic;
 public class WarGod : Ability
 {
     private ushort _lightWarriorSerial;
-    private int _lightWarrierCooldown;
+    private int _lightWarriorCooldown;
 
     public override void OnEnabled()
     {
@@ -40,9 +40,9 @@ public class WarGod : Ability
             ev.Attacker.CurrentItem != null && 
             _lightWarriorSerial == ev.Attacker.CurrentItem.Serial)
         {
-            if (_lightWarrierCooldown <= 0)
+            if (_lightWarriorCooldown <= 0)
             {
-                _lightWarrierCooldown = 3;
+                _lightWarriorCooldown = 3;
 
                 if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
                 {
@@ -59,7 +59,7 @@ public class WarGod : Ability
 
                 Timing.CallDelayed(3f, () =>
                 {
-                    _lightWarrierCooldown = 0;
+                    _lightWarriorCooldown = 0;
                 });
             }
         }

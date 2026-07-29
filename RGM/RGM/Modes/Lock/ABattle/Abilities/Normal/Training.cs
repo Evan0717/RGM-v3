@@ -4,15 +4,15 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("단련", "공격력이 16% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
+[Ability("단련", "공격력이 15% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
 public class Training : Ability
 {
-    List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
-    {
+    private readonly List<RoleTypeId> _ignoredRoles =
+    [
         RoleTypeId.Scp173,
         RoleTypeId.Scp049,
         RoleTypeId.Scp106
-    };  
+    ];  
 
     public override void OnEnabled()
     {
@@ -26,12 +26,12 @@ public class Training : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
+        if (ev.Attacker != Owner || _ignoredRoles.Contains(ev.Attacker.Role))
             return;
 
         if (ABattle.Instance.GetAbility(Owner, AbilityType.NORMAL_TRAINING) != this)
             return;
 
-        ev.DamageHandler.Damage *= 1.0f + 0.16f * Owner.AbilityCount(AbilityType.NORMAL_TRAINING);
+        ev.DamageHandler.Damage *= 1.0f + 0.15f * Owner.AbilityCount(AbilityType.NORMAL_TRAINING);
     }
 }

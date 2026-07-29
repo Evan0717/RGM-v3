@@ -13,14 +13,14 @@ namespace RGM.Modes.Abilities.Mythic;
 public class ToolGun : Ability
 {
     private const float ForwardOffset = 1.5f;
-    private const float DownwardOffset = 0.5f;
+    private const float DownwardOffset = 0.6f;
 
-    private ushort coinSerial;
+    private ushort _coinSerial;
 
     public override void OnEnabled()
     {
         Item coin = Owner.AddItem(ItemType.Coin);
-        coinSerial = coin.Serial;
+        _coinSerial = coin.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -33,7 +33,7 @@ public class ToolGun : Ability
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item?.Serial == coinSerial)
+        if (ev.Item?.Serial == _coinSerial)
         {
             ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["신화"]}>워크스테이션</color></b>을 설치합니다.");
         }
@@ -41,7 +41,7 @@ public class ToolGun : Ability
 
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (ev.Item.Serial != coinSerial)
+        if (ev.Item.Serial != _coinSerial)
             return;
 
         Player player = ev.Player;

@@ -140,46 +140,6 @@ public enum RoleAbility
     Scp079,
     Flamingo
 }
-
-/* 
-
-전용 능력에 등급 추가 구상
-
-위의 Enum사용
-AbilityData에 bool 79Allowed, RoleAbility RoleAbility 추가
-물론 Attribute에도
-79Allowed는 럭키비키 등이 포함될 것입니다.
-
-등급에 따른 전용 능력의 확률
-일반 ->5퍼
-희귀 ->7퍼
-영웅 ->10퍼
-전설 -> 20퍼
-신화 -> 25퍼
-위 확률로 선택지들 중 그 선택지를 등급에 맞는 전용 능력으로 바꿉니다.
-
-바꿔야 될게 많은데,
-
-Ability.cs
-1. GetAbilityCategory
-2. GetTranslation
-3. GetColor
-4. Enum AbilityType -> 전용등급의 이름만 변경
-
-ABattle.cs
-1. RatingColor
-2. ColorFormat
-3. OnEnabled()
-4. StartSelect() -> 제일 중요 ***
-5. SelectionCoroutine 내부 로컬함수 -> 2번째로 중요 **
-6. GetCategory() 3번째로 중요 *
-7. ApplyPrelude()
-
-이거 말고 더 있을 수 있습니다 제가 찾은 거는.
-일단 AbilityCategory 쓰는 거는 다 잡아야 돼요.
-
- */
-
 public static class AbilityCategoryExtensions
 {
     public static string GetCategoryTranslation(this AbilityCategory category)
@@ -537,7 +497,6 @@ public enum AbilityType
     RARE_SCP079_MOBILESTRIKEFORCE, // [전용 희귀] 기동타격대
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
-    RARE_SCP079_PROTECTION, // [전용 희귀] 보호
     RARE_SCP079_HIDE, // [전용 희귀] 은폐
 
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
@@ -546,11 +505,14 @@ public enum AbilityType
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
+    EPIC_SCP079_BLESSING, // [전용 영웅] 가호
     EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
     EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
+    EPIC_SCP079_PROTECTION, // [전용 영웅] 보호
 
     LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
+    LEGEND_SCP079_ASSULTORDER, // [전용 전설] 돌격 명령
     LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다
     LEGEND_SCP079_VIRUS, // [전용 전설] 바이러스
 
