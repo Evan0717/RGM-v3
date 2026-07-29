@@ -29,8 +29,4 @@ public class RandomPackage : Ability
             }
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

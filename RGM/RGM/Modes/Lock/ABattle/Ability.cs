@@ -10,9 +10,9 @@ namespace RGM.Modes;
 
 public abstract class Ability
 {
-    public abstract void OnEnabled();
+    public virtual void OnEnabled() { } // 뭐... 여기에 이상한거 넣으면 호출되니... 하면.. 안되겠... 안되겠죠...?
 
-    public abstract void OnDisabled();
+    public virtual void OnDisabled() { } // 뭐... 여기에 이상한거 넣으면 호출되니... 하면.. 안되겠... 안되겠죠...?
 
     public AbilityData Data { get; set; }
     public Player Owner { get; set; }

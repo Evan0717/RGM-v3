@@ -21,10 +21,6 @@ public class OrganicMilk : Ability
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _coinSerial)

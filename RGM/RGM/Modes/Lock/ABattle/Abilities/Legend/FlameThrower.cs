@@ -27,10 +27,6 @@ public class FlameThrower : Ability
         _onStarted = Timing.RunCoroutine(OnStarted());
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public IEnumerator<float> OnStarted()
     {
         while (true)

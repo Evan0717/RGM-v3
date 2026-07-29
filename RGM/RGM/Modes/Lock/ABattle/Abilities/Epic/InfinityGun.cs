@@ -20,10 +20,6 @@ public class InfinityGun : Ability
         Exiled.Events.Handlers.Player.Shooting += OnShooting;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _infinityGunSerial)

@@ -28,9 +28,4 @@ public class Priest : Ability
             }
         }
     }
-
-    public override void OnDisabled()
-    {
-
-    }
 }

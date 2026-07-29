@@ -12,5 +12,8 @@ namespace RGM
         public bool EN { get; set; } = false;
         [Description("여기에 특정 모드의 Enum을 입력하면 그 모드가 고정적으로 나옵니다. 랜덤게임모드 관련 기능들이 일부 차단됩니다.")]
         public List<ModeType> FixedModes { get; set; } = new();
+        
+        [Description("개발자 모드입니다. 특수 기능이 활성화됩니다.")]
+        public bool IsDevMode { get; set; } = false;
     }
 }

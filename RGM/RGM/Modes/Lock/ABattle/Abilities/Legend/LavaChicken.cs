@@ -16,15 +16,10 @@ public class LavaChicken : Ability
 {
     CoroutineHandle _onStarted;
 
-    public override void OnEnabled()
-    {
-        _onStarted = Timing.RunCoroutine(OnStarted());
-    }
+    public override void OnEnabled() 
+        => _onStarted = Timing.RunCoroutine(OnStarted());
 
-    public override void OnDisabled()
-    {
-        Timing.KillCoroutines(_onStarted);
-    }
+    public override void OnDisabled() => Timing.KillCoroutines(_onStarted);
 
     public IEnumerator<float> OnStarted()
     {

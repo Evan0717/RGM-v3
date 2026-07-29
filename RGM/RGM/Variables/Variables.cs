@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
@@ -13,7 +14,9 @@ using RGM.API.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using RGM.Modes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RGM.Variables
 {
@@ -305,6 +308,16 @@ namespace RGM.Variables
         [
             ModeType.Infection
         ];
+
+        public static readonly List<(Type, IEnumerable<DevClassAttribute>)> DevScannedTypes = [];
+        
+        public static readonly IEnumerable<Type> DevBlockedAttributes = 
+        [
+            typeof(ModeAttribute),
+            typeof(AbilityAttribute),
+        ];
+
+        public static readonly Dictionary<string, object> DevInstances = [];
         
         // -------------------------------------------------------------------------------------------------
 

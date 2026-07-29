@@ -458,7 +458,7 @@ $"""
 
                 onEnabledMethod?.Invoke(modeInstance, null);
 
-                if (Server.Port != 7803 && !Round.IsEnded && Server.PlayerCount >= 15)
+                if (!Main.Instance.Config.IsDevMode && !Round.IsEnded && Server.PlayerCount >= 15)
                     Webhook.Send($"{ModeType.GetModeData().Name}", ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook3.txt"));
 
                 return true;

@@ -16,14 +16,9 @@ public class Disguise : Ability
     CoroutineHandle _disguise;
 
     public override void OnEnabled()
-    {
-        _disguise = Timing.RunCoroutine(disguise());
-    }
+        => _disguise = Timing.RunCoroutine(disguise());
 
-    public override void OnDisabled()
-    {
-        Timing.KillCoroutines(_disguise);
-    }
+    public override void OnDisabled() => Timing.KillCoroutines(_disguise);
 
     public IEnumerator<float> disguise()
     {

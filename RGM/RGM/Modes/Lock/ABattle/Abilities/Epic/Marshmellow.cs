@@ -11,8 +11,4 @@ public class MarshMellow : Ability
         Owner.AddAbility(AbilityType.NORMAL_SWIFT);
         Owner.AddItem(ItemType.MarshmallowItem);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

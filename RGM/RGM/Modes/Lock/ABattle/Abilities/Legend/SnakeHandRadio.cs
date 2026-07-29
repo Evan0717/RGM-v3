@@ -23,11 +23,6 @@ public class SnakeHandRadio : Ability
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
     }
-
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _callSnakeHandsSerial)

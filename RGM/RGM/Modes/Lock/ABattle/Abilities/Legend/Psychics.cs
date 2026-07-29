@@ -24,10 +24,7 @@ public class Psychics : Ability
         Timing.RunCoroutine(Speaker());
     }
 
-    public override void OnDisabled()
-    {
-        Timing.KillCoroutines(_blessing);
-    }
+    public override void OnDisabled() => Timing.KillCoroutines(_blessing);
 
     public IEnumerator<float> Blessing()
     {

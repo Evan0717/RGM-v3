@@ -31,10 +31,6 @@ public class SpringfieldM1A : Ability
         Exiled.Events.Handlers.Player.Shooting += OnShooting;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item == null || ev.Item.Serial != _m1ASerial)

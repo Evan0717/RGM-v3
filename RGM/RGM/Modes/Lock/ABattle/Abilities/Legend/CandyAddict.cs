@@ -12,14 +12,9 @@ public class CandyAddict : Ability
     CoroutineHandle _candyAddict;
 
     public override void OnEnabled()
-    {
-        _candyAddict = Timing.RunCoroutine(candyParty());
-    }
+        => _candyAddict = Timing.RunCoroutine(candyParty());
 
-    public override void OnDisabled()
-    {
-        Timing.KillCoroutines(_candyAddict);
-    }
+    public override void OnDisabled() => Timing.KillCoroutines(_candyAddict);
 
     public IEnumerator<float> candyParty()
     {

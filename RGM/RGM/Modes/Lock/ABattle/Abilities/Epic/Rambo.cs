@@ -20,10 +20,6 @@ public class Rambo : Ability
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != InfinityGunSerial)

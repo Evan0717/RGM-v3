@@ -31,8 +31,4 @@ public class RandomChest : Ability
             Item RandomChestItem = Owner.AddItem(RandomChest.GetRandomValue());
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

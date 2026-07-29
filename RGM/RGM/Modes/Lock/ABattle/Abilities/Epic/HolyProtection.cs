@@ -10,14 +10,11 @@ namespace RGM.Modes.Abilities.Epic;
 public class HolyProtection : Ability
 {
     public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
-    }
+        => Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
 
-    public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
-    }
+    public override void OnDisabled() 
+        => Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
+
     public void OnReceivingEffect(ReceivingEffectEventArgs ev)
     {
         if (ev.Player != Owner) return;

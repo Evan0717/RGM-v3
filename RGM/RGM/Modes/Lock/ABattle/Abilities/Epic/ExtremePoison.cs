@@ -9,15 +9,11 @@ public class ExtremePoison : Ability
 {
     const float Duration = 60f;
     
-    public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.Dying += OnDying;
-    }
+    public override void OnEnabled() 
+        => Exiled.Events.Handlers.Player.Dying += OnDying;
 
     public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.Dying -= OnDying;
-    }
+        => Exiled.Events.Handlers.Player.Dying -= OnDying;
 
     public void OnDying(DyingEventArgs ev)
     {

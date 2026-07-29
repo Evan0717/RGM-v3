@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -64,6 +64,7 @@
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
+    <Compile Include="API\Features\DevManager.cs" />
     <Compile Include="API\Features\EffectManager.cs" />
     <Compile Include="API\Features\ServerManager.cs" />
     <Compile Include="API\Features\RoomReplacer.cs" />
@@ -98,7 +99,6 @@
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\Use.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Event.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayAudio.cs" />
-    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Translator.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PrintPos.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Warn.cs" />
@@ -786,10 +786,23 @@
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
     <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
+    <Compile Include="RGM\Patches\UserSettings.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
-    <Compile Include="RGM\UserSettings\MainSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\SettingVariables.cs" />
+    <Compile Include="RGM\UserSettings\UserSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\BGMVolumeSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\DetailInfoKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\DownKeySeting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\EnterKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\LeftKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\MuteBGMSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\RightKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\ScpCanEquipRandomItemSetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\SettingManager.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Main\UpKeySetting.cs" />
+    <Compile Include="RGM\UserSettings\Settings\Managers\MainSettingManager.cs" />
     <Compile Include="RGM\Variables\Variables.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -893,6 +906,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Reflection.DispatchProxy, Version=4.0.9.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Reflection.DispatchProxy.4.8.2\lib\net462\System.Reflection.DispatchProxy.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -923,13 +939,13 @@
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\..\EXILED_REFERENCES\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>..\..\EXILED_REFERENCES\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.UIElementsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -945,9 +961,6 @@
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SecretAPI.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

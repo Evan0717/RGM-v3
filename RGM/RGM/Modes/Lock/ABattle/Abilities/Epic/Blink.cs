@@ -12,15 +12,11 @@ public class Blink : Ability
 {
     int TeleportCooldown = 0;
 
-    public override void OnEnabled()
-    {
-        Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
-    }
+    public override void OnEnabled() 
+        => Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
 
     public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
-    }
+        => Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
 
     public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {

@@ -28,8 +28,4 @@ public class CandyPower : Ability
         Owner.MaxHealth += 200;
         Owner.Health += 200;
     }
-
-    public override void OnDisabled() 
-    {
-    }
 }
