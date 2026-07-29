@@ -21,6 +21,7 @@ namespace RGM.API.Features
     /// - LRU cache
     /// - Retry with exponential backoff on 429/403/5xx/network
     /// </summary>
+    [Obsolete("작동 불가로 인하여 사용이 중지되었습니다.")]
     public static class TranslationManager
     {
         private static readonly string CacheDir = Path.Combine(Paths.Configs, "RGM");

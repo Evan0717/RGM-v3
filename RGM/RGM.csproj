@@ -99,7 +99,6 @@
     <Compile Include="RGM\Commands\ClientCommands\ShopFeatures\Use.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Event.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayAudio.cs" />
-    <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Translator.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Suggest.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PrintPos.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\Warn.cs" />
