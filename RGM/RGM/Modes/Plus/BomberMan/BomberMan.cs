@@ -69,11 +69,8 @@ namespace RGM.Modes
             {
                 try
                 {
-                    foreach (var item in player.Items)
-                    {
-                        if (item.IsFirearm)
-                            player.RemoveItem(item);
-                    }
+                    foreach (var item in player.Items.Where(x => x.IsFirearm).ToList())
+                        player.RemoveItem(item);
                 }
                 catch (Exception e)
                 {
