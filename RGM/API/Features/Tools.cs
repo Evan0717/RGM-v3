@@ -385,6 +385,47 @@ $"""
 
             return targets.Count > 0;
         }
+        
+        /**
+         * 화면 내에 비치는 가장 가까운 플레이어를 구합니다.
+         * <param name="observer">관찰자 (확장)</param>
+         * <param name="nearestPlayer">가장 가까운 플레이어</param>
+         * <param name="radius">가장 가까운 플레이어와의 거리</param>
+         * <param name="maxDistance">거리</param>
+         * <param name="fov">시야각</param>
+         * <param name="exceptPlayers">탐색 대상에서 제외할 플레이어</param>
+         */
+        public static bool TryGetNearestVisiblePlayer(
+            this Player observer,
+            out Player nearestPlayer,
+            out float radius,
+            float maxDistance = 30f,
+            float fov = 90f,
+            List<Player> exceptPlayers = null
+            )
+        {
+            nearestPlayer = null;
+            radius = float.MaxValue;
+
+            if (exceptPlayers == null)
+                exceptPlayers = new List<Player>();
+            
+            foreach (var near in PlayerManager.List.Where(x => x.IsAlive && x != observer && !exceptPlayers.Contains(x)))
+            {
+                float distance = Vector3.Distance(near.Position, observer.Position);
+
+                if (distance >= radius || distance > maxDistance)
+                    continue;
+
+                if (!observer.IsLookingAt(near, maxDistance, fov))
+                    continue;
+
+                nearestPlayer = near;
+                radius = distance;
+            }
+
+            return nearestPlayer != null;
+        }
 
 
         /// <summary>
