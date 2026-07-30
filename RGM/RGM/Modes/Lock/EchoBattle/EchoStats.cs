@@ -41,7 +41,7 @@ public static class EchoStats
         DamageType.Scp106
     };
 
-    static readonly float[] SubOptionGradeWeights = [24, 24, 16, 16, 10, 10];
+    static readonly float[] SubOptionGradeWeights = [11, 19, 25, 21, 14, 10];
     static readonly System.Random SubOptionRandom = new();
     static readonly object SubOptionRandomLock = new();
     static readonly HashSet<Player> FixedDamageTargets = new();
@@ -157,16 +157,7 @@ public static class EchoStats
 
     public static bool IsMainStatAvailable(EchoCost cost, EchoMainStatType type)
     {
-        if (type == EchoMainStatType.None)
-            return false;
-
-        foreach (var available in GetAvailableMainStats(cost))
-        {
-            if (available == type)
-                return true;
-        }
-
-        return false;
+        return type != EchoMainStatType.None && GetAvailableMainStats(cost).Any(available => available == type);
     }
 
     /// <summary>Server-Specific 드롭다운용: 모든 Cost에서 등장하는 메인 스탯 합집합.</summary>
@@ -438,7 +429,7 @@ public static class EchoStats
         {
             float hp = value;
             if (player.IsScp)
-                hp *= 12f;
+                hp *= 15f;
             snapshot.HpFlat += hp;
         }
         else if (cost == EchoCost.Cost3)
@@ -482,7 +473,7 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 12f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 15f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
