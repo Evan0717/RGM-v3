@@ -120,15 +120,16 @@ namespace RGM.Modes
                     }
                     else
                     {
-                        if (soulMates.ContainsKey(player))
-                        {
-                            Player soulMate = soulMates[player];
+                        waitingPlayers.Remove(player);
 
-                            soulMates.Remove(soulMate);
+                        if (soulMates.TryGetValue(player, out Player soulMate))
+                        {
+                            if (soulMate != null)
+                                soulMates.Remove(soulMate);
                             soulMates.Remove(player);
 
                             player.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
-                            soulMate.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            soulMate?.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
                         }
                     }
                 }
@@ -181,7 +182,8 @@ namespace RGM.Modes
                         {
                             Timing.CallDelayed(0.1f, () =>
                             {
-                                Player soulMate = soulMates[player];
+                                if (!soulMates.TryGetValue(player, out Player soulMate) || soulMate == null)
+                                    return;
 
                                 if (player.CurrentItem == null)
                                     soulMate.CurrentItem = null;
@@ -221,13 +223,15 @@ namespace RGM.Modes
 
                     if (totalSoulMatePairs == scpSoulMatePairs)
                     {
-                        Server.FriendlyFire = true;
+                        Tools.TryInstallMode(ModeType.FriendlyFire);
 
                         foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
-                            player.AddHint("소울메이트 경고", $"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 자신의 짝을 제외하고 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>", 1.2f);
+                            player.AddHint("소울메이트 경고",
+                                $"<size=25><color=red>SCP</color>가 포함된 짝들만이 살아남았습니다. 지금부터 자신의 짝을 제외하고 서로 죽이세요.</size>\n<size=20><color=red><b>죽이지 않으면 제재 대상입니다.</b></color></size>",
+                                1.2f);
                     }
                     else
-                        Server.FriendlyFire = false;
+                        Tools.UnInstallMode(ModeType.FriendlyFire);
                 }
                 catch (Exception e)
                 {
@@ -240,32 +244,30 @@ namespace RGM.Modes
 
         public void OnDying(DyingEventArgs ev)
         {
+            if (!soulMates.TryGetValue(ev.Player, out Player soulMate) || soulMate == null)
+                return;
+
             string playerColor = ev.Player.Role.Color.ToHex();
-            string soulMateColor = soulMates[ev.Player] == null ? null : soulMates[ev.Player].Role.Color.ToHex();
+            string soulMateColor = soulMate.Role.Color.ToHex();
 
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                if (ev.Player.IsDead)
+                if (!ev.Player.IsDead)
+                    return;
+
+                if (!soulMates.TryGetValue(ev.Player, out soulMate) || soulMate == null || !soulMate.IsAlive)
+                    return;
+
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
-                    if (soulMates.ContainsKey(ev.Player))
-                    {
-                        Player soulMate = soulMates[ev.Player];
+                    foreach (var player in PlayerManager.List.Where(x => x.IsDead))
+                        player.AddBroadcast(10, $"<size=20><color={playerColor}>{ev.Player.DisplayNickname}</color>(와)과 <color={soulMateColor}>{soulMate.DisplayNickname}</color>(은)는 <color=#FE2EF7>소울메이트</color>였습니다.</size>");
+                });
 
-                        if (soulMate != null && soulMate.IsAlive)
-                        {
-                            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-                            {
-                                foreach (var player in PlayerManager.List.Where(x => x.IsDead))
-                                    player.AddBroadcast(10, $"<size=20><color={playerColor}>{ev.Player.DisplayNickname}</color>(와)과 <color={soulMateColor}>{soulMate.DisplayNickname}</color>(은)는 <color=#FE2EF7>소울메이트</color>였습니다.</size>");
-                            });
+                soulMate.ClearInventory();
+                soulMate.Kill(ev.DamageHandler);
 
-                            soulMate.ClearInventory();
-                            soulMate.Kill(ev.DamageHandler);
-
-                            Tools.MessageTranslated("", $"<color=red>{ev.Attacker.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
-                        }
-                    }
-                }
+                Tools.MessageTranslated("", $"<color=red>{ev.Attacker?.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
             });
         }
 

@@ -648,7 +648,7 @@ namespace RGM.EventArgs
                         ev.Player.Health = ev.Player.MaxHealth;
                     }
 
-                    if (CurrentMode.GetModeData().Info == ModeInfo.Plus)
+                    if (CurrentMode != ModeType.None && CurrentMode.GetModeData().Info == ModeInfo.Plus)
                     {
                         if (!PlayersInfo.ContainsKey(ev.Player.UserId))
                         {
@@ -706,6 +706,7 @@ namespace RGM.EventArgs
 
             if (ev.Player.IsAlive && 
                 Round.IsStarted &&
+                CurrentMode != ModeType.None &&
                 new List<SpawnReason>
                 {
                     SpawnReason.RoundStart,

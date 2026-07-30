@@ -56,6 +56,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     public void Verified(Player player)
     {
+        aBattle.EnsurePlayer(player);
         aBattle.ExtraModeNotion(player);
     }
 
@@ -66,6 +67,8 @@ public class ABattleEventHandler(ABattle aBattle)
 
     public IEnumerator<float> Spawned(Player player)
     {
+        aBattle.EnsurePlayer(player);
+
         yield return Timing.WaitForSeconds(1);
 
         if (player.IsAlive)
@@ -74,17 +77,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnJumping(JumpingEventArgs ev)
     {
-        if (!aBattle.PlayerWorkstations.ContainsKey(ev.Player))
-            aBattle.PlayerWorkstations.Add(ev.Player, new List<WorkstationController>());
-
-        if (!aBattle.PlayerAbilities.ContainsKey(ev.Player))
-            aBattle.PlayerAbilities.Add(ev.Player, new List<Ability>());
-
-        if (!aBattle.IsSelecting.ContainsKey(ev.Player))
-            aBattle.IsSelecting.Add(ev.Player, false);
-
-        if (!aBattle.IsLifeUsed.ContainsKey(ev.Player))
-            aBattle.IsLifeUsed.Add(ev.Player, false);
+        aBattle.EnsurePlayer(ev.Player);
 
         if (Physics.Raycast(ev.Player.Position, Vector3.down, out var hit, 5, (LayerMask)1))
         {
@@ -163,17 +156,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     public void OnPinging(PingingEventArgs ev)
     {
-        if (!aBattle.PlayerWorkstations.ContainsKey(ev.Player))
-            aBattle.PlayerWorkstations.Add(ev.Player, new List<WorkstationController>());
-
-        if (!aBattle.PlayerAbilities.ContainsKey(ev.Player))
-            aBattle.PlayerAbilities.Add(ev.Player, new List<Ability>());
-
-        if (!aBattle.IsSelecting.ContainsKey(ev.Player))
-            aBattle.IsSelecting.Add(ev.Player, false);
-
-        if (!aBattle.IsLifeUsed.ContainsKey(ev.Player))
-            aBattle.IsLifeUsed.Add(ev.Player, false);
+        aBattle.EnsurePlayer(ev.Player);
 
         Vector3 pos = ev.Position;
 
