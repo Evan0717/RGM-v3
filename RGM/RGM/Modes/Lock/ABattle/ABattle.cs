@@ -298,6 +298,7 @@ public class ABattle : Mode
         {
             try
             {
+                EnsurePlayer(player);
                 ExtraModeNotion(player);
                 ApplyPrelude(player);
             }
@@ -387,7 +388,10 @@ public class ABattle : Mode
     {
         foreach (var player in players)
         {
-            List<AbilityType> _abilities = PlayerAbilities[player].Select(x => x.Data.AbilityType).ToList();
+            if (!PlayerAbilities.TryGetValue(player, out var playerAbilities) || playerAbilities.Count == 0)
+                continue;
+
+            List<AbilityType> _abilities = playerAbilities.Select(x => x.Data.AbilityType).ToList();
 
             Reset(player);
 
@@ -1012,8 +1016,31 @@ public class ABattle : Mode
         }
     }
 
+    public void EnsurePlayer(Player player)
+    {
+        if (player == null)
+            return;
+
+        if (!PlayerWorkstations.ContainsKey(player))
+            PlayerWorkstations.Add(player, new List<WorkstationController>());
+
+        if (!PlayerAbilities.ContainsKey(player))
+            PlayerAbilities.Add(player, new List<Ability>());
+
+        if (!Selections.ContainsKey(player))
+            Selections.Add(player, new List<AbilityType>());
+
+        if (!IsSelecting.ContainsKey(player))
+            IsSelecting.Add(player, false);
+
+        if (!IsLifeUsed.ContainsKey(player))
+            IsLifeUsed.Add(player, false);
+    }
+
     public void Reset(Player player)
     {
+        EnsurePlayer(player);
+
         player.RemoveAllAbilities();
 
         PlayerWorkstations[player].Clear();

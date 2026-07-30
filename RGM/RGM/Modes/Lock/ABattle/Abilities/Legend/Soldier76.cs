@@ -9,11 +9,11 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("솔져: 76",
+/*[Ability("솔져: 76",
     "적군 주변 10m 이내에 발사된 총알은 모두 맞은 판정으로 처리하는 E11SR를 획득합니다.\n" +
                    " 단, 최종 데미지가 50% 감소하며 30초마다 50발의 5.56x45mm 탄이 장전됩니다. (150개를 넘을 시 지급되지 않습니다.)", 
     AbilityCategory.Legend, 
-    AbilityType.LEGEND_SOLDIER76)]
+    AbilityType.LEGEND_SOLDIER76)]*/
 public class Soldier76 : Ability
 {
     private static CoroutineHandle _ammoCoroutine;
