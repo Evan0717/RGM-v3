@@ -435,7 +435,6 @@ $"""
         /// <param name="target">대상 플레이어</param>
         /// <param name="maxDistance">최대 거리 (기본값: 30m)</param>
         /// <param name="fov">시야각 (기본값: 60도)</param>
-        /// <returns>장애물 없이 바라보고 있다면 true</returns>
         public static bool IsLookingAt(this Player observer, Player target, float maxDistance = 30f, float fov = 60f)
         {
             if (observer == null || target == null || observer == target)
@@ -473,7 +472,104 @@ $"""
                 return true;
 
             return false;
-        } //dnspy로 땅콩이 로직 뜯어서 AI시켜서 만듦
+        }
+
+        /// <summary>
+        /// 특정 위치를 기준으로 방향을 봤을 때 target(대상)을 실제로 바라보고 있는지 확인합니다.
+        /// </summary>
+        /// <param name="direction">보는 방향</param>
+        /// <param name="pos">볼 위치</param>
+        /// <param name="target">대상 플레이어</param>
+        /// <param name="maxDistance">최대 거리 (기본값: 30m)</param>
+        /// <param name="fov">시야각 (기본값: 60도)</param>
+        public static bool IsLookingAt(Vector3 direction, Vector3 pos, Player target, float maxDistance = 30f, float fov = 60f)
+        {
+            if (target == null || !target.IsAlive)
+                return false;
+
+            Vector3 targetPos = target.Position;
+
+            float distance = Vector3.Distance(pos, targetPos);
+            if (distance > maxDistance)
+                return false;
+
+            Vector3 directionToTarget = (targetPos - pos).normalized;
+
+            if (Vector3.Angle(direction, directionToTarget) > fov)
+                return false;
+
+            Vector3 targetHead = target.CameraTransform.position;
+            Vector3 targetChest = targetPos + Vector3.up * 1.0f;
+            Vector3 targetFeet = targetPos + Vector3.up * 0.1f;
+
+            int visionMask = VisionInformation.VisionLayerMask;
+
+            if (!Physics.Linecast(pos, targetHead, visionMask))
+                return true;
+
+            if (!Physics.Linecast(pos, targetChest, visionMask))
+                return true;
+
+            if (!Physics.Linecast(pos, targetFeet, visionMask))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// observer(관찰자)가 target(대상)을 실제로 바라보고 있는지 확인합니다.
+        /// </summary>
+        /// <param name="observer">보는 사람(확장)</param>
+        /// <param name="position">대상 위치</param>
+        /// <param name="maxDistance">최대 거리 (기본값: 30m)</param>
+        /// <param name="fov">시야각 (기본값: 60도)</param>
+        /// <param name="offset"> 오프셋</param>
+        public static bool IsLookingAt(this Player observer, Vector3 position, float maxDistance = 30f, float fov = 60f, float offset = 0f)
+        {
+            if (observer == null)
+                return false;
+
+            if (!observer.IsAlive)
+                return false;
+
+            Vector3 observerEyePos = observer.CameraTransform.position;
+
+            float distance = Vector3.Distance(observerEyePos, position);
+            if (distance > maxDistance)
+                return false;
+
+            Vector3 directionToTarget = (position - observerEyePos).normalized;
+            Vector3 forwardDirection = observer.CameraTransform.forward;
+
+            if (Vector3.Angle(forwardDirection, directionToTarget) > fov)
+                return false;
+
+            int visionMask = VisionInformation.VisionLayerMask;
+
+            if (offset != 0)
+            {
+                Vector3 Pos1 = position + Vector3.up * offset;
+                Vector3 Pos2 = position + Vector3.down * offset;
+                Vector3 Pos3 = position + Vector3.left * offset;
+                Vector3 Pos4 = position + Vector3.right * offset;
+                Vector3 Pos5 = position + Vector3.forward * offset;
+                Vector3 Pos6 = position + Vector3.back * offset;
+
+                if (
+                    !Physics.Linecast(observerEyePos, Pos1, visionMask)
+                    || !Physics.Linecast(observerEyePos, Pos2, visionMask)
+                    || !Physics.Linecast(observerEyePos, Pos3, visionMask)
+                    || !Physics.Linecast(observerEyePos, Pos4, visionMask)
+                    || !Physics.Linecast(observerEyePos, Pos5, visionMask)
+                    || !Physics.Linecast(observerEyePos, Pos6, visionMask)
+                   )
+                    return true;
+            }
+
+            else { if (!Physics.Linecast(observerEyePos, position, visionMask)) return true; }
+
+            return false;
+        }
 
 
         public static bool TryInstallMode(ModeType ModeType)

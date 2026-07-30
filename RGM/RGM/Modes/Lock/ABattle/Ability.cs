@@ -515,12 +515,14 @@ public enum AbilityType
     LEGEND_SCP079_ASSULTORDER, // [전용 전설] 돌격 명령
     LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다
     LEGEND_SCP079_VIRUS, // [전용 전설] 바이러스
+    LEGEND_SCP079_SECURITYCAMERA, // [전용 전설] 감시 카메라
 
     MYTHIC_SCP079_TOOLPING, // [전용 신화] 따아알깍
     MYTHIC_SCP079_TRANSENDENCE, // [전용 신화] 초월
     MYTHIC_SCP079_SEVEREVIRUS, // [전용 신화] 치명적인 바이러스
     MYTHIC_SCP079_BACKDOOR, // [전용 신화] 백도어
     MYTHIC_SCP079_FUSIONBOMB, // [전용 신화] 융단 폭격
+
 
     //79가 먹을 수 있는 범용 능력
     /*
@@ -529,7 +531,6 @@ public enum AbilityType
       기말고사
       변이
       대학수학능력시험
-      럭키비키
       반사경
       상급변이
       복제
