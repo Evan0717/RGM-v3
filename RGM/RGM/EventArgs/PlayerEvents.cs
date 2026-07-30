@@ -847,11 +847,9 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
-            if (ev.Attacker == null ||
-                ev.Attacker.IsNonePlayer() ||
-                ev.Player.IsNonePlayer() ||
-                SelectMode == "FightVote" ||
-                Round.IsEnded)
+            if (ev.Player.IsNonePlayer() ||
+                Round.IsEnded ||
+                (ev.Attacker != null && ev.Attacker.IsNonePlayer()))
                 return;
 
             // 저장된 효과 삭제
@@ -860,6 +858,10 @@ namespace RGM.EventArgs
 
             if (!Round.IsStarted)
             {
+                // 공포 정치(FightVote) 로비에서는 자동 로비 복귀를 하지 않음
+                if (SelectMode == "FightVote")
+                    return;
+
                 Timing.CallDelayed(5, () =>
                 {
                     if (!Round.IsStarted)
@@ -880,10 +882,9 @@ namespace RGM.EventArgs
                 {
                     PlayersReport[ev.Attacker.UserId].Kill += 1;
 
-                    if (ev.Player.IsScpRole())
+                    if (ev.TargetOldRole.IsScpRole())
                         PlayersReport[ev.Attacker.UserId].KillScp += 1;
-
-                    if (!ev.Player.IsScpRole())
+                    else
                         PlayersReport[ev.Attacker.UserId].KillHuman += 1;
 
                     if (PlayersAudio.TryGetValue(ev.Attacker, out var attackerAudio))

@@ -25,7 +25,7 @@ public class Magician : Ability
 
     public void OnHurt(HurtEventArgs ev)
     {
-        if (ev.Player != Owner || !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Attacker.ReferenceHub))
+        if (ev.Player != Owner || ev.Attacker == null || !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Attacker.ReferenceHub))
             return;
 
         var add = ev.DamageHandler.Damage * 0.5f;
