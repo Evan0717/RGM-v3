@@ -322,26 +322,23 @@ namespace RGM.EventArgs
                                 if (new List<string>() { "First", "Second", "Third", "Fourth" }.Contains(hit.collider
                                         .name))
                                 {
-                                    if (hit.collider.name == "First")
+                                    switch (hit.collider.name)
                                     {
-                                        SelectedMode = ModeVote.Keys.ToList()[0];
-                                        ModeVote[SelectedMode].Add(ev.Player);
+                                        case "First":
+                                            SelectedMode = ModeVote.Keys.ToList()[0];
+                                            break;
+                                        case "Second":
+                                            SelectedMode = ModeVote.Keys.ToList()[1];
+                                            break;
+                                        case "Third":
+                                            SelectedMode = ModeVote.Keys.ToList()[2];
+                                            break;
+                                        default:
+                                            SelectedMode = ModeVote.Keys.ToList()[3];
+                                            break;
                                     }
-                                    else if (hit.collider.name == "Second")
-                                    {
-                                        SelectedMode = ModeVote.Keys.ToList()[1];
-                                        ModeVote[SelectedMode].Add(ev.Player);
-                                    }
-                                    else if (hit.collider.name == "Third")
-                                    {
-                                        SelectedMode = ModeVote.Keys.ToList()[2];
-                                        ModeVote[SelectedMode].Add(ev.Player);
-                                    }
-                                    else
-                                    {
-                                        SelectedMode = ModeVote.Keys.ToList()[3];
-                                        ModeVote[SelectedMode].Add(ev.Player);
-                                    }
+
+                                    ModeVote[SelectedMode].Add(ev.Player);
 
                                     Color = ModeList[SelectedMode].Color;
                                     Description = ModeList[SelectedMode].Description;
@@ -573,8 +570,7 @@ namespace RGM.EventArgs
         {
             Timing.CallDelayed(5 * 60, () =>
             {
-                if (ev.Ragdoll != null)
-                    ev.Ragdoll.Destroy();
+                ev.Ragdoll?.Destroy();
             });
         }
 
@@ -674,16 +670,22 @@ namespace RGM.EventArgs
                 }
                 else if (ev.Player.IsHuman)
                 {
-                    if (StartupRandom == 1) // 시작 카오스
+                    switch (StartupRandom)
                     {
-                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
-                            ev.Player.Role.Set(RoleTypeId.ChaosConscript);
-                    }
-
-                    if (StartupRandom == 2) // 시작 NTF
-                    {
-                        if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
-                            ev.Player.Role.Set(RoleTypeId.NtfPrivate);
+                        // 시작 카오스
+                        case 1:
+                        {
+                            if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                                ev.Player.Role.Set(RoleTypeId.ChaosConscript);
+                            break;
+                        }
+                        // 시작 NTF
+                        case 2:
+                        {
+                            if (ev.Player.Role.Type == RoleTypeId.FacilityGuard)
+                                ev.Player.Role.Set(RoleTypeId.NtfPrivate);
+                            break;
+                        }
                     }
 
                     if (UnityEngine.Random.Range(1, 1001) == 1) // 시작 049-2
@@ -830,16 +832,14 @@ namespace RGM.EventArgs
                 }
                 else
                 {
-                    if (ev.DamageHandler.Type == DamageType.PocketDimension)
-                    {
-                        var attacker = Player.Get(RoleTypeId.Scp106).GetRandomValue();
+                    if (ev.DamageHandler.Type != DamageType.PocketDimension) return;
+                    var attacker = Player.Get(RoleTypeId.Scp106).GetRandomValue();
 
-                        if (attacker == null) return;
+                    if (attacker == null) return;
 
-                        ev.IsAllowed = false;
+                    ev.IsAllowed = false;
 
-                        ev.Player.Kill(new ScpDamageHandler(attacker.ReferenceHub, DeathTranslations.PocketDecay));
-                    }
+                    ev.Player.Kill(new ScpDamageHandler(attacker.ReferenceHub, DeathTranslations.PocketDecay));
                 }
             }
         }
@@ -869,12 +869,7 @@ namespace RGM.EventArgs
             {
                 string MessageFormat()
                 {
-                    if (ev.Attacker == null)
-                        return
-                            $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
-
-                    return
-                        $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                    return ev.Attacker == null ? $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}" : $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
                 }
 
                 foreach (var player in PlayerManager.List.Where(x => x.IsDead || x == ev.Attacker))
@@ -904,13 +899,8 @@ namespace RGM.EventArgs
 
         public static void OnItemAdded(ItemAddedEventArgs ev)
         {
-            if (ev.Player.IsScpRole())
-            {
-                if (ev.Player.CurrentItem == null)
-                {
-                    ev.Player.CurrentItem = ev.Item;
-                }
-            }
+            if (!ev.Player.IsScpRole()) return;
+            ev.Player.CurrentItem ??= ev.Item; // IF ev.Player.CurrentItem NULL
         }
 
         public static void OnUsingItem(UsingItemEventArgs ev)
@@ -963,7 +953,7 @@ namespace RGM.EventArgs
             if (ev.ClaimedTarget != target) return;
             if (!scp173.IsObserved) return;
             ev.ClaimedTarget.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub,
-                ev.Firearm.Damage *= 0.65f, DeathTranslations.Scp173));
+                ev.Firearm.Damage * 0.65f, DeathTranslations.Scp173));
 
             ev.Player.ShowHitMarker();
         }
