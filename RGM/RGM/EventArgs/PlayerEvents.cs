@@ -347,28 +347,26 @@ namespace RGM.EventArgs
                                 {
                                     string FirstDesc()
                                     {
-                                        if (SelectMode == "RandomSelect")
-                                            return
-                                                "<b>[선택 모드 : 무작위]</b> <color=#F6CECE>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
-
-                                        else if (SelectMode == "SimpleSelect")
-                                            return
-                                                "<b>[선택 모드 : 롤토체스]</b> <color=#F5D0A9>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
-
-                                        else if (SelectMode == "MostVote")
-                                            return
-                                                "<b>[선택 모드 : 다수결]</b> <color=#E6E0F8>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
-
-                                        else if (SelectMode == "SecretVote")
-                                            return
-                                                "<b>[선택 모드 : 비밀 선거]</b> <color=#E6F8E0>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
-
-                                        else if (SelectMode == "FightVote")
-                                            return
-                                                "<b>[선택 모드 : 공포 정치]</b> <color=#FA5858>소수가 지배하는 모드 투표장이 되었습니다.</color>";
-
-                                        else
-                                            return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
+                                        switch (SelectMode)
+                                        {
+                                            case "RandomSelect":
+                                                return
+                                                    "<b>[선택 모드 : 무작위]</b> <color=#F6CECE>랜덤한 모드가 선택됩니다. 과연 어떤 모드가 걸릴까요?</color>";
+                                            case "SimpleSelect":
+                                                return
+                                                    "<b>[선택 모드 : 롤토체스]</b> <color=#F5D0A9>투표한 유저 중에서 모드가 자동으로 결정됩니다.</color>";
+                                            case "MostVote":
+                                                return
+                                                    "<b>[선택 모드 : 다수결]</b> <color=#E6E0F8>원하는 모드의 번호가 할당된 플랫폼을 밟아 투표하세요.</color>";
+                                            case "SecretVote":
+                                                return
+                                                    "<b>[선택 모드 : 비밀 선거]</b> <color=#E6F8E0>누가 어떤 모드를 투표했는지 알 수 없습니다.</color>";
+                                            case "FightVote":
+                                                return
+                                                    "<b>[선택 모드 : 공포 정치]</b> <color=#FA5858>소수가 지배하는 모드 투표장이 되었습니다.</color>";
+                                            default:
+                                                return "<b>[버그로 추정됨 : 문의 요망]</b> 어떤 선택 모드도 선택되지 않았습니다. 뭔가 이상합니다.";
+                                        }
                                     }
 
                                     Color = "ffffff";
@@ -657,8 +655,8 @@ namespace RGM.EventArgs
                                 RoleType = ev.Player.Role.Type,
                                 MaxHealth = ev.Player.MaxHealth,
                                 Health = ev.Player.Health,
-                                ActiveEffects = ev.Player.ActiveEffects.ToList(),
-                                Items = ev.Player.Items.ToList(),
+                                ActiveEffects = [.. ev.Player.ActiveEffects],
+                                Items = [.. ev.Player.Items],
                                 CurrentItem = ev.Player.CurrentItem,
                                 Position =
                                     new Vector3(ev.Player.Position.x, ev.Player.Position.y, ev.Player.Position.z),
@@ -891,11 +889,9 @@ namespace RGM.EventArgs
                         attackerAudio.TryPlay("Overwatch2Kill", 2);
                 }
 
-                if (!ev.Player.IsNPC)
-                {
-                    PlayersReport[ev.Player.UserId].Death += 1;
-                    PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
-                }
+                if (ev.Player.IsNPC) return;
+                PlayersReport[ev.Player.UserId].Death += 1;
+                PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
             }
         }
 
@@ -907,12 +903,10 @@ namespace RGM.EventArgs
 
         public static void OnUsingItem(UsingItemEventArgs ev)
         {
-            if (ev.Item.Type == ItemType.SCP1576)
+            if (ev.Item.Type != ItemType.SCP1576) return;
+            foreach (var none in NonePlayer.Players.ToList())
             {
-                foreach (var none in NonePlayer.Players.ToList())
-                {
-                    none.Role.Set(RoleTypeId.Spectator);
-                }
+                none.Role.Set(RoleTypeId.Spectator);
             }
         }
 
@@ -951,7 +945,7 @@ namespace RGM.EventArgs
         {
             if (ev.ClaimedTarget == null) return;
             if (ev.Player.Role is not Scp173Role scp173) return;
-            if (!Tools.TryGetLookPlayer(ev.Player, 1000, out Player target, out RaycastHit? hit)) return;
+            if (!ev.Player.TryGetLookPlayer(1000, out Player target, out RaycastHit? hit)) return;
             if (ev.ClaimedTarget != target) return;
             if (!scp173.IsObserved) return;
             ev.ClaimedTarget.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub,

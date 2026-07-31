@@ -58,7 +58,7 @@ namespace RGM.EventArgs
 
             UsersManager.LoadUsers();
 
-            Tools.PlayGlobalAudio("First Blood (Cover)", 1.5f, true);
+            Tools.PlayGlobalAudio("First Blood (Cover)", 1.25f, true);
 
             Round.IsLobbyLocked = true;
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
@@ -88,29 +88,26 @@ namespace RGM.EventArgs
             Timing.RunCoroutine(Ball());
             Timing.RunCoroutine(MovingShootingTarget());
 
-            int rn = UnityEngine.Random.Range(1, 6);
+            var rand = UnityEngine.Random.Range(1, 6);
 
-            if (rn == 1)
+            switch (rand)
             {
-                SelectMode = "RandomSelect";
-            }
-            else if (rn == 2)
-            {
-                SelectMode = "SimpleSelect";
-            }
-            else if (rn == 3)
-            {
-                SelectMode = "SecretVote";
-            }
-            else if (rn == 4)
-            {
-                SelectMode = "FightVote";
-
-                Server.FriendlyFire = true;
-            }
-            else
-            {
-                SelectMode = "MostVote";
+                case 1:
+                    SelectMode = "RandomSelect";
+                    break;
+                case 2:
+                    SelectMode = "SimpleSelect";
+                    break;
+                case 3:
+                    SelectMode = "SecretVote";
+                    break;
+                case 4:
+                    SelectMode = "FightVote";
+                    Server.FriendlyFire = true;
+                    break;
+                default:
+                    SelectMode = "MostVote";
+                    break;
             }
 
             while (true)
@@ -215,10 +212,9 @@ namespace RGM.EventArgs
 
                     if (num == 1)
                     {
-                        foreach (var special in Specials)
-                        {
-                            if (UnityEngine.Random.Range(1, 4) == 1)
-                                Tools.LoadMap(special);
+                        foreach (var special in Specials.Where(special => 
+                                     UnityEngine.Random.Range(1, 4) == 1)) {
+                            Tools.LoadMap(special);
                         }
 
                         if (UnityEngine.Random.Range(1, 3) == 1)
@@ -250,13 +246,13 @@ namespace RGM.EventArgs
             {
                 if (UnityEngine.Random.Range(1, 6) == 1)
                 {
-                    List<EffectType> effects = new()
-                    {
+                    List<EffectType> effects =
+                    [
                         EffectType.Metal,
                         EffectType.Lightweight,
                         EffectType.MovementBoost,
                         EffectType.SugarRush
-                    };
+                    ];
 
                     foreach (var player in PlayerManager.List)
                     {
@@ -268,8 +264,8 @@ namespace RGM.EventArgs
                 }
                 else
                 {
-                    List<EffectType> effects = new()
-                    {
+                    List<EffectType> effects =
+                    [
                         EffectType.Spicy,
                         EffectType.OrangeCandy,
                         EffectType.SugarCrave,
@@ -279,7 +275,7 @@ namespace RGM.EventArgs
                         EffectType.Prismatic,
                         EffectType.WhiteCandy,
                         EffectType.Metal
-                    };
+                    ];
                     var effect = effects.GetRandomValue();
 
                     foreach (var player in PlayerManager.List)

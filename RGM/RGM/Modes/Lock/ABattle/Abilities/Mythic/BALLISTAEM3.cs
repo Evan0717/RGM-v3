@@ -40,21 +40,21 @@ public class BALLISTAEM3 : Ability
         {
             yield return Timing.WaitForSeconds(10f);
 
-            if (Owner != null && Owner.IsAlive && Owner.CurrentItem != null)
-            {
-                var firearm = (Firearm)Item.Get(_serial);
-                
-                if (firearm.MaxMagazineAmmo > firearm.MagazineAmmo) {}
+            if (Owner == null || !Owner.IsAlive || Owner.CurrentItem == null)
+                continue;
 
+            if (Item.Get(_serial) is not Firearm firearm)
+                continue;
+
+            if (firearm.MagazineAmmo < firearm.MaxMagazineAmmo)
                 firearm.MagazineAmmo += 1;
-            }
         }
     }
 
     private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item == null || ev.Player == null) return;
-        if (ev.Item?.Serial != _serial)
+        if (ev.Item.Serial != _serial)
             return;
         
         ev.Player.AddHint("발리스타 MP3",  $"<b><color={ABattle.RatingColor["신화"]}>발리스타 MP3</color></b> 능력이 있는 <b>입자 분열기</b>입니다!");
@@ -64,11 +64,13 @@ public class BALLISTAEM3 : Ability
     {
         if (ev.Player == null 
             || ev.Attacker == null 
-            || ev.DamageHandler == null) return;
+            || ev.DamageHandler == null
+            || ev.Attacker.CurrentItem == null) return;
         
         if (_isActive) return;
-        Waiting();     
-        if (_serial != ev.Attacker.CurrentItem.Serial) return;
+        if (ev.Attacker != Owner || ev.Attacker.CurrentItem.Serial != _serial) return;
+
+        Waiting();
         if (!Tools.TryGetLookPlayers(ev.Attacker, 75f, out List<Player> players, out _)) return;
 
         Log.Info(players.Count);
@@ -93,12 +95,11 @@ public class BALLISTAEM3 : Ability
                 player.RemoveAllAbilities();
                     
                 ABattle.Instance.PlayerAbilities[player].Clear();
-                ABattle.Instance.PlayerWorkstations[player].Clear();
+                if (ABattle.Instance.PlayerWorkstations.TryGetValue(player, out var workstations))
+                    workstations.Clear();
             }
             else
                 Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
-            
-            
         }
     }
 
@@ -114,7 +115,10 @@ public class BALLISTAEM3 : Ability
         if (!Player.TryGet(victim, out var player)) return;
         if (!Player.TryGet(attacker, out var attack)) return;
         if (_isHitActive)
+        {
             Timing.CallDelayed(0.1f, () => Hit(victim, attacker, size));
+            return;
+        }
         
         _isHitActive = true;
         player.Hit(attack, Damage);
