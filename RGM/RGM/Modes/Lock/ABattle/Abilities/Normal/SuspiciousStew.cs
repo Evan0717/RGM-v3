@@ -28,7 +28,7 @@ public class SuspiciousStew : Ability
         };
 
         EffectType Effect = Owner.HasAbility(AbilityType.EPIC_FOODRESEARCHER) ? Effects.Where(x => x.IsPositive()).GetRandomValue() : Effects.Where(x => !ignoredEffect.Contains(x)).GetRandomValue();
-        byte Intensity = (byte)Random.Range(1, Random.Range(12, Random.Range(48, Random.Range(64, Random.Range(100, 255)))));
+        byte Intensity = (byte)Random.Range(1, Random.Range(12, Random.Range(48, Random.Range(96, 255))));
 
         Owner.EnableEffect(Effect, Intensity);
         Owner.AddHint("효과 알리미", $"<color=#D0FA58>{Effect}</color> 효과가 {Intensity}만큼 적용되는 중입니다.", 5);

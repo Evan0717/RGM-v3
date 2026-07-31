@@ -16,10 +16,7 @@ public class Undine : Ability
     {
         Light(Owner, Color.blue);
     }
-
-    public override void OnDisabled()
-    {
-    }
+    
     public void Light(Player player, Color color)
     {
         try

@@ -32,7 +32,7 @@ public class RoaringSound : TFTAbility
     {
         while (true)
         {
-            for (int i = 0; i < 180; i++)
+            for (int i = 0; i < 60; i++)
             {
                 if (RoaringSoundCooldown > 0)
                     RoaringSoundCooldown--;
@@ -51,26 +51,26 @@ public class RoaringSound : TFTAbility
 
         if (RoaringSoundCooldown <= 0)
         {
-            RoaringSoundCooldown = 180;
+            RoaringSoundCooldown = 60;
 
             Tools.PlayGlobalAudio("GmanRoaringSound");
 
             foreach (var player in Player.List.Where(x => !x.IsNPC && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub) && x.IsAlive))
             {
-                player.EnableEffect(EffectType.Flashed, 1, 0.3f);
-                player.EnableEffect(EffectType.Blinded, 1, 7.5f);
-                player.EnableEffect(EffectType.SinkHole, 1, 12f);
-                player.EnableEffect(EffectType.Slowness, 150, 5.5f);
+                player.EnableEffect(EffectType.Ensnared, 1, 1f);
+                player.EnableEffect(EffectType.Flashed, 1, 3f);
+                player.EnableEffect(EffectType.Blurred, 100, 15f);
+                player.EnableEffect(EffectType.Deafened, 100, 15f);
+                player.EnableEffect(EffectType.Blinded, 1, 15f);
+                player.EnableEffect(EffectType.SinkHole, 1, 8f);
+                player.EnableEffect(EffectType.Slowness, 120, 6f);
+                player.EnableEffect(EffectType.Disabled, 100, 15f);
+                player.EnableEffect(EffectType.Stained, 100, 5f);
+                player.EnableEffect(EffectType.AmnesiaItems, 1, 10f);
+                player.EnableEffect(EffectType.Bleeding, 1, 30f);
             }
 
             yield return Timing.WaitForSeconds(0.65f);
-
-            for (int i = 1; i < 71; i++)
-            {
-                Warhead.Shake();
-
-                yield return Timing.WaitForOneFrame;
-            }
         }
     }
 }

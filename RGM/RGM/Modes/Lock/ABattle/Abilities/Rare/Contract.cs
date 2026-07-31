@@ -64,11 +64,11 @@ public class Contract : Ability
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Mythic, 1)[0]);
                             break;
                     
-                        case <= 7: // 3.5%
+                        case <= 5: // 2.5%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Legend, 1)[0]);
                             break;
                     
-                        case <= 20: // 10.0%
+                        case <= 22: // 11.0%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1)[0]);
                             break;
                     

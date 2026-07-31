@@ -1,5 +1,6 @@
-﻿using Exiled.API.Features.Items;
-using InventorySystem.Items.Usables.Scp330;
+﻿using InventorySystem.Items.Usables.Scp330;
+using RGM.API.Features;
+using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
@@ -8,15 +9,6 @@ public class TerroristRemains : Ability
 {
     public override void OnEnabled()
     {
-        Scp330 PinkCandy = (Scp330)Item.Create(ItemType.SCP330);
-        Scp330 EvliCandy = (Scp330)Item.Create(ItemType.SCP330);
-        if (UnityEngine.Random.Range(1, 6) == 1) {
-            EvliCandy.RemoveAllCandy();
-            EvliCandy.AddCandy(CandyKindID.Evil);
-            Owner.AddItem(EvliCandy);
-        }
-        PinkCandy.RemoveAllCandy();
-        PinkCandy.AddCandy(CandyKindID.Pink);
-        Owner.AddItem(PinkCandy);
+        Owner.AddCandy(Random.Range(1, 6) == 1 ? CandyKindID.Evil : CandyKindID.Pink);
     }
 }
