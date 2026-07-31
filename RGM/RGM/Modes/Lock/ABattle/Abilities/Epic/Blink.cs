@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("점멸", "[Space + ALT]ㅣ근처 문으로 텔레포트합니다. (쿨타임 15초)", AbilityCategory.Epic, AbilityType.EPIC_BLINK)]
+[Ability("점멸", "[Space + ALT]ㅣ근처 문으로 텔레포트합니다. (쿨타임 10초)", AbilityCategory.Epic, AbilityType.EPIC_BLINK)]
 public class Blink : Ability
 {
     int TeleportCooldown = 0;
@@ -23,7 +23,7 @@ public class Blink : Ability
         if (ev.Player != Owner || TeleportCooldown > 0 || !ev.Player.IsJumping || ev.Player.CurrentRoom.Type == RoomType.Pocket)
             return;
 
-        TeleportCooldown = 15;
+        TeleportCooldown = 10;
 
         Door nearestDoor = null;
         float radius = 99999;
@@ -45,7 +45,7 @@ public class Blink : Ability
 
             ev.Player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
 
-            Timing.CallDelayed(15, () => { TeleportCooldown = 0; });
+            Timing.CallDelayed(10, () => { TeleportCooldown = 0; });
         }
     }
 }

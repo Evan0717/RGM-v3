@@ -10,7 +10,7 @@ public class RandomCandy : Ability
     {
         Owner.AddRandomCandy();
 
-        if (Random.Range(1, 8) == 1)
+        while (Random.Range(1, 101) <= 20)
             Owner.AddRandomCandy();
     }
 

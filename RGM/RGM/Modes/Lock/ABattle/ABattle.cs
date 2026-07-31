@@ -105,7 +105,7 @@ public class ABattle : Mode
         //{"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
         {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+10 (SCP의 경우 +50))"},
-        {"캐시 청소", "9분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
+        {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 20% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
         {"난장판", "두가지의 추가 모드(난장판 포함)가 적용되며, 관리자의 제약이 모두 풀립니다."}
@@ -146,41 +146,69 @@ public class ABattle : Mode
                     .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
     }
 
-    public string PickExtraMode(List<string> exceptModes = null)
+    public string PickExtraMode(List<string> exceptModes = null, bool allowBasic = true)
     {
-        if (exceptModes == null)
-        {
-            exceptModes = new List<string>();
-        }
+        exceptModes ??= new List<string>();
 
-        if (Random.Range(1, 7) == 1)
+        var candidates = ExtraModes.Keys
+            .Where(x => x != "기본" && !exceptModes.Contains(x) && !CurrentExtraModes.Contains(x))
+            .ToList();
+
+        string extraMode;
+
+        if (allowBasic && Random.Range(1, 7) == 1)
         {
-            return "기본";
-        }   
+            extraMode = "기본";
+        }
+        else if (candidates.Count == 0)
+        {
+            if (!allowBasic)
+                return null;
+
+            extraMode = "기본";
+        }
         else
         {
-            string extraMode = ExtraModes.Keys.Where(x => !exceptModes.Contains(x)).ToList().GetRandomValue();
-
-            if (!CurrentExtraModes.Contains(extraMode))
-                CurrentExtraModes.Add(extraMode);
-
-            Webhook.Send($"추가 모드: {extraMode}");
-            Log.Info($"추가 모드: {extraMode}");
-
-            if (extraMode == "캐시 청소")
-                Timing.RunCoroutine(Instance.ClearCache());
-
-            if (extraMode == "지원")
-                Timing.RunCoroutine(Instance.Backup());
-
-            if (extraMode == "난장판")
-            {
-                for (int i = 0; i < 2; i++)
-                    PickExtraMode();
-            }
-
-            return extraMode;
+            extraMode = candidates.GetRandomValue();
         }
+
+        bool newlyAdded = false;
+
+        if (extraMode == "기본")
+        {
+            if (CurrentExtraModes.Count == 0)
+            {
+                CurrentExtraModes.Add("기본");
+                newlyAdded = true;
+            }
+        }
+        else if (!CurrentExtraModes.Contains(extraMode))
+        {
+            CurrentExtraModes.Remove("기본");
+            CurrentExtraModes.Add(extraMode);
+            newlyAdded = true;
+        }
+
+        Webhook.Send($"추가 모드: {extraMode}");
+        Log.Info($"추가 모드: {extraMode}");
+
+        if (!newlyAdded)
+            return extraMode;
+
+        if (extraMode == "캐시 청소")
+            Timing.RunCoroutine(Instance.ClearCache());
+
+        if (extraMode == "지원")
+            Timing.RunCoroutine(Instance.Backup());
+
+        if (extraMode == "난장판")
+        {
+            // 난장판 추가 픽에서는 기본/중복을 제외하고 실제 추가 모드만 뽑음
+            for (int i = 0; i < 2; i++)
+                PickExtraMode(exceptModes: new List<string> { "기본", "난장판" }, allowBasic: false);
+        }
+
+        return extraMode;
     }
 
     public static List<string> CurrentExtraModes = new();
@@ -340,7 +368,7 @@ public class ABattle : Mode
                     player.AddBroadcast(10, $"<b><size=20>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
             }
 
-            yield return Timing.WaitForSeconds(60 * 9);
+            yield return Timing.WaitForSeconds(60 * 8);
         }
     }
 

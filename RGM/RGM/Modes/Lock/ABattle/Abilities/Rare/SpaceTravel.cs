@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("공간이동", "지급된 동전을 튕기면 대상에게 이동합니다. (사거리 100)", AbilityCategory.Rare, AbilityType.RARE_SPACETRAVEL)]
+[Ability("이차원 도약", "지급된 동전을 튕기면 대상과 본인의 위치를 서로 뒤바꿉니다. (사거리 12)", AbilityCategory.Rare, AbilityType.RARE_SPACETRAVEL)]
 public class SpaceTravel : Ability
 {
     private ushort _serial;
@@ -36,9 +36,13 @@ public class SpaceTravel : Ability
     {
         if (_serial == ev.Item.Serial)
         {
-            if (Tools.TryGetLookPlayer(ev.Player, 100f, out Player player, out RaycastHit? hit))
+            if (ev.Player.TryGetLookPlayer(25f, out Player player, out RaycastHit? hit))
             {
-                ev.Player.Position = player.Position;
+                Vector3 ownerPos = ev.Player.Position;
+                Vector3 targetPos = player.Position;
+
+                ev.Player.Position = targetPos;
+                player.Position = ownerPos;
 
                 ev.Item.Destroy();
                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1f);

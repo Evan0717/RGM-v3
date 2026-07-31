@@ -38,7 +38,7 @@ public class FlameThrower : Ability
                     MicroHid MicroHID = (MicroHid)Item;
 
                     if (MicroHID.Energy < 1)
-                        MicroHID.Energy += 0.025f;
+                        MicroHID.Energy += 0.03f;
                 }
             }
 

@@ -3,7 +3,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("반창고", "체력이 절반 이하로 줄어들었을 경우 160HP를 즉시 회복합니다. (최대 체력 무시)", AbilityCategory.Rare, AbilityType.RARE_ADHESIVEPLASTER)]
+[Ability("반창고", "체력이 절반 이하로 줄어들었을 경우 180HP를 즉시 회복합니다. (최대 체력 무시)", AbilityCategory.Rare, AbilityType.RARE_ADHESIVEPLASTER)]
 public class AdhesivePlaster : Ability
 {
     public override void OnEnabled()
@@ -23,7 +23,7 @@ public class AdhesivePlaster : Ability
 
         if (ev.Player.Health <= ev.Player.MaxHealth / 2)
         {
-            ev.Player.Health += 160;
+            ev.Player.Health += 180;
 
             ev.Player.RemoveAbility(AbilityType.RARE_ADHESIVEPLASTER);
 

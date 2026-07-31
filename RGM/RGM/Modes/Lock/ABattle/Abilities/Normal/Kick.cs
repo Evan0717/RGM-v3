@@ -9,6 +9,7 @@ namespace RGM.Modes.Abilities.Normal;
 [Ability("회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초, 중복 불가능)", AbilityCategory.Common, AbilityType.NORMAL_KICK)]
 public class Kick : Ability
 {
+    public const float Meleedamage = 25f;
     public static int MeleeCooldown = 0;
 
     public override void OnEnabled()
@@ -29,7 +30,7 @@ public class Kick : Ability
         if (ev.Player.IsCaptured(out Player None))
             return;
 
-        if (Tools.TryGetLookPlayer(ev.Player, 4f, out Player player, out RaycastHit? hit))
+        if (ev.Player.TryGetLookPlayer(4.5f, out Player player, out RaycastHit? hit))
         {
             if (ev.Player != player && MeleeCooldown <= 0 && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
             {
@@ -38,19 +39,19 @@ public class Kick : Ability
                     switch (pos)
                     {
                         case "Head":
-                            return 40f;
+                            return Meleedamage * 2f;
 
                         case "Chest":
-                            return 20f;
+                            return Meleedamage;
 
                         default:
-                            return 14f;
+                            return Meleedamage * 0.7f;
                     }
                 }
 
                 float damage = damageCalcu(hit.Value.transform.name);
 
-                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / 20);
+                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / Meleedamage);
                 player.Hit(ev.Player, damage);
                 ev.Player.Grab();
 
