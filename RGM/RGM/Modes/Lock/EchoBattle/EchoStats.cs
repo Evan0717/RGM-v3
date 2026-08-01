@@ -52,13 +52,13 @@ public static class EchoStats
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
-        { EchoSubOptionType.AttackPercent, [6.0f, 6.8f, 7.6f, 8.4f, 9.2f, 10.0f] },
-        { EchoSubOptionType.AttackFlat, [5f, 7f, 9f, 11f, 13f, 15f] },
+        { EchoSubOptionType.AttackPercent, [7.1f, 7.8f, 8.5f, 9.2f, 9.9f, 10.6f] },
+        { EchoSubOptionType.AttackFlat, [6f, 8f, 10f, 12f, 14f, 16f] },
         { EchoSubOptionType.DefensePercent, [10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f] },
-        { EchoSubOptionType.DefenseFlat, [9.4f, 10.0f, 10.6f, 11.2f, 11.8f, 12.4f] },
+        { EchoSubOptionType.DefenseFlat, [10.0f, 10.8f, 11.6f, 12.4f, 13.2f, 14.0f] },
         { EchoSubOptionType.HpPercent, [10.5f, 11.6f, 12.7f, 13.8f, 14.9f, 16.0f] },
-        { EchoSubOptionType.HpFlat, [80f, 92f, 104f, 116f, 128f, 140f] },
-        { EchoSubOptionType.CriticalChance, [6.9f, 7.5f, 8.1f, 8.7f, 9.3f, 9.9f] },
+        { EchoSubOptionType.HpFlat, [90f, 102f, 114f, 126f, 138f, 150f] },
+        { EchoSubOptionType.CriticalChance, [7.5f, 8.1f, 8.7f, 9.3f, 9.9f, 10.5f] },
         { EchoSubOptionType.ScpDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.HumanDamagePercent, [8.3f, 9.6f, 10.9f, 12.2f, 13.5f, 14.8f] },
         { EchoSubOptionType.MoveSpeed, [9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f] },
@@ -186,7 +186,7 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(2f, 50f, level),
+            EchoCost.Cost4 => LerpStat(2f, 60f, level),
             EchoCost.Cost3 => LerpStat(50f, 250f, level),
             EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f
@@ -429,7 +429,7 @@ public static class EchoStats
         {
             float hp = value;
             if (player.IsScp)
-                hp *= 15f;
+                hp *= 12f;
             snapshot.HpFlat += hp;
         }
         else if (cost == EchoCost.Cost3)
@@ -473,7 +473,7 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 15f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 12f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
