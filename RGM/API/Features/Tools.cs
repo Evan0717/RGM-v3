@@ -434,8 +434,8 @@ $"""
         /// <param name="observer">보는 사람(확장)</param>
         /// <param name="target">대상 플레이어</param>
         /// <param name="maxDistance">최대 거리 (기본값: 30m)</param>
-        /// <param name="fov">시야각 (기본값: 60도)</param>
-        public static bool IsLookingAt(this Player observer, Player target, float maxDistance = 30f, float fov = 60f)
+        /// <param name="fov">시야각 (기본값: 45도)</param>
+        public static bool IsLookingAt(this Player observer, Player target, float maxDistance = 30f, float fov = 45f)
         {
             if (observer == null || target == null || observer == target)
                 return false;

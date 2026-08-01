@@ -71,7 +71,7 @@ public class SecurityCamera : Ability
 
         List<Player> TargetPlayers = new();
 
-        if (player.Role is Scp079Role scp079)
+        /*if (player.Role is Scp079Role scp079)
         {
             var cam = scp079.Base.CurrentCamera;
 
@@ -80,11 +80,12 @@ public class SecurityCamera : Ability
                 pos = cam.CameraPosition;
                 dir = cam.transform.forward;
             }
-        }
+        }*/
+        
 
         foreach (var target in PlayerManager.List)
         {
-            if (Tools.IsLookingAt(dir, pos, target, 100f)) TargetPlayers.Add(target);
+            if (Tools.IsLookingAt(player, target, 100f, 45f)) TargetPlayers.Add(target);
         }
 
         return TargetPlayers;
