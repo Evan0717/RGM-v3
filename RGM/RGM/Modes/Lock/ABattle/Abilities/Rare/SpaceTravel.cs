@@ -35,6 +35,12 @@ public class SpaceTravel : Ability
         if (_serial != ev.Item.Serial) return;
         if (ev.Player.TryGetLookPlayer(10f, out Player player, out RaycastHit? hit))
         {
+            if (player.HasAbility(AbilityType.RARE_SCP173_IMMENSEWEIGHT))
+            {
+                ev.Player.AddHint("동전 사용 실패", "해당 대상은 이차원 도약 능력에 영향을 받지 않습니다.");
+                return;
+            }
+
             Vector3 ownerPos = ev.Player.Position;
             Vector3 targetPos = player.Position;
 

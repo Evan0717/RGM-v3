@@ -433,6 +433,7 @@ public enum AbilityType
     NORMAL_SCP173_FEAR, // [전용 일반] 공포
     NORMAL_SCP173_ABERRATION, // [전용 희귀] 괴이
     NORMAL_SCP173_MIRAGE, // [전용 희귀] 신기루
+    RARE_SCP173_IMMENSEWEIGHT, // [전용 희귀] 육중한 무게
 
     // SCP-049
     NORMAL_SCP049_DEATH, // [전용 희귀] 사신

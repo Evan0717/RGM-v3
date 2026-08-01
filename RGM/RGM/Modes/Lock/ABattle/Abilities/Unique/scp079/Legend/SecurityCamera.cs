@@ -22,14 +22,12 @@ public class SecurityCamera : Ability
 {
     CoroutineHandle SecurityCameraHandle;
     public override void OnEnabled()
-    {
-        SecurityCameraHandle = Timing.RunCoroutine(SecurityCameraSystem());
-    }
+        => SecurityCameraHandle = Timing.RunCoroutine(SecurityCameraSystem());
+    
 
     public override void OnDisabled()
-    {
-        Timing.KillCoroutines(SecurityCameraHandle);
-    }
+        => Timing.KillCoroutines(SecurityCameraHandle);
+    
 
     public IEnumerator<float> SecurityCameraSystem()
     {
