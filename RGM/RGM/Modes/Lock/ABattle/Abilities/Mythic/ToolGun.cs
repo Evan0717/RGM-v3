@@ -13,7 +13,7 @@ namespace RGM.Modes.Abilities.Mythic;
 public class ToolGun : Ability
 {
     private const float ForwardOffset = 1.5f;
-    private const float DownwardOffset = 0.6f;
+    private const float DownwardOffset = 0.75f;
 
     private ushort _coinSerial;
 

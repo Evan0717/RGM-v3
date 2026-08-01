@@ -175,7 +175,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\GhostRule.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\GraveRobber.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\HolyProtection.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\InfinityGun.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\FallenKingsSword.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\LuckyVicky.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\MadScientist.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Marshmellow.cs" />

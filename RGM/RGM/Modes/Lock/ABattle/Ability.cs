@@ -292,7 +292,6 @@ public enum AbilityType
     RARE_VAMPIRE, // [희귀] 흡혈귀
     RARE_TELEPORTATION, // [희귀] 순간이동
     RARE_BOMBERMAN, // [희귀] 봄버맨
-    RARE_GRAPPLINGHOOK, // [희귀] 갈고리
     RARE_STOPWATCH, // [희귀] 회중시계
     RARE_STEROID, // [희귀] 스테로이드
     RARE_MARTYRDOM, // [희귀] 순교
@@ -312,7 +311,7 @@ public enum AbilityType
     RARE_UPGRADE, // [희귀] 강화
     RARE_DND, // [희귀] 자리 비움
     RARE_CLONE, // [희귀] 분신
-    RARE_SPACETRAVEL, // [희귀] 공간이동
+    RARE_SPACETRAVEL, // [희귀] 이차원 도약
     RARE_ORGANICMILK, // [희귀] 유기농 우유
     RARE_CANDYBAG, // [희귀] 사탕 봉지
     RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
@@ -334,7 +333,7 @@ public enum AbilityType
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
     EPIC_DISGUISE, // [영웅] 위장술
     EPIC_GRAVEROBBER, // [영웅] 도굴꾼
-    EPIC_INFINITYGUN, // [영웅] 훌륭한 대화수단
+    EPIC_FALLENKINGSSWORD, // [영웅] 몰락한 왕의 검
     EPIC_SCP1344, // [영웅] 투시
     EPIC_PRIEST, // [영웅] 성직자
     EPIC_ADDWORKSTATION, // [영웅] 업무 증가
@@ -371,7 +370,6 @@ public enum AbilityType
     LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
-    LEGEND_SCP294, // [전설] SCP-294, 커피 자판기
     LEGEND_SCP457, // [전설] SCP-457, 불타는 남자
     LEGEND_SCP966, // [전설] SCP-966, 잠을 죽이는 자
     LEGEND_SCP999, // [전설] SCP-999, 간지럼 괴물
