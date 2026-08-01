@@ -108,7 +108,7 @@ public class AN94 : Ability
 
     private bool TryConsumeBurstAmmo()
     {
-        if (Item.Get(_an94Serial) is not Firearm firearm || firearm.MagazineAmmo <= 0)
+        if (Item.Get(_an94Serial) is not Firearm { MagazineAmmo: > 0 } firearm)
             return false;
 
         firearm.MagazineAmmo -= 1;

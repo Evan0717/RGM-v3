@@ -1,37 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("킬스트릭", "적을 처치할 때마다 새로운 능력을 얻습니다. (인간 진영의 경우 능력 5개를 추가로 선택합니다.)", AbilityCategory.Legend, AbilityType.LEGEND_KILLSTREAK)]
+[Ability("킬스트릭", "적을 처치할 때마다 새로운 능력을 얻습니다. (인간 진영의 경우 능력 12개를 지급받습니다.)", AbilityCategory.Legend, AbilityType.LEGEND_KILLSTREAK)]
 public class KillStreak : Ability
 {
-    CoroutineHandle coroutine;
 
     public override void OnEnabled()
     {
+        if (!Owner.IsScpRole()) {
+            for (int i = 0; i < 12; i++)
+                Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, ABattle.Instance.GetCategory(Owner), 1,
+                    [AbilityType.NORMAL_REROLL, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_DND])[0]);
+        }
         Exiled.Events.Handlers.Player.Died += OnDied;
-
-        coroutine = Timing.RunCoroutine(onStarted());
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.Died -= OnDied;
-
-        Timing.KillCoroutines(coroutine);
-    }
-
-    public IEnumerator<float> onStarted()
-    {
-        for (int i = 1; i < 6; i++)
-        {
-            ABattle.Instance.StartSelect(Owner);
-
-            while (ABattle.Instance.IsSelecting[Owner])
-                yield return Timing.WaitForOneFrame;
-        }
     }
 
     public void OnDied(DiedEventArgs ev)
