@@ -60,10 +60,11 @@ public class Soldier76 : Ability
     {
         if (ev.Item == null || ev.Firearm.Serial != _serial) return;
 
-        bool success = ev.Player.TryGetNearestVisiblePlayer(out var player, out _, 10f, 60f, [.. PlayerManager.List.Where(x => x == ev.Player || x.IsDead)]);
-
         ev.IsAllowed = false;
-        if (!success) return;
+        if (!ev.Player.TryGetNearestVisiblePlayer(out var player, out _, 10f, 60f, [.. PlayerManager.List.Where(x => 
+                x == ev.Player || 
+                x.IsDead || 
+                !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub))])) return;
         
         if (ev.Firearm.MagazineAmmo > 0)
             ev.Firearm.MagazineAmmo--;
