@@ -1070,16 +1070,18 @@ public class ABattle : Mode
         EnsurePlayer(player);
 
         player.RemoveAllAbilities();
-
-        PlayerWorkstations[player].Clear();
+        
+        if (PlayerWorkstations.ContainsKey(player))
+            PlayerWorkstations[player].Clear();
         
         lock (_selectionLock)
         {
-            IsSelecting[player] = false;
+            if (PlayerWorkstations.ContainsKey(player))
+               IsSelecting[player] = false;
             SelectionCursor.Remove(player);
         }
-        
-        IsLifeUsed[player] = false;
+        if (PlayerWorkstations.ContainsKey(player))
+            IsLifeUsed[player] = false;
     }
 
     public static void ApplyPrelude(Player player)
