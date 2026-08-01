@@ -85,7 +85,7 @@ public class SecurityCamera : Ability
 
         foreach (var target in PlayerManager.List)
         {
-            if (Tools.IsLookingAt(player, target, 100f, 45f)) TargetPlayers.Add(target);
+            if (Tools.IsLookingAt(player, target, 100f)) TargetPlayers.Add(target);
         }
 
         return TargetPlayers;
