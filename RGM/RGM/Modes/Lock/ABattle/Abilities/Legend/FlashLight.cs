@@ -38,14 +38,13 @@ public class FlashLight : Ability
     {
         while (true)
         {
-            foreach (var player in PlayerManager.List.Where(player => 
-                         player.CurrentItem != null && 
+            foreach (var player in PlayerManager.List.Where(player =>
                          _flashLightSerial == player.CurrentItem.Serial))
             {
                 if (!player.TryGetLookPlayer(45, out Player target, out RaycastHit? hit)) continue;
                 if (player == target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                target.EnableEffect(EffectType.Flashed, 1, 1f);
+                target.AddEffect(EffectType.Flashed, 1, 1f, true);
             }
 
             yield return Timing.WaitForOneFrame;
