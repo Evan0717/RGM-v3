@@ -10,8 +10,8 @@ public class RandomChest : Ability
 {
     public override void OnEnabled()
     {
-        List<ItemType> RandomChest = new List<ItemType>()
-        {
+        List<ItemType> randomChest =
+        [
             ItemType.ParticleDisruptor,
             ItemType.Jailbird,
             ItemType.MicroHID,
@@ -24,11 +24,11 @@ public class RandomChest : Ability
             ItemType.SCP500,
             ItemType.KeycardO5,
             ItemType.SCP1344
-        };
+        ];
 
         for (int i = 1; i < 4; i++)
         {
-            Item RandomChestItem = Owner.AddItem(RandomChest.GetRandomValue());
+            Owner.AddItem(randomChest.GetRandomValue());
         }
     }
 }
