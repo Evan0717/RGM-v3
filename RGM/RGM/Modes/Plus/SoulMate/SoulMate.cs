@@ -10,7 +10,7 @@ using Exiled.API.Extensions;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.SoulMate)]
+    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.SoulMate)]
     class SoulMate : Mode
     {
         public override string Name => "소울메이트";

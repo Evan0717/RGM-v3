@@ -61,7 +61,7 @@ namespace RGM.Modes
                 [roundHandler.AllWavesCleared ? roundHandler.CurrentWave : roundHandler.CurrentWave - 1];
             List<Player> wonplayers = players
                 .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report) 
-                            && report.Damage >= 2700)
+                            && report.Damage >= 0)
                 .ToList();
 
             Timing.RunCoroutine(Tools.SetWinner(wonplayers, reward));
