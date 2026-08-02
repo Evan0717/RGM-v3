@@ -70,9 +70,9 @@ namespace RGM.Modes
             List<ItemType> ItemList = Tools.EnumToList<ItemType>();
             ItemType Item = ItemList.GetRandomValue();
 
-            int rand = UnityEngine.Random.Range(1, 101);
+            int rand = Random.Range(1, 101);
 
-            if (0 < rand && rand < 3)
+            if (rand is > 0 and < 3)
             {
                 ev.Player.EnableEffect(EffectType.SeveredHands, 1, 50);
             }
@@ -91,7 +91,7 @@ namespace RGM.Modes
 
             int rand = UnityEngine.Random.Range(1, 101);
 
-            if (0 < rand && rand < 3)
+            if (rand is > 0 and < 3)
                 ev.Player.EnableEffect(EffectType.SeveredHands, 1, 50);
 
             else
