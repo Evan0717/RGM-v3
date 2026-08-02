@@ -11,16 +11,7 @@ public class HealthCenterStaff : Ability
 {
     public override void OnEnabled()
     {
-        List<ItemType> healItem =
-        [
-            ItemType.Medkit,
-            ItemType.Painkillers,
-            ItemType.Adrenaline,
-            ItemType.SCP500,
-            ItemType.SCP330
-        ];
-
         foreach (var team in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && x.LeadingTeam == Owner.LeadingTeam && Vector3.Distance(Owner.Position, x.Position) < 11))
-            team.AddItem(healItem.GetRandomValue());
+            team.AddItem(ItemType.SCP500);
     }
 }

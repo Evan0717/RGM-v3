@@ -313,12 +313,12 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (Random.Range(1, 6) == 1)
+        if (true)
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
             {
-                player.AddBroadcast(10, $"<size=25><b><color=#fecdcd>하이퍼버닝</color></b></size>\n<size=20>더욱 더 많은 워크스테이션!!!</size>");
+                player.AddBroadcast(10, $"<size=25><b><color=#FF5F1F>HYPER BURNING</color></b></size>\n<size=20><color=#DC143C>더욱 더 많은 워크스테이션!!!</color></size>");
             }
         }
         foreach (var player in PlayerManager.List)

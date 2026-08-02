@@ -25,11 +25,13 @@ public class Gambler : Ability
 
     public void OnDroppingItem(DroppingItemEventArgs ev)
     {
-        if (ev.Player != Owner)
-            return;
+        if (ev.Player != Owner ||
+            ev.Player.IsScpRole() || 
+            ev.Player.Role.Type.ToString().Contains("Flamingo") || 
+            !PlayerManager.List.Contains(ev.Player)) return;
 
         int rand = UnityEngine.Random.Range(1, 101);
-        if (0 < rand && rand < 3)
+        if (rand is > 0 and < 3)
         {
             Owner.EnableEffect(EffectType.SeveredHands, 1, 50);
         }
@@ -43,12 +45,13 @@ public class Gambler : Ability
 
     public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
-        if (!(Owner.IsScpRole() || Owner.Role.Type.ToString().Contains("Flamingo")) || !Owner.IsJumping || Owner.GetEffect(EffectType.SeveredHands).IsEnabled)
-            return;
+        if (!(Owner.IsScpRole() || Owner.Role.Type.ToString().Contains("Flamingo")) || 
+            !Owner.IsJumping || 
+            Owner.GetEffect(EffectType.SeveredHands).IsEnabled) return;
 
         int rand = UnityEngine.Random.Range(1, 101);
 
-        if (0 < rand && rand < 3)
+        if (rand is > 0 and < 3)
             Owner.EnableEffect(EffectType.SeveredHands, 1, 50);
 
         else
