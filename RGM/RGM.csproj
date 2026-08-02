@@ -391,6 +391,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\StickySwamp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Aberration.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Fear.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\ImmenseWeight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Mirage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\DoraemonPocket.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\HalfBlock.cs" />

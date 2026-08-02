@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using CommandSystem;
+﻿using CommandSystem;
 using DiscordInteraction.Discord;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration.Holidays;
 using MEC;
-
 using PlayerRoles;
 using RemoteAdmin;
 using RGM.API.Features;
 using RGM.Modes.Commands;
 using RGM.Modes.Lock.ABattle;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
 using Random = UnityEngine.Random;
@@ -110,15 +110,7 @@ public class ABattle : Mode
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
         {"난장판", "두가지의 추가 모드(난장판 포함)가 적용되며, 관리자의 제약이 모두 풀립니다."}
     };
-    //ColorFormat
-    public static Dictionary<string, string> AdditionalModes = new Dictionary<string, string>()
-    {
-        //{"승천", "능력을 획득하려고 시도할 시 저 하늘로 승천합니다."},
-        //{"추가 SCP", "추가적인 SCP와 사물이 추가됩니다."},
-        //{"저거너트", "워크를 혐오하는 저거너트가 워크스테이션을 전부 부숴버리기 위해 시설을 침공하였습니다."},
-        //{"무제한", "모두가 [신화]무제한 능력을 획득합니다."},
-        //{"로켓 런처", "모두가 [신화]로켓 런처 능력을 획득합니다."},
-    };
+
     public static List<ICommand> DotCommands =
     [
         new SelectFirst(),
@@ -321,7 +313,14 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-
+        if (Random.Range(1, 6) == 1)
+        {
+            Tools.LoadMap("AddWorkstation");
+            foreach (var player in PlayerManager.List)
+            {
+                player.AddBroadcast(10, $"<size=25><b><color=#fecdcd>하이퍼버닝</color></b></size>\n<size=20>더욱 더 많은 워크스테이션!!!</size>");
+            }
+        }
         foreach (var player in PlayerManager.List)
         {
             try
