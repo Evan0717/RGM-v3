@@ -15,6 +15,7 @@ namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 [Ability("시스템 침투", "35% 확률로 [워크스테이션 업그레이드]추가 모드를 추가합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_SystemInfiltration, RoleAbility.Scp079)]
 public class SystemInfiltration : Ability
 {
+    ABattle _instance = ABattle.Instance;
     public override void OnEnabled()
     {
         TryAddExtraMode();
@@ -24,34 +25,6 @@ public class SystemInfiltration : Ability
     {
 
     }
-
-
-    private string PickExtraMode_79()
-    {
-        if (ABattle.CurrentExtraModes.Count >= ABattle.ExtraModes.Count) return "";
-        string extraMode = ABattle.ExtraModes.Keys.Where(x => !ABattle.CurrentExtraModes.Contains(x)).ToList().GetRandomValue();
-        ABattle.CurrentExtraModes.Add(extraMode);
-
-        Webhook.Send($"추가 모드: {extraMode}");
-        Log.Info($"추가 모드: {extraMode}");
-
-        AllPlayerBroadcast($"<size=25><b><color=#fecdcd>{extraMode}</color></b></size>\n<size=20>{ABattle.ExtraModes[extraMode]}</size>");
-
-        if (extraMode == "캐시 청소")
-            Timing.RunCoroutine(ABattle.Instance.ClearCache());
-
-        if (extraMode == "지원")
-            Timing.RunCoroutine(ABattle.Instance.Backup());
-
-        if (extraMode == "난장판")
-        {
-            for (int i = 0; i < 2; i++)
-                PickExtraMode_79();
-        }
-
-        return extraMode;
-    }
-
     public void AllPlayerBroadcast(string message)
     {
         foreach (var p in PlayerManager.List)
@@ -70,8 +43,8 @@ public class SystemInfiltration : Ability
             {
                 if (Random.Range(1, 101) <= 35)
                 { 
-                    string extraMode = PickExtraMode_79();
-                    if (!string.IsNullOrEmpty(extraMode))
+                    string extraMode = _instance.PickExtraMode();
+                    if (extraMode != null)
                     {
                         Owner.AddHint("침투", $"시스템 침투에 성공하여 <b>{extraMode}</b> 모드가 추가되었습니다!");
                         Owner.AddAbility(AbilityType.DUMMY_INFILTRATIONSUCCESS);
