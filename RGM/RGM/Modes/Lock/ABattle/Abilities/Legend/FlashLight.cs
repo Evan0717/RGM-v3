@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
-using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
-using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -23,10 +21,11 @@ public class FlashLight : Ability
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
 
+        if (Timing.IsRunning(_onStarted)) return;
         _onStarted = Timing.RunCoroutine(OnStarted());
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _flashLightSerial)
             return;
@@ -34,7 +33,7 @@ public class FlashLight : Ability
         ev.Player.AddHint("플래시라이트", $"손전등을 상대에게 비추면 <b><color={ABattle.RatingColor["전설"]}>플래시라이트</color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
         while (true)
         {
@@ -43,7 +42,7 @@ public class FlashLight : Ability
                          player.CurrentItem != null && 
                          _flashLightSerial == player.CurrentItem.Serial))
             {
-                if (!player.TryGetLookPlayer(45, out Player target, out RaycastHit? hit)) continue;
+                if (!player.TryGetLookPlayer(45, out var target, out _)) continue;
                 if (player == target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
                 target.AddEffect(EffectType.Flashed, 1, 1f, true);
