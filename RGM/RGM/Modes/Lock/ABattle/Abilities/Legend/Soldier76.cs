@@ -59,17 +59,25 @@ public class Soldier76 : Ability
     private void OnShooting(ShootingEventArgs ev)
     {
         if (ev.Item == null || ev.Firearm.Serial != _serial) return;
-
-        ev.IsAllowed = false;
+        
         if (!ev.Player.TryGetNearestVisiblePlayer(out var player, out _, 10f, 60f, [.. PlayerManager.List.Where(x => 
                 x == ev.Player || 
                 x.IsDead || 
-                !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub))])) return;
-        
-        if (ev.Firearm.MagazineAmmo > 0)
-            ev.Firearm.MagazineAmmo--;
-
-        player.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub, ev.Firearm.Damage * (player.IsScpRole() ? 0.3f : 0.5f), DeathTranslations.BulletWounds));
-        ev.Player.ShowHitMarker();
+                !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub))]))
+        {
+            ev.IsAllowed = false;
+            return;
+        }
+        var multiplier = player.IsScpRole() ? 0.3f : 0.5f;
+        var check = Tools.TryGetLookPlayers(ev.Player, 10f, out var victims, out var hit);
+        if (!check ||
+            !victims.Contains(player) ||
+            (hit != null && 
+             hit.Value.collider.gameObject != player.GameObject))
+        {
+            player.Hurt(new FirearmDamageHandler(ev.Firearm.Base, ev.Firearm.Damage * multiplier,
+                ev.Firearm.Penetration));
+            ev.Player.ShowHitMarker();
+        }
     }
 }
