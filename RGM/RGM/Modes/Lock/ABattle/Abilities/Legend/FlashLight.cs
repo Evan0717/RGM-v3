@@ -39,6 +39,8 @@ public class FlashLight : Ability
         while (true)
         {
             foreach (var player in PlayerManager.List.Where(player =>
+                         player.IsAlive &&
+                         player.CurrentItem != null && 
                          _flashLightSerial == player.CurrentItem.Serial))
             {
                 if (!player.TryGetLookPlayer(45, out Player target, out RaycastHit? hit)) continue;
