@@ -25,10 +25,9 @@ public class AdhesivePlaster : Ability
         {
             ev.Player.Health += 180;
 
-            ev.Player.RemoveAbility(AbilityType.RARE_ADHESIVEPLASTER);
-
             Owner.AddAbility(AbilityType.DUMMY_USEDADHESIVEPLASTER);
             Owner.AddHint("반창고", $"<color={ABattle.RatingColor["희귀"]}>반창고</color> 효과 덕에 체력을 160HP 회복했습니다.");
+            ev.Player.RemoveAbility(this);
         }
     }
 }
