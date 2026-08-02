@@ -76,7 +76,7 @@ public class SecurityCamera : Ability
             if (cam != null)
             {
                 pos = cam.CameraPosition;
-                dir = cam.transform.forward;
+                dir = cam.CameraAnchor.forward;
             }
         }
         
