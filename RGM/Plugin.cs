@@ -156,6 +156,10 @@ namespace RGM
                     postfix: new HarmonyMethod(AccessTools.Method(typeof(BroadcastPatch), nameof(BroadcastPatch.MapBroadcastPostfix))));
                 harmony.Patch(AccessTools.Method(typeof(WaveSpawner), nameof(WaveSpawner.CanBeSpawned), [typeof(ReferenceHub)]),
                     postfix: new HarmonyMethod(AccessTools.Method(typeof(WavePatch), nameof(WavePatch.Postfix))));
+
+                WaveTimerPatch.Apply(harmony);
+                Exiled.Events.Handlers.Server.WaitingForPlayers += WaveTimerPatch.ApplyWaveFieldOverrides;
+                Exiled.Events.Handlers.Server.RoundStarted += WaveTimerPatch.OnRoundStarted;
             }
             else
             {

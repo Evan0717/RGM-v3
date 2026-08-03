@@ -3,7 +3,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("몰락한 왕의 검", "공격 시 대상 최대 HP의 1.5%만큼 추가 데미지를 입힙니다. 대상이 인간진영인 경우 12.0%로 적용됩니다.", AbilityCategory.Epic, AbilityType.EPIC_FALLENKINGSSWORD)]
+[Ability("몰락한 왕의 검", "공격 시 대상 최대 HP의 1.5%만큼 추가 데미지를 입힙니다. 대상이 인간진영인 경우 9.0%로 적용됩니다.", AbilityCategory.Epic, AbilityType.EPIC_FALLENKINGSSWORD)]
 public class FallenKingsSword : Ability
 {
     public override void OnEnabled()
@@ -27,7 +27,7 @@ public class FallenKingsSword : Ability
         if (ABattle.Instance.GetAbility(Owner, AbilityType.EPIC_FALLENKINGSSWORD) != this)
             return;
 
-        float ratio = ev.Player.IsScpRole() ? 0.015f : 0.120f;
+        float ratio = ev.Player.IsScpRole() ? 0.015f : 0.090f;
         ev.DamageHandler.Damage += ev.Player.MaxHealth * ratio * Owner.AbilityCount(AbilityType.EPIC_FALLENKINGSSWORD);
     }
 }

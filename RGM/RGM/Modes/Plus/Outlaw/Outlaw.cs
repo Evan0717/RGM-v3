@@ -22,12 +22,15 @@ namespace RGM.Modes
 무기 아이템 중에서 랜덤으로 지급받습니다.
 
 SCP는 매 지원마다 새로운 무기를 받습니다.
+
+* 게임 시작 14분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "9F81F7";
 
         public static Outlaw Instance;
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -36,6 +39,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -45,6 +49,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -92,6 +97,23 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(13 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }

@@ -23,6 +23,8 @@ namespace RGM.Modes
 엘레베이터와 같은 움직이는 물체를 주의하세요!
 
 아, 그리고 설마 죽을까봐 움직이지 않거나 조금씩만 이동하는 쫄보는 없겠죠?
+
+* 게임 시작 8분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "F7D358";
 
@@ -35,6 +37,7 @@ namespace RGM.Modes
         CoroutineHandle _onModeStarted;
         CoroutineHandle _recordPlayerInfo;
         CoroutineHandle _checkRedLight;
+        CoroutineHandle _autoWarhead;
 
         public Quaternion rot(Player player)
         {
@@ -53,6 +56,7 @@ namespace RGM.Modes
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
             _recordPlayerInfo = Timing.RunCoroutine(RecordPlayerInfo());
             _checkRedLight = Timing.RunCoroutine(CheckRedLight());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -60,6 +64,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
             Timing.KillCoroutines(_recordPlayerInfo);
             Timing.KillCoroutines(_checkRedLight);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -147,6 +152,23 @@ namespace RGM.Modes
                     yield return Timing.WaitForSeconds(0.1f);
                 }
             }
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(7 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }

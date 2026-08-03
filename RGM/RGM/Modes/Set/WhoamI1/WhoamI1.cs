@@ -26,14 +26,17 @@ namespace RGM.Modes
 
 <b>[참고]</b>
 • <color=red>죽어야 하는 장소에 스폰했을 때 [.자살] 명령어를 입력하지 않으면 제재 대상입니다.</color>
+
+* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "886A08";
 
         public static WhoamI1 Instance;
 
-        Dictionary<Player, PlayerInfo> PlayersInfo = new Dictionary<Player, PlayerInfo>();
+        Dictionary<Player, PlayerInfo> PlayersInfo = new();
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -42,6 +45,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -50,6 +54,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -142,6 +147,23 @@ namespace RGM.Modes
         public void OnSpawned(SpawnedEventArgs ev)
         {
             ev.Player.AddHint("나는 누구?", $"<b>⚠️ 주의하세요</b>, <color=red>죽어야 하는 장소에 스폰했을 때 [.자살] 명령어를 입력하지 않으면 제재 대상입니다.</color>", 10);
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(9 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }

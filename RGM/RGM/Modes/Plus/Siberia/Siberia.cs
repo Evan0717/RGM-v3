@@ -20,18 +20,22 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 
 3m 이상 떨어지지 마세요!
 대상이 누구든 절대로 떨어지지 마십시오.
+
+* 게임 시작 8분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "FAFAFA";
 
         public static Siberia Instance;
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -39,6 +43,7 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -90,6 +95,23 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 
             if (player.Role.Type == RoleTypeId.Scp079)
                 player.Health += 100000;
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(7 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }

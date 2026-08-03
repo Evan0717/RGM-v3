@@ -789,6 +789,7 @@
     <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
     <Compile Include="RGM\Patches\UserSettings.cs" />
     <Compile Include="RGM\Patches\Wave.cs" />
+    <Compile Include="RGM\Patches\WaveTimer.cs" />
     <Compile Include="RGM\Patches\Broadcast.cs" />
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
     <Compile Include="RGM\UserSettings\Settings\SettingVariables.cs" />

@@ -313,7 +313,7 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (true)
+        if (Random.Range(1, 101) <= 5)
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
