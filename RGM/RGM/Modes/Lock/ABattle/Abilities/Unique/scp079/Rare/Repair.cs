@@ -6,7 +6,7 @@ using Map = Exiled.API.Features.Map;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-// [Ability("수리수리 마수리", "1 ~ 2분마다 부서진 모든 문이 복구됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_REPAIR, RoleAbility.Scp079)]
+[Ability("수리수리 마수리", "1 ~ 2분마다 부서진 모든 문이 복구됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_REPAIR, RoleAbility.Scp079)]
 public class Repair : Ability
 {
     private CoroutineHandle _repairHandle;
@@ -14,7 +14,7 @@ public class Repair : Ability
     
     public override void OnEnabled()
     {
-        if (Timing.IsRunning(_repairHandle))
+        if (!Timing.IsRunning(_repairHandle))
             _repairHandle = Timing.RunCoroutine(RepairCoroutine());
     }
 
@@ -28,7 +28,7 @@ public class Repair : Ability
                 if (door is BreakableDoor breakableDoor) 
                     breakableDoor.Repair();
             }
-            Timing.WaitForSeconds(Rand.Next(1, 3) * 60);
+            yield return Timing.WaitForSeconds(Rand.Next(1, 3) * 60);
         }
     }
 
