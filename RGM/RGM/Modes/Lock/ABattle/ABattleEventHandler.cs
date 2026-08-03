@@ -13,7 +13,6 @@ using Exiled.Events.EventArgs.Scp1507;
 using static RGM.Variables.Variable;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Server;
-using PlayerRoles;
 using RGM.API.Features;
 
 namespace RGM.Modes;
@@ -129,13 +128,23 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private IEnumerator<float> OnChangingRole(ChangingRoleEventArgs ev)
     {
-        if (ev.Player.IsDead || ev.NewRole.IsDead() || !ev.Player.GetAbilities().Any())
-            Timing.CallDelayed(Timing.WaitForOneFrame, () => aBattle.Reset(ev.Player));
+        if (ev.Player.IsDead || ev.NewRole.IsDead() || ev.Player.GetAbilities().Count() == 0)
+        {
+            Timing.CallDelayed(Timing.WaitForOneFrame, () => 
+            {
+                aBattle.Reset(ev.Player);
+            });
+        }
+        else
+        {
+            if (ev.Reason == SpawnReason.Escaped)
+            {
+                Timing.RunCoroutine(aBattle.RestoreAbilities(new List<Player>() { ev.Player }));
+            }
+        }
 
-        yield return Timing.WaitForOneFrame;
-        if (ev.Reason == SpawnReason.Escaped || 
-            (ev.NewRole == RoleTypeId.Tutorial && ev.Player.IsCuffed))
-            Timing.RunCoroutine(aBattle.RestoreAbilities([ev.Player])); }
+        yield break;
+    }
 
     private void OnDied(DiedEventArgs ev)
     {

@@ -60,78 +60,81 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
+                foreach (var player in PlayerManager.List)
                 {
-                    int s = player.CurrentSpectatingPlayers.Count();
-                    string t = "관전자들이 조용합니다. 누구에게도 원성을 사지 않으신 것 같군요!";
-
-                    player.GetEffect(EffectType.Slowness).Intensity = (byte)(1.5 * s);
-                    player.GetEffect(EffectType.HeavyFooted).Intensity = (byte)(1.5 * s);
-
-                    if (player.Role is Scp079Role scp079)
-                        scp079.Energy -= 0.15f * s;
-
-                    if (s >= 3)
+                    if (player.IsAlive)
                     {
-                        t = "소수의 관전자들이 당신을 알아봅니다.";
-                        player.EnableEffect(EffectType.AmnesiaVision);
-                    }
-                    else
-                        player.DisableEffect(EffectType.AmnesiaVision);
+                        int s = player.CurrentSpectatingPlayers.Count();
+                        string t = "관전자들이 조용합니다. 누구에게도 원성을 사지 않으신 것 같군요!";
 
-                    if (s >= 5)
-                    {
-                        t = "더 많은 관전자들이 당신을 싸늘하게 지켜봅니다.";
-                        player.EnableEffect(EffectType.Blinded);
-                    }
-                    else
-                        player.DisableEffect(EffectType.Blinded);
+                        player.GetEffect(EffectType.Slowness).Intensity = (byte)(1.5 * s);
+                        player.GetEffect(EffectType.HeavyFooted).Intensity = (byte)(1.5 * s);
 
-                    if (s >= 8)
-                    {
-                        t = "많은 관전자들이 당신을 원망하고 있습니다.";
-                        if (UnityEngine.Random.Range(1, 11) == 1)
+                        if (player.Role is Scp079Role scp079)
+                            scp079.Energy -= 0.15f * s;
+
+                        if (s >= 3)
                         {
-                            Item item = player.Items.GetRandomValue(x => !x.IsAmmo);
-                            player.CurrentItem = item;
-
-                            Timing.CallDelayed(1, () =>
-                            {
-                                if (player.CurrentItem == item)
-                                    player.DropItem(item);
-                            });
+                            t = "소수의 관전자들이 당신을 알아봅니다.";
+                            player.EnableEffect(EffectType.AmnesiaVision);
                         }
-                    }
+                        else
+                            player.DisableEffect(EffectType.AmnesiaVision);
 
-                    if (s >= 12)
-                    {
-                        t = "다수의 관전자들이 당신을 향해 분노하고 있습니다.";
-                        player.EnableEffect(EffectType.Hypothermia, 50);
-                    }
-                    else
-                        player.DisableEffect(EffectType.Blinded);
+                        if (s >= 5)
+                        {
+                            t = "더 많은 관전자들이 당신을 싸늘하게 지켜봅니다.";
+                            player.EnableEffect(EffectType.Blinded);
+                        }
+                        else
+                            player.DisableEffect(EffectType.Blinded);
 
-                    if (s >= 16)
-                    {
-                        t = "대다수의 관전자들이 당신의 죽음을 바랍니다.";
-                        player.EnableEffect(EffectType.Flashed, 1, 0.3f);
-                    }
-                    else
-                        player.DisableEffect(EffectType.Flashed);
+                        if (s >= 8)
+                        {
+                            t = "많은 관전자들이 당신을 원망하고 있습니다.";
+                            if (UnityEngine.Random.Range(1, 11) == 1)
+                            {
+                                Item item = player.Items.GetRandomValue(x => !x.IsAmmo);
+                                player.CurrentItem = item;
 
-                    if (s >= 20)
-                    {
-                        t = "<b><color=red>모든 관전자들이 당신을 저주합니다.</color></b>";
-                        player.EnableEffect(EffectType.SeveredHands);
-                    }
-                    else
-                        player.DisableEffect(EffectType.SeveredHands);
+                                Timing.CallDelayed(1, () =>
+                                {
+                                    if (player.CurrentItem == item)
+                                        player.DropItem(item);
+                                });
+                            }
+                        }
 
-                    player.AddHint("저주",
-                        $"""
-                         <size=20>현재 {s}명이 당신을 관전하고 있습니다.</size>
-                         <size=25>{t}</size>
-                         """, 1.2f);
+                        if (s >= 12)
+                        {
+                            t = "다수의 관전자들이 당신을 향해 분노하고 있습니다.";
+                            player.EnableEffect(EffectType.Hypothermia, 50);
+                        }
+                        else
+                            player.DisableEffect(EffectType.Blinded);
+
+                        if (s >= 16)
+                        {
+                            t = "대다수의 관전자들이 당신의 죽음을 바랍니다.";
+                            player.EnableEffect(EffectType.Flashed, 1, 0.3f);
+                        }
+                        else
+                            player.DisableEffect(EffectType.Flashed);
+
+                        if (s >= 20)
+                        {
+                            t = "<b><color=red>모든 관전자들이 당신을 저주합니다.</color></b>";
+                            player.EnableEffect(EffectType.SeveredHands);
+                        }
+                        else
+                            player.DisableEffect(EffectType.SeveredHands);
+
+                        player.AddHint("저주",
+$"""
+<size=20>현재 {s}명이 당신을 관전하고 있습니다.</size>
+<size=25>{t}</size>
+""", 1.2f);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
