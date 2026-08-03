@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Exiled.API.Features;
 using RGM.Variables;
 
@@ -133,6 +132,9 @@ public class DevManager
     }
 }
 
+/*
+// DispatchProxy 의존으로 Exiled/Mono 로드 실패를 유발해 임시 비활성화.
+// 재활성화 시 System.Reflection.DispatchProxy 참조 및 using System.Text; 복원 필요.
 public class DevAspectManager<T> : DispatchProxy where T : IDevClass
 {
     private T _obj;
@@ -179,6 +181,7 @@ public class DevAspectManager<T> : DispatchProxy where T : IDevClass
         }
     }
 }
+*/
 
 public interface IDevClass
 {
