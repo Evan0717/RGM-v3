@@ -20,6 +20,8 @@ namespace RGM.Modes
 """
 죽으면 영혼 상태로 부활합니다. 이 상태에서 사망하면 성불됩니다.
 또한, 자살로 사망한 경우 곧바로 성불됩니다.
+
+* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "CED8F6";
 
@@ -28,6 +30,7 @@ namespace RGM.Modes
         List<Player> spirits = new List<Player>();
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -37,6 +40,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -47,6 +51,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -123,6 +128,23 @@ namespace RGM.Modes
 
             if (spirits.Contains(ev.Player))
                 ev.Player.DisableEffect(EffectType.Invisible);
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(9 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }

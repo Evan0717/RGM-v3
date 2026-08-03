@@ -20,12 +20,15 @@ namespace RGM.Modes
 
 가끔씩 바닥에 꽁짜 사탕이 떨어질 수도 있겠죠.
 아니면 누군가를 죽이거나..
+
+* 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "5F04B4";
 
         public static TrickorTreat Instance;
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -33,6 +36,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Dying += OnDying;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -41,6 +45,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Dying -= OnDying;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -100,6 +105,23 @@ namespace RGM.Modes
                 return;
 
             ev.Attacker.AddRandomCandy();
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(11 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 };

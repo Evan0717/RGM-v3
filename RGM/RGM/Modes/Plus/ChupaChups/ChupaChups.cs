@@ -17,12 +17,15 @@ namespace RGM.Modes
         public override string Detail =>
 """
 스폰하면 즉시 Jailbird를 얻습니다.
+
+* 게임 시작 14분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "2ECCFA";
 
         public static ChupaChups Instance;
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -31,6 +34,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -39,6 +43,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -67,6 +72,23 @@ namespace RGM.Modes
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(13 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }

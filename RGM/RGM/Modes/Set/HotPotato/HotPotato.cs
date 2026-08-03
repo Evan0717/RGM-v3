@@ -25,7 +25,7 @@ namespace RGM.Modes
         public override string Description => "폭탄이 터지기 전에 다른 유저에게 넘기세요!";
         public override string Detail =>
 """
-유저에 비례하여 <b>폭탄 플레이어의 수가 조정</b>됩니다. (10명 당 1마리 + 1마리)
+유저에 비례하여 <b>폭탄 플레이어의 수가 조정</b>됩니다. (6명 당 1마리 + 1마리)
 
 어떤 수단을 사용하더라도 최후까지 살아남으세요!
 """;
@@ -89,7 +89,7 @@ namespace RGM.Modes
             {
                 pl.ShuffleList();
 
-                for (float i = 1; i < pl.Count / 10 + 2; i++)
+                for (float i = 1; i < pl.Count / 6 + 2; i++)
                 {
                     try
                     {

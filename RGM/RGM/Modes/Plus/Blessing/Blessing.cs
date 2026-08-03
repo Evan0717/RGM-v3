@@ -5,6 +5,7 @@ using MEC;
 using Exiled.API.Features.Roles;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using Exiled.API.Features;
 using RGM.API.Features;
 
 using PlayerRoles;
@@ -35,12 +36,15 @@ namespace RGM.Modes
 12명 이상 - <color=#57F104>아</color><color=#5DEE03>이</color><color=#63EB03>템</color><color=#6AE803>이</color> <color=#76E202>지</color><color=#7DDF02>급</color><color=#83DD01>될</color> <color=#90D701>수</color> <color=#9DD100>있</color><color=#A3CE00>음</color>
 16명 이상 - <b><color=#2718F7>노</color><color=#222DEF>클</color><color=#1E42E7>립</color> <color=#156CD8>사</color><color=#1181D1>용</color> <color=#08ABC2>가</color><color=#04C0BA>능</color></b>
 20명 이상 - <b><color=#A400F0>투</color><color=#B600EE>명</color> <color=#DA00EC>효</color><color=#EC00EB>과</color></b>
+
+* 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "F6D8CE";
 
         public static Blessing Instance;
 
         CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -49,6 +53,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -56,6 +61,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -150,6 +156,23 @@ $"""
                 float s = ev.Attacker.CurrentSpectatingPlayers.Count();
                 ev.DamageHandler.Damage = ev.DamageHandler.Damage + ev.DamageHandler.Damage * (0.15f * s);
             }
+        }
+        
+        public IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(11 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 }
