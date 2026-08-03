@@ -17,7 +17,7 @@ public class PingRemote : Ability
 
     public void OnPinging(PingingEventArgs ev)
     {
-        if (ev.Player != Owner)
+        if (ev.Player != Owner || ev.Room == null)
             return;
 
         if (!ev.Room.AreLightsOff)
