@@ -332,11 +332,7 @@ $"""
                 }
             }
 
-            if (nearestPlayer != null)
-                return true;
-
-            else
-                return false;
+            return nearestPlayer != null;
         }
 
         public static bool TryGetLookPlayer(this Player player, float Distance, out Player target, out RaycastHit? raycastHit)
@@ -370,17 +366,15 @@ $"""
 
             foreach (var hit in hits.OrderBy(h => h.distance))
             {
-                if (hit.collider.TryGetComponent<IDestructible>(out IDestructible destructible))
-                {
-                    if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>().gameObject, out Player t) && !targets.Contains(t))
-                    {
-                        targets.Add(t);
-                        if (targets.Count == 1)
-                            raycastHit = hit;
-                        if (targets.Count >= count)
-                            return true;
-                    }
-                }
+                if (!hit.collider.TryGetComponent<IDestructible>(out _) ||
+                    !Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>().gameObject, out Player t) ||
+                    targets.Contains(t)) continue;
+                
+                targets.Add(t);
+                if (targets.Count == 1)
+                    raycastHit = hit;
+                if (targets.Count >= count)
+                    return true;
             }
 
             return targets.Count > 0;
@@ -401,24 +395,19 @@ $"""
             out float radius,
             float maxDistance = 30f,
             float fov = 90f,
-            List<Player> exceptPlayers = null
-            )
+            List<Player> exceptPlayers = null)
         {
             nearestPlayer = null;
             radius = float.MaxValue;
-
-            if (exceptPlayers == null)
-                exceptPlayers = new List<Player>();
+            exceptPlayers ??= [];
             
             foreach (var near in PlayerManager.List.Where(x => x.IsAlive && x != observer && !exceptPlayers.Contains(x)))
             {
                 float distance = Vector3.Distance(near.Position, observer.Position);
 
-                if (distance >= radius || distance > maxDistance)
-                    continue;
-
-                if (!observer.IsLookingAt(near, maxDistance, fov))
-                    continue;
+                if (distance >= radius ||
+                    distance > maxDistance ||
+                    !observer.IsLookingAt(near, maxDistance, fov)) continue;
 
                 nearestPlayer = near;
                 radius = distance;
@@ -426,8 +415,7 @@ $"""
 
             return nearestPlayer != null;
         }
-
-
+        
         /// <summary>
         /// observer(관찰자)가 target(대상)을 실제로 바라보고 있는지 확인합니다.
         /// </summary>
@@ -437,43 +425,31 @@ $"""
         /// <param name="fov">시야각 (기본값: 60도)</param>
         public static bool IsLookingAt(this Player observer, Player target, float maxDistance = 30f, float fov = 60f)
         {
-            if (observer == null || target == null || observer == target)
-                return false;
+            if (observer == null || target == null) 
+                throw new NullReferenceException("The object Observer or Target is null.");
 
-            if (!observer.IsAlive || !target.IsAlive)
-                return false;
-
-            Vector3 observerEyePos = observer.CameraTransform.position;
-            Vector3 targetPos = target.Position;
+            var observerEyePos = observer.CameraTransform.position;
+            var targetPos = target.Position;
 
             float distance = Vector3.Distance(observerEyePos, targetPos);
-            if (distance > maxDistance)
-                return false;
+            if (distance > maxDistance) return false;
 
             Vector3 directionToTarget = (targetPos - observerEyePos).normalized;
             Vector3 forwardDirection = observer.CameraTransform.forward;
 
-            if (Vector3.Angle(forwardDirection, directionToTarget) > fov)
-                return false;
+            if (Vector3.Angle(forwardDirection, directionToTarget) > fov) return false;
 
-            Vector3 targetHead = target.CameraTransform.position;
-            Vector3 targetChest = targetPos + Vector3.up * 1.0f;
-            Vector3 targetFeet = targetPos + Vector3.up * 0.1f;
+            List<Vector3> options =
+            [
+                target.CameraTransform.position,
+                targetPos + Vector3.up * 1.0f,
+                targetPos + Vector3.up * 0.1f
+            ];
 
             int visionMask = VisionInformation.VisionLayerMask;
-
-            if (!Physics.Linecast(observerEyePos, targetHead, visionMask))
-                return true;
-
-            if (!Physics.Linecast(observerEyePos, targetChest, visionMask))
-                return true;
-
-            if (!Physics.Linecast(observerEyePos, targetFeet, visionMask))
-                return true;
-
-            return false;
+            return options.Any(x => !Physics.Linecast(observerEyePos, x, visionMask));
         }
-
+        
         /// <summary>
         /// 특정 위치를 기준으로 방향을 봤을 때 target(대상)을 실제로 바라보고 있는지 확인합니다.
         /// </summary>
@@ -484,36 +460,27 @@ $"""
         /// <param name="fov">시야각 (기본값: 60도)</param>
         public static bool IsLookingAt(Vector3 direction, Vector3 pos, Player target, float maxDistance = 30f, float fov = 60f)
         {
-            if (target == null || !target.IsAlive)
-                return false;
-
+            if (target == null)
+                throw new NullReferenceException("The target is null.");
+            
             Vector3 targetPos = target.Position;
 
             float distance = Vector3.Distance(pos, targetPos);
-            if (distance > maxDistance)
-                return false;
+            if (distance > maxDistance) return false;
 
             Vector3 directionToTarget = (targetPos - pos).normalized;
 
-            if (Vector3.Angle(direction, directionToTarget) > fov)
-                return false;
-
-            Vector3 targetHead = target.CameraTransform.position;
-            Vector3 targetChest = targetPos + Vector3.up * 1.0f;
-            Vector3 targetFeet = targetPos + Vector3.up * 0.1f;
+            if (Vector3.Angle(direction, directionToTarget) > fov) return false;
 
             int visionMask = VisionInformation.VisionLayerMask;
+            List<Vector3> options =
+            [
+                target.CameraTransform.position,
+                targetPos + Vector3.up * 1.0f,
+                targetPos + Vector3.up * 0.1f
+            ];
 
-            if (!Physics.Linecast(pos, targetHead, visionMask))
-                return true;
-
-            if (!Physics.Linecast(pos, targetChest, visionMask))
-                return true;
-
-            if (!Physics.Linecast(pos, targetFeet, visionMask))
-                return true;
-
-            return false;
+            return options.Any(x => !Physics.Linecast(pos, x, visionMask));
         }
 
         /// <summary>
@@ -526,49 +493,34 @@ $"""
         /// <param name="offset"> 오프셋</param>
         public static bool IsLookingAt(this Player observer, Vector3 position, float maxDistance = 30f, float fov = 60f, float offset = 0f)
         {
-            if (observer == null)
-                return false;
+            if (observer == null) return false;
+            if (!observer.IsAlive) return false;
 
-            if (!observer.IsAlive)
-                return false;
-
+            List<Vector3> options = 
+            [
+                Vector3.up,
+                Vector3.down,
+                Vector3.left,
+                Vector3.right,
+                Vector3.forward,
+                Vector3.back
+            ];
+            
             Vector3 observerEyePos = observer.CameraTransform.position;
 
             float distance = Vector3.Distance(observerEyePos, position);
-            if (distance > maxDistance)
-                return false;
+            if (distance > maxDistance) return false;
 
             Vector3 directionToTarget = (position - observerEyePos).normalized;
             Vector3 forwardDirection = observer.CameraTransform.forward;
 
-            if (Vector3.Angle(forwardDirection, directionToTarget) > fov)
-                return false;
-
+            if (Vector3.Angle(forwardDirection, directionToTarget) > fov) return false;
             int visionMask = VisionInformation.VisionLayerMask;
 
-            if (offset != 0)
-            {
-                Vector3 Pos1 = position + Vector3.up * offset;
-                Vector3 Pos2 = position + Vector3.down * offset;
-                Vector3 Pos3 = position + Vector3.left * offset;
-                Vector3 Pos4 = position + Vector3.right * offset;
-                Vector3 Pos5 = position + Vector3.forward * offset;
-                Vector3 Pos6 = position + Vector3.back * offset;
+            if (offset != 0 && options.Any(option 
+                        => !Physics.Linecast(observerEyePos, position + option * offset, visionMask))) return true;
 
-                if (
-                    !Physics.Linecast(observerEyePos, Pos1, visionMask)
-                    || !Physics.Linecast(observerEyePos, Pos2, visionMask)
-                    || !Physics.Linecast(observerEyePos, Pos3, visionMask)
-                    || !Physics.Linecast(observerEyePos, Pos4, visionMask)
-                    || !Physics.Linecast(observerEyePos, Pos5, visionMask)
-                    || !Physics.Linecast(observerEyePos, Pos6, visionMask)
-                   )
-                    return true;
-            }
-
-            else { if (!Physics.Linecast(observerEyePos, position, visionMask)) return true; }
-
-            return false;
+            return !Physics.Linecast(observerEyePos, position, visionMask);
         }
 
 
@@ -576,32 +528,27 @@ $"""
         {
             var modeType = Type.GetType($"RGM.Modes.{ModeType}");
 
-            if (modeType == null)
-            {
-                if (ModeList.ContainsKey(ModeType.GetModeData().Type))
-                    modeType = Type.GetType($"RGM.Modes.{modeType}");
-            }
+            if (modeType == null &&
+                ModeList.ContainsKey(ModeType.GetModeData().Type))
+                modeType = Type.GetType($"RGM.Modes.{ModeType.GetModeData().Type}");
 
-            if (modeType != null)
-            {
-                Mode modeInstance = (Mode)Activator.CreateInstance(modeType);
-                modeInstance.Data = ModeList[ModeType];
-                EnabledModeList.Add(modeInstance);
+            if (modeType == null) return false;
+            Mode modeInstance = (Mode)Activator.CreateInstance(modeType);
+            modeInstance.Data = ModeList[ModeType];
+            EnabledModeList.Add(modeInstance);
 
-                var onEnabledMethod = modeType.GetMethod("OnEnabled");
+            var onEnabledMethod = modeType.GetMethod("OnEnabled");
 
-                if (ModeType.GetModeData().Map != "")
-                    LoadMap(ModeType.GetModeData().Map);
+            if (ModeType.GetModeData().Map != "")
+                LoadMap(ModeType.GetModeData().Map);
 
-                onEnabledMethod?.Invoke(modeInstance, null);
+            onEnabledMethod?.Invoke(modeInstance, null);
 
-                if (!Main.Instance.Config.IsDevMode && !Round.IsEnded && Server.PlayerCount >= 15)
-                    Webhook.Send($"{ModeType.GetModeData().Name}", ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook3.txt"));
+            if (!Main.Instance.Config.IsDevMode && !Round.IsEnded && Server.PlayerCount >= 15)
+                Webhook.Send($"{ModeType.GetModeData().Name}", ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "Webhook3.txt"));
 
-                return true;
-            }
-            else
-                return false;
+            return true;
+
         }
 
         public static bool UnInstallMode(ModeType ModeType)

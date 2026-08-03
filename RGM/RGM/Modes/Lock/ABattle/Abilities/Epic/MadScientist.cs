@@ -35,7 +35,7 @@ public class MadScientist : Ability
 
             Timing.CallDelayed(10, () =>
             {
-                Owner.Role.Set(ev.TargetOldRole, RoleSpawnFlags.None);
+                if (ev.Player.IsDead) Owner.Role.Set(ev.TargetOldRole, RoleSpawnFlags.None);
 
                 Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
