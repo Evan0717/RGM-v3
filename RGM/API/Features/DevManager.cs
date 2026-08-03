@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Exiled.API.Features;
 using RGM.Variables;
 
 namespace RGM.API.Features;
 
 // Classes
-[Obsolete("Under Construction")]
 public class DevManager
 {
     /// <summary>
@@ -17,9 +17,10 @@ public class DevManager
     /// </summary>
     public static void Initialize()
     {
-        // TODO: 미리보기로 공개, 로직 작동 불가.
         return;
         
+        // TODO: 미리보기로 공개, 로직 작동 불가.
+
         var assembly = Assembly.GetExecutingAssembly();
 
         var scannedTypes = assembly.GetTypes()
@@ -30,37 +31,39 @@ public class DevManager
             })
             .Where(x =>
                 x.Attributes != null &&
-                Variable.DevBlockedAttributes.Contains(x.Type.CustomAttributes.GetType())).ToList();
-        
+                !Variable.DevBlockedAttributes.Contains(x.Type.CustomAttributes.GetType())).ToList();
+
         if (!scannedTypes.Any()) return;
-        
-        Log.Info($"총 {scannedTypes.Count}개의 개발 클래스를 스캔함.");
-        try
+
+        foreach (var items in scannedTypes)
         {
-            foreach (var items in scannedTypes)
+            try
             {
-                if (items?.Type == null || items.Attributes == null) return;
+                if (items?.Type == null ||
+                    items.Attributes == null ||
+                    Variable.DevScannedTypes.Contains((items.Type, items.Attributes))) continue;
 
-                items.Attributes.First(x => string.IsNullOrEmpty(x.Name)).Name = items.Type.Name;
-                items.Attributes.First(x => x.Version == null).Version = new Version(0, 0, 0, 0);
+                items.Attributes.FirstOrDefault(x => string.IsNullOrEmpty(x.Info.Name))!.Info.Name = items.Type.Name;
+                items.Attributes.FirstOrDefault(x => x.Info.Version == null)!.Info.Version = new Version(0, 0, 0, 0);
 
-                if (items.Attributes.Any(x => x.ActiveNow))
+                if (items.Attributes.Any(x => x.Info.ActiveNow))
                 {
                     if (items.Attributes.All(x => x.Type == DevType.DevModeOnly) &&
                         !Main.Instance.Config.IsDevMode) continue;
-                    var instance = Activator.CreateInstance(items.Type);
+                    var instance = (IDevClass)Activator.CreateInstance(items.Type);
                     Run(instance);
-                    Variable.DevInstances.Add(items.Attributes.First(_ => true).Name, instance);
+                    Variable.DevInstances.Add(items.Attributes.First(_ => true).Info.Name, instance);
                 }
 
                 Variable.DevScannedTypes.Add((items.Type, items.Attributes));
             }
+            catch (Exception e)
+            {
+                Log.Error($"개발 클래스 {nameof(items)}를 로드하는 도중 오류가 발생하였습니다. \n {e}");
+            }
         }
-        catch (Exception e)
-        {
-            Log.Error($"스켄 도중 알 수 없는 오류 발생: {e.Message}");
-            throw e.InnerException!;
-        }
+
+        Log.Info($"총 {scannedTypes.Count}개의 개발 클래스를 스캔하였습니다.");
     }
 
     public static ConsoleColor GetDevColor(DevType type)
@@ -73,7 +76,7 @@ public class DevManager
             DevType.Beta => ConsoleColor.Green,
             DevType.ReleaseCandidate => ConsoleColor.DarkGreen,
             DevType.Dev => ConsoleColor.Cyan,
-            _ => ConsoleColor.DarkCyan
+            _ => ConsoleColor.White
         };
     }
 
@@ -85,9 +88,9 @@ public class DevManager
     /// <param name="isDisabled">비활성화 여부입니다. <c>DevOnDisabled</c> Attribute가 없을 경우 실행되지 않습니다.</param>
     public static void Run(object instance, bool isDisabled = false)
     {
-        // TODO: 미리보기로 공개, 아직 작동하지 않음.
         return;
-        
+        // TODO: 미리보기로 공개, 아직 작동하지 않음.
+
         if (!instance.GetType().IsClass ||
             instance.GetType().IsDefined(typeof(DevClassAttribute))) return;
         try
@@ -95,11 +98,11 @@ public class DevManager
             if (!isDisabled)
             {
                 Log.Info($"개발 클래스 {nameof(instance)}의 활성화를 시도중");
-                
+
                 instance
                     .GetType()
                     .GetMethods()
-                    .Where(x => x.IsDefined(typeof(DevOnEnabledAttribute)))
+                    .Where(x => x.IsDefined(typeof(EnabledMethodAttribute)))
                     .ToList()
                     .ForEach(x => x.Invoke(instance, null));
             }
@@ -109,14 +112,14 @@ public class DevManager
                 instance
                     .GetType()
                     .GetMethods()
-                    .Where(x => x.IsDefined(typeof(DevOnDisabledAttribute)))
+                    .Where(x => x.IsDefined(typeof(DisabledMethodAttribute)))
                     .ToList()
                     .ForEach(x => x.Invoke(instance, null));
             }
         }
         catch (Exception e)
         {
-            Log.Warn($"개발 클래스 {nameof(instance)}의 활성화를 실패하였습니다.\n사유: {e.Message} \nStackTrace: {e.StackTrace}");
+            Log.Warn($"개발 클래스 {nameof(instance)}의 활성화를 실패하였습니다.\n{e}");
             throw e!.InnerException!;
         }
     }
@@ -124,44 +127,122 @@ public class DevManager
     internal static void Remove(string name)
     {
         // TODO: 미리보기로 공개, 아직 작동하지 않음
-        return;
-        
+
         if (!Variable.DevInstances.TryGetValue(name, out var instance)) return;
         Run(instance, true);
     }
 }
 
-// Attributes
-[Obsolete("Under Construction")]
-[AttributeUsage(AttributeTargets.Class)]
-public class DevClassAttribute(
-    string name = null,
-    DevType type = DevType.DevModeOnly,
-    Version version = null,
-    string description = "",
-    bool activeNow = false) : Attribute
+public class DevAspectManager<T> : DispatchProxy where T : IDevClass
 {
-    public string Name { get; set; } = name;
+    private T _obj;
 
-    public DevType Type { get; set; } = type;
+    public DevAspectManager(T target, out T proxy)
+    {
+        throw new NotImplementedException("완성안됬슈");
+        if (target.GetType().CustomAttributes.All(x => x.GetType() != typeof(DevDebugAttribute)))
+            throw new ArgumentException(
+                $"Class {nameof(target)} is cannot be found {nameof(DevDebugAttribute)} Attributes.");
 
-    public string Description { get; set; } = description;
+        var proxia = Create<T, DevAspectManager<T>>();
+        ((DevAspectManager<T>)(object)proxia)._obj = target;
+        proxy = proxia;
+    }
 
-    public Version Version { get; set; } = version;
+    protected override object Invoke(MethodInfo targetMethod, object[] args)
+    {
+        StringBuilder builder = new();
 
-    public bool ActiveNow { get; set; } = activeNow;
+        builder.Append($"""
+                        Method Name: {targetMethod.Name}
+                        Method Position: {targetMethod.DeclaringType?.FullName}
+                        Arguments: ({string.Join(", ", args.Select(x => x?.ToString() ?? "null"))}
+
+                        """);
+        try
+        {
+            var result = targetMethod.Invoke(_obj, args);
+            builder.Append($"RESULT: {ConsoleColor.Green}SUCCESS{ConsoleColor.White}");
+            Log.Info(builder.ToString());
+            return result;
+        }
+        catch (Exception e)
+        {
+            builder.Append($"""
+                               RESULT: {ConsoleColor.Red}FAILED{ConsoleColor.White}
+                               -----------------------------------[Exception]-----------------------------------
+                            """);
+            Log.Info(builder.ToString());
+            Log.Error(e);
+            Log.Info("--------------------------------------[END]--------------------------------------");
+            throw e.InnerException!;
+        }
+    }
 }
 
-[Obsolete("Under Construction")]
-[AttributeUsage(AttributeTargets.Method)]
-public class DevOnEnabledAttribute : Attribute;
+public interface IDevClass
+{
+    void Active();
 
-[Obsolete("Under Construction")]
+    void Disable();
+}
+
+// Attributes
+[AttributeUsage(AttributeTargets.Class)]
+public class DevClassAttribute : Attribute
+{
+    public DevType Type { get; }
+
+    public DevInfo Info { get; set; }
+
+    public DevClassAttribute(string name = null,
+        DevType type = DevType.DevModeOnly,
+        string version = null,
+        string description = "",
+        bool activeNow = false)
+    {
+        Type = type;
+
+        if (!Version.TryParse(string.IsNullOrEmpty(version) ? "0.0.0.0" : version, out var result))
+            Info = new DevInfo
+            {
+                Name = name,
+                Description = description,
+                ActiveNow = activeNow,
+                Version = new Version(0, 0, 0, 0)
+            };
+        else
+            Info = new DevInfo
+            {
+                Name = name,
+                Description = description,
+                ActiveNow = activeNow,
+                Version = result
+            };
+    }
+}
+
+public class DevInfo
+{
+    public string Name { get; set; } = "";
+
+    public Version Version { get; set; } = new(0, 0, 0);
+
+    public string Description { get; set; } = "";
+
+    public bool ActiveNow { get; init; }
+}
+
 [AttributeUsage(AttributeTargets.Method)]
-public class DevOnDisabledAttribute : Attribute;
+public class EnabledMethodAttribute : Attribute;
+
+[AttributeUsage(AttributeTargets.Method)]
+public class DisabledMethodAttribute : Attribute;
+
+[AttributeUsage(AttributeTargets.Method)]
+public class DevDebugAttribute : Attribute;
 
 // Enums
-[Obsolete("Under Construction")]
 public enum DevType : byte
 {
     ReleaseCandidate = 0,
@@ -171,3 +252,19 @@ public enum DevType : byte
     Canary = 4,
     DevModeOnly = 5
 }
+
+/*[DevClass("테스트", DevType.Alpha, "9.3.9", description: "유?출", true)]
+public class TestDevClass : IDevClass
+{
+    [EnabledMethod]
+    public void Active()
+    {
+        Log.Info("응애 :)");
+    }
+
+    [DisabledMethod]
+    public void Disable()
+    {
+        Log.Info("힝... :(");
+    }
+}*/

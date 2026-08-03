@@ -36,6 +36,11 @@ namespace RGM.Modes
             byte count = 0;
             while (true)
             {
+                if (!PlayerManager.List.Exists(x =>
+                        x != null &&
+                        !x.IsNPC &&
+                        !x.IsHost)) yield return Timing.WaitForSeconds(1f);
+                
                 if (!IntercomPlayers.Exists(player => PlayerManager.List.Contains(player)))
                 {
                     Server.ExecuteCommand($"/speak {string.Join(".", PlayerManager.List.Select(x => x.Id))}. 1");

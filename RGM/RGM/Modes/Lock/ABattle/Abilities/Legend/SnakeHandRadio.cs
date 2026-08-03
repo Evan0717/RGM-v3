@@ -48,7 +48,7 @@ public class SnakeHandRadio : Ability
 
             Timing.CallDelayed(1, () =>
             {
-                ev.Player.Position = deadPlayers.FirstOrDefault().Position;
+                ev.Player.Position = deadPlayers.FirstOrDefault()!.Position;
             });
 
             ev.Player.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
