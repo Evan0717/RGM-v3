@@ -12,7 +12,7 @@ namespace RGM.API.Features
     public static class HintManager
     {
         /// <summary>
-        /// 해당 플레이어 객체의 힌트 정보를 기록합니다.
+        /// TODO: Fill summary
         /// </summary>
         private static Dictionary<Player, Dictionary<string, (string, float)>> _playerHints = new(); // Custom ID, (힌트, 남은 시간)
         

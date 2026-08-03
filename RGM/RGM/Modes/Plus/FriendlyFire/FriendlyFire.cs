@@ -42,8 +42,8 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
         int Scp106AttackTeamCoolDown = 0;
         List<Player> Scp106Stacks = new List<Player>();
 
-        private CoroutineHandle _onModeStarted;
-        private CoroutineHandle _autoWarhead;
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _autoWarhead;
 
         Harmony harmony;
 
@@ -56,8 +56,8 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
 
             Exiled.Events.Handlers.Scp939.Lunging += OnLunging;
 
-            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            Timing.RunCoroutine(OnModeStarted());
+            Timing.RunCoroutine(AutoWarhead());
 
             harmony = new Harmony($"FriendlyFire - {DateTime.Now.Ticks}");
             harmony.Patch(AccessTools.Method(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy), [typeof(Team), typeof(Team)]), 

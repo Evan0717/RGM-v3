@@ -27,13 +27,13 @@ namespace RGM.Modes
 
         public static SoulMate Instance;
 
-        private readonly Dictionary<Player, Player> _soulMates = [];
-        private readonly List<Player> _waitingPlayers = [];
+        Dictionary<Player, Player> soulMates = new Dictionary<Player, Player>();
+        List<Player> waitingPlayers = new List<Player>();
 
-        private CoroutineHandle _onModeStarted;
-        private CoroutineHandle _soulMateMatching;
-        private CoroutineHandle _currentItemAsync;
-        private CoroutineHandle _checkIfScpSoulMate;
+        CoroutineHandle _onModeStarted;
+        CoroutineHandle _soulMateMatching;
+        CoroutineHandle _currentItemAsync;
+        CoroutineHandle _checkIfScpSoulMate;
 
         public override void OnEnabled()
         {
@@ -49,7 +49,7 @@ namespace RGM.Modes
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
             _soulMateMatching = Timing.RunCoroutine(SoulMateMatching());
-            _currentItemAsync = Timing.RunCoroutine(CurrentItemCoroutine());
+            _currentItemAsync = Timing.RunCoroutine(CurrentItemAsync());
             _checkIfScpSoulMate = Timing.RunCoroutine(CheckIfScpSoulMate());
         }
 
@@ -75,15 +75,14 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var _ in PlayerManager.List
-                             .Where(player => PlayerManager.List.Count(x => x.IsAlive) < 3 && 
-                                              player.Role.Type != PlayerRoles.RoleTypeId.Tutorial))
+                foreach (var player in PlayerManager.List)
                 {
-                    PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => Server.ExecuteCommand($"/fc {x.Id} Tutorial 1"));
-                    PlayerManager.List.ForEach(x => x.AddBroadcast(15, $"<size=30><b>{(PlayerManager.List.Count(y => y.IsAlive) == 2 
-                        ? "<color=#ffd700>소울메이트</color>"
-                        : "<color=#BFFF00>외톨이</color>")}</b>({string.Join(", ", PlayerManager.List.Where(z => z.IsAlive).Select(w => w.DisplayNickname))})의 승리입니다!</size>"));
-                    yield return Timing.WaitForSeconds(100f);
+                    if (PlayerManager.List.ToList().Where(x => x.IsAlive).Count() < 3 && player.Role.Type != PlayerRoles.RoleTypeId.Tutorial)
+                    {
+                        PlayerManager.List.ToList().Where(x => x.IsAlive).ToList().ForEach(x => Server.ExecuteCommand($"/fc {x.Id} Tutorial 1"));
+                        PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(15, $"<size=30><b>{(PlayerManager.List.ToList().Where(x => x.IsAlive).Count() == 2 ? "<color=#ffd700>소울메이트</color>" : "<color=#BFFF00>외톨이</color>")}</b>({string.Join(", ", PlayerManager.List.ToList().Where(x => x.IsAlive).Select(x => x.DisplayNickname))})의 승리입니다!</size>"));
+                        yield return Timing.WaitForSeconds(100f);
+                    }
                 }
 
                 yield return Timing.WaitForSeconds(1f);
@@ -94,51 +93,68 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var sm in _soulMates.Keys.ToList())
+                foreach (var sm in soulMates.Keys.ToList())
                 {
-                    if (_soulMates[sm] != null) continue;
-                    Player soulMate = _soulMates[sm];
+                    if (soulMates[sm] == null)
+                    {
+                        Player soulMate = soulMates[sm];
 
-                    _soulMates.Remove(soulMate);
-                    _soulMates.Remove(sm);
+                        soulMates.Remove(soulMate);
+                        soulMates.Remove(sm);
 
-                    sm.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                        sm.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                    }
                 }
 
                 foreach (var player in PlayerManager.List)
                 {
                     if (player.IsAlive)
                     {
-                        if (_soulMates.ContainsKey(player) || _waitingPlayers.Contains(player)) continue;
-                        _waitingPlayers.Add(player);
+                        if (!soulMates.ContainsKey(player))
+                        {
+                            if (!waitingPlayers.Contains(player))
+                                waitingPlayers.Add(player);
 
-                        player.AddHint("소울메이트 매칭", "누군가와 매칭되기를 기다리는 중입니다..", 1.2f);
+                            player.AddHint("소울메이트 매칭", "누군가와 매칭되기를 기다리는 중입니다..", 1.2f);
+                        }
                     }
                     else
                     {
-                        _waitingPlayers.Remove(player);
+                        waitingPlayers.Remove(player);
 
-                        if (!_soulMates.TryGetValue(player, out Player soulMate)) continue;
-                        if (soulMate != null)
-                            _soulMates.Remove(soulMate);
-                        _soulMates.Remove(player);
+                        if (soulMates.TryGetValue(player, out Player soulMate))
+                        {
+                            if (soulMate != null)
+                                soulMates.Remove(soulMate);
+                            soulMates.Remove(player);
 
-                        player.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
-                        soulMate?.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            player.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                            soulMate?.AddHint("소울메이트 매칭", "누군가와의 매칭이 해제되었습니다.", 1.2f);
+                        }
                     }
                 }
 
-                while (_waitingPlayers.Count > 1)
+                while (waitingPlayers.Count > 1)
                 {
-                    Player first = _waitingPlayers.GetRandomValue();
-                    Player second = _waitingPlayers.Where(x => x != first).GetRandomValue();
+                    Player first = waitingPlayers.GetRandomValue();
+                    Player second = waitingPlayers.Where(x => x != first).ToList().GetRandomValue();
 
-                    _waitingPlayers.Remove(first);
-                    _waitingPlayers.Remove(second);
+                    waitingPlayers.Remove(first);
+                    waitingPlayers.Remove(second);
 
-                    _soulMates.Add(first, second);
-                    _soulMates.Add(second, first);
-                    
+                    soulMates.Add(first, second);
+                    soulMates.Add(second, first);
+
+                    void SetSoulMate(Player a, Player b)
+                    {
+                        a.MaxHealth = b.MaxHealth;
+                        a.Health = b.Health;
+
+                        a.ClearItems();
+                        foreach (var Item in b.Items)
+                            a.AddItem(Item.Type);
+                    }
+
                     if (first.MaxHealth > second.MaxHealth)
                         SetSoulMate(second, first);
                     else
@@ -150,33 +166,24 @@ namespace RGM.Modes
 
                 yield return Timing.WaitForSeconds(1f);
             }
-
-            void SetSoulMate(Player a, Player b)
-            {
-                a.MaxHealth = b.MaxHealth;
-                a.Health = b.Health;
-
-                a.ClearItems();
-                foreach (var Item in b.Items)
-                    a.AddItem(Item.Type);
-            }
         }
 
-        public IEnumerator<float> CurrentItemCoroutine() // CurrentItemAsync..?
+        public IEnumerator<float> CurrentItemAsync()
         {
             Dictionary<Player, Item> currentItems = new Dictionary<Player, Item>();
 
             while (true)
             {
-                foreach (var player in PlayerManager.List.Where(x => x.IsAlive &&
-                                                                     _soulMates.ContainsKey(x)))
+                foreach (var player in PlayerManager.List.Where(x => x.IsAlive && soulMates.ContainsKey(x)))
                 {
                     if (currentItems.ContainsKey(player))
                     {
                         if (currentItems[player] != player.CurrentItem)
+                        {
                             Timing.CallDelayed(0.1f, () =>
                             {
-                                if (!_soulMates.TryGetValue(player, out Player soulMate) || soulMate == null) return;
+                                if (!soulMates.TryGetValue(player, out Player soulMate) || soulMate == null)
+                                    return;
 
                                 if (player.CurrentItem == null)
                                     soulMate.CurrentItem = null;
@@ -185,12 +192,15 @@ namespace RGM.Modes
                                 {
                                     foreach (var Item in soulMate.Items)
                                     {
-                                        if (Item.Type != player.CurrentItem.Type) continue;
-                                        soulMate.CurrentItem = Item;
-                                        break;
+                                        if (Item.Type == player.CurrentItem.Type)
+                                        {
+                                            soulMate.CurrentItem = Item;
+                                            break;
+                                        }
                                     }
                                 }
                             });
+                        };
 
                         currentItems[player] = player.CurrentItem;
                     }
@@ -208,8 +218,8 @@ namespace RGM.Modes
             {
                 try
                 {
-                    int totalSoulMatePairs = _soulMates.Count;
-                    int scpSoulMatePairs = _soulMates.Count(pair => pair.Key.IsScpRole() || pair.Value.IsScpRole());
+                    int totalSoulMatePairs = soulMates.Count;
+                    int scpSoulMatePairs = soulMates.Count(pair => pair.Key.IsScpRole() || pair.Value.IsScpRole());
 
                     if (totalSoulMatePairs == scpSoulMatePairs)
                     {
@@ -234,17 +244,19 @@ namespace RGM.Modes
 
         public void OnDying(DyingEventArgs ev)
         {
-            if (!_soulMates.TryGetValue(ev.Player, out Player soulMate) || soulMate == null) return;
+            if (!soulMates.TryGetValue(ev.Player, out Player soulMate) || soulMate == null)
+                return;
 
             string playerColor = ev.Player.Role.Color.ToHex();
             string soulMateColor = soulMate.Role.Color.ToHex();
 
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                if (!ev.Player.IsDead ||
-                    !_soulMates.TryGetValue(ev.Player, out soulMate) || 
-                    soulMate == null ||
-                    !soulMate.IsAlive) return;
+                if (!ev.Player.IsDead)
+                    return;
+
+                if (!soulMates.TryGetValue(ev.Player, out soulMate) || soulMate == null || !soulMate.IsAlive)
+                    return;
 
                 Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
@@ -261,65 +273,91 @@ namespace RGM.Modes
 
         public void OnHurt(HurtEventArgs ev)
         {
-            if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
-            soulMate.MaxHealth = ev.Player.MaxHealth;
-            soulMate.Health = ev.Player.Health;
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                soulMate.MaxHealth = ev.Player.MaxHealth;
+                soulMate.Health = ev.Player.Health;
+            }
         }
 
         public void OnHealed(HealedEventArgs ev)
         {
-            if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
-            soulMate.MaxHealth = ev.Player.MaxHealth;
-            soulMate.Health = ev.Player.Health;
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                soulMate.MaxHealth = ev.Player.MaxHealth;
+                soulMate.Health = ev.Player.Health;
+            }
         }
 
         public void OnPickingUpItem(PickingUpItemEventArgs ev)
         {
-            if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
-            soulMate.AddItem(ev.Pickup.Type);
+            if (soulMates.ContainsKey(ev.Player))
+            {
+                Player soulMate = soulMates[ev.Player];
+
+                soulMate.AddItem(ev.Pickup.Type);
+            }
         }
 
         public void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
-            foreach (var Item in soulMate.Items)
+            if (soulMates.ContainsKey(ev.Player))
             {
-                if (Item.Type == ev.Item.Type)
+                Player soulMate = soulMates[ev.Player];
+
+                foreach (var Item in soulMate.Items)
                 {
-                    soulMate.RemoveItem(Item);
-                    break;
+                    if (Item.Type == ev.Item.Type)
+                    {
+                        soulMate.RemoveItem(Item);
+                        break;
+                    }
                 }
             }
         }
 
         public void OnUsingItemCompleted(UsingItemCompletedEventArgs ev)
         {
-            if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
-            foreach (var Item in soulMate.Items)
+            if (soulMates.ContainsKey(ev.Player))
             {
-                if (Item.Type == ev.Item.Type)
+                Player soulMate = soulMates[ev.Player];
+
+                foreach (var Item in soulMate.Items)
                 {
-                    soulMate.RemoveItem(Item);
-                    break;
+                    if (Item.Type == ev.Item.Type)
+                    {
+                        soulMate.RemoveItem(Item);
+                        break;
+                    }
                 }
             }
         }
 
         public void OnEscaping(EscapingEventArgs ev)
         {
-            Timing.CallDelayed(0.1f, () =>
+            Timing.CallDelayed(0.1f, () => 
             {
-                if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
-                ev.Player.MaxHealth = soulMate.MaxHealth;
-                ev.Player.Health = soulMate.Health;
+                if (soulMates.ContainsKey(ev.Player))
+                {
+                    Player soulMate = soulMates[ev.Player];
 
-                soulMate.ClearInventory();
-                foreach (var Item in ev.Player.Items)
-                    soulMate.AddItem(Item.Type);
+                    ev.Player.MaxHealth = soulMate.MaxHealth;
+                    ev.Player.Health = soulMate.Health;
+
+                    soulMate.ClearInventory();
+                    foreach (var Item in ev.Player.Items)
+                        soulMate.AddItem(Item.Type);
+                }
             });
         }
 
-        public void OnRevealing(Exiled.Events.EventArgs.Scp3114.RevealingEventArgs ev) 
-            => ev.Player.DropItems();
+        public void OnRevealing(Exiled.Events.EventArgs.Scp3114.RevealingEventArgs ev)
+        {
+            ev.Player.DropItems();
+        }
     }
 }
