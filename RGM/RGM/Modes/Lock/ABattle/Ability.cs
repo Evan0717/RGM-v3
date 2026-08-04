@@ -306,7 +306,6 @@ public enum AbilityType
     RARE_GNOME, // [희귀] 흙의 정령, 노움
     RARE_SYLPH, // [희귀] 바람의 정령, 실프
     RARE_CONTRACT, // [희귀] 계약
-    RARE_AMBUSH, // [희귀] 매복자
     RARE_TRANSITION, // [희귀] 하급 변이
     RARE_UPGRADE, // [희귀] 강화
     RARE_DND, // [희귀] 자리 비움
@@ -349,7 +348,8 @@ public enum AbilityType
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSTC, // [영웅] 대학수학능력시험
     EPIC_HOLYPROTECTION, // [영웅] 신성방어
-    EPIC_AN94, // // [영웅] AN-94
+    EPIC_AN94, // [영웅] AN-94
+    EPIC_SHARPEYES, // [영웅] 샤프 아이즈
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -483,6 +483,7 @@ public enum AbilityType
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
     NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
     //NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    NORMAL_SCP079_WORKOUTORDER, // [전용 일반] 운동 명령
 
     //RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
@@ -559,6 +560,7 @@ public enum AbilityType
     SYNERGY_BOMBPARTY, // [시너지] 폭탄 파티
     SYNERGY_BLACKMARKET, // [시너지] 암시장
     SYNERGY_COMMANDER, // [시너지] 지휘관
+    SYNERGY_WEAKPOINTATTACK // [시너지] 약점 공격
 }
 
 public static class AbilityTypeExtensions

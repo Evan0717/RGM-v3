@@ -160,6 +160,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\UsedPingHook.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\UsedSnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AddWorkstation.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SharpEyes.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AN94.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AntiScp207.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Blink.cs" />
@@ -265,7 +266,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Workout.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\AdhesivePlaster.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Alchemy.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Ambush.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BomberMan.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\CandyBag.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Clone.cs" />
@@ -309,6 +309,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SuicideSquad.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SurvivalExpert.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Vampire.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\WeakPointAttack.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Winner.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\BagOfChaos.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\ChaosOfChaos.cs" />
@@ -351,6 +352,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Mythic\FusionBomb.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Mythic\SevereVirus.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Mythic\Transendence.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\WorkoutOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\AirStrike.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AutoTesla.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\CallScp.cs" />

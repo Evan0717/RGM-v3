@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Warhead;
 using MEC;
 using RGM.API.Features;
+using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Epic;
 
@@ -48,7 +49,8 @@ public class Survivor : Ability
 
     private void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner || IsExemptDamage(ev.DamageHandler.Type))
+        if (ev.Player != Owner || IsExemptDamage(ev.DamageHandler.Type) ||
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
         if (isEnabled)
@@ -63,6 +65,9 @@ public class Survivor : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
+        if (WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
+            return;
+
         if (ev.Player == Owner &&
             !isEnabled &&
             !IsExemptDamage(ev.DamageHandler.Type) &&
@@ -83,7 +88,7 @@ public class Survivor : Ability
 
     private void OnScp106Attacking(AttackingEventArgs ev)
     {
-        if (ev.Target != Owner || !isEnabled)
+        if (ev.Target != Owner || !isEnabled || WeakPointAttack.ShouldIgnoreDefenses(ev.Player))
             return;
 
         ev.IsAllowed = false;

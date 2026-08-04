@@ -22,7 +22,12 @@ public class Druid : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (_isReflecting || ev.Player != Owner || ev.Attacker == null || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+        if (_isReflecting ||
+            ev.Player != Owner ||
+            ev.Attacker == null ||
+            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
+            Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) ||
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
         float reflectChance = ev.Player.IsScpRole() ? 45 : 75;

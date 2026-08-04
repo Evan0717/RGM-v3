@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Scp106;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
+using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -54,7 +55,8 @@ public class Reincarnation : Ability
 
     private void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner || IsContractExemptDamage(ev.DamageHandler.Type))
+        if (ev.Player != Owner || IsContractExemptDamage(ev.DamageHandler.Type) ||
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
         if (_isContractActive)
@@ -69,6 +71,13 @@ public class Reincarnation : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
+        if (WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
+        {
+            if (_isContractActive && ev.Attacker == Owner)
+                ev.DamageHandler.Damage *= 1.35f;
+            return;
+        }
+
         if (ev.Player == Owner &&
             !_isContractActive &&
             !IsContractExemptDamage(ev.DamageHandler.Type) &&
@@ -120,7 +129,7 @@ public class Reincarnation : Ability
 
     private void OnScp106Attacking(AttackingEventArgs ev)
     {
-        if (ev.Target != Owner || !_isContractActive)
+        if (ev.Target != Owner || !_isContractActive || WeakPointAttack.ShouldIgnoreDefenses(ev.Player))
             return;
 
         ev.IsAllowed = false;

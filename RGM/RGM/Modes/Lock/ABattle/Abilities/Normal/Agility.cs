@@ -1,6 +1,7 @@
 ﻿using Exiled.Events.EventArgs.Player;
 using RGM.API.DataBases;
 using RGM.API.Features;
+using RGM.Modes.Abilities.Synergy;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
@@ -23,7 +24,8 @@ public class Agility : Ability
         if (ev.Attacker == null || 
             ev.Player != Owner || 
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) || 
-            Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+            Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) ||
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
         int dodgeChance = Owner.IsScpRole() ? 2 : 5;
