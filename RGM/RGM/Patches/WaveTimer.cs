@@ -22,8 +22,8 @@ public static class WaveTimerPatch
 {
     private const float PrimarySecondsPerSpawn = 3f;
     private const float MiniWaveSecondsPerSpawn = 0f;
-    private const float MiniWaveSpawnInterval = 110f;
-    private const int PrimaryIntervalMin = 210;
+    private const float MiniWaveSpawnInterval = 100f;
+    private const int PrimaryIntervalMin = 205;
     private const int PrimaryIntervalMax = 255;
 
     private static bool _useSharedPrimaryInterval = true;

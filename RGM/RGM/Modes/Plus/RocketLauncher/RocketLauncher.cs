@@ -16,7 +16,7 @@ namespace RGM.Modes
 """
 공격자가 <b>인간</b>인 경우 - 5%
 공격자가 <b>SCP</b>인 경우 - 50%
-공격자가 <b>???</b>인 경우 - 2000%!!!!!
+공격자가 <b>???</b>인 경우 - 200%!!!!!
 """;
         public override string Color => "FA8258";
 
@@ -36,35 +36,30 @@ namespace RGM.Modes
 
         public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
         {
-            if (ev.Attacker != null && HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) && ev.Player != ev.Attacker)
+            if (ev.Attacker == null || 
+                !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
+                ev.Player == ev.Attacker) return;
+            if (queue.Contains(ev.Player)) return;
+            queue.Add(ev.Player);
+
+            if (UnityEngine.Random.Range(1, 101) <= GetPercent())
             {
-                if (!queue.Contains(ev.Player))
-                {
-                    queue.Add(ev.Player);
+                Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
+                Timing.RunCoroutine(Tools.DoRocket(ev.Attacker, ev.Player, 1f));
+            }
 
-                    int GetPercent()
-                    {
-                        if (ev.Attacker.IsScpRole())
-                            return UnityEngine.Random.Range(1, 3);
+            Timing.CallDelayed(2, () =>
+            {
+                queue.Remove(ev.Player);
+            });
+            return;
 
-                        else if (ev.Attacker.Role.Type == RoleTypeId.Tutorial)
-                            return 1;
+            int GetPercent()
+            {
+                if (ev.Attacker.IsScpRole())
+                    return 50;
 
-                        else
-                            return UnityEngine.Random.Range(1, 21);
-                    }
-
-                    if (GetPercent() == 1)
-                    {
-                        Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
-                        Timing.RunCoroutine(Tools.DoRocket(ev.Attacker, ev.Player, 1f));
-                    }
-
-                    Timing.CallDelayed(2, () =>
-                    {
-                        queue.Remove(ev.Player);
-                    });
-                }
+                return ev.Attacker.Role.Type == RoleTypeId.Tutorial ? 200 : 5;
             }
         }
     }
