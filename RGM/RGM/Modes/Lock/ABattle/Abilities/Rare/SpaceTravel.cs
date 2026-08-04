@@ -33,7 +33,7 @@ public class SpaceTravel : Ability
     public void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_serial != ev.Item.Serial) return;
-        if (ev.Player.TryGetLookPlayer(10f, out Player player, out RaycastHit? hit))
+        if (ev.Player.TryGetLookPlayer(10f, out Player player, out _))
         {
             if (player.HasAbility(AbilityType.RARE_SCP173_IMMENSEWEIGHT))
             {
