@@ -1,4 +1,5 @@
-﻿using Exiled.API.Extensions;
+﻿using System;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -118,7 +119,9 @@ namespace RGM.Modes
                     try
                     {
                         var blockedAction = dict[player];
-                        FirstPersonMovementModule fpcModule = (player.ReferenceHub.roleManager.CurrentRole as FpcStandardRoleBase).FpcModule;
+                        FirstPersonMovementModule fpcModule =
+                            (player.ReferenceHub.roleManager.CurrentRole as FpcStandardRoleBase)?.FpcModule;
+                        if (fpcModule is null) continue;
 
                         if (blockedAction == BlockedActions.달리기)
                         {
@@ -143,7 +146,10 @@ namespace RGM.Modes
                             pos_dict[player] = player.Position;
                         }
                     }
-                    catch { }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
                 }
 
                 yield return Timing.WaitForOneFrame;
@@ -173,7 +179,7 @@ namespace RGM.Modes
             if (ev.Player.IsNonePlayer())
                 return;
 
-            if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.말하기)
+            if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.말하기 && !ev.Player.IsDead)
                 ev.Player.ExplodeGrenade(ignore: true);
         }
 
@@ -229,6 +235,8 @@ namespace RGM.Modes
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.탈출하기)
                 ev.Player.ExplodeGrenade(ignore: true);
+
+            ev.IsAllowed = false;
         }
     }
 }
