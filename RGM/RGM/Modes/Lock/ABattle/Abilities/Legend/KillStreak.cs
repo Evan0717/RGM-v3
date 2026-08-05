@@ -15,7 +15,7 @@ public class KillStreak : Ability
         if (!Owner.IsScpRole()) {
             for (int i = 0; i < 12; i++)
                 Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, ABattle.Instance.GetCategory(Owner), 1,
-                    [AbilityType.NORMAL_REROLL, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_DND])[0]);
+                    [AbilityType.NORMAL_FRIENDSHIP, AbilityType.NORMAL_REROLL, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_DND])[0]);
         }
         Exiled.Events.Handlers.Player.Died += OnDied;
     }

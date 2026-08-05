@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("진화", "몸의 크기가 8% 작아집니다.", AbilityCategory.Common, AbilityType.NORMAL_EVOLUTION)]
+[Ability("진화", "몸의 크기가 8%p 작아집니다.", AbilityCategory.Common, AbilityType.NORMAL_EVOLUTION)]
 public class Evolution : Ability
 {
     public override void OnEnabled()

@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("운동", "35만큼 최대 체력을 추가합니다. (SCP는 6배의 보너스를 받습니다.)", AbilityCategory.Common, AbilityType.NORMAL_WORKOUT)]
+[Ability("운동", "35p 만큼 최대 체력을 추가합니다. (SCP는 6배의 보너스를 받습니다.)", AbilityCategory.Common, AbilityType.NORMAL_WORKOUT)]
 public class Workout : Ability
 {
     private const float Health = 35;

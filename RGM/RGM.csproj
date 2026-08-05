@@ -164,7 +164,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AN94.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AntiScp207.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Blink.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\BullsEye.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\ContExpert.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\CSTC.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Disguise.cs" />
@@ -267,6 +266,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\AdhesivePlaster.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Alchemy.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BomberMan.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BullsEye.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\CandyBag.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Clone.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Contract.cs" />

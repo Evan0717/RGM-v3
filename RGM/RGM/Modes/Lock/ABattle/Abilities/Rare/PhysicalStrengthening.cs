@@ -3,7 +3,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("육체 강화", "1초당 1HP를 받습니다.", AbilityCategory.Rare, AbilityType.RARE_PHYSICALSTRENGTHENING)]
+[Ability("육체 강화", "1초당 1p만큼 체력을 회복합니다.", AbilityCategory.Rare, AbilityType.RARE_PHYSICALSTRENGTHENING)]
 public class PhysicalStrengthening : Ability
 {
     CoroutineHandle _upgradeBody;

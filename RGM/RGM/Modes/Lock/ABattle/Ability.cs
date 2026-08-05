@@ -315,6 +315,7 @@ public enum AbilityType
     RARE_CANDYBAG, // [희귀] 사탕 봉지
     RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
     RARE_FINALEXAM, // [희귀] 기말고사
+    RARE_BULLSEYE, // [희귀] 불스아이
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -343,7 +344,6 @@ public enum AbilityType
     EPIC_SCP1509, // [영웅] 마체테
     EPIC_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
-    EPIC_BULLSEYE, // [영웅] 불스아이
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSTC, // [영웅] 대학수학능력시험
