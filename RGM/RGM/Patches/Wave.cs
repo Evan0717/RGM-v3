@@ -12,16 +12,14 @@ namespace RGM.Patches
             try
             {
                 if (player.IsHost || player.IsDummy)
-                {
                     __result = false;
-                }
                 else
                 {
                     Player ply = Player.Get(player);
 
                     if (ply == null) { __result = false; return; }
 
-                    __result = !ply.IsDND() && (ply.IsDead || ply.IsNonePlayer());
+                    __result = !ply.IsDND() && ply.IsDead;
                 }
             }
             catch (Exception e)
