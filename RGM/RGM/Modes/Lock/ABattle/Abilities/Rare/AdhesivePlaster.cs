@@ -25,7 +25,7 @@ public class AdhesivePlaster : Ability
         ev.Player.Health += ev.Player.IsScpRole() ? ev.Player.MaxHealth * 0.25f : ev.Player.MaxHealth * 0.75f;
 
         Owner.AddAbility(AbilityType.DUMMY_USEDADHESIVEPLASTER);
-        Owner.AddHint("반창고", $"<color={ABattle.RatingColor["희귀"]}>반창고</color> 효과 덕에 체력을 180HP 회복했습니다.");
+        Owner.AddHint("반창고", $"<color={ABattle.RatingColor["희귀"]}>반창고</color>를 사용하여 체력을 회복했습니다.");
         ev.Player.RemoveAbility(this);
     }
 }

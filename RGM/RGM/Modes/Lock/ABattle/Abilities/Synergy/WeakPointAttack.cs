@@ -6,7 +6,7 @@ using PlayerStatsSystem;
 
 namespace RGM.Modes.Abilities.Synergy;
 
-[RequiresAbility(AbilityType.EPIC_SHARPEYES, AbilityType.EPIC_SHARPEYES, AbilityType.EPIC_BULLSEYE)]
+[RequiresAbility(AbilityType.EPIC_SHARPEYES, AbilityType.EPIC_SHARPEYES, AbilityType.RARE_BULLSEYE)]
 [Ability("약점 공격", "<샤프 아이즈 x2, 불스아이> 뛰어난 통찰력으로 적군의 약점을 간파합니다.\n공격 시, 상대의 방어 효과를 무시합니다. 이 효과는 회피, 무적, 반사 효과에도 포함됩니다.",
     AbilityCategory.Synergy, AbilityType.SYNERGY_WEAKPOINTATTACK)]
 public class WeakPointAttack : Ability
