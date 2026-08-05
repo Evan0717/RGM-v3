@@ -12,9 +12,15 @@ using RGM.Modes.Commands;
 using RGM.Modes.Lock.ABattle;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.ConstrainedExecution;
+using System.Threading;
+using Exiled.API.Enums;
+using Exiled.API.Features.Doors;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using UnityEngine;
 using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
 using Random = UnityEngine.Random;
@@ -108,7 +114,8 @@ public class ABattle : Mode
         {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 20% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
-        {"난장판", "두가지의 추가 모드(난장판 포함)가 적용되며, 관리자의 제약이 모두 풀립니다."}
+        {"난장판", "유령이 시스템을 장악하여 난장판이 되었습니다. 이로 인해 관리자의 제약이 모두 풀립니다.\n" +
+                "아, 빼먹은 것이 있군요. <b><color=#FF5F1F>HYPER BURNING</color></b>이 활성화됩니다.\n"}
     };
 
     public static List<ICommand> DotCommands =
@@ -192,17 +199,135 @@ public class ABattle : Mode
 
         if (extraMode == "지원")
             Timing.RunCoroutine(Instance.Backup());
-
+        
         if (extraMode == "난장판")
         {
-            // 난장판 추가 픽에서는 기본/중복을 제외하고 실제 추가 모드만 뽑음
-            for (int i = 0; i < 2; i++)
-                PickExtraMode(exceptModes: new List<string> { "기본", "난장판" }, allowBasic: false);
+            for (int i = 0; i < 3; i++)
+                PickExtraMode(exceptModes: ["난장판"], allowBasic: false);
+            Tools.LoadMap("AddWorkstation");
+            ActivateExtraModeForChaos();
         }
 
         return extraMode;
-    }
 
+        void ActivateExtraModeForChaos()
+        {
+            var chaos = new CoroutineHandle();
+            var mutex = new Mutex();
+            chaos = Timing.RunCoroutine(Chaos());
+            Tools.TryInstallMode(ModeType.FriendlyFire);
+            return;
+
+            IEnumerator<float> Chaos()
+            {
+                const float waitTime = 12f;
+                const float chaosStopTime = 30f;
+                while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
+                {
+                    Tools.MessageTranslated("10 . 9 . 8 . 7 . 6 . 5 . 4 . 3 . 2 . 1",
+                        "10초 후 무언가가 일어납니다.");
+                    if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
+                    Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
+                    yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
+                }
+            }
+
+            IEnumerator<float> ChaosMaker()
+            {
+                if (!mutex.WaitOne(1000)) yield break;
+                var rand = new System.Random(Exiled.API.Features.Map.Seed);
+
+                if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
+                PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
+                PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
+                    .ToList()
+                    .ForEach(x
+                        => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
+                
+                if (/*Mathf.Clamp01((float)rand.NextDouble()) >= .8f*/true)
+                {
+                    var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                    AddAbility(player, GetRandomAbilities(player, AbilityCategory.Legend, 5).GetRandomValue());
+                    Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
+                        $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 20%의 확률로 <b><color={AbilityCategory.Legend.GetColor()}>전설</color></b> 능력을 획득하였습니다!");
+                }
+
+                if (/*Mathf.Clamp01((float)rand.NextDouble()) >= .7f*/true)
+                {
+                    var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                    AddAbility(player, GetRandomAbilities(player, AbilityCategory.Mythic, 5).GetRandomValue());
+                    Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
+                        $"<b>플레이어 <color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 30%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
+                }
+
+                if (true/*Mathf.Clamp01((float)rand.NextDouble()) >= .2f*/)
+                    for (int i = 0; i < 3; i++)
+                    {
+                        List<string> musicList =
+                        [
+                            "짬뽕-1",
+                            "폭8-2",
+                            "폭8-1"
+                        ];
+
+                        List<string> delayBomb =
+                        [
+                            "짬뽕-1"
+                        ];
+
+                        var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                        if (player.IsDead || player.IsHost)
+                        {
+                            i--;
+                            continue;
+                        }
+                        var text = musicList.GetRandomValue();
+                        bomb.FuseTime = 0f;
+                        MakeRadio(player, text);
+                        
+                        if (!delayBomb.Contains(text))
+                        {
+                            bomb.SpawnActive(player.Position);
+                            player.Kill(DamageType.Explosion);
+                            continue;
+                        }
+
+                        Timing.CallDelayed(2f, () =>
+                        {
+                            bomb.SpawnActive(player.Position);
+                            player.Kill(DamageType.Explosion);
+                        });
+                        
+                    }
+
+                mutex.ReleaseMutex();
+            }
+
+            void MakeRadio(Player player, string arg)
+            {
+                var item = Pickup.CreateAndSpawn(ItemType.KeycardJanitor, player.Position);
+                
+                AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}",  condition: hub
+                    => !MuteBGMPlayers.Contains(Player.Get(hub)), onIntialCreation: p =>
+                {
+                    Speaker speaker = p.AddSpeaker("Main", 1.5f ,isSpatial: true, minDistance: 1f, maxDistance: 50f);
+                    speaker.transform.localPosition = Vector3.zero;
+                    p.transform.parent = item.Base.gameObject.transform;
+                    speaker.transform.parent = item.Base.gameObject.transform;
+                });
+
+                string audioDir = Paths.Plugins + "/audio/";
+                string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
+                string clipName = audioFiles.GetRandomValue().Replace(".ogg", "").Replace(audioDir, "");
+
+                if (radio.TryPlay(arg, 0.5f) != null) return;
+                radio.TryPlay(clipName, 0.5f);
+                Timing.CallDelayed(5f, item.Destroy);
+            }
+        }
+    }
+    
     public static List<string> CurrentExtraModes = new();
 
     CoroutineHandle _onModeStarted;
@@ -313,7 +438,7 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (Random.Range(1, 101) <= 5)
+        if (Random.Range(1, 101) <= 5 && !ExtraModes.ContainsKey("난장판"))
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
@@ -924,9 +1049,14 @@ public class ABattle : Mode
             var random = Random.Range(0, abilities.Count);
 
             player.AddAbility(abilities[random]);
-
-            Selections.Remove(player);
-            SelectionCursor.Remove(player);
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                lock (_selectionLock) 
+                {
+                    Selections.Remove(player);
+                    SelectionCursor.Remove(player);
+                }
+            });
         }
     }
 
@@ -991,12 +1121,17 @@ public class ABattle : Mode
 
             player.AddAbility(ability);
 
-            Selections.Remove(player);
-            SelectionCursor.Remove(player);
-
             player.AddHint("/?/", "", 0.1f);
 
             response = $"{index}번 능력 선택 완료!";
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                lock (_selectionLock)
+                {
+                    Selections.Remove(player);
+                    SelectionCursor.Remove(player);
+                }
+            });
             return true;
         }
     }
