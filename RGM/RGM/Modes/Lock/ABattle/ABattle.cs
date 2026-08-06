@@ -1115,8 +1115,7 @@ public class ABattle : Mode
 
         if (player.Role.Type == RoleTypeId.Scp096 && !player.HasAbility(AbilityType.NORMAL_RABBIT))
         {
-            for (int i = 0; i < 4; i++)
-                player.AddAbility(AbilityType.NORMAL_RABBIT);
+            player.AddAbility(AbilityType.NORMAL_RABBIT);
         }
     }
 }
