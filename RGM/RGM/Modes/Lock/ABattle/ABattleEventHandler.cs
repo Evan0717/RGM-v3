@@ -91,7 +91,7 @@ public class ABattleEventHandler(ABattle aBattle)
                     if (!ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
                         return;
 
-                    if (ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 101) <= 20)
+                    if (ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 101) <= 18)
                     {
                         if (GodModePlayers.Contains(ev.Player))
                             GodModePlayers.Remove(ev.Player);
@@ -164,7 +164,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
                     if (ABattle.CurrentExtraModes.Contains("대출"))
                     {
-                        if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 6) == 1)
+                        if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) && Random.Range(1, 101) <= 18)
                         {
                             if (GodModePlayers.Contains(ev.Player))
                                 GodModePlayers.Remove(ev.Player);
