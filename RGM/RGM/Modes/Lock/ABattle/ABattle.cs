@@ -101,12 +101,12 @@ public class ABattle : Mode
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
-        {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다."},
-        //{"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. 낮은 확률로 <color={RatingColor["전설"]}>전설</color>, <color={RatingColor["신화"]}>신화</color> 등급의 능력이 지급될 수 있습니다."},
+        {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
+        {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>) 등급의 능력을 얻습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
         {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+10 (SCP의 경우 +50))"},
         {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
-        {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 20% 확률로 아사합니다."},
+        {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 18% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
         {"난장판", "두가지의 추가 모드(난장판 포함)가 적용되며, 관리자의 제약이 모두 풀립니다."}
     };
@@ -482,7 +482,7 @@ public class ABattle : Mode
 
         if (player.HasAbility(AbilityType.LEGEND_REFLECTOR))
         {
-            if (Random.Range(1, 4) == 1)
+            if (Random.Range(1, 101) <= 33)
                 player.AddAbility(type);
         }
 
@@ -760,7 +760,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
 
-            var transition = Random.Range(1, 5) == 1;
+            var transition = Random.Range(1, 101) <= 25;
 
             if (transition)
             {
@@ -776,7 +776,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.EPIC_TRANSITION);
 
-            var transition = Random.Range(1, 5) == 1;
+            var transition = Random.Range(1, 101) <= 25;
 
             if (transition)
             {
@@ -792,7 +792,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
 
-            var transition = Random.Range(1, 5) == 1;
+            var transition = Random.Range(1, 101) <= 25;
 
             if (transition)
             {
@@ -1088,30 +1088,32 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("골드 전주곡"))
         {
             if (player.IsNonePlayer()) return;
-
+            
             player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
-                    [AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
+                [
+                    AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, 
+                    AbilityType.EPIC_SUICIDEBOMBER, AbilityType.EPIC_TERRORISTREMAINS,
+                    AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
+                    AbilityType.EPIC_CSTC, AbilityType.EPIC_RANDOMCHEST
+                ]).First());
         }
-        /*
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.IsNonePlayer()) return;
              
-            AbilityCategory getRandom()
+            AbilityCategory GetRandom()
             {
-                if (Random.Range(1, 31) == 1)
-                        return AbilityCategory.Mythic;
-
-                if (Random.Range(1, 21) == 1)
-                        return AbilityCategory.Legend;
-
-                return AbilityCategory.Epic;
+                return Random.Range(1, 101) <= 15 ? AbilityCategory.Legend : AbilityCategory.Epic;
             }
 
-            player.AddAbility(Instance.GetRandomAbilities(player, getRandom(), 1,[AbilityType.EPIC_PRIEST, AbilityType.EPIC_BLINK, AbilityType.EPIC_MADSCIENTIST]).First());
+            player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
+                [
+                    AbilityType.LEGEND_SCP008, AbilityType.LEGEND_SCP035,
+                    AbilityType.LEGEND_SCP457, AbilityType.LEGEND_SCP966, 
+                    AbilityType.LEGEND_SCP999
+                ]).First());
             
         }
-        */
 
         if (player.Role.Type == RoleTypeId.Scp096 && !player.HasAbility(AbilityType.NORMAL_RABBIT))
         {
