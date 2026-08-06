@@ -284,6 +284,9 @@ public enum AbilityType
     NORMAL_EXCHANGE, // [일반] 교환
     NORMAL_RABBIT, // [일반] 토끼뜀
     NORMAL_RANDOMCANDY, // [일반] 트릭 오어 트릿
+    NORMAL_SHELL, // [일반] 껍데기
+    NORMAL_CLOAK, // [일반] 망토
+    NORMAL_NIGHTOWL, // [일반] 밤눈
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -316,6 +319,7 @@ public enum AbilityType
     RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
     RARE_FINALEXAM, // [희귀] 기말고사
     RARE_BULLSEYE, // [희귀] 불스아이
+    RARE_HYPERBODY, // [희귀] 하이퍼 바디
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -367,7 +371,6 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
-    LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
     LEGEND_SCP457, // [전설] SCP-457, 불타는 남자
@@ -379,6 +382,7 @@ public enum AbilityType
     LEGEND_REPLICATION, // [전설] 복제
     LEGEND_CLEARCACHE, // [전설] 캐시 청소
     LEGEND_REINCARNATION, // [전설] 리인카네이션
+    LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -396,6 +400,7 @@ public enum AbilityType
     MYTHIC_HAMMER, // [신화] 철퇴
     MYTHIC_UNLIMITED, // [신화] 무제한
     MYTHIC_ANCHOR, //[신화] 구속
+    MYTHIC_SOLDIER76, // [신화] 솔져: 76
 
 
     // 전용 //

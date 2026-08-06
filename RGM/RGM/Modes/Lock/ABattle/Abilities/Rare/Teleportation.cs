@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
@@ -7,13 +8,15 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("순간이동", "랜덤한 유저의 위치로 순간이동합니다.", AbilityCategory.Rare, AbilityType.RARE_TELEPORTATION)]
+[Ability("순간이동", "랜덤한 유저의 위치로 순간이동합니다. 순간이동 후, 3초간 생존 보정을 받습니다.", AbilityCategory.Rare, AbilityType.RARE_TELEPORTATION)]
 public class Teleportation : Ability
 {
     public override void OnEnabled()
     {
         Player target = PlayerManager.List.Where(x => x != Owner && x.IsAlive && x.Role.Type != RoleTypeId.Scp079).ToList().GetRandomValue();
         Owner.Position = target.Position;
+        Owner.AddEffect(EffectType.Invisible, 1, 3);
+        Owner.ApplyGodMode(3);
 
         Timing.CallDelayed(1, () =>
         {

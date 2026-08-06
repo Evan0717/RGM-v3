@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초, 중복 불가능)", AbilityCategory.Common, AbilityType.NORMAL_KICK)]
+[Ability("회축", "[ALT]를 눌러 발차기 공격을 가할 수 있습니다. (쿨타임 1초)", AbilityCategory.Common, AbilityType.NORMAL_KICK)]
 public class Kick : Ability
 {
-    public const float Meleedamage = 25f;
-    public static int MeleeCooldown = 0;
+    private const float Meleedamage = 20f;
+    private static int _meleeCooldown;
 
     public override void OnEnabled()
     {
@@ -30,11 +30,11 @@ public class Kick : Ability
         if (ev.Player.IsCaptured(out Player None))
             return;
 
-        if (ev.Player.TryGetLookPlayer(4.5f, out Player player, out RaycastHit? hit))
+        if (ev.Player.TryGetLookPlayer(4.7f, out Player player, out RaycastHit? hit))
         {
-            if (ev.Player != player && MeleeCooldown <= 0 && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
+            if (ev.Player != player && _meleeCooldown <= 0 && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
             {
-                float damageCalcu(string pos)
+                float DamageCalcu(string pos)
                 {
                     switch (pos)
                     {
@@ -49,15 +49,15 @@ public class Kick : Ability
                     }
                 }
 
-                float damage = damageCalcu(hit.Value.transform.name);
+                float damage = DamageCalcu(hit?.transform.name) * Owner.AbilityCount(AbilityType.NORMAL_KICK);
 
                 Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / Meleedamage);
                 player.Hit(ev.Player, damage);
                 ev.Player.Grab();
 
-                MeleeCooldown = 1;
+                _meleeCooldown = 1;
 
-                Timing.CallDelayed(1f, () => MeleeCooldown = 0);
+                Timing.CallDelayed(1f, () => _meleeCooldown = 0);
             }
         }
     }

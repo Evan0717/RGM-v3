@@ -21,7 +21,7 @@ namespace RGM.Modes
 <color=#81F781>인간</color>이던 <color=red>SCP</color>던 <b><color=#FFBF00>팀킬</color>이 허용</b>됩니다.
 팀킬이 허용되므로, 티밍이 자유로워집니다. (이 모드는 팀킬, 티밍, 약한 저격, 약한 친목으로 제재되지 않습니다.)
 
-인간 진영의 경우 [ALT]키를 눌러 다른 플레이어에게 주먹을 날릴 수 있습니다. (데미지: 12.05)
+인간 진영의 경우 [ALT]키를 눌러 다른 플레이어에게 주먹을 날릴 수 있습니다. (데미지: 25)
 SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 있게 되지만 몇몇 SCP는 특수한 규칙을 따릅니다.
 - <color=red>SCP-173</color> 순간이동: SCP에게 순간이동할 때, 해당 SCP를 쳐다보고 있어야 목을 꺾을 수 있습니다.
 - <color=red>SCP-173</color> 공격: 쳐다보고 있지 않을 때, [ALT]키를 눌러 죽일 수 있습니다.
@@ -38,9 +38,10 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
 
         public static FriendlyFire Instance;
 
-        List<Player> HumanMeleeCooldown = new List<Player>();
+        public const float Meleedamage = 25f;
+        List<Player> HumanMeleeCooldown = new();
         int Scp106AttackTeamCoolDown = 0;
-        List<Player> Scp106Stacks = new List<Player>();
+        List<Player> Scp106Stacks = new();
 
         private CoroutineHandle _onModeStarted;
         private CoroutineHandle _autoWarhead;
@@ -133,19 +134,19 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
                             switch (pos)
                             {
                                 case "Head":
-                                    return 24.1f;
+                                    return Meleedamage * 2f;
 
                                 case "Chest":
-                                    return 14f;
+                                    return Meleedamage;
 
                                 default:
-                                    return 12.5f;
+                                    return Meleedamage * 0.7f;
                             }
                         }
 
                         float damage = damageCalcu(hit.Value.transform.name);
 
-                        ev.Player.ShowHitMarker(damage / 14);
+                        ev.Player.ShowHitMarker(damage / Meleedamage);
                         player.Hit(ev.Player, damage);
                         ev.Player.Grab();
 
