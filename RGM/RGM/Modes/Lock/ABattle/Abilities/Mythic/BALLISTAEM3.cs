@@ -12,7 +12,7 @@ namespace RGM.Modes.Abilities.Mythic;
 
 [Ability(
     "발리스타 MP3",
-    "10초마다 탄약이 하나 추가되고, 90% 확률로 능력을 삭제하며, 벽을 관통하고, 1300 데미지를 입히는 입자 분열기를 받습니다. 투시 능력을 얻습니다. (사거리 75)\n능력 삭제 시도에 실패하거나 능력이 없는 대상을 공격 시, 최종 데미지가 150% 증가합니다.",
+    "10초마다 탄약이 하나 추가되고, 90% 확률로 능력을 삭제하며, 벽을 관통하고, 1300 데미지를 입히는 입자 분열기를 받습니다.\n투시 능력을 얻습니다. (사거리 75)\n능력 삭제 시도에 실패하거나 능력이 없는 대상을 공격 시, 최종 데미지가 150% 증가합니다.",
     AbilityCategory.Mythic,
     AbilityType.MYTHIC_BALLISTAEM3)]
 public class BALLISTAEM3 : Ability

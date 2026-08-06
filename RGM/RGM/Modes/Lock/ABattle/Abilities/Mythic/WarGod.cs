@@ -42,7 +42,7 @@ public class WarGod : Ability
         {
             if (_lightWarriorCooldown <= 0)
             {
-                _lightWarriorCooldown = 3;
+                _lightWarriorCooldown = 1;
 
                 if (HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
                 {
@@ -57,7 +57,7 @@ public class WarGod : Ability
                     g.SpawnActive(ev.Attacker.Position, ev.Attacker);
                 }
 
-                Timing.CallDelayed(3f, () =>
+                Timing.CallDelayed(1f, () =>
                 {
                     _lightWarriorCooldown = 0;
                 });
