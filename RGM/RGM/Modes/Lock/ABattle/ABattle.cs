@@ -449,7 +449,9 @@ public class ABattle : Mode
     }
 
     // 플레이어에게 특정 능력을 부여
-    public void AddAbility(Player player, AbilityType type)
+    // reflectorChain: LEGEND_REFLECTOR로 인한 연쇄 횟수 (최대 3회)
+    // allowReflector: false면 반사경 연쇄를 건너뜀 (복제 등)
+    public void AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true)
     {
         if (player == null) return;
         
@@ -480,10 +482,11 @@ public class ABattle : Mode
                 Tools.PlayGlobalAudio(name, 2.5f);
         }
 
-        if (player.HasAbility(AbilityType.LEGEND_REFLECTOR))
+        // LEGEND_REFLECTOR: 50% 확률로 동일 능력 추가 획득. 동일 능력 연쇄는 최대 3회까지.
+        if (allowReflector && reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR))
         {
-            if (Random.Range(1, 101) <= 33)
-                player.AddAbility(type);
+            if (Random.Range(1, 101) <= 50)
+                AddAbility(player, type, reflectorChain + 1, allowReflector);
         }
 
         Log.Info("AddAbility called with " + player.Nickname + " and " + type);
@@ -804,7 +807,7 @@ public class ABattle : Mode
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONFAILURE);
         }
 
-        if (abilities.Distinct().Count() == 1 && abilities.Count() > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
+        if (abilities.Distinct().Count() == 1 && abilities.Count > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
         {
             player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
 
