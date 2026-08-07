@@ -73,7 +73,7 @@ namespace RGM.Variables
         {
             "BarotraumaWinterhalter3",
             "City17v3",
-            // "DeathInAir4",
+            "DeathInAir4",
             "NoMercyCP1v1",
             "Airship",
             "Lighthouse1",
@@ -84,7 +84,7 @@ namespace RGM.Variables
             "Airplane6",
             "OperationHarvest",
             "OperationNightFlight",
-            //"China",
+            "China",
             "CityPlusCITY",
             "Castle",
             "FNAF2"

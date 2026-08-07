@@ -11,7 +11,8 @@ public class Replication : Ability
     {
         foreach (var ability in Owner.GetAbilities().Where(a => a.Data.AbilityType != AbilityType.LEGEND_REPLICATION).ToList())
         {
-            Owner.AddAbility(ability.Data.AbilityType);
+            // 복제로 지급되는 능력에는 반사경 연쇄가 발동되지 않음
+            ABattle.Instance.AddAbility(Owner, ability.Data.AbilityType, allowReflector: false);
         }
     }
 }
