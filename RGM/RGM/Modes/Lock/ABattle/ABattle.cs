@@ -16,7 +16,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using CustomPlayerEffects;
-using Exiled.API.Enums;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Mirror;
