@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Reflection.Emit;
 using Exiled.API.Features;
 using HarmonyLib;
+using PlayerRoles.Spectating;
 using Respawning;
 using Respawning.Waves;
 using UnityEngine;
@@ -16,19 +16,21 @@ namespace RGM.Patches;
 /// 2) Primary Wave Respawn Time = Random.Range(min, max) (라운드 시작 시 MTF/CHAOS 공통, 이후 개별)
 /// 3) 지원 인원 1명당 지원 시간 +3초 (기존 +10초)
 /// 4) MiniWave는 지원 인원당 시간 증가 없음
-/// 5) MiniWave 대기시간 고정
+/// 5) MiniWave 대기시간/가용시간 고정
 /// </summary>
 public static class WaveTimerPatch
 {
     private const float PrimarySecondsPerSpawn = 3f;
     private const float MiniWaveSecondsPerSpawn = 0f;
     private const float MiniWaveSpawnInterval = 100f;
+    private const float MiniWaveAvailabilityDuration = 100f;
     private const int PrimaryIntervalMin = 205;
     private const int PrimaryIntervalMax = 255;
 
     private static bool _useSharedPrimaryInterval = true;
     private static float _sharedPrimaryInterval;
     private static int _sharedPrimaryIntervalFrame = -1;
+    private static bool _miniWaveSpawnHooked;
 
     public static void Apply(Harmony harmony)
     {
@@ -43,27 +45,24 @@ public static class WaveTimerPatch
                 AccessTools.PropertySetter(typeof(RespawnTokensManager), nameof(RespawnTokensManager.AvailableRespawnsLeft)),
                 prefix: new HarmonyMethod(typeof(WaveTimerPatch), nameof(AvailableRespawnsLeftSetPrefix)));
 
-            foreach (Type miniWaveType in new[]
-                     {
-                         typeof(MiniWaveBase<NtfSpawnWave, ChaosMiniWave>),
-                         typeof(MiniWaveBase<ChaosSpawnWave, NtfMiniWave>)
-                     })
+            // MiniWaveBase`2 메서드는 closed generic끼리 MethodHandle을 공유하므로 한 번만 패치합니다.
+            MethodInfo miniInterval = AccessTools.DeclaredMethod(
+                typeof(MiniWaveBase<NtfSpawnWave, ChaosMiniWave>),
+                "get_InitialSpawnInterval");
+            if (miniInterval != null)
             {
-                MethodInfo miniInterval = AccessTools.DeclaredMethod(miniWaveType, "get_InitialSpawnInterval");
-                if (miniInterval != null)
-                {
-                    harmony.Patch(
-                        miniInterval,
-                        postfix: new HarmonyMethod(typeof(WaveTimerPatch), nameof(MiniWaveInitialSpawnIntervalPostfix)));
-                }
+                harmony.Patch(
+                    miniInterval,
+                    postfix: new HarmonyMethod(typeof(WaveTimerPatch), nameof(MiniWaveInitialSpawnIntervalPostfix)));
+            }
 
-                MethodInfo miniOnAnyWaveSpawned = AccessTools.DeclaredMethod(miniWaveType, nameof(SpawnableWaveBase.OnAnyWaveSpawned));
-                if (miniOnAnyWaveSpawned != null)
-                {
-                    harmony.Patch(
-                        miniOnAnyWaveSpawned,
-                        transpiler: new HarmonyMethod(typeof(WaveTimerPatch), nameof(MiniWaveAvailabilityTranspiler)));
-                }
+            // 제네릭 OnAnyWaveSpawned transpiler는 isinst TMainWave를 깨뜨려
+            // 영향력 초기화/_mainWaveSpawned 갱신이 실패할 수 있으므로 사용하지 않습니다.
+            // 대신 WaveManager 이벤트로 가용시간·영향력 캐시를 확정합니다.
+            if (!_miniWaveSpawnHooked)
+            {
+                WaveManager.OnWaveSpawned += OnWaveSpawnedSyncMiniWave;
+                _miniWaveSpawnHooked = true;
             }
 
             ApplyWaveFieldOverrides();
@@ -186,16 +185,49 @@ public static class WaveTimerPatch
         __result = MiniWaveSpawnInterval;
     }
 
-    public static IEnumerable<CodeInstruction> MiniWaveAvailabilityTranspiler(IEnumerable<CodeInstruction> instructions)
+    /// <summary>
+    /// 정규 지원 스폰 후 MiniWave 영향력 윈도우/캐시를 확정합니다.
+    /// (상대 Mini 해제 OnUpdate가 _mainWaveSpawned·_availabilityTimer에 의존)
+    /// </summary>
+    private static void OnWaveSpawnedSyncMiniWave(SpawnableWaveBase wave, List<ReferenceHub> _)
     {
-        foreach (CodeInstruction instruction in instructions)
+        try
         {
-            if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand is float value && Mathf.Approximately(value, 150f))
-            {
-                instruction.operand = MiniWaveSpawnInterval;
-            }
-
-            yield return instruction;
+            SyncMiniWaveAfterPrimary<NtfMiniWave, NtfSpawnWave, ChaosMiniWave>(wave);
+            SyncMiniWaveAfterPrimary<ChaosMiniWave, ChaosSpawnWave, NtfMiniWave>(wave);
         }
+        catch (Exception e)
+        {
+            Log.Error($"[WaveTimerPatch] OnWaveSpawnedSyncMiniWave Exception: {e}");
+        }
+    }
+
+    private static void SyncMiniWaveAfterPrimary<TMini, TMain, TCounter>(SpawnableWaveBase wave)
+        where TMini : MiniWaveBase<TMain, TCounter>
+        where TMain : SpawnableWaveBase
+        where TCounter : SpawnableWaveBase
+    {
+        if (wave is not TMain)
+            return;
+
+        if (!WaveManager.TryGet(out TMini mini) || mini.Timer == null)
+            return;
+
+        int readySpectators = 0;
+        foreach (ReferenceHub hub in ReferenceHub.AllHubs)
+        {
+            if (hub.roleManager.CurrentRole is SpectatorRole spectatorRole && spectatorRole.ReadyToRespawn)
+                readySpectators++;
+        }
+
+        float spectatorBonus = MiniWaveBase<TMain, TCounter>.InfluencePerSpectator * readySpectators;
+
+        mini._mainWaveSpawned = true;
+        mini._waveFailedObjective = false;
+        mini._availabilityTimer = Time.time + MiniWaveAvailabilityDuration;
+        mini._cachedInfluenceCount = FactionInfluenceManager.Get(mini.TargetFaction) - spectatorBonus;
+
+        mini.Timer.DefaultSpawnInterval = MiniWaveSpawnInterval;
+        mini.Timer.Reset();
     }
 }
