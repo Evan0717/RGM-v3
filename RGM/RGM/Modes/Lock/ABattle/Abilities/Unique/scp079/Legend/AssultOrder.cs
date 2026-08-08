@@ -12,7 +12,7 @@ public class AssultOrder : Ability
     {
         foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079)) {
             scp.AddAbility(AbilityType.EPIC_RAMBO);
-            scp.AddAbility(AbilityType.EPIC_BULLSEYE);
+            scp.AddAbility(AbilityType.RARE_BULLSEYE);
             for (int i = 0; i < 5; i++) {
                 scp.AddAbility(AbilityType.NORMAL_TRAINING);
             }

@@ -284,6 +284,9 @@ public enum AbilityType
     NORMAL_EXCHANGE, // [일반] 교환
     NORMAL_RABBIT, // [일반] 토끼뜀
     NORMAL_RANDOMCANDY, // [일반] 트릭 오어 트릿
+    NORMAL_SHELL, // [일반] 껍데기
+    NORMAL_CLOAK, // [일반] 망토
+    NORMAL_NIGHTOWL, // [일반] 밤눈
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -306,7 +309,6 @@ public enum AbilityType
     RARE_GNOME, // [희귀] 흙의 정령, 노움
     RARE_SYLPH, // [희귀] 바람의 정령, 실프
     RARE_CONTRACT, // [희귀] 계약
-    RARE_AMBUSH, // [희귀] 매복자
     RARE_TRANSITION, // [희귀] 하급 변이
     RARE_UPGRADE, // [희귀] 강화
     RARE_DND, // [희귀] 자리 비움
@@ -316,6 +318,8 @@ public enum AbilityType
     RARE_CANDYBAG, // [희귀] 사탕 봉지
     RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
     RARE_FINALEXAM, // [희귀] 기말고사
+    RARE_BULLSEYE, // [희귀] 불스아이
+    RARE_HYPERBODY, // [희귀] 하이퍼 바디
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -344,12 +348,12 @@ public enum AbilityType
     EPIC_SCP1509, // [영웅] 마체테
     EPIC_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
-    EPIC_BULLSEYE, // [영웅] 불스아이
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSTC, // [영웅] 대학수학능력시험
     EPIC_HOLYPROTECTION, // [영웅] 신성방어
-    EPIC_AN94, // // [영웅] AN-94
+    EPIC_AN94, // [영웅] AN-94
+    EPIC_SHARPEYES, // [영웅] 샤프 아이즈
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -367,7 +371,6 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
-    LEGEND_SOLDIER76, // [전설] 솔져: 76
     LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
     LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
     LEGEND_SCP457, // [전설] SCP-457, 불타는 남자
@@ -379,6 +382,7 @@ public enum AbilityType
     LEGEND_REPLICATION, // [전설] 복제
     LEGEND_CLEARCACHE, // [전설] 캐시 청소
     LEGEND_REINCARNATION, // [전설] 리인카네이션
+    LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -396,6 +400,7 @@ public enum AbilityType
     MYTHIC_HAMMER, // [신화] 철퇴
     MYTHIC_UNLIMITED, // [신화] 무제한
     MYTHIC_ANCHOR, //[신화] 구속
+    MYTHIC_SOLDIER76, // [신화] 솔져: 76
 
 
     // 전용 //
@@ -483,6 +488,7 @@ public enum AbilityType
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
     NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
     //NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    NORMAL_SCP079_WORKOUTORDER, // [전용 일반] 운동 명령
 
     //RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
@@ -559,6 +565,7 @@ public enum AbilityType
     SYNERGY_BOMBPARTY, // [시너지] 폭탄 파티
     SYNERGY_BLACKMARKET, // [시너지] 암시장
     SYNERGY_COMMANDER, // [시너지] 지휘관
+    SYNERGY_WEAKPOINTATTACK // [시너지] 약점 공격
 }
 
 public static class AbilityTypeExtensions

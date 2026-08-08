@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("행운", "3% 확률로 잠긴 문 또는 락커를 열 수 있습니다.", AbilityCategory.Common, AbilityType.NORMAL_LUCKY)]
+[Ability("행운", "5%p 확률로 잠긴 문 또는 락커를 열 수 있습니다.", AbilityCategory.Common, AbilityType.NORMAL_LUCKY)]
 public class Lucky : Ability
 {
     public override void OnEnabled()
@@ -42,7 +42,7 @@ public class Lucky : Ability
             return;
         }
 
-        if (Random.Range(1, 101) <= 3)
+        if (Random.Range(1, 101) <= 5)
         {
             ev.IsAllowed = false;
 
@@ -55,7 +55,7 @@ public class Lucky : Ability
         if (ev.Player != Owner)
             return;
 
-        if (Random.Range(1, 101) <= 3)
+        if (Random.Range(1, 101) <= 5)
         {
             ev.IsAllowed = false;
 
@@ -68,7 +68,7 @@ public class Lucky : Ability
         if (ev.Player != Owner)
             return;
 
-        if (Random.Range(1, 101) <= 3)
+        if (Random.Range(1, 101) <= 5)
         {
             ev.IsAllowed = false;
             ev.Generator.IsOpen = false;
@@ -80,7 +80,7 @@ public class Lucky : Ability
         if (ev.Player != Owner)
             return;
 
-        if (Random.Range(1, 101) <= 3)
+        if (Random.Range(1, 101) <= 5)
         {
             ev.IsAllowed = false;
             ev.Generator.IsOpen = true;

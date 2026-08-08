@@ -13,6 +13,7 @@ using ProjectMER.Features;
 using RGM.API.DataBases;
 using RGM.API.Features;
 using RGM.API.Interfaces;
+using RGM.Modes.Abilities.Synergy;
 using RGM.Modes.SubClass;
 using System;
 using System.Collections.Generic;
@@ -785,7 +786,8 @@ namespace RGM.EventArgs
 
             if (GodModePlayers.Contains(ev.Player))
             {
-                if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+                if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) &&
+                    !WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
                     ev.IsAllowed = false;
             }
             else if (ev.Attacker != null && !ev.Attacker.IsNonePlayer())
@@ -820,10 +822,11 @@ namespace RGM.EventArgs
             {
                 if (GodModePlayers.Contains(ev.Player))
                 {
-                    if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+                    if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) &&
+                        !WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
                         ev.IsAllowed = false;
 
-                    else
+                    else if (Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
                     {
                         GodModePlayers.Remove(ev.Player);
                         ev.Player.Kill(ev.DamageHandler);

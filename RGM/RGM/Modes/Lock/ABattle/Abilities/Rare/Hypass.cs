@@ -3,6 +3,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Warhead;
 using MEC;
+using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Rare;
 
@@ -64,7 +65,8 @@ public class Hypass : Ability
 
     private void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player != Owner || !_isActive || IsExemptDamage(ev.DamageHandler.Type))
+        if (ev.Player != Owner || !_isActive || IsExemptDamage(ev.DamageHandler.Type) ||
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
         ev.IsAllowed = false;
@@ -74,6 +76,7 @@ public class Hypass : Ability
     {
         if (_isActive &&
             ev.Player == Owner &&
+            !WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker) &&
             (!IsExemptDamage(ev.DamageHandler.Type) ||
              ev.DamageHandler.Type == DamageType.PocketDimension && !ev.IsInstantKill))
             ev.IsAllowed = false;
@@ -81,7 +84,7 @@ public class Hypass : Ability
 
     private void OnScp106Attacking(AttackingEventArgs ev)
     {
-        if (ev.Target != Owner || !_isActive)
+        if (ev.Target != Owner || !_isActive || WeakPointAttack.ShouldIgnoreDefenses(ev.Player))
             return;
 
         ev.IsAllowed = false;

@@ -7,7 +7,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("조커", "사망할 시 부활하며 5초 무적, 최대 체력 3~6배, 상대방의 능력 1개를 삭제하며,\n전설 이상 등급 능력 4개를 얻습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_JOKER)]
+[Ability("조커", "사망할 시 부활하며 5초 무적, 최대 체력 3~6배, 상대방의 능력 1개를 삭제하며,\n전설(15% 확률로 신화) 능력 4개를 얻습니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_JOKER)]
 public class Joker : Ability
 {
     public override void OnEnabled()

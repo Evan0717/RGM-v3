@@ -4,7 +4,7 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("단련", "공격력이 15% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
+[Ability("단련", "공격력이 15%p 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_TRAINING)]
 public class Training : Ability
 {
     private readonly List<RoleTypeId> _ignoredRoles =

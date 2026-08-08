@@ -28,7 +28,9 @@ namespace RGM.API.Features
             EffectType.NightVision,
             EffectType.FogControl,
             EffectType.PitDeath,
-            EffectType.Decontaminating
+            EffectType.Decontaminating,
+            EffectType.InsufficientLighting,
+            EffectType.SoundtrackMute
         ];
 
         public static bool IsKeptBuff(EffectType effectType) => KeptBuffs.Contains(effectType);
