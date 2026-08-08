@@ -12,7 +12,7 @@ using UserSettings.ServerSpecific;
 
 namespace RGM.Modes;
 
-[Mode(ModeCategory.Private, ModeInfo.Lock, ModeType.EchoBattle)]
+[Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.EchoBattle)]
 public class EchoBattle : Mode
 {
     public override string Name => "에코 전투";
@@ -71,6 +71,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
             Exiled.Events.Handlers.Player.Kicking += OnKicking;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
+        EchoStats.RegisterHsSkillGuards();
         EchoQuest.Register();
         ExclusiveWeaponQuest.Register();
         EchoSetting.Init();
@@ -95,6 +96,7 @@ Echo는 메인 1개 + 부가 4개까지 장착할 수 있습니다. (합산 Cost
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
         ServerSpecificSettingsSync.ServerOnSettingValueReceived -= EchoSetting.OnSSInput;
+        EchoStats.UnregisterHsSkillGuards();
         EchoQuest.Unregister();
         ExclusiveWeaponQuest.Unregister();
 
