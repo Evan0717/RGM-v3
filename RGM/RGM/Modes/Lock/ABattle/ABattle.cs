@@ -12,14 +12,16 @@ using RGM.Modes.Commands;
 using RGM.Modes.Lock.ABattle;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups;
+using Mirror;
+using NetworkManagerUtils.Dummies;
+using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
 using UnityEngine;
 using UserSettings.ServerSpecific;
 using static RGM.Variables.Variable;
@@ -212,9 +214,9 @@ public class ABattle : Mode
 
         void ActivateExtraModeForChaos()
         {
-            var chaos = new CoroutineHandle();
             var mutex = new Mutex();
-            chaos = Timing.RunCoroutine(Chaos());
+            
+            Timing.RunCoroutine(Chaos());
             Tools.TryInstallMode(ModeType.FriendlyFire);
             return;
 
@@ -224,7 +226,7 @@ public class ABattle : Mode
                 const float chaosStopTime = 30f;
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
-                    Tools.MessageTranslated("10 . 9 . 8 . 7 . 6 . 5 . 4 . 3 . 2 . 1",
+                    Tools.MessageTranslated(".G6 .G6 .G6",
                         "10초 후 무언가가 일어납니다.");
                     if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
@@ -236,31 +238,10 @@ public class ABattle : Mode
             {
                 if (!mutex.WaitOne(1000)) yield break;
                 var rand = new System.Random(Exiled.API.Features.Map.Seed);
-
-                if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
-                PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
-                PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
-                    .ToList()
-                    .ForEach(x
-                        => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
+                // -----------------------------------------------------------------------------------------------
                 
-                if (/*Mathf.Clamp01((float)rand.NextDouble()) >= .8f*/true)
-                {
-                    var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
-                    AddAbility(player, GetRandomAbilities(player, AbilityCategory.Legend, 5).GetRandomValue());
-                    Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
-                        $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 20%의 확률로 <b><color={AbilityCategory.Legend.GetColor()}>전설</color></b> 능력을 획득하였습니다!");
-                }
-
-                if (/*Mathf.Clamp01((float)rand.NextDouble()) >= .7f*/true)
-                {
-                    var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
-                    AddAbility(player, GetRandomAbilities(player, AbilityCategory.Mythic, 5).GetRandomValue());
-                    Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
-                        $"<b>플레이어 <color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 30%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
-                }
-
-                if (true/*Mathf.Clamp01((float)rand.NextDouble()) >= .2f*/)
+                List<Player> complete = [];
+                if (NextRandom() >= 5)
                     for (int i = 0; i < 3; i++)
                     {
                         List<string> musicList =
@@ -271,59 +252,123 @@ public class ABattle : Mode
                         ];
 
                         List<string> delayBomb =
-                        [
-                            "짬뽕-1"
-                        ];
+                            ["짬뽕-1"];
 
                         var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
-                        if (player.IsDead || player.IsHost)
-                        {
-                            i--;
-                            continue;
-                        }
+                        if (player.IsDead || player.IsHost || complete.Contains(player)) continue;
                         var text = musicList.GetRandomValue();
-                        bomb.FuseTime = 0f;
-                        MakeRadio(player, text);
-                        
+                        bomb.FuseTime = 0.1f;
+
+                        complete.Add(player);
+
                         if (!delayBomb.Contains(text))
                         {
+                            MakeRadio(player, text);
                             bomb.SpawnActive(player.Position);
-                            player.Kill(DamageType.Explosion);
+                            if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
+                                    AbilityType.EPIC_SURVIVOR or
+                                    AbilityType.EPIC_MADSCIENTIST or
+                                    AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
+                            bomb.ScpDamageMultiplier = 2.5f;
+                            player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
                             continue;
                         }
 
-                        Timing.CallDelayed(2f, () =>
-                        {
-                            bomb.SpawnActive(player.Position);
-                            player.Kill(DamageType.Explosion);
-                        });
-                        
+                        MakeRadio(player, text);
+                        Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
+                    }
+                // -----------------------------------------------------------------------------------------------
+                for (var a = 0; a < 5; a++)
+                {
+                    if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
+                    PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
+                    PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
+                        .ToList()
+                        .ForEach(x
+                            => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
+
+                    
+
+
+                    if (NextRandom() >= 99 && !(Warhead.IsInProgress || Warhead.IsDetonated))
+                    {
+                        Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
+                            $"<b><color={AbilityCategory.Mythic.GetColor()}>1%의 확률로 인해 핵이 점화됩니다</color></b>");
+                        DeadmanSwitch.StartWarhead();
+
+                        continue;
                     }
 
-                mutex.ReleaseMutex();
-            }
+                    if (NextRandom() >= 70)
+                    {
+                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                        AddAbility(player, GetRandomAbilities(player, AbilityCategory.Epic, 5).GetRandomValue());
+                        Tools.MessageTranslated(".G2 .G2",
+                            $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 30%의 확률로 <b><color={AbilityCategory.Epic.GetColor()}>영웅</color></b> 능력을 획득하였습니다!");
 
+                        continue;
+                    }
+                    
+                    if (NextRandom() >= 1972) {}
+                    
+
+                    if (NextRandom() >= 95)
+                    {
+                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                        AddAbility(player, GetRandomAbilities(player, AbilityCategory.Legend, 5).GetRandomValue());
+                        Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
+                            $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 5%의 확률로 <b><color={AbilityCategory.Legend.GetColor()}>전설</color></b> 능력을 획득하였습니다!");
+
+                        continue;
+                    }
+
+                    if (NextRandom() >= 97)
+                    {
+                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                        AddAbility(player, GetRandomAbilities(player, AbilityCategory.Mythic, 5).GetRandomValue());
+                        Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
+                            $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 3%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
+                    }
+                }
+                mutex.ReleaseMutex();
+                yield break;
+                // -----------------------------------------------------------------------------------------------
+
+                float NextRandom() => rand.Next(1, 101);
+            }
             void MakeRadio(Player player, string arg)
             {
-                var item = Pickup.CreateAndSpawn(ItemType.KeycardJanitor, player.Position);
+                if (player == null) return;
+                var dummy = DummyUtils.SpawnDummy("영사기");
                 
-                AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}",  condition: hub
+                dummy.roleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.None);
+                dummy.playerEffectsController.EnableEffect<SpawnProtected>();
+                dummy.ServerSetEmotionPreset(EmotionPresetType.AwkwardSmile);
+                dummy.transform.position = player.Position;
+                Timing.RunCoroutine(Teleporter(player));
+                
+                var radio = AudioPlayer.CreateOrGet("AudioPlayer", condition: hub
                     => !MuteBGMPlayers.Contains(Player.Get(hub)), onIntialCreation: p =>
                 {
-                    Speaker speaker = p.AddSpeaker("Main", 1.5f ,isSpatial: true, minDistance: 1f, maxDistance: 50f);
+                    Speaker speaker = p.AddSpeaker("Main", 1.5f, isSpatial: true,  minDistance: 1f, maxDistance: 50f);
+                    p.transform.parent = dummy.gameObject.transform;
+                    speaker.transform.parent = dummy.gameObject.transform;
                     speaker.transform.localPosition = Vector3.zero;
-                    p.transform.parent = item.Base.gameObject.transform;
-                    speaker.transform.parent = item.Base.gameObject.transform;
                 });
+                
+                
+                Timing.CallDelayed(radio.TryPlay(arg, 1.5f).Duration.Seconds + 1, ()
+                    => NetworkServer.Destroy(dummy.gameObject));
 
-                string audioDir = Paths.Plugins + "/audio/";
-                string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
-                string clipName = audioFiles.GetRandomValue().Replace(".ogg", "").Replace(audioDir, "");
-
-                if (radio.TryPlay(arg, 0.5f) != null) return;
-                radio.TryPlay(clipName, 0.5f);
-                Timing.CallDelayed(5f, item.Destroy);
+                IEnumerator<float> Teleporter(Player pl)
+                {
+                    while (pl != null && !pl.IsDead)
+                    {
+                        dummy.transform.position = pl.Position;
+                        yield return Timing.WaitForOneFrame;
+                    }
+                }
             }
         }
     }
