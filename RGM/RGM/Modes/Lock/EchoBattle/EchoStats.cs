@@ -2,10 +2,13 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp049;
+using Exiled.Events.EventArgs.Scp096;
 using Exiled.Events.EventArgs.Scp173;
 using InventorySystem.Items.Firearms.Modules;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.PlayableScps.HumeShield;
 using PlayerStatsSystem;
 using RGM.API.Features;
 using System;
@@ -45,10 +48,32 @@ public static class EchoStats
     static readonly System.Random SubOptionRandom = new();
     static readonly object SubOptionRandomLock = new();
     static readonly HashSet<Player> FixedDamageTargets = new();
+    static readonly Dictionary<Player, PendingScp173HsFix> PendingScp173HsFixes = new();
     const float Scp173BaseBlinkCooldown = 3f;
     const float Scp173MinimumBlinkCooldown = 1f;
     const float Scp173MaximumMoveSpeed = 100f;
     const float Scp173BlinkCooldownReductionPerMoveSpeed = 0.014f;
+
+    /// <summary>바닐라 SCP-049 Good Sense 대상 소생 HS 보상. <c>Scp049ResurrectAbility.ResurrectTargetReward</c></summary>
+    const float Scp049SenseResurrectHsReward = 200f;
+    /// <summary>바닐라 SCP-173 Tantrum 처치 HS 보상.</summary>
+    const float Scp173TantrumHsReward = 400f;
+    const float Scp173TantrumFlamingoHsReward = 100f;
+    const float HsClampMatchTolerance = 1f;
+
+    readonly struct PendingScp173HsFix
+    {
+        public readonly float SavedHs;
+        public readonly float ProviderMax;
+        public readonly float Reward;
+
+        public PendingScp173HsFix(float savedHs, float providerMax, float reward)
+        {
+            SavedHs = savedHs;
+            ProviderMax = providerMax;
+            Reward = reward;
+        }
+    }
 
     static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
@@ -92,7 +117,7 @@ public static class EchoStats
             (EchoCost.Cost4, EchoMainStatType.HpPercent) => LerpStat(13.6f, 68.0f, level),
             (EchoCost.Cost4, EchoMainStatType.Defense) => LerpStat(5.0f, 25.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalChance) => LerpStat(4.4f, 22.0f, level),
-            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(6.0f, 30.0f, level),
+            (EchoCost.Cost4, EchoMainStatType.MoveSpeedAndJump) => LerpStat(4.0f, 20.0f, level),
             (EchoCost.Cost4, EchoMainStatType.StaminaDrainReduction) => LerpStat(12.0f, 60.0f, level),
             (EchoCost.Cost4, EchoMainStatType.CriticalDamage) => LerpStat(8.8f, 44.0f, level),
 
@@ -508,6 +533,29 @@ public static class EchoStats
         }
     }
 
+    /// <summary>
+    /// 바닐라 SCP 스킬이 <see cref="HumeShieldModuleBase.HsMax"/>로 현재 HS를 클램프하는 것을
+    /// Echo <c>AhpRegenAndMax</c> 최대치 기준으로 보정합니다.
+    /// </summary>
+    public static void RegisterHsSkillGuards()
+    {
+        Exiled.Events.Handlers.Scp049.FinishingRecall += OnScp049FinishingRecallHsGuard;
+        Exiled.Events.Handlers.Scp096.Enraging += OnScp096EnragingHsGuard;
+        Exiled.Events.Handlers.Scp096.CalmingDown += OnScp096CalmingDownHsGuard;
+        Exiled.Events.Handlers.Player.Dying += OnDyingScp173HsGuard;
+        Exiled.Events.Handlers.Player.Died += OnDiedScp173HsGuard;
+    }
+
+    public static void UnregisterHsSkillGuards()
+    {
+        Exiled.Events.Handlers.Scp049.FinishingRecall -= OnScp049FinishingRecallHsGuard;
+        Exiled.Events.Handlers.Scp096.Enraging -= OnScp096EnragingHsGuard;
+        Exiled.Events.Handlers.Scp096.CalmingDown -= OnScp096CalmingDownHsGuard;
+        Exiled.Events.Handlers.Player.Dying -= OnDyingScp173HsGuard;
+        Exiled.Events.Handlers.Player.Died -= OnDiedScp173HsGuard;
+        PendingScp173HsFixes.Clear();
+    }
+
     public static void ClearPassiveEffects(Player player)
     {
         if (player == null)
@@ -515,6 +563,7 @@ public static class EchoStats
 
         Timing.KillCoroutines($"EchoRegen_{player.UserId}");
         Timing.KillCoroutines($"EchoStamina_{player.UserId}");
+        PendingScp173HsFixes.Remove(player);
 
         if (!EchoInfo.PlayerPassiveEffects.TryGetValue(player, out var prev))
             return;
@@ -583,6 +632,9 @@ public static class EchoStats
             echoAhpAmount = peeked;
         }
 
+        // Clear/HP 재계산 전에 현재 HS를 보존 (바닐라 모듈 HsMax 클램프와 별개로 재적용 손실 방지)
+        float? preservedHs = player.IsScp ? player.HumeShield : null;
+
         ClearPassiveEffects(player);
 
         // HP: 역할 기본 MaxHealth 기준으로만 계산 (레벨업 재적용 시 복리 방지)
@@ -646,7 +698,8 @@ public static class EchoStats
 
             float targetHsMax = baseHs + snapshot.HsMax;
             player.MaxHumeShield = targetHsMax;
-            player.HumeShield = Math.Min(player.HumeShield, player.MaxHumeShield);
+            float currentHs = preservedHs ?? player.HumeShield;
+            player.HumeShield = Math.Min(currentHs, player.MaxHumeShield);
         }
         else if (snapshot.AhpMax > 0)
         {
@@ -672,6 +725,129 @@ public static class EchoStats
             return;
 
         ev.BlinkCooldown = GetScp173BlinkCooldown(snapshot.MoveSpeed);
+    }
+
+    static bool HasEchoHsBonus(Player player)
+    {
+        return player != null
+               && EchoInfo.PlayerStats.TryGetValue(player, out var stats)
+               && stats.HsMax > 0f;
+    }
+
+    static bool TryGetProviderHsMax(Player player, out float providerMax)
+    {
+        providerMax = 0f;
+        if (player?.ReferenceHub?.roleManager?.CurrentRole is not IHumeShieldedRole { HumeShieldModule: { } module })
+            return false;
+
+        providerMax = module.HsMax;
+        return true;
+    }
+
+    /// <summary>
+    /// 바닐라가 provider HsMax로 클램프한 HS 보상을 Echo MaxHumeShield 기준으로 다시 적용합니다.
+    /// </summary>
+    static void RestoreHsRewardAgainstEchoMax(Player player, float savedHs, float providerMax, float reward)
+    {
+        if (player == null || !player.IsAlive || !HasEchoHsBonus(player))
+            return;
+
+        float expectedVanilla = Mathf.Min(savedHs + reward, providerMax);
+        if (Mathf.Abs(player.HumeShield - expectedVanilla) > HsClampMatchTolerance)
+            return;
+
+        player.HumeShield = Mathf.Min(savedHs + reward, player.MaxHumeShield);
+    }
+
+    /// <summary>
+    /// SCP-096 분노 전환 시 바닐라가 provider HsMax로 현재 HS를 잘라내는 것을 복구합니다.
+    /// </summary>
+    static void RestoreHsAfterProviderClamp(Player player, float savedHs, float providerMax)
+    {
+        if (player == null || !player.IsAlive || !HasEchoHsBonus(player))
+            return;
+
+        float expectedVanilla = Mathf.Min(savedHs, providerMax);
+        if (Mathf.Abs(player.HumeShield - expectedVanilla) > HsClampMatchTolerance)
+            return;
+
+        player.HumeShield = Mathf.Min(savedHs, player.MaxHumeShield);
+    }
+
+    static void ScheduleHsRestore(Player player, float savedHs, float providerMax, float reward)
+    {
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            RestoreHsRewardAgainstEchoMax(player, savedHs, providerMax, reward));
+    }
+
+    static void ScheduleHsClampRestore(Player player, float savedHs, float providerMax)
+    {
+        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            RestoreHsAfterProviderClamp(player, savedHs, providerMax));
+    }
+
+    static void OnScp049FinishingRecallHsGuard(FinishingRecallEventArgs ev)
+    {
+        // Good Sense 대상 소생 시: HsCurrent = Min(current + 200, HumeShieldModule.HsMax)
+        // Echo 최대치가 모듈 기본값보다 크면 현재 HS가 역할 초기 최대치로 잘린다.
+        if (ev?.Player == null || !ev.IsAllowed || !HasEchoHsBonus(ev.Player))
+            return;
+        if (!TryGetProviderHsMax(ev.Player, out float providerMax))
+            return;
+
+        ScheduleHsRestore(ev.Player, ev.Player.HumeShield, providerMax, Scp049SenseResurrectHsReward);
+    }
+
+    static void OnScp096EnragingHsGuard(EnragingEventArgs ev)
+    {
+        if (ev?.Player == null || !ev.IsAllowed || !HasEchoHsBonus(ev.Player))
+            return;
+        if (!TryGetProviderHsMax(ev.Player, out float providerMax))
+            return;
+
+        ScheduleHsClampRestore(ev.Player, ev.Player.HumeShield, providerMax);
+    }
+
+    static void OnScp096CalmingDownHsGuard(CalmingDownEventArgs ev)
+    {
+        if (ev?.Player == null || !ev.IsAllowed || !HasEchoHsBonus(ev.Player))
+            return;
+        if (!TryGetProviderHsMax(ev.Player, out float providerMax))
+            return;
+
+        ScheduleHsClampRestore(ev.Player, ev.Player.HumeShield, providerMax);
+    }
+
+    static void OnDyingScp173HsGuard(DyingEventArgs ev)
+    {
+        // Tantrum(Stained) 처치 보상도 provider HsMax로 클램프된다.
+        var attacker = ev?.Attacker;
+        if (attacker == null
+            || attacker.Role.Type != RoleTypeId.Scp173
+            || !HasEchoHsBonus(attacker)
+            || !TryGetProviderHsMax(attacker, out float providerMax))
+            return;
+
+        if (ev.Player == null
+            || !ev.Player.TryGetEffect(EffectType.Stained, out var stained)
+            || !stained.IsEnabled)
+            return;
+
+        float reward = ev.Player.Role.Type.IsFlamingo()
+            ? Scp173TantrumFlamingoHsReward
+            : Scp173TantrumHsReward;
+
+        PendingScp173HsFixes[attacker] = new PendingScp173HsFix(attacker.HumeShield, providerMax, reward);
+    }
+
+    static void OnDiedScp173HsGuard(DiedEventArgs ev)
+    {
+        var attacker = ev?.Attacker;
+        if (attacker == null || !PendingScp173HsFixes.TryGetValue(attacker, out var pending))
+            return;
+
+        PendingScp173HsFixes.Remove(attacker);
+        ScheduleHsRestore(attacker, pending.SavedHs, pending.ProviderMax, pending.Reward);
     }
 
     /// <summary>
