@@ -412,6 +412,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Tutorial\ThirdForce.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Tutorial\Tongue.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Ability.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\AbilityInformation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\CASSIE.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\GetExtraModeDescription.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\Select.cs" />
