@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Exiled.API.Extensions;
-using Exiled.API.Features.Items;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Tutorial;
@@ -10,7 +9,7 @@ public class Researcher : Ability
 {
     public override void OnEnabled()
     {
-        Item SCPItem = Owner.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).ToList().GetRandomValue());
+        Owner.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).ToList().GetRandomValue());
     }
 
     public override void OnDisabled()
