@@ -51,7 +51,7 @@ public class Spirit : Ability
                 }
             }
 
-            yield return Timing.WaitForSeconds(2f);
+            yield return Timing.WaitForOneFrame;
         }
     }
 
