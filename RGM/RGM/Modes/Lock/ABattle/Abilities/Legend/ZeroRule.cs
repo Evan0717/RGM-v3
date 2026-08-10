@@ -16,9 +16,14 @@ public class ZeroRule : Ability
 {
     const float FixedDamage = 618.03f;
 
+    static HurtingEventArgs _ignoreDefensesEvent;
+
     static readonly FieldInfo PenetrationField = typeof(FirearmDamageHandler).GetField(
         nameof(FirearmDamageHandler._penetration),
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+    public static bool ShouldIgnoreDefenses(HurtingEventArgs ev) =>
+        ev != null && ReferenceEquals(_ignoreDefensesEvent, ev);
     
     public override void OnEnabled()
     {
@@ -39,6 +44,8 @@ public class ZeroRule : Ability
 
         if (Random.Range(1, 101) > 15)
             return;
+
+        _ignoreDefensesEvent = ev;
 
         HitboxType hitbox = ev.DamageHandler.Base is StandardDamageHandler standard
             ? standard.Hitbox
