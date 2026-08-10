@@ -16,7 +16,7 @@ public class Claymore : Ability
 {
     private ushort _claymoreCoinSerial;
     private CoroutineHandle _handle;
-    private static int excludeMask = ~((1 << 8) | (1 << 2));
+    private static int excludeMask = ~((1 << 8) | (1 << 2)) & LayerMask.GetMask("Door", "Default");
     private static float distance = 5f;
     private static float ForwardRange = 7f;
     private static float BackwardRange = 2f;
@@ -46,7 +46,7 @@ public class Claymore : Ability
             return;
         
 
-        if (!Tools.TryGetLookPoint(ev.Player, distance, Tools.SurfaceType.Floor, out Vector3 point,
+        if (!Tools.TryGetLookFirstPoint(ev.Player, distance, Tools.SurfaceType.Floor, out Vector3 point,
                 layerMask: excludeMask))
         {
             ev.Player.AddHint("동전 사용 설명", "벽이나 가파른 경사에는 설치하실 수 없습니다.");
@@ -56,7 +56,11 @@ public class Claymore : Ability
         ev.Item.Destroy();
 
         SchematicObject claymore = ObjectSpawner.SpawnSchematic("Claymore", point, Quaternion.Euler(0, ev.Player.Rotation.eulerAngles.y, 0));
-        _handle = Timing.RunCoroutine(Corutine(point, claymore));
+        _handle = Timing.CallDelayed(5f, () => 
+        {
+            // n초 후에 이 블록 안의 코드가 실행됩니다.
+            _handle = Timing.RunCoroutine(Corutine(point, claymore));
+        });
     }
     //TODO: 중간에 Owner 가 나가는 체크 꼭 해줘야함
     private IEnumerator<float> Corutine(Vector3 position, SchematicObject schematic)
