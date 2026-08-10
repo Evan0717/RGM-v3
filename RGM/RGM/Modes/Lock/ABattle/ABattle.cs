@@ -80,6 +80,7 @@ public class ABattle : Mode
     public Dictionary<Player, bool> IsSelecting = new Dictionary<Player, bool>();
     public Dictionary<Player, int> SelectionCursor = new Dictionary<Player, int>();
     public Dictionary<Player, bool> IsLifeUsed = new Dictionary<Player, bool>();
+    private Mutex _chaosMutex = new();
 
     private ABattleEventHandler _eventHandler;
 
@@ -214,7 +215,7 @@ public class ABattle : Mode
 
         void ActivateExtraModeForChaos()
         {
-            var mutex = new Mutex();
+            
             
             Timing.RunCoroutine(Chaos());
             Tools.TryInstallMode(ModeType.FriendlyFire);
@@ -237,13 +238,13 @@ public class ABattle : Mode
             IEnumerator<float> ChaosMaker()
             {
                 const int nukeChance = 99;
-                const int mythicChance = 95;
-                const int legendaryChance = 90;
+                const int mythicChance = 97;
+                const int legendaryChance = 95;
                 const int epicChance = 75;
-                const int explodeChance = 50;
+                const int explodeChance = 80;
                 const int explodeCount = 5;
                 
-                if (!mutex.WaitOne(1000)) yield break;
+                if (!_chaosMutex.WaitOne(1000)) yield break;
                 var rand = new System.Random(Exiled.API.Features.Map.Seed);
                 // -----------------------------------------------------------------------------------------------
                 
@@ -337,7 +338,7 @@ public class ABattle : Mode
                             $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 3%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
                     }
                 }
-                mutex.ReleaseMutex();
+                _chaosMutex.ReleaseMutex();
                 yield break;
                 // -----------------------------------------------------------------------------------------------
 
