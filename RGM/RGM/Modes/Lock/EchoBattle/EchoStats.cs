@@ -211,7 +211,7 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(2f, 60f, level),
+            EchoCost.Cost4 => LerpStat(3f, 60f, level),
             EchoCost.Cost3 => LerpStat(50f, 250f, level),
             EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f
@@ -436,9 +436,9 @@ public static class EchoStats
             case EchoMainStatType.AhpRegenAndMax:
                 // Cost3 전용. regen value + max 테이블
                 snapshot.AhpRegen += value;
-                snapshot.AhpMax += LerpStat(25f, 300f, level);
-                snapshot.HsRegen += LerpStat(16f, 80f, level);
-                snapshot.HsMax += LerpStat(400f, 2000f, level);
+                snapshot.AhpMax += LerpStat(35f, 350f, level);
+                snapshot.HsRegen += LerpStat(15f, 75f, level);
+                snapshot.HsMax += LerpStat(360f, 1800f, level);
                 break;
             case EchoMainStatType.SizeReduction:
                 snapshot.SizeReduction += value;
@@ -454,7 +454,7 @@ public static class EchoStats
         {
             float hp = value;
             if (player.IsScp)
-                hp *= 12f;
+                hp *= 8f;
             snapshot.HpFlat += hp;
         }
         else if (cost == EchoCost.Cost3)
@@ -498,7 +498,7 @@ public static class EchoStats
                 snapshot.HpPercent += option.Value;
                 break;
             case EchoSubOptionType.HpFlat:
-                snapshot.HpFlat += player.IsScp ? option.Value * 12f : option.Value;
+                snapshot.HpFlat += player.IsScp ? option.Value * 8f : option.Value;
                 break;
             case EchoSubOptionType.CriticalChance:
                 snapshot.CriticalChance += option.Value;
