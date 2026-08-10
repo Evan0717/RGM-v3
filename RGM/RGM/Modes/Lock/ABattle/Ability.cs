@@ -320,6 +320,7 @@ public enum AbilityType
     RARE_FINALEXAM, // [희귀] 기말고사
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
+    RARE_CLAYMORE, // [희귀] Claymore
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
