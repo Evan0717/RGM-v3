@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using PlayerRoles;
 using PlayerRoles.PlayableScps;
 using ProjectMER.Features;
 using ProjectMER.Features.Objects;
@@ -59,11 +60,11 @@ public class Claymore : Ability
         _handle = Timing.CallDelayed(5f, () => 
         {
             // n초 후에 이 블록 안의 코드가 실행됩니다.
-            _handle = Timing.RunCoroutine(Corutine(point, claymore));
+            _handle = Timing.RunCoroutine(Corutine(point, claymore, ev.Player.ReferenceHub.GetTeam()));
         });
     }
     //TODO: 중간에 Owner 가 나가는 체크 꼭 해줘야함
-    private IEnumerator<float> Corutine(Vector3 position, SchematicObject schematic)
+    private IEnumerator<float> Corutine(Vector3 position, SchematicObject schematic, Team team)
     {
         Vector3 forward = schematic.transform.forward;
         float maxRange = Mathf.Max(ForwardRange, BackwardRange);
@@ -72,7 +73,7 @@ public class Claymore : Ability
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, position) <= maxRange))
             {
-                if (player == Owner || !HitboxIdentity.IsEnemy(Owner.ReferenceHub, player.ReferenceHub))
+                if (player == Owner || !HitboxIdentity.IsEnemy(team, player.ReferenceHub.GetTeam()))
                     continue;
 
                 Vector3 offset = player.Position - position;
