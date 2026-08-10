@@ -11,25 +11,26 @@ namespace RGM.Modes;
 
 /// <summary>
 /// 반복 가능 내부 Quest.
-/// 1) 30초 생존 → 60 XP
-/// 2) SCP 아이템 획득 → 400 XP
-/// 3) 적 1명 처치 → 200 XP
-/// 4) SCP로 적 1회 타격 → 50 XP
+/// 1) 30초 생존 → 40 XP
+/// 2) SCP 아이템 획득 → 600 XP
+/// 3) 적 1명 처치 → 무장 100 XP / 탈출 병력 40 XP
+/// 4) SCP로 적 1회 타격 → 60 XP
 /// 5) SCP 격리(049-2 제외) → 4000 XP
 /// 6) SCP-049-2 처치 → 400 XP
-/// 7) D계급/과학자 시설 탈출(무장 해제 상태 포함) → 3000 XP
+/// 7) D계급/과학자 시설 탈출(무장 해제 상태 포함) → 4000 XP
 /// 적 플레이어에게 가하거나 받은 피해량은 별도 퀘스트 없이 동일한 양의 XP로 즉시 지급합니다.
 /// </summary>
 public static class EchoQuest
 {
     public const int SurviveSeconds = 30;
-    public const int SurviveReward = 50;
-    public const int ScpItemReward = 400;
-    public const int KillEnemyReward = 100;
-    public const int ScpHitReward = 50;
+    public const int SurviveReward = 40;
+    public const int ScpItemReward = 600;
+    public const int KillArmedEnemyReward = 100;
+    public const int KillEscapeEnemyReward = 40;
+    public const int ScpHitReward = 60;
     public const int ContainScpReward = 4000;
     public const int KillScp0492Reward = 400;
-    public const int HumanEscapeReward = 3000;
+    public const int HumanEscapeReward = 4000;
 
     enum QuestSide
     {
@@ -265,7 +266,7 @@ public static class EchoQuest
             || !IsEnemyRole(ev.Attacker.Role.Type, ev.TargetOldRole))
             return;
 
-        GrantQuestReward(ev.Attacker, KillEnemyReward, "적 1명 처치");
+        GrantQuestReward(ev.Attacker, GetKillEnemyReward(ev.TargetOldRole), "적 1명 처치");
 
         if (!CanProgressQuests(ev.Attacker, QuestSide.Human))
             return;
@@ -278,6 +279,19 @@ public static class EchoQuest
         {
             GrantQuestReward(ev.Attacker, ContainScpReward, "SCP 격리");
         }
+    }
+
+    /// <summary>
+    /// 무장 병력(Guard / MTF / Chaos) 및 Tutorial → 100 XP,
+    /// 탈출 병력(ClassD / Scientist) → 40 XP.
+    /// </summary>
+    static int GetKillEnemyReward(RoleTypeId targetRole)
+    {
+        return targetRole switch
+        {
+            RoleTypeId.ClassD or RoleTypeId.Scientist => KillEscapeEnemyReward,
+            _ => KillArmedEnemyReward
+        };
     }
 
     static void OnEscaping(EscapingEventArgs ev)

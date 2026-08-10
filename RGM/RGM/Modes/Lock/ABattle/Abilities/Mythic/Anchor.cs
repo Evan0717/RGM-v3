@@ -145,7 +145,7 @@ public class Anchor : Ability
                 player.EnableEffect(EffectType.Lightweight, 1, 0.5f);
                 player.AddHint("알림", $"{Owner.DisplayNickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.1f);
             }
-             yield return Timing.WaitForSeconds(0.034f);
+            yield return Timing.WaitForSeconds(0.034f);
         }
     }
 
@@ -159,7 +159,11 @@ public class Anchor : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || ev.Attacker == ev.Player) return;
+        if (ev.Attacker == null ||
+            ev.Attacker != Owner ||
+            ev.Attacker.CurrentItem == null ||
+            ev.Attacker.CurrentItem.Serial != itemSerial) return;
+
         if (ev.Attacker == Owner && Owner.CurrentItem.Serial == itemSerial)
             ev.IsAllowed = false;
 

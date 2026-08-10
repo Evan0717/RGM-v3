@@ -22,6 +22,6 @@ public class Minic : Ability
             return;
 
         if (ev.DamageHandler.Type == DamageType.Strangled)
-            ev.DamageHandler.Damage = ev.Attacker.MaxHealth;
+            ev.DamageHandler.Damage *= 77.7f;
     }
 }

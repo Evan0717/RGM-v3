@@ -28,6 +28,12 @@ public class KingsColor : Ability
         Exiled.Events.Handlers.Player.Died -= OnDied;
 
         Timing.KillCoroutines(king);
+
+        if (lightSource != null)
+        {
+            lightSource.Destroy();
+            lightSource = null;
+        }
     }
 
     public IEnumerator<float> kingsColor()
@@ -39,26 +45,30 @@ public class KingsColor : Ability
 
         while (Owner.IsAlive)
         {
-            foreach (var player in PlayerManager.List)
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != Owner))
             {
-                if (Tools.TryGetLookPlayer(player, 90f, out Player target, out RaycastHit? hit))
-                {
-                    if (Owner == target && HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub))
-                    {
-                        lightSource.Position = Owner.Position;
+                if (!Tools.TryGetLookPlayer(player, 90f, out Player target, out RaycastHit? hit))
+                    continue;
 
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
-                        player.EnableEffect(EffectType.Slowness, 80, 1f);
-                        player.CurrentItem = null;
-                        player.Hit(Owner, target.IsScpRole() ? 10 + target.MaxHealth * 0.04f : 20 + target.MaxHealth * 0.16f);
-                    }
-                }
+                if (Owner != target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub))
+                    continue;
+
+                lightSource.Position = Owner.Position;
+
+                Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
+                player.EnableEffect(EffectType.Slowness, 80, 1f);
+                player.CurrentItem = null;
+                player.Hit(Owner, target.IsScpRole() ? 10 + target.MaxHealth * 0.04f : 20 + target.MaxHealth * 0.16f);
             }
 
             yield return Timing.WaitForOneFrame;
         }
 
-        lightSource.Destroy();
+        if (lightSource != null)
+        {
+            lightSource.Destroy();
+            lightSource = null;
+        }
     }
 
     public void OnDied(DiedEventArgs ev)
@@ -72,25 +82,37 @@ public class KingsColor : Ability
         {
             case 5:
             {
-                Tools.PlayGlobalAudio("시산혈해 (屍山血海)", 2.5f);
-
-                Owner.RankName = "시산혈해 (屍山血海)";
-                Owner.RankColor = "red";
-
-                foreach (var player in PlayerManager.List.Where(x => Owner.LeadingTeam != x.LeadingTeam))
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
-                    player.EnableEffect(EffectType.SinkHole, 1, 3);
-                    player.EnableEffect(EffectType.Blinded, 1, 3);
-                }
+                    if (Owner == null || !Owner.IsAlive)
+                        return;
+
+                    Tools.PlayGlobalAudio("시산혈해 (屍山血海)", 2.5f);
+
+                    Owner.RankName = "시산혈해 (屍山血海)";
+                    Owner.RankColor = "red";
+
+                    foreach (var player in PlayerManager.List.Where(x => x.IsAlive && Owner.LeadingTeam != x.LeadingTeam))
+                    {
+                        player.EnableEffect(EffectType.SinkHole, 1, 3);
+                        player.EnableEffect(EffectType.Blinded, 1, 3);
+                    }
+                });
 
                 break;
             }
             case 30:
             {
-                foreach (var player in PlayerManager.List.Where(x => x != Owner))
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
-                    player.Kill("패기에 의해 공중분해 되었습니다");
-                }
+                    if (Owner == null || !Owner.IsAlive)
+                        return;
+
+                    foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != Owner))
+                    {
+                        player.Kill("패기에 의해 공중분해 되었습니다");
+                    }
+                });
 
                 break;
             }
