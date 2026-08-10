@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Scp049;
+using Scp106AttackingEventArgs = Exiled.Events.EventArgs.Scp106.AttackingEventArgs;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -35,13 +36,24 @@ public class Anchor : Ability
         Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         Exiled.Events.Handlers.Scp049.Attacking += On049Attack;
+        Exiled.Events.Handlers.Scp106.Attacking += On106Attack;
         Exiled.Events.Handlers.Player.Handcuffing += OnArrest;
+        Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
         
         Timing.RunCoroutine(Main());
     }
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
+        Exiled.Events.Handlers.Player.Shooting -= OnShooting;
+        Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+        Exiled.Events.Handlers.Scp049.Attacking -= On049Attack;
+        Exiled.Events.Handlers.Scp106.Attacking -= On106Attack;
+        Exiled.Events.Handlers.Player.Handcuffing -= OnArrest;
+        Exiled.Events.Handlers.Player.ThrowingRequest -= OnThrowingRequest;
+
         Timing.RunCoroutine(Disable());
     }
 
@@ -57,6 +69,12 @@ public class Anchor : Ability
 
     private void OnShooting(ShootingEventArgs ev)
     {
+        if (IsCapturedTarget(ev.Player))
+        {
+            ev.IsAllowed = false;
+            return;
+        }
+
         if (ev.Player != Owner) return;
         if (ev.Player.CurrentItem.Serial != itemSerial) return;
         if (ev.Item.Serial != itemSerial) return;
@@ -143,6 +161,7 @@ public class Anchor : Ability
                 player.EnableEffect(EffectType.Fade, 179, 0.5f); //시야 방해 방지
                 player.EnableEffect(EffectType.Ensnared, 1, 2f);
                 player.EnableEffect(EffectType.Lightweight, 1, 0.5f);
+                player.CurrentItem = null;
                 player.AddHint("알림", $"{Owner.DisplayNickname}에게 붙잡혔습니다.\n다른 플레이어를 공격 할 수 없습니다.", 0.1f);
             }
             yield return Timing.WaitForSeconds(0.034f);
@@ -159,30 +178,50 @@ public class Anchor : Ability
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null ||
-            ev.Attacker != Owner ||
-            ev.Attacker.CurrentItem == null ||
-            ev.Attacker.CurrentItem.Serial != itemSerial) return;
+        if (ev.Attacker == null) return;
 
-        if (ev.Attacker == Owner && Owner.CurrentItem.Serial == itemSerial)
-            ev.IsAllowed = false;
-
-        if (TargetPlayer.Contains(ev.Attacker))
+        // 구속 리볼버 자체 피해 무효
+        if (ev.Attacker == Owner &&
+            ev.Attacker.CurrentItem != null &&
+            ev.Attacker.CurrentItem.Serial == itemSerial)
         {
             ev.IsAllowed = false;
+            return;
         }
+
+        // 구속된 대상의 모든 피해(총기/SCP 근접 등) 차단
+        if (IsCapturedTarget(ev.Attacker))
+            ev.IsAllowed = false;
     }
 
     public void On049Attack(AttackingEventArgs ev)
     {
         if (ev.Player == null) return;
-        if (TargetPlayer.Contains(ev.Player)) ev.IsAllowed = false;
+        if (IsCapturedTarget(ev.Player)) ev.IsAllowed = false;
+    }
+
+    public void On106Attack(Scp106AttackingEventArgs ev)
+    {
+        if (ev.Player == null) return;
+        if (IsCapturedTarget(ev.Player)) ev.IsAllowed = false;
     }
 
     public void OnArrest(HandcuffingEventArgs ev)
     {
         if (ev.Target == null || ev.Player == null) return;
         if (ev.Target == Owner) ev.IsAllowed = false;
+        if (IsCapturedTarget(ev.Player)) ev.IsAllowed = false;
+    }
+
+    public void OnThrowingRequest(ThrowingRequestEventArgs ev)
+    {
+        if (IsCapturedTarget(ev.Player))
+            ev.RequestType = ThrowRequest.CancelThrow;
+    }
+
+    private bool IsCapturedTarget(Player player)
+    {
+        return player != null && TargetPlayer.Contains(player);
     }
 
     public IEnumerator<float> Disable()
@@ -204,4 +243,3 @@ public class Anchor : Ability
         yield break;
     }
 }
-
