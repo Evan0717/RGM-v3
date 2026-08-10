@@ -7,7 +7,7 @@ namespace RGM.Modes;
 
 /// <summary>
 /// Echo 성장 XP 공식.
-/// 1→2 기준: Cost4=150, Cost3=100, Cost1=70
+/// 1→2 기준: Cost4=180, Cost3=130, Cost1=100
 /// 이후: y = ceil(1.085x + 25)
 /// </summary>
 public static class EchoGrowth
@@ -25,10 +25,10 @@ public static class EchoGrowth
     {
         return cost switch
         {
-            EchoCost.Cost4 => 160,
-            EchoCost.Cost3 => 110,
-            EchoCost.Cost1 => 80,
-            _ => 80
+            EchoCost.Cost4 => 180,
+            EchoCost.Cost3 => 130,
+            EchoCost.Cost1 => 100,
+            _ => 100
         };
     }
 

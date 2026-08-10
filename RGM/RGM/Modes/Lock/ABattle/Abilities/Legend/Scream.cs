@@ -10,17 +10,32 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("괴성", "적을 보고 있을 때 마이크를 키면 모든 적군을 일정 시간동안 행동 불가 상태로 만들고, 무장을 해제합니다. (쿨타임 60초)\n이후 영향을 받은 대상에게 30초간 출혈 효과를 부여합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
+[Ability("괴성", "적을 보고 있을 때 마이크를 키면 모든 적군을 일정 시간동안 행동 불가 상태로 만들고, 무장을 해제한 뒤 15초간 아이템을 들지 못하게 합니다. (쿨타임 60초)\n이후 영향을 받은 대상에게 30초간 출혈 효과를 부여합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
 public class GmanRoaringSound : Ability
 {
     private const int RoaringSoundCooldownDuration = 60;
+    private const float DisarmDuration = 15f;
     private int _roaringSoundCooldown;
+    private readonly HashSet<Player> _disarmedPlayers = new();
 
     public override void OnEnabled()
-        => Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+    {
+        Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+        Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
+    }
 
-    public override void OnDisabled() 
-        => Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+    public override void OnDisabled()
+    {
+        Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+        Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
+        _disarmedPlayers.Clear();
+    }
+
+    private void OnChangingItem(ChangingItemEventArgs ev)
+    {
+        if (_disarmedPlayers.Contains(ev.Player))
+            ev.IsAllowed = false;
+    }
 
     public IEnumerator<float> OnVoiceChatting(VoiceChattingEventArgs ev)
     {
@@ -38,6 +53,8 @@ public class GmanRoaringSound : Ability
 
         Tools.PlayGlobalAudio("GmanRoaringSound");
 
+        _disarmedPlayers.Clear();
+
         foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub) && x.IsAlive))
         {
             player.EnableEffect(EffectType.Ensnared, 1, 1.5f);
@@ -51,8 +68,11 @@ public class GmanRoaringSound : Ability
             player.EnableEffect(EffectType.AmnesiaItems, 1, 15f);
             player.EnableEffect(EffectType.Bleeding, 1, 30f);
 
-            player.DropItems();
+            player.CurrentItem = null;
+            _disarmedPlayers.Add(player);
         }
+
+        Timing.CallDelayed(DisarmDuration, () => _disarmedPlayers.Clear());
 
         yield return Timing.WaitForSeconds(0.65f);
 

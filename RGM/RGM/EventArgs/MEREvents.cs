@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using MEC;
 using ProjectMER.Events.Arguments;
+using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -51,6 +52,14 @@ namespace RGM.EventArgs
                     }
 
                     Timing.RunCoroutine(work());
+                }
+            }
+
+            if (ev.Schematic.Name == "VirtualWorld")
+            {
+                foreach (var player in PlayerManager.List)
+                {
+                    player.EnableEffect(EffectType.Lightweight, 1);
                 }
             }
         }

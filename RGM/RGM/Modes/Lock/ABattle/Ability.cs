@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
@@ -320,6 +320,7 @@ public enum AbilityType
     RARE_FINALEXAM, // [희귀] 기말고사
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
+    RARE_CLAYMORE, // [희귀] Claymore
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -354,6 +355,7 @@ public enum AbilityType
     EPIC_HOLYPROTECTION, // [영웅] 신성방어
     EPIC_AN94, // [영웅] AN-94
     EPIC_SHARPEYES, // [영웅] 샤프 아이즈
+    EPIC_TURTLE, // [영웅] 거북 도사
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
@@ -378,7 +380,6 @@ public enum AbilityType
     LEGEND_SCP999, // [전설] SCP-999, 간지럼 괴물
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
-    LEGEND_TURTLE, // [전설] 거북 도사
     LEGEND_REPLICATION, // [전설] 복제
     LEGEND_CLEARCACHE, // [전설] 캐시 청소
     LEGEND_REINCARNATION, // [전설] 리인카네이션

@@ -128,7 +128,8 @@ public class ABattle : Mode
         new SelectFourth(),
         new SelectFifth(),
         new GetExtraMode(),
-        new CASSIE()
+        new CASSIE(),
+        new AbilityInformation()
     ];
     
     public static readonly List<ICommand> RemoteAdminCommands =
@@ -616,6 +617,12 @@ public class ABattle : Mode
 
             player.SendConsoleMessage("\n" + extraMode, "white");
         }
+    }
+
+    public string GetAbilityInformation(AbilityType ability)
+    {
+        string message = $"{Abilities[ability].GetFormattedName()}: {Abilities[ability].Description}";
+        return message;
     }
 
     // 플레이어에게 특정 능력을 부여

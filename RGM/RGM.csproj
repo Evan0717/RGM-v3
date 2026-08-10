@@ -191,6 +191,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SuperStar.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Survivor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\TerroristRemains.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Turtle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\OtherworldLight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyPower.cs" />
@@ -215,7 +216,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scream.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SpeedWagon.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Turtle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\ZeroRule.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Anchor.cs" />
@@ -272,6 +272,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BomberMan.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BullsEye.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\CandyBag.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Claymore.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Clone.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Contract.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Dnd.cs" />
@@ -412,6 +413,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Tutorial\ThirdForce.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Tutorial\Tongue.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Ability.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\AbilityInformation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\CASSIE.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\GetExtraModeDescription.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Commands\ClientCommands\Select.cs" />

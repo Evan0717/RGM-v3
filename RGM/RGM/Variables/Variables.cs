@@ -87,7 +87,8 @@ namespace RGM.Variables
             "China",
             "CityPlusCITY",
             "Castle",
-            "FNAF2"
+            "FNAF2",
+            // "VirtualWorld"
         };
         public static List<string> Specials = new()
         {

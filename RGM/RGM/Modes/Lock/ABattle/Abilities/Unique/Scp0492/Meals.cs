@@ -5,7 +5,8 @@ public class Meals : Ability
 {
     public override void OnEnabled()
     {
-        Owner.MaxHealth += Owner.MaxHealth * 0.5f;
+        Owner.MaxHealth *= 1.5f;
+        Owner.Health *= 1.5f;
     }
 
     public override void OnDisabled()

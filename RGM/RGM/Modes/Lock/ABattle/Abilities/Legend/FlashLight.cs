@@ -45,7 +45,7 @@ public class FlashLight : Ability
                 if (!player.TryGetLookPlayer(45, out var target, out _)) continue;
                 if (player == target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
                 Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                target.AddEffect(EffectType.Flashed, 1, 1f, true);
+                target.EnableEffect(EffectType.Flashed, 1, 1.5f);
             }
 
             yield return Timing.WaitForOneFrame;
