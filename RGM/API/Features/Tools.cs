@@ -559,7 +559,7 @@ $"""
             if (hitCount == 0) return false;
 
             // 거리가 가까운 순서대로 정렬
-            System.Array.Sort(hits, 0, hitCount, System.Collections.Comparer.Default);
+            System.Array.Sort(hits, 0, hitCount, System.Collections.Generic.Comparer<RaycastHit>.Create((a, b) => a.distance.CompareTo(b.distance)));
 
             for (int i = 0; i < hitCount; i++)
             {
