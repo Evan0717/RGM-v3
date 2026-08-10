@@ -546,6 +546,48 @@ $"""
             return false;
         }
 
+        public static bool TryGetLookFirstPoint(Player player, float distance, SurfaceType type, out Vector3 point, float floorNormalThreshold = 0.7f, int layerMask = ~0) 
+        {
+            point = Vector3.zero;
+            Vector3 forward = player.CameraTransform.forward;
+            Vector3 origin = player.CameraTransform.position + forward * 0.2f;
+
+            // 최대 5개의 충돌체를 감지 (적당히 넉넉하게 설정)
+            RaycastHit[] hits = new RaycastHit[5];
+            int hitCount = Physics.RaycastNonAlloc(origin, forward, hits, distance, layerMask);
+
+            if (hitCount == 0) return false;
+
+            // 거리가 가까운 순서대로 정렬
+            System.Array.Sort(hits, 0, hitCount, System.Collections.Generic.Comparer<RaycastHit>.Create((a, b) => a.distance.CompareTo(b.distance)));
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                RaycastHit hit = hits[i];
+
+                // 충돌한 오브젝트가 플레이어 본인이거나 그 하위 오브젝트라면 패스
+                if (hit.transform.IsChildOf(player.GameObject.transform) || hit.transform == player.GameObject.transform)
+                    continue;
+
+                // 본인이 아닌 첫 번째 충돌체를 찾았으므로 기존 로직 수행
+                bool isFloor = hit.normal.y >= floorNormalThreshold;
+                bool isWall = !isFloor && Mathf.Abs(hit.normal.y) < floorNormalThreshold;
+
+                if ((isFloor && type.HasFlag(SurfaceType.Floor)) || (isWall && type.HasFlag(SurfaceType.Wall))) 
+                {
+                    point = hit.point;
+                    return true;
+                }
+        
+                // 만약 본인이 아닌 첫 충돌체가 지정한 SurfaceType(예: 바닥)이 아니라면 
+                // 뒤에 있는 오브젝트를 투과하지 않고 바로 실패 처리해야 하므로 break
+                break;
+            }
+
+            return false;
+        }
+
+
         /// <summary>
         /// 특정 위치에서 바라보는 방향으로 Nm만큼 이동한 점를 구합니다.
         /// </summary>
