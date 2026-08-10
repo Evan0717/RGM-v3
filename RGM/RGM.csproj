@@ -191,6 +191,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SuperStar.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Survivor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\TerroristRemains.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Turtle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\OtherworldLight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyAddict.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\CandyPower.cs" />
@@ -215,7 +216,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scream.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SpeedWagon.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Turtle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\ZeroRule.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Anchor.cs" />
