@@ -236,49 +236,58 @@ public class ABattle : Mode
 
             IEnumerator<float> ChaosMaker()
             {
+                const int nukeChance = 99;
+                const int mythicChance = 95;
+                const int legendaryChance = 90;
+                const int epicChance = 75;
+                const int explodeChance = 50;
+                const int explodeCount = 5;
+                
                 if (!mutex.WaitOne(1000)) yield break;
                 var rand = new System.Random(Exiled.API.Features.Map.Seed);
                 // -----------------------------------------------------------------------------------------------
                 
                 List<Player> complete = [];
-                if (NextRandom() >= 5)
-                    for (int i = 0; i < 3; i++)
-                    {
-                        List<string> musicList =
-                        [
-                            "짬뽕-1",
-                            "폭8-2",
-                            "폭8-1"
-                        ];
-
-                        List<string> delayBomb =
-                            ["짬뽕-1"];
-
-                        var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
-                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
-                        if (player.IsDead || player.IsHost || complete.Contains(player)) continue;
-                        var text = musicList.GetRandomValue();
-                        bomb.FuseTime = 0.1f;
-
-                        complete.Add(player);
-
-                        if (!delayBomb.Contains(text))
+                    for (int i = 0; i < explodeCount; i++)
+                        Timing.CallDelayed(0.3f, () =>
                         {
-                            MakeRadio(player, text);
-                            bomb.SpawnActive(player.Position);
-                            if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
-                                    AbilityType.EPIC_SURVIVOR or
-                                    AbilityType.EPIC_MADSCIENTIST or
-                                    AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
-                            bomb.ScpDamageMultiplier = 2.5f;
-                            player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
-                            continue;
-                        }
+                            if (!(NextRandom() >= explodeChance)) return;
 
-                        MakeRadio(player, text);
-                        Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
-                    }
-                // -----------------------------------------------------------------------------------------------
+                            List<string> musicList =
+                            [
+                                "짬뽕-1",
+                                "폭8-2",
+                                "폭8-1"
+                            ];
+
+                            List<string> delayBomb =
+                                ["짬뽕-1"];
+
+                            var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                            var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                            if (player.IsDead || player.IsHost || complete.Contains(player)) return;
+                            var text = musicList.GetRandomValue();
+                            bomb.FuseTime = 0.1f;
+
+                            complete.Add(player);
+
+                            if (!delayBomb.Contains(text))
+                            {
+                                MakeRadio(player, text);
+                                bomb.SpawnActive(player.Position);
+                                if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
+                                        AbilityType.EPIC_SURVIVOR or
+                                        AbilityType.EPIC_MADSCIENTIST or
+                                        AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
+                                bomb.ScpDamageMultiplier = 2.5f;
+                                player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
+                                return;
+                            }
+
+                            MakeRadio(player, text);
+                            Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
+                        });
+                    // -----------------------------------------------------------------------------------------------
                 for (var a = 0; a < 5; a++)
                 {
                     if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
@@ -291,7 +300,7 @@ public class ABattle : Mode
                     
 
 
-                    if (NextRandom() >= 99 && !(Warhead.IsInProgress || Warhead.IsDetonated))
+                    if (NextRandom() >= nukeChance && !(Warhead.IsInProgress || Warhead.IsDetonated))
                     {
                         Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
                             $"<b><color={AbilityCategory.Mythic.GetColor()}>1%의 확률로 인해 핵이 점화됩니다</color></b>");
@@ -300,7 +309,7 @@ public class ABattle : Mode
                         continue;
                     }
 
-                    if (NextRandom() >= 70)
+                    if (NextRandom() >= epicChance)
                     {
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
                         AddAbility(player, GetRandomAbilities(player, AbilityCategory.Epic, 5).GetRandomValue());
@@ -310,10 +319,7 @@ public class ABattle : Mode
                         continue;
                     }
                     
-                    if (NextRandom() >= 1972) {}
-                    
-
-                    if (NextRandom() >= 95)
+                    if (NextRandom() >= legendaryChance)
                     {
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
                         AddAbility(player, GetRandomAbilities(player, AbilityCategory.Legend, 5).GetRandomValue());
@@ -323,7 +329,7 @@ public class ABattle : Mode
                         continue;
                     }
 
-                    if (NextRandom() >= 97)
+                    if (NextRandom() >= mythicChance)
                     {
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
                         AddAbility(player, GetRandomAbilities(player, AbilityCategory.Mythic, 5).GetRandomValue());
