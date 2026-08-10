@@ -309,16 +309,6 @@ namespace RGM.Variables
         [
             ModeType.Infection
         ];
-
-        public static readonly List<(Type, IEnumerable<DevClassAttribute>)> DevScannedTypes = [];
-        
-        public static readonly IEnumerable<Type> DevBlockedAttributes = 
-        [
-            typeof(ModeAttribute),
-            typeof(AbilityAttribute),
-        ];
-
-        public static readonly Dictionary<string, object> DevInstances = [];
         
         // -------------------------------------------------------------------------------------------------
 

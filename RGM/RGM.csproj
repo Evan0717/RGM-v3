@@ -64,7 +64,6 @@
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
-    <Compile Include="API\Features\DevManager.cs" />
     <Compile Include="API\Features\EffectManager.cs" />
     <Compile Include="API\Features\ServerManager.cs" />
     <Compile Include="API\Features\RoomReplacer.cs" />
