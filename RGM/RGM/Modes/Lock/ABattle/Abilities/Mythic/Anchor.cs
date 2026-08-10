@@ -57,13 +57,14 @@ public class Anchor : Ability
         Timing.RunCoroutine(Disable());
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item == null) return;
-        if (itemSerial != ev.Player.CurrentItem.Serial) return;
-        if (ev.Player != Owner) return;
-        if (itemSerial == ev.Item.Serial)
-                ev.Player.AddHint("구속", $"<b><color={ABattle.RatingColor["신화"]}>구속</color></b> 능력이 있는 <b>리볼버</b>입니다!");
+        if (ev.Player == null 
+            || ev.Player.IsNPC
+            || ev.Item == null
+            || itemSerial != ev.Player.CurrentItem.Serial
+            || itemSerial != ev.Item.Serial) return;
+        ev.Player.AddHint("구속", $"<b><color={ABattle.RatingColor["신화"]}>구속</color></b> 능력이 있는 <b>리볼버</b>입니다!");
         
     }
 
@@ -169,14 +170,16 @@ public class Anchor : Ability
     }
 
 
-    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
-        if (ev.Player == null) return;
-        if (ev.Player.CurrentItem.Serial != itemSerial) return;
+        if (ev.Player == null 
+            || ev.Player.IsNPC 
+            || ev.Player.CurrentItem == null 
+            || ev.Player.CurrentItem.Serial != itemSerial) return;
         Timing.RunCoroutine(Disable());
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null) return;
 
@@ -194,26 +197,26 @@ public class Anchor : Ability
             ev.IsAllowed = false;
     }
 
-    public void On049Attack(AttackingEventArgs ev)
+    private void On049Attack(AttackingEventArgs ev)
     {
         if (ev.Player == null) return;
         if (IsCapturedTarget(ev.Player)) ev.IsAllowed = false;
     }
 
-    public void On106Attack(Scp106AttackingEventArgs ev)
+    private void On106Attack(Scp106AttackingEventArgs ev)
     {
         if (ev.Player == null) return;
         if (IsCapturedTarget(ev.Player)) ev.IsAllowed = false;
     }
 
-    public void OnArrest(HandcuffingEventArgs ev)
+    private void OnArrest(HandcuffingEventArgs ev)
     {
         if (ev.Target == null || ev.Player == null) return;
         if (ev.Target == Owner) ev.IsAllowed = false;
         if (IsCapturedTarget(ev.Player)) ev.IsAllowed = false;
     }
 
-    public void OnThrowingRequest(ThrowingRequestEventArgs ev)
+    private void OnThrowingRequest(ThrowingRequestEventArgs ev)
     {
         if (IsCapturedTarget(ev.Player))
             ev.RequestType = ThrowRequest.CancelThrow;
@@ -224,7 +227,7 @@ public class Anchor : Ability
         return player != null && TargetPlayer.Contains(player);
     }
 
-    public IEnumerator<float> Disable()
+    private IEnumerator<float> Disable()
     {
         foreach (var player in TargetPlayer.ToList())
         {
