@@ -522,8 +522,42 @@ $"""
 
             return !Physics.Linecast(observerEyePos, position, visionMask);
         }
+        // 
+        public static bool TryGetLookPoint(Player player, float distance, SurfaceType type, out Vector3 point, float floorNormalThreshold = 0.7f, int layerMask = ~0)
+        {
+            point = Vector3.zero;
 
+            Vector3 forward = player.CameraTransform.forward;
+            Vector3 origin = player.CameraTransform.position + forward * 0.2f;
 
+            if (!Physics.Raycast(origin, forward, out RaycastHit hit, distance, layerMask))
+                return false;
+
+            bool isFloor = hit.normal.y >= floorNormalThreshold;
+            bool isWall = !isFloor && Mathf.Abs(hit.normal.y) < floorNormalThreshold;
+
+            if ((isFloor && type.HasFlag(SurfaceType.Floor)) ||
+                (isWall && type.HasFlag(SurfaceType.Wall)))
+            {
+                point = hit.point;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 특정 위치에서 바라보는 방향으로 Nm만큼 이동한 점를 구합니다.
+        /// </summary>
+        /// <param name="t">트랜스폼</param>
+        /// <param name="moveDistance">갈 거리</param>
+        /// <returns>이동한 위치</returns>
+        public static Vector3 GetPointForward(Transform t, float moveDistance)
+        {
+            return t.position + t.forward * moveDistance;
+        }
+        
+        
         public static bool TryInstallMode(ModeType ModeType)
         {
             var modeType = Type.GetType($"RGM.Modes.{ModeType}");
@@ -1091,6 +1125,14 @@ $"""
             }
 
             return sb.ToString();
+        }
+        [Flags]
+        public enum SurfaceType
+        {
+            None  = 0,
+            Floor = 1 << 0, // 1
+            Wall  = 1 << 1, // 2
+            Both  = Floor | Wall // 3
         }
     }
 }
