@@ -229,14 +229,11 @@ public class ABattle : Mode
                         "10초 후 무언가가 일어납니다.");
                     if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
-                    Timing.CallDelayed(waitTime, () =>
-                    {
-                        foreach (var dummy in PlayerManager.List.Where(x => x.IsNPC))
-                        {
-                            if (dummy.DisplayNickname == "영사기")
-                                NetworkServer.Destroy(dummy.GameObject);
-                        }
-                    });
+                    Timing.CallDelayed(waitTime, ()
+                        => PlayerManager.List
+                            .Where(x => x.IsNPC && x.DisplayNickname == "영사기")
+                            .ToList()
+                            .ForEach(x => NetworkServer.Destroy(x.GameObject)));
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
 
