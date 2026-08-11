@@ -141,6 +141,45 @@ namespace RGM.API.Features
             return GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.InstanceID).Where(t => t.name == Name).ToList();
         }
 
+        /// <summary>
+        /// Schematic Empty(Transform.name)와 YAML player_spawnpoints(MapEditorObject.Id) 모두에서 스폰 위치를 수집합니다.
+        /// exact: "Spot A" / prefix: "Spawn_ClassD" → Spawn_ClassD_1, Spawn_ClassD_2 ...
+        /// </summary>
+        public static List<Vector3> GetSpawnPositions(params string[] keys)
+        {
+            var positions = new List<Vector3>();
+            if (keys == null || keys.Length == 0)
+                return positions;
+
+            var transforms = GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.InstanceID);
+            foreach (var key in keys)
+            {
+                if (string.IsNullOrEmpty(key))
+                    continue;
+
+                foreach (var transform in transforms)
+                {
+                    // Schematic Empty: "Spot A", 복제본 "Spot A (1)", 다중 "Spawn_ClassD_1"
+                    if (transform.name == key ||
+                        transform.name.StartsWith(key + " (") ||
+                        transform.name.StartsWith(key + "_"))
+                        positions.Add(transform.position);
+                }
+
+                foreach (var map in MapUtils.LoadedMaps.Values)
+                {
+                    foreach (var obj in map.SpawnedObjects)
+                    {
+                        // YAML player_spawnpoints: Id == key 또는 Spawn_ClassD_1 형태
+                        if (obj.Id == key || obj.Id.StartsWith(key + "_"))
+                            positions.Add(obj.transform.position);
+                    }
+                }
+            }
+
+            return positions;
+        }
+
         public static List<string> GetModeDesc(ModeType ModeType, ModeType SubModeType)
         {
             string Color = ModeList[ModeType].Color;
