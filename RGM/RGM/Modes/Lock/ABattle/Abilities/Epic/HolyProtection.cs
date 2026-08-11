@@ -1,4 +1,3 @@
-using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -18,15 +17,9 @@ public class HolyProtection : Ability
     public void OnReceivingEffect(ReceivingEffectEventArgs ev)
     {
         if (ev.Player != Owner) return;
-
         var effectType = ev.Effect.GetEffectType();
 
         if (!EffectManager.IsKeptBuff(effectType))
-        {
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                ev.Player.DisableEffect(effectType);
-            });
-        }
+            Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Player.DisableEffect(effectType));
     }
 }

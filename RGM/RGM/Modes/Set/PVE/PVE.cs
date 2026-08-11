@@ -50,20 +50,57 @@ namespace RGM.Modes
             if (players.Count == 0 || roundHandler.SelectedDifficulty < 0)
                 return;
             
-            int[][] difficultyRewards =
+
+            int reward = -1;
+            reward = roundHandler.SelectedDifficulty switch
             {
-                [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6],
-                [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 12],
-                [1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 8, 9, 18]
-            };  
-            
-            int reward = difficultyRewards[roundHandler.SelectedDifficulty]
-                [roundHandler.AllWavesCleared ? roundHandler.CurrentWave : roundHandler.CurrentWave - 1];
+                0 => roundHandler.CurrentWave switch
+                {
+                    <= 4 => 1,
+                    <= 7 => 2,
+                    <= 10 => 3,
+                    <= 12 => 4,
+                    <= 14 => 5,
+                    15 => 6,
+                    _ => reward
+                },
+                1 => roundHandler.CurrentWave switch
+                {
+                  <= 2 => 1,
+                  <= 4 => 2,
+                  <= 6 => 3,
+                  <= 8 => 4,
+                  <= 10 => 5,
+                  11 => 6,
+                  12 => 7,
+                  <= 14 => 8,
+                  15 => 12,
+                  _ => reward
+                },
+                2 => roundHandler.CurrentWave switch
+                {
+                    <= 2 => 1,
+                    3 => 2,
+                    <= 5 => 3,
+                    6 => 4,
+                    <= 8 => 5,
+                    9 => 6,
+                    <= 11 => 7,
+                    <= 13 => 8,
+                    <= 15 => 9,
+                    16 => 18,
+                    _ => reward
+                },
+                _ => reward
+            };
+
             List<Player> wonplayers = players
                 .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report) 
                             && report.Damage >= 0)
                 .ToList();
 
+            reward -= roundHandler.AllWavesCleared ? 1 : 0;
+            reward = reward <= 0 ? 5 : reward;
             Timing.RunCoroutine(Tools.SetWinner(wonplayers, reward));
         }
     }

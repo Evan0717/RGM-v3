@@ -19,20 +19,14 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
         {
             Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
         }
-        
-        public void OnReceivingEffect(ReceivingEffectEventArgs ev)
+
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
         {
-            if (ev.Player != Owner) return;
+            if (ev.Player != Owner || ev.Player.CurrentRoom.Type == RoomType.Pocket) return;
             
             var effectType = ev.Effect.GetEffectType();
-
-            if (!EffectManager.IsKeptBuff(effectType))
-            {
-                Timing.CallDelayed(4f, () =>
-                {
-                    ev.Player.DisableEffect(effectType);
-                });
-            }
+            if (!EffectManager.IsKeptBuff(effectType)) 
+                Timing.CallDelayed(4f, () => ev.Player.DisableEffect(effectType));
         }
     }
 }

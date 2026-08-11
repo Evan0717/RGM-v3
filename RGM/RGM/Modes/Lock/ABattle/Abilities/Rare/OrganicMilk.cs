@@ -21,28 +21,20 @@ public class OrganicMilk : Ability
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item?.Serial != _coinSerial)
-            return;
-        
+        if (ev.Item?.Serial != _coinSerial) return;
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>유기농 우유</color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (_coinSerial == ev.Item.Serial && ev.Player.CurrentRoom.Type != RoomType.Pocket)
-        {
-            foreach (var effectType in Owner.ActiveEffects
-                         .Select(effect => effect.GetEffectType())
-                         .Where(effectType => !EffectManager.IsKeptBuff(effectType))
-                         .ToList())
-            {
-                Owner.DisableEffect(effectType);
-                ev.Player.DisableEffect(effectType);
-            }
+        if (_coinSerial != ev.Item.Serial || ev.Player.CurrentRoom.Type == RoomType.Pocket) return;
+        Owner.ActiveEffects
+            .Select(effect => effect.GetEffectType())
+            .Where(effectType => !EffectManager.IsKeptBuff(effectType)).ToList()
+            .ForEach(x => ev.Player.RemoveEffect(x, 255));
 
-            ev.Item.Destroy();
-        }
+        ev.Item.Destroy();
     }
 }

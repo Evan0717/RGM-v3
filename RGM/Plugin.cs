@@ -134,18 +134,14 @@ namespace RGM
                 // ------------------------------------------------------------------------------------------------------
 
                 SettingManager.Init();
-
-                // ------------------------------------------------------------------------------------------------------
-                
-                DevManager.Initialize();
                 
                 // ------------------------------------------------------------------------------------------------------
 
-                TranslationManager.ApiKey = Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "GoogleAPIKey.txt");
-                TranslationManager.IsEnabled = true;
-                TranslationManager.Debug = true;
-
-                TranslationManager.StartWorker();
+                // TranslationManager.ApiKey = Tools.ReadTextFile(Path.Combine(Paths.Configs, "RGM"), "GoogleAPIKey.txt");
+                // TranslationManager.IsEnabled = true;
+                // TranslationManager.Debug = true;
+                //
+                // TranslationManager.StartWorker();
 
                 // ------------------------------------------------------------------------------------------------------
 

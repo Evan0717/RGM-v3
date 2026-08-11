@@ -5,6 +5,7 @@ using MEC;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using PlayerRoles;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace RGM.Modes.Abilities.Mythic;
     AbilityType.MYTHIC_BALLISTAEM3)]
 public class BALLISTAEM3 : Ability
 {
+    private Mutex _mutex = new();
     private ushort _serial;
     private bool _isActive;
     private const float Damage = 1300 * 2.5f;
@@ -65,12 +67,12 @@ public class BALLISTAEM3 : Ability
         if (ev.Player == null 
             || ev.Attacker == null 
             || ev.DamageHandler == null
-            || ev.Attacker.CurrentItem == null) return;
+            || ev.Attacker.CurrentItem == null
+            || !_mutex.WaitOne(2000)) return;
         
         if (_isActive) return;
         if (ev.Attacker != Owner || ev.Attacker.CurrentItem.Serial != _serial) return;
-
-        Waiting();
+        
         if (!Tools.TryGetLookPlayers(ev.Attacker, 75f, out List<Player> players, out _)) return;
 
         Log.Info(players.Count);
@@ -100,13 +102,9 @@ public class BALLISTAEM3 : Ability
             }
             else
                 Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
-        }
-    }
 
-    private void Waiting()
-    {
-        _isActive = true;
-        Timing.CallDelayed(3f, () => _isActive = false);
+            Timing.CallDelayed(1.5f, _mutex.ReleaseMutex);
+        }
     }
 
     private bool _isHitActive; 

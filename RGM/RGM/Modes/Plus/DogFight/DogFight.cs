@@ -100,10 +100,7 @@ namespace RGM.Modes
                     ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 6;
                 });
 
-                Timing.CallDelayed(60, () =>
-                {
-                    scp018.Destroy();
-                });
+                Timing.CallDelayed(60, scp018.Destroy);
             }
         }
 

@@ -581,7 +581,7 @@ namespace RGM.EventArgs
 
         public static void OnSpawned(SpawnedEventArgs ev)
         {
-            if (ev.Player.IsNPC || ev.Player.IsNonePlayer())
+            if (ev.Player.IsNPC || ev.Player == null || ev.Player.IsHost)
                 return;
 
             ev.Player.EnableEffect(EffectType.FogControl, 1);
