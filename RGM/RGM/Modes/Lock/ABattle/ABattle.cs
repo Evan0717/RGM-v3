@@ -229,6 +229,7 @@ public class ABattle : Mode
                         "10초 후 무언가가 일어납니다.");
                     if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
+                    Timing.CallDelayed(waitTime, DummyUtils.DestroyAllDummies);
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
 
