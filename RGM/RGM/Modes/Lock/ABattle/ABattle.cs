@@ -110,7 +110,7 @@ public class ABattle : Mode
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
-        {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>) 등급의 능력을 얻습니다."},
+        {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
         {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+10 (SCP의 경우 +50))"},
         {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
@@ -1301,10 +1301,10 @@ public class ABattle : Mode
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.IsNonePlayer()) return;
-             
+            var prismrand = Random.Range(1, 101); 
             AbilityCategory GetRandom()
             {
-                return Random.Range(1, 101) <= 15 ? AbilityCategory.Legend : AbilityCategory.Epic;
+                return prismrand <= 15 ? prismrand == 7 ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;
             }
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
@@ -1316,7 +1316,7 @@ public class ABattle : Mode
             
         }
 
-        if (player.Role.Type == RoleTypeId.Scp096 && !player.HasAbility(AbilityType.NORMAL_RABBIT))
+        if (player.Role.Type == RoleTypeId.Scp096)
         {
             player.AddAbility(AbilityType.NORMAL_RABBIT);
         }
