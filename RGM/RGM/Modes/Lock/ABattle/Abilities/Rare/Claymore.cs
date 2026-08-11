@@ -21,7 +21,7 @@ public class Claymore : Ability
     private CoroutineHandle _handle;
     private static readonly int excludeMask = ~((1 << 8) | (1 << 2)) & LayerMask.GetMask("Door", "Default");
     private static readonly float distance = 5f;
-    private static readonly float ForwardRange = 7f;
+    private static readonly float ForwardRange = 5.5f;
     private static readonly float BackwardRange = 2f;
     private static float health = 100f;
 
