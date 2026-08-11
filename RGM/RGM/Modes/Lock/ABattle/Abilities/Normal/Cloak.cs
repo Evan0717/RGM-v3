@@ -10,9 +10,4 @@ public class Cloak : Ability
     {
         Owner.AddEffect(EffectType.Fade, 25);
     }
-
-    public override void OnDisabled()
-    {
-        Owner.RemoveEffect(EffectType.Fade, 25);
-    }
 }

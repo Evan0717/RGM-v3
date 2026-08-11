@@ -2,16 +2,27 @@
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("진화", "몸의 크기가 8%p 작아집니다.", AbilityCategory.Common, AbilityType.NORMAL_EVOLUTION)]
+[Ability("진화", "몸의 크기가 8%p 작아집니다. (최대 10회까지 적용)", AbilityCategory.Common, AbilityType.NORMAL_EVOLUTION)]
 public class Evolution : Ability
 {
+    private const float Scale = 0.08f;
+    private const int MaxCount = 10;
+    private bool _applied;
+
     public override void OnEnabled()
     {
-        Owner.Scale = new Vector3(Owner.Scale.x - 0.08f, Owner.Scale.y - 0.08f, Owner.Scale.z - 0.08f);
+        if (Owner.AbilityCount(AbilityType.NORMAL_EVOLUTION) >= MaxCount)
+            return;
+
+        _applied = true;
+        Owner.Scale = new Vector3(Owner.Scale.x - Scale, Owner.Scale.y - Scale, Owner.Scale.z - Scale);
     }
 
     public override void OnDisabled()
     {
-        Owner.Scale = new Vector3(Owner.Scale.x + 0.08f, Owner.Scale.y + 0.08f, Owner.Scale.z + 0.08f);
+        if (!_applied)
+            return;
+
+        Owner.Scale = new Vector3(Owner.Scale.x + Scale, Owner.Scale.y + Scale, Owner.Scale.z + Scale);
     }
 }
