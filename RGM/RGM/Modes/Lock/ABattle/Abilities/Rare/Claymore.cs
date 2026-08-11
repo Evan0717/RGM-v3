@@ -81,6 +81,18 @@ public class Claymore : Ability
             if (schematic == null || !schematic)
                 yield break;
             
+            ExplosiveGrenade eg = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+            eg.FuseTime = 0f;
+            eg.MaxRadius = 4.5f;
+            
+            if (health == 0f)
+            {
+                schematic.Destroy();
+                eg.MaxRadius = 0f;
+                eg.SpawnActive(schematic.Position);
+                yield break;
+            }
+            
             bool ownerValid = Owner != null && Owner.ReferenceHub != null && Owner.IsAlive;
 
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, position) <= maxRange))
@@ -103,10 +115,7 @@ public class Claymore : Ability
 
                 if (Physics.Linecast(position, player.Position, visionMask))
                     continue;
-
-                ExplosiveGrenade eg = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-                eg.FuseTime = 0f;
-                eg.MaxRadius = 4.5f;
+                
                 eg.SpawnActive(Tools.GetPointForward(schematic.transform, 2.5f), Owner);
 
                 schematic.Destroy();
