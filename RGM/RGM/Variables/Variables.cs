@@ -78,17 +78,15 @@ namespace RGM.Variables
             "Airship",
             "Lighthouse1",
             "TarkovStreet",
-            // "NowYoureACadet",
-            // "InTheSea",
-            // "City",
             "Airplane6",
             "OperationHarvest",
-            "OperationNightFlight",
+            // "OperationNightFlight",
             "China",
             "CityPlusCITY",
             "Castle",
             "FNAF2",
-            // "VirtualWorld"
+            // "VirtualWorld",
+            "SnowForest"
         };
         public static List<string> Specials = new()
         {
