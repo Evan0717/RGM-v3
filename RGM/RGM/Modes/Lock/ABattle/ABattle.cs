@@ -215,10 +215,7 @@ public class ABattle : Mode
 
         void ActivateExtraModeForChaos()
         {
-            
-            
             Timing.RunCoroutine(Chaos());
-            Tools.TryInstallMode(ModeType.FriendlyFire);
             return;
 
             IEnumerator<float> Chaos()
@@ -227,12 +224,20 @@ public class ABattle : Mode
                 const float chaosStopTime = 30f;
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
+                    FriendlyFire.Instance.OnEnabledForNoNuke();
                     Tools.MessageTranslated(".G6 .G6 .G6",
                         "10초 후 무언가가 일어납니다.");
                     if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
+                    Timing.CallDelayed(waitTime, ()
+                        => PlayerManager.List
+                            .Where(x => x.IsNPC && x.DisplayNickname == "영사기")
+                            .ToList()
+                            .ForEach(x => NetworkServer.Destroy(x.GameObject)));
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
+
+                FriendlyFire.Instance.OnDisabled();
             }
 
             IEnumerator<float> ChaosMaker()
@@ -241,7 +246,7 @@ public class ABattle : Mode
                 const int mythicChance = 97;
                 const int legendaryChance = 95;
                 const int epicChance = 75;
-                const int explodeChance = 80;
+                const int explodeChance = 60;
                 const int explodeCount = 5;
                 
                 if (!_chaosMutex.WaitOne(1000)) yield break;

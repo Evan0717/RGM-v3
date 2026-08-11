@@ -64,6 +64,22 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
             harmony.Patch(AccessTools.Method(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy), [typeof(Team), typeof(Team)]), 
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(HitboxPatchPostfix), nameof(HitboxPatchPostfix.Postfix))));
         }
+        
+        public void OnEnabledForNoNuke()
+        {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
+
+            Exiled.Events.Handlers.Scp173.Blinking += OnBlinking;
+
+            Exiled.Events.Handlers.Scp939.Lunging += OnLunging;
+
+            _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+
+            harmony = new Harmony($"FriendlyFire - {DateTime.Now.Ticks}");
+            harmony.Patch(AccessTools.Method(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy), [typeof(Team), typeof(Team)]), 
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(HitboxPatchPostfix), nameof(HitboxPatchPostfix.Postfix))));
+        }
 
         public override void OnDisabled()
         {
