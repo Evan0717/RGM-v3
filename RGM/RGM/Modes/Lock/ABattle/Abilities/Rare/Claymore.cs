@@ -153,7 +153,7 @@ public class Claymore : Ability
             {
 
                 health -= Firearm[ev.Firearm.FirearmType];
-
+                ev.Player.ShowHitMarker();
             }
         }
 
@@ -161,9 +161,15 @@ public class Claymore : Ability
         {
             if (ev.MicroHID.State == InventorySystem.Items.MicroHID.Modules.MicroHidPhase.Firing)
             {
-                if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 5, (LayerMask)1) &&
+                if (Physics.Raycast(
+                        ev.Player.ReferenceHub.PlayerCameraReference.position +
+                        ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f,
+                        ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 5, (LayerMask)1) &&
                     hit.transform.IsChildOf(schematic.transform))
+                {
                     health -= 120;
+                    ev.Player.ShowHitMarker();
+                }
             }
         }
 
@@ -176,6 +182,9 @@ public class Claymore : Ability
                     ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f,
                     ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 3, (LayerMask)1) &&
                 hit.transform.IsChildOf(schematic.transform))
+            {
                 health -= 50;
+                ev.Player.ShowHitMarker();
+            }
         } 
 }
