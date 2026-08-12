@@ -4,9 +4,9 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Epic;
+namespace RGM.Modes.Abilities.Legend;
 
-[Ability("도박꾼", "아이템을 버리면 새로운 아이템을 받지만, 2% 확률로 손이 잘립니다.", AbilityCategory.Epic, AbilityType.EPIC_GAMBLER)]
+[Ability("도박사", "아이템을 버리면 새로운 아이템으로 변환합니다.", AbilityCategory.Legend, AbilityType.LEGEND_GAMBLER)]
 public class Gambler : Ability
 {
     private Mutex _mutex;
@@ -38,17 +38,9 @@ public class Gambler : Ability
             !PlayerManager.List.Contains(ev.Player) ||
             !_mutex.WaitOne(1000)) return;
 
-        int rand = UnityEngine.Random.Range(1, 101);
-        if (rand is > 0 and < 3)
-        {
-            Owner.EnableEffect(EffectType.SeveredHands, 1, 50);
-        }
-        else
-        {
-            ev.Item.Destroy();
-            Item CurrentItem = Owner.AddRandomItem();
-            Owner.DropItem(CurrentItem);
-        }
+        ev.Item.Destroy();
+        Item currentItem = Owner.AddRandomItem();
+        Owner.DropItem(currentItem);
         _mutex.ReleaseMutex();
     }
 
@@ -60,19 +52,12 @@ public class Gambler : Ability
             Owner.GetEffect(EffectType.SeveredHands).IsEnabled ||
             !_mutex.WaitOne(1000))
             return;
-        int rand = UnityEngine.Random.Range(1, 101);
 
-        if (rand is > 0 and < 3)
-            Owner.EnableEffect(EffectType.SeveredHands, 1, 50);
+        if (Owner.IsScpRole())
+            Owner.Hit(Owner, Owner.MaxHealth * 0.005f);
 
-        else
-        {
-            if (Owner.IsScpRole())
-                Owner.Hit(Owner, Owner.MaxHealth / 100);
+        Owner.AddRandomItem();
 
-            Owner.AddRandomItem();
-        }
-        
         _mutex.ReleaseMutex();
     }
 }

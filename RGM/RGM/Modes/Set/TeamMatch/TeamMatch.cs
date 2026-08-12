@@ -35,6 +35,7 @@ namespace RGM.Modes
 
         private List<Player> _teamA = new();
         private List<Player> _teamB = new();
+        private List<Player> _losingTeam = new();
         private List<Vector3> _teamASpawns = new();
         private List<Vector3> _teamBSpawns = new();
 
@@ -44,9 +45,8 @@ namespace RGM.Modes
 
         private static readonly List<string> TdmMaps =
         [
-            /*"Battle",
-            "Battle_Xmas2025",*/
-            "Battle_Ezone"
+            "Battle",
+            "Battle_Xmas2025",
         ];
 
         private CoroutineHandle _onModeStarted;
@@ -66,10 +66,12 @@ namespace RGM.Modes
             _teamBScore = 0;
             _isMatchEnded = false;
             _isModeActive = true;
+            _losingTeam.Clear();
             Round.IsLocked = true;
             Respawn.PauseWaves();
 
             Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
@@ -85,6 +87,7 @@ namespace RGM.Modes
             _isModeActive = false;
 
             Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
             Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
@@ -99,6 +102,7 @@ namespace RGM.Modes
 
             _teamASpawns.Clear();
             _teamBSpawns.Clear();
+            _losingTeam.Clear();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -206,6 +210,18 @@ namespace RGM.Modes
             ev.Ragdoll?.Destroy();
         }
 
+        public void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (!_isModeActive || !_isMatchEnded || !_losingTeam.Contains(ev.Player))
+                return;
+
+            if (ev.Player.Role.Type is RoleTypeId.Tutorial or RoleTypeId.Spectator or RoleTypeId.Overwatch
+                or RoleTypeId.Filmmaker or RoleTypeId.None)
+                return;
+
+            ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+        }
+
         IEnumerator<float> RespawnPlayer(Player player, int modeId)
         {
             yield return Timing.WaitForSeconds(5f);
@@ -217,6 +233,14 @@ namespace RGM.Modes
             {
                 player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
                 yield return Timing.WaitForOneFrame;
+
+                if (!_isModeActive || modeId != _modeId || _isMatchEnded)
+                {
+                    if (_losingTeam.Contains(player) && player.IsAlive && player.Role.Type != RoleTypeId.Tutorial)
+                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+                    yield break;
+                }
+
                 player.Position = _teamASpawns.GetRandomValue();
                 player.ApplyGodMode(3);
             }
@@ -224,6 +248,14 @@ namespace RGM.Modes
             {
                 player.Role.Set(RoleTypeId.Scientist, RoleSpawnFlags.None);
                 yield return Timing.WaitForOneFrame;
+
+                if (!_isModeActive || modeId != _modeId || _isMatchEnded)
+                {
+                    if (_losingTeam.Contains(player) && player.IsAlive && player.Role.Type != RoleTypeId.Tutorial)
+                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+                    yield break;
+                }
+
                 player.Position = _teamBSpawns.GetRandomValue();
                 player.ApplyGodMode(3);
             }
@@ -267,9 +299,9 @@ namespace RGM.Modes
                 return;
 
             _isMatchEnded = true;
+            _losingTeam = ReferenceEquals(winningTeam, _teamA) ? _teamB : _teamA;
 
-            var losingTeam = ReferenceEquals(winningTeam, _teamA) ? _teamB : _teamA;
-            foreach (var player in losingTeam.Where(x => x.IsAlive).ToList())
+            foreach (var player in _losingTeam.Where(x => x.IsAlive).ToList())
                 player.Kill("패배하였습니다...");
 
             Round.IsLocked = false;

@@ -57,7 +57,7 @@ public class EyeMan : Ability
                         target.EnableEffect(EffectType.SinkHole, 1, 0.2f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.2f);
                         target.CurrentItem = null;
-                        target.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.008f : target.MaxHealth * 0.024f);
+                        target.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.02f : target.MaxHealth * 0.08f);
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
                     else
@@ -71,7 +71,7 @@ public class EyeMan : Ability
                 Log.Error($"눈빛맨 오류: {e}");
             }
 
-            yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitForSeconds(0.0417f);
         }
 
         NetworkServer.Destroy(beam.gameObject);

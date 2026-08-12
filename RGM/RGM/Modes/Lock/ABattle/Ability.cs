@@ -324,7 +324,6 @@ public enum AbilityType
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
-    EPIC_GAMBLER, // [영웅] 도박꾼
     EPIC_RANDOMCHEST, // [영웅] 랜덤상자
     EPIC_REPAIRMAN, // [영웅] 수리 기사
     EPIC_SUPERSTAR, // [영웅] 슈퍼 스타
@@ -384,6 +383,7 @@ public enum AbilityType
     LEGEND_CLEARCACHE, // [전설] 캐시 청소
     LEGEND_REINCARNATION, // [전설] 리인카네이션
     LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
+    LEGEND_GAMBLER, // [전설] 도박사
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -566,7 +566,8 @@ public enum AbilityType
     SYNERGY_BOMBPARTY, // [시너지] 폭탄 파티
     SYNERGY_BLACKMARKET, // [시너지] 암시장
     SYNERGY_COMMANDER, // [시너지] 지휘관
-    SYNERGY_WEAKPOINTATTACK // [시너지] 약점 공격
+    SYNERGY_WEAKPOINTATTACK, // [시너지] 약점 공격
+    SYNERGY_CLOWN // [시너지] 광대
 }
 
 public static class AbilityTypeExtensions
