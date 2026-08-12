@@ -9,7 +9,7 @@ namespace RGM.Modes.Abilities.Unique.Scp096.Mythic;
 
 [Ability("광분", """
                공격 성공 시 폭발을 일으킵니다. 자신과 아군들은 해당 폭발에 피해를 받지 않습니다.
-               추가로, 분노 조절문제, 천리안, 별자리 찢기 능력을 획득하며, 받는 데미지가 40%p 감소합니다.
+               추가로, 분노 조절문제, 천리안, 별자리 찢기 능력을 획득하며, 받는 데미지가 50%p 감소합니다.
                """, 
     AbilityCategory.Mythic,
     AbilityType.MYTHIC_SCP096_BERSERK, 
@@ -24,7 +24,7 @@ public class Berserk : Ability
         Owner.AddAbility(AbilityType.NORMAL_SCP096_CANTMANAGEANGER);
         Owner.AddAbility(AbilityType.RARE_SCP096_SEER);
         Owner.AddAbility(AbilityType.EPIC_SCP096_STARTEARING);
-        Owner.AddEffect(EffectType.DamageReduction, 80);
+        Owner.AddEffect(EffectType.DamageReduction, 100);
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 

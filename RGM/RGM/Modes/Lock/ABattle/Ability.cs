@@ -456,12 +456,12 @@ public enum AbilityType
     // SCP-096
     NORMAL_SCP096_ENEMY, // [전용 일반] 원수
     NORMAL_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
-    NORMAL_SCP096_OUTSIDER, // [전용 일반] 아웃사이더
     NORMAL_SCP096_RAGE, // [전용 일반] 격노
     
     RARE_SCP096_SEER, // [전용 희귀] 천리안
     
     EPIC_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
+    EPIC_SCP096_RAGINGATTACK, // [전용 영웅] 분노의 일격
     
     MYTHIC_SCP096_BERSERK, // [전용 신화] 광분
 
