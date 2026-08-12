@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MEC;
 
-namespace RGM.Modes.Abilities.Unique.Scp096;
+namespace RGM.Modes.Abilities.Unique.Scp096.Normal;
 
 [Ability("분노 조절 문제", "분노 시간에 제한이 사라집니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP096_CANTMANAGEANGER, RoleAbility.Scp096)]
 public class CantManageAnger : Ability
