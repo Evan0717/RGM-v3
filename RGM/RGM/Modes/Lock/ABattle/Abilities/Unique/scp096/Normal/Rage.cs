@@ -1,7 +1,7 @@
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 
-namespace RGM.Modes.Abilities.Unique.Scp096;
+namespace RGM.Modes.Abilities.Unique.Scp096.Normal;
 
 [Ability("격노", "분노 시 받는 피해가 25% 줄어듭니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP096_RAGE, RoleAbility.Scp096)]
 public class Rage : Ability

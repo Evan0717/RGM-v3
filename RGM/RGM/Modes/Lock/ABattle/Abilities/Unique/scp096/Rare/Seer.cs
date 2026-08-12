@@ -3,9 +3,9 @@ using Exiled.Events.EventArgs.Scp096;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Unique.Scp096;
+namespace RGM.Modes.Abilities.Unique.Scp096.Rare;
 
-[Ability("천리안", "분노 시에 30m 내의 인간들을 목격자에 포함시킵니다. (최대 4명)", AbilityCategory.Common, AbilityType.NORMAL_SCP096_SEER, RoleAbility.Scp096)]
+[Ability("천리안", "분노 시에 50m 내의 인간들을 목격자에 포함시킵니다. (최대 15명)", AbilityCategory.Rare, AbilityType.RARE_SCP096_SEER, RoleAbility.Scp096)]
 public class Seer : Ability
 {
     public override void OnEnabled()
@@ -27,19 +27,19 @@ public class Seer : Ability
 
         foreach (var player in PlayerManager.List.Where(x => x.IsHuman))
         {
-            if (Stack == 4)
+            if (Stack == 15)
                 break;
 
-            if (Vector3.Distance(player.Position, ev.Player.Position) < 31)
+            if (Vector3.Distance(player.Position, ev.Player.Position) < 51)
             {
                 Stack += 1;
 
                 ev.Scp096.AddTarget(player);
 
-                player.AddHint("천리안", $"<color={ABattle.RatingColor["일반"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
+                player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
             }
         }
 
-        ev.Player.AddHint("천리안", $"<color={ABattle.RatingColor["일반"]}>천리안</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
+        ev.Player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
     }
 }

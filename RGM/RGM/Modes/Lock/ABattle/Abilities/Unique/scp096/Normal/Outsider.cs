@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Enums;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Unique.Scp096;
+namespace RGM.Modes.Abilities.Unique.Scp096.Normal;
 
 [Ability("아웃사이더", "몸이 25% 투명해집니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP096_OUTSIDER, RoleAbility.Scp096)]
 public class Outsider : Ability
