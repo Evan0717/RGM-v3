@@ -21,8 +21,10 @@ public class Repair : Ability
 
     private static IEnumerator<float> RepairCoroutine()
     {
-        while (!Warhead.IsInProgress && !Warhead.IsDetonated)
+        while (!Warhead.IsDetonated)
         {
+            if (Warhead.IsInProgress) yield return Timing.WaitForSeconds(1f);
+            
             Door.List.Where(x => x is BreakableDoor).ToList().ForEach(x =>
             {
                 if (x is not BreakableDoor door) return;

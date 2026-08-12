@@ -216,7 +216,8 @@ public class ABattle : Mode
         void ActivateExtraModeForChaos()
         {
             Timing.RunCoroutine(Chaos());
-            return;
+            
+            return; // 지역 함수
 
             IEnumerator<float> Chaos()
             {
@@ -228,8 +229,8 @@ public class ABattle : Mode
                 {
                     Tools.MessageTranslated(".G6 .G6 .G6",
                         "10초 후 무언가가 일어납니다.");
-                    if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
+                    
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
 
@@ -248,61 +249,64 @@ public class ABattle : Mode
                 
                 if (!_chaosMutex.WaitOne(1000)) yield break;
                 var rand = new System.Random(Exiled.API.Features.Map.Seed);
+                
                 // -----------------------------------------------------------------------------------------------
                 
                 List<Player> complete = [];
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
                     for (int i = 0; i < explodeCount; i++)
-                        Timing.CallDelayed(0.3f, () =>
+                    {
+                        if (!(NextRandom() >= explodeChance)) continue;
+                        
+                        List<string> musicList =
+                        [
+                            "짬뽕-1",
+                            "폭8-2",
+                            "폭8-1"
+                        ];
+
+                        List<string> delayBomb =
+                            ["짬뽕-1"];
+
+                        var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                        if (player.IsDead || player.IsHost || complete.Contains(player)) continue;
+                        var text = musicList.GetRandomValue();
+                        bomb.FuseTime = 0.1f;
+
+                        complete.Add(player);
+
+                        if (!delayBomb.Contains(text))
                         {
-                            if (!(NextRandom() >= explodeChance)) return;
-
-                            List<string> musicList =
-                            [
-                                "짬뽕-1",
-                                "폭8-2",
-                                "폭8-1"
-                            ];
-
-                            List<string> delayBomb =
-                                ["짬뽕-1"];
-
-                            var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
-                            var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
-                            if (player.IsDead || player.IsHost || complete.Contains(player)) return;
-                            var text = musicList.GetRandomValue();
-                            bomb.FuseTime = 0.1f;
-
-                            complete.Add(player);
-
-                            if (!delayBomb.Contains(text))
-                            {
-                                MakeRadio(player, text);
-                                bomb.SpawnActive(player.Position);
-                                if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
-                                        AbilityType.EPIC_SURVIVOR or
-                                        AbilityType.EPIC_MADSCIENTIST or
-                                        AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
-                                bomb.ScpDamageMultiplier = 2.5f;
-                                player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
-                                return;
-                            }
-
                             MakeRadio(player, text);
-                            Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
-                        });
-                    // -----------------------------------------------------------------------------------------------
+                            bomb.SpawnActive(player.Position);
+                            if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
+                                    AbilityType.EPIC_SURVIVOR or
+                                    AbilityType.EPIC_MADSCIENTIST or
+                                    AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
+                            bomb.ScpDamageMultiplier = 2.5f;
+                            player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
+                            continue;
+                        }
+
+                        MakeRadio(player, text);
+                        Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
+                    }
+                });
+                // -----------------------------------------------------------------------------------------------
+                
                 for (var a = 0; a < 5; a++)
                 {
+                    yield return Timing.WaitForOneFrame;
+                    
                     if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
                     PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
                     PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
                         .ToList()
                         .ForEach(x
                             => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
-
                     
-
-
                     if (NextRandom() >= nukeChance && !(Warhead.IsInProgress || Warhead.IsDetonated))
                     {
                         Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
@@ -341,15 +345,16 @@ public class ABattle : Mode
                     }
                 }
                 _chaosMutex.ReleaseMutex();
-                yield break;
+                
                 // -----------------------------------------------------------------------------------------------
+                yield break; // 지역 함수
 
                 float NextRandom() => rand.Next(1, 101);
             }
 
             IEnumerator<float> ClearMaker()
             {
-                while (true)
+                while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
                     yield return Timing.WaitForSeconds(120f);
                     PlayerManager.List
@@ -382,6 +387,8 @@ public class ABattle : Mode
                 
                 Timing.CallDelayed(radio.TryPlay(arg, 1.5f).Duration.Seconds + 1, ()
                     => NetworkServer.Destroy(dummy.gameObject));
+
+                return;
 
                 IEnumerator<float> Teleporter(Player pl)
                 {
