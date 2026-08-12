@@ -103,7 +103,6 @@ public class Claymore : Ability
             ExplosiveGrenade eg = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
             eg.FuseTime = 0f;
             eg.MaxRadius = 4.5f;
-            
             if (health <= 0f)
             {
                 schematic.Destroy();
@@ -148,6 +147,9 @@ public class Claymore : Ability
     // 데미지 관련 핸들러
     public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
         {
+            if (schematic == null || !schematic)
+                return;
+
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 1000, (LayerMask)1) &&
                 hit.transform.IsChildOf(schematic.transform))
             {
@@ -159,6 +161,9 @@ public class Claymore : Ability
 
         public void OnUsingMicroHIDEnergy(Exiled.Events.EventArgs.Player.UsingMicroHIDEnergyEventArgs ev)
         {
+            if (schematic == null || !schematic)
+                return;
+
             if (ev.MicroHID.State == InventorySystem.Items.MicroHID.Modules.MicroHidPhase.Firing)
             {
                 if (Physics.Raycast(
@@ -175,6 +180,9 @@ public class Claymore : Ability
 
         public async void OnSwining(Exiled.Events.EventArgs.Item.SwingingEventArgs ev)
         {
+            if (schematic == null || !schematic)
+                return;
+
             await Task.Delay(300);
 
             if (Physics.Raycast(
