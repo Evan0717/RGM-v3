@@ -23,7 +23,11 @@ public class Repair : Ability
     {
         while (!Warhead.IsDetonated)
         {
-            if (Warhead.IsInProgress) yield return Timing.WaitForSeconds(1f);
+            if (Warhead.IsInProgress)
+            {
+                yield return Timing.WaitForSeconds(1f);
+                continue;
+            }
             
             Door.List.Where(x => x is BreakableDoor).ToList().ForEach(x =>
             {
