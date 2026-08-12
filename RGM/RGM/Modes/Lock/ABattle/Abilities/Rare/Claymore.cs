@@ -19,11 +19,29 @@ public class Claymore : Ability
 {
     private ushort _claymoreCoinSerial;
     private CoroutineHandle _handle;
+    private SchematicObject schematic;
     private static readonly int excludeMask = ~((1 << 8) | (1 << 2)) & LayerMask.GetMask("Door", "Default");
     private static readonly float distance = 5f;
     private static readonly float ForwardRange = 5.5f;
     private static readonly float BackwardRange = 2f;
-    private static float health = 100f;
+    private float health = 100f;
+    
+    private static readonly Dictionary<FirearmType, int> Firearm = new Dictionary<FirearmType, int>() {
+        { FirearmType.Com15, 25 }, 
+        { FirearmType.Com18, 25 }, 
+        { FirearmType.FSP9, 22 }, 
+        { FirearmType.Crossvec, 23 }, 
+        { FirearmType.E11SR, 26 },
+        { FirearmType.FRMG0, 24 }, 
+        { FirearmType.Revolver, 51 }, 
+        { FirearmType.Shotgun, 8 }, 
+        { FirearmType.AK, 35 }, 
+        { FirearmType.Logicer, 25 },
+        { FirearmType.A7, 26 }, 
+        { FirearmType.Com45, 25 }, 
+        { FirearmType.ParticleDisruptor, 250 },
+        { FirearmType.Scp127, 30 }
+    };
 
     public override void OnEnabled()
     {
@@ -63,6 +81,7 @@ public class Claymore : Ability
         ev.Item.Destroy();
 
         SchematicObject claymore = ObjectSpawner.SpawnSchematic("Claymore", point, Quaternion.Euler(0, ev.Player.Rotation.eulerAngles.y, 0));
+        schematic = claymore;
         _handle = Timing.CallDelayed(5f, () => 
         {
             // n초 후에 이 블록 안의 코드가 실행됩니다.
@@ -85,7 +104,7 @@ public class Claymore : Ability
             eg.FuseTime = 0f;
             eg.MaxRadius = 4.5f;
             
-            if (health == 0f)
+            if (health <= 0f)
             {
                 schematic.Destroy();
                 eg.MaxRadius = 0f;
@@ -105,7 +124,6 @@ public class Claymore : Ability
 
                 Vector3 offset = player.Position - position;
                 float forwardDistance = Vector3.Dot(forward, offset);
-
                 bool inRange = forwardDistance >= 0
                     ? forwardDistance <= ForwardRange
                     : -forwardDistance <= BackwardRange;
@@ -130,24 +148,9 @@ public class Claymore : Ability
     // 데미지 관련 핸들러
     public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
         {
-            if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 1000, (LayerMask)1))
+            if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 1000, (LayerMask)1) &&
+                hit.transform.IsChildOf(schematic.transform))
             {
-                Dictionary<FirearmType, int> Firearm = new Dictionary<FirearmType, int>() {
-                    { FirearmType.Com15, 25 }, 
-                    { FirearmType.Com18, 25 }, 
-                    { FirearmType.FSP9, 22 }, 
-                    { FirearmType.Crossvec, 23 }, 
-                    { FirearmType.E11SR, 26 },
-                    { FirearmType.FRMG0, 24 }, 
-                    { FirearmType.Revolver, 51 }, 
-                    { FirearmType.Shotgun, 8 }, 
-                    { FirearmType.AK, 35 }, 
-                    { FirearmType.Logicer, 25 },
-                    { FirearmType.A7, 26 }, 
-                    { FirearmType.Com45, 25 }, 
-                    { FirearmType.ParticleDisruptor, 250 },
-                    { FirearmType.Scp127, 30 }
-                };
 
                 health -= Firearm[ev.Firearm.FirearmType];
 
@@ -158,7 +161,8 @@ public class Claymore : Ability
         {
             if (ev.MicroHID.State == InventorySystem.Items.MicroHID.Modules.MicroHidPhase.Firing)
             {
-                if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 5, (LayerMask)1))
+                if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 5, (LayerMask)1) &&
+                    hit.transform.IsChildOf(schematic.transform))
                     health -= 120;
             }
         }
@@ -170,7 +174,8 @@ public class Claymore : Ability
             if (Physics.Raycast(
                     ev.Player.ReferenceHub.PlayerCameraReference.position +
                     ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f,
-                    ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 3, (LayerMask)1))
+                    ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 3, (LayerMask)1) &&
+                hit.transform.IsChildOf(schematic.transform))
                 health -= 50;
         } 
 }
