@@ -215,21 +215,34 @@ public class ABattle : Mode
 
         void ActivateExtraModeForChaos()
         {
-            Timing.RunCoroutine(Chaos());
+            // 1. C.A.S.S.I.E 방송 후 딜레이
+            // 2. 실행 후 딜레이
+            const float waitTime = 10f;
+            const float chaosStopTime = 30f;
+            
+            // (확률) = 100 - 값 + 1
+            const int nukeChance = 99;
+            const int mythicChance = 97;
+            const int legendaryChance = 95;
+            const int epicChance = 75;
+            const int explodeChance = 60;
+            const int explodeCount = 5;
+            
+            var rand = new System.Random(Exiled.API.Features.Map.Seed);
+            
+            Timing.RunCoroutine(Chaos()); // 가랏 피카츄!!
             
             return; // 지역 함수
 
             IEnumerator<float> Chaos()
             {
-                const float waitTime = 12f;
-                const float chaosStopTime = 30f;
                 var clearMakerHandle = Timing.RunCoroutine(ClearMaker());
                 FriendlyFire.Instance.OnEnabledForNoNuke();
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
                     Tools.MessageTranslated(".G6 .G6 .G6",
-                        "10초 후 무언가가 일어납니다.");
-                    Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
+                        $"{waitTime - 2}초 후 무언가가 일어납니다.");
+                    Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker())); // 가랏 몬스터볼!!
                     
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
@@ -240,15 +253,7 @@ public class ABattle : Mode
 
             IEnumerator<float> ChaosMaker()
             {
-                const int nukeChance = 99;
-                const int mythicChance = 97;
-                const int legendaryChance = 95;
-                const int epicChance = 75;
-                const int explodeChance = 60;
-                const int explodeCount = 5;
-                
                 if (!_chaosMutex.WaitOne(1000)) yield break;
-                var rand = new System.Random(Exiled.API.Features.Map.Seed);
                 
                 // -----------------------------------------------------------------------------------------------
                 
@@ -336,6 +341,7 @@ public class ABattle : Mode
                         continue;
                     }
 
+                    // 이름 충돌 방지로 설치, 반전을 하지 말 것
                     if (NextRandom() >= mythicChance)
                     {
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
@@ -344,6 +350,7 @@ public class ABattle : Mode
                             $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 3%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
                     }
                 }
+                
                 _chaosMutex.ReleaseMutex();
                 
                 // -----------------------------------------------------------------------------------------------
@@ -357,10 +364,20 @@ public class ABattle : Mode
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
                     yield return Timing.WaitForSeconds(120f);
-                    PlayerManager.List
-                        .Where(x => x.IsNPC && x.Nickname == "영사기")
-                        .ToList()
-                        .ForEach(clear => NetworkServer.Destroy(clear.GameObject));
+                    
+                    try
+                    {
+                        PlayerManager.List
+                            .Where(x => x.IsNPC && x.Nickname == "영사기")
+                            .ToList()
+                            .ForEach(clear => NetworkServer.Destroy(clear.GameObject));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"이런, 청소 기능에 버그가 발생하였네요 :(\n" +
+                                  $"사유:{e.GetType().Name}: {e.Message}\n" +
+                                  $"StackTrace: {e.StackTrace}");
+                    }
                 }
             }
             
