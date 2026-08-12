@@ -145,7 +145,7 @@ public class Claymore : Ability
     
     
     // 데미지 관련 핸들러
-    public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+    public void OnShot(ShotEventArgs ev)
         {
             if (schematic == null || !schematic)
                 return;
@@ -159,7 +159,7 @@ public class Claymore : Ability
             }
         }
 
-        public void OnUsingMicroHIDEnergy(Exiled.Events.EventArgs.Player.UsingMicroHIDEnergyEventArgs ev)
+        public void OnUsingMicroHIDEnergy(UsingMicroHIDEnergyEventArgs ev)
         {
             if (schematic == null || !schematic)
                 return;

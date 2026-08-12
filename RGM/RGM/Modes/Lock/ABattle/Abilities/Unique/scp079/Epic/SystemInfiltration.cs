@@ -48,6 +48,15 @@ public class SystemInfiltration : Ability
                     {
                         Owner.AddHint("침투", $"시스템 침투에 성공하여 <b>{extraMode}</b> 모드가 추가되었습니다!");
                         Owner.AddAbility(AbilityType.DUMMY_INFILTRATIONSUCCESS);
+
+                        foreach (var player in PlayerManager.List)
+                        {
+
+                            extraMode = $"\n<size=25><b><color=#fecdcd>{extraMode}</color></b></size>\n<size=20>{ABattle.ExtraModes[extraMode]}</size>";
+                            
+                            player.AddBroadcast(10, extraMode);
+                            player.SendConsoleMessage("\n" + extraMode, "white");
+                        }
                     }
                     else
                     {

@@ -1,6 +1,5 @@
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
-using MEC;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Epic;
@@ -20,6 +19,6 @@ public class HolyProtection : Ability
         var effectType = ev.Effect.GetEffectType();
 
         if (!EffectManager.IsKeptBuff(effectType))
-            Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Player.DisableEffect(effectType));
+            ev.IsAllowed = false;
     }
 }
