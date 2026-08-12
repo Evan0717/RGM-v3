@@ -8,7 +8,7 @@ using UnityEngine;
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("현을 푸는 제 0법칙",
-    "특수한 시야로 적의 생명줄을 포착합니다.\n공격 시, 15% 확률로 618.03의 고정 피해를 입힙니다. 해당 피해는 적의 방어력을 무시합니다.", 
+    "특수한 시야로 적의 생명줄을 포착합니다.\n공격 시, 10% 확률로 618.03의 고정 피해를 입힙니다. 해당 피해는 적의 방어력을 무시합니다.", 
     AbilityCategory.Legend,
     AbilityType.LEGEND_ZERORULE)]
 
@@ -42,7 +42,7 @@ public class ZeroRule : Ability
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
-        if (Random.Range(1, 101) > 15)
+        if (Random.Range(1, 101) > 10)
             return;
 
         _ignoreDefensesEvent = ev;

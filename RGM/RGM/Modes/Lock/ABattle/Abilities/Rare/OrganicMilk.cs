@@ -30,10 +30,14 @@ public class OrganicMilk : Ability
     private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_coinSerial != ev.Item.Serial || ev.Player.CurrentRoom.Type == RoomType.Pocket) return;
-        Owner.ActiveEffects
-            .Select(effect => effect.GetEffectType())
-            .Where(effectType => !EffectManager.IsKeptBuff(effectType)).ToList()
-            .ForEach(x => ev.Player.RemoveEffect(x, 255));
+
+        foreach (var effectType in Owner.ActiveEffects
+                     .Select(effect => effect.GetEffectType())
+                     .Where(effectType => !EffectManager.IsKeptBuff(effectType))
+                     .ToList())
+        {
+            ev.Player.DisableEffect(effectType);
+        }
 
         ev.Item.Destroy();
     }
