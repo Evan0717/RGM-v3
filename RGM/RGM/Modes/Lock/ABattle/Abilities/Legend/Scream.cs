@@ -66,7 +66,8 @@ public class GmanRoaringSound : Ability
             player.EnableEffect(EffectType.Disabled, 1, 15f);
             player.EnableEffect(EffectType.Stained, 1, 5f);
             player.EnableEffect(EffectType.AmnesiaItems, 1, 15f);
-            player.EnableEffect(EffectType.Bleeding, 1, 30f);
+            if (player.Role.Type != RoleTypeId.Scp079)
+                player.EnableEffect(EffectType.Bleeding, 1, 30f);
 
             player.CurrentItem = null;
             _disarmedPlayers.Add(player);

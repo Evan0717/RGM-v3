@@ -50,8 +50,6 @@ public class ScpFeatures : ILogicFeatures
 
     private static IEnumerator<float> RegisterFeatures()
     {
-
-
         while (SpeedStore.IsEnabled)
         {
             if (!_isRunning)
@@ -236,10 +234,10 @@ public class ScpFeatures : ILogicFeatures
     private static void On049SenseLost(Scp049SenseLostTargetEventArgs e)
     {
         Player player = e.Player;
-        if (player.Role != RoleTypeId.Scp049 || player.IsNPC || !player.IsAlive || player.IsHost ||
-            player.IsNonePlayer()) return;
+        if (player.Role != RoleTypeId.Scp049 || player.IsNPC || !player.IsAlive || player.IsHost) return;
         if (!SpeedStore.CurrentSensePlayers.Contains(player)) return;
         if (player.Role is not Scp049Role scp049) return;
+        if (scp049.RemainingGoodSenseDuration <= 0f) return;
 
         scp049.RemainingGoodSenseDuration = 0.0f;
         SpeedStore.CurrentSensePlayers.Remove(player);
@@ -248,11 +246,11 @@ public class ScpFeatures : ILogicFeatures
     private static void On049SenseKilled(Scp049SenseKilledTargetEventArgs e)
     {
         Player player = e.Player;
-        if (player.Role != RoleTypeId.Scp049 || player.IsNPC || !player.IsAlive || player.IsHost ||
-            player.IsNonePlayer()) return;
+        if (player.Role != RoleTypeId.Scp049 || player.IsNPC || !player.IsAlive || player.IsHost) return;
         if (!SpeedStore.CurrentSensePlayers.Contains(player)) return;
         if (player.Role is not Scp049Role scp049) return;
-
+        if (scp049.RemainingGoodSenseDuration <= 0f) return;
+        
         scp049.RemainingGoodSenseDuration = 0.0f;
         SpeedStore.CurrentSensePlayers.Remove(player);
     }
@@ -261,7 +259,7 @@ public class ScpFeatures : ILogicFeatures
     {
         var player = e.Player;
         
-        if (player.Role == RoleTypeId.Scp049 && !player.IsNpc && player.IsAlive && player.IsPlayer && !player.IsHost) 
+        if (player.Role == RoleTypeId.Scp049 && player.IsAlive && player.IsPlayer) 
             SpeedStore.CurrentSensePlayers.Add(player);
     }
 }
