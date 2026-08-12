@@ -1020,10 +1020,25 @@ public class ABattle : Mode
 
             ignoredIndexes.Add(index);
 
-            var ability = GetRandomAbilities(player, category, 1,
-                                             roleAbility: player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
-                                             ? Tools.EnumToList<RoleAbility>().GetRandomValue()
-                                             : player.GetRoleAbility()).FirstOrDefault();
+            List<AbilityCategory> exceptCategory =
+            [
+                AbilityCategory.Synergy,
+                AbilityCategory.Dummy,
+                AbilityCategory.None
+            ];
+
+            var ability = 
+                GetRandomAbilities
+                (player,
+                player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
+                ? Tools.EnumToList<AbilityCategory>().Where(a => !exceptCategory.Contains(a)).GetRandomValue()
+                : category,
+                1,
+                roleAbility: player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
+                ? Tools.EnumToList<RoleAbility>().GetRandomValue()
+                : player.GetRoleAbility()).FirstOrDefault();
+
+
             if (ability != AbilityType.NONE)
                 abilities[index] = ability;
         }

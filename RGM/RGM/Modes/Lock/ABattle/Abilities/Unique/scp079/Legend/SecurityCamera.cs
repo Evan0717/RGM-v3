@@ -43,7 +43,7 @@ public class SecurityCamera : Ability
                         if (player == null) continue;
                         if (!HitboxIdentity.IsEnemy(Owner.ReferenceHub, player.ReferenceHub)) continue;
 
-                        var damage = 1f;
+                        var damage = player.AbilityCount(AbilityType.NORMAL_SHELL) + 1;
 
                         player.AddHint("알림", $"<color=red>SCP-079</color>에게 감시당하고 있습니다...", 0.5f);
 
