@@ -222,22 +222,19 @@ public class ABattle : Mode
             {
                 const float waitTime = 12f;
                 const float chaosStopTime = 30f;
+                var clearMakerHandle = Timing.RunCoroutine(ClearMaker());
+                FriendlyFire.Instance.OnEnabledForNoNuke();
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
-                    FriendlyFire.Instance.OnEnabledForNoNuke();
                     Tools.MessageTranslated(".G6 .G6 .G6",
                         "10초 후 무언가가 일어납니다.");
                     if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
-                    Timing.CallDelayed(waitTime, ()
-                        => PlayerManager.List
-                            .Where(x => x.IsNPC && x.DisplayNickname == "영사기")
-                            .ToList()
-                            .ForEach(x => NetworkServer.Destroy(x.GameObject)));
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
 
                 FriendlyFire.Instance.OnDisabled();
+                Timing.KillCoroutines(clearMakerHandle);
             }
 
             IEnumerator<float> ChaosMaker()
@@ -349,6 +346,19 @@ public class ABattle : Mode
 
                 float NextRandom() => rand.Next(1, 101);
             }
+
+            IEnumerator<float> ClearMaker()
+            {
+                while (true)
+                {
+                    yield return Timing.WaitForSeconds(120f);
+                    PlayerManager.List
+                        .Where(x => x.IsNPC && x.Nickname == "영사기")
+                        .ToList()
+                        .ForEach(clear => NetworkServer.Destroy(clear.GameObject));
+                }
+            }
+            
             void MakeRadio(Player player, string arg)
             {
                 if (player == null) return;
