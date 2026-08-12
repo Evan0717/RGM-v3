@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
@@ -17,10 +19,11 @@ public class Claymore : Ability
 {
     private ushort _claymoreCoinSerial;
     private CoroutineHandle _handle;
-    private static int excludeMask = ~((1 << 8) | (1 << 2)) & LayerMask.GetMask("Door", "Default");
-    private static float distance = 5f;
-    private static float ForwardRange = 7f;
-    private static float BackwardRange = 2f;
+    private static readonly int excludeMask = ~((1 << 8) | (1 << 2)) & LayerMask.GetMask("Door", "Default");
+    private static readonly float distance = 5f;
+    private static readonly float ForwardRange = 5.5f;
+    private static readonly float BackwardRange = 2f;
+    private static float health = 100f;
 
     public override void OnEnabled()
     {
@@ -29,6 +32,9 @@ public class Claymore : Ability
         
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
+        Exiled.Events.Handlers.Player.Shot += OnShot;
+        Exiled.Events.Handlers.Player.UsingMicroHIDEnergy += OnUsingMicroHIDEnergy;
+        Exiled.Events.Handlers.Item.Swinging += OnSwining;
     }
     
     public override void OnDisabled() {}
@@ -65,6 +71,7 @@ public class Claymore : Ability
     }
     private IEnumerator<float> Corutine(Vector3 position, SchematicObject schematic)
     {
+        
         Vector3 forward = schematic.transform.forward;
         float maxRange = Mathf.Max(ForwardRange, BackwardRange);
         int visionMask = VisionInformation.VisionLayerMask;
@@ -73,6 +80,18 @@ public class Claymore : Ability
         {
             if (schematic == null || !schematic)
                 yield break;
+            
+            ExplosiveGrenade eg = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+            eg.FuseTime = 0f;
+            eg.MaxRadius = 4.5f;
+            
+            if (health == 0f)
+            {
+                schematic.Destroy();
+                eg.MaxRadius = 0f;
+                eg.SpawnActive(schematic.Position);
+                yield break;
+            }
             
             bool ownerValid = Owner != null && Owner.ReferenceHub != null && Owner.IsAlive;
 
@@ -96,10 +115,7 @@ public class Claymore : Ability
 
                 if (Physics.Linecast(position, player.Position, visionMask))
                     continue;
-
-                ExplosiveGrenade eg = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-                eg.FuseTime = 0f;
-                eg.MaxRadius = 4.5f;
+                
                 eg.SpawnActive(Tools.GetPointForward(schematic.transform, 2.5f), Owner);
 
                 schematic.Destroy();
@@ -109,4 +125,52 @@ public class Claymore : Ability
             yield return Timing.WaitForOneFrame;
         }
     }
+    
+    
+    // 데미지 관련 핸들러
+    public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+        {
+            if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 1000, (LayerMask)1))
+            {
+                Dictionary<FirearmType, int> Firearm = new Dictionary<FirearmType, int>() {
+                    { FirearmType.Com15, 25 }, 
+                    { FirearmType.Com18, 25 }, 
+                    { FirearmType.FSP9, 22 }, 
+                    { FirearmType.Crossvec, 23 }, 
+                    { FirearmType.E11SR, 26 },
+                    { FirearmType.FRMG0, 24 }, 
+                    { FirearmType.Revolver, 51 }, 
+                    { FirearmType.Shotgun, 8 }, 
+                    { FirearmType.AK, 35 }, 
+                    { FirearmType.Logicer, 25 },
+                    { FirearmType.A7, 26 }, 
+                    { FirearmType.Com45, 25 }, 
+                    { FirearmType.ParticleDisruptor, 250 },
+                    { FirearmType.Scp127, 30 }
+                };
+
+                health -= Firearm[ev.Firearm.FirearmType];
+
+            }
+        }
+
+        public void OnUsingMicroHIDEnergy(Exiled.Events.EventArgs.Player.UsingMicroHIDEnergyEventArgs ev)
+        {
+            if (ev.MicroHID.State == InventorySystem.Items.MicroHID.Modules.MicroHidPhase.Firing)
+            {
+                if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 5, (LayerMask)1))
+                    health -= 120;
+            }
+        }
+
+        public async void OnSwining(Exiled.Events.EventArgs.Item.SwingingEventArgs ev)
+        {
+            await Task.Delay(300);
+
+            if (Physics.Raycast(
+                    ev.Player.ReferenceHub.PlayerCameraReference.position +
+                    ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f,
+                    ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 3, (LayerMask)1))
+                health -= 50;
+        } 
 }
