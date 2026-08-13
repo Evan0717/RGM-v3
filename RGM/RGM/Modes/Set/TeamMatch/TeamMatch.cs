@@ -43,7 +43,7 @@ namespace RGM.Modes
         private static readonly string[] TeamASpawnKeys = { "Spot A", "Spawn_ClassD" };
         private static readonly string[] TeamBSpawnKeys = { "Spot B", "Spawn_Scientist" };
 
-        private static readonly List<string> TdmMaps =
+        private static readonly List<string> MapsTdm =
         [
             "Battle",
             "Battle_Xmas2025",
@@ -113,7 +113,7 @@ namespace RGM.Modes
                 door.Lock(DoorLockType.AdminCommand);
             }
 
-            Tools.LoadMap(TdmMaps.GetRandomValue());
+            Tools.LoadMap(MapsTdm.GetRandomValue());
 
             yield return Timing.WaitForSeconds(1f);
 
@@ -269,11 +269,11 @@ namespace RGM.Modes
                 player.AddItem(item);
         }
 
-        IEnumerator<float> CleanDecals()
+        private IEnumerator<float> CleanDecals()
         {
             while (!_isMatchEnded)
             {
-                yield return Timing.WaitForSeconds(30f);
+                yield return Timing.WaitForSeconds(10f);
 
                 Exiled.API.Features.Map.Clean(DecalPoolType.Blood);
                 Exiled.API.Features.Map.Clean(DecalPoolType.Bullet);
