@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Decals;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;
-using HarmonyLib;
 using MEC;
-using Mirror;
+using PlayerRoles;
 using RGM.API.Features;
 using UnityEngine;
 
@@ -16,125 +17,249 @@ namespace RGM.Modes
     class FreeForAll : Mode
     {
         public override string Name => "개인전";
-        public override string Description => "최후의 1인이 되세요!";
+        public override string Description => "가장 먼저 50킬을 달성하세요!";
         public override string Detail =>
 """
-랜덤한 문으로 순간이동한 후 랜덤하게 지급되는 아이템으로 싸움을 시작합니다.
+랜덤한 전투 맵에서 다른 모든 플레이어와 싸우세요.
 
-모든 문은 잠겨 있습니다.
+먼저 50킬을 달성하거나, 4분 후 가장 많은 킬을 기록한 플레이어가 승리합니다.
 """;
         public override string Color => "FA58F4";
 
         public static FreeForAll Instance;
+        
+        private static readonly List<string> MapsDm =
+        [
+            "Battle_Shipment_Halloween2024",
+            "Battle_Shipment_Xmas2025",
+            "Battle_Shipment"
+        ];
+        
+        private const int TargetKills = 40;
+        private const float MatchDuration = 180f;
+        private const float RespawnDelay = 5f;
 
-        List<Player> pl = new List<Player>();
-        List<ItemType> StartupItems = new List<ItemType>();
-        Door door;
-
-        CoroutineHandle _onModeStarted;
+        private readonly List<Player> _players = new();
+        private readonly Dictionary<Player, int> _kills = new();
+        private List<Vector3> _spawnPositions = new();
+        private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _leaderboard;
+        private CoroutineHandle _cleanupDecals;
+        private bool _isMatchEnded;
+        private bool _isModeActive;
+        private int _modeId;
+        private float _matchEndTime;
 
         List<ItemType> Items()
         {
-            List<ItemType> Guns = new List<ItemType>() { ItemType.GunA7, ItemType.GunE11SR, ItemType.GunShotgun, ItemType.GunCom45, ItemType.GunFSP9, ItemType.GunRevolver,
-                ItemType.GunCOM18, ItemType.GunCrossvec, ItemType.GunLogicer, ItemType.GunFRMG0, ItemType.GunAK, ItemType.Jailbird, ItemType.ParticleDisruptor };
-            List<ItemType> Ammos = new List<ItemType>() { ItemType.Ammo12gauge, ItemType.Ammo44cal, ItemType.Ammo556x45, ItemType.Ammo762x39, ItemType.Ammo9x19 };
-            List<ItemType> CDItems = new List<ItemType>() { ItemType.Medkit, ItemType.Painkillers, ItemType.Radio, ItemType.GrenadeFlash };
-            List<ItemType> Items = new List<ItemType>();
-
-            Items.Add(Guns.GetRandomValue());
-
-            foreach (var item in CDItems)
+            List<ItemType> Guns = new List<ItemType>()
             {
-                if (UnityEngine.Random.Range(1, 3) == 1)
-                    Items.Add(item);
-            }
+                ItemType.GunA7,
+                ItemType.GunE11SR,
+                ItemType.GunShotgun,
+                ItemType.GunCom45,
+                ItemType.GunCrossvec,
+                ItemType.GunLogicer,
+                ItemType.GunFRMG0,
+                ItemType.GunAK
+            };
+            
+            List<ItemType> Items = new List<ItemType>();
+            Items.Add(Guns.GetRandomValue());
+            Items.Add(ItemType.ArmorLight);
 
             return Items;
         }
 
         public override void OnEnabled()
         {
+            _modeId++;
+            _isModeActive = true;
+            _isMatchEnded = false;
+            _players.Clear();
+            _kills.Clear();
+            _spawnPositions.Clear();
+
             Server.FriendlyFire = true;
             Round.IsLocked = true;
             Respawn.PauseWaves();
-            Door.List.ToList().ForEach(x => x.Lock(1205, Exiled.API.Enums.DoorLockType.Lockdown079));
-
+            
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot += OnShot;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _leaderboard = Timing.RunCoroutine(LeaderboardCoroutine());
+            _cleanupDecals = Timing.RunCoroutine(CleanDecals());
         }
 
         public override void OnDisabled()
         {
-            Door.List.ToList().ForEach(x => x.Unlock());
+            _isModeActive = false;
 
             Exiled.Events.Handlers.Player.Dying -= OnDying;
-            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
             Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
             Exiled.Events.Handlers.Player.Shot -= OnShot;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_leaderboard);
+            Timing.KillCoroutines(_cleanupDecals);
+
+            foreach (var door in Door.List)
+                door.Unlock();
         }
 
         public IEnumerator<float> OnModeStarted()
         {
-            door = Door.List.ToList().GetRandomValue();
-            StartupItems = Items();
-
-            PlayerManager.List.ToList().CopyTo(pl);
-            PlayerManager.List.ToList().ForEach(Spawned);
-
-            yield return Timing.WaitForSeconds(180f);
-
-            Player BusterCall = PlayerManager.List.Where(x => x.IsAlive).ToList().GetRandomValue();
-
-            foreach (var player in PlayerManager.List)
+            foreach (var door in Door.List)
             {
-                player.Position = BusterCall.Position;
-                player.AddBroadcast(5, "<b><size=30>[<color=yellow>버스터콜</color>]</size></b>\n<size=20>모두가 한자리에 모입니다.</size>");
+                door.IsOpen = true;
+                door.Lock(DoorLockType.AdminCommand);
             }
+
+            Tools.LoadMap(MapsDm.GetRandomValue());
+            yield return Timing.WaitForSeconds(1f);
+
+            _spawnPositions = Tools.GetSpawnPositions("Spot Random");
+            if (_spawnPositions.Count == 0)
+            {
+                Log.Error("[FreeForAll] 'Spot Random' 스폰 포인트를 찾지 못했습니다.");
+                Round.IsLocked = false;
+                yield break;
+            }
+
+            _matchEndTime = Time.realtimeSinceStartup + MatchDuration;
+            foreach (var player in PlayerManager.List.ToList())
+            {
+                _players.Add(player);
+                _kills[player] = 0;
+                player.Role.Set(RoleTypeId.NtfSpecialist, RoleSpawnFlags.None);
+                yield return Timing.WaitForOneFrame;
+                FinishSpawn(player, _modeId);
+            }
+
+            yield return Timing.WaitForSeconds(MatchDuration);
+
+            if (!_isMatchEnded)
+                EndMatch(GetLeaders());
         }
 
         public void OnDying(DyingEventArgs ev)
         {
-            if (pl.Contains(ev.Player))
+            if (_isModeActive && !_isMatchEnded && _players.Contains(ev.Player))
             {
-                pl.Remove(ev.Player);
-
-                if (pl.Count() < 2)
-                {
-                    Round.IsLocked = false;
-
-                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
-                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
-                }
+                ev.Player.ClearInventory();
+                ev.Player.ClearAmmo();
             }
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        public void OnDied(DiedEventArgs ev)
         {
-            Spawned(ev.Player);
+            if (!_isModeActive || _isMatchEnded || !_players.Contains(ev.Player))
+                return;
+
+            ev.Ragdoll?.Destroy();
+
+            if (ev.Attacker != null && ev.Attacker != ev.Player && _kills.ContainsKey(ev.Attacker))
+            {
+                _kills[ev.Attacker]++;
+
+                if (_kills[ev.Attacker] >= TargetKills)
+                {
+                    EndMatch(new List<Player> { ev.Attacker });
+                    return;
+                }
+            }
+
+            Timing.RunCoroutine(RespawnPlayer(ev.Player, _modeId));
         }
 
-        public void Spawned(Player player)
+        private IEnumerator<float> RespawnPlayer(Player player, int modeId)
         {
-            PlayerManager.List.ToList().ForEach(x => x.DisableEffect(Exiled.API.Enums.EffectType.FogControl));
-            Timing.CallDelayed(0.1f, () => PlayerManager.List.ToList().ForEach(x => x.EnableEffect(Exiled.API.Enums.EffectType.FogControl)));
+            yield return Timing.WaitForSeconds(RespawnDelay);
 
-            if (player.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist && pl.Contains(player))
+            if (!_isModeActive || _isMatchEnded || modeId != _modeId || !Round.IsLocked || player.IsAlive)
+                yield break;
+
+            player.Role.Set(RoleTypeId.NtfSpecialist, RoleSpawnFlags.None);
+            yield return Timing.WaitForOneFrame;
+            FinishSpawn(player, modeId);
+        }
+
+        private void FinishSpawn(Player player, int modeId)
+        {
+            if (!_isModeActive || _isMatchEnded || modeId != _modeId || !_players.Contains(player) || _spawnPositions.Count == 0)
+                return;
+
+            player.Position = _spawnPositions.GetRandomValue();
+            player.ApplyGodMode(3);
+            player.ClearInventory();
+
+            foreach (var item in Items())
+                player.AddItem(item);
+        }
+
+        private IEnumerator<float> LeaderboardCoroutine()
+        {
+            while (_isModeActive && !_isMatchEnded)
             {
-                player.Role.Set(PlayerRoles.RoleTypeId.NtfSpecialist);
-                player.Position = new Vector3(door.Position.x, door.Position.y + 2, door.Position.z);
+                foreach (var player in _players.Where(x => x.IsAlive))
+                    player.AddHint("개인전 리더보드", GetLeaderboardText(player), 1.2f);
 
-                player.ClearInventory();
+                yield return Timing.WaitForSeconds(1f);
+            }
+        }
 
-                foreach (var item in StartupItems)
-                    player.AddItem(item);
+        private string GetLeaderboardText(Player viewer)
+        {
+            int remainingSeconds = Mathf.CeilToInt(Mathf.Max(0f, _matchEndTime - Time.realtimeSinceStartup));
+            var rankings = _kills
+                .OrderByDescending(entry => entry.Value)
+                .ThenBy(entry => entry.Key.DisplayNickname)
+                .Take(5)
+                .Select((entry, index) => $"{index + 1}. {entry.Key.DisplayNickname} <color=#FFD700>{entry.Value}</color>");
+
+            return $"<align=right><size=22><b>개인전 리더보드</b>\n남은 시간: <color=#FF6B6B>{remainingSeconds / 60:00}:{remainingSeconds % 60:00}</color>\n\n{string.Join("\n", rankings)}\n\n내 킬: <color=#00E5FF>{_kills[viewer]}</color> / {TargetKills}</size></align>";
+        }
+
+        private List<Player> GetLeaders()
+        {
+            if (_kills.Count == 0)
+                return new List<Player>();
+
+            int highestKills = _kills.Max(entry => entry.Value);
+            return _kills
+                .Where(entry => entry.Value == highestKills)
+                .Select(entry => entry.Key)
+                .ToList();
+        }
+
+        private void EndMatch(List<Player> winners)
+        {
+            if (_isMatchEnded || winners.Count == 0)
+                return;
+
+            _isMatchEnded = true;
+            Round.IsLocked = false;
+
+            string winnerNames = string.Join(", ", winners.Select(player => player.DisplayNickname));
+            foreach (var player in PlayerManager.List)
+                player.AddBroadcast(10, $"<size=30><b>승리자: <color=#FFD700>{winnerNames}</color></b></size>");
+
+            Timing.RunCoroutine(Tools.SetWinner(winners, 13));
+        }
+        private IEnumerator<float> CleanDecals()
+        {
+            while (!_isMatchEnded)
+            {
+                yield return Timing.WaitForSeconds(10f);
+
+                Exiled.API.Features.Map.Clean(DecalPoolType.Blood);
+                Exiled.API.Features.Map.Clean(DecalPoolType.Bullet);
             }
         }
 
