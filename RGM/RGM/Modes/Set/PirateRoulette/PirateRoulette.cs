@@ -115,7 +115,7 @@ namespace RGM.Modes
         {
             while (Scp049.IsAlive)
             {
-                Scp049.Hurt(Scp049.MaxHealth / 120);
+                Scp049.Hurt(Scp049.MaxHealth / 100);
 
                 yield return Timing.WaitForSeconds(1);
             }
@@ -126,11 +126,9 @@ namespace RGM.Modes
             for (; ; )
             {
                 yield return Timing.WaitForSeconds(0.5f);
-                if (PlayerManager.List.Where(x => x.Role == RoleTypeId.ClassD && x != Bomb).Count() == 0)
-                {
-                    Bomb.Role.Set(RoleTypeId.Spectator, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
-                    yield break;
-                }
+                if (PlayerManager.List.Count(x => x.Role == RoleTypeId.ClassD && x != Bomb) != 0) continue;
+                Bomb.Role.Set(RoleTypeId.Spectator, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.None);
+                yield break;
             }
         }
 
@@ -181,11 +179,10 @@ namespace RGM.Modes
 
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            if (PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList()[0].Role.Type == RoleTypeId.Scp049)
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 15));
-
-            else
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 1));
+            Timing.RunCoroutine(
+                PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList()[0].Role.Type == RoleTypeId.Scp049
+                    ? Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), PlayerManager.List.Count)
+                    : Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 1));
         }
     }
 }
