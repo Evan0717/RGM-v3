@@ -217,15 +217,15 @@ public class ABattle : Mode
         {
             // 1. C.A.S.S.I.E 방송 후 딜레이
             // 2. 실행 후 딜레이
-            const float waitTime = 10f;
+            const float waitTime = 19f;
             const float chaosStopTime = 30f;
             
             // (확률) = 100 - 값 + 1
-            const int nukeChance = 99;
-            const int mythicChance = 97;
-            const int legendaryChance = 95;
+            const int nukeChance = 95;
+            const int mythicChance = 85;
+            const int legendaryChance = 80;
             const int epicChance = 75;
-            const int explodeChance = 60;
+            const int explodeChance = 40;
             const int explodeCount = 5;
             
             var rand = new System.Random(Exiled.API.Features.Map.Seed);
@@ -241,7 +241,7 @@ public class ABattle : Mode
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
                     Tools.MessageTranslated(".G6 .G6 .G6",
-                        $"{waitTime - 2}초 후 무언가가 일어납니다.");
+                        $"{waitTime}초 후 무언가가 일어납니다.");
                     Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker())); // 가랏 몬스터볼!!
                     
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
