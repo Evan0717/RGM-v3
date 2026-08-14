@@ -298,7 +298,7 @@ public class ABattle : Mode
                         MakeRadio(player, text);
                         Timing.CallDelayed(2f, () =>
                         {
-                            bomb.FuseTime = .2f;
+                            bomb.FuseTime = 0f;
                             bomb.SpawnActive(player.Position);
                             bomb.SpawnActive(player.Position);
                             bomb.SpawnActive(player.Position);
