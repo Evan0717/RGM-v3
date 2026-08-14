@@ -12,48 +12,46 @@ namespace RGM.Modes.Abilities.Mythic;
 [Ability("패왕색 패기", "누군가가 당신을 쳐다본다면, 그 사람은 이제 없는 존재가 되겠지요!", AbilityCategory.Mythic, AbilityType.MYTHIC_KINGSCOLOR)]
 public class KingsColor : Ability
 {
-    CoroutineHandle king;
-    int count = 0;
-    LabApi.Features.Wrappers.LightSourceToy lightSource;
+    private CoroutineHandle _king;
+    private int _count;
+    private LabApi.Features.Wrappers.LightSourceToy _lightSource;
 
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.Died += OnDied;
 
-        king = Timing.RunCoroutine(kingsColor());
+        _king = Timing.RunCoroutine(Kingscolor());
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.Died -= OnDied;
 
-        Timing.KillCoroutines(king);
+        Timing.KillCoroutines(_king);
 
-        if (lightSource != null)
-        {
-            lightSource.Destroy();
-            lightSource = null;
-        }
+        if (_lightSource == null) return;
+        _lightSource.Destroy();
+        _lightSource = null;
     }
 
-    public IEnumerator<float> kingsColor()
+    private IEnumerator<float> Kingscolor()
     {
-        lightSource = LabApi.Features.Wrappers.LightSourceToy.Create();
-        lightSource.Color = Color.red;
-        lightSource.Intensity = 40;
-        lightSource.Range = 10;
+        _lightSource = LabApi.Features.Wrappers.LightSourceToy.Create();
+        _lightSource.Color = Color.red;
+        _lightSource.Intensity = 40;
+        _lightSource.Range = 10;
 
         while (Owner.IsAlive)
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != Owner))
             {
-                if (!Tools.TryGetLookPlayer(player, 90f, out Player target, out RaycastHit? hit))
+                if (!player.TryGetLookPlayer(90f, out Player target, out RaycastHit? hit))
                     continue;
 
                 if (Owner != target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub))
                     continue;
 
-                lightSource.Position = Owner.Position;
+                _lightSource.Position = Owner.Position;
 
                 Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
                 player.EnableEffect(EffectType.Slowness, 80, 1f);
@@ -64,21 +62,19 @@ public class KingsColor : Ability
             yield return Timing.WaitForSeconds(0.0417f);
         }
 
-        if (lightSource != null)
-        {
-            lightSource.Destroy();
-            lightSource = null;
-        }
+        if (_lightSource == null) yield break;
+        _lightSource.Destroy();
+        _lightSource = null;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    private void OnDied(DiedEventArgs ev)
     {
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;
 
-        count++;
+        _count++;
 
-        switch (count)
+        switch (_count)
         {
             case 5:
             {

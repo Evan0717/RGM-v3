@@ -14,14 +14,14 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("Lava Chicken", "6.3m 반경의 적들을 태웁니다.", AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
 public class LavaChicken : Ability
 {
-    CoroutineHandle _onStarted;
+    private CoroutineHandle _onStarted;
 
     public override void OnEnabled() 
         => _onStarted = Timing.RunCoroutine(OnStarted());
 
     public override void OnDisabled() => Timing.KillCoroutines(_onStarted);
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
         SchematicObject lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205));
 
@@ -36,20 +36,18 @@ public class LavaChicken : Ability
 
                 foreach (var player in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
-                    if (Vector3.Distance(player.Position, Owner.Position) <= 6.3f)
+                    if (!(Vector3.Distance(player.Position, Owner.Position) <= 6.3f)) continue;
+                    var damage = player.IsScpRole() ? player.MaxHealth * 0.007f : player.MaxHealth * 0.021f;
+
+                    if (player.HasAbility(AbilityType.RARE_UNDINE))
                     {
-                        var damage = player.IsScpRole() ? player.MaxHealth * 0.007f : player.MaxHealth * 0.021f;
+                        damage /= 1 + player.AbilityCount(AbilityType.RARE_UNDINE);
 
-                        if (player.HasAbility(AbilityType.RARE_UNDINE))
-                        {
-                            damage /= 1 + player.AbilityCount(AbilityType.RARE_UNDINE);
-
-                            player.AddHint("운디네", $"<color={ABattle.RatingColor["희귀"]}><b>운디네</b></color>가 화염으로부터 당신을 보호하기 위해 노력하고 있습니다.", 0.5f);
-                        }
-
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
-                        player.Hit(Owner, damage);
+                        player.AddHint("운디네", $"<color={ABattle.RatingColor["희귀"]}><b>운디네</b></color>가 화염으로부터 당신을 보호하기 위해 노력하고 있습니다.", 0.5f);
                     }
+
+                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
+                    player.Hit(Owner, damage);
                 }
             }
             catch (Exception e)

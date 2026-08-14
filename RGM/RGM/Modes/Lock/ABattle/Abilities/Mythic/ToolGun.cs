@@ -26,12 +26,7 @@ public class ToolGun : Ability
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
-    public override void OnDisabled()
-    {
-        
-    }
-
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial == _coinSerial)
         {
@@ -39,7 +34,7 @@ public class ToolGun : Ability
         }
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (ev.Item.Serial != _coinSerial)
             return;

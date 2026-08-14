@@ -20,8 +20,8 @@ public class WarGod : Ability
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
-    
-    public void OnChangedItem(ChangedItemEventArgs ev)
+
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item == null || ev.Player == null) return;
         if (_lightWarriorSerial != ev.Player.CurrentItem.Serial) return;
@@ -33,7 +33,7 @@ public class WarGod : Ability
         ev.Player.AddHint("광전사", $"<b><color={ABattle.RatingColor["신화"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker != null && 
             ev.Player != ev.Attacker &&
@@ -64,10 +64,8 @@ public class WarGod : Ability
             }
         }
 
-        if (ev.Player == Owner)
-        {
-            if (ev.DamageHandler.Type == DamageType.Explosion)
-                ev.IsAllowed = false;
-        }
+        if (ev.Player != Owner) return;
+        if (ev.DamageHandler.Type == DamageType.Explosion)
+            ev.IsAllowed = false;
     }
 }

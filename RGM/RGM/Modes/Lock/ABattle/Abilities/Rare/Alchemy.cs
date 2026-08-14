@@ -4,10 +4,10 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("연금", "15초마다 랜덤한 아이템을 1개 획득합니다. (6회 발동 가능)", AbilityCategory.Rare, AbilityType.RARE_ALCHEMY)]
+[Ability("연금", "15초마다 랜덤한 아이템을 1개 획득합니다. (8회 발동 가능)", AbilityCategory.Rare, AbilityType.RARE_ALCHEMY)]
 public class Alchemy : Ability
 {
-    CoroutineHandle _onStarted;
+    private CoroutineHandle _onStarted;
 
     public override void OnEnabled()
     {
@@ -19,9 +19,9 @@ public class Alchemy : Ability
         Timing.KillCoroutines(_onStarted);
     }
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 8; i++)
         {
             Owner.AddRandomItem();
 

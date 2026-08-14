@@ -7,7 +7,7 @@ namespace RGM.Modes.Abilities.Epic;
 [Ability("고스트룰", "유령이 되어 문을 통과할 수 있게 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_GHOSTRULE)]
 public class GhostRule : Ability
 {
-    CoroutineHandle _ghostRotation;
+    private CoroutineHandle _ghostRotation;
     public override void OnEnabled()
     {
         _ghostRotation = Timing.RunCoroutine(GhostRotation());
@@ -19,7 +19,7 @@ public class GhostRule : Ability
         Owner.DisableEffect(EffectType.Ghostly);
     }
     
-    public IEnumerator<float> GhostRotation()
+    private IEnumerator<float> GhostRotation()
     {
         while (true)
         {

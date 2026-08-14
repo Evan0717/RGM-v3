@@ -16,12 +16,8 @@ public class Gnome : Ability
     {
         Light(Owner, new Color(0.588f, 0.294f, 0));
     }
-
-    public override void OnDisabled()
-    {
-    }
     
-    public void Light(Player player, Color color)
+    private void Light(Player player, Color color)
     {
         try
         {

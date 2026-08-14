@@ -11,8 +11,8 @@ namespace RGM.Modes.Abilities.Mythic;
 [Ability("무제한", "제한이 사라집니다. (무제한 모드와 동일)", AbilityCategory.Mythic, AbilityType.MYTHIC_UNLIMITED, RoleAbility.None, true)]
 public class Unlimited : Ability
 {
-    public int Tantrum;
-    CoroutineHandle _onStarted;
+    private int _tantrum;
+    private CoroutineHandle _onStarted;
 
     public override void OnEnabled()
     {
@@ -84,58 +84,55 @@ public class Unlimited : Ability
         Timing.KillCoroutines(_onStarted);
     }
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
         while (true)
         {
-            if (Owner.Role is Scp049Role scp049)
+            switch (Owner.Role)
             {
-                scp049.CallCooldown = 0;
-                scp049.GoodSenseCooldown = 0;
-                scp049.RemainingAttackCooldown = 0;
-            }
-            else if (Owner.Role is Scp106Role scp106)
-            {
-                scp106.CaptureCooldown = 0;
-                scp106.RemainingSinkholeCooldown = 0;
-            }
-            else if (Owner.Role is Scp173Role scp173)
-            {
-                scp173.BlinkCooldown = 0.5f;
-                scp173.RemainingBreakneckCooldown = 0.5f;
-            }
-            else if (Owner.Role is Scp096Role scp096)
-            {
-                scp096.EnrageCooldown = 0;
-                scp096.ChargeCooldown = 0;
-            }
-            else if (Owner.Role is Scp939Role scp939)
-            {
-                scp939.MimicryCooldown = 0;
-                scp939.AmnesticCloudCooldown = 0;
-                scp939.AttackCooldown = 0;
-            }
-            else if (Owner.Role is Scp079Role scp079)
-            {
-                scp079.BlackoutZoneCooldown = 0;
-                scp079.RoomLockdownCooldown = 0;
-
-                if (scp079.PingAbility != null)
+                case Scp049Role scp049:
+                    scp049.CallCooldown = 0;
+                    scp049.GoodSenseCooldown = 0;
+                    scp049.RemainingAttackCooldown = 0;
+                    break;
+                case Scp106Role scp106:
+                    scp106.CaptureCooldown = 0;
+                    scp106.RemainingSinkholeCooldown = 0;
+                    break;
+                case Scp173Role scp173:
+                    scp173.BlinkCooldown = 0.5f;
+                    scp173.RemainingBreakneckCooldown = 0.5f;
+                    break;
+                case Scp096Role scp096:
+                    scp096.EnrageCooldown = 0;
+                    scp096.ChargeCooldown = 0;
+                    break;
+                case Scp939Role scp939:
+                    scp939.MimicryCooldown = 0;
+                    scp939.AmnesticCloudCooldown = 0;
+                    scp939.AttackCooldown = 0;
+                    break;
+                case Scp079Role scp079:
                 {
-                    var field = typeof(PlayerRoles.PlayableScps.Scp079.Pinging.Scp079PingAbility)
-                        .GetField("_rateLimiter", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+                    scp079.BlackoutZoneCooldown = 0;
+                    scp079.RoomLockdownCooldown = 0;
 
-                    if (field != null)
+                    if (scp079.PingAbility != null)
                     {
-                        field.SetValue(scp079.PingAbility, new RateLimiter(0f));
+                        var field = typeof(PlayerRoles.PlayableScps.Scp079.Pinging.Scp079PingAbility)
+                            .GetField("_rateLimiter", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+
+                        if (field != null)
+                        {
+                            field.SetValue(scp079.PingAbility, new RateLimiter(0f));
+                        }
                     }
+
+                    break;
                 }
-            }
-            else if (Owner.Role is Scp0492Role scp0492)
-            {
-            }
-            else if (Owner.Role is Scp3114Role scp3114)
-            {
+                case Scp0492Role scp0492:
+                case Scp3114Role scp3114:
+                    break;
             }
 
             yield return Timing.WaitForSeconds(1f);
@@ -143,7 +140,7 @@ public class Unlimited : Ability
     }
 
 
-    public void OnHealing(HealingEventArgs ev)
+    private void OnHealing(HealingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -151,7 +148,7 @@ public class Unlimited : Ability
         ev.Player.MaxHealth += ev.Amount;
     }
 
-    public IEnumerator<float> OnUsingItem(UsingItemEventArgs ev)
+    private IEnumerator<float> OnUsingItem(UsingItemEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -161,7 +158,7 @@ public class Unlimited : Ability
         ev.Cooldown = 0;
     }
 
-    public void OnUsingRadioBattery(UsingRadioBatteryEventArgs ev)
+    private void OnUsingRadioBattery(UsingRadioBatteryEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -169,7 +166,7 @@ public class Unlimited : Ability
         ev.Drain = 0;
     }
 
-    public IEnumerator<float> OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
+    private IEnumerator<float> OnTeleporting(Exiled.Events.EventArgs.Scp106.TeleportingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -179,7 +176,7 @@ public class Unlimited : Ability
         ev.Scp106.RemainingSinkholeCooldown = 0;
     }
 
-    public IEnumerator<float> OnStalking(Exiled.Events.EventArgs.Scp106.StalkingEventArgs ev)
+    private IEnumerator<float> OnStalking(Exiled.Events.EventArgs.Scp106.StalkingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -189,7 +186,7 @@ public class Unlimited : Ability
         ev.Scp106.RemainingSinkholeCooldown = 0;
     }
 
-    public IEnumerator<float> OnScp106Attacking(Exiled.Events.EventArgs.Scp106.AttackingEventArgs ev)
+    private IEnumerator<float> OnScp106Attacking(Exiled.Events.EventArgs.Scp106.AttackingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -199,7 +196,7 @@ public class Unlimited : Ability
         ev.Scp106.CaptureCooldown = 0;
     }
 
-    public IEnumerator<float> OnPlayingSound(Exiled.Events.EventArgs.Scp939.PlayingSoundEventArgs ev)
+    private IEnumerator<float> OnPlayingSound(Exiled.Events.EventArgs.Scp939.PlayingSoundEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -209,7 +206,7 @@ public class Unlimited : Ability
         ev.Scp939.MimicryCooldown = 0;
     }
 
-    public void OnChangingCamera(Exiled.Events.EventArgs.Scp079.ChangingCameraEventArgs ev)
+    private void OnChangingCamera(Exiled.Events.EventArgs.Scp079.ChangingCameraEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -217,14 +214,14 @@ public class Unlimited : Ability
         ev.Scp079.Energy = 100000;
     }
 
-    public void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
+    private void OnPinging(Exiled.Events.EventArgs.Scp079.PingingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
         ev.Scp079.Energy = 100000;
     }
 
-    public IEnumerator<float> OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
+    private IEnumerator<float> OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -234,7 +231,7 @@ public class Unlimited : Ability
         ev.Scp049.RemainingCallDuration = 0;
     }
 
-    public IEnumerator<float> OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
+    private IEnumerator<float> OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -245,7 +242,7 @@ public class Unlimited : Ability
         ev.Scp049.RemainingGoodSenseDuration = 0;
     }
 
-    public IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
+    private IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -257,19 +254,19 @@ public class Unlimited : Ability
         ev.Scp096.SprintingSpeed = 500;
     }
 
-    public IEnumerator<float> OnPlacingTantrum(Exiled.Events.EventArgs.Scp173.PlacingTantrumEventArgs ev)
+    private IEnumerator<float> OnPlacingTantrum(Exiled.Events.EventArgs.Scp173.PlacingTantrumEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
 
-        if (Tantrum >= 10)
+        if (_tantrum >= 10)
         {
             ev.Player.AddHint("무제한 땅콩 똥 제한", $"렉 방지를 위해 10개로 제한됩니다. (하나 당 180초)", 1);
             ev.IsAllowed = false;
         }
         else
         {
-            Tantrum += 1;
+            _tantrum += 1;
 
             yield return Timing.WaitForOneFrame;
 
@@ -277,11 +274,11 @@ public class Unlimited : Ability
 
             yield return Timing.WaitForSeconds(180f);
 
-            Tantrum -= 1;
+            _tantrum -= 1;
         }
     }
 
-    public IEnumerator<float> OnUsingBreakneckSpeeds(Exiled.Events.EventArgs.Scp173.UsingBreakneckSpeedsEventArgs ev)
+    private IEnumerator<float> OnUsingBreakneckSpeeds(Exiled.Events.EventArgs.Scp173.UsingBreakneckSpeedsEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;
@@ -291,7 +288,7 @@ public class Unlimited : Ability
         ev.Scp173.RemainingBreakneckCooldown = 0;
     }
 
-    public void OnShooting(ShootingEventArgs ev)
+    private void OnShooting(ShootingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -299,7 +296,7 @@ public class Unlimited : Ability
         ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
     }
 
-    public void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
+    private void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -307,7 +304,7 @@ public class Unlimited : Ability
         ev.MicroHID.Energy += 100;
     }
 
-    public void OnUsingMicroHIDEnergy(UsingMicroHIDEnergyEventArgs ev)
+    private void OnUsingMicroHIDEnergy(UsingMicroHIDEnergyEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -315,7 +312,7 @@ public class Unlimited : Ability
         ev.MicroHID.Energy += 100;
     }
 
-    public void OnChargingJailbird(Exiled.Events.EventArgs.Item.ChargingJailbirdEventArgs ev)
+    private void OnChargingJailbird(Exiled.Events.EventArgs.Item.ChargingJailbirdEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -323,5 +320,4 @@ public class Unlimited : Ability
         ev.Jailbird.TotalCharges = 0;
         ev.Jailbird.TotalDamageDealt = 0;
     }
-
 }

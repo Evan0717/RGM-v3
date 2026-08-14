@@ -10,9 +10,4 @@ public class SteelShell : Ability
     {
         Owner.AddEffect(EffectType.DamageReduction, 10);
     }
-
-    public override void OnDisabled()
-    {
-        Owner.RemoveEffect(EffectType.DamageReduction, 10);
-    }
 }

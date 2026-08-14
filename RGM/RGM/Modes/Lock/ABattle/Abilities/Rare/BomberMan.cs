@@ -14,8 +14,4 @@ public class BomberMan : Ability
         g.FuseTime = 3f;
         g.SpawnActive(PlayerManager.List.ToList().Where(x => x.IsAlive && x.Role.Team != Owner.Role.Team && Owner != x).ToList().GetRandomValue().Position, Owner);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

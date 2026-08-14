@@ -24,11 +24,7 @@ public class Contract : Ability
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _contractCoinSerial)
             return;
@@ -36,7 +32,7 @@ public class Contract : Ability
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>계약</color></color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
+    private IEnumerator<float> OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_contractCoinSerial != ev.Item.Serial)
             yield break;

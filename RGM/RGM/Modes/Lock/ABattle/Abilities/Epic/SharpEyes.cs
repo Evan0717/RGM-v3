@@ -17,7 +17,7 @@ public class SharpEyes : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null || 
             ev.Attacker != Owner || 

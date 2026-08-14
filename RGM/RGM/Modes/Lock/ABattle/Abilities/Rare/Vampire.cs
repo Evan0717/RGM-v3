@@ -15,11 +15,13 @@ public class Vampire : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || ev.Attacker != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
+        if (ev.Attacker == null ||
+            ev.Attacker != Owner ||
+            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
-        ev.Attacker.AddAhp(22 * ev.DamageHandler.Damage / 100);
+        ev.Attacker.AddAhp(ev.DamageHandler.Damage * 0.22f);
     }
 }

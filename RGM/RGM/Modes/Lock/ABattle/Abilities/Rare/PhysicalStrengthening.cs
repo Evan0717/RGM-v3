@@ -18,7 +18,7 @@ public class PhysicalStrengthening : Ability
         Timing.KillCoroutines(_upgradeBody);
     }
 
-    public IEnumerator<float> UpgradeBody()
+    private IEnumerator<float> UpgradeBody()
     {
         while (true)
         {

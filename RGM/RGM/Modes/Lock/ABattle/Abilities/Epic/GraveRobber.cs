@@ -9,7 +9,7 @@ namespace RGM.Modes.Abilities.Epic;
 [Ability("도굴꾼", "사망한 아군의 능력 중 하나를 랜덤으로 획득합니다. (4회)", AbilityCategory.Epic, AbilityType.EPIC_GRAVEROBBER)]
 public class GraveRobber : Ability
 {
-    int count = 4;
+    private int _count = 4;
 
     public override void OnEnabled() 
         => Exiled.Events.Handlers.Player.Dying += OnDying;
@@ -17,9 +17,9 @@ public class GraveRobber : Ability
     public override void OnDisabled() 
         => Exiled.Events.Handlers.Player.Dying -= OnDying;
 
-    public void OnDying(DyingEventArgs ev)
+    private void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player.LeadingTeam != Owner.LeadingTeam || ev.Player.GetAbilities().Count() == 0)
+        if (ev.Player.LeadingTeam != Owner.LeadingTeam || ev.Player.GetAbilities().Count == 0)
             return;
 
         List<AbilityType> abilityTypes = ev.Player.GetAbilities().Where(x=> x.Data.RoleAbility == RoleAbility.None).Select(x => x.Data.AbilityType).ToList();
@@ -28,17 +28,13 @@ public class GraveRobber : Ability
 
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            if (ev.Player.IsDead)
-            {
-                Owner.AddAbility(abilityTypes.GetRandomValue());
+            if (!ev.Player.IsDead) return;
+            Owner.AddAbility(abilityTypes.GetRandomValue());
 
-                if (--count == 0)
-                {
-                    Owner.RemoveAbility(AbilityType.EPIC_GRAVEROBBER);
-                    OnDisabled();
-                    Owner.AddAbility(AbilityType.DUMMY_ENDOFGRAVEROBBERY);
-                }
-            }
+            if (--_count != 0) return;
+            Owner.RemoveAbility(AbilityType.EPIC_GRAVEROBBER);
+            OnDisabled();
+            Owner.AddAbility(AbilityType.DUMMY_ENDOFGRAVEROBBERY);
         });
     }
 }

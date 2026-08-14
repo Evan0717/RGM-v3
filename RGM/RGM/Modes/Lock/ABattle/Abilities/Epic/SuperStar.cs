@@ -28,7 +28,7 @@ public class SuperStar : Ability
         Exiled.Events.Handlers.Player.Died -= OnDied;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    private void OnDied(DiedEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

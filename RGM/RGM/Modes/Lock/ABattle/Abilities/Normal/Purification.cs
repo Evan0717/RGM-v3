@@ -1,5 +1,6 @@
 ﻿using InventorySystem.Items.Usables.Scp330;
 using RGM.API.Features;
+using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
@@ -9,9 +10,8 @@ public class Purification : Ability
     public override void OnEnabled()
     {
         Owner.AddCandy(CandyKindID.Green);
-    }
-
-    public override void OnDisabled()
-    {
+        while (Random.Range(1, 101) <= 25) {
+            Owner.AddCandy(CandyKindID.Green);
+        }
     }
 }

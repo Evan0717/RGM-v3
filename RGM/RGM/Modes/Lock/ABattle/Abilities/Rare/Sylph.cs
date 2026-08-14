@@ -15,12 +15,8 @@ public class Sylph : Ability
     {
         Light(Owner, Color.green);
     }
-
-    public override void OnDisabled()
-    {
-    }
-    
-    public void Light(Player player, Color color)
+   
+    private void Light(Player player, Color color)
     {
         try
         {

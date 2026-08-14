@@ -13,24 +13,22 @@ public class CSTC : Ability
 
         Timing.CallDelayed(3.5f, () =>
         {
-            if (Owner.IsAlive)
+            if (!Owner.IsAlive) return;
+            if (Random.Range(1, 101) <= 20)
             {
-                if (Random.Range(1, 101) <= 20)
-                {
-                    Owner.AddHint("대학수학능력시험 1등급", "<b>능력을 3개 더 얻었습니다!</b>");
+                Owner.AddHint("대학수학능력시험 1등급", "<b>능력을 3개 더 얻었습니다!</b>");
 
-                    for (int i = 0; i < 3; i++) {
-                        var category = Random.Range(1, 101) <= 15 ? AbilityCategory.Legend : AbilityCategory.Epic;
-                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1)[0]);
-                    }
-                    Owner.AddAbility(AbilityType.DUMMY_CSTCSUCCESS);
+                for (int i = 0; i < 3; i++) {
+                    var category = Random.Range(1, 101) <= 15 ? AbilityCategory.Legend : AbilityCategory.Epic;
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1)[0]);
                 }
-                else
-                {
-                    Owner.AddHint("대학수학능력시험 9등급", "다음 기회에..");
-                    Owner.AddAbility(AbilityType.DUMMY_CSTCFAIL);
-                };
+                Owner.AddAbility(AbilityType.DUMMY_CSTCSUCCESS);
             }
+            else
+            {
+                Owner.AddHint("대학수학능력시험 9등급", "다음 기회에..");
+                Owner.AddAbility(AbilityType.DUMMY_CSTCFAIL);
+            };
         });
     }
 }

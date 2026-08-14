@@ -18,7 +18,7 @@ public class Martyrdom : Ability
         Exiled.Events.Handlers.Player.Dying -= OnDying;
     }
 
-    public void OnDying(DyingEventArgs ev)
+    private void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -27,12 +27,10 @@ public class Martyrdom : Ability
 
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            if (ev.Player.IsDead)
-            {
-                var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
-                g.FuseTime = 3f;
-                g.SpawnActive(pos, ev.Player);
-            }
+            if (!ev.Player.IsDead) return;
+            var g = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Player);
+            g.FuseTime = 3f;
+            g.SpawnActive(pos, ev.Player);
         });
     }
 }

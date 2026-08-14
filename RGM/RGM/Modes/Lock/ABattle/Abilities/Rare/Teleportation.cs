@@ -24,8 +24,4 @@ public class Teleportation : Ability
             Owner.AddAbility(AbilityType.DUMMY_TELEPORTED);
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

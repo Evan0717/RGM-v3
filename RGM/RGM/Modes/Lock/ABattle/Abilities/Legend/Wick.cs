@@ -27,7 +27,7 @@ public class Wick : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+    private void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
     {
         if (ev.Attacker != Owner || ev.Attacker.CurrentItem == null)
             return;

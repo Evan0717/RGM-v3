@@ -14,18 +14,12 @@ public class Priest : Ability
         {
             var dead = PlayerManager.List.Where(x => x.IsDead).ToList();
 
-            if (dead.Count() != 0)
-            {
-                var revive = dead.GetRandomValue();
+            if (dead.Count == 0) continue;
+            var revive = dead.GetRandomValue();
 
-                if (Owner.IsScpRole())
-                    revive.Role.Set(RoleTypeId.Scp0492);
+            revive.Role.Set(Owner.IsScpRole() ? RoleTypeId.Scp0492 : Owner.Role.Type);
 
-                else
-                    revive.Role.Set(Owner.Role.Type);
-
-                revive.Position = Owner.Position;
-            }
+            revive.Position = Owner.Position;
         }
     }
 }

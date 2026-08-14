@@ -29,7 +29,7 @@ public class Spirit : Ability
         Timing.KillCoroutines(_onStarted);
     }
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
         while (true)
         {
@@ -50,12 +50,11 @@ public class Spirit : Ability
                     Log.Error($"An error occurred while removing SCP-1344 from <b><i>{player.Nickname}</i></b> ({player.UserId}): {e}");
                 }
             }
-
             yield return Timing.WaitForOneFrame;
         }
     }
 
-    public void OnHurt(HurtEventArgs ev)
+    private void OnHurt(HurtEventArgs ev)
     {
         if (ev.Attacker == Owner)
             ev.Attacker.DisableEffect(EffectType.Invisible);

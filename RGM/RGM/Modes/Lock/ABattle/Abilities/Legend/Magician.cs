@@ -21,7 +21,7 @@ public class Magician : Ability
         Exiled.Events.Handlers.Player.Hurt -= OnHurt;
     }
 
-    public void OnHurt(HurtEventArgs ev)
+    private void OnHurt(HurtEventArgs ev)
     {
         if (ev.Player != Owner || ev.Attacker == null || !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Attacker.ReferenceHub))
             return;

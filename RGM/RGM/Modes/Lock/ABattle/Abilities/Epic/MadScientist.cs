@@ -1,4 +1,5 @@
 ﻿using System;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Warhead;
@@ -30,7 +31,9 @@ public class MadScientist : Ability
     {
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            if (ev.Player != Owner || Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) || _isDetonatingState)
+            if (ev.Player != Owner ||
+                Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) || 
+                _isDetonatingState)
                 return;
 
             Timing.CallDelayed(10, () =>
