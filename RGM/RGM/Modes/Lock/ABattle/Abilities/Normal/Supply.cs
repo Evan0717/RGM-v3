@@ -21,8 +21,4 @@ public class Supply : Ability
         for (int i = 1; i < 4; i++)
             Owner.AddItem(ammos.GetRandomValue());
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

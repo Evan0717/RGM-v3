@@ -20,12 +20,11 @@ public class CataclysmGenerator : Ability
 
         foreach (var a in Owner.GetAbilities().ToList())
         {
-            if (upgradable.ContainsKey(a.Data.Category) && a.Data.AbilityType != AbilityType.LEGEND_CATACLYSMGENERATOR)
-            {
-                abilityList.Add(upgradable[a.Data.Category]);
+            if (!upgradable.ContainsKey(a.Data.Category) ||
+                a.Data.AbilityType == AbilityType.LEGEND_CATACLYSMGENERATOR) continue;
+            abilityList.Add(upgradable[a.Data.Category]);
 
-                Owner.RemoveAbility(a);
-            }
+            Owner.RemoveAbility(a);
         }
 
         foreach (var ac in abilityList)

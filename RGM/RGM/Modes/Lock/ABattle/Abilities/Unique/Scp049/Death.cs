@@ -16,7 +16,7 @@ public class Death : Ability
         Exiled.Events.Handlers.Scp049.Attacking -= OnScp049Attacking;
     }
 
-    public IEnumerator<float> OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
+    private IEnumerator<float> OnScp049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;

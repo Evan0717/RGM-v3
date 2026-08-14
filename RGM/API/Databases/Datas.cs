@@ -56,7 +56,7 @@ namespace RGM.API.DataBases
             {"찰칵", new List<string>() { "<b><color=#D8FE9F>카</color><color=#A2FE78>메</color><color=#6DFE51>라</color></b>", "추억 속으로 박제"}}
         };
 
-        public static List<DamageType> BlockDamageTypes = new List<DamageType>()
+        public static List<DamageType> BlockDamageTypes = new()
         {
             DamageType.Warhead,
             DamageType.Crushed,
@@ -65,7 +65,7 @@ namespace RGM.API.DataBases
             DamageType.Scp106
         };
 
-        public static List<RoleTypeId> AIRoles = new List<RoleTypeId>()
+        public static List<RoleTypeId> AIRoles = new()
         {
             RoleTypeId.Scp049,
             RoleTypeId.Scp096,
@@ -73,7 +73,7 @@ namespace RGM.API.DataBases
             RoleTypeId.Scp173
         };
 
-        public static List<ItemType> ExceptItems = new List<ItemType>()
+        public static List<ItemType> ExceptItems = new()
         {
             ItemType.Snowball,
             ItemType.Coal,

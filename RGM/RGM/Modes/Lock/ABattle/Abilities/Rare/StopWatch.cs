@@ -39,7 +39,7 @@ public class StopWatch : Ability
     {
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _clockCoinSerial)
             return;
@@ -47,7 +47,7 @@ public class StopWatch : Ability
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>회중시계</color></color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_clockCoinSerial != ev.Item.Serial)
             return;

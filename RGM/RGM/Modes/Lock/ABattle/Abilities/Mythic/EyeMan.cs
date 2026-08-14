@@ -16,7 +16,7 @@ namespace RGM.Modes.Abilities.Mythic;
 [Ability("눈빛맨", "상대는 눈에 띄는 것만으로도 압도당할 것입니다!", AbilityCategory.Mythic, AbilityType.MYTHIC_EYEMAN)]
 public class EyeMan : Ability
 {
-    CoroutineHandle _twinkle;
+    private CoroutineHandle _twinkle;
 
     public override void OnEnabled()
     {
@@ -28,7 +28,7 @@ public class EyeMan : Ability
         Timing.KillCoroutines(_twinkle);
     }
 
-    public IEnumerator<float> Twinkle()
+    private IEnumerator<float> Twinkle()
     {
         SchematicObject beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205));
         beam.GetComponentsInChildren<PrimitiveObjectToy>().ToList().ForEach(x => x.MovementSmoothing = 0);
@@ -48,7 +48,7 @@ public class EyeMan : Ability
                 //    }
                 //}
 
-                if (Tools.TryGetLookPlayer(Owner, 100f, out Exiled.API.Features.Player target, out RaycastHit? hit))
+                if (Owner.TryGetLookPlayer(100f, out Exiled.API.Features.Player target, out RaycastHit? hit))
                 {
                     if (Owner != target && HitboxIdentity.IsEnemy(Owner.ReferenceHub, target.ReferenceHub))
                     {

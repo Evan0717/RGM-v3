@@ -11,12 +11,12 @@ namespace RGM.Modes.Abilities.Unique.ClassD;
 [Ability("불법개조무기소지죄", "지면에 닿으면 폭발하는 수류탄을 지급받습니다.", AbilityCategory.Common, AbilityType.NORMAL_CLASSD_ILLEGALWEAPON,  RoleAbility.ClassD)]
 public class IllegalWeapon : Ability
 {
-    ushort id = 0;
+    private ushort _id;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.GrenadeHE);
-        id = item.Serial;
+        _id = item.Serial;
 
         Exiled.Events.Handlers.Player.ThrownProjectile += OnThrownProjectile;
     }
@@ -26,24 +26,23 @@ public class IllegalWeapon : Ability
         Exiled.Events.Handlers.Player.ThrownProjectile -= OnThrownProjectile;
     }
 
-    public IEnumerator<float> OnThrownProjectile(ThrownProjectileEventArgs ev)
+    private IEnumerator<float> OnThrownProjectile(ThrownProjectileEventArgs ev)
     {
-        if (ev.Item.Serial != id)
+        if (ev.Item.Serial != _id)
             yield break;
 
         yield return Timing.WaitForSeconds(0.3f);
 
-        if (ev.Projectile is ExplosionGrenadeProjectile grenade && ev.Player.Role.Type != PlayerRoles.RoleTypeId.Scp079)
+        if (ev.Projectile is not ExplosionGrenadeProjectile grenade ||
+            ev.Player.Role.Type == PlayerRoles.RoleTypeId.Scp079) yield break;
+        while (!grenade.IsAlreadyDetonated)
         {
-            while (!grenade.IsAlreadyDetonated)
+            if (Physics.OverlapSphere(grenade.Position, 0.3f).Count() > 4)
             {
-                if (Physics.OverlapSphere(grenade.Position, 0.3f).Count() > 4)
-                {
-                    grenade.Base.Network_syncTargetTime = 0.1f;
-                }
-
-                yield return Timing.WaitForOneFrame;
+                grenade.Base.Network_syncTargetTime = 0.1f;
             }
+
+            yield return Timing.WaitForOneFrame;
         }
     }
 }

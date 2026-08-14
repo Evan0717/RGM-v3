@@ -16,7 +16,7 @@ public class Confusion : Ability
         Exiled.Events.Handlers.Scp0492.TriggeringBloodlust -= OnTriggeringBloodlust;
     }
 
-    public void OnTriggeringBloodlust(TriggeringBloodlustEventArgs ev)
+    private void OnTriggeringBloodlust(TriggeringBloodlustEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

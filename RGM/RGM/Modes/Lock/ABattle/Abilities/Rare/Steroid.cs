@@ -10,8 +10,4 @@ public class Steroid : Ability
     {
         Owner.AddEffect(EffectType.MovementBoost, 50, 25);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

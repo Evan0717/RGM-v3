@@ -30,9 +30,4 @@ public class Lockdown : Ability
 
         Map.TurnOffAllLights(16);
     }
-
-    public override void OnDisabled()
-    {
-
-    }
 }

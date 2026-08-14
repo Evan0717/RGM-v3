@@ -9,18 +9,13 @@ public class BagOfChaos : Ability
 {
     public override void OnEnabled()
     {
-        int Count = Owner.Items.Where(x => !x.IsAmmo).ToList().Count;
+        int count = Owner.Items.Where(x => !x.IsAmmo).ToList().Count;
 
         Owner.ClearItems();
 
-        for (int i = 1; i < Count + 1; i++)
+        for (int i = 1; i < count + 1; i++)
         {
-            try { Owner.AddItem(Tools.EnumToList<ItemType>().Where(x => !x.IsAmmo()).ToList()).GetRandomValue(); }
-            catch { }
+            Owner.AddItem([.. Tools.EnumToList<ItemType>().Where(x => !x.IsAmmo())]).GetRandomValue();
         }
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

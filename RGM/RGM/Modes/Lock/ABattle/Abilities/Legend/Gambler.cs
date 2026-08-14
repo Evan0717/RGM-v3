@@ -30,7 +30,7 @@ public class Gambler : Ability
         _mutex?.Dispose();
     }
 
-    public void OnDroppingItem(DroppingItemEventArgs ev)
+    private void OnDroppingItem(DroppingItemEventArgs ev)
     {
         if (ev.Player != Owner ||
             ev.Player.IsScpRole() || 
@@ -44,7 +44,7 @@ public class Gambler : Ability
         _mutex.ReleaseMutex();
     }
 
-    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
         if (!(Owner.IsScpRole() || 
               Owner.Role.Type.ToString().Contains("Flamingo")) ||

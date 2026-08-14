@@ -5,7 +5,7 @@ public class Scp127 : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddItem(ItemType.GrenadeFlash);
         Owner.AddItem(ItemType.GunSCP127);
+        Owner.AddItem(ItemType.GrenadeFlash);
     }
 }

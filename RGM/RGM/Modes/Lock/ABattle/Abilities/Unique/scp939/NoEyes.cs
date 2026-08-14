@@ -10,6 +10,13 @@ namespace RGM.Modes.Abilities.Unique.Scp939;
 [Ability("실명", "섬광탄 효과에 면역을 가집니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP939_NOEYES, RoleAbility.Scp939)]
 public class NoEyes : Ability
 {
+    private readonly List<EffectType> _effects =
+    [
+        EffectType.Blurred,
+        EffectType.Deafened,
+        EffectType.Flashed
+    ];
+    
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
@@ -20,13 +27,7 @@ public class NoEyes : Ability
         Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
     }
 
-    List<EffectType> _effects =
-    [
-        EffectType.Blurred,
-        EffectType.Deafened,
-        EffectType.Flashed
-    ];
-    public void OnReceivingEffect(ReceivingEffectEventArgs ev)
+    private void OnReceivingEffect(ReceivingEffectEventArgs ev)
     {
         if (ev.Player != Owner) return;
         

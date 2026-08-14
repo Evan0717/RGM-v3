@@ -25,7 +25,7 @@ public class Lucky : Ability
         Exiled.Events.Handlers.Player.ClosingGenerator -= OnClosingGenerator;
     }
 
-    public void OnInteractingDoor(InteractingDoorEventArgs ev)
+    private void OnInteractingDoor(InteractingDoorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -42,48 +42,40 @@ public class Lucky : Ability
             return;
         }
 
-        if (Random.Range(1, 101) <= 5)
-        {
-            ev.IsAllowed = false;
+        if (Random.Range(1, 101) > 5) return;
+        ev.IsAllowed = false;
 
-            ev.Door.IsOpen = !ev.Door.IsOpen;
-        }
+        ev.Door.IsOpen = !ev.Door.IsOpen;
     }
 
-    public void OnInteractingLocker(InteractingLockerEventArgs ev)
+    private void OnInteractingLocker(InteractingLockerEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Random.Range(1, 101) <= 5)
-        {
-            ev.IsAllowed = false;
+        if (Random.Range(1, 101) > 5) return;
+        ev.IsAllowed = false;
 
-            ev.InteractingChamber.IsOpen = !ev.InteractingChamber.IsOpen;
-        }
+        ev.InteractingChamber.IsOpen = !ev.InteractingChamber.IsOpen;
     }
 
-    public void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
+    private void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Random.Range(1, 101) <= 5)
-        {
-            ev.IsAllowed = false;
-            ev.Generator.IsOpen = false;
-        }
+        if (Random.Range(1, 101) > 5) return;
+        ev.IsAllowed = false;
+        ev.Generator.IsOpen = false;
     }
 
-    public void OnClosingGenerator(ClosingGeneratorEventArgs ev)
+    private void OnClosingGenerator(ClosingGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Random.Range(1, 101) <= 5)
-        {
-            ev.IsAllowed = false;
-            ev.Generator.IsOpen = true;
-        }
+        if (Random.Range(1, 101) > 5) return;
+        ev.IsAllowed = false;
+        ev.Generator.IsOpen = true;
     }
 }

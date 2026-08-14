@@ -17,7 +17,7 @@ public class RestArea : Ability
         Exiled.Events.Handlers.Scp079.GainingExperience -= OnGainingExperience;
     }
 
-    public void OnGainingExperience(GainingExperienceEventArgs ev)
+    private void OnGainingExperience(GainingExperienceEventArgs ev)
     {
         if (Owner != ev.Player)
             return;

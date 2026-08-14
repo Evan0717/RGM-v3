@@ -15,7 +15,7 @@ public class SuicideBomber : Ability
     public override void OnDisabled()
         => Exiled.Events.Handlers.Player.Dying -= OnDying;
 
-    public void OnDying(DyingEventArgs ev)
+    private void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

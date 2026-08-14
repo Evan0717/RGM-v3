@@ -13,7 +13,7 @@ public class HolyProtection : Ability
     public override void OnDisabled() 
         => Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
 
-    public void OnReceivingEffect(ReceivingEffectEventArgs ev)
+    private void OnReceivingEffect(ReceivingEffectEventArgs ev)
     {
         if (ev.Player != Owner) return;
         var effectType = ev.Effect.GetEffectType();

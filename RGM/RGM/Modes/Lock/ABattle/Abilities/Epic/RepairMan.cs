@@ -28,7 +28,7 @@ public class RepairMan : Ability
         Exiled.Events.Handlers.Player.ClosingGenerator -= OnClosingGenerator;
     }
 
-    public void OnInteractingDoor(InteractingDoorEventArgs ev)
+    private void OnInteractingDoor(InteractingDoorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -48,7 +48,7 @@ public class RepairMan : Ability
         ev.IsAllowed = true;
     }
 
-    public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
+    private void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -56,7 +56,7 @@ public class RepairMan : Ability
         ev.IsTriggerable = false;
     }
 
-    public void OnInteractingLocker(InteractingLockerEventArgs ev)
+    private void OnInteractingLocker(InteractingLockerEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -64,7 +64,7 @@ public class RepairMan : Ability
         ev.IsAllowed = true;
     }
 
-    public void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
+    private void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -72,7 +72,7 @@ public class RepairMan : Ability
         ev.IsAllowed = true;
     }
 
-    public void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
+    private void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -80,7 +80,7 @@ public class RepairMan : Ability
         ev.IsAllowed = true;
     }
 
-    public void OnClosingGenerator(ClosingGeneratorEventArgs ev)
+    private void OnClosingGenerator(ClosingGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

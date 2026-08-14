@@ -18,7 +18,7 @@ public class Blink : Ability
     public override void OnDisabled()
         => Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
 
-    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
         if (ev.Player != Owner || TeleportCooldown > 0 || !ev.Player.IsJumping || ev.Player.CurrentRoom.Type == RoomType.Pocket)
             return;
@@ -32,20 +32,16 @@ public class Blink : Ability
         {
             float Distance = Vector3.Distance(door.Position, ev.Player.Position);
 
-            if (Distance < radius)
-            {
-                nearestDoor = door;
-                radius = Distance;
-            }
+            if (!(Distance < radius)) continue;
+            nearestDoor = door;
+            radius = Distance;
         }
 
-        if (nearestDoor != null)
-        {
-            Vector3 pos = nearestDoor.Position;
+        if (nearestDoor == null) return;
+        Vector3 pos = nearestDoor.Position;
 
-            ev.Player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
+        ev.Player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
 
-            Timing.CallDelayed(10, () => { TeleportCooldown = 0; });
-        }
+        Timing.CallDelayed(10, () => { TeleportCooldown = 0; });
     }
 }

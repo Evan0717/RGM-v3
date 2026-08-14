@@ -7,8 +7,4 @@ public class EngineeringMajor : Ability
     {
         Owner.AddItem(ItemType.SCP2176);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

@@ -1,16 +1,6 @@
-﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp079;
-using Exiled.Events.Patches.Events.Player;
-using LabApi.Features.Wrappers;
-using MEC;
-using ProjectMER.Features.Serializable;
-using RGM.API.Features;
-using RGM.Modes;
+﻿using MEC;
 using System.Collections.Generic;
 using UnityEngine;
-using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Legend;
 
@@ -27,10 +17,9 @@ public class ExplosionIsArt : Ability
     public override void OnDisabled()
     {
         Timing.KillCoroutines(_airstrike);
-
     }
 
-    public IEnumerator<float> AirstrikeCoroutine()
+    private IEnumerator<float> AirstrikeCoroutine()
     {
         while (Owner.IsAlive && Owner != null)
         {
@@ -41,6 +30,5 @@ public class ExplosionIsArt : Ability
             Owner.AddAbility(AbilityType.RARE_SCP079_AIRSTRIKE);
             yield return Timing.WaitForSeconds(30f);
         }
-        yield break;
     }
 }

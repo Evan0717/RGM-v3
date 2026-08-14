@@ -13,8 +13,4 @@ public class Gman : Ability
             Owner.AddAbility(AbilityType.MYTHIC_NOCLIP);
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

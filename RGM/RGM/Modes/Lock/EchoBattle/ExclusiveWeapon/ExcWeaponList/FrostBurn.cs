@@ -19,8 +19,8 @@ namespace RGM.Modes.ExclusiveWeapon;
     ExclusiveWeaponType.FrostBurn)]
 public class FrostBurn : ExcWeapon
 {
-    public override float AttackFlatMin => 3.0f;
-    public override float AttackFlatMax => 36.7f;
+    public override float AttackFlatMin => 4.7f;
+    public override float AttackFlatMax => 58.7f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.CriticalChance;
     public override float SecondaryStatMin => 10.4f;
     public override float SecondaryStatMax => 29.3f;

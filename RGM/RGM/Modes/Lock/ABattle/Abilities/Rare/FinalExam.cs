@@ -13,24 +13,22 @@ public class FinalExam : Ability
 
         Timing.CallDelayed(3.5f, () =>
         {
-            if (Owner.IsAlive)
+            if (!Owner.IsAlive) return;
+            if (Random.Range(1, 101) <= 25)
             {
-                if (Random.Range(1, 101) <= 25)
-                {
-                    Owner.AddHint("기말고사 수석", "<b>능력을 3개 더 얻었습니다!</b>");
+                Owner.AddHint("기말고사 수석", "<b>능력을 3개 더 얻었습니다!</b>");
 
-                    for (int i = 0; i < 3; i++) {
-                        var category = Random.Range(1, 101) <= 20 ? AbilityCategory.Epic : AbilityCategory.Rare;
-                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, [AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
-                    }
-                    Owner.AddAbility(AbilityType.DUMMY_FINALEXAMSUCCESS);
+                for (int i = 0; i < 3; i++) {
+                    var category = Random.Range(1, 101) <= 20 ? AbilityCategory.Epic : AbilityCategory.Rare;
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, [AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
                 }
-                else
-                {
-                    Owner.AddHint("기말고사 낙제", "다음 기회에..");
-                    Owner.AddAbility(AbilityType.DUMMY_FINALEXAMFAIL);
-                };
+                Owner.AddAbility(AbilityType.DUMMY_FINALEXAMSUCCESS);
             }
+            else
+            {
+                Owner.AddHint("기말고사 낙제", "다음 기회에..");
+                Owner.AddAbility(AbilityType.DUMMY_FINALEXAMFAIL);
+            };
         });
     }
 }

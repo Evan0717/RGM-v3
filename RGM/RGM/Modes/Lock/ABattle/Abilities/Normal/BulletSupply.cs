@@ -16,15 +16,13 @@ public class BulletSupply : Ability
         Exiled.Events.Handlers.Player.Shooting -= OnShooting;
     }
 
-    public void OnShooting(ShootingEventArgs ev)
+    private void OnShooting(ShootingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (ev.ClaimedTarget == null)
-        {
-            if (Random.Range(1, 6) == 1)
-                ev.Firearm.MagazineAmmo += 1;
-        }
+        if (ev.ClaimedTarget != null) return;
+        if (Random.Range(1, 6) == 1)
+            ev.Firearm.MagazineAmmo += 1;
     }
 }

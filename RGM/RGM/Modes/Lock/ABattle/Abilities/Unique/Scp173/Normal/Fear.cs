@@ -4,7 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Unique.Scp173;
+namespace RGM.Modes.Abilities.Unique.Scp173.Normal;
 
 [Ability("공포", "인간을 죽이면 근처에 있는 인간들이 0.75초 동안 움직일 수 없게 됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP173_FEAR, RoleAbility.Scp173)]
 public class Fear : Ability
@@ -19,7 +19,7 @@ public class Fear : Ability
         Exiled.Events.Handlers.Player.Died -= OnDied;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    private void OnDied(DiedEventArgs ev)
     {
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;

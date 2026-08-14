@@ -10,8 +10,4 @@ public class Recovery : Ability
         if (Owner.Role is Scp106Role scp106) 
             scp106.CaptureCooldown *= 0.8f;
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

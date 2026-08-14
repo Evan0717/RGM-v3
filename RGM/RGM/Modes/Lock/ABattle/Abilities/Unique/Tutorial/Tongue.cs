@@ -7,8 +7,4 @@ public class Tongue : Ability
     {
         Owner.AddItem(ItemType.SCP1576);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

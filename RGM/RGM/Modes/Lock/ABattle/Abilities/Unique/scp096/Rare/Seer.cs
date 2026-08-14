@@ -1,0 +1,42 @@
+﻿using System.Linq;
+using Exiled.Events.EventArgs.Scp096;
+using RGM.API.Features;
+using UnityEngine;
+
+namespace RGM.Modes.Abilities.Unique.Scp096.Rare;
+
+[Ability("천리안", "분노 시에 50m 내의 인간들을 목격자에 포함시킵니다. (최대 15명)", AbilityCategory.Rare, AbilityType.RARE_SCP096_SEER, RoleAbility.Scp096)]
+public class Seer : Ability
+{
+    public override void OnEnabled()
+    {
+        Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
+    }
+
+    public override void OnDisabled()
+    {
+        Exiled.Events.Handlers.Scp096.Enraging -= OnEnraging;
+    }
+
+    private void OnEnraging(EnragingEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+
+        int stack = 0;
+
+        foreach (var player in PlayerManager.List.Where(x => x.IsHuman))
+        {
+            if (stack == 15) break;
+            
+            if (!(Vector3.Distance(player.Position, ev.Player.Position) < 51)) continue;
+            stack += 1;
+
+            ev.Scp096.AddTarget(player);
+
+            player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
+        }
+
+        ev.Player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color> 능력으로 {stack}명의 인간들을 추가로 탐색했습니다.");
+    }
+}

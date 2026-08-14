@@ -14,8 +14,8 @@ namespace RGM.Modes.ExclusiveWeapon;
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
-    public override float AttackFlatMin => 2.5f;
-    public override float AttackFlatMax => 31.3f;
+    public override float AttackFlatMin => 4.0f;
+    public override float AttackFlatMax => 50.0f;
     public override ExclusiveWeaponSecondaryStat SecondaryStat => ExclusiveWeaponSecondaryStat.CriticalChance;
     public override float SecondaryStatMin => 13.0f;
     public override float SecondaryStatMax => 41.0f;

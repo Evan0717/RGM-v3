@@ -211,7 +211,7 @@ public static class EchoStats
     {
         return cost switch
         {
-            EchoCost.Cost4 => LerpStat(3f, 60f, level),
+            EchoCost.Cost4 => LerpStat(3f, 75f, level),
             EchoCost.Cost3 => LerpStat(50f, 250f, level),
             EchoCost.Cost1 => LerpStat(46f, 228f, level),
             _ => 0f

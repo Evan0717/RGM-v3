@@ -19,7 +19,7 @@ public class AirStrike : Ability
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
-    public void OnPinging(PingingEventArgs ev)
+    private void OnPinging(PingingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -41,7 +41,6 @@ public class AirStrike : Ability
                     light.Destroy();
                 });
             }
-
             OnDisabled();
         });
     }

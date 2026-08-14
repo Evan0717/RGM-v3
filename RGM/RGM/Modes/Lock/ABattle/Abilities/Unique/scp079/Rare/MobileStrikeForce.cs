@@ -15,7 +15,7 @@ public class MobileStrikeForce : Ability
         Exiled.Events.Handlers.Scp079.InteractingTesla -= OnInteractingTesla;
     }
 
-    public void OnInteractingTesla(InteractingTeslaEventArgs ev)
+    private void OnInteractingTesla(InteractingTeslaEventArgs ev)
     {
         if (Owner != ev.Player)
             return;

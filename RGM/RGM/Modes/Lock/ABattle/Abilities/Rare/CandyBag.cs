@@ -14,8 +14,4 @@ public class CandyBag : Ability
             Owner.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

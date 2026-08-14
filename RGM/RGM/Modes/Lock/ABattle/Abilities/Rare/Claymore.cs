@@ -19,12 +19,12 @@ public class Claymore : Ability
 {
     private ushort _claymoreCoinSerial;
     private CoroutineHandle _handle;
-    private SchematicObject schematic;
+    private SchematicObject _schematic;
     private static readonly int excludeMask = ~((1 << 8) | (1 << 2)) & LayerMask.GetMask("Door", "Default");
     private static readonly float distance = 5f;
     private static readonly float ForwardRange = 5.5f;
     private static readonly float BackwardRange = 2f;
-    private float health = 100f;
+    private float _health = 50f;
     
     private static readonly Dictionary<FirearmType, int> Firearm = new Dictionary<FirearmType, int>() {
         { FirearmType.Com15, 25 }, 
@@ -54,10 +54,8 @@ public class Claymore : Ability
         Exiled.Events.Handlers.Player.UsingMicroHIDEnergy += OnUsingMicroHIDEnergy;
         Exiled.Events.Handlers.Item.Swinging += OnSwining;
     }
-    
-    public override void OnDisabled() {}
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _claymoreCoinSerial)
             return;
@@ -65,7 +63,7 @@ public class Claymore : Ability
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>크레모아</color></color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_claymoreCoinSerial != ev.Item.Serial)
             return;
@@ -81,7 +79,7 @@ public class Claymore : Ability
         ev.Item.Destroy();
 
         SchematicObject claymore = ObjectSpawner.SpawnSchematic("Claymore", point, Quaternion.Euler(0, ev.Player.Rotation.eulerAngles.y, 0));
-        schematic = claymore;
+        _schematic = claymore;
         _handle = Timing.CallDelayed(5f, () => 
         {
             // n초 후에 이 블록 안의 코드가 실행됩니다.
@@ -103,7 +101,7 @@ public class Claymore : Ability
             ExplosiveGrenade eg = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
             eg.FuseTime = 0f;
             eg.MaxRadius = 4.5f;
-            if (health <= 0f)
+            if (_health <= 0f)
             {
                 schematic.Destroy();
                 eg.MaxRadius = 0f;
@@ -145,23 +143,23 @@ public class Claymore : Ability
     
     
     // 데미지 관련 핸들러
-    public void OnShot(ShotEventArgs ev)
+    private void OnShot(ShotEventArgs ev)
         {
-            if (schematic == null || !schematic)
+            if (_schematic == null || !_schematic)
                 return;
 
             if (Physics.Raycast(ev.Player.ReferenceHub.PlayerCameraReference.position + ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f, ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 1000, (LayerMask)1) &&
-                hit.transform.IsChildOf(schematic.transform))
+                hit.transform.IsChildOf(_schematic.transform))
             {
 
-                health -= Firearm[ev.Firearm.FirearmType];
+                _health -= Firearm[ev.Firearm.FirearmType];
                 ev.Player.ShowHitMarker();
             }
         }
 
-        public void OnUsingMicroHIDEnergy(UsingMicroHIDEnergyEventArgs ev)
+    private void OnUsingMicroHIDEnergy(UsingMicroHIDEnergyEventArgs ev)
         {
-            if (schematic == null || !schematic)
+            if (_schematic == null || !_schematic)
                 return;
 
             if (ev.MicroHID.State == InventorySystem.Items.MicroHID.Modules.MicroHidPhase.Firing)
@@ -170,17 +168,17 @@ public class Claymore : Ability
                         ev.Player.ReferenceHub.PlayerCameraReference.position +
                         ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f,
                         ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 5, (LayerMask)1) &&
-                    hit.transform.IsChildOf(schematic.transform))
+                    hit.transform.IsChildOf(_schematic.transform))
                 {
-                    health -= 120;
+                    _health -= 120;
                     ev.Player.ShowHitMarker();
                 }
             }
         }
 
-        public async void OnSwining(Exiled.Events.EventArgs.Item.SwingingEventArgs ev)
+    private async void OnSwining(Exiled.Events.EventArgs.Item.SwingingEventArgs ev)
         {
-            if (schematic == null || !schematic)
+            if (_schematic == null || !_schematic)
                 return;
 
             await Task.Delay(300);
@@ -189,9 +187,9 @@ public class Claymore : Ability
                     ev.Player.ReferenceHub.PlayerCameraReference.position +
                     ev.Player.ReferenceHub.PlayerCameraReference.forward * 0.2f,
                     ev.Player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, 3, (LayerMask)1) &&
-                hit.transform.IsChildOf(schematic.transform))
+                hit.transform.IsChildOf(_schematic.transform))
             {
-                health -= 50;
+                _health -= 50;
                 ev.Player.ShowHitMarker();
             }
         } 

@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
@@ -437,10 +437,13 @@ public enum AbilityType
 
     // SCP-173
     NORMAL_SCP173_FEAR, // [전용 일반] 공포
-    NORMAL_SCP173_ABERRATION, // [전용 희귀] 괴이
-    NORMAL_SCP173_MIRAGE, // [전용 희귀] 신기루
+    NORMAL_SCP173_ABERRATION, // [전용 일반] 괴이
+    
+    RARE_SCP173_MIRAGE, // [전용 희귀] 신기루
     RARE_SCP173_IMMENSEWEIGHT, // [전용 희귀] 육중한 무게
 
+    LEGEND_SCP173_DEBRIS, // [전용 전설] 파편
+    
     // SCP-049
     NORMAL_SCP049_DEATH, // [전용 희귀] 사신
     NORMAL_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
@@ -456,10 +459,14 @@ public enum AbilityType
     // SCP-096
     NORMAL_SCP096_ENEMY, // [전용 일반] 원수
     NORMAL_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
-    NORMAL_SCP096_OUTSIDER, // [전용 일반] 아웃사이더
-    NORMAL_SCP096_RAGE, // [전용 희귀] 격노
-    NORMAL_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
-    NORMAL_SCP096_SEER, // [전용 영웅] 천리안
+    NORMAL_SCP096_RAGE, // [전용 일반] 격노
+    
+    RARE_SCP096_SEER, // [전용 희귀] 천리안
+    
+    EPIC_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
+    EPIC_SCP096_RAGINGATTACK, // [전용 영웅] 분노의 일격
+    
+    MYTHIC_SCP096_BERSERK, // [전용 신화] 광분
 
     // SCP-106
     NORMAL_SCP106_RECOVERY, // [전용 희귀] 회춘
@@ -567,7 +574,8 @@ public enum AbilityType
     SYNERGY_BLACKMARKET, // [시너지] 암시장
     SYNERGY_COMMANDER, // [시너지] 지휘관
     SYNERGY_WEAKPOINTATTACK, // [시너지] 약점 공격
-    SYNERGY_CLOWN // [시너지] 광대
+    SYNERGY_CLOWN, // [시너지] 광대
+    SYNERGY_HEALER
 }
 
 public static class AbilityTypeExtensions

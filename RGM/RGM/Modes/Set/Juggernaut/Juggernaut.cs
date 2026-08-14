@@ -203,9 +203,10 @@ namespace RGM.Modes
 
         void TriggerAnnihilation()
         {
+            Warhead.Detonate();
             foreach (var player in PlayerManager.List.Where(x => true))
             {
-                player.Kill("패기에 의해 공중분해 되었습니다");
+                player.Kill("초토화 작전으로 인해 모든것이 허무로 돌아갑니다...");
             }
         }
         public IEnumerator<float> OnModeStarted()
@@ -224,7 +225,7 @@ namespace RGM.Modes
             
             juggernaut.Role.Set(RoleTypeId.Tutorial);
             juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            juggernaut.MaxHealth = 580 * PlayerManager.List.Count();
+            juggernaut.MaxHealth = 550 * PlayerManager.List.Count;
             juggernaut.Health = juggernaut.MaxHealth;
             juggernaut.IsBypassModeEnabled = true;
             juggernaut.EnableEffect(EffectType.SinkHole);
@@ -451,11 +452,11 @@ namespace RGM.Modes
                         PlayerDamages[ev.Attacker] += ev.DamageHandler.Damage;
                         stack += ev.DamageHandler.Damage;
 
-                        if (stack > 300) {
+                        if (stack > 200) {
                             Respawn.GrantInfluence(Faction.FoundationStaff, 20);
                             Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
                                   
-                            if (stack > 3000) {
+                            if (stack > 2400) {
                                 CallRegularSupport();
                                 stack = 0;
                             }
@@ -491,10 +492,6 @@ namespace RGM.Modes
                             ScpAttackCooldown.Remove(ev.Attacker);
                         }
                     }
-                } 
-                else 
-                {
-                    ev.IsAllowed = false;
                 }
             }
         }

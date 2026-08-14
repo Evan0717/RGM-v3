@@ -10,8 +10,4 @@ public class SeedsOfCHI : Ability
     {
         Respawn.GrantInfluence(Faction.FoundationEnemy, 20);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

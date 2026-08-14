@@ -25,7 +25,7 @@ public class Showmanship : Ability
         Timing.KillCoroutines(coroutine);
     }
 
-    public IEnumerator<float> onStarted()
+    private IEnumerator<float> onStarted()
     {
         while (true)
         {
@@ -40,7 +40,7 @@ public class Showmanship : Ability
         }
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

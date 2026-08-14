@@ -7,8 +7,4 @@ public class Level05 : Ability
     {
         Owner.AddItem(ItemType.KeycardO5);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

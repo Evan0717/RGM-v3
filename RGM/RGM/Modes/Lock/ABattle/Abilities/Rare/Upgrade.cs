@@ -8,14 +8,9 @@ public class Upgrade : Ability
 {
     public override void OnEnabled()
     {
-        if (Owner.CurrentItem != null)
-        {
-            if (Scp914Upgrader.TryGetProcessor(Owner.CurrentItem.Type, out Scp914ItemProcessor processor))
-                processor.UpgradeInventoryItem(Scp914KnobSetting.VeryFine, Owner.CurrentItem.Base);
-        }
+        if (Owner.CurrentItem == null) return;
+        if (Scp914Upgrader.TryGetProcessor(Owner.CurrentItem.Type, out Scp914ItemProcessor processor))
+            processor.UpgradeInventoryItem(Scp914KnobSetting.VeryFine, Owner.CurrentItem.Base);
     }
 
-    public override void OnDisabled()
-    {
-    }
 }

@@ -11,8 +11,4 @@ public class Researcher : Ability
     {
         Owner.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).ToList().GetRandomValue());
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

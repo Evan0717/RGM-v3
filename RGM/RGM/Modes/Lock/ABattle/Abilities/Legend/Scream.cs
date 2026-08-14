@@ -37,7 +37,7 @@ public class GmanRoaringSound : Ability
             ev.IsAllowed = false;
     }
 
-    public IEnumerator<float> OnVoiceChatting(VoiceChattingEventArgs ev)
+    private IEnumerator<float> OnVoiceChatting(VoiceChattingEventArgs ev)
     {
         if (ev.Player != Owner)
             yield break;

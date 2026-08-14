@@ -11,7 +11,7 @@ namespace RGM.Modes.Abilities.Synergy;
 [Ability("광휘", "<플래시라이트, 횃불> 당신을 쳐다보는 눈은 멀어버릴 것입니다.", AbilityCategory.Synergy, AbilityType.SYNERGY_GLORY)]
 public class Glory : Ability
 {
-    CoroutineHandle _radiation;
+    private CoroutineHandle _radiation;
 
     public override void OnEnabled()
     {
@@ -23,7 +23,7 @@ public class Glory : Ability
         Timing.KillCoroutines(_radiation);
     }
 
-    public IEnumerator<float> Radiation()
+    private IEnumerator<float> Radiation()
     {
         LightSourceToy lightSource = LightSourceToy.Create();
         lightSource.Color = Color.yellow;
@@ -34,16 +34,12 @@ public class Glory : Ability
         {
             foreach (var player in PlayerManager.List)
             {
-                if (Tools.TryGetLookPlayer(player, 45f, out Exiled.API.Features.Player target, out RaycastHit? hit))
-                {
-                    if (Owner == target && HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub))
-                    {
-                        lightSource.Position = Owner.Position;
+                if (!player.TryGetLookPlayer(45f, out Exiled.API.Features.Player target, out _)) continue;
+                if (Owner != target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
+                lightSource.Position = Owner.Position;
 
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
-                        player.EnableEffect(EffectType.Flashed, 1, 1f);
-                    }
-                }
+                Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
+                player.EnableEffect(EffectType.Flashed, 1, 1.5f);
             }
 
             yield return Timing.WaitForOneFrame;

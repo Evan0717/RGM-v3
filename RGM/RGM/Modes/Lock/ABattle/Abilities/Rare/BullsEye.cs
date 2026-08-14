@@ -12,7 +12,7 @@ public class BullsEye : Ability
     public override void OnDisabled() 
         => Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker != Owner || ev.DamageHandler.CustomBase is not FirearmDamageHandler damageHandler)
             return;

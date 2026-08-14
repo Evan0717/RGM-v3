@@ -33,18 +33,17 @@ public class Importunity : Ability
         Exiled.Events.Handlers.Player.Dying -= OnDying;
     }
 
-    public void OnDying(DyingEventArgs ev)
+    private void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Owner.Role is Scp079Role Bscp079)
-        {
-            tier = Bscp079.Level;
-            experience = Bscp079.Experience;
-        }
+        if (Owner.Role is not Scp079Role scp079) return;
+        tier = scp079.Level;
+        experience = scp079.Experience;
     }
-    public void OnDied(DiedEventArgs ev)
+
+    private void OnDied(DiedEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -58,11 +57,9 @@ public class Importunity : Ability
 
             Owner.Role.Set(RoleTypeId.Scp079, RoleSpawnFlags.None);
 
-            if (Owner.Role is Scp079Role Ascp079)
-            {
-                Ascp079.Level = tier;
-                Ascp079.Experience = experience;
-            }
+            if (Owner.Role is not Scp079Role scp079) return;
+            scp079.Level = tier;
+            scp079.Experience = experience;
         });
     }
 }

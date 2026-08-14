@@ -10,9 +10,4 @@ public class Sneak : Ability
     {
         Owner.AddEffect(EffectType.SilentWalk, 4);
     }
-
-    public override void OnDisabled()
-    {
-        Owner.RemoveEffect(EffectType.SilentWalk, 4);
-    }
 }

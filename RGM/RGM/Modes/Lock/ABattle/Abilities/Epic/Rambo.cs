@@ -7,38 +7,38 @@ namespace RGM.Modes.Abilities.Epic;
 [Ability("람보", "탄약이 무제한인 로지카를 받습니다. 단, 최종 데미지가 17% 감소되어 지급됩니다.", AbilityCategory.Epic, AbilityType.EPIC_RAMBO)]
 public class Rambo : Ability
 {
-    ushort InfinityGunSerial = 0;
+    private ushort _infinityGunSerial;
 
     public override void OnEnabled()
     {
         Item ig = Owner.AddItem(ItemType.GunLogicer);
 
-        InfinityGunSerial = ig.Serial;
+        _infinityGunSerial = ig.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Shooting += OnShooting;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item?.Serial != InfinityGunSerial)
+        if (ev.Item?.Serial != _infinityGunSerial)
             return;
 
         ev.Player.AddHint("람보", $"<b><color={ABattle.RatingColor["영웅"]}>람보</color></b> 능력이 있는 Logicer입니다");
     }
 
-    public void OnShooting(ShootingEventArgs ev)
+    private void OnShooting(ShootingEventArgs ev)
     {
-        if (ev.Item.Serial == InfinityGunSerial) {
+        if (ev.Item.Serial == _infinityGunSerial) {
             ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 101;
         }
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null || ev.Player == ev.Attacker) return;
-        if (ev.Attacker.CurrentItem != null && InfinityGunSerial == ev.Attacker.CurrentItem.Serial) {
+        if (ev.Attacker.CurrentItem != null && _infinityGunSerial == ev.Attacker.CurrentItem.Serial) {
             ev.DamageHandler.Damage *= 0.83f;
         }
     }

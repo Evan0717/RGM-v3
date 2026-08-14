@@ -10,8 +10,4 @@ public class Rabbit : Ability
     {
         Owner.AddEffect(EffectType.Lightweight, 10);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

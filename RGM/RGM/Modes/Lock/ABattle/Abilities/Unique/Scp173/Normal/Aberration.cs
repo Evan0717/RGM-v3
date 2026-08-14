@@ -1,6 +1,6 @@
 ﻿using Exiled.Events.EventArgs.Scp173;
 
-namespace RGM.Modes.Abilities.Unique.Scp173;
+namespace RGM.Modes.Abilities.Unique.Scp173.Normal;
 
 [Ability("괴이", "순간이동한 방이 1초 동안 정전됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP173_ABERRATION, RoleAbility.Scp173)]
 public class Aberration : Ability
@@ -15,7 +15,7 @@ public class Aberration : Ability
         Exiled.Events.Handlers.Scp173.Blinking -= OnBlinking;
     }
 
-    public void OnBlinking(BlinkingEventArgs ev)
+    private void OnBlinking(BlinkingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

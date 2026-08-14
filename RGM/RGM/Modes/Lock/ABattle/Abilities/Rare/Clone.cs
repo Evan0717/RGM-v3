@@ -17,7 +17,7 @@ public class Clone : Ability
 
     public override void OnEnabled()
     {
-        _onStarted = Timing.RunCoroutine(onStarted());
+        _onStarted = Timing.RunCoroutine(OnStarted());
     }
 
     public override void OnDisabled()
@@ -27,7 +27,7 @@ public class Clone : Ability
         NetworkServer.Destroy(clone.gameObject);
     }
 
-    public IEnumerator<float> onStarted()
+    private IEnumerator<float> OnStarted()
     {
         clone = DummyUtils.SpawnDummy($"누군가의 분신");
 

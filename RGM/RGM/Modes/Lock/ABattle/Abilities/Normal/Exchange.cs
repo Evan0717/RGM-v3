@@ -9,18 +9,8 @@ public class Exchange : Ability
 {
     public override void OnEnabled()
     {
-        if (Owner.CurrentItem != null)
-        {
-            if (Scp914Upgrader.TryGetProcessor(Owner.CurrentItem.Type, out Scp914ItemProcessor processor))
-                processor.UpgradeInventoryItem(Scp914KnobSetting.OneToOne, Owner.CurrentItem.Base);
-        }
-    }
-
-    public override void OnDisabled()
-    {
-    }
-
-    public void OnHurting(HurtingEventArgs ev)
-    {
+        if (Owner.CurrentItem == null) return;
+        if (Scp914Upgrader.TryGetProcessor(Owner.CurrentItem.Type, out Scp914ItemProcessor processor))
+            processor.UpgradeInventoryItem(Scp914KnobSetting.OneToOne, Owner.CurrentItem.Base);
     }
 }

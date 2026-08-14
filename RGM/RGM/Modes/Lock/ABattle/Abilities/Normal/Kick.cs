@@ -22,42 +22,41 @@ public class Kick : Ability
         Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
     }
 
-    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (ev.Player.IsCaptured(out Player None))
+        if (ev.Player.IsCaptured(out Player none))
             return;
 
-        if (ev.Player.TryGetLookPlayer(4.7f, out Player player, out RaycastHit? hit))
+        if (!ev.Player.TryGetLookPlayer(4.7f, out Player player, out RaycastHit? hit)) return;
+        if (ev.Player == player || _meleeCooldown > 0 ||
+            !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub)) return;
+
+        float damage = DamageCalcu(hit?.transform.name) * Owner.AbilityCount(AbilityType.NORMAL_KICK);
+
+        Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / Meleedamage);
+        player.Hit(ev.Player, damage);
+        ev.Player.Grab();
+
+        _meleeCooldown = 1;
+
+        Timing.CallDelayed(1f, () => _meleeCooldown = 0);
+        return;
+
+        float DamageCalcu(string pos)
         {
-            if (ev.Player != player && _meleeCooldown <= 0 && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub))
+            switch (pos)
             {
-                float DamageCalcu(string pos)
-                {
-                    switch (pos)
-                    {
-                        case "Head":
-                            return Meleedamage * 2f;
+                case "Head":
+                    return Meleedamage * 2f;
 
-                        case "Chest":
-                            return Meleedamage;
+                case "Chest":
+                    return Meleedamage;
 
-                        default:
-                            return Meleedamage * 0.7f;
-                    }
-                }
-
-                float damage = DamageCalcu(hit?.transform.name) * Owner.AbilityCount(AbilityType.NORMAL_KICK);
-
-                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / Meleedamage);
-                player.Hit(ev.Player, damage);
-                ev.Player.Grab();
-
-                _meleeCooldown = 1;
-
-                Timing.CallDelayed(1f, () => _meleeCooldown = 0);
+                default:
+                    return Meleedamage * 0.7f;
             }
         }
     }

@@ -8,8 +8,4 @@ public class Torch : Ability
         Owner.AddItem(ItemType.Lantern);
         Owner.AddItem(ItemType.Adrenaline);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

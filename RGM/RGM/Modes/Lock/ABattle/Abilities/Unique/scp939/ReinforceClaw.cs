@@ -26,7 +26,7 @@ public class ReinforceClaw : Ability
         _lastClawHitTime = DateTime.MinValue;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (Owner.Role is not Scp939Role scp939) return;
         if (ev.Attacker == null || ev.Attacker.ReferenceHub != scp939.Owner.ReferenceHub) return;

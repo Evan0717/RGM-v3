@@ -22,7 +22,7 @@ public class StickySwamp : Ability
         Timing.KillCoroutines(_stickySwamp1);
     }
 
-    public IEnumerator<float> StickySwamp1()
+    private IEnumerator<float> StickySwamp1()
     {
         while (true)
         {

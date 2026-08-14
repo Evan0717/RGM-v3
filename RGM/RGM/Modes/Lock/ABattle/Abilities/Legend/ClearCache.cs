@@ -10,11 +10,11 @@ namespace RGM.Modes.Abilities.Legend;
 public class ClearCache : Ability
 {
     private CoroutineHandle _clearCache;
-    public override void OnEnabled() => _clearCache = Timing.RunCoroutine(clearCache());
+    public override void OnEnabled() => _clearCache = Timing.RunCoroutine(Clearcache());
 
     public override void OnDisabled() => Timing.KillCoroutines(_clearCache);
 
-    public IEnumerator<float> clearCache()
+    private IEnumerator<float> Clearcache()
     {
         while (Owner != null && Owner.IsConnected && Owner.IsAlive)
         {

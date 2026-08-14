@@ -12,9 +12,4 @@ public class Blackout: Ability
            room.TurnOffLights();
         }
     }
-
-    public override void OnDisabled()
-    {
-
-    }
 }

@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("로켓 런처", "공격 시, 11% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 35%)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
+[Ability("로켓 런처", "공격 시, 10% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 40%)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
 public class RocketLauncher : Ability
 {
-    List<Player> isInRocket = new();
+    private readonly List<Player> _isInRocket = [];
 
     public override void OnEnabled()
     {
@@ -23,43 +23,37 @@ public class RocketLauncher : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null || ev.Attacker != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
-        if (!isInRocket.Contains(ev.Player))
+        if (_isInRocket.Contains(ev.Player)) return;
+        if (ev.Attacker.IsScpRole())
         {
-            if (ev.Attacker.IsScpRole())
+            if (Random.Range(1, 101) > 10) return;
+            _isInRocket.Add(ev.Player);
+
+            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
+            Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
+
+            Timing.CallDelayed(1, () =>
             {
-                if (Random.Range(1, 101) <= 12)
-                {
-                    isInRocket.Add(ev.Player);
+                _isInRocket.Remove(ev.Player);
+            });
+        }
+        else
+        {
+            if (Random.Range(1, 101) > 40) return;
+            _isInRocket.Add(ev.Player);
 
-                    Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
-                    Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
+            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
+            Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
-                    Timing.CallDelayed(1, () =>
-                    {
-                        isInRocket.Remove(ev.Player);
-                    });
-                }
-            }
-            else
+            Timing.CallDelayed(1, () =>
             {
-                if (Random.Range(1, 101) <= 36)
-                {
-                    isInRocket.Add(ev.Player);
-
-                    Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
-                    Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
-
-                    Timing.CallDelayed(1, () =>
-                    {
-                        isInRocket.Remove(ev.Player);
-                    });
-                }
-            }
+                _isInRocket.Remove(ev.Player);
+            });
         }
     }
 }

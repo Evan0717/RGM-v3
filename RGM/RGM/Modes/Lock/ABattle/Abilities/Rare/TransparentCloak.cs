@@ -9,9 +9,4 @@ public class TransparentCloak : Ability
     {
         Owner.EnableEffect(EffectType.Invisible, 1, 25);
     }
-
-    public override void OnDisabled()
-    {
-        Owner.DisableEffect(EffectType.Invisible);
-    }
 }

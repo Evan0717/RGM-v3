@@ -10,8 +10,4 @@ public class PortableCharger : Ability
         if (Owner.Role is Scp079Role scp079)
             scp079.AddExperience(20 * scp079.Level);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

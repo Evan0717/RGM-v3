@@ -9,11 +9,13 @@ namespace RGM.Modes.Abilities.Normal;
 public class Milk : Ability
 {
     private ushort _coinSerial;
+    private bool _isConsumed;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.Coin);
         _coinSerial = item.Serial;
+        _isConsumed = false;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
@@ -21,22 +23,30 @@ public class Milk : Ability
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
+        Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item?.Serial != _coinSerial)
+        if (_isConsumed || ev.Player != Owner || ev.Item?.Serial != _coinSerial)
             return;
         
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>우유</color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (_coinSerial == ev.Item.Serial && ev.Player.CurrentRoom.Type != RoomType.Pocket)
-        {
-            ev.Player.DisableAllEffects();
-            ev.Item.Destroy();
-        }
+        if (_isConsumed ||
+            ev.Player != Owner ||
+            ev.Item?.Serial != _coinSerial ||
+            ev.Player.CurrentRoom.Type == RoomType.Pocket)
+            return;
+
+        _isConsumed = true;
+        ev.Player.DisableAllEffects();
+        ev.Item.Destroy();
+
+        OnDisabled();
     }
 }

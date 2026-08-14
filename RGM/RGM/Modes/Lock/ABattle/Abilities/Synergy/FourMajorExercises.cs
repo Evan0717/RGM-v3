@@ -13,8 +13,4 @@ public class FourMajorExercises : Ability
             ABattle.Instance.StartSelect(Owner);
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

@@ -1,6 +1,6 @@
 ﻿using MEC;
 
-namespace RGM.Modes.Abilities.Unique.Scp096;
+namespace RGM.Modes.Abilities.Unique.Scp096.Normal;
 
 [Ability("원수", "분노 충전 시간이 50% 줄어듭니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP096_ENEMY, RoleAbility.Scp096)]
 public class Enemy : Ability
@@ -15,7 +15,7 @@ public class Enemy : Ability
         Exiled.Events.Handlers.Scp096.Charging -= OnCharging;
     }
 
-    public void OnCharging(Exiled.Events.EventArgs.Scp096.ChargingEventArgs ev)
+    private void OnCharging(Exiled.Events.EventArgs.Scp096.ChargingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

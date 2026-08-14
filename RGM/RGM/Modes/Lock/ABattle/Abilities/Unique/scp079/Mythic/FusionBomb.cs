@@ -25,7 +25,7 @@ public class FusionBomb : Ability
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
-    public void OnPinging(PingingEventArgs ev)
+    private void OnPinging(PingingEventArgs ev)
     {
         if (ev.Player == null && ev.Player != Owner) return;
 
@@ -54,7 +54,7 @@ public class FusionBomb : Ability
         }
     }
 
-    public IEnumerator<float> StartBombardment(Vector3 centerPos)
+    private IEnumerator<float> StartBombardment(Vector3 centerPos)
     {
         float duration = 10f;
         float interval = 0.1f;
@@ -72,7 +72,7 @@ public class FusionBomb : Ability
         }
     }
 
-    public IEnumerator<float> Boom(Vector3 pos)
+    private IEnumerator<float> Boom(Vector3 pos)
     {
         Vector3 RealPosition = pos;
 

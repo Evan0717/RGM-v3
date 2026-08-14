@@ -8,7 +8,7 @@ namespace RGM.Modes.Abilities.Epic;
 [Ability("거북 도사", "받는 모든 데미지는 40을 넘을 수 없습니다.(일부 피해 제외)", AbilityCategory.Epic, AbilityType.EPIC_TURTLE)]
 public class Turtle : Ability
 {
-    const float MaxDamage = 40f;
+    private const float MaxDamage = 40f;
 
     public override void OnEnabled()
     {
@@ -20,7 +20,7 @@ public class Turtle : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Player != Owner ||
             ev.DamageHandler.Type == DamageType.Crushed ||

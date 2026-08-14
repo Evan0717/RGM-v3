@@ -1,7 +1,7 @@
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 
-namespace RGM.Modes.Abilities.Unique.Scp096;
+namespace RGM.Modes.Abilities.Unique.Scp096.Normal;
 
 [Ability("격노", "분노 시 받는 피해가 25% 줄어듭니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP096_RAGE, RoleAbility.Scp096)]
 public class Rage : Ability
@@ -16,17 +16,15 @@ public class Rage : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Owner.Role is Scp096Role scp096)
+        if (Owner.Role is not Scp096Role scp096) return;
+        if (scp096.RageManager.IsEnraged)
         {
-            if (scp096.RageManager.IsEnraged)
-            {
-                ev.Amount *= 0.75f;
-            }
+            ev.Amount *= 0.75f;
         }
     }
 }
