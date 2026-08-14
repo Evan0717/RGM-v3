@@ -7,6 +7,8 @@ using MEC;
 using RGM.API.Features;
 using RGM.API.DataBases;
 using PlayerRoles;
+using Exiled.API.Extensions;
+using InventorySystem.Items;
 
 namespace RGM.Modes
 {
@@ -20,7 +22,7 @@ namespace RGM.Modes
 
         public override string Detail =>
             """
-            무작위 아이템들이 클래스 별 확률로 지급됩니다.
+            랜덤 아이템이 지급됩니다.
 
             이후, 15초마다 무작위 아이템들을 하나 더 받습니다.
             """;
@@ -61,9 +63,10 @@ namespace RGM.Modes
                 foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
                     try
                     {
-                        Item item = player.AddRandomItem();
+                        List<ItemType> itemList = Tools.EnumToList<ItemType>();
+                        ItemType item = itemList.GetRandomValue();
 
-                        player.AddHint("랜덤박스", $"<color=#F3F781>{Trans.Item[item.Type]}</color>(을)를 지급받았습니다.",
+                        player.AddHint("랜덤박스", $"<color=#F3F781>{item.GetName()}</color>(을)를 지급받았습니다.",
                             5);
                     }
                     catch (KeyNotFoundException e)
@@ -101,7 +104,10 @@ namespace RGM.Modes
             }
             for (int i = 1; i < 7; i++)
             {
-                player.AddRandomItem();
+                List<ItemType> itemList = Tools.EnumToList<ItemType>();
+                ItemType item = itemList.GetRandomValue();
+                
+                player.AddItem(item);
 
                 yield return Timing.WaitForSeconds(1);
             }

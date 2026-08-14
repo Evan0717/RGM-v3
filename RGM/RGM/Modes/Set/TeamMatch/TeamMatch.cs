@@ -105,7 +105,7 @@ namespace RGM.Modes
             _losingTeam.Clear();
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var door in Door.List)
             {
@@ -156,34 +156,29 @@ namespace RGM.Modes
                 player.AddBroadcast(10, $"<size=36><b>목표 점수: <color=#D23265>{_targetScore}</color></b></size>");
         }
 
-        public List<ItemType> Items()
+        private List<ItemType> Items()
         {
-            List<ItemType> Guns = new List<ItemType> {
+            List<ItemType> guns =
+            [
+                ItemType.GunA7,
                 ItemType.GunE11SR,
-                ItemType.GunFSP9,
-                ItemType.GunRevolver,
+                ItemType.GunShotgun,
+                ItemType.GunCom45,
                 ItemType.GunCrossvec,
                 ItemType.GunLogicer,
                 ItemType.GunFRMG0,
-                ItemType.GunAK,
-                ItemType.GunShotgun
+                ItemType.GunAK
+            ];
+            List<ItemType> items =
+            [
+                guns.GetRandomValue(),
+                ItemType.ArmorLight
+            ];
 
-            };
-            List<ItemType> CDItems = new List<ItemType> {
-                ItemType.Medkit,
-                ItemType.Painkillers,
-                ItemType.Radio
-            };
-            List<ItemType> Items = new List<ItemType>();
-
-            Items.Add(Guns.GetRandomValue());
-            Items.AddRange(CDItems.Where(item => Random.Range(1, 3) == 1));
-            Items.Add(ItemType.ArmorLight);
-
-            return Items;
+            return items;
         }
 
-        public void OnDied(DiedEventArgs ev)
+        private void OnDied(DiedEventArgs ev)
         {
             if (_isMatchEnded || (!_teamA.Contains(ev.Player) && !_teamB.Contains(ev.Player)))
                 return;
@@ -205,12 +200,12 @@ namespace RGM.Modes
                 Timing.RunCoroutine(RespawnPlayer(ev.Player, _modeId));
         }
 
-        public void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
+        private void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
         {
             ev.Ragdoll?.Destroy();
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             if (!_isModeActive || !_isMatchEnded || !_losingTeam.Contains(ev.Player))
                 return;
@@ -222,7 +217,7 @@ namespace RGM.Modes
             ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
         }
 
-        IEnumerator<float> RespawnPlayer(Player player, int modeId)
+        private IEnumerator<float> RespawnPlayer(Player player, int modeId)
         {
             yield return Timing.WaitForSeconds(5f);
 
@@ -280,7 +275,7 @@ namespace RGM.Modes
             }
         }
 
-        IEnumerator<float> ScoreHintCoroutine()
+        private IEnumerator<float> ScoreHintCoroutine()
         {
             while (_isModeActive && !_isMatchEnded)
             {
@@ -293,7 +288,7 @@ namespace RGM.Modes
             }
         }
 
-        void CheckWinner(List<Player> winningTeam)
+        private void CheckWinner(List<Player> winningTeam)
         {
             if (_teamAScore < _targetScore && _teamBScore < _targetScore)
                 return;
@@ -308,17 +303,17 @@ namespace RGM.Modes
             Timing.RunCoroutine(Tools.SetWinner(winningTeam, 3));
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
+        private void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnShot(ShotEventArgs ev)
+        private void OnShot(ShotEventArgs ev)
         {
             ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }

@@ -308,6 +308,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\FourMajorExercises.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Glory.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Gman.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Healer.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Loser.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\RandomCollection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Rich1.cs" />

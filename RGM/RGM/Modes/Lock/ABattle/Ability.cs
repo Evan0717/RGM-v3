@@ -574,7 +574,8 @@ public enum AbilityType
     SYNERGY_BLACKMARKET, // [시너지] 암시장
     SYNERGY_COMMANDER, // [시너지] 지휘관
     SYNERGY_WEAKPOINTATTACK, // [시너지] 약점 공격
-    SYNERGY_CLOWN // [시너지] 광대
+    SYNERGY_CLOWN, // [시너지] 광대
+    SYNERGY_HEALER
 }
 
 public static class AbilityTypeExtensions

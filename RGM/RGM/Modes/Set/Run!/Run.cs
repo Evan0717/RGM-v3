@@ -96,7 +96,7 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnModeStarted()
         {
-            if (Random.Range(1, 101) <= 45)
+            if (Random.Range(1, 101) <= 44)
             {
                 hellMode = true;
 
@@ -150,17 +150,20 @@ namespace RGM.Modes
 
             var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
-            if (players.Count() == 1 && hellMode) {
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 15));
-            }
-            else if (players.Count() > 1 && hellMode) {
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
-            }
-            else if (players.Count() == 1) {
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-            }
-            else {
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count())
+            {
+                case 1 when hellMode:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 15));
+                    break;
+                case > 1 when hellMode:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 3));
+                    break;
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                default:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
             }
         }
 
@@ -188,7 +191,7 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (hellMode ? true : Random.Range(1, 3) == 1)
+                if (hellMode || Random.Range(1, 3) == 1)
                 {
                     SchematicObject raser = ObjectSpawner.SpawnSchematic(
                         $"Raser{Random.Range(1, 11)}",
@@ -247,7 +250,7 @@ namespace RGM.Modes
             {
                 var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
-                if (players.Count() == 0)
+                if (!players.Any())
                 {
                     Round.IsLocked = false;
                 }
