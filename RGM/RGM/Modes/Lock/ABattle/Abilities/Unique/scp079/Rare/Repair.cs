@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features.Doors;
 using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Features;
 using MEC;
 using Map = Exiled.API.Features.Map;
@@ -20,14 +21,20 @@ public class Repair : Ability
 
     private static IEnumerator<float> RepairCoroutine()
     {
-        while (true)
+        while (!Warhead.IsDetonated)
         {
-            Log.Info("Running");
-            foreach (var door in Door.List)
+            if (Warhead.IsInProgress)
             {
-                if (door is BreakableDoor breakableDoor) 
-                    breakableDoor.Repair();
+                yield return Timing.WaitForSeconds(1f);
+                continue;
             }
+            
+            Door.List.Where(x => x is BreakableDoor).ToList().ForEach(x =>
+            {
+                if (x is not BreakableDoor door) return;
+                if (!door.IsDestroyed) return;
+                door.Repair(); 
+            });
             yield return Timing.WaitForSeconds(Rand.Next(1, 3) * 60);
         }
     }

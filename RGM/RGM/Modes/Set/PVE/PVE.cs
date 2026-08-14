@@ -29,22 +29,22 @@ namespace RGM.Modes
             Round.IsLocked = true;
             Respawn.PauseWaves(); 
 
-            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            Exiled.Events.Handlers.Server.EndingRound += OnRoundEnding;
+            Exiled.Events.Handlers.Server.EndingRound += roundHandler.OnEndingRound;
 
             roundHandler = new RoundHandler();
             roundHandler.OnRoundStarted();
-
-            Exiled.Events.Handlers.Server.EndingRound += roundHandler.OnEndingRound;
         }
 
         public override void OnDisabled()
         {
-            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnding;
+            Exiled.Events.Handlers.Server.EndingRound -= roundHandler.OnEndingRound;
 
             roundHandler.OnEndingRound();
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        public void OnRoundEnding(EndingRoundEventArgs ev)
         {
             List<Player> players = PlayerManager.List.Where(x => !x.IsNPC).ToList();
             if (players.Count == 0 || roundHandler.SelectedDifficulty < 0)
@@ -94,10 +94,12 @@ namespace RGM.Modes
                 _ => reward
             };
 
-            List<Player> wonplayers = players
-                .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report) 
-                            && report.Damage >= 0)
-                .ToList();
+            List<Player> wonplayers =
+            [
+                .. players
+                    .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report)
+                                && report.Damage >= 0)
+            ];
 
             reward -= roundHandler.AllWavesCleared ? 1 : 0;
             reward = reward <= 0 ? 5 : reward;

@@ -17,12 +17,12 @@ namespace RGM.API.Components
             rigid.isKinematic = false;
             rigid.useGravity = true;
             rigid.mass = 0.1f;
-            rigid.drag = 0.1f;
+            rigid.linearDamping = 0.1f;
         }
 
         private void FixedUpdate()
         {
-            transform.position += rigid.velocity * (Time.fixedDeltaTime * BallSpeedBoost);
+            transform.position += rigid.linearVelocity * (Time.fixedDeltaTime * BallSpeedBoost);
         }
     }
 }

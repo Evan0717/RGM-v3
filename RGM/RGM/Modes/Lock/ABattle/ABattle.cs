@@ -215,97 +215,103 @@ public class ABattle : Mode
 
         void ActivateExtraModeForChaos()
         {
-            Timing.RunCoroutine(Chaos());
-            return;
+            // 1. C.A.S.S.I.E 방송 후 딜레이
+            // 2. 실행 후 딜레이
+            const float waitTime = 10f;
+            const float chaosStopTime = 30f;
+            
+            // (확률) = 100 - 값 + 1
+            const int nukeChance = 99;
+            const int mythicChance = 97;
+            const int legendaryChance = 95;
+            const int epicChance = 75;
+            const int explodeChance = 60;
+            const int explodeCount = 5;
+            
+            var rand = new System.Random(Exiled.API.Features.Map.Seed);
+            
+            Timing.RunCoroutine(Chaos()); // 가랏 피카츄!!
+            
+            return; // 지역 함수
 
             IEnumerator<float> Chaos()
             {
-                const float waitTime = 12f;
-                const float chaosStopTime = 30f;
+                var clearMakerHandle = Timing.RunCoroutine(ClearMaker());
+                FriendlyFire.Instance.OnEnabledForNoNuke();
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
-                    FriendlyFire.Instance.OnEnabledForNoNuke();
                     Tools.MessageTranslated(".G6 .G6 .G6",
-                        "10초 후 무언가가 일어납니다.");
-                    if (!EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle)) break;
-                    Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker()));
-                    Timing.CallDelayed(waitTime, ()
-                        => PlayerManager.List
-                            .Where(x => x.IsNPC && x.DisplayNickname == "영사기")
-                            .ToList()
-                            .ForEach(x => NetworkServer.Destroy(x.GameObject)));
+                        $"{waitTime - 2}초 후 무언가가 일어납니다.");
+                    Timing.CallDelayed(waitTime, () => Timing.RunCoroutine(ChaosMaker())); // 가랏 몬스터볼!!
+                    
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
 
                 FriendlyFire.Instance.OnDisabled();
+                Timing.KillCoroutines(clearMakerHandle);
             }
 
             IEnumerator<float> ChaosMaker()
             {
-                const int nukeChance = 99;
-                const int mythicChance = 97;
-                const int legendaryChance = 95;
-                const int epicChance = 75;
-                const int explodeChance = 60;
-                const int explodeCount = 5;
-                
                 if (!_chaosMutex.WaitOne(1000)) yield break;
-                var rand = new System.Random(Exiled.API.Features.Map.Seed);
+                
                 // -----------------------------------------------------------------------------------------------
                 
                 List<Player> complete = [];
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
                     for (int i = 0; i < explodeCount; i++)
-                        Timing.CallDelayed(0.3f, () =>
+                    {
+                        if (!(NextRandom() >= explodeChance)) continue;
+                        
+                        List<string> musicList =
+                        [
+                            "짬뽕-1",
+                            "폭8-2",
+                            "폭8-1"
+                        ];
+
+                        List<string> delayBomb =
+                            ["짬뽕-1"];
+
+                        var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                        var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
+                        if (player.IsDead || player.IsHost || complete.Contains(player)) continue;
+                        var text = musicList.GetRandomValue();
+                        bomb.FuseTime = 0.1f;
+
+                        complete.Add(player);
+
+                        if (!delayBomb.Contains(text))
                         {
-                            if (!(NextRandom() >= explodeChance)) return;
-
-                            List<string> musicList =
-                            [
-                                "짬뽕-1",
-                                "폭8-2",
-                                "폭8-1"
-                            ];
-
-                            List<string> delayBomb =
-                                ["짬뽕-1"];
-
-                            var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
-                            var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
-                            if (player.IsDead || player.IsHost || complete.Contains(player)) return;
-                            var text = musicList.GetRandomValue();
-                            bomb.FuseTime = 0.1f;
-
-                            complete.Add(player);
-
-                            if (!delayBomb.Contains(text))
-                            {
-                                MakeRadio(player, text);
-                                bomb.SpawnActive(player.Position);
-                                if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
-                                        AbilityType.EPIC_SURVIVOR or
-                                        AbilityType.EPIC_MADSCIENTIST or
-                                        AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
-                                bomb.ScpDamageMultiplier = 2.5f;
-                                player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
-                                return;
-                            }
-
                             MakeRadio(player, text);
-                            Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
-                        });
-                    // -----------------------------------------------------------------------------------------------
+                            bomb.SpawnActive(player.Position);
+                            if (!player.GetAbilities().Exists(x => x.Data.AbilityType is
+                                    AbilityType.EPIC_SURVIVOR or
+                                    AbilityType.EPIC_MADSCIENTIST or
+                                    AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
+                            bomb.ScpDamageMultiplier = 2.5f;
+                            player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
+                            continue;
+                        }
+
+                        MakeRadio(player, text);
+                        Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
+                    }
+                });
+                // -----------------------------------------------------------------------------------------------
+                
                 for (var a = 0; a < 5; a++)
                 {
+                    yield return Timing.WaitForOneFrame;
+                    
                     if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
                     PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
                     PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
                         .ToList()
                         .ForEach(x
                             => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
-
                     
-
-
                     if (NextRandom() >= nukeChance && !(Warhead.IsInProgress || Warhead.IsDetonated))
                     {
                         Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
@@ -335,6 +341,7 @@ public class ABattle : Mode
                         continue;
                     }
 
+                    // 이름 충돌 방지로 설치, 반전을 하지 말 것
                     if (NextRandom() >= mythicChance)
                     {
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
@@ -343,12 +350,37 @@ public class ABattle : Mode
                             $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 3%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
                     }
                 }
+                
                 _chaosMutex.ReleaseMutex();
-                yield break;
+                
                 // -----------------------------------------------------------------------------------------------
+                yield break; // 지역 함수
 
                 float NextRandom() => rand.Next(1, 101);
             }
+
+            IEnumerator<float> ClearMaker()
+            {
+                while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
+                {
+                    yield return Timing.WaitForSeconds(120f);
+                    
+                    try
+                    {
+                        PlayerManager.List
+                            .Where(x => x.IsNPC && x.Nickname == "영사기")
+                            .ToList()
+                            .ForEach(clear => NetworkServer.Destroy(clear.GameObject));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"이런, 청소 기능에 버그가 발생하였네요 :(\n" +
+                                  $"사유:{e.GetType().Name}: {e.Message}\n" +
+                                  $"StackTrace: {e.StackTrace}");
+                    }
+                }
+            }
+            
             void MakeRadio(Player player, string arg)
             {
                 if (player == null) return;
@@ -372,6 +404,8 @@ public class ABattle : Mode
                 
                 Timing.CallDelayed(radio.TryPlay(arg, 1.5f).Duration.Seconds + 1, ()
                     => NetworkServer.Destroy(dummy.gameObject));
+
+                return;
 
                 IEnumerator<float> Teleporter(Player pl)
                 {

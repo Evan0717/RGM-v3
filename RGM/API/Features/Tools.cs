@@ -318,8 +318,7 @@ $"""
 
         public static IEnumerator<float> SetWinner(List<Player> playerList, int amount)
         {
-            if (IsWinnerSelected || Main.Instance.Config.FixedModes.Count() > 0)
-                yield break;
+            if (IsWinnerSelected || Main.Instance.Config.FixedModes.Any()) yield break;
 
             IsWinnerSelected = true;
 
