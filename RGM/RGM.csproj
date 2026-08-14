@@ -61,6 +61,8 @@
     <PreferNativeArm64>true</PreferNativeArm64>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="API\Components\BoxColliderThingsComponent.cs" />
+    <Compile Include="API\Components\ThingsComponent.cs" />
     <Compile Include="API\Databases\Datas.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />

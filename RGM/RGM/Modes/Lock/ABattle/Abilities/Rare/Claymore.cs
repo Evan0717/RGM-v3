@@ -2,14 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Exiled.API.Enums;
-using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
-using PlayerRoles;
 using PlayerRoles.PlayableScps;
 using ProjectMER.Features;
 using ProjectMER.Features.Objects;
+using RGM.API.Components;
 using RGM.API.Features;
 using UnityEngine;
 namespace RGM.Modes.Abilities.Rare;
@@ -26,7 +25,7 @@ public class Claymore : Ability
     private static readonly float BackwardRange = 2f;
     private float _health = 50f;
     
-    private static readonly Dictionary<FirearmType, int> Firearm = new Dictionary<FirearmType, int>() {
+    private static readonly Dictionary<FirearmType, int> Firearm = new() {
         { FirearmType.Com15, 25 }, 
         { FirearmType.Com18, 25 }, 
         { FirearmType.FSP9, 22 }, 
@@ -57,18 +56,15 @@ public class Claymore : Ability
 
     private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (ev.Item?.Serial != _claymoreCoinSerial)
-            return;
+        if (ev.Item?.Serial != _claymoreCoinSerial) return;
         
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["희귀"]}>크레모아</color></color></b> 능력을 사용할 수 있습니다.");
     }
 
     private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
-        if (_claymoreCoinSerial != ev.Item.Serial)
-            return;
+        if (_claymoreCoinSerial != ev.Item.Serial) return;
         
-
         if (!Tools.TryGetLookFirstPoint(ev.Player, distance, Tools.SurfaceType.Floor, out Vector3 point,
                 layerMask: excludeMask))
         {
@@ -80,6 +76,7 @@ public class Claymore : Ability
 
         SchematicObject claymore = ObjectSpawner.SpawnSchematic("Claymore", point, Quaternion.Euler(0, ev.Player.Rotation.eulerAngles.y, 0));
         _schematic = claymore;
+        claymore.gameObject.AddComponent<BoxColliderThingsComponent>();
         _handle = Timing.CallDelayed(5f, () => 
         {
             // n초 후에 이 블록 안의 코드가 실행됩니다.
