@@ -56,7 +56,7 @@ public static class TFTBattle
             PlayAudio(player, "증강 선택창 닫힘", 3);
     }
 
-    public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
+    public static readonly Dictionary<string, string> RatingColor = new()
     {
         {"일반", "#A4A4A4"},
         {"희귀", "#2ECCFA"},
@@ -66,7 +66,7 @@ public static class TFTBattle
         {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
     };
-    public static Dictionary<string, string> SelectFormat = new Dictionary<string, string>()
+    public static Dictionary<string, string> SelectFormat = new()
     {
         {"일반", "<b><i><color=#404040>일</color><color=#474747>반</color> <color=#555555>(</color><color=#5C5C5C>C</color><color=#636363>o</color><color=#6B6B6B>m</color><color=#727272>m</color><color=#797979>o</color><color=#808080>n</color><color=#878787>)</color></i></b>"},
         {"희귀", "<b><i><color=#47DAFF>희</color><color=#47D4FC>귀</color> <color=#47C8F7>(</color><color=#47C2F5>R</color><color=#48BCF2>a</color><color=#48B6F0>r</color><color=#48B0ED>e</color><color=#48AAEB>)</color></i></b>"},
@@ -134,7 +134,7 @@ public static class TFTBattle
             if (Encounter == RoleTypeId.NtfSergeant)
                 playerLevel = TFTAbilityLevel.Euclid;
 
-            if (Encounter == RoleTypeId.NtfSpecialist && player.GetAbilities().Count() == 0)
+            if (Encounter == RoleTypeId.NtfSpecialist && player.GetAbilities().Count == 0)
                 playerLevel = TFTAbilityLevel.Keter;
 
             if (Encounter == RoleTypeId.NtfPrivate && player.GetAbilities().Count() == 2)
@@ -310,7 +310,7 @@ public static class TFTBattle
 
         foreach (var TFTAbility in candidates.Take(selectionCount))
         {
-            queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 3 : 1);
+            queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 5 : 3);
         }
 
         Selections[player] = queue;

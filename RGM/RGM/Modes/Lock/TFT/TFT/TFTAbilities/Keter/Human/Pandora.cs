@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DAONTFT.Core.TFT.Keter.Human;
 
-[TFTAbility("판도라의 인벤토리", "1분마다 인벤토리의 아이템들이 유형이 같은 무작위 아이템들로 교체됩니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Human, TFTAbilityPoint.Continuous, TFTAbilityType.Pandora, "❓")]
+//[TFTAbility("판도라의 인벤토리", "1분마다 인벤토리의 아이템들이 유형이 같은 무작위 아이템들로 교체됩니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Human, TFTAbilityPoint.Continuous, TFTAbilityType.Pandora, "❓")]
 public class Pandora : TFTAbility
 {
     CoroutineHandle _loop;

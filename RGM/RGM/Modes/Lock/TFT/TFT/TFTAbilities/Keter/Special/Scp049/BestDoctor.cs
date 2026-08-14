@@ -1,29 +1,31 @@
-﻿using Exiled.Events.EventArgs.Scp049;
+﻿using Exiled.Events.EventArgs.Player;
 using MEC;
+using PlayerRoles;
 
 namespace DAONTFT.Core.TFT.Keter.Scp049;
 
-[TFTAbility("명의", "시체를 되살리기 시작한 후, 3초 후에도 시체가 만료되지 않았다면 즉시 되살립니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Scp049, TFTAbilityPoint.Continuous, TFTAbilityType.BestDoctor, "💉")]
+[TFTAbility("명의", "적을 처치하면 그 대상을 049-2로 만들고, 대상의 최대 HP를 50% 증가시킵니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.Scp049, TFTAbilityPoint.Continuous, TFTAbilityType.BestDoctor, "💉")]
 public class BestDoctor : TFTAbility
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Scp049.StartingRecall += OnStartingRecall;
+        Exiled.Events.Handlers.Player.Died += OnDied;
     }
 
     public override void OnDisabled()
     {
-        Exiled.Events.Handlers.Scp049.StartingRecall -= OnStartingRecall;
+        Exiled.Events.Handlers.Player.Died -= OnDied;
     }
 
-    void OnStartingRecall(StartingRecallEventArgs ev)
+    private void OnDied(DiedEventArgs ev)
     {
-        Timing.CallDelayed(3, () =>
+        if (ev.Attacker != Owner || ev.Player == Owner)
+            return;
+
+        Timing.CallDelayed(0.1f, () =>
         {
-            if (ev.Scp049.CanResurrect(ev.Ragdoll) && ev.Scp049.IsInRecallRange(ev.Ragdoll))
-            {
-                ev.Scp049.Resurrect(ev.Player);
-            }
+            ev.Player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
+            ev.Player.MaxHealth *= 1.5f;
         });
     }
 }
