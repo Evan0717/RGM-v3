@@ -11,13 +11,8 @@ public class AttackOrder : Ability
     {
         foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
         {
-            
-                scp.AddAbility(AbilityType.NORMAL_TRAINING);
-            
+            scp.AddAbility(AbilityType.NORMAL_TRAINING);
         }
-    }
-    public override void OnDisabled()
-    {
     }
 }
 

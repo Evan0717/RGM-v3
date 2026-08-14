@@ -1,14 +1,6 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
-using MEC;
-using PlayerRoles;
+﻿using PlayerRoles;
 using RGM.API.Features;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
@@ -22,9 +14,5 @@ public class SurvivalOrder : Ability
             scp.AddAbility(AbilityType.EPIC_SURVIVOR);
             scp.AddAbility(AbilityType.NORMAL_INSURANCE);
         }
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

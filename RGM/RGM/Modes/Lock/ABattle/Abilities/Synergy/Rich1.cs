@@ -13,8 +13,4 @@ public class Rich1 : Ability
 
         Owner.UserId.SetRC(1 + int.Parse(uc[1]), out string response);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

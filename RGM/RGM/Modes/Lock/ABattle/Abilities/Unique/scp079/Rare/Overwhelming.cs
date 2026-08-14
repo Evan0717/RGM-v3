@@ -19,7 +19,7 @@ public class Overwhelming : Ability
         Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
     }
 
-    public void OnVoiceChatting(VoiceChattingEventArgs ev)
+    private void OnVoiceChatting(VoiceChattingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

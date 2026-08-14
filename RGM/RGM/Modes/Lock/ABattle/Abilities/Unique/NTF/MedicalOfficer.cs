@@ -21,7 +21,7 @@ public class MedicalOfficer : Ability
         Timing.KillCoroutines(_medical);
     }
 
-    public IEnumerator<float> Medical()
+    private IEnumerator<float> Medical()
     {
         while (true)
         {

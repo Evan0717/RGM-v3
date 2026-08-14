@@ -10,8 +10,4 @@ public class SeedsOfMTF : Ability
     {
         Respawn.GrantInfluence(Faction.FoundationStaff, 20);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

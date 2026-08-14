@@ -15,7 +15,7 @@ public class Hurger : Ability
         Exiled.Events.Handlers.Scp0492.ConsumingCorpse -= OnConsumingCorpse;
     }
 
-    public void OnConsumingCorpse(Exiled.Events.EventArgs.Scp0492.ConsumingCorpseEventArgs ev)
+    private void OnConsumingCorpse(Exiled.Events.EventArgs.Scp0492.ConsumingCorpseEventArgs ev)
     {
         if (ev.Player != Owner || !ev.IsAllowed)
             return;

@@ -14,8 +14,4 @@ public class Loser : Ability
             Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Legend, 1).GetRandomValue());
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

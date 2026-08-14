@@ -11,8 +11,4 @@ public class CASSIE : Ability
         else
             ABattleVar.CASSIE.Add(Owner, 1);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

@@ -1,11 +1,7 @@
 ﻿using PlayerRoles;
 using RGM.API.Features;
 using RGM.Modes;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RGM.RGM.Modes.Abilities.Unique.Scp079.Rare;
 
@@ -19,9 +15,5 @@ public class Hide : Ability
         {
             scp.AddAbility(AbilityType.RARE_TRANSPARENTCLOAK);
         }
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

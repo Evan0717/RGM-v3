@@ -1,14 +1,7 @@
-﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp079;
-using Exiled.Events.Patches.Events.Player;
+﻿using Exiled.Events.EventArgs.Scp079;
 using MEC;
 using ProjectMER.Features.Serializable;
-using RGM.API.Features;
 using UnityEngine;
-
-using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
@@ -27,7 +20,7 @@ public class ToolPing : Ability
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
-    public void OnPinging(PingingEventArgs ev)
+    private void OnPinging(PingingEventArgs ev)
     {
         if (ev.Player == null || ev.Player != Owner) return;
         if (!isScp079Cooldown)

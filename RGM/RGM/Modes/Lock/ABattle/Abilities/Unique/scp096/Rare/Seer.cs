@@ -18,28 +18,25 @@ public class Seer : Ability
         Exiled.Events.Handlers.Scp096.Enraging -= OnEnraging;
     }
 
-    public void OnEnraging(EnragingEventArgs ev)
+    private void OnEnraging(EnragingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        int Stack = 0;
+        int stack = 0;
 
         foreach (var player in PlayerManager.List.Where(x => x.IsHuman))
         {
-            if (Stack == 15)
-                break;
+            if (stack == 15) break;
+            
+            if (!(Vector3.Distance(player.Position, ev.Player.Position) < 51)) continue;
+            stack += 1;
 
-            if (Vector3.Distance(player.Position, ev.Player.Position) < 51)
-            {
-                Stack += 1;
+            ev.Scp096.AddTarget(player);
 
-                ev.Scp096.AddTarget(player);
-
-                player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
-            }
+            player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
         }
 
-        ev.Player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
+        ev.Player.AddHint("천리안", $"<color={ABattle.RatingColor["희귀"]}>천리안</color> 능력으로 {stack}명의 인간들을 추가로 탐색했습니다.");
     }
 }

@@ -14,8 +14,4 @@ public class Assassin : Ability
                 Owner.AddAbility(AbilityType.NORMAL_SWIFT);
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

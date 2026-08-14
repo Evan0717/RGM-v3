@@ -16,8 +16,4 @@ public class QuarantineObligation : Ability
         foreach (var item in ContainDuty)
             Owner.AddItem(item);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

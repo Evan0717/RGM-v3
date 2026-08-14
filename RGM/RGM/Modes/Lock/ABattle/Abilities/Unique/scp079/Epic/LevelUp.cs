@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Features.Roles;
-using MEC;
+﻿using Exiled.API.Features.Roles;
+
 namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
 [Ability("만렙", "즉시 5티어까지 상승합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP079_LEVELUP, RoleAbility.Scp079)]
@@ -10,12 +9,5 @@ public class LevelUp : Ability
     {
         if (Owner.Role is Scp079Role scp079)
             scp079.Level = 5;
-
     }
-
-    public override void OnDisabled()
-    {
-
-    }
-
 }

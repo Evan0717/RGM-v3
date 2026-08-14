@@ -19,7 +19,7 @@ public class DoraemonPocket : Ability
         Exiled.Events.Handlers.Scp3114.Revealed -= OnRevealed;
     }
 
-    public void OnRevealed(RevealedEventArgs ev)
+    private void OnRevealed(RevealedEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

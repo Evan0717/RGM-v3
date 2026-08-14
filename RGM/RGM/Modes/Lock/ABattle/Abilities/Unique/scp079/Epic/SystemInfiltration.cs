@@ -1,13 +1,6 @@
-﻿using DiscordInteraction.Discord;
-using Exiled.API.Features;
-using MEC;
+﻿using MEC;
 using RGM.API.Features;
-using SecretAPI.Extensions;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
 using UnityEngine;
-using static PlayerList;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
@@ -20,11 +13,7 @@ public class SystemInfiltration : Ability
     {
         TryAddExtraMode();
     }
-
-    public override void OnDisabled()
-    {
-
-    }
+    
     public void AllPlayerBroadcast(string message)
     {
         foreach (var p in PlayerManager.List)

@@ -20,7 +20,7 @@ public class Druid : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (_isReflecting ||
             ev.Player != Owner ||
@@ -32,21 +32,19 @@ public class Druid : Ability
 
         float reflectChance = ev.Player.IsScpRole() ? 45 : 75;
 
-        if (UnityEngine.Random.Range(1, 101) <= reflectChance)
-        {
-            ev.IsAllowed = false;
+        if (!(UnityEngine.Random.Range(1, 101) <= reflectChance)) return;
+        ev.IsAllowed = false;
 
-            _isReflecting = true;
-            try
-            {
-                ev.Attacker.Hit(ev.Player, ev.Amount);
-                ev.Attacker.AddHint("드루이드", "당신의 공격이 반사되었습니다.");
-                ev.Player.AddHint("드루이드", $"상대의 공격이 반사되었습니다.");
-            }
-            finally
-            {
-                _isReflecting = false;
-            }
+        _isReflecting = true;
+        try
+        {
+            ev.Attacker.Hit(ev.Player, ev.Amount);
+            ev.Attacker.AddHint("드루이드", "당신의 공격이 반사되었습니다.");
+            ev.Player.AddHint("드루이드", $"상대의 공격이 반사되었습니다.");
+        }
+        finally
+        {
+            _isReflecting = false;
         }
     }
 }

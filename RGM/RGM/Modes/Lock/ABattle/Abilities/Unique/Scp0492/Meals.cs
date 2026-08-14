@@ -8,8 +8,4 @@ public class Meals : Ability
         Owner.MaxHealth *= 1.5f;
         Owner.Health *= 1.5f;
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

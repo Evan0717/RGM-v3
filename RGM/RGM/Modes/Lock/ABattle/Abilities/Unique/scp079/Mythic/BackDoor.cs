@@ -1,17 +1,11 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
-using Exiled.Events.Patches.Events.Player;
-using MEC;
 using PlayerRoles;
-using ProjectMER.Features.Serializable;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static RGM.Variables.Variable;
 using RGM.API.DataBases;
 
 using System;
@@ -32,7 +26,7 @@ public class BackDoor : Ability
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
-    public void OnPinging(PingingEventArgs ev)
+    private void OnPinging(PingingEventArgs ev)
     {
         try
         {

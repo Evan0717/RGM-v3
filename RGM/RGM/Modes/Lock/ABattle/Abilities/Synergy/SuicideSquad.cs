@@ -19,7 +19,7 @@ public class SuicideSquad : Ability
         Exiled.Events.Handlers.Player.Dying -= OnDying;
     }
 
-    public void OnDying(DyingEventArgs ev)
+    private void OnDying(DyingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
@@ -28,13 +28,11 @@ public class SuicideSquad : Ability
 
         Timing.CallDelayed(0.1f, () =>
         {
-            if (Owner.IsDead)
+            if (!Owner.IsDead) return;
+            for (int i = 0; i < 3; i++)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    Pickup item = Pickup.Create(ItemType.SCP018);
-                    item.Spawn(pos, Quaternion.identity);
-                }
+                Pickup item = Pickup.Create(ItemType.SCP018);
+                item.Spawn(pos, Quaternion.identity);
             }
         });
     }

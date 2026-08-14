@@ -16,8 +16,4 @@ public class AssultOrder : Ability
             scp.AddAbility(AbilityType.EPIC_SHARPEYES);
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

@@ -1,13 +1,6 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
-using MEC;
-using PlayerRoles;
+﻿using PlayerRoles;
 using RGM.API.Features;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
@@ -23,9 +16,5 @@ public class AvoidOrder : Ability
                 scp.AddAbility(AbilityType.NORMAL_AGILITY);
             }
         }
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

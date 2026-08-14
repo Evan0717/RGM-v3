@@ -16,7 +16,7 @@ public class CompetentDoctor : Ability
         Exiled.Events.Handlers.Scp049.FinishingRecall -= OnFinishingRecall;
     }
 
-    public void OnFinishingRecall(FinishingRecallEventArgs ev)
+    private void OnFinishingRecall(FinishingRecallEventArgs ev)
     {
         if (ev.Player == Owner)
         {

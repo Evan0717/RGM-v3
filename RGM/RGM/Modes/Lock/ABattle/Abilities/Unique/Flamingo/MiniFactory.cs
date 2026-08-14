@@ -17,8 +17,4 @@ public class MiniFactory : Ability
         player.Role.Set(Owner.Role.Type);
         player.Position = Owner.Position;
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

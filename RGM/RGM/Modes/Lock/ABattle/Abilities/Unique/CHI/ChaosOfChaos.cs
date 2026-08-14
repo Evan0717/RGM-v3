@@ -1,6 +1,4 @@
-﻿using Exiled.API.Features.Items;
-
-namespace RGM.Modes.Abilities.Unique.CHI;
+﻿namespace RGM.Modes.Abilities.Unique.CHI;
 
 [Ability("혼돈의 카오스", "SCP-018을 2개 지급받습니다.", AbilityCategory.Common, AbilityType.NORMAL_CHI_CHAOSOFCHAOS, RoleAbility.CHI)]
 public class ChaosOfChaos : Ability
@@ -10,9 +8,5 @@ public class ChaosOfChaos : Ability
         for (int i = 0; i < 2; i++) {
             Owner.AddItem(ItemType.SCP018);
         }
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

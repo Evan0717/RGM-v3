@@ -15,8 +15,4 @@ public class SurvivalExpert : Ability
         Owner.MaxHealth += _additionHealth;
         Owner.Health += _additionHealth;
     }
-
-    public override void OnDisabled()
-    {
-    }
 }
