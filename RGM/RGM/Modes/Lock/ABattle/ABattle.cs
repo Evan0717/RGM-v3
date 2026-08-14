@@ -278,7 +278,8 @@ public class ABattle : Mode
                         var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
                         if (player.IsDead || player.IsHost || complete.Contains(player)) continue;
                         var text = musicList.GetRandomValue();
-                        bomb.FuseTime = 0.1f;
+                        bomb.FuseTime = .1f;
+                        bomb.ScpDamageMultiplier = 2.5f;
 
                         complete.Add(player);
 
@@ -290,13 +291,18 @@ public class ABattle : Mode
                                     AbilityType.EPIC_SURVIVOR or
                                     AbilityType.EPIC_MADSCIENTIST or
                                     AbilityType.NORMAL_INSURANCE)) player.AddAbility(AbilityType.EPIC_MADSCIENTIST);
-                            bomb.ScpDamageMultiplier = 2.5f;
                             player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
                             continue;
                         }
 
                         MakeRadio(player, text);
-                        Timing.CallDelayed(2f, () => bomb.SpawnActive(player.Position));
+                        Timing.CallDelayed(2f, () =>
+                        {
+                            bomb.FuseTime = .2f;
+                            bomb.SpawnActive(player.Position);
+                            bomb.SpawnActive(player.Position);
+                            bomb.SpawnActive(player.Position);
+                        });
                     }
                 });
                 // -----------------------------------------------------------------------------------------------
