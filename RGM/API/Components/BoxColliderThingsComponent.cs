@@ -8,6 +8,7 @@ public class BoxColliderThingsComponent : MonoBehaviour
     public class TriggerEventArgs : System.EventArgs
     {
         public GameObject GameObject { get; set; }
+        public Collider Collider { get; set; }
     }
 
     public event EventHandler<TriggerEventArgs> TriggerEnter;
@@ -60,10 +61,18 @@ public class BoxColliderThingsComponent : MonoBehaviour
     }
     
     public void OnTriggerEnter(Collider obj)
-        => TriggerEnter?.Invoke(this, new TriggerEventArgs { GameObject = obj.gameObject });
+        => TriggerEnter?.Invoke(this, new TriggerEventArgs
+        {
+            GameObject = obj.gameObject,
+            Collider = obj
+        });
     
     public void OnTriggerExit(Collider obj)
-         => TriggerExit?.Invoke(this, new TriggerEventArgs {GameObject = obj.gameObject});
+         => TriggerExit?.Invoke(this, new TriggerEventArgs
+         {
+             GameObject = obj.gameObject,
+             Collider = obj
+         });
 
     private void Setter()
     {

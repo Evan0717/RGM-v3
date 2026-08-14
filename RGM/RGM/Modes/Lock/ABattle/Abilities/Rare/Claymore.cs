@@ -76,11 +76,22 @@ public class Claymore : Ability
 
         SchematicObject claymore = ObjectSpawner.SpawnSchematic("Claymore", point, Quaternion.Euler(0, ev.Player.Rotation.eulerAngles.y, 0));
         _schematic = claymore;
-        claymore.gameObject.AddComponent<BoxColliderThingsComponent>();
+        // claymore.gameObject.AddComponent<BoxColliderThingsComponent>();
         _handle = Timing.CallDelayed(5f, () => 
         {
+            // var component = claymore.GetComponent<BoxColliderThingsComponent>();
+            
             // n초 후에 이 블록 안의 코드가 실행됩니다.
             _handle = Timing.RunCoroutine(Corutine(point, claymore));
+            // component.TriggerEnter += (sender, args) =>
+            // {
+            //     var collider = args.Collider;
+            //
+            //     if (collider.gameObject.GetType() == typeof())
+            //     {
+            //         
+            //     }
+            // };
         });
     }
     private IEnumerator<float> Corutine(Vector3 position, SchematicObject schematic)
