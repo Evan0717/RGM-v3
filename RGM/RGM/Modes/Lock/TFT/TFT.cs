@@ -29,18 +29,18 @@ public class TFT : Mode
 """
 증강은 한 사람당 총 3개를 확보할 수 있으며,
 처음 라운드 시작시 40초 후에,
-그 다음 240초마다 지급됩니다.
+그 다음 120초마다 지급됩니다.
 """;
     public override string Color => "ffd700";
 
-    CoroutineHandle _onModeStarted;
-    CoroutineHandle _upgradeTimerLoop;
-    readonly Dictionary<string, float> _upgradeRemainingTimes = new();
-    readonly HashSet<string> _playersWaitingRespawn = new();
-    readonly List<TFTAbilityLevel> _upgradeLevelSequence = new();
-    int _upgradeWaitTime = 240;
-    bool _isUpgradeTimerReady;
-    const bool DebugUpgradeTimer = false;
+    private CoroutineHandle _onModeStarted;
+    private CoroutineHandle _upgradeTimerLoop;
+    private readonly Dictionary<string, float> _upgradeRemainingTimes = new();
+    private readonly HashSet<string> _playersWaitingRespawn = new();
+    private readonly List<TFTAbilityLevel> _upgradeLevelSequence = new();
+    private int _upgradeWaitTime = 120;
+    private bool _isUpgradeTimerReady;
+    private const bool DebugUpgradeTimer = false;
 
     public override void OnEnabled()
     {
@@ -163,28 +163,32 @@ public class TFT : Mode
 
             try
             {
-                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosRepressor)
+                switch (DAONTFT.Core.Variables.Base.Encounter)
                 {
-                    foreach (var player in Player.List)
-                        player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.IsWeapon()).GetRandomValue());
-                }
-
-                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosMarauder)
-                {
-                    foreach (var player in Player.List)
-                        player.AddItem(Random.Range(1, 3) == 1 ? ItemType.GrenadeFlash : ItemType.GrenadeHE);
-                }
-
-                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosConscript)
-                {
-                    foreach (var player in Player.List)
-                        player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).GetRandomValue());
-                }
-
-                if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ChaosRifleman)
-                {
-                    foreach (var player in Player.List)
-                        player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
+                    case RoleTypeId.ChaosRepressor:
+                    {
+                        foreach (var player in Player.List)
+                            player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.IsWeapon()).GetRandomValue());
+                        break;
+                    }
+                    case RoleTypeId.ChaosMarauder:
+                    {
+                        foreach (var player in Player.List)
+                            player.AddItem(Random.Range(1, 3) == 1 ? ItemType.GrenadeFlash : ItemType.GrenadeHE);
+                        break;
+                    }
+                    case RoleTypeId.ChaosConscript:
+                    {
+                        foreach (var player in Player.List)
+                            player.AddItem(Tools.EnumToList<ItemType>().Where(x => x.ToString().Contains("SCP")).GetRandomValue());
+                        break;
+                    }
+                    case RoleTypeId.ChaosRifleman:
+                    {
+                        foreach (var player in Player.List)
+                            player.AddItem(Tools.EnumToList<ItemType>().GetRandomValue());
+                        break;
+                    }
                 }
             }
             catch { }
@@ -199,21 +203,18 @@ public class TFT : Mode
          * 새로 리스폰하는 유저들은 지급 시간을 초기화하도록 변경.
          * 즉, 유저마다 증강 지급 시간을 개별로 적용함.
          *
-         * 기존 유저는 시작 40초 후 획득, 이후 240(또는 다른 시간)초마다 획득
-         * 중간에 리스폰 한 유저는 리스폰 한 시점 부터 40초 후 획득, 이후 240(또는 다른 시간)초마다 획득
+         * 기존 유저는 시작 40초 후 획득, 이후 120(또는 다른 시간)초마다 획득
+         * 중간에 리스폰 한 유저는 리스폰 한 시점 부터 40초 후 획득, 이후 120(또는 다른 시간)초마다 획득
          */
         int getTime()
         {
-            if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.ClassD)
-                return 120;
-
-            if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scientist)
-                return 60;
-
-            if (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.FacilityGuard)
-                return 180;
-            
-            return 240;
+            return DAONTFT.Core.Variables.Base.Encounter switch
+            {
+                RoleTypeId.ClassD => 80,
+                RoleTypeId.Scientist => 60,
+                RoleTypeId.FacilityGuard => 90,
+                _ => 120
+            };
         }
 
         _upgradeWaitTime = getTime();
@@ -327,7 +328,7 @@ public class TFT : Mode
         return player != null &&
                player.IsAlive &&
                !player.IsNPC &&
-               TFTBattle.GetAbilities(player).Count() < (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scp0492 ? 4 : 3);
+               TFTBattle.GetAbilities(player).Count() < (DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scp0492 ? 8 : 5);
     }
 
     string GetCannotReceiveReason(Player player)
@@ -341,10 +342,10 @@ public class TFT : Mode
         if (player.IsNPC)
             return "npc";
 
-        int maxAbilityCount = DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scp0492 ? 4 : 3;
+        int maxAbilityCount = DAONTFT.Core.Variables.Base.Encounter == RoleTypeId.Scp0492 ? 8 : 5;
 
-        if (TFTBattle.GetAbilities(player).Count() >= maxAbilityCount)
-            return $"max abilities ({TFTBattle.GetAbilities(player).Count()}/{maxAbilityCount})";
+        if (TFTBattle.GetAbilities(player).Count >= maxAbilityCount)
+            return $"max abilities ({TFTBattle.GetAbilities(player).Count}/{maxAbilityCount})";
 
         return "unknown";
     }
@@ -375,7 +376,7 @@ public class TFT : Mode
     {
         DebugBroadcast($"ChangingRole / {ev.Player.Nickname} / oldDead: {ev.Player.IsDead} / new: {ev.NewRole} / newDead: {ev.NewRole.IsDead()}", ev.Player);
 
-        if (ev.Player.IsDead || ev.NewRole.IsDead() || TFTBattle.GetAbilities(ev.Player).Count() == 0)
+        if (ev.Player.IsDead || ev.NewRole.IsDead() || TFTBattle.GetAbilities(ev.Player).Count == 0)
         {
             if (ev.NewRole.IsDead())
             {
