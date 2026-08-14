@@ -20,11 +20,11 @@ public class Disguise : Ability
 
     public override void OnDisabled() => Timing.KillCoroutines(_disguise);
 
-    public IEnumerator<float> disguise()
+    private IEnumerator<float> disguise()
     {
         Team? currentTeam = null;
-        List<RoleTypeId> _blockedRoles = new List<RoleTypeId>()
-        {
+        List<RoleTypeId> blockedRoles =
+        [
             RoleTypeId.Spectator,
             RoleTypeId.Scp079,
             RoleTypeId.Overwatch,
@@ -32,7 +32,7 @@ public class Disguise : Ability
             RoleTypeId.CustomRole,
             RoleTypeId.Destroyed,
             RoleTypeId.Scp3114
-        };
+        ];
 
         while (Owner.IsAlive)
         {
@@ -40,13 +40,11 @@ public class Disguise : Ability
 
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
             {
-                if (player.Role.Team != Team.Dead && player.Role.Team != Team.OtherAlive)
-                {
-                    if (!teams.ContainsKey(player.Role.Team))
-                        teams[player.Role.Team] = 0;
+                if (player.Role.Team is Team.Dead or Team.OtherAlive) continue;
+                if (!teams.ContainsKey(player.Role.Team))
+                    teams[player.Role.Team] = 0;
 
-                    teams[player.Role.Team]++;
-                }
+                teams[player.Role.Team]++;
             }
 
             var mostCommonTeam = teams.OrderByDescending(fc => fc.Value).FirstOrDefault().Key;
@@ -55,9 +53,9 @@ public class Disguise : Ability
             {
                 currentTeam = mostCommonTeam;
 
-                RoleTypeId role = Tools.EnumToList<RoleTypeId>().Where(x => RoleExtensions.GetTeam(x) == mostCommonTeam && !_blockedRoles.Contains(x)).ToList().GetRandomValue();
+                RoleTypeId role = Tools.EnumToList<RoleTypeId>().Where(x => RoleExtensions.GetTeam(x) == mostCommonTeam && !blockedRoles.Contains(x)).ToList().GetRandomValue();
 
-                MirrorExtensions.ChangeAppearance(Owner, role);
+                Owner.ChangeAppearance(role);
                 Owner.AddBroadcast(10, $"<size=20><color={role.GetRoleColor().ToHex()}>{Trans.Role[role]}</color>(으)로 변장했습니다.</size>");
             }
 

@@ -19,7 +19,7 @@ public class Agility : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null || 
             ev.Player != Owner || 
@@ -30,12 +30,10 @@ public class Agility : Ability
 
         int dodgeChance = Owner.IsScpRole() ? 2 : 5;
 
-        if (Random.Range(1, 101) <= dodgeChance)
-        {
-            ev.IsAllowed = false;
+        if (Random.Range(1, 101) > dodgeChance) return;
+        ev.IsAllowed = false;
 
-            ev.Attacker.AddHint("이런, 미끄러져 버렸군요.", $"이런, 미끄러져 버렸군요.", 1.2f);
-            ev.Player.AddHint("아슬아슬하게 회피했군요!", $"아슬아슬하게 회피했군요!", 1.2f);
-        }
+        ev.Attacker.AddHint("이런, 미끄러져 버렸군요.", $"이런, 미끄러져 버렸군요.", 1.2f);
+        ev.Player.AddHint("아슬아슬하게 회피했군요!", $"아슬아슬하게 회피했군요!", 1.2f);
     }
 }

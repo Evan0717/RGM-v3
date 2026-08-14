@@ -31,10 +31,6 @@ public class OtherworldLight : Ability
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _serial)
@@ -48,7 +44,7 @@ public class OtherworldLight : Ability
         if (ev.Item.Serial != _serial)
             return;
 
-        if (!Tools.TryGetLookPlayer(ev.Player, 100f, out Player target, out RaycastHit? _))
+        if (!ev.Player.TryGetLookPlayer(100f, out Player target, out RaycastHit? _))
         {
             ev.Player.AddHint("동전 사용 실패", "대상을 정확히 지정해 주세요.");
             return;

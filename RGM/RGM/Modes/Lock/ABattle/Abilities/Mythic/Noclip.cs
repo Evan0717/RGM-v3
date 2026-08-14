@@ -25,7 +25,7 @@ public class Noclip : Ability
         Owner.IsNoclipPermitted = false;
     }
 
-    public IEnumerator<float> noclip()
+    private IEnumerator<float> noclip()
     {
         while (true)
         {
@@ -33,7 +33,7 @@ public class Noclip : Ability
             {
                 if (role.IsNoclipEnabled)
                 {
-                    if (Tools.TryGetNearestPlayer(Owner, out Player nearestPlayer, out float radius))
+                    if (Owner.TryGetNearestPlayer(out _, out float radius))
                     {
                         if (radius > 10f)
                             Owner.Hurt(Owner.MaxHealth / 20, "육체가 신의 힘을 감당해내지 못했습니다.");

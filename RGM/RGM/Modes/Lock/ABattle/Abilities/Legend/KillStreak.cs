@@ -25,7 +25,7 @@ public class KillStreak : Ability
         Exiled.Events.Handlers.Player.Died -= OnDied;
     }
 
-    public void OnDied(DiedEventArgs ev)
+    private void OnDied(DiedEventArgs ev)
     {
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;

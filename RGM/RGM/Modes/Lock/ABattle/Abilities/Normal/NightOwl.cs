@@ -10,9 +10,4 @@ public class NightOwl : Ability
     {
         Owner.AddEffect(EffectType.NightVision, 10);
     }
-
-    public override void OnDisabled()
-    {
-        Owner.RemoveEffect(EffectType.NightVision, 10);
-    }
 }

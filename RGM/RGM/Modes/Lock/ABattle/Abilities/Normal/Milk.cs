@@ -27,7 +27,7 @@ public class Milk : Ability
         Exiled.Events.Handlers.Player.FlippingCoin -= OnFlippingCoin;
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (_isConsumed || ev.Player != Owner || ev.Item?.Serial != _coinSerial)
             return;
@@ -35,7 +35,7 @@ public class Milk : Ability
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>우유</color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_isConsumed ||
             ev.Player != Owner ||

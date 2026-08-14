@@ -13,7 +13,10 @@ public class Dnd : Ability
 {
     public override void OnEnabled()
     {
-        IEnumerator<float> enumerator()
+        Timing.RunCoroutine(Enumerator());
+        return;
+
+        IEnumerator<float> Enumerator()
         {
             Owner.EnableEffect(EffectType.Ensnared, 1, 100);
 
@@ -56,11 +59,5 @@ public class Dnd : Ability
             }
             
         }
-
-        Timing.RunCoroutine(enumerator());
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

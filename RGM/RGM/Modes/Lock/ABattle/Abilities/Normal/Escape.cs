@@ -23,11 +23,7 @@ public class Escape : Ability
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlippingCoin;
     }
 
-    public override void OnDisabled()
-    {
-    }
-
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _serial)
             return;
@@ -35,7 +31,7 @@ public class Escape : Ability
         ev.Player.AddHint("동전 사용 설명", $"이 동전을 튕기면 <b><color={ABattle.RatingColor["일반"]}>위기 탈출</color></b> 능력을 사용할 수 있습니다.");
     }
 
-    public void OnFlippingCoin(FlippingCoinEventArgs ev)
+    private void OnFlippingCoin(FlippingCoinEventArgs ev)
     {
         if (_serial != ev.Item.Serial) return;
         if (Tools.TryGetLookPlayers(ev.Player, 25f, out List<Player> players, out RaycastHit? hit))

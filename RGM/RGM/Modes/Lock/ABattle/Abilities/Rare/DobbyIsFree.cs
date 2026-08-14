@@ -7,8 +7,4 @@ public class DobbyIsFree : Ability
     {
         Owner.AddItem(ItemType.SpecialCoal);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

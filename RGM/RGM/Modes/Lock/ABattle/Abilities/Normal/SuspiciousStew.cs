@@ -39,8 +39,4 @@ public class SuspiciousStew : Ability
         });
         Owner.AddAbility(AbilityType.DUMMY_COLDSTEW);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

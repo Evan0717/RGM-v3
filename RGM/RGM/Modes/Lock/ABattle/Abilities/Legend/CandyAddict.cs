@@ -9,14 +9,13 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("마약 중독자", "8초마다 랜덤한 사탕이 지급됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_CANDYADDICT)]
 public class CandyAddict : Ability
 {
-    CoroutineHandle _candyAddict;
+    private CoroutineHandle _candyAddict;
 
-    public override void OnEnabled()
-        => _candyAddict = Timing.RunCoroutine(candyParty());
+    public override void OnEnabled() => _candyAddict = Timing.RunCoroutine(CandyParty());
 
     public override void OnDisabled() => Timing.KillCoroutines(_candyAddict);
 
-    public IEnumerator<float> candyParty()
+    private IEnumerator<float> CandyParty()
     {
         while (true)
         {

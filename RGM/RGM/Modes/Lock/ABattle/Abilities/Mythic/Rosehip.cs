@@ -10,23 +10,19 @@ namespace RGM.Modes.Abilities.Mythic;
 public class Rosehip : Ability
 {
     private ushort _serial;
-    float damageMultiplier = 2f;
+    private float _damageMultiplier = 2f;
 
     public override void OnEnabled()
     {
         Item item = Owner.AddItem(ItemType.SCP1509);
         _serial = item.Serial;
-        damageMultiplier = 2f;
+        _damageMultiplier = 2f;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
-
-    public override void OnDisabled()
-    {
-    }
-
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _serial)
             return;
@@ -34,20 +30,20 @@ public class Rosehip : Ability
         ev.Player.AddHint("장미칼", $"<b><color={ABattle.RatingColor["신화"]}>장미칼</color></b> 능력이 있는 <b>SCP-1509</b>입니다!");
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null ||
             ev.Attacker.CurrentItem == null ||
             ev.Attacker.CurrentItem.Serial != _serial) return;
         if (UnityEngine.Random.Range(1, 101) <= 30)
         {
-            damageMultiplier = 2f;
+            _damageMultiplier = 2f;
             ev.IsAllowed = false;
             ev.Player.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
             return;
         }
 
-        ev.DamageHandler.Damage *= damageMultiplier;
-        damageMultiplier *= 2f;
+        ev.DamageHandler.Damage *= _damageMultiplier;
+        _damageMultiplier *= 2f;
     }
 }

@@ -27,26 +27,24 @@ public class FlameThrower : Ability
         _onStarted = Timing.RunCoroutine(OnStarted());
     }
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
         while (true)
         {
             foreach (var Item in Item.List.Where(x => x.Type == ItemType.MicroHID))
             {
-                if (_flamethrowerSerial == Item.Serial)
-                {
-                    MicroHid MicroHID = (MicroHid)Item;
+                if (_flamethrowerSerial != Item.Serial) continue;
+                MicroHid MicroHID = (MicroHid)Item;
 
-                    if (MicroHID.Energy < 1)
-                        MicroHID.Energy += 0.03f;
-                }
+                if (MicroHID.Energy < 1)
+                    MicroHID.Energy += 0.03f;
             }
 
             yield return Timing.WaitForSeconds(1f);
         }
     }
 
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _flamethrowerSerial)
             return;
@@ -54,22 +52,20 @@ public class FlameThrower : Ability
         ev.Player.AddHint("화염 방사기", $"<b><color={ABattle.RatingColor["전설"]}>화염 방사기</color></b> 능력이 있는 <b>마이크로 H.I.D</b>입니다!");
     }
 
-    public void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
+    private void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
     {
         if (_flamethrowerSerial == ev.Item.Serial && ev.NewPhase == MicroHidPhase.WindingUp)
             ev.NewPhase = MicroHidPhase.Firing;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null || ev.Player == ev.Attacker)
             return;
 
-        if (ev.Attacker.CurrentItem != null && _flamethrowerSerial == ev.Attacker.CurrentItem.Serial)
-        {
-            ev.DamageHandler.Damage *= 0.41f;
+        if (ev.Attacker.CurrentItem == null || _flamethrowerSerial != ev.Attacker.CurrentItem.Serial) return;
+        ev.DamageHandler.Damage *= 0.41f;
 
-            ev.Player.EnableEffect(EffectType.Burned, 1, 1.5f);
-        }
+        ev.Player.EnableEffect(EffectType.Burned, 1, 1.5f);
     }
 }

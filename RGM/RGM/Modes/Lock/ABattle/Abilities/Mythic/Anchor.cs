@@ -19,7 +19,7 @@ namespace RGM.Modes.Abilities.Mythic;
     AbilityType.MYTHIC_ANCHOR)] 
 public class Anchor : Ability
 {
-    ushort itemSerial = 0;
+    private ushort _itemSerial;
     public List<Player> TargetPlayer = new();
     private Dictionary<Player, byte> LWPlayerIntensity = new();
     private Dictionary<Player, float> LWPlayerDuration = new();
@@ -29,7 +29,7 @@ public class Anchor : Ability
     {
         Item item = Owner.AddItem(ItemType.GunRevolver);
 
-        itemSerial = item.Serial;
+        _itemSerial = item.Serial;
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Shooting += OnShooting;
@@ -62,8 +62,8 @@ public class Anchor : Ability
         if (ev.Player == null 
             || ev.Player.IsNPC
             || ev.Item == null
-            || itemSerial != ev.Player.CurrentItem.Serial
-            || itemSerial != ev.Item.Serial) return;
+            || _itemSerial != ev.Player.CurrentItem.Serial
+            || _itemSerial != ev.Item.Serial) return;
         ev.Player.AddHint("구속", $"<b><color={ABattle.RatingColor["신화"]}>구속</color></b> 능력이 있는 <b>리볼버</b>입니다!");
         
     }
@@ -77,8 +77,8 @@ public class Anchor : Ability
         }
 
         if (ev.Player != Owner) return;
-        if (ev.Player.CurrentItem.Serial != itemSerial) return;
-        if (ev.Item.Serial != itemSerial) return;
+        if (ev.Player.CurrentItem.Serial != _itemSerial) return;
+        if (ev.Item.Serial != _itemSerial) return;
         ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 6;
 
         if (!Tools.TryGetLookPlayers(ev.Player, 100f, out List<Player> players, out _)) return;
@@ -175,7 +175,7 @@ public class Anchor : Ability
         if (ev.Player == null 
             || ev.Player.IsNPC 
             || ev.Player.CurrentItem == null 
-            || ev.Player.CurrentItem.Serial != itemSerial) return;
+            || ev.Player.CurrentItem.Serial != _itemSerial) return;
         Timing.RunCoroutine(Disable());
     }
 
@@ -186,7 +186,7 @@ public class Anchor : Ability
         // 구속 리볼버 자체 피해 무효
         if (ev.Attacker == Owner &&
             ev.Attacker.CurrentItem != null &&
-            ev.Attacker.CurrentItem.Serial == itemSerial)
+            ev.Attacker.CurrentItem.Serial == _itemSerial)
         {
             ev.IsAllowed = false;
             return;

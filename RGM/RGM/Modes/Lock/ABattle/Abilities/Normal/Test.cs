@@ -13,28 +13,22 @@ public class Test : Ability
 
         Timing.CallDelayed(3.5f, () =>
         {
-            if (Owner.IsAlive)
+            if (!Owner.IsAlive) return;
+            if (Random.Range(1, 101) <= 35)
             {
-                if (Random.Range(1, 101) <= 35)
-                {
-                    Owner.AddHint("시험 성공", "<b>능력을 3개 더 얻었습니다!</b>");
+                Owner.AddHint("시험 성공", "<b>능력을 3개 더 얻었습니다!</b>");
 
-                    for (int i = 0; i < 3; i++) {
-                        var category = Random.Range(1, 101) <= 30 ? AbilityCategory.Rare : AbilityCategory.Common;
-                        Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1,[AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
-                    }
-                    Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);
+                for (int i = 0; i < 3; i++) {
+                    var category = Random.Range(1, 101) <= 30 ? AbilityCategory.Rare : AbilityCategory.Common;
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1,[AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
                 }
-                else
-                {
-                    Owner.AddHint("시험 실패", "다음 기회에..");
-                    Owner.AddAbility(AbilityType.DUMMY_TESTFAILURE);
-                };
+                Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);
             }
+            else
+            {
+                Owner.AddHint("시험 실패", "다음 기회에..");
+                Owner.AddAbility(AbilityType.DUMMY_TESTFAILURE);
+            };
         });
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

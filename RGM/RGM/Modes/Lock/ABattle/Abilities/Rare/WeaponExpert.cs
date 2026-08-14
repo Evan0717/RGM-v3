@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features.Items;
+using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
@@ -7,10 +8,10 @@ public class WeaponExpert : Ability
 {
     public override void OnEnabled()
     {
-        Item scp1853 = Owner.AddItem(ItemType.SCP1853);
+        Owner.AddItem(ItemType.SCP1853);
+        if (Random.Range(1, 101) <= 25) {
+            Owner.AddItem(ItemType.SCP1853);
+        }
     }
 
-    public override void OnDisabled()
-    {
-    }
 }

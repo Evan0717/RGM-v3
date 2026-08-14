@@ -9,12 +9,8 @@ public class RandomCandy : Ability
     public override void OnEnabled()
     {
         Owner.AddRandomCandy();
-
-        while (Random.Range(1, 101) <= 20)
+        while (Random.Range(1, 101) <= 25) {
             Owner.AddRandomCandy();
-    }
-
-    public override void OnDisabled()
-    {
+        }
     }
 }

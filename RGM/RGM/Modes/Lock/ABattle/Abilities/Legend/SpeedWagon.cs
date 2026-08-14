@@ -10,8 +10,4 @@ public class SpeedWagon : Ability
     {
         Owner.AddEffect(EffectType.MovementBoost, 100);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

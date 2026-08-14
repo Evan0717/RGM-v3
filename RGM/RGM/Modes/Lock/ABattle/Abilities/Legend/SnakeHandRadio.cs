@@ -23,7 +23,7 @@ public class SnakeHandRadio : Ability
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
     }
-    public void OnChangedItem(ChangedItemEventArgs ev)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item?.Serial != _callSnakeHandsSerial)
             return;
@@ -31,27 +31,25 @@ public class SnakeHandRadio : Ability
         ev.Player.AddHint("뱀의 손 무전기", $"<b><color={ABattle.RatingColor["전설"]}>뱀의 손 무전기</color></b> 능력이 있는 <b>무전기</b>입니다!");
     }
 
-    public void OnTogglingRadio(TogglingRadioEventArgs ev)
+    private void OnTogglingRadio(TogglingRadioEventArgs ev)
     {
-        if (_callSnakeHandsSerial == ev.Item.Serial)
+        if (_callSnakeHandsSerial != ev.Item.Serial) return;
+        ev.Item.Destroy();
+
+        ev.Player.RemoveAbility(this);
+        ev.Player.AddAbility(AbilityType.DUMMY_USEDSNAKEHANDRADIO);
+
+        if (ev.Player.Role.Type != RoleTypeId.Tutorial)
+            ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
+
+        List<Player> deadPlayers = PlayerManager.List.Where(x => x.IsDead).ToList();
+        Tools.CallSnakeHand(ev.Player, deadPlayers);
+
+        Timing.CallDelayed(1, () =>
         {
-            ev.Item.Destroy();
+            ev.Player.Position = deadPlayers.FirstOrDefault()!.Position;
+        });
 
-            ev.Player.RemoveAbility(this);
-            ev.Player.AddAbility(AbilityType.DUMMY_USEDSNAKEHANDRADIO);
-
-            if (ev.Player.Role.Type != RoleTypeId.Tutorial)
-                ev.Player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
-            List<Player> deadPlayers = PlayerManager.List.Where(x => x.IsDead).ToList();
-            Tools.CallSnakeHand(ev.Player, deadPlayers);
-
-            Timing.CallDelayed(1, () =>
-            {
-                ev.Player.Position = deadPlayers.FirstOrDefault()!.Position;
-            });
-
-            ev.Player.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
-        }
+        ev.Player.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
     }
 }

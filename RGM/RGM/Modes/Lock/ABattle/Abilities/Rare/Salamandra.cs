@@ -16,12 +16,8 @@ public class Salamandra : Ability
     {
         Light(Owner, Color.red);
     }
-
-    public override void OnDisabled()
-    {
-    }
     
-    public void Light(Player player, Color color)
+    private void Light(Player player, Color color)
     {
         try
         {
