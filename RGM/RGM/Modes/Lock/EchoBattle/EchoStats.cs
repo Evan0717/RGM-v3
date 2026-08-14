@@ -24,58 +24,52 @@ namespace RGM.Modes;
 /// </summary>
 public static class EchoStats
 {
-    static readonly RoleTypeId[] AttackFlagIgnoredRoles =
-    {
+    private static readonly RoleTypeId[] AttackFlagIgnoredRoles =
+    [
         RoleTypeId.Scp173,
         RoleTypeId.Scp079
-    };
+    ];
 
     public static bool AreAttackModifiersIgnored(Player player)
     {
         return player != null && AttackFlagIgnoredRoles.Contains(player.Role.Type);
     }
 
-    static readonly DamageType[] DefenseFlatIgnoredDamageTypes =
-    {
+    private static readonly DamageType[] DefenseFlatIgnoredDamageTypes =
+    [
         DamageType.Warhead,
         DamageType.Crushed,
         DamageType.PocketDimension,
         DamageType.Falldown,
         DamageType.Scp106
-    };
+    ];
 
-    static readonly float[] SubOptionGradeWeights = [11, 19, 25, 21, 14, 10];
-    static readonly System.Random SubOptionRandom = new();
-    static readonly object SubOptionRandomLock = new();
-    static readonly HashSet<Player> FixedDamageTargets = new();
-    static readonly Dictionary<Player, PendingScp173HsFix> PendingScp173HsFixes = new();
-    const float Scp173BaseBlinkCooldown = 3f;
-    const float Scp173MinimumBlinkCooldown = 1f;
-    const float Scp173MaximumMoveSpeed = 100f;
-    const float Scp173BlinkCooldownReductionPerMoveSpeed = 0.014f;
+    private static readonly float[] SubOptionGradeWeights = [11, 19, 25, 21, 14, 10];
+    private static readonly System.Random SubOptionRandom = new();
+    private static readonly object SubOptionRandomLock = new();
+    private static readonly HashSet<Player> FixedDamageTargets = new();
+    private static readonly Dictionary<Player, PendingScp173HsFix> PendingScp173HsFixes = new();
+    private const float Scp173BaseBlinkCooldown = 3f;
+    private const float Scp173MinimumBlinkCooldown = 1f;
+    private const float Scp173MaximumMoveSpeed = 100f;
+    private const float Scp173BlinkCooldownReductionPerMoveSpeed = 0.014f;
 
     /// <summary>바닐라 SCP-049 Good Sense 대상 소생 HS 보상. <c>Scp049ResurrectAbility.ResurrectTargetReward</c></summary>
-    const float Scp049SenseResurrectHsReward = 200f;
+    private const float Scp049SenseResurrectHsReward = 200f;
     /// <summary>바닐라 SCP-173 Tantrum 처치 HS 보상.</summary>
-    const float Scp173TantrumHsReward = 400f;
-    const float Scp173TantrumFlamingoHsReward = 100f;
-    const float HsClampMatchTolerance = 1f;
+    private const float Scp173TantrumHsReward = 400f;
 
-    readonly struct PendingScp173HsFix
+    private const float Scp173TantrumFlamingoHsReward = 100f;
+    private const float HsClampMatchTolerance = 1f;
+
+    private readonly struct PendingScp173HsFix(float savedHs, float providerMax, float reward)
     {
-        public readonly float SavedHs;
-        public readonly float ProviderMax;
-        public readonly float Reward;
-
-        public PendingScp173HsFix(float savedHs, float providerMax, float reward)
-        {
-            SavedHs = savedHs;
-            ProviderMax = providerMax;
-            Reward = reward;
-        }
+        public readonly float SavedHs = savedHs;
+        public readonly float ProviderMax = providerMax;
+        public readonly float Reward = reward;
     }
 
-    static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
+    private static readonly Dictionary<EchoSubOptionType, float[]> SubOptionValues = new()
     {
         { EchoSubOptionType.AttackPercent, [7.1f, 7.8f, 8.5f, 9.2f, 9.9f, 10.6f] },
         { EchoSubOptionType.AttackFlat, [6f, 8f, 10f, 12f, 14f, 16f] },
@@ -92,7 +86,7 @@ public static class EchoStats
         { EchoSubOptionType.HeadshotDamage, [23.8f, 26.1f, 28.4f, 30.7f, 33.0f, 35.3f] },
         { EchoSubOptionType.SizeReduction, [4.8f, 5.5f, 6.2f, 6.9f, 7.6f, 8.3f] },
         { EchoSubOptionType.HealingBonus, [55.0f, 64.0f, 73.0f, 82.0f, 91.0f, 100.0f] },
-        { EchoSubOptionType.CriticalDamage, [15.0f, 16.2f, 17.4f, 18.6f, 19.8f, 21.0f] },
+        { EchoSubOptionType.CriticalDamage, [15.0f, 16.2f, 17.4f, 18.6f, 19.8f, 21.0f] }
     };
 
     public static float LerpStat(float min, float max, int level)
@@ -105,8 +99,7 @@ public static class EchoStats
     public static int Clamp(int value, int min, int max)
     {
         if (value < min) return min;
-        if (value > max) return max;
-        return value;
+        return value > max ? max : value;
     }
 
     public static float GetMainStatValue(EchoCost cost, EchoMainStatType type, int level)

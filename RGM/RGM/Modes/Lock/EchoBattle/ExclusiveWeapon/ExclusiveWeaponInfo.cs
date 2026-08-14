@@ -8,8 +8,8 @@ public static class ExclusiveWeaponInfo
     public const int MaxLevel = 90;
     public const int MaxResonance = 5;
     public const int BaseExp = 25;
-    public const float LevelExpMultiplier = 1.02f;
-    public const float LevelExpAdd = 7f;
+    public const float LevelExpMultiplier = 1.015f;
+    public const float LevelExpAdd = 10f;
 
     public static Dictionary<ExclusiveWeaponType, ExclusiveWeaponData> Weapons = new();
     public static Dictionary<Player, ExcWeapon> PlayerWeapons = new();
