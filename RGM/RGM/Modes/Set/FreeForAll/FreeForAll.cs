@@ -17,12 +17,12 @@ namespace RGM.Modes
     class FreeForAll : Mode
     {
         public override string Name => "개인전";
-        public override string Description => "가장 먼저 50킬을 달성하세요!";
+        public override string Description => "가장 먼저 40킬을 달성하세요!";
         public override string Detail =>
 """
 랜덤한 전투 맵에서 다른 모든 플레이어와 싸우세요.
 
-먼저 50킬을 달성하거나, 4분 후 가장 많은 킬을 기록한 플레이어가 승리합니다.
+먼저 40킬을 달성하거나, 3분 후 가장 많은 킬을 기록한 플레이어가 승리합니다.
 """;
         public override string Color => "FA58F4";
 
@@ -50,10 +50,10 @@ namespace RGM.Modes
         private int _modeId;
         private float _matchEndTime;
 
-        List<ItemType> Items()
+        private List<ItemType> Items()
         {
-            List<ItemType> Guns = new List<ItemType>()
-            {
+            List<ItemType> guns =
+            [
                 ItemType.GunA7,
                 ItemType.GunE11SR,
                 ItemType.GunShotgun,
@@ -62,13 +62,14 @@ namespace RGM.Modes
                 ItemType.GunLogicer,
                 ItemType.GunFRMG0,
                 ItemType.GunAK
-            };
-            
-            List<ItemType> Items = new List<ItemType>();
-            Items.Add(Guns.GetRandomValue());
-            Items.Add(ItemType.ArmorLight);
+            ];
+            List<ItemType> items =
+            [
+                guns.GetRandomValue(),
+                ItemType.ArmorLight
+            ];
 
-            return Items;
+            return items;
         }
 
         public override void OnEnabled()
@@ -113,7 +114,7 @@ namespace RGM.Modes
                 door.Unlock();
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var door in Door.List)
             {
@@ -148,7 +149,7 @@ namespace RGM.Modes
                 EndMatch(GetLeaders());
         }
 
-        public void OnDying(DyingEventArgs ev)
+        private void OnDying(DyingEventArgs ev)
         {
             if (_isModeActive && !_isMatchEnded && _players.Contains(ev.Player))
             {
@@ -157,7 +158,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDied(DiedEventArgs ev)
+        private void OnDied(DiedEventArgs ev)
         {
             if (!_isModeActive || _isMatchEnded || !_players.Contains(ev.Player))
                 return;
@@ -263,17 +264,17 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
+        private void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnShot(ShotEventArgs ev)
+        private void OnShot(ShotEventArgs ev)
         {
             ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }
