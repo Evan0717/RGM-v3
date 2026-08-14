@@ -125,13 +125,13 @@ public static class PlayerExtensions
                 case RoleTypeId.ClassD: add(TFTAbilityCategory.ClassD); return abilities;
                 case RoleTypeId.Scientist: add(TFTAbilityCategory.Scientist); return abilities;
                 case RoleTypeId.FacilityGuard: add(TFTAbilityCategory.FacilityGuard); return abilities;
-                case RoleTypeId.NtfPrivate: add(TFTAbilityCategory.NTF); return abilities;
-                case RoleTypeId.NtfSergeant: add(TFTAbilityCategory.NTF); return abilities;
-                case RoleTypeId.NtfSpecialist: add(TFTAbilityCategory.NTF); return abilities;
-                case RoleTypeId.NtfCaptain: add(TFTAbilityCategory.CHI); return abilities;
-                case RoleTypeId.ChaosConscript: add(TFTAbilityCategory.CHI); return abilities;
-                case RoleTypeId.ChaosMarauder: add(TFTAbilityCategory.CHI); return abilities;
-                case RoleTypeId.ChaosRepressor: add(TFTAbilityCategory.CHI); return abilities;
+                case RoleTypeId.NtfPrivate:
+                case RoleTypeId.NtfSergeant:
+                case RoleTypeId.NtfSpecialist:
+                case RoleTypeId.NtfCaptain: add(TFTAbilityCategory.NTF); return abilities;
+                case RoleTypeId.ChaosConscript:
+                case RoleTypeId.ChaosMarauder:
+                case RoleTypeId.ChaosRepressor:
                 case RoleTypeId.ChaosRifleman: add(TFTAbilityCategory.CHI); return abilities;
                 case RoleTypeId.Tutorial: add(TFTAbilityCategory.Tutorial); return abilities;
                 case RoleTypeId.Scp173: add(TFTAbilityCategory.Scp173); return abilities;

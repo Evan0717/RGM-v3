@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Keter.All;
 
-[TFTAbility("행운아", "모든 문들을 5% 확률로 열고 닫을 수 있습니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.Fortunate, "🍀")]
+//[TFTAbility("행운아", "모든 문들을 5% 확률로 열고 닫을 수 있습니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.Fortunate, "🍀")]
 public class Fortunate : TFTAbility
 {
     public override void OnEnabled()

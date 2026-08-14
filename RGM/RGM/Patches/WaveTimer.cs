@@ -15,17 +15,17 @@ namespace RGM.Patches;
 /// 1) Respawn Token 공용 풀 제한 제거 (소모는 유지 → DeadmanSwitch 정상 동작)
 /// 2) Primary Wave Respawn Time = Random.Range(min, max) (라운드 시작 시 MTF/CHAOS 공통, 이후 개별)
 /// 3) 지원 인원 1명당 지원 시간 +3초 (기존 +10초)
-/// 4) MiniWave는 지원 인원당 시간 증가 없음
+/// 4) MiniWave는 지원 인원당 시간 증가 +1초
 /// 5) MiniWave 대기시간/가용시간 고정
 /// </summary>
 public static class WaveTimerPatch
 {
     private const float PrimarySecondsPerSpawn = 3f;
-    private const float MiniWaveSecondsPerSpawn = 0f;
+    private const float MiniWaveSecondsPerSpawn = 1f;
     private const float MiniWaveSpawnInterval = 100f;
     private const float MiniWaveAvailabilityDuration = 100f;
-    private const int PrimaryIntervalMin = 205;
-    private const int PrimaryIntervalMax = 255;
+    private const int PrimaryIntervalMin = 240;
+    private const int PrimaryIntervalMax = 300;
 
     private static bool _useSharedPrimaryInterval = true;
     private static float _sharedPrimaryInterval;

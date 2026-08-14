@@ -6,13 +6,13 @@ using RGM.API.Features;
 
 namespace DAONTFT.Core.TFT.Keter.All;
 
-[TFTAbility("유령화", "아이템을 전부 버린 상태라면 문을 뚫고 다닐 수 있습니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.Ghost, "👻")]
+[TFTAbility("유령화", "문을 뚫고 다닐 수 있으며, 투명도가 45% 증가합니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.Ghost, "👻")]
 public class Ghost : TFTAbility
 {
-    CoroutineHandle _ghostLoop;
+    private CoroutineHandle _ghostLoop;
     public override void OnEnabled()
     {
-        _ghostLoop = Timing.RunCoroutine(ghostLoop());
+        _ghostLoop = Timing.RunCoroutine(Ghostloop());
     }
 
     public override void OnDisabled()
@@ -20,15 +20,11 @@ public class Ghost : TFTAbility
         Timing.KillCoroutines(_ghostLoop);
     }
 
-    IEnumerator<float> ghostLoop()
+    private IEnumerator<float> Ghostloop()
     {
-        while (true)
-        {
-            if (Owner.Items.Count(x => !x.IsAmmo) == 0)
-            {
-                Owner.AddEffect(EffectType.Ghostly, 1, 1.1f);
-            }
-
+        while (true) {
+            Owner.AddEffect(EffectType.Fade, 115);
+            Owner.AddEffect(EffectType.Ghostly, 1);
             yield return Timing.WaitForSeconds(1);
         }
     }
