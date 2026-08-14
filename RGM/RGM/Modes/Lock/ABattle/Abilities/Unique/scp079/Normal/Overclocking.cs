@@ -23,9 +23,4 @@ public class Overclocking : Ability
 
         Timing.RunCoroutine(enumerator());
     }
-
-    public override void OnDisabled()
-    {
-
-    }
 }

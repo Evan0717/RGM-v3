@@ -7,8 +7,4 @@ public class StartWarhead : Ability
     {
         DeadmanSwitch.StartWarhead();
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

@@ -1,19 +1,11 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
-using Exiled.Events.Patches.Events.Player;
 using MEC;
-using PlayerRoles;
-using ProjectMER.Features.Serializable;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static RGM.Variables.Variable;
 using RGM.API.DataBases;
-using Exiled.API.Enums;
-using Exiled.Events.Patches.Generic;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
@@ -32,7 +24,7 @@ public class Transendence : Ability
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
-    public void OnPinging(PingingEventArgs ev)
+    private void OnPinging(PingingEventArgs ev)
     {
         if (ev.Player == null || ev.Player != Owner)
             return;

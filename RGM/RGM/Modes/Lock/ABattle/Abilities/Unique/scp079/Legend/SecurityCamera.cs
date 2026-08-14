@@ -1,18 +1,9 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp079;
-using Exiled.Events.Patches.Events.Player;
 using MEC;
-using ProjectMER.Features.Serializable;
 using RGM.API.Features;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using PlayerRoles;
-
-using static RGM.Variables.Variable;
 using Exiled.API.Features.Roles;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Legend;
@@ -27,9 +18,9 @@ public class SecurityCamera : Ability
 
     public override void OnDisabled()
         => Timing.KillCoroutines(SecurityCameraHandle);
-    
 
-    public IEnumerator<float> SecurityCameraSystem()
+
+    private IEnumerator<float> SecurityCameraSystem()
     {
         while (Owner.IsAlive)
         {
@@ -62,7 +53,7 @@ public class SecurityCamera : Ability
         }
     }
 
-    public List<Player> Scan(Player player) 
+    private List<Player> Scan(Player player) 
     {
         Vector3 pos = new Vector3(0, 0, 0);
         Vector3 dir = new Vector3(0, 0, 0);
@@ -80,7 +71,6 @@ public class SecurityCamera : Ability
             }
         }
         
-
         foreach (var target in PlayerManager.List)
         {
             if (Tools.IsLookingAt(dir, pos, target, 100f)) TargetPlayers.Add(target);

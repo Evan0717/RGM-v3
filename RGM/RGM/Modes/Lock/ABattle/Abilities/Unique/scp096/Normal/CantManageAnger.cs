@@ -16,7 +16,7 @@ public class CantManageAnger : Ability
         Exiled.Events.Handlers.Scp096.Enraging -= OnEnraging;
     }
 
-    public IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
+    private IEnumerator<float> OnEnraging(Exiled.Events.EventArgs.Scp096.EnragingEventArgs ev)
     {
         yield return Timing.WaitForOneFrame;
 

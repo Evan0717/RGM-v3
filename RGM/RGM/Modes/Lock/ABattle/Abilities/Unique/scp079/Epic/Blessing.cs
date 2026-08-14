@@ -23,8 +23,4 @@ public class Blessing : Ability
             if (scp.Role != RoleTypeId.Scp079)  scp.AddAbility(AbilityType.NORMAL_LUCKY);
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

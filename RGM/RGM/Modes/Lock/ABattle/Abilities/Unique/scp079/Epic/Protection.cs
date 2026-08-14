@@ -18,8 +18,4 @@ public class Protection : Ability
             scp.AddAbility(AbilityType.RARE_HYPASS);
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Scp079;
 
@@ -17,20 +18,33 @@ public class PowerAbsorption : Ability
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
     }
 
-    public void OnPinging(PingingEventArgs ev)
+    private void OnPinging(PingingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (ev.Type == PingType.MicroHid)
+        switch (ev.Type)
         {
-            if (ev.Player.Role is Scp079Role scp079)
-                scp079.Energy += 50;
-        }
-        if (ev.Type == PingType.Generator)
-        {
-            if (ev.Player.Role is Scp079Role scp079)
-                scp079.Energy += 20;
+            case PingType.MicroHid:
+            {
+                if (ev.Player.Role is Scp079Role scp079)
+                    scp079.Energy += 50;
+                break;
+            }
+            case PingType.Generator:
+            {
+                if (ev.Player.Role is Scp079Role scp079)
+                    scp079.Energy += 20;
+                break;
+            }
+            case PingType.Projectile:
+            case PingType.Human:
+            case PingType.Elevator:
+            case PingType.Door:
+            case PingType.Default:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 }

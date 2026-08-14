@@ -18,7 +18,7 @@ public class Shutdown : Ability
         Exiled.Events.Handlers.Scp079.RoomBlackout -= OnRoomBlackout;
     }
 
-    public void OnRoomBlackout(RoomBlackoutEventArgs ev)
+    private void OnRoomBlackout(RoomBlackoutEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

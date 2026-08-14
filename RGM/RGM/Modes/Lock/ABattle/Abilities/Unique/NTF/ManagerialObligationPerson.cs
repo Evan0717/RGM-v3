@@ -20,8 +20,4 @@ public class ManagerialObligationPerson : Ability
         foreach (var item in manageDuty)
             Owner.AddItem(item);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

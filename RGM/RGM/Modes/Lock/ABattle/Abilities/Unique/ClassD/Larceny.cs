@@ -12,7 +12,7 @@ namespace RGM.Modes.Abilities.Unique.ClassD;
 [Ability("절도죄", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)", AbilityCategory.Common, AbilityType.NORMAL_CLASSD_LARCENY, RoleAbility.ClassD)]
 public class Larceny : Ability
 {
-    int PickPocketCooldown = 0;
+    private int _pickPocketCooldown;
 
     public override void OnEnabled()
     {
@@ -24,36 +24,34 @@ public class Larceny : Ability
         Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
     }
 
-    public void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+    private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
     {
-        if (ev.Player != Owner || PickPocketCooldown > 0)
+        if (ev.Player != Owner || _pickPocketCooldown > 0)
             return;
 
-        if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
+        if (!ev.Player.TryGetLookPlayer(3f, out Player player, out RaycastHit? hit)) return;
+        _pickPocketCooldown = 60;
+
+        if (!player.IsInventoryEmpty)
         {
-            PickPocketCooldown = 60;
+            Item Item = player.Items.ToList().GetRandomValue();
 
-            if (!player.IsInventoryEmpty)
-            {
-                Item Item = player.Items.ToList().GetRandomValue();
+            player.RemoveItem(Item);
+            player.AddHint("소매치기", "주머니가 허전합니다..", 1.2f);
+            ev.Player.AddItem(Item.Type);
+            ev.Player.AddHint("소매치기", "소매치기에 성공했습니다.", 1.2f);
 
-                player.RemoveItem(Item);
-                player.AddHint("소매치기", "주머니가 허전합니다..", 1.2f);
-                Item I = ev.Player.AddItem(Item.Type);
-                ev.Player.AddHint("소매치기", "소매치기에 성공했습니다.", 1.2f);
-
-                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
-            }
-            else
-            {
-                player.AddHint("소매치기", "누군가가 소매치기를 하려고 시도했습니다.", 1.2f);
-                ev.Player.AddHint("소매치기", "소매치기에 실패했습니다.\n대상은 아이템을 가지고 있지 않습니다.", 1.2f);
-            }
-
-            Timing.CallDelayed(60, () =>
-            {
-                PickPocketCooldown = 0;
-            });
+            Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
         }
+        else
+        {
+            player.AddHint("소매치기", "누군가가 소매치기를 하려고 시도했습니다.", 1.2f);
+            ev.Player.AddHint("소매치기", "소매치기에 실패했습니다.\n대상은 아이템을 가지고 있지 않습니다.", 1.2f);
+        }
+
+        Timing.CallDelayed(60, () =>
+        {
+            _pickPocketCooldown = 0;
+        });
     }
 }

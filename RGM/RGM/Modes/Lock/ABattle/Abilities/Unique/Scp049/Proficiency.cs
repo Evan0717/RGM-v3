@@ -15,7 +15,7 @@ public class Proficiency : Ability
         Exiled.Events.Handlers.Scp049.StartingRecall -= OnStartingRecall;
     }
 
-    public void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
+    private void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

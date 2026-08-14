@@ -30,8 +30,4 @@ public class IndustrialAccidentInsurance : Ability
             }
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

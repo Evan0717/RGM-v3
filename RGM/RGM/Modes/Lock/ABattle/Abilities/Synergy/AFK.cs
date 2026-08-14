@@ -23,8 +23,4 @@ public class AFK : Ability
             }
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

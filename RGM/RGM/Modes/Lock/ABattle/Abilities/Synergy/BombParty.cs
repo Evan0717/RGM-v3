@@ -17,8 +17,4 @@ public class BombParty : Ability
             g.SpawnActive(enemy.Position, Owner);
         }
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

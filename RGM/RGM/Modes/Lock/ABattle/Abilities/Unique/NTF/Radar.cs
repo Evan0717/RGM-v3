@@ -21,13 +21,13 @@ public class Radar : Ability
         Timing.KillCoroutines(_radar1);
     }
 
-    public IEnumerator<float> Radar1()
+    private IEnumerator<float> Radar1()
     {
         while (true)
         {
             if (Owner != null && Owner.IsAlive)
             {
-                if (Tools.TryGetNearestPlayer(Owner, out Player nearestPlayer, out float radius))
+                if (Owner.TryGetNearestPlayer(out Player nearestPlayer, out float radius))
                 {
                     if (nearestPlayer != null && radius < 99999)
                         Owner.AddHint("레이더", $"<align=left><size=20><color={nearestPlayer.Role.Color.ToHex()}>{Trans.Role[nearestPlayer.Role.Type]}</color> - {radius.ToString("F1")}m</size></align>", 1.2f);

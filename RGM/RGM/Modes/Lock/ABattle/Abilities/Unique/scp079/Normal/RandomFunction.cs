@@ -2,7 +2,6 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp079;
-using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
@@ -19,7 +18,7 @@ public class RandomFunction : Ability
         Exiled.Events.Handlers.Scp079.RoomBlackout -= OnRoomBlackout;
     }
 
-    public void OnRoomBlackout(RoomBlackoutEventArgs ev)
+    private void OnRoomBlackout(RoomBlackoutEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

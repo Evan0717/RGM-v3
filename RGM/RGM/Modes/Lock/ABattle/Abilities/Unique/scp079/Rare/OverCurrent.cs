@@ -19,7 +19,7 @@ public class OverCurrent : Ability
         Timing.KillCoroutines(_onStarted);
     }
 
-    public IEnumerator<float> OnStarted()
+    private IEnumerator<float> OnStarted()
     {
         for (int i = 1; i < 61; i++)
         {

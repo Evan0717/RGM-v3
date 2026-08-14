@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
-using Exiled.API.Features;
-using MEC;
+﻿using Exiled.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Rare;
 
@@ -18,10 +15,5 @@ public class Freedom : Ability
 
          generator.ActivationTime += 60f;
        }
-       
-    }
-
-    public override void OnDisabled()
-    {
     }
 }

@@ -15,7 +15,7 @@ public class Aberration : Ability
         Exiled.Events.Handlers.Scp173.Blinking -= OnBlinking;
     }
 
-    public void OnBlinking(BlinkingEventArgs ev)
+    private void OnBlinking(BlinkingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;

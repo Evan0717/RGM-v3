@@ -14,8 +14,4 @@ public class Winner : Ability
             Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Mythic, 2).GetRandomValue());
         });
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

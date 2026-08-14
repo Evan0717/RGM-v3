@@ -16,17 +16,15 @@ public class Rage : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Owner.Role is Scp096Role scp096)
+        if (Owner.Role is not Scp096Role scp096) return;
+        if (scp096.RageManager.IsEnraged)
         {
-            if (scp096.RageManager.IsEnraged)
-            {
-                ev.Amount *= 0.75f;
-            }
+            ev.Amount *= 0.75f;
         }
     }
 }

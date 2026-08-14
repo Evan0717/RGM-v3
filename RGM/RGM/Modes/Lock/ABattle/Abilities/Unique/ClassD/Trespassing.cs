@@ -7,8 +7,4 @@ public class Trespassing : Ability
     {
         Owner.AddItem(ItemType.SCP268);
     }
-
-    public override void OnDisabled()
-    {
-    }
 }

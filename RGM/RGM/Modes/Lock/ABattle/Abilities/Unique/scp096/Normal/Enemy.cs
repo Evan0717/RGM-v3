@@ -15,7 +15,7 @@ public class Enemy : Ability
         Exiled.Events.Handlers.Scp096.Charging -= OnCharging;
     }
 
-    public void OnCharging(Exiled.Events.EventArgs.Scp096.ChargingEventArgs ev)
+    private void OnCharging(Exiled.Events.EventArgs.Scp096.ChargingEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
