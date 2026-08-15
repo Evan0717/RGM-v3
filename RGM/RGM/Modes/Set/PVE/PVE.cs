@@ -23,25 +23,50 @@ namespace RGM.Modes
 
 
         RoundHandler roundHandler;
+        private const bool EnableLoadDebug = true;
 
         public override void OnEnabled()
         {
+            DebugLoad("모드 활성화를 시작합니다.");
+
             Round.IsLocked = true;
-            Respawn.PauseWaves(); 
+            DebugLoad("라운드를 잠갔습니다.");
+
+            Respawn.PauseWaves();
+            DebugLoad("리스폰 웨이브를 일시 정지했습니다.");
+
+            roundHandler = new RoundHandler();
+            DebugLoad("RoundHandler를 생성했습니다.");
 
             Exiled.Events.Handlers.Server.EndingRound += OnRoundEnding;
             Exiled.Events.Handlers.Server.EndingRound += roundHandler.OnEndingRound;
+            DebugLoad("라운드 종료 이벤트를 등록했습니다.");
 
-            roundHandler = new RoundHandler();
             roundHandler.OnRoundStarted();
+            DebugLoad("RoundHandler를 시작했습니다.");
         }
 
         public override void OnDisabled()
         {
+            DebugLoad("모드 비활성화를 시작합니다.");
+
             Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnding;
+            if (roundHandler == null)
+            {
+                DebugLoad("RoundHandler가 없어 종료 처리를 건너뜁니다.");
+                return;
+            }
+
             Exiled.Events.Handlers.Server.EndingRound -= roundHandler.OnEndingRound;
 
             roundHandler.OnEndingRound();
+            DebugLoad("RoundHandler 종료 처리가 완료되었습니다.");
+        }
+
+        private static void DebugLoad(string message)
+        {
+            if (EnableLoadDebug)
+                Log.Debug($"[PVE] {message}");
         }
 
         public void OnRoundEnding(EndingRoundEventArgs ev)
@@ -98,7 +123,7 @@ namespace RGM.Modes
             [
                 .. players
                     .Where(p => Variable.PlayersReport.TryGetValue(p.UserId, out var report)
-                                && report.Damage >= 0)
+                                && report.Damage >= 3500)
             ];
 
             reward -= roundHandler.AllWavesCleared ? 1 : 0;

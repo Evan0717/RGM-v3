@@ -694,8 +694,6 @@ namespace RGM.API.Features
             if (player.IsNonePlayer() || player.IsNPC)
                 return Item.Create(ItemType.None);
             
-            // 맵의 시드를 활용하여 난수 생성 오브젝트 생성
-            Random rand = new(Map.Seed);
             List<ItemType> poll = [];
             // 추후 constant로 옮길 예정
             List<ItemType> mythos =
@@ -801,7 +799,8 @@ namespace RGM.API.Features
                 ItemType.Lantern,
                 ItemType.Coin
             ];
-            List<ItemType> customKeycard =
+            /*
+             List<ItemType> customKeycard =
             [
                 ItemType.KeycardCustomManagement,
                 ItemType.KeycardCustomMetalCase,
@@ -811,6 +810,7 @@ namespace RGM.API.Features
                 // 기타
                 ItemType.DebugRagdollMover
             ];
+            */
 
             if (!PlayerRandomValueCount.ContainsKey(player))
                 PlayerRandomValueCount.Add(player, [0, 0]);
@@ -831,23 +831,22 @@ namespace RGM.API.Features
                 return player.AddItem(legendary.GetRandomValue());
             }
 
-            poll.AddRange(mythos.Where(_ => Mathf.Clamp01((float)rand.NextDouble()) <= .1f));
+            // 총 40개의 아이템을 가중치에 따라 담고, 그 내에서 랜덤 추출
+            for (int i = 0; i < 3; i++) 
+                poll.AddRange(mythos); // 3%
 
-            for (int i = 0; i < 2; i++)
-                 if (Mathf.Clamp01((float) rand.NextDouble()) <= .2f)
-                     poll.AddRange(legendary);
+            for (int i = 0; i < 6; i++) 
+                poll.AddRange(legendary); // 6%
 
-            for (int i = 0; i < 8; i++) 
-                poll.AddRange(epic);
+            for (int i = 0; i < 16; i++) 
+                poll.AddRange(epic); // 16%
 
-            for (int i = 0; i < 13; i++) 
-                poll.AddRange(rare);
+            for (int i = 0; i < 30; i++) 
+                poll.AddRange(rare); // 30%
 
-            for (int i = 0; i < 23; i++) 
-                poll.AddRange(general);
-
-            for (int i = 0; i < 3; i++)
-                 poll.AddRange(customKeycard);
+            for (int i = 0; i < 45; i++) 
+                poll.AddRange(general); // 45%
+            
 
             var item = player.AddItem(poll.GetRandomValue());
             PlayerRandomValueCount[player][0]++;

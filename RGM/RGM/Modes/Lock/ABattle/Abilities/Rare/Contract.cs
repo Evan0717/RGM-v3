@@ -53,26 +53,26 @@ public class Contract : Ability
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    var rand = Random.Range(1, 201);
+                    var rand = Random.Range(1, 401);
                     switch (rand)
                     {
-                        case 1: // 0.5%
+                        case 1: // 0.25%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Mythic, 1)[0]);
                             break;
                     
-                        case <= 5: // 2.5%
+                        case <= 5: // 1.25%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Legend, 1)[0]);
                             break;
                     
-                        case <= 22: // 11.0%
+                        case <= 52: // 13.0%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1)[0]);
                             break;
                     
-                        case <= 70: // 35.0%
+                        case <= 142: // 35.5%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Rare, 1)[0]);
                             break;
                     
-                        default: // 51.0%
+                        default: // 48.5%
                             player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Common, 1)[0]);
                             break;
                     }
