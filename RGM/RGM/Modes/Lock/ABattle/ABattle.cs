@@ -231,6 +231,7 @@ public class ABattle : Mode
             var rand = new System.Random(Exiled.API.Features.Map.Seed);
             
             Timing.RunCoroutine(Chaos()); // 가랏 피카츄!!
+            Timing.RunCoroutine(ClearMaker());
             FriendlyFire.Instance.OnEnabledForNoNuke();
             
             return; // 지역 함수
