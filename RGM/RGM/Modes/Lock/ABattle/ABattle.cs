@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Mirror;
@@ -81,7 +82,6 @@ public class ABattle : Mode
     public Dictionary<Player, int> SelectionCursor = new Dictionary<Player, int>();
     public Dictionary<Player, bool> IsLifeUsed = new Dictionary<Player, bool>();
     private Mutex _chaosMutex = new();
-
     private ABattleEventHandler _eventHandler;
 
     public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
@@ -231,13 +231,12 @@ public class ABattle : Mode
             var rand = new System.Random(Exiled.API.Features.Map.Seed);
             
             Timing.RunCoroutine(Chaos()); // 가랏 피카츄!!
+            FriendlyFire.Instance.OnEnabledForNoNuke();
             
             return; // 지역 함수
 
             IEnumerator<float> Chaos()
             {
-                var clearMakerHandle = Timing.RunCoroutine(ClearMaker());
-                FriendlyFire.Instance.OnEnabledForNoNuke();
                 while (EnabledModeList.Exists(x => x.Data.Type == ModeType.ABattle))
                 {
                     Tools.MessageTranslated(".G6 .G6 .G6",
@@ -246,9 +245,7 @@ public class ABattle : Mode
                     
                     yield return Timing.WaitForSeconds(chaosStopTime + waitTime);
                 }
-
                 FriendlyFire.Instance.OnDisabled();
-                Timing.KillCoroutines(clearMakerHandle);
             }
 
             IEnumerator<float> ChaosMaker()
