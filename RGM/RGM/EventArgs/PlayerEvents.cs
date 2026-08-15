@@ -767,7 +767,20 @@ namespace RGM.EventArgs
 
         public static void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Player.IsNPC || ev.Player.IsNonePlayer()) return;
+            if (ev.Player.IsNPC)
+            {
+                if (ev.Attacker == null || ev.Attacker.IsNPC || ev.Attacker.IsNonePlayer()) return;
+                float damage = ev.IsInstantKill
+                    ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
+                    : ev.DamageHandler.Damage;
+
+                if (ev.Attacker != ev.Player && damage < 10000)
+                    PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
+
+                return;
+            }
+
+            if (ev.Player.IsNonePlayer()) return;
             
             if (ev.DamageHandler.Type == DamageType.Falldown &&
                 ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) &&
