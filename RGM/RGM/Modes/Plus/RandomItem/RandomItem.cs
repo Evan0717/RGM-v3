@@ -65,6 +65,7 @@ namespace RGM.Modes
                     {
                         List<ItemType> itemList = Tools.EnumToList<ItemType>();
                         ItemType item = itemList.GetRandomValue();
+                        player.AddItem(item);
 
                         player.AddHint("랜덤박스", $"<color=#F3F781>{item.GetName()}</color>(을)를 지급받았습니다.",
                             5);
