@@ -1086,7 +1086,7 @@ public class ABattle : Mode
         if (player.HasAbility(AbilityType.RARE_SCP079_DUPLICATION))
         {
             player.RemoveAbility(AbilityType.RARE_SCP079_DUPLICATION);
-
+            player.AddAbility(AbilityType.DUMMY_DONEDUPLICATION);
             if (abilities.Count > 0)
             {
                 var firstAbility = abilities[0];

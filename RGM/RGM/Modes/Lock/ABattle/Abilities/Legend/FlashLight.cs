@@ -55,6 +55,7 @@ public class FlashLight : Ability
                             target.Hit(player, target.AbilityCount(AbilityType.NORMAL_SHELL) + 1);
                             target.EnableEffect(EffectType.Burned, 1, 10f);
                             target.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                            target.AddHint("따가움", "<b><color=#FFFF00>불타는 안구</color></b>");
                         }
                         else if (player.IsLookingAt(target, fov: 20))
                         {

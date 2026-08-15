@@ -63,6 +63,7 @@ public class Compulsion : Ability
             {
                 if (Physics.Linecast(target.CameraTransform.position, Owner.CameraTransform.position, visionMask)) continue;
                 target.ForceLookAt(Owner.CameraTransform.position);
+                target.AddHint("강박증", "<b><color=#FF0000>눈을 떼지 않으면 안돼...</color></b>");
             }
             yield return Timing.WaitForOneFrame;
         }
