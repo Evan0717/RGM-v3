@@ -139,6 +139,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCSuccess.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\DoneDuplication.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\DopamineReleased.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\EndOfGraveRobbery.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\EpicTransitionFailure.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Healer.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Loser.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\RandomCollection.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\ReflectedLight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Rich1.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Rich2.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SuicideSquad.cs" />
@@ -369,6 +371,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\CameraFlash.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\CASSIE.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SystemInfiltration.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Duplication.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Hide.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Freedom.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\JustPrice.cs" />
@@ -402,6 +405,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Recovery.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\StickySwamp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Legend\Debris.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Mythic\Compulsion.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Normal\Aberration.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Normal\Fear.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Rare\ImmenseWeight.cs" />
