@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
+using LabApi.Features.Wrappers;
 using MEC;
 using RGM.API.Features;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using LabApi.Features.Wrappers;
+using static UnityEngine.GraphicsBuffer;
 
 namespace RGM.Modes.Abilities.Synergy;
 
@@ -32,17 +34,48 @@ public class Glory : Ability
 
         while (Owner.IsAlive)
         {
-            foreach (var player in PlayerManager.List)
+            if (Owner.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
             {
-                if (!player.TryGetLookPlayer(45f, out Exiled.API.Features.Player target, out _)) continue;
-                if (Owner != target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
-                lightSource.Position = Owner.Position;
+                foreach (var player in PlayerManager.List)
+                {
+                    if (player == Owner || !player.IsAlive) continue;
+                    if (!HitboxIdentity.IsEnemy(player.ReferenceHub, Owner.ReferenceHub)) continue;
 
-                Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
-                player.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                    lightSource.Position = Owner.Position;
+
+                    if (player.IsLookingAt(Owner, fov: 5))
+                    {
+                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 2f);
+                        player.Hit(Owner, player.AbilityCount(AbilityType.NORMAL_SHELL) + 1);
+                        player.EnableEffect(EffectType.Burned, 1, 10f);
+                        player.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                    }
+
+                    else if (player.IsLookingAt(Owner, fov: 30))
+                    {
+                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
+                        player.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                    }
+                }
+
+                yield return Timing.WaitForOneFrame;
             }
 
-            yield return Timing.WaitForOneFrame;
+            else
+            {
+                foreach (var player in PlayerManager.List)
+                {
+                    if (!player.TryGetLookPlayer(45f, out Exiled.API.Features.Player target, out _)) continue;
+                    if (Owner != target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
+                    lightSource.Position = Owner.Position;
+
+                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
+                    player.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                }
+
+                yield return Timing.WaitForOneFrame;
+
+            }
         }
     }
 }

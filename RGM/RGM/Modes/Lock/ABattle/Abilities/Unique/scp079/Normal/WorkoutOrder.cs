@@ -4,15 +4,15 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
-[Ability("운동 명령", "SCP들에게 [일반] 운동 능력을 지급합니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_WORKOUTORDER, RoleAbility.Scp079)]
+[Ability("운동 명령", "아군들에게 [일반] 운동 능력을 지급합니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_WORKOUTORDER, RoleAbility.Scp079)]
 
 public class WorkoutOrder : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
+        foreach (var p in PlayerManager.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x.Role != RoleTypeId.Scp079))
         {
-            scp.AddAbility(AbilityType.NORMAL_WORKOUT);
+            p.AddAbility(AbilityType.NORMAL_WORKOUT);
         }
     }
 }
