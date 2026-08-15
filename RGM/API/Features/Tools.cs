@@ -625,6 +625,19 @@ $"""
             return false;
         }
 
+        public static void ForceLookAt(this Player player, Vector3 targetPosition)
+        {
+            if (player == null || !player.IsAlive) return;
+
+            Vector3 direction = (targetPosition - player.CameraTransform.position).normalized;
+
+            if (direction == Vector3.zero) return;
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            player.Rotation = targetRotation;
+        }
+
 
         /// <summary>
         /// 특정 위치에서 바라보는 방향으로 Nm만큼 이동한 점를 구합니다.

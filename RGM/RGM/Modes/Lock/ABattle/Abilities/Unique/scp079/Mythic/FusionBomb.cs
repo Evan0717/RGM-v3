@@ -11,12 +11,13 @@ using ProjectMER.Features;
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 
-[Ability("융단 폭격", "핑을 찍은 지점 20m 이내에서 10초간 0.1초 간격으로 미사일이 쏟아집니다. (쿨타임 15초)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079)]
+[Ability("융단 폭격", "핑을 찍은 지점 20m 이내에서 10초간 0.1초 간격으로 미사일이 쏟아집니다. (쿨타임 15초, 중복 불가)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079)]
 public class FusionBomb : Ability
 {
-    bool isScp079Cooldown = false;
+    static bool isScp079Cooldown = false;
     public override void OnEnabled()
     {
+
         Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
     }
 
@@ -33,12 +34,12 @@ public class FusionBomb : Ability
         {
             if (!isScp079Cooldown)
             {
+                isScp079Cooldown = true;
                 Timing.CallDelayed(0.1f, () =>
                 {
                     Vector3 centerPos = ev.Position + new Vector3(0, 0.1f, 0);
                     Timing.RunCoroutine(StartBombardment(centerPos));
 
-                    isScp079Cooldown = true;
                     Timing.CallDelayed(15f, () =>
                     {
                         isScp079Cooldown = false;
@@ -63,9 +64,11 @@ public class FusionBomb : Ability
         while (elapsedTime < duration)
         {
             Vector2 randomCircle = UnityEngine.Random.insideUnitCircle * 20f;
-            Vector3 randomTargetPos = centerPos + new Vector3(randomCircle.x, 0f, randomCircle.y);
+            Vector3 randomTargetPos1 = centerPos + new Vector3(randomCircle.x, 0f, randomCircle.y);
+            Vector3 randomTargetPos2 = centerPos + new Vector3(randomCircle.x, 0f, randomCircle.y);
 
-            Timing.RunCoroutine(Boom(randomTargetPos));
+            Timing.RunCoroutine(Boom(randomTargetPos1));
+            Timing.RunCoroutine(Boom(randomTargetPos2));
 
             yield return Timing.WaitForSeconds(interval);
             elapsedTime += interval;

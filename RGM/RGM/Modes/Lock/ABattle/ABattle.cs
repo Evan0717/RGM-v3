@@ -1034,16 +1034,9 @@ public class ABattle : Mode
             else
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONFAILURE);
         }
-
-        if (abilities.Distinct().Count() == 1 && abilities.Count > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
-        {
-            player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
-
-            foreach (var ability in abilities)
-            {
-                player.AddAbility(ability);
-            }
-        }
+        
+        
+        
         lock (_selectionLock)
         {
             Selections[player] = abilities;
@@ -1070,10 +1063,17 @@ public class ABattle : Mode
             var ability = 
                 GetRandomAbilities
                 (player,
+
+
                 player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
-                ? Tools.EnumToList<AbilityCategory>().Where(a => !exceptCategory.Contains(a)).GetRandomValue()
+
+                ? Tools.EnumToList<AbilityCategory>()
+                .Where(a => !exceptCategory.Contains(a) && a >= category)
+                .GetRandomValue()
                 : category,
+
                 1,
+
                 roleAbility: player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
                 ? Tools.EnumToList<RoleAbility>().GetRandomValue()
                 : player.GetRoleAbility()).FirstOrDefault();
@@ -1081,6 +1081,30 @@ public class ABattle : Mode
 
             if (ability != AbilityType.NONE)
                 abilities[index] = ability;
+        }
+
+        if (player.HasAbility(AbilityType.RARE_SCP079_DUPLICATION))
+        {
+            player.RemoveAbility(AbilityType.RARE_SCP079_DUPLICATION);
+            player.AddAbility(AbilityType.DUMMY_DONEDUPLICATION);
+            if (abilities.Count > 0)
+            {
+                var firstAbility = abilities[0];
+                for (int i = 0; i < abilities.Count; i++)
+                {
+                    abilities[i] = firstAbility;
+                }
+            }
+        }
+
+        if (abilities.Distinct().Count() == 1 && abilities.Count > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
+        {
+            player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
+
+            foreach (var ability in abilities)
+            {
+                player.AddAbility(ability);
+            }
         }
         // 다음 타자, 코루틴!!!
         Timing.RunCoroutine(SelectionCoroutine(player));

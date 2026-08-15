@@ -5,15 +5,15 @@ using System.Linq;
 
 namespace RGM.RGM.Modes.Abilities.Unique.Scp079.Rare;
 
-[Ability("은폐", "SCP들에게 [<color=#2ECCFA>희귀</color>] 투명망토 능력을 지급합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_HIDE, RoleAbility.Scp079)]
+[Ability("은폐", "아군들에게 [<color=#2ECCFA>희귀</color>] 투명망토 능력을 지급합니다.", AbilityCategory.Rare, AbilityType.RARE_SCP079_HIDE, RoleAbility.Scp079)]
 
 public class Hide : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
+        foreach (var p in PlayerManager.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x.Role != RoleTypeId.Scp079))
         {
-            scp.AddAbility(AbilityType.RARE_TRANSPARENTCLOAK);
+            p.AddAbility(AbilityType.RARE_TRANSPARENTCLOAK);
         }
     }
 }

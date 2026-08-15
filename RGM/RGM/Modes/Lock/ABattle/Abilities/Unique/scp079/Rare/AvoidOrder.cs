@@ -9,11 +9,11 @@ public class AvoidOrder : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var scp in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
+        foreach (var p in PlayerManager.List.Where(x => x.LeadingTeam == Owner.LeadingTeam && x.IsAlive && x.Role != RoleTypeId.Scp079))
         {
             for (int i = 0; i < 3; i++)
             {
-                scp.AddAbility(AbilityType.NORMAL_AGILITY);
+                p.AddAbility(AbilityType.NORMAL_AGILITY);
             }
         }
     }
