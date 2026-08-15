@@ -310,7 +310,7 @@ public static class TFTBattle
 
         foreach (var TFTAbility in candidates.Take(selectionCount))
         {
-            queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 5 : 3);
+            queue.Add(TFTAbility, Encounter == RoleTypeId.Tutorial ? 4 : 2);
         }
 
         Selections[player] = queue;
