@@ -227,7 +227,7 @@ public class ABattle : Mode
         const int mythicChance = 85;
         const int legendaryChance = 80;
         const int epicChance = 75;
-        const int explodeChance = 90;
+        const int explodeChance = 95;
         const int explodeCount = 5;
 
         var rand = new System.Random(Exiled.API.Features.Map.Seed);
