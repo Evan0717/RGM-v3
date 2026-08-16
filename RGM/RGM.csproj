@@ -135,6 +135,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Divine\temp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
