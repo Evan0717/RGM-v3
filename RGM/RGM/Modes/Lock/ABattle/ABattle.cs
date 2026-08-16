@@ -223,11 +223,11 @@ public class ABattle : Mode
         const float chaosStopTime = 30f;
 
         // (확률) = 100 - 값 + 1
-        const int nukeChance = 95;
+        const int nukeChance = 99;
         const int mythicChance = 85;
         const int legendaryChance = 80;
         const int epicChance = 75;
-        const int explodeChance = 40;
+        const int explodeChance = 90;
         const int explodeCount = 5;
 
         var rand = new System.Random(Exiled.API.Features.Map.Seed);
@@ -281,13 +281,10 @@ public class ABattle : Mode
                     List<string> delayBomb =
                         ["짬뽕-1"];
 
-                    var bomb = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                     var player = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).GetRandomValue();
                     if (player.IsDead || player.IsHost || complete.Contains(player)) continue;
                     var text = musicList.GetRandomValue();
                     var role = player.Role;
-                    bomb.FuseTime = .1f;
-                    bomb.ScpDamageMultiplier = 2.5f;
 
                     complete.Add(player);
                     
@@ -315,19 +312,17 @@ public class ABattle : Mode
                     if (!delayBomb.Contains(text))
                     {
                         MakeRadio(player, text);
-                        bomb.SpawnActive(player.Position);
-                        player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
+                        player.ExplodeGrenade(ignore: true);
+                        player.Kill("약한 폭발을 맛보았습니다.");
                         continue;
                     }
 
                     MakeRadio(player, text);
                     Timing.CallDelayed(2f, () =>
                     {
-                        bomb.FuseTime = .1f;
-                        bomb.SpawnActive(player.Position);
-                        bomb.SpawnActive(player.Position);
-                        bomb.SpawnActive(player.Position);
-                        player.Kill("영사기가 당신 곁에서 폭⭐8했습니다.");
+                        for (var a = 0; a < 3; a++)
+                            player.ExplodeGrenade(kill: false);
+                        player.Kill("강력한 폭발을 맛보았습니다.");
                     });
                 }
             });
@@ -347,7 +342,7 @@ public class ABattle : Mode
                 if (NextRandom() >= nukeChance && !(Warhead.IsInProgress || Warhead.IsDetonated) && nukeChanceAvailable)
                 {
                     Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
-                        $"<b><color={AbilityCategory.Mythic.GetColor()}>5%의 확률로 인해 핵이 점화됩니다</color></b>");
+                        $"<b><color={AbilityCategory.Mythic.GetColor()}>1%의 확률로 인해 핵이 점화됩니다</color></b>");
                     DeadmanSwitch.StartWarhead();
 
                     continue;
