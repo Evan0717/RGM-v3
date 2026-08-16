@@ -252,6 +252,7 @@ public enum AbilityType
     DUMMY_INFILTRATIONSUCCESS, // [더미] 침투 성공
     DUMMY_INFILTRATIONFAIL, // [더미] 침투 실패
     DUMMY_INFORMATIONLEAK, // [더미] 개인 정보 유출
+    DUMMY_DONEDUPLICATION, // [더미] 인공 중복기연
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -443,7 +444,9 @@ public enum AbilityType
     RARE_SCP173_IMMENSEWEIGHT, // [전용 희귀] 육중한 무게
 
     LEGEND_SCP173_DEBRIS, // [전용 전설] 파편
-    
+
+    MYTHIC_SCP173_COMPULSION, // [전용 신화] 강박증
+
     // SCP-049
     NORMAL_SCP049_DEATH, // [전용 희귀] 사신
     NORMAL_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
@@ -511,6 +514,7 @@ public enum AbilityType
     RARE_SCP079_AIRSTRIKE, // [전용 희귀] 폭격
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
     RARE_SCP079_HIDE, // [전용 희귀] 은폐
+    RARE_SCP079_DUPLICATION, // [전용 희귀] 중복
 
     EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
     EPIC_SCP079_LEVELUP, //[전용 영웅] 만렙
@@ -572,10 +576,10 @@ public enum AbilityType
     SYNERGY_AFK, // [시너지] AFK
     SYNERGY_BOMBPARTY, // [시너지] 폭탄 파티
     SYNERGY_BLACKMARKET, // [시너지] 암시장
-    SYNERGY_COMMANDER, // [시너지] 지휘관
     SYNERGY_WEAKPOINTATTACK, // [시너지] 약점 공격
     SYNERGY_CLOWN, // [시너지] 광대
-    SYNERGY_HEALER
+    SYNERGY_HEALER, // [시너지] 비숍
+    SYNERGY_REFLECTEDLIGHT, // [시너지] 반사광
 }
 
 public static class AbilityTypeExtensions

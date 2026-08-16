@@ -38,14 +38,40 @@ public class FlashLight : Ability
         while (true)
         {
             foreach (var player in PlayerManager.List.Where(player =>
-                         player.IsAlive &&
-                         player.CurrentItem != null && 
-                         _flashLightSerial == player.CurrentItem.Serial))
+             player.IsAlive &&
+             player.CurrentItem != null &&
+             _flashLightSerial == player.CurrentItem.Serial))
             {
-                if (!player.TryGetLookPlayer(45, out var target, out _)) continue;
-                if (player == target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
-                Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                target.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                if (player.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
+                {
+                    foreach (var target in PlayerManager.List.Where(p => p != null && p.IsAlive))
+                    {
+                        if (target == player) continue;
+                        if (!HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
+
+                        if (player.IsLookingAt(target, fov: 5))
+                        {
+                            Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 2f);
+                            target.Hit(player, target.AbilityCount(AbilityType.NORMAL_SHELL) + 1);
+                            target.EnableEffect(EffectType.Burned, 1, 10f);
+                            target.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                            target.AddHint("따가움", "<b><color=#FFFF00>불타는 안구</color></b>");
+                        }
+                        else if (player.IsLookingAt(target, fov: 20))
+                        {
+                            Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
+                            target.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!player.TryGetLookPlayer(45, out var target, out _)) continue;
+                    if (player == target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
+
+                    Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
+                    target.EnableEffect(EffectType.Flashed, 1, 1.5f);
+                }
             }
 
             yield return Timing.WaitForOneFrame;
