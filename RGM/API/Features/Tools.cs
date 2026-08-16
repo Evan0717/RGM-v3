@@ -15,15 +15,12 @@ using ProjectMER.Features.Serializable;
 using RGM.API.Components;
 using RGM.API.DataBases;
 using RGM.API.Interfaces;
-using RGM.Modes;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using YamlDotNet.Core;
 using static RGM.Variables.Variable;
 using Random = System.Random;
 
@@ -115,9 +112,12 @@ namespace RGM.API.Features
                 RoleTypeId.NtfSpecialist,
                 RoleTypeId.Tutorial
             };
-
+            
             player.Role.Set(humans.GetRandomValue());
             player.ClearInventory();
+
+            if (GameObject.Find("LobbyStartPoint") == null) return; 
+            
             player.Position = GameObject.Find("LobbyStartPoint").transform.position;
 
             if (SelectMode == "FightVote")

@@ -13,18 +13,14 @@ namespace RGM.Modes.Abilities.Epic;
     AbilityType.EPIC_MADSCIENTIST)]
 public class MadScientist : Ability
 {
-    private static bool _isDetonatingState;
-
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.Died += OnDied;
-        Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.Died -= OnDied;
-        Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
     }
 
     private void OnDied(DiedEventArgs ev)
@@ -32,8 +28,9 @@ public class MadScientist : Ability
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
             if (ev.Player != Owner ||
+                !ev.Player.IsDead ||
                 Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) || 
-                _isDetonatingState)
+                Warhead.IsDetonated)
                 return;
 
             Timing.CallDelayed(10, () =>
@@ -57,11 +54,5 @@ public class MadScientist : Ability
                 });
             });
         });
-    }
-
-    private void OnDetonating(DetonatingEventArgs e)
-    {
-        _isDetonatingState = true;
-        Timing.CallDelayed(.5f, () => _isDetonatingState = false);
     }
 }
