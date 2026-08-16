@@ -229,12 +229,12 @@ public class ABattle : Mode
         const float chaosStopTime = 30f;
 
         // (확률) = 100 - 값 + 1
-        const int nukeChance = 100;
-        const int mythicChance = 95;
-        const int legendaryChance = 90;
+        const int mythicChance = 99;
+        const int legendaryChance = 95;
         const int epicChance = 75;
         const int explodeChance = 95;
         const int repeatCount = 5;
+        const int explodeCount = 5;
 
         var rand = new System.Random(Exiled.API.Features.Map.Seed);
 
@@ -272,7 +272,7 @@ public class ABattle : Mode
             List<Player> complete = [];
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                for (int i = 0; i < repeatCount; i++)
+                for (int i = 0; i < explodeCount; i++)
                 {
                     if (!(NextRandom() >= explodeChance)) continue;
 
@@ -337,13 +337,6 @@ public class ABattle : Mode
                 .ToList()
                 .ForEach(x
                     => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
-
-            if (NextRandom() >= nukeChance && !(Warhead.IsInProgress || Warhead.IsDetonated))
-            {
-                Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
-                    $"<b><color={AbilityCategory.Mythic.GetColor()}>1%의 확률로 인해 핵이 점화됩니다</color></b>");
-                DeadmanSwitch.StartWarhead();
-            }
             
             for (var a = 0; a < repeatCount; a++)
             {
