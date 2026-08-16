@@ -492,18 +492,22 @@ Trouble in Terrorist Town의 약자.
                         ev.Player.AddItem(main.GetRandomValue());
                         ev.Player.AddItem(secondary.GetRandomValue());
                         ev.Player.Position = Tools.GetObjectList("Spot Random").GetRandomValue().position;
-                        switch (Random.Range(1, 16))
+                        switch (Random.Range(1, 101))
                         {
                             case 1:
-                                ev.Player.AddItem(ItemType.Flashlight);
+                                ev.Player.AddCandy(CandyKindID.Pink);
                                 break;
 
-                            case 2:
+                            case >= 2 and <= 16:
                                 ev.Player.AddItem(ItemType.GrenadeHE);
                                 break;
 
-                            case 3:
+                            case >= 17 and <= 33:
                                 ev.Player.AddItem(ItemType.Painkillers);
+                                break;
+                            
+                            case >= 34 and <= 50:
+                                ev.Player.AddItem(ItemType.Medkit);
                                 break;
                         }
                     });
@@ -515,7 +519,7 @@ Trouble in Terrorist Town의 약자.
                 ev.Player.RankColor = "orange";
             }
 
-            if (traitors.Where(x => x.IsAlive).Count() == 0 && !PlayerManager.List.Any(x => (x == O5 || x == jester) && x.IsAlive))
+            if (traitors.Count(x => x.IsAlive) == 0 && !PlayerManager.List.Any(x => (x == O5 || x == jester) && x.IsAlive))
             {
                 Round.IsLocked = false;
 

@@ -12,6 +12,7 @@ using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RGM.API.Features;
 using UnityEngine;
 using UnityEngine.AI;
 using mbc = MultiBroadcast;
@@ -45,6 +46,7 @@ namespace RGM.Modes.PveExiledSystem
 
         public void OnRoundStarted()
         {
+            Tools.LoadMap("PVE");
             OnEndingRound();
 
             roundStarted = true;
@@ -291,8 +293,7 @@ namespace RGM.Modes.PveExiledSystem
             for (int wave = 0; wave < waveConfig.Waves.Length; wave++)//웨이브 진행 루프
             {
                 WaveConfig.WaveInfo waveInfo = waveConfig.Waves[wave];
-                this.CurrentWave = wave;
-                Map.CleanAllRagdolls();
+                CurrentWave = wave;
                 Map.Clean(Decals.DecalPoolType.Blood);
                 Map.Clean(Decals.DecalPoolType.GlassCrack);
                 Map.Clean(Decals.DecalPoolType.Bullet);
@@ -359,10 +360,10 @@ namespace RGM.Modes.PveExiledSystem
                     {
                         if (spawnQueue.Count <= 0) break;
                         string random = spawnQueue.Last();
-                        if (spawnQueue.Count % 20 == 0)
+                        /*if (spawnQueue.Count % 20 == 0)
                         {
-                            Exiled.API.Features.Map.CleanAllRagdolls();
-                        }
+                            Map.CleanAllRagdolls();
+                        }*/
                         spawnQueue.RemoveAt(spawnQueue.Count - 1);
                         SpawnEnemy(random);
                         if (enemies.Count >= maxEnemy)

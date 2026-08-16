@@ -38,11 +38,11 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
                     ev.Scp096.AddTarget(player);
 
                     player.AddHint("본능",
-                        $"<color={ABattle.RatingColor["전용"]}>본능</color>에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
+                        $"본능에 의해 강제로 목격자에 포함되었습니다. 도망가세요!");
                 }
             }
 
-            ev.Player.AddHint("본능", $"<color={ABattle.RatingColor["전용"]}>본능</color> 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
+            ev.Player.AddHint("본능", $"본능 능력으로 {Stack}명의 인간들을 추가로 탐색했습니다.");
         }
     }
 }
