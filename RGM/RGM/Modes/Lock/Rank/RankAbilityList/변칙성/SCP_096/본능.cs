@@ -18,7 +18,7 @@ namespace RGM.RGM.Modes.Lock.Rank.RankAbilityList.변칙성
         {
             Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
         }
-        
+
         public void OnEnraging(EnragingEventArgs ev)
         {
             var ratingColor = global::RGM.Modes.ABattle.RatingColor;
