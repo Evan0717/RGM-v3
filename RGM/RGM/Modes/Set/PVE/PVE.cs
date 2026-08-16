@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using RGM.API.Features;
@@ -37,7 +38,8 @@ namespace RGM.Modes
 
             roundHandler = new RoundHandler();
             DebugLoad("RoundHandler를 생성했습니다.");
-
+            
+            Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
             Exiled.Events.Handlers.Server.EndingRound += OnRoundEnding;
             Exiled.Events.Handlers.Server.EndingRound += roundHandler.OnEndingRound;
             DebugLoad("라운드 종료 이벤트를 등록했습니다.");
@@ -49,6 +51,7 @@ namespace RGM.Modes
         public override void OnDisabled()
         {
             DebugLoad("모드 비활성화를 시작합니다.");
+            Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
 
             Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnding;
             if (roundHandler == null)
@@ -68,8 +71,13 @@ namespace RGM.Modes
             if (EnableLoadDebug)
                 Log.Debug($"[PVE] {message}");
         }
+        
+        private void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
+        {
+            ev.Ragdoll?.Destroy();
+        }
 
-        public void OnRoundEnding(EndingRoundEventArgs ev)
+        private void OnRoundEnding(EndingRoundEventArgs ev)
         {
             List<Player> players = PlayerManager.List.Where(x => !x.IsNPC).ToList();
             if (players.Count == 0 || roundHandler.SelectedDifficulty < 0)

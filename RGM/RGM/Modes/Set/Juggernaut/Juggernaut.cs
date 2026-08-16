@@ -25,7 +25,7 @@ using Warhead = Exiled.API.Features.Warhead;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Juggernaut)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Juggernaut)]
     class Juggernaut : Mode
     {
         public override string Name => "저거너트";
@@ -343,7 +343,7 @@ namespace RGM.Modes
         {
             while (!Round.IsEnded)
             {
-                if (Tools.TryGetNearestPlayer(_juggernaut, out _, out var radius))
+                if (_juggernaut.TryGetNearestPlayer(out _, out var radius))
                 {
                     int alivePlayersCount =
                         PlayerManager.List.Count(x => x.IsAlive && !x.IsNPC && !IsJuggernautTeam(x));

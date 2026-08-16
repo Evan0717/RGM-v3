@@ -831,7 +831,7 @@ namespace RGM.API.Features
                 return player.AddItem(legendary.GetRandomValue());
             }
 
-            // 총 40개의 아이템을 가중치에 따라 담고, 그 내에서 랜덤 추출
+            // 총 100개의 아이템 카테고리를 가중치에 따라 담고, 그 내에서 랜덤 추출
             for (int i = 0; i < 3; i++) 
                 poll.AddRange(mythos); // 3%
 

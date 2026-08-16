@@ -12,6 +12,7 @@ public class Ghost : TFTAbility
     private CoroutineHandle _ghostLoop;
     public override void OnEnabled()
     {
+        Owner.EnableEffect(EffectType.Fade, 115);
         _ghostLoop = Timing.RunCoroutine(Ghostloop());
     }
 
@@ -23,8 +24,7 @@ public class Ghost : TFTAbility
     private IEnumerator<float> Ghostloop()
     {
         while (true) {
-            Owner.AddEffect(EffectType.Fade, 115);
-            Owner.AddEffect(EffectType.Ghostly, 1);
+            Owner.EnableEffect(EffectType.Ghostly, 1);
             yield return Timing.WaitForSeconds(1);
         }
     }

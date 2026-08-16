@@ -24,7 +24,7 @@ public class DevilContract : TFTAbility
         Timing.KillCoroutines(_invisible);
     }
 
-    IEnumerator<float> invisible()
+    private IEnumerator<float> invisible()
     {
         while (Owner.IsAlive)
         {

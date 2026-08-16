@@ -45,6 +45,7 @@ public class ABattle : Mode
 • <color=#FF00FF>영웅</color> - 5.05%
 • <color=#ffd700>전설</color> - 0.2%
 • <color=#DF0101>신화</color> - 0.05%
+• <color=#AAFF00>고대</color> - 0.01% (추가 예정)
 • <color=#DEEFED>시너지</color> - ???
 
 • <color=#F7819F>전용</color> 
@@ -53,6 +54,7 @@ public class ABattle : Mode
 <color=#FF00FF>영웅</color> - 10%
 <color=#ffd700>전설</color> - 20%
 <color=#DF0101>신화</color> - 25%
+<color=#AAFF00>고대</color> - 40% (추가 예정)
 (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
 66.6% 확률로 추가 모드가 활성화됩니다.
@@ -71,41 +73,43 @@ public class ABattle : Mode
     private static readonly Mutex _chaosModeLock = new();
 
     // 동기화 객체
-    private readonly object _selectionLock = new object();
-    private readonly object _cursorLock = new object();
+    private readonly object _selectionLock = new();
+    private readonly object _cursorLock = new();
 
-    public Dictionary<Player, List<WorkstationController>> PlayerWorkstations = new Dictionary<Player, List<WorkstationController>>();
-    public Dictionary<AbilityType, AbilityData> Abilities = new Dictionary<AbilityType, AbilityData>();
-    public Dictionary<AbilityType, List<AbilityType>> SynergyAbilities = new Dictionary<AbilityType, List<AbilityType>>();
-    public Dictionary<Player, List<Ability>> PlayerAbilities = new Dictionary<Player, List<Ability>>();
-    public Dictionary<Player, List<AbilityType>> Selections = new Dictionary<Player, List<AbilityType>>();
-    public Dictionary<Player, bool> IsSelecting = new Dictionary<Player, bool>();
-    public Dictionary<Player, int> SelectionCursor = new Dictionary<Player, int>();
-    public Dictionary<Player, bool> IsLifeUsed = new Dictionary<Player, bool>();
+    public Dictionary<Player, List<WorkstationController>> PlayerWorkstations = new();
+    public Dictionary<AbilityType, AbilityData> Abilities = new();
+    public Dictionary<AbilityType, List<AbilityType>> SynergyAbilities = new();
+    public Dictionary<Player, List<Ability>> PlayerAbilities = new();
+    public Dictionary<Player, List<AbilityType>> Selections = new();
+    public Dictionary<Player, bool> IsSelecting = new();
+    public Dictionary<Player, int> SelectionCursor = new();
+    public Dictionary<Player, bool> IsLifeUsed = new();
     private Mutex _chaosMutex = new();
     private ABattleEventHandler _eventHandler;
 
-    public static Dictionary<string, string> RatingColor = new Dictionary<string, string>()
+    public static Dictionary<string, string> RatingColor = new()
     {
         {"일반", "#A4A4A4"},
         {"희귀", "#2ECCFA"},
         {"영웅", "#FF00FF"},
         {"전설", "#ffd700"},
         {"신화", "#DF0101"},
+        //{"고대", "#AAFF00"},
         {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
     };
-    public static Dictionary<string, string> SelectFormat = new Dictionary<string, string>()
+    public static Dictionary<string, string> SelectFormat = new()
     {
         {"일반", "<b><color=#404040>일반</color></b>"},
         {"희귀", "<b><color=#47DAFF>희귀</color></b>"},
         {"영웅", "<b><color=#F185FF>영웅</color></b>"},
         {"전설", "<b><color=#FFF70A>전설</color></b>"},
         {"신화", "<b><color=#F52500>신화</color></b>"},
+        // {"고대", "<b><color=#AAFF00>고대</color></b>"}
         {"전용", "<b><color=#F7819F>전용</color></b>" },
         {"알 수 없음", "<b><color=#000000>알수없음</b>"}
     };
-    public static Dictionary<string, string> ExtraModes = new Dictionary<string, string>()
+    public static Dictionary<string, string> ExtraModes = new()
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
@@ -141,12 +145,14 @@ public class ABattle : Mode
 
     public static string ColorFormat(string text)
     {
-        return text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
-                    .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
-                    .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
-                    .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
-                    .Replace("[희귀]", $"<color={RatingColor["희귀"]}>[희귀]</color>")
-                    .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
+        return 
+            text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
+                //.Replace("[고대]", $"<color={RatingColor["고대"]}>[고대]</color>")
+                .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
+                .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
+                .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
+                .Replace("[희귀]", $"<color={RatingColor["희귀"]}>[희귀]</color>")
+                .Replace("[일반]", $"<color={RatingColor["일반"]}>[일반]</color>");
     }
 
     public string PickExtraMode(List<string> exceptModes = null, bool allowBasic = true)
@@ -1174,6 +1180,7 @@ public class ABattle : Mode
             else if (text.Contains("영웅")) return "영웅";
             else if (text.Contains("전설")) return "전설";
             else if (text.Contains("신화")) return "신화";
+            //else if (text.Contains("고대")) return "고대";
 
             else return "알 수 없음";
         }
@@ -1227,27 +1234,29 @@ public class ABattle : Mode
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
 
-        var random = Random.Range(1, 10001); //0.001 단위
+        var random = Random.Range(1, 10001); //0.01 단위
 
         if (CurrentExtraModes.Contains("잔칫상"))
         {
             return random switch
             {
-                <= 12 => AbilityCategory.Mythic, // 0.012
-                <= 60 => AbilityCategory.Legend, // 0.06
-                <= 638 => AbilityCategory.Epic, // 6.38
-                <= 3420 => AbilityCategory.Rare, // 34.2
-                _ => AbilityCategory.Common // 59.42
+                // <= 2 => AbilityCategory.Ancient, // 0.02
+                <= 15 => AbilityCategory.Mythic, // 0.15
+                <= 70 => AbilityCategory.Legend, // 0.70
+                <= 985 => AbilityCategory.Epic, // 9.85
+                <= 3858 => AbilityCategory.Rare, // 38.58
+                _ => AbilityCategory.Common // 50.70
             };
         }
 
         return random switch
         {
-            <= 5 => AbilityCategory.Mythic, // 0.005
-            <= 25 => AbilityCategory.Legend, // 0.025
-            <= 535 => AbilityCategory.Epic, // 5.35
-            <= 3005 => AbilityCategory.Rare, // 30.05
-            _ => AbilityCategory.Common // 64.57
+            // 1 => AbilityCategory.Ancient, // 0.01
+            <= 5 => AbilityCategory.Mythic, // 0.05
+            <= 25 => AbilityCategory.Legend, // 0.25
+            <= 575 => AbilityCategory.Epic, // 5.75
+            <= 3185 => AbilityCategory.Rare, // 31.55
+            _ => AbilityCategory.Common // 62.40
         };
     }
 
@@ -1255,6 +1264,7 @@ public class ABattle : Mode
     {
         return category switch
         {
+            //AbilityCategory.Ancient => 40,
             AbilityCategory.Mythic => 25,
             AbilityCategory.Legend => 20,
             AbilityCategory.Epic => 10,
