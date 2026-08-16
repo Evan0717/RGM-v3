@@ -350,7 +350,6 @@ public class ABattle : Mode
                 yield return Timing.WaitForOneFrame;
 
                 if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
-                PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
 
                 if (NextRandom() >= epicChance)
                 {
