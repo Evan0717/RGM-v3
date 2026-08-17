@@ -44,7 +44,7 @@ public class MadScientist : Ability
                         try
                         {
                             Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ev.Player,
-                                ABattle.Instance.GetCategory(Owner), 1)[0]);
+                                ABattle.Instance.GetCategory(Owner, allowAncient: false), 1)[0]);
                         }
                         catch (Exception ex)
                         {

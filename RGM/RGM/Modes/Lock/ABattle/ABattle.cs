@@ -45,7 +45,7 @@ public class ABattle : Mode
 • <color=#FF00FF>영웅</color> - 5.05%
 • <color=#ffd700>전설</color> - 0.2%
 • <color=#DF0101>신화</color> - 0.05%
-• <color=#AAFF00>고대</color> - 0.01% (추가 예정)
+• <color=#AAFF00>고대</color> - 0.01%
 • <color=#DEEFED>시너지</color> - ???
 
 • <color=#F7819F>전용</color> 
@@ -54,7 +54,7 @@ public class ABattle : Mode
 <color=#FF00FF>영웅</color> - 10%
 <color=#ffd700>전설</color> - 20%
 <color=#DF0101>신화</color> - 25%
-<color=#AAFF00>고대</color> - 40% (추가 예정)
+<color=#AAFF00>고대</color> - 40%
 (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
 66.6% 확률로 추가 모드가 활성화됩니다.
@@ -94,7 +94,7 @@ public class ABattle : Mode
         {"영웅", "#FF00FF"},
         {"전설", "#ffd700"},
         {"신화", "#DF0101"},
-        //{"고대", "#AAFF00"},
+        {"고대", "#AAFF00"},
         {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
     };
@@ -105,7 +105,7 @@ public class ABattle : Mode
         {"영웅", "<b><color=#F185FF>영웅</color></b>"},
         {"전설", "<b><color=#FFF70A>전설</color></b>"},
         {"신화", "<b><color=#F52500>신화</color></b>"},
-        // {"고대", "<b><color=#AAFF00>고대</color></b>"}
+        {"고대", "<b><color=#AAFF00>고대</color></b>"},
         {"전용", "<b><color=#F7819F>전용</color></b>" },
         {"알 수 없음", "<b><color=#000000>알수없음</b>"}
     };
@@ -147,7 +147,7 @@ public class ABattle : Mode
     {
         return 
             text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
-                //.Replace("[고대]", $"<color={RatingColor["고대"]}>[고대]</color>")
+                .Replace("[고대]", $"<color={RatingColor["고대"]}>[고대]</color>")
                 .Replace("[신화]", $"<color={RatingColor["신화"]}>[신화]</color>")
                 .Replace("[전설]", $"<color={RatingColor["전설"]}>[전설]</color>")
                 .Replace("[영웅]", $"<color={RatingColor["영웅"]}>[영웅]</color>")
@@ -230,9 +230,9 @@ public class ABattle : Mode
 
         // (확률) = 100 - 값 + 1
         const int mythicChance = 99;
-        const int legendaryChance = 95;
-        const int epicChance = 75;
-        const int explodeChance = 95;
+        const int legendaryChance = 97;
+        const int epicChance = 80;
+        const int explodeChance = 97;
         const int repeatCount = 5;
         const int explodeCount = 5;
 
@@ -304,7 +304,7 @@ public class ABattle : Mode
                                 try
                                 {
                                     player.AddAbility(Instance.GetRandomAbilities(player,
-                                        Instance.GetCategory(player), 1)[0]);
+                                        Instance.GetCategory(player, allowAncient: false), 1)[0]);
                                 }
                                 catch (Exception ex)
                                 {
@@ -318,7 +318,7 @@ public class ABattle : Mode
                     {
                         MakeRadio(player, text);
                         player.ExplodeGrenade(ignore: true);
-                        player.Kill("약한 폭발을 맛보았습니다.");
+                        player.Kill("약한 폭8을 맛보았습니다.");
                         continue;
                     }
 
@@ -327,7 +327,7 @@ public class ABattle : Mode
                     {
                         for (var a = 0; a < 3; a++)
                             player.ExplodeGrenade(kill: false);
-                        player.Kill("강력한 폭발을 맛보았습니다.");
+                        player.Kill("강력한 폭8을 맛보았습니다.");
                     });
                 }
             });
@@ -709,7 +709,7 @@ public class ABattle : Mode
                 default: name = "누군가가 전설 능력을 획득하였습니다"; break;
             }
 
-            if (GlobalPlayer.ClipsById.Where(x => x.Value.Clip == name).Count() < 1)
+            if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
                 Tools.PlayGlobalAudio(name, 1.5f);
         }
         else if (type.ToString().Contains("MYTHIC"))
@@ -722,8 +722,15 @@ public class ABattle : Mode
                 default: name = "누군가가 신화 능력을 영접하였습니다"; break;
             }
 
-            if (GlobalPlayer.ClipsById.Where(x => x.Value.Clip == name).Count() < 1)
+            if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
                 Tools.PlayGlobalAudio(name, 2.5f);
+        }
+        else if (type.ToString().Contains("ANCIENT"))
+        {
+            const string name = "누군가가 고대의 무한한 힘을 손에 얻었습니다";
+
+            if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
+                Tools.PlayGlobalAudio(name, 2f);
         }
 
         // LEGEND_REFLECTOR: 50% 확률로 동일 능력 추가 획득. 동일 능력 연쇄는 최대 3회까지.
@@ -907,6 +914,9 @@ public class ABattle : Mode
 
     public List<AbilityType> GetRandomAbilities(Player player, AbilityCategory category, int count, IEnumerable<AbilityType> exceptTypes = null, RoleAbility roleAbility = RoleAbility.None, bool _79Allowed = false)
     {
+        if (category == AbilityCategory.Ancient && player.HasAbility(AbilityType.SYNERGY_BLACKMARKET))
+            return [];
+
         var abilities = Abilities
             .Where(x => x.Value.Category == category)
             .Where(x =>
@@ -1076,23 +1086,24 @@ public class ABattle : Mode
                 AbilityCategory.None
             ];
 
+            if (player.HasAbility(AbilityType.SYNERGY_BLACKMARKET))
+                exceptCategory.Add(AbilityCategory.Ancient);
+
             var ability = 
-                GetRandomAbilities
-                (player,
-
-
-                player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
-
-                ? Tools.EnumToList<AbilityCategory>()
-                .Where(a => !exceptCategory.Contains(a) && a >= category)
-                .GetRandomValue()
-                : category,
+                GetRandomAbilities(
+                    player,
+                    player.HasAbility(AbilityType.SYNERGY_BLACKMARKET)
+                    ? Tools.EnumToList<AbilityCategory>()
+                    .Where(a => !exceptCategory.Contains(a) && a >= category)
+                    .GetRandomValue()
+                    : category,
 
                 1,
 
-                roleAbility: player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
-                ? Tools.EnumToList<RoleAbility>().GetRandomValue()
-                : player.GetRoleAbility()).FirstOrDefault();
+                    roleAbility: player.HasAbility(AbilityType.SYNERGY_BLACKMARKET) 
+                    ? Tools.EnumToList<RoleAbility>().GetRandomValue()
+                    : player.GetRoleAbility()
+                ).FirstOrDefault();
 
 
             if (ability != AbilityType.NONE)
@@ -1113,7 +1124,8 @@ public class ABattle : Mode
             }
         }
 
-        if (abilities.Distinct().Count() == 1 && abilities.Count > 2) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
+        if (abilities.Distinct().Count() == 1 &&
+            abilities.Count > 2 && abilities.All(ability => Abilities[ability].Category != AbilityCategory.Ancient)) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
         {
             player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
 
@@ -1148,34 +1160,6 @@ public class ABattle : Mode
         }
 
         var abilities = Selections[player];
-
-        string BuildSelectionText()
-        {
-            if (!SelectionCursor.ContainsKey(player))
-                SelectionCursor[player] = 0;
-
-            int cursor = SelectionCursor[player];
-            if (abilities.Count > 0)
-                cursor = Math.Max(0, Math.Min(cursor, abilities.Count - 1));
-
-            return string.Join("\n", abilities.Select((x, i) =>
-            {
-                string prefix = i == cursor ? "▶ " : "   ";
-                return $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>{(holidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n";
-            }));
-        }
-
-        string CheckAbilityGrade(string text)
-        {
-            if (text.Contains("일반")) return "일반";
-            else if (text.Contains("희귀")) return "희귀";
-            else if (text.Contains("영웅")) return "영웅";
-            else if (text.Contains("전설")) return "전설";
-            else if (text.Contains("신화")) return "신화";
-            //else if (text.Contains("고대")) return "고대";
-
-            else return "알 수 없음";
-        }
 
         for (var i = 0; i < 200; i++)
         {
@@ -1220,19 +1204,50 @@ public class ABattle : Mode
                 }
             });
         }
+
+        yield break;
+
+        string CheckAbilityGrade(string text)
+        {
+            if (text.Contains("일반")) return "일반";
+            if (text.Contains("희귀")) return "희귀";
+            if (text.Contains("영웅")) return "영웅";
+            if (text.Contains("전설")) return "전설";
+            if (text.Contains("신화")) return "신화";
+            if (text.Contains("고대")) return "고대";
+
+            return "알 수 없음";
+        }
+
+        string BuildSelectionText()
+        {
+            if (!SelectionCursor.ContainsKey(player))
+                SelectionCursor[player] = 0;
+
+            int cursor = SelectionCursor[player];
+            if (abilities.Count > 0)
+                cursor = Math.Max(0, Math.Min(cursor, abilities.Count - 1));
+
+            return string.Join("\n", abilities.Select((x, i) =>
+            {
+                string prefix = i == cursor ? "▶ " : "   ";
+                return $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>{(holidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n";
+            }));
+        }
     }
 
-    public AbilityCategory GetCategory(Player player)
+    public AbilityCategory GetCategory(Player player, bool allowAncient = true)
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
 
         var random = Random.Range(1, 10001); //0.01 단위
+        var hasBlackMarket = player.HasAbility(AbilityType.SYNERGY_BLACKMARKET);
 
         if (CurrentExtraModes.Contains("잔칫상"))
         {
             return random switch
             {
-                // <= 2 => AbilityCategory.Ancient, // 0.02
+                <= 2 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.02
                 <= 15 => AbilityCategory.Mythic, // 0.15
                 <= 70 => AbilityCategory.Legend, // 0.70
                 <= 985 => AbilityCategory.Epic, // 9.85
@@ -1243,7 +1258,7 @@ public class ABattle : Mode
 
         return random switch
         {
-            // 1 => AbilityCategory.Ancient, // 0.01
+            1 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.01
             <= 5 => AbilityCategory.Mythic, // 0.05
             <= 25 => AbilityCategory.Legend, // 0.25
             <= 575 => AbilityCategory.Epic, // 5.75
@@ -1256,7 +1271,7 @@ public class ABattle : Mode
     {
         return category switch
         {
-            //AbilityCategory.Ancient => 40,
+            AbilityCategory.Ancient => 40,
             AbilityCategory.Mythic => 25,
             AbilityCategory.Legend => 20,
             AbilityCategory.Epic => 10,
@@ -1278,11 +1293,9 @@ public class ABattle : Mode
 
             Log.Info("Select called with " + player.Nickname + " and " + index);
 
-            AbilityType ability;
-
             Log.Info("All abilities are not the same");
 
-            ability = Selections[player][index - 1];
+            var ability = Selections[player][index - 1];
 
             player.AddAbility(ability);
 
