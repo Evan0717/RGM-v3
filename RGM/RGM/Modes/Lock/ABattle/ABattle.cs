@@ -229,11 +229,11 @@ public class ABattle : Mode
         const float chaosStopTime = 30f;
 
         // (확률) = 100 - 값 + 1
-        const int nukeChance = 99;
-        const int mythicChance = 85;
-        const int legendaryChance = 80;
+        const int mythicChance = 99;
+        const int legendaryChance = 95;
         const int epicChance = 75;
         const int explodeChance = 95;
+        const int repeatCount = 5;
         const int explodeCount = 5;
 
         var rand = new System.Random(Exiled.API.Features.Map.Seed);
@@ -268,8 +268,7 @@ public class ABattle : Mode
             if (!_chaosMutex.WaitOne(1000)) yield break;
 
             // -----------------------------------------------------------------------------------------------
-
-            bool nukeChanceAvailable = true;
+            
             List<Player> complete = [];
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
@@ -334,25 +333,16 @@ public class ABattle : Mode
             });
             // -----------------------------------------------------------------------------------------------
 
-            for (var a = 0; a < 5; a++)
+            PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
+                .ToList()
+                .ForEach(x
+                    => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
+            
+            for (var a = 0; a < repeatCount; a++)
             {
                 yield return Timing.WaitForOneFrame;
 
                 if (Door.List.GetRandomValue() is BreakableDoor door) door.IsDestroyed = true;
-                PlayerManager.List.Where(x => x.IsAlive).ToList().ForEach(x => x.AddRandomItem());
-                PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
-                    .ToList()
-                    .ForEach(x
-                        => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
-
-                if (NextRandom() >= nukeChance && !(Warhead.IsInProgress || Warhead.IsDetonated) && nukeChanceAvailable)
-                {
-                    Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6" /*Seven*/,
-                        $"<b><color={AbilityCategory.Mythic.GetColor()}>1%의 확률로 인해 핵이 점화됩니다</color></b>");
-                    DeadmanSwitch.StartWarhead();
-
-                    continue;
-                }
 
                 if (NextRandom() >= epicChance)
                 {
@@ -382,8 +372,6 @@ public class ABattle : Mode
                     Tools.MessageTranslated(".G6 .G6 .G6 .G6 .G6",
                         $"플레이어 <b><color={player.Role.Color.ToHex()}>{player.Nickname}</color></b>이(가) 15%의 확률로 <b><color={AbilityCategory.Mythic.GetColor()}>신화</color></b> 능력을 획득하였습니다!");
                 }
-
-                nukeChanceAvailable = false;
             }
 
             _chaosMutex.ReleaseMutex();
