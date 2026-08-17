@@ -166,7 +166,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\UsedPingHook.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\UsedSnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AddWorkstation.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SaveLocation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SharpEyes.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AN94.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AntiScp207.cs" />
@@ -293,6 +292,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\PhysicalStrengthening.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\RareTransition.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Salamandra.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SaveLocation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SpaceTravel.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SteelShell.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Steroid.cs" />

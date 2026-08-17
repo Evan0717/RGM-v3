@@ -30,7 +30,7 @@ public class ExplosiveAmmo : Ability
             {
                 Owner.AddAbility(AbilityType.SYNERGY_WEAKPOINTATTACK);
                 Owner.AddAbility(AbilityType.EPIC_HOLYPROTECTION);
-                Owner.AddAbility(AbilityType.EPIC_SAVELOCATION);
+                Owner.AddAbility(AbilityType.RARE_SAVELOCATION);
             });
     }
 
