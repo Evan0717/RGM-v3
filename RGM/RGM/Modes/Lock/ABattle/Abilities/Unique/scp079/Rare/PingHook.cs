@@ -30,6 +30,7 @@ public class PingHook : Ability
 
         Vector3 pos = ev.Position;
         Player RandomPlayer1 = PlayerManager.List.Where(x => x.IsAlive && !NonePlayer.Players.Contains(x) && !x.IsScpRole()).GetRandomValue();
+        if (RandomPlayer1.HasAbility(AbilityType.EPIC_SAVELOCATION)) return;
         RandomPlayer1.Position = new Vector3(pos.x, pos.y + 2, pos.z);
         /*Player RandomPlayer2 = PlayerManager.List.Where(x => x.IsAlive && !NonePlayer.Players.Contains(x) && !x.IsScpRole() && x != RandomPlayer1).GetRandomValue();
         RandomPlayer2.Position = new Vector3(pos.x, pos.y + 2, pos.z);*/

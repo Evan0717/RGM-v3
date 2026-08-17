@@ -359,6 +359,7 @@ public enum AbilityType
     EPIC_AN94, // [영웅] AN-94
     EPIC_SHARPEYES, // [영웅] 샤프 아이즈
     EPIC_TURTLE, // [영웅] 거북 도사
+    EPIC_SAVELOCATION, // [영웅] 위치 저장
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
