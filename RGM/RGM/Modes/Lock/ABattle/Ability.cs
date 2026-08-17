@@ -119,6 +119,7 @@ public enum AbilityCategory
     Epic,
     Legend,
     Mythic,
+    Ancient,
     Synergy,
 }
 
@@ -151,6 +152,7 @@ public static class AbilityCategoryExtensions
             AbilityCategory.Epic => "영웅",
             AbilityCategory.Legend => "전설",
             AbilityCategory.Mythic => "신화",
+            AbilityCategory.Ancient => "고대",
             AbilityCategory.Synergy => "시너지",
             _ => "?"
         };
@@ -165,6 +167,7 @@ public static class AbilityCategoryExtensions
             AbilityCategory.Epic => "#FF00FF",
             AbilityCategory.Legend => "#ffd700",
             AbilityCategory.Mythic => "#DF0101",
+            AbilityCategory.Ancient => "#AAFF00",
             AbilityCategory.Synergy => "#DEEFED",
             _ => "white"
         };
@@ -392,7 +395,6 @@ public enum AbilityType
     MYTHIC_EYEMAN, // [신화] 눈빛맨
     MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
     MYTHIC_JOKER, // [신화] 조커
-    MYTHIC_NOCLIP, // [신화] 노클립
     MYTHIC_BOMBGUN, // [신화] 워 머신
     MYTHIC_WARGOD, // [신화] 광전사
     MYTHIC_BALLISTAEM3, // [신화] 발리스타 MP3
@@ -404,7 +406,13 @@ public enum AbilityType
     MYTHIC_ANCHOR, //[신화] 구속
     MYTHIC_SOLDIER76, // [신화] 솔져: 76
 
-
+    // 고대 //
+    // ANCIENT_NOCLIP, // [고대] 노클립
+    ANCIENT_ALEPHONE, // [고대] Aleph-1
+    // ANCIENT_LONGINUS, // [고대] 롱기누스의 창
+    ANCIENT_EXPLOSIVEAMMO, // [고대] 폭발 탄환
+    
+    
     // 전용 //
     // D계급
     NORMAL_CLASSD_LARCENY, // [전용 일반] 절도죄

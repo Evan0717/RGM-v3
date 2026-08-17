@@ -135,7 +135,10 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Divine\temp.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\ExplosiveAmmo.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Longinus.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Noclip.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
@@ -229,7 +232,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Hammer.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Joker.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\KingsColor.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Noclip.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\RocketLauncher.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Rosehip.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Soldier76.cs" />
@@ -311,7 +313,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\DuplicateFate.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\FourMajorExercises.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Glory.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Gman.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Healer.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Loser.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\RandomCollection.cs" />
