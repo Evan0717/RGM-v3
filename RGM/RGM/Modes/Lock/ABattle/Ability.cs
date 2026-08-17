@@ -325,6 +325,7 @@ public enum AbilityType
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
     RARE_CLAYMORE, // [희귀] Claymore
+    RARE_SAVELOCATION, // [희귀] 위치 저장
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품

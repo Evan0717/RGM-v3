@@ -292,6 +292,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\PhysicalStrengthening.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\RareTransition.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Salamandra.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SaveLocation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SpaceTravel.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SteelShell.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Steroid.cs" />

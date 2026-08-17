@@ -41,6 +41,7 @@ public class AlephOne : Ability
         {
             Owner.AddAbility(AbilityType.SYNERGY_WEAKPOINTATTACK);
             Owner.AddAbility(AbilityType.EPIC_HOLYPROTECTION);
+            Owner.AddAbility(AbilityType.RARE_SAVELOCATION);
         });
     }
 
