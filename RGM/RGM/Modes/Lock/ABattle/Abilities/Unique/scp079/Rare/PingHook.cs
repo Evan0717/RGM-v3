@@ -30,7 +30,11 @@ public class PingHook : Ability
 
         Vector3 pos = ev.Position;
         Player RandomPlayer1 = PlayerManager.List.Where(x => x.IsAlive && !NonePlayer.Players.Contains(x) && !x.IsScpRole()).GetRandomValue();
-        if (RandomPlayer1.HasAbility(AbilityType.RARE_SAVELOCATION)) return;
+        if (RandomPlayer1.HasAbility(AbilityType.RARE_SAVELOCATION))
+        {
+            ev.Player.AddHint("핑 갈고리 실패","플레이어의 위치 정보를 불러오는 데 실패했습니다.");
+            return;
+        }
         RandomPlayer1.Position = new Vector3(pos.x, pos.y + 2, pos.z);
         /*Player RandomPlayer2 = PlayerManager.List.Where(x => x.IsAlive && !NonePlayer.Players.Contains(x) && !x.IsScpRole() && x != RandomPlayer1).GetRandomValue();
         RandomPlayer2.Position = new Vector3(pos.x, pos.y + 2, pos.z);*/
