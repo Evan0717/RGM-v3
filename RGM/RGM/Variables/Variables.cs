@@ -196,11 +196,14 @@ namespace RGM.Variables
             {
                 IsPubliced = true,
                 Name = "모드 제안서",
-                Description = $".구매 모드 제안서/{{모드 이름}}ㅣ4번째 투표 목록에 있는 모드를 10% 확률로 해당 모드로 교체합니다. 한 라운드 당 한번만 구매할 수 있습니다.",
+                Description = $".구매 모드 제안서/{{모드 이름}}ㅣ현재 투표 목록에 없는 모드로 4번째 투표 목록을 10% 확률로 교체합니다. 한 라운드 당 한번만 구매할 수 있습니다.",
                 Price = 10,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("모드 제안서"); },
+                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("모드 제안서"); },
                 Script = (player, arg) =>
                 {
+                    if (ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg))
+                        return;
+
                     UsedItems.Add("모드 제안서");
 
                     string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;
@@ -223,11 +226,14 @@ namespace RGM.Variables
             {
                 IsPubliced = false,
                 Name = "고급 모드 제안서",
-                Description = $".사용 고급 모드 제안서/{{모드 이름}}ㅣ4번째 투표 목록에 있는 모드를 무조건적으로 해당 모드로 교체합니다.",
+                Description = $".사용 고급 모드 제안서/{{모드 이름}}ㅣ현재 투표 목록에 없는 모드로 4번째 투표 목록을 무조건 교체합니다.",
                 Price = 1205,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("고급 모드 제안서"); },
+                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("고급 모드 제안서"); },
                 Script = (player, arg) =>
                 {
+                    if (ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg))
+                        return;
+
                     UsedItems.Add("고급 모드 제안서");
 
                     string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;

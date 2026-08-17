@@ -124,6 +124,15 @@ namespace RGM.EventArgs
             Server.FriendlyFire = false;
 
             MapUtils.UnloadMap("RGMLobby");
+            First.Clear();
+            Second.Clear();
+            Third.Clear();
+            Fourth.Clear();
+            Numbers.Clear();
+            RandomColors.Clear();
+            RandomLights.Clear();
+            Balls.Clear();
+
             Server.ExecuteCommand($"/speak {string.Join(".", PlayerManager.List.Select(x => x.Id))}. 0");
             IntercomPlayers.Clear();
             EnabledModeList.Clear();
