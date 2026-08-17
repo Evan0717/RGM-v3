@@ -507,15 +507,16 @@ public enum AbilityType
     NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
     NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
     NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
-    //NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템
+    NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템(x)
     NORMAL_SCP079_WORKOUTORDER, // [전용 일반] 운동 명령
+    NORMAL_SCP079_SPAMMESSAGE, // [전용 일반] 스팸 문자
 
-    //RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류
+    RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류(x)
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
     RARE_SCP079_PINGHOOK, // [전용 희귀] 핑 갈고리
     RARE_SCP079_AVOIDORDER, // [전용 희귀] 회피 명령
-   // RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
+    RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄(x)
     RARE_SCP079_REPAIR, // [전용 희귀] 수리수리 마수리
     RARE_SCP079_RESTAREA, // [전용 희귀] 휴게소
     RARE_SCP079_FREEDOM, // [전용 희귀] 자유
