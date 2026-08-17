@@ -15,7 +15,7 @@ namespace RGM.Modes.Abilities.Ancient;
     AbilityCategory.Ancient,
     AbilityType.ANCIENT_EXPLOSIVEAMMO)]
 
-public class ExplosiveAmmo : Ability
+public class AntiMatter : Ability
 {
     private const float ExplosionInterval = 0.1f;
     private const float FixedDamage = 1f;

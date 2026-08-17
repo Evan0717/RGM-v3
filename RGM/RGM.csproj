@@ -136,7 +136,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\ExplosiveAmmo.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Longinus.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Noclip.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />

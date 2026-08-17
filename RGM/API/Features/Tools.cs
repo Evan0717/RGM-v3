@@ -80,24 +80,56 @@ namespace RGM.API.Features
 
                 for (int i = 0; i < 4; i++)
                 {
-                    try
-                    {
-                        foreach (var Pad in Pads[i])
-                            Pad.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]].Color, out Color color) ? color : Color.white;
-                    }
-                    catch (Exception e) { }
+                    Color padColor = ColorUtility.TryParseHtmlString("#" + ModeList[ModeVote.Keys.ToList()[i]].Color, out Color color)
+                        ? color
+                        : Color.white;
+
+                    SetPrimitiveColor(Pads[i], padColor);
                 }
 
-                Color randomColor = Tools.GetRandomColor(true);
+                Color randomColor = GetRandomColor(true);
 
-                Numbers.ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = randomColor);
-                RandomColors.ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = randomColor);
-                RandomLights.ForEach(x => x.GetComponent<LightSourceToy>().NetworkLightColor = Tools.GetRandomColor());
-                Balls.ForEach(x => x.GetComponent<PrimitiveObjectToy>().NetworkMaterialColor = Tools.GetRandomColor(true));
+                SetPrimitiveColor(Numbers, randomColor);
+                SetPrimitiveColor(RandomColors, randomColor);
+                SetLightColor(RandomLights);
+                SetRandomPrimitiveColor(Balls);
             }
             catch (Exception e)
             {
                 Log.Error($"[RGM] {e}");
+            }
+        }
+
+        private static void SetPrimitiveColor(List<Transform> transforms, Color color)
+        {
+            transforms.RemoveAll(transform => transform == null);
+
+            foreach (var transform in transforms)
+            {
+                if (transform.TryGetComponent<PrimitiveObjectToy>(out var primitive))
+                    primitive.NetworkMaterialColor = color;
+            }
+        }
+
+        private static void SetLightColor(List<Transform> transforms)
+        {
+            transforms.RemoveAll(transform => transform == null);
+
+            foreach (var transform in transforms)
+            {
+                if (transform.TryGetComponent<LightSourceToy>(out var light))
+                    light.NetworkLightColor = GetRandomColor();
+            }
+        }
+
+        private static void SetRandomPrimitiveColor(List<Transform> transforms)
+        {
+            transforms.RemoveAll(transform => transform == null);
+
+            foreach (var transform in transforms)
+            {
+                if (transform.TryGetComponent<PrimitiveObjectToy>(out var primitive))
+                    primitive.NetworkMaterialColor = GetRandomColor(true);
             }
         }
 

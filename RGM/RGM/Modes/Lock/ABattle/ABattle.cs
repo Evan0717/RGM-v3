@@ -40,12 +40,12 @@ public class ABattle : Mode
 <color=red>SCP-079</color>일 경우, 레벨이 올라갈 때마다 능력을 1개 얻습니다.
 
 각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
-• <color=#A4A4A4>일반</color> - 70%
-• <color=#2ECCFA>희귀</color> - 24.7%
-• <color=#FF00FF>영웅</color> - 5.05%
-• <color=#ffd700>전설</color> - 0.2%
+• <color=#A4A4A4>일반</color> - 62.40%
+• <color=#2ECCFA>희귀</color> - 31.55%
+• <color=#FF00FF>영웅</color> - 5.85%
+• <color=#ffd700>전설</color> - 0.25%
 • <color=#DF0101>신화</color> - 0.05%
-• <color=#AAFF00>고대</color> - 0.01%
+• <color=#008000>고대</color> - 0.01%
 • <color=#DEEFED>시너지</color> - ???
 
 • <color=#F7819F>전용</color> 
@@ -54,7 +54,7 @@ public class ABattle : Mode
 <color=#FF00FF>영웅</color> - 10%
 <color=#ffd700>전설</color> - 20%
 <color=#DF0101>신화</color> - 25%
-<color=#AAFF00>고대</color> - 40%
+<color=#008000>고대</color> - 40%
 (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
 66.6% 확률로 추가 모드가 활성화됩니다.
@@ -64,10 +64,10 @@ public class ABattle : Mode
 <size=20>.(번호) - 1번부터 5번까지 있습니다. 능력을 선택할 때 사용됩니다.</size>
 <size=20>.추가모드 - 현재 워크스테이션 업그레이드 모드의 추가 모드를 확인합니다.</size>
 """;
-    public override string Color => "00FFFF";
+    public override string Color => "AAFF00";
     public override string Map => "ABattle";
 
-    public override string Author => "GoldenPig1205, RGM Contributors :D";
+    public override string Author => "GoldenPig1205, DeniA, and RGM Contributors :D";
 
     public static ABattle Instance;
     private static readonly Mutex _chaosModeLock = new();
@@ -94,7 +94,7 @@ public class ABattle : Mode
         {"영웅", "#FF00FF"},
         {"전설", "#ffd700"},
         {"신화", "#DF0101"},
-        {"고대", "#AAFF00"},
+        {"고대", "#008000"},
         {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
     };
@@ -105,7 +105,7 @@ public class ABattle : Mode
         {"영웅", "<b><color=#F185FF>영웅</color></b>"},
         {"전설", "<b><color=#FFF70A>전설</color></b>"},
         {"신화", "<b><color=#F52500>신화</color></b>"},
-        {"고대", "<b><color=#AAFF00>고대</color></b>"},
+        {"고대", "<b><color=#008000>고대</color></b>"},
         {"전용", "<b><color=#F7819F>전용</color></b>" },
         {"알 수 없음", "<b><color=#000000>알수없음</b>"}
     };
@@ -466,15 +466,20 @@ public class ABattle : Mode
             if (!typeof(Ability).IsAssignableFrom(type))
                 continue;
 
-            if (abilityAttribute.HolidayType == AbilityHolidayType.Christmas && !HolidayUtils.IsHolidayActive(HolidayType.Christmas))
-                continue;
-
-            if (abilityAttribute.HolidayType == AbilityHolidayType.Halloween && !HolidayUtils.IsHolidayActive(HolidayType.Halloween))
-                continue;
-
-            if (Abilities.ContainsKey(abilityAttribute.Type))
+            switch (abilityAttribute.HolidayType)
             {
-                Log.Error($"Duplicate AbilityType '{abilityAttribute.Type}' on {type.FullName}. Already registered by {Abilities[abilityAttribute.Type].Type.FullName}.");
+                case AbilityHolidayType.Christmas when !HolidayUtils.IsHolidayActive(HolidayType.Christmas):
+                case AbilityHolidayType.Halloween when !HolidayUtils.IsHolidayActive(HolidayType.Halloween):
+                    continue;
+                case AbilityHolidayType.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (Abilities.TryGetValue(abilityAttribute.Type, out var ability))
+            {
+                Log.Error($"Duplicate AbilityType '{abilityAttribute.Type}' on {type.FullName}. Already registered by {ability.Type.FullName}.");
                 continue;
             }
 
