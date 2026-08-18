@@ -1,7 +1,7 @@
 ﻿using Exiled.Events.EventArgs.Scp049;
 using MEC;
 
-namespace RGM.Modes.Abilities.Unique.Scp049;
+namespace RGM.Modes.Abilities.Unique.Scp049.Normal;
 
 [Ability("유능한 의사", "소생된 좀비의 체력이 50% 추가됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP049_COMPETENTDOCTOR, RoleAbility.Scp049)]
 public class CompetentDoctor : Ability

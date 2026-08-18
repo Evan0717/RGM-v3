@@ -347,10 +347,13 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Hurger.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Infection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Meals.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\CompetentDoctor.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Death.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\MedicalKnife.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Proficiency.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Epic\MedicalAccident.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Legend\Contagion.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Mythic\Pandemic.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Normal\CompetentDoctor.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Normal\Death.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Rare\MedicalKnife.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Rare\Proficiency.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\Blessing.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\Protection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\AssultOrder.cs" />

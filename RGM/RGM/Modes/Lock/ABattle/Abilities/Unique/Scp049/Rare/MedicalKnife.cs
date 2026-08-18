@@ -1,9 +1,9 @@
 ﻿using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 
-namespace RGM.Modes.Abilities.Unique.Scp049;
+namespace RGM.Modes.Abilities.Unique.Scp049.Rare;
 
-[Ability("메스", "자신의 공격에 추가 데미지 70이 적용됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP049_MEDICALKNIFE, RoleAbility.Scp049)]
+[Ability("메스", "자신의 공격에 추가 데미지가 120만큼 적용됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP049_MEDICALKNIFE, RoleAbility.Scp049)]
 public class MedicalKnife : Ability
 {
     public override void OnEnabled()
@@ -24,6 +24,6 @@ public class MedicalKnife : Ability
         if (ev.DamageHandler.Type != DamageType.Scp049)
             return;
 
-        ev.DamageHandler.Damage += 70f;
+        ev.DamageHandler.Damage += 120f;
     }
 }

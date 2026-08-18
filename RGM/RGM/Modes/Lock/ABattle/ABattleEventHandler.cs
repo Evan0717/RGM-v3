@@ -205,14 +205,19 @@ public class ABattleEventHandler(ABattle aBattle)
     {
         Timing.RunCoroutine(aBattle.RestoreAbilities(ev.SpawnablePlayers.ToList()));
     }
-    public void OnRoundEnded(RoundEndedEventArgs ev)
+
+    private static void OnRoundEnded(RoundEndedEventArgs ev)
     {
         IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
-        if (players.Count() == 1)
-            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-        else if (players.Count() > 1)
-            Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+        switch (players.Count())
+        {
+            case 1:
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                break;
+            case > 1:
+                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                break;
+        }
     }
 }
