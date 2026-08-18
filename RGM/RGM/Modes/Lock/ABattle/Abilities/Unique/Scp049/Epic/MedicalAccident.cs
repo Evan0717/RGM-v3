@@ -9,7 +9,7 @@ namespace RGM.Modes.Abilities.Unique.Scp049.Epic;
 [Ability("의료 사고",
     """
     SCP-049의 F 스킬 사용 시, 적용한 대상에게 심장 마비 효과를 부여하고, 이후 049가 공격한 판정을 입힙니다.
-    <color=#FFC000>[전용 전설]</color> 전염병 능력을 보유 중인 경우, <color=#BF40BF>[전용 영웅]</color> 의료 사고 능력을 획득할 수 없습니다.
+    <color=#DF0101>[전용 신화]</color> PANDEMIC 능력을 보유 중인 경우, <color=#BF40BF>[전용 영웅]</color> 의료 사고 능력을 획득할 수 없습니다.
     """,
     AbilityCategory.Epic,
     AbilityType.EPIC_SCP049_MEDICALACCIDENT,
@@ -39,7 +39,7 @@ public class MedicalAccident : Ability
         if (ev.Target.TryGetEffect<CardiacArrest>(out var cardiacArrest))
             cardiacArrest.SetAttacker(Owner.ReferenceHub);
 
-        Timing.CallDelayed(0.3f, () =>
+        Timing.CallDelayed(0.2f, () =>
         {
             if (!ev.Target.IsAlive)
                 return;
