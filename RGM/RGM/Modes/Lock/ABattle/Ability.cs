@@ -18,6 +18,13 @@ public abstract class Ability
     public Player Owner { get; set; }
 }
 
+public sealed class AddingAbilityEventArgs(Player player, AbilityType abilityType) : System.EventArgs
+{
+    public Player Player { get; } = player;
+    public AbilityType AbilityType { get; } = abilityType;
+    public bool IsAllowed { get; set; } = true;
+}
+
 public abstract class EffectAbility : Ability
 {
     public abstract Dictionary<EffectType, byte> EffectTypes { get; }
@@ -164,10 +171,10 @@ public static class AbilityCategoryExtensions
         {
             AbilityCategory.Common => "#A4A4A4",
             AbilityCategory.Rare => "#2ECCFA",
-            AbilityCategory.Epic => "#FF00FF",
-            AbilityCategory.Legend => "#ffd700",
+            AbilityCategory.Epic => "#BF40BF",
+            AbilityCategory.Legend => "#FFC000",
             AbilityCategory.Mythic => "#DF0101",
-            AbilityCategory.Ancient => "#AAFF00",
+            AbilityCategory.Ancient => "#008000",
             AbilityCategory.Synergy => "#DEEFED",
             _ => "white"
         };
@@ -457,10 +464,17 @@ public enum AbilityType
     MYTHIC_SCP173_COMPULSION, // [전용 신화] 강박증
 
     // SCP-049
-    NORMAL_SCP049_DEATH, // [전용 희귀] 사신
-    NORMAL_SCP049_COMPETENTDOCTOR, // [전용 희귀] 유능한 의사
-    NORMAL_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
-    NORMAL_SCP049_MEDICALKNIFE, // [전용 희귀] 메스
+    NORMAL_SCP049_COMPETENTDOCTOR, // [전용 일반] 유능한 의사
+    NORMAL_SCP049_DEATH, // [전용 일반] 사신
+    
+    RARE_SCP049_MEDICALKNIFE, // [전용 희귀] 메스
+    RARE_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
+    
+    EPIC_SCP049_MEDICALACCIDENT, // [전용 영웅] 의료 사고
+    
+    LEGEND_SCP049_CONTAGION, // [전용 전설] 전염병
+    
+    MYTHIC_SCP049_PANDEMIC, // [전용 신화] PANDEMIC
 
     // SCP-0492
     NORMAL_SCP0492_MEALS, // [전용 일반] 급식

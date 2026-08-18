@@ -42,8 +42,8 @@ public class ABattle : Mode
 각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
 • <color=#A4A4A4>일반</color> - 62.40%
 • <color=#2ECCFA>희귀</color> - 31.55%
-• <color=#FF00FF>영웅</color> - 5.85%
-• <color=#ffd700>전설</color> - 0.25%
+• <color=#BF40BF>영웅</color> - 5.85%
+• <color=#FFC000>전설</color> - 0.25%
 • <color=#DF0101>신화</color> - 0.05%
 • <color=#008000>고대</color> - 0.01%
 • <color=#DEEFED>시너지</color> - ???
@@ -51,8 +51,8 @@ public class ABattle : Mode
 • <color=#F7819F>전용</color> 
 <color=#A4A4A4>일반</color> - 5%
 <color=#2ECCFA>희귀</color> - 7%
-<color=#FF00FF>영웅</color> - 10%
-<color=#ffd700>전설</color> - 20%
+<color=#BF40BF>영웅</color> - 10%
+<color=#FFC000>전설</color> - 20%
 <color=#DF0101>신화</color> - 25%
 <color=#008000>고대</color> - 40%
 (등급에 따라 확률 변동, 능력 선택 옵션 독립)
@@ -84,6 +84,7 @@ public class ABattle : Mode
     public Dictionary<Player, bool> IsSelecting = new();
     public Dictionary<Player, int> SelectionCursor = new();
     public Dictionary<Player, bool> IsLifeUsed = new();
+    public event Action<AddingAbilityEventArgs> AddingAbility;
     private Mutex _chaosMutex = new();
     private ABattleEventHandler _eventHandler;
 
@@ -91,8 +92,8 @@ public class ABattle : Mode
     {
         {"일반", "#A4A4A4"},
         {"희귀", "#2ECCFA"},
-        {"영웅", "#FF00FF"},
-        {"전설", "#ffd700"},
+        {"영웅", "#BF40BF"},
+        {"전설", "#FFC000"},
         {"신화", "#DF0101"},
         {"고대", "#008000"},
         {"전용", "#F7819F"},
@@ -102,8 +103,8 @@ public class ABattle : Mode
     {
         {"일반", "<b><color=#404040>일반</color></b>"},
         {"희귀", "<b><color=#47DAFF>희귀</color></b>"},
-        {"영웅", "<b><color=#F185FF>영웅</color></b>"},
-        {"전설", "<b><color=#FFF70A>전설</color></b>"},
+        {"영웅", "<b><color=#CB62CB>영웅</color></b>"},
+        {"전설", "<b><color=#FFD700>전설</color></b>"},
         {"신화", "<b><color=#F52500>신화</color></b>"},
         {"고대", "<b><color=#008000>고대</color></b>"},
         {"전용", "<b><color=#F7819F>전용</color></b>" },
@@ -703,7 +704,19 @@ public class ABattle : Mode
     public void AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true)
     {
         if (player == null) return;
-        
+
+        if (!Abilities.ContainsKey(type))
+        {
+            Log.Error($"Ability {type} not found.");
+            return;
+        }
+
+        var addingAbilityEventArgs = new AddingAbilityEventArgs(player, type);
+        AddingAbility?.Invoke(addingAbilityEventArgs);
+
+        if (!addingAbilityEventArgs.IsAllowed)
+            return;
+
         if (type.ToString().Contains("LEGEND"))
         {
             string name;
@@ -747,13 +760,6 @@ public class ABattle : Mode
 
         Log.Info("AddAbility called with " + player.Nickname + " and " + type);
 
-        if (!Abilities.ContainsKey(type))
-        {
-            Log.Error($"Ability {type} not found.");
-
-            return;
-        }
-
         if (!PlayerAbilities.ContainsKey(player))
         {
             Log.Info("No key");
@@ -788,7 +794,7 @@ public class ABattle : Mode
 
         string styleName = ColorFormat(abilityData.GetFormattedName());
 
-        string Message = $"<size=20>{styleName}</size>\n<size=15>{abilityData.Description}</size>";
+        string Message = $"<size=24>{styleName}</size>\n<size=18>{abilityData.Description}</size>";
         player.AddBroadcast(10, Message);
         player.SendConsoleMessage($"\n{Message}", "white");
 
