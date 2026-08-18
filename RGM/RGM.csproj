@@ -349,6 +349,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Meals.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Epic\MedicalAccident.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Legend\Contagion.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Legend\Mutation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Mythic\Pandemic.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Normal\CompetentDoctor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Normal\Death.cs" />

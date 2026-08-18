@@ -473,6 +473,7 @@ public enum AbilityType
     EPIC_SCP049_MEDICALACCIDENT, // [전용 영웅] 의료 사고
     
     LEGEND_SCP049_CONTAGION, // [전용 전설] 전염병
+    LEGEND_SCP049_MUTATION, // [전용 전설] 돌연변이
     
     MYTHIC_SCP049_PANDEMIC, // [전용 신화] PANDEMIC
 
