@@ -73,7 +73,7 @@ public class Contract : Ability
                             break;
                     
                         default: // 48.0%
-                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Common, 1)[0]);
+                            player.AddAbility(ABattle.Instance.GetRandomAbilities(player, AbilityCategory.Normal, 1)[0]);
                             break;
                     }
                 }

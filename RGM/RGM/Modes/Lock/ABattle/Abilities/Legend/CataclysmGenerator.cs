@@ -11,7 +11,7 @@ public class CataclysmGenerator : Ability
     {
         Dictionary<AbilityCategory, AbilityCategory> upgradable = new Dictionary<AbilityCategory, AbilityCategory>
         {
-            { AbilityCategory.Common, AbilityCategory.Rare },
+            { AbilityCategory.Normal, AbilityCategory.Rare },
             { AbilityCategory.Rare, AbilityCategory.Epic },
             { AbilityCategory.Epic, AbilityCategory.Legend },
             { AbilityCategory.Legend, AbilityCategory.Mythic }

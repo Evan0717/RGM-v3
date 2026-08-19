@@ -3,7 +3,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("밤눈", "NightVision 효과를 10p 획득합니다.", AbilityCategory.Common, AbilityType.NORMAL_NIGHTOWL)]
+[Ability("밤눈", "NightVision 효과를 10p 획득합니다.", AbilityCategory.Normal, AbilityType.NORMAL_NIGHTOWL)]
 public class NightOwl : Ability
 {
     public override void OnEnabled()

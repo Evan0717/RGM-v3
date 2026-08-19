@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("보험", "사망 판정을 받을 경우 1번 버텨냅니다.", AbilityCategory.Common, AbilityType.NORMAL_INSURANCE)]
+[Ability("보험", "사망 판정을 받을 경우 1번 버텨냅니다.", AbilityCategory.Normal, AbilityType.NORMAL_INSURANCE)]
 public class Insurance : Ability
 {
     private static bool _isDetonatingState;

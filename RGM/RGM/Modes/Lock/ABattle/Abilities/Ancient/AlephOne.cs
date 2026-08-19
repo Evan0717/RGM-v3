@@ -63,7 +63,7 @@ public class AlephOne : Ability
     {
         player.Health = EnemyHealth;
         player.ArtificialHealth = 0f;
-        player.HumeShield = 0f;
+        player.HumeShield = 1f;
     }
 
     private IEnumerator<float> LockEnemyHealth()

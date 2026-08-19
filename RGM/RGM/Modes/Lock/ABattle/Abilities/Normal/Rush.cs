@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("황소", "지급된 동전을 튕기면 1.5초 동안 속도가 압도적으로 빨라집니다.", AbilityCategory.Common, AbilityType.NORMAL_RUSH)]
+[Ability("황소", "지급된 동전을 튕기면 1.5초 동안 속도가 압도적으로 빨라집니다.", AbilityCategory.Normal, AbilityType.NORMAL_RUSH)]
 public class Rush : Ability
 {
     private ushort _serial;

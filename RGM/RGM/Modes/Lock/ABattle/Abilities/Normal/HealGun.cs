@@ -5,7 +5,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("치유 사제", "체력을 20p만큼 회복시켜주는 COM-18을 받습니다. 9x19mm탄을 2세트 얻습니다.", AbilityCategory.Common, AbilityType.NORMAL_HEALGUN)]
+[Ability("치유 사제", "체력을 20p만큼 회복시켜주는 COM-18을 받습니다. 9x19mm탄을 2세트 얻습니다.", AbilityCategory.Normal, AbilityType.NORMAL_HEALGUN)]
 public class HealGun : Ability
 {
     private const float HealAmount = 20f;

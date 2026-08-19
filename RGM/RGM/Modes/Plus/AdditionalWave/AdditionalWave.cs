@@ -48,12 +48,6 @@ namespace RGM.Modes
                     case 2:
                         Tools.CallSnakeHand(null, PlayerManager.List.Where(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch).ToList());
                         break;
-
-                    case 3:
-                        break;
-
-                    case 4:
-                        break;
                 }
             });
 

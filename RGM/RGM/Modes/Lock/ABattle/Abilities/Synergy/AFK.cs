@@ -19,7 +19,7 @@ public class AFK : Ability
             }
             for (int i = 0; i < 7; i++) {
                 Owner.AddAbility(ABattle.Instance.GetRandomAbilities(
-                    Owner, AbilityCategory.Common, 1,[AbilityType.NORMAL_REROLL])[0]);
+                    Owner, AbilityCategory.Normal, 1,[AbilityType.NORMAL_REROLL])[0]);
             }
         });
     }

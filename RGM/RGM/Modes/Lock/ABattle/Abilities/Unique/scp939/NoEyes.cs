@@ -7,7 +7,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp939;
 
-[Ability("실명", "섬광탄 효과에 면역을 가집니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP939_NOEYES, RoleAbility.Scp939)]
+[Ability("실명", "섬광탄 효과에 면역을 가집니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP939_NOEYES, RoleAbility.Scp939)]
 public class NoEyes : Ability
 {
     private readonly List<EffectType> _effects =

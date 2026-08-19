@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다. (사거리 25)", AbilityCategory.Common, AbilityType.NORMAL_ESCAPE)]
+[Ability("위기 탈출", "넘버원! 지급된 동전을 튕기면 대상을 잠시 동안 멈추게 만듭니다. (사거리 25)", AbilityCategory.Normal, AbilityType.NORMAL_ESCAPE)]
 public class Escape : Ability
 {
     private ushort _serial;

@@ -121,7 +121,7 @@ public enum AbilityCategory
 {
     None,
     Dummy,
-    Common,
+    Normal,
     Rare,
     Epic,
     Legend,
@@ -154,7 +154,7 @@ public static class AbilityCategoryExtensions
     {
         return category switch
         {
-            AbilityCategory.Common => "일반",
+            AbilityCategory.Normal => "일반",
             AbilityCategory.Rare => "희귀",
             AbilityCategory.Epic => "영웅",
             AbilityCategory.Legend => "전설",
@@ -169,7 +169,7 @@ public static class AbilityCategoryExtensions
     {
         return category switch
         {
-            AbilityCategory.Common => "#A4A4A4",
+            AbilityCategory.Normal => "#A4A4A4",
             AbilityCategory.Rare => "#2ECCFA",
             AbilityCategory.Epic => "#BF40BF",
             AbilityCategory.Legend => "#FFC000",
@@ -473,14 +473,23 @@ public enum AbilityType
     EPIC_SCP049_MEDICALACCIDENT, // [전용 영웅] 의료 사고
     
     LEGEND_SCP049_CONTAGION, // [전용 전설] 전염병
+    LEGEND_SCP049_MUTATION, // [전용 전설] 돌연변이
     
     MYTHIC_SCP049_PANDEMIC, // [전용 신화] PANDEMIC
 
     // SCP-0492
-    NORMAL_SCP0492_MEALS, // [전용 일반] 급식
     NORMAL_SCP0492_CONFUSION, // [전용 일반] 당혹감
     NORMAL_SCP0492_INFECTION, // [전용 일반] 감염
-    NORMAL_SCP0492_HUNGER, // [전용 희귀] 허기
+    
+    RARE_SCP0492_HUNGER, // [전용 희귀] 허기
+    RARE_SCP0492_MEALS, // [전용 희귀] 급식
+    RARE_SCP0492_SHIELD, // [전용 희귀] 보호막
+    
+    EPIC_SCP0492_MINIPLAGUEDOCTOR, // [전용 영웅] 작은 역병 의사
+    
+    LEGEND_SCP0492_GROWTH, // [전용 전설] 성장
+    
+    MYTHIC_SCP0492_ONEPUNCH, // [전용 신화] ONE PUNCH MAN
 
     // SCP-096
     NORMAL_SCP096_ENEMY, // [전용 일반] 원수

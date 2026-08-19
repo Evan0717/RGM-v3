@@ -53,7 +53,7 @@ public class Contagion : Ability
                 if (!applyDamage)
                     continue;
 
-                float damage = player.IsScpRole() ? player.MaxHealth * 0.09f : player.MaxHealth * 0.04f;
+                float damage = player.IsScpRole() ? player.MaxHealth * 0.09f : player.MaxHealth * 0.03f;
 
                 // Hurt 이벤트를 거치지 않아 피해 무효화 능력 및 GodMode를 우회한다.
                 player.Health -= damage;

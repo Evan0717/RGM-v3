@@ -5,7 +5,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("우유", "지급된 동전을 튕기면 현재 자신에게 적용된 모든 효과를 제거합니다.", AbilityCategory.Common, AbilityType.NORMAL_MILK)]
+[Ability("우유", "지급된 동전을 튕기면 현재 자신에게 적용된 모든 효과를 제거합니다.", AbilityCategory.Normal, AbilityType.NORMAL_MILK)]
 public class Milk : Ability
 {
     private ushort _coinSerial;

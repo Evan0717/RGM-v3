@@ -337,7 +337,7 @@ public class ABattle : Mode
             PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)
                 .ToList()
                 .ForEach(x
-                    => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Common, 5).GetRandomValue()));
+                    => x.AddAbility(GetRandomAbilities(x, AbilityCategory.Normal, 5).GetRandomValue()));
             
             for (var a = 0; a < repeatCount; a++)
             {
@@ -1263,7 +1263,7 @@ public class ABattle : Mode
                 <= 70 => AbilityCategory.Legend, // 0.70
                 <= 985 => AbilityCategory.Epic, // 9.85
                 <= 3858 => AbilityCategory.Rare, // 38.58
-                _ => AbilityCategory.Common // 50.70
+                _ => AbilityCategory.Normal // 50.70
             };
         }
 
@@ -1274,7 +1274,7 @@ public class ABattle : Mode
             <= 25 => AbilityCategory.Legend, // 0.25
             <= 575 => AbilityCategory.Epic, // 5.75
             <= 3185 => AbilityCategory.Rare, // 31.55
-            _ => AbilityCategory.Common // 62.40
+            _ => AbilityCategory.Normal // 62.40
         };
     }
 
@@ -1287,7 +1287,7 @@ public class ABattle : Mode
             AbilityCategory.Legend => 20,
             AbilityCategory.Epic => 10,
             AbilityCategory.Rare => 7,
-            AbilityCategory.Common => 5,
+            AbilityCategory.Normal => 5,
             _ => 5
         };
     }

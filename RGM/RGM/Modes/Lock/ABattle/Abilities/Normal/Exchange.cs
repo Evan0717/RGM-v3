@@ -4,7 +4,7 @@ using Scp914;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("교환", "현재 들고 있는 아이템을 강화합니다. (1:1 기준)", AbilityCategory.Common, AbilityType.NORMAL_EXCHANGE)]
+[Ability("교환", "현재 들고 있는 아이템을 강화합니다. (1:1 기준)", AbilityCategory.Normal, AbilityType.NORMAL_EXCHANGE)]
 public class Exchange : Ability
 {
     public override void OnEnabled()

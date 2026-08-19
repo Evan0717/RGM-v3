@@ -4,7 +4,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
-[Ability("응당한 대가", "20초동안 전력을 사용할 수 없지만, 그 후 12초마다 10의 경험치를 획득합니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_JUSTPRICE, RoleAbility.Scp079)]
+[Ability("응당한 대가", "20초동안 전력을 사용할 수 없지만, 그 후 12초마다 10의 경험치를 획득합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP079_JUSTPRICE, RoleAbility.Scp079)]
 public class JustPrice : Ability
 {
     CoroutineHandle JustPriceHandle;

@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("우애", "자신이 가진 아이템 중 하나를 복사하여 근처에 있는 플레이어에게 지급합니다.", AbilityCategory.Common, AbilityType.NORMAL_FRIENDSHIP)]
+[Ability("우애", "자신이 가진 아이템 중 하나를 복사하여 근처에 있는 플레이어에게 지급합니다.", AbilityCategory.Normal, AbilityType.NORMAL_FRIENDSHIP)]
 public class Friendship : Ability
 {
     public override void OnEnabled()
