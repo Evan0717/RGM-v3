@@ -137,7 +137,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Longinus.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Noclip.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
@@ -315,6 +314,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\FourMajorExercises.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Glory.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Healer.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Juggernaut.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Loser.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\RandomCollection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\ReflectedLight.cs" />
@@ -413,9 +413,12 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Normal\Enemy.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Normal\Rage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Rare\Seer.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\HurtingPrey.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Recovery.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\StickySwamp.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Epic\Return.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Legend\Flashback.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Normal\HurtingPrey.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Normal\Recovery.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Rare\Digestion.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Rare\StickySwamp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Legend\Debris.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Mythic\Compulsion.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Normal\Aberration.cs" />

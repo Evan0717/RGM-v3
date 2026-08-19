@@ -43,7 +43,9 @@ public class BackDoor : Ability
                 .Where(p => p.IsAlive)
                 .Where(p => Vector3.Distance(pingPosition, p.Position) <= searchRadius)
                 .Where(p => HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, p.ReferenceHub))
-                .Where(p => p.GetAbilities().Any(a => a.Data.RoleAbility == RoleAbility.None))
+                .Where(p => p.GetAbilities().Any(a =>
+                    a.Data.RoleAbility == RoleAbility.None &&
+                    a.Data.Category != AbilityCategory.Ancient))
                 .OrderBy(p => Vector3.Distance(pingPosition, p.Position))
                 .FirstOrDefault();
 
@@ -55,7 +57,9 @@ public class BackDoor : Ability
 
             for (int i = 0; i < 3; i++)
             {
-                List<Ability> TargetList = player.GetAbilities().Where(a => a.Data.RoleAbility == RoleAbility.None).ToList();
+                List<Ability> TargetList = player.GetAbilities().Where(a =>
+                    a.Data.RoleAbility == RoleAbility.None &&
+                    a.Data.Category != AbilityCategory.Ancient).ToList();
 
                 Ability TargetAbility = TargetList.GetRandomValue();
                 if (TargetAbility == null) break;

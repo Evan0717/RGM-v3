@@ -3,6 +3,7 @@ using System.Linq;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
+using PlayerRoles;
 using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Ancient;
@@ -13,6 +14,7 @@ namespace RGM.Modes.Abilities.Ancient;
     <color=#FF3131>모든 것을 허무로 되돌려버립니다.</color>
     획득 시, 자신과 아군을 제외한 모든 상대의 체력을 1로 상시 고정하고, 감소된 수치만큼 본인의 최대 HP가 상승합니다.
     추가로, 자신의 최대 HP의 40%만큼 추가 피해를 입히며, 본인은 받는 피해가 최대 10까지 적용됩니다.
+    ALEPH-1은 1명만 존재할 수 있으며, 능력 획득 시 이전 ALEPH-1의 HP를 흡수한 뒤 모든 능력을 제거하고 관전자로 전환합니다.
     """,
     AbilityCategory.Ancient,
     AbilityType.ANCIENT_ALEPHONE)] 
@@ -28,6 +30,7 @@ public class AlephOne : Ability
     public override void OnEnabled()
     {        
         _processedEnemies.Clear();
+        AbsorbPreviousAlephOnes();
 
         foreach (Player enemy in PlayerManager.List.Where(IsEnemy))
             ApplyHealthLock(enemy);
@@ -39,10 +42,27 @@ public class AlephOne : Ability
         
         Timing.CallDelayed(0.5f, () =>
         {
-            Owner.AddAbility(AbilityType.SYNERGY_WEAKPOINTATTACK);
+            Owner.AddAbility(AbilityType.EPIC_SHARPEYES);
+            Owner.AddAbility(AbilityType.EPIC_SHARPEYES);
+            Owner.AddAbility(AbilityType.RARE_BULLSEYE);
             Owner.AddAbility(AbilityType.EPIC_HOLYPROTECTION);
             Owner.AddAbility(AbilityType.RARE_SAVELOCATION);
         });
+    }
+
+    private void AbsorbPreviousAlephOnes()
+    {
+        foreach (Player previousAlephOne in PlayerManager.List
+                     .Where(player => player != Owner && player.HasAbility(AbilityType.ANCIENT_ALEPHONE))
+                     .ToList())
+        {
+            float absorbedHealth = previousAlephOne.Health;
+            Owner.MaxHealth += absorbedHealth;
+            Owner.Health += absorbedHealth;
+
+            previousAlephOne.RemoveAllAbilities();
+            previousAlephOne.Role.Set(RoleTypeId.Spectator);
+        }
     }
 
     public override void OnDisabled()

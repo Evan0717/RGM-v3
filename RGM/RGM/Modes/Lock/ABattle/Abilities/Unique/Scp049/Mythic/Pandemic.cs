@@ -28,7 +28,7 @@ public class Pandemic : Ability
     private const float ExposureCheckInterval = 0.1f;
     private const float PermanentDuration = float.MaxValue;
     private const float ProficiencyConversionDelay = 0.1f;
-    private const float TeleportDelay = ProficiencyConversionDelay + 0.5f;
+    private const float TeleportDelay = ProficiencyConversionDelay + 1f;
 
     private readonly HashSet<Player> _pandemicPlayers = [];
     private readonly Dictionary<Player, float> _exposureDurations = [];

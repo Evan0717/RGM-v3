@@ -96,7 +96,6 @@ public class BALLISTAEM3 : Ability
                 player.DisableAllEffects();
                 player.RemoveAllAbilities();
                     
-                ABattle.Instance.PlayerAbilities[player].Clear();
                 if (ABattle.Instance.PlayerWorkstations.TryGetValue(player, out var workstations))
                     workstations.Clear();
             }

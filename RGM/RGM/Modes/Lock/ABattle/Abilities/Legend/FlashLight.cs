@@ -74,7 +74,7 @@ public class FlashLight : Ability
                 }
             }
 
-            yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitForSeconds(0.0417f);
         }
     }
 }
