@@ -17,7 +17,7 @@ using Mirror;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.RUN)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.RUN)]
     public class RUN : Mode
     {
         public override string Name => "RUN FOR YOUR LIFE";
