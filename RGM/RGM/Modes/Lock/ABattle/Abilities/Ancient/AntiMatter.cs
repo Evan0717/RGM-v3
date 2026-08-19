@@ -27,11 +27,13 @@ public class AntiMatter : Ability
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         
         Timing.CallDelayed(0.5f, () =>
-            {
-                Owner.AddAbility(AbilityType.SYNERGY_WEAKPOINTATTACK);
-                Owner.AddAbility(AbilityType.EPIC_HOLYPROTECTION);
-                Owner.AddAbility(AbilityType.RARE_SAVELOCATION);
-            });
+        {
+            Owner.AddAbility(AbilityType.EPIC_SHARPEYES);
+            Owner.AddAbility(AbilityType.EPIC_SHARPEYES);
+            Owner.AddAbility(AbilityType.RARE_BULLSEYE);
+            Owner.AddAbility(AbilityType.EPIC_HOLYPROTECTION);
+            Owner.AddAbility(AbilityType.RARE_SAVELOCATION);
+        });
     }
 
     public override void OnDisabled()
