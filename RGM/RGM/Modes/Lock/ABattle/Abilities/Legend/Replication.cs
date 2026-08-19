@@ -9,7 +9,10 @@ public class Replication : Ability
 {
     public override void OnEnabled()
     {
-        foreach (var ability in Owner.GetAbilities().Where(a => a.Data.AbilityType != AbilityType.LEGEND_REPLICATION && a.Data.AbilityType != AbilityType.LEGEND_CATACLYSMGENERATOR).ToList())
+        foreach (var ability in Owner.GetAbilities().Where(a =>
+                     a.Data.Category != AbilityCategory.Ancient &&
+                     a.Data.AbilityType != AbilityType.LEGEND_REPLICATION &&
+                     a.Data.AbilityType != AbilityType.LEGEND_CATACLYSMGENERATOR).ToList())
         {
             // 복제로 지급되는 능력에는 반사경 연쇄가 발동되지 않음
             ABattle.Instance.AddAbility(Owner, ability.Data.AbilityType, allowReflector: false);

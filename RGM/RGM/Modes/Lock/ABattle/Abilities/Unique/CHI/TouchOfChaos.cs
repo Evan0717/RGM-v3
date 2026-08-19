@@ -44,6 +44,5 @@ public class TouchOfChaos : Ability
         ev.Player.EnableEffect(EffectType.FogControl, 1);
 
         ABattle.Instance.PlayerWorkstations[ev.Player].Clear();
-        ABattle.Instance.PlayerAbilities[ev.Player].Clear();
     }
 }

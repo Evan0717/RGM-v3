@@ -662,7 +662,10 @@ public class ABattle : Mode
             if (!PlayerAbilities.TryGetValue(player, out var playerAbilities) || playerAbilities.Count == 0)
                 continue;
 
-            List<AbilityType> _abilities = playerAbilities.Select(x => x.Data.AbilityType).ToList();
+            List<AbilityType> _abilities = playerAbilities
+                .Where(x => x.Data.Category != AbilityCategory.Ancient)
+                .Select(x => x.Data.AbilityType)
+                .ToList();
 
             Reset(player);
 
@@ -752,7 +755,8 @@ public class ABattle : Mode
         }
 
         // LEGEND_REFLECTOR: 50% 확률로 동일 능력 추가 획득. 동일 능력 연쇄는 최대 3회까지.
-        if (allowReflector && reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR))
+        if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
+            reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR))
         {
             if (Random.Range(1, 101) <= 50)
                 AddAbility(player, type, reflectorChain + 1, allowReflector);
@@ -894,10 +898,13 @@ public class ABattle : Mode
         if (!PlayerAbilities.TryGetValue(player, out var playerAbility))
             return;
 
-        foreach (var ability in playerAbility)
+        foreach (var ability in playerAbility.Where(x => x.Data.Category != AbilityCategory.Ancient).ToList())
             ability.OnDisabled();
 
-        PlayerAbilities.Remove(player);
+        playerAbility.RemoveAll(x => x.Data.Category != AbilityCategory.Ancient);
+
+        if (playerAbility.Count == 0)
+            PlayerAbilities.Remove(player);
     }
 
     // 플레이어의 모든 능력 가져오기
