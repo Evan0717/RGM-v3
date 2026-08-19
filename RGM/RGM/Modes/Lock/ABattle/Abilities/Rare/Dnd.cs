@@ -34,7 +34,7 @@ public class Dnd : Ability
             {
                 List<AbilityCategory> categories = new List<AbilityCategory>
                 {
-                    AbilityCategory.Common,
+                    AbilityCategory.Normal,
                     AbilityCategory.Rare,
                     AbilityCategory.Epic
                 };

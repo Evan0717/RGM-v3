@@ -3,7 +3,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes.Abilities.Unique.Scp3114;
 
-[Ability("숙련된 암살자", "교살로 적을 즉시 처치할 수 있습니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP3114_SKILLEDASSASSIN, RoleAbility.Scp3114)]
+[Ability("숙련된 암살자", "교살로 적을 즉시 처치할 수 있습니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP3114_SKILLEDASSASSIN, RoleAbility.Scp3114)]
 public class SkilledAssassin : Ability
 {
     public override void OnEnabled()

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("수상한 스튜", "효과 세기가 랜덤인 영구 지속 무작위 효과를 하나 받습니다.", AbilityCategory.Common, AbilityType.NORMAL_SUSPICIOUSSTEW)]
+[Ability("수상한 스튜", "효과 세기가 랜덤인 영구 지속 무작위 효과를 하나 받습니다.", AbilityCategory.Normal, AbilityType.NORMAL_SUSPICIOUSSTEW)]
 public class SuspiciousStew : Ability
 {
     public override void OnEnabled()

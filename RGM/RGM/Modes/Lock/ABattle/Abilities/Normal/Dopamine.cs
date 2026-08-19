@@ -4,7 +4,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("도파민", "다음으로 맞는 첫 공격의 데미지를 무시하고 체력으로 흡수합니다. (최대 200HP)", AbilityCategory.Common, AbilityType.NORMAL_DOPAMINE)]
+[Ability("도파민", "다음으로 맞는 첫 공격의 데미지를 무시하고 체력으로 흡수합니다. (최대 200HP)", AbilityCategory.Normal, AbilityType.NORMAL_DOPAMINE)]
 public class Dopamine : Ability
 {
     public override void OnEnabled()

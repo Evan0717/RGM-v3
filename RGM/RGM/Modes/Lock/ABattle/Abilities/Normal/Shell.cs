@@ -5,7 +5,7 @@ using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("껍데기", "방어력이 1p 증가합니다.", AbilityCategory.Common, AbilityType.NORMAL_SHELL)]
+[Ability("껍데기", "방어력이 1p 증가합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SHELL)]
 public class Shell : Ability
 {
     private const float DefenseFlat = 1f;

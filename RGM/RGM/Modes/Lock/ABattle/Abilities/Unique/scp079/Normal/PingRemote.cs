@@ -2,7 +2,7 @@ using Exiled.Events.EventArgs.Scp079;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
-[Ability("핑 리모컨", "핑을 찍은 방이 1.5초 간 정전이 됩니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_PINGREMOTE, RoleAbility.Scp079)]
+[Ability("핑 리모컨", "핑을 찍은 방이 1.5초 간 정전이 됩니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP079_PINGREMOTE, RoleAbility.Scp079)]
 public class PingRemote : Ability
 {
     public override void OnEnabled()

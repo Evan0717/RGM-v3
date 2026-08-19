@@ -11,7 +11,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
-[Ability("스팸 문자", "적들에게 20초짜리 스팸 문자 3개를 보내 시야를 60초간 방해합니다.", AbilityCategory.Common, AbilityType.NORMAL_SCP079_SPAMMESSAGE, RoleAbility.Scp079)]
+[Ability("스팸 문자", "적들에게 20초짜리 스팸 문자 3개를 보내 시야를 60초간 방해합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP079_SPAMMESSAGE, RoleAbility.Scp079)]
 
 public class SpamMessage : Ability
 {

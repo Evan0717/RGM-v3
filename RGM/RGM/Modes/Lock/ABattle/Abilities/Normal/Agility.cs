@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("민첩", "회피율이 5%p 증가합니다. SCP 진영은 기존의 40% 확률로 적용됩니다.", AbilityCategory.Common, AbilityType.NORMAL_AGILITY)]
+[Ability("민첩", "회피율이 5%p 증가합니다. SCP 진영은 기존의 40% 확률로 적용됩니다.", AbilityCategory.Normal, AbilityType.NORMAL_AGILITY)]
 public class Agility : Ability
 {
     public override void OnEnabled()
