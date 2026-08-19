@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
+using MEC;
 using RGM.API.Features;
 
 using static RGM.Variables.Variable;
@@ -19,10 +20,13 @@ public class OnePunch : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddAbility(AbilityType.LEGEND_SPEEDWAGON);
-        Owner.AddAbility(AbilityType.EPIC_TURTLE);
-        Owner.AddAbility(AbilityType.RARE_SCP0492_SHIELD);
-        Owner.AddAbility(AbilityType.RARE_SCP0492_MEALS);
+        Timing.CallDelayed(0.1f, () =>
+        {
+            Owner.AddAbility(AbilityType.LEGEND_SPEEDWAGON);
+            Owner.AddAbility(AbilityType.EPIC_TURTLE);
+            Owner.AddAbility(AbilityType.RARE_SCP0492_SHIELD);
+            Owner.AddAbility(AbilityType.RARE_SCP0492_MEALS);
+        });
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
@@ -41,6 +45,7 @@ public class OnePunch : Ability
         if (GodModePlayers.Contains(ev.Player))
             GodModePlayers.Remove(ev.Player);
 
-        ev.Player.Hit(ev.Attacker, ev.Player.MaxHealth);
+        ev.Player.RemoveAllAbilities();
+        Timing.CallDelayed(0.11f, () => ev.Player.Hit(ev.Attacker, ev.Player.MaxHealth));
     }
 }

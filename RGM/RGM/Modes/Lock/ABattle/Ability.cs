@@ -417,7 +417,6 @@ public enum AbilityType
     // 고대 //
     // ANCIENT_NOCLIP, // [고대] 노클립
     ANCIENT_ALEPHONE, // [고대] Aleph-1
-    // ANCIENT_LONGINUS, // [고대] 롱기누스의 창
     ANCIENT_EXPLOSIVEAMMO, // [고대] 폭발 탄환
     
     
@@ -504,10 +503,16 @@ public enum AbilityType
     MYTHIC_SCP096_BERSERK, // [전용 신화] 광분
 
     // SCP-106
-    NORMAL_SCP106_RECOVERY, // [전용 희귀] 회춘
-    NORMAL_SCP106_HUNTINGPREY, // [전용 희귀] 사냥감 모색
-    NORMAL_SCP106_STICKYSWAMP, // [전용 영웅] 끈적한 늪
+    NORMAL_SCP106_RECOVERY, // [전용 일반] 회춘
+    NORMAL_SCP106_HUNTINGPREY, // [전용 일반] 사냥감 모색
+    
+    RARE_SCP106_STICKYSWAMP, // [전용 희귀] 끈적한 늪
+    RARE_SCP106_DIGESTION, // [전용 희귀] 소화
+    
+    EPIC_SCP106_RETURN, // [전용 영웅] 회귀
 
+    LEGEND_SCP106_FLASHBACK, // [전용 전설] 회상
+    
     // SCP-939
     NORMAL_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이
     NORMAL_SCP939_NOEYES, // [전용 일반] 실명
@@ -613,6 +618,7 @@ public enum AbilityType
     SYNERGY_CLOWN, // [시너지] 광대
     SYNERGY_HEALER, // [시너지] 비숍
     SYNERGY_REFLECTEDLIGHT, // [시너지] 반사광
+    SYNERGY_JUGGERNAUT, // [시너지] 저거너트
 }
 
 public static class AbilityTypeExtensions

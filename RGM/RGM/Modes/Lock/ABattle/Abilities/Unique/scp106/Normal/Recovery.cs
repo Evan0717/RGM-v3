@@ -1,6 +1,6 @@
 using Exiled.API.Features.Roles;
 
-namespace RGM.Modes.Abilities.Unique.Scp106;
+namespace RGM.Modes.Abilities.Unique.Scp106.Normal;
 
 [Ability("회춘", "공격 쿨타임이 20% 줄어듭니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP106_RECOVERY, RoleAbility.Scp106)]
 public class Recovery : Ability
