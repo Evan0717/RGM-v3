@@ -17,7 +17,7 @@ namespace RGM.Modes.Abilities.Ancient;
 
 public class AntiMatter : Ability
 {
-    private const float ExplosionInterval = 0.1f;
+    private const float ExplosionInterval = 0.125f;
     private const float FixedDamage = 1f;
 
     private float _nextExplosionTime;

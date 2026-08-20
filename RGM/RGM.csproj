@@ -351,6 +351,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Hurger.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Meals.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Shield.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Epic\PlagueCurse.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Epic\MedicalAccident.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Legend\Contagion.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Legend\Mutation.cs" />
@@ -413,11 +414,14 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Normal\Enemy.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Normal\Rage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Rare\Seer.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Epic\Evade.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Epic\Return.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Legend\Flashback.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Mythic\Reminiscence.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Normal\HurtingPrey.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Normal\Recovery.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Rare\Digestion.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Rare\Energizer.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Rare\StickySwamp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Legend\Debris.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Mythic\Compulsion.cs" />
