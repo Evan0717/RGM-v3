@@ -13,14 +13,17 @@ using UnityEngine;
 namespace RGM.Modes.Abilities.Unique.Scp173.Mythic;
 
 [Ability("강박증",
-    "50m 이내의 플레이어가 자신을 강제로 쳐다보게 되지만, 모든 데미지를 1로 받습니다.",
+    """
+    50m 이내의 플레이어가 자신을 강제로 보게 합니다.
+    추가로, 받는 데미지가 최대 HP의 0.25%까지로 제한됩니다.
+    """,
     AbilityCategory.Mythic,
     AbilityType.MYTHIC_SCP173_COMPULSION,
     RoleAbility.Scp173)]
 
 public class Compulsion : Ability
 {
-    private const float MaxDamage = 1f;
+    private const float MaxHealthRatio = 0.0025f;
     private int visionMask = VisionInformation.VisionLayerMask;
     private CoroutineHandle Handle;
     public override void OnEnabled()
@@ -45,14 +48,14 @@ public class Compulsion : Ability
         if (ev.IsInstantKill)
         {
             ev.IsAllowed = false;
-            ev.Player.Hurt(MaxDamage, ev.DamageHandler.Type);
+            ev.Player.Hurt(Owner.MaxHealth * MaxHealthRatio, ev.DamageHandler.Type);
 
             return;
         }
 
-        if (ev.DamageHandler.Damage > MaxDamage)
+        if (ev.DamageHandler.Damage > Owner.MaxHealth * MaxHealthRatio)
         {
-            ev.DamageHandler.Damage = MaxDamage;
+            ev.DamageHandler.Damage = Owner.MaxHealth * MaxHealthRatio;
         }
     }
     private IEnumerator<float> WeMustLookAt()

@@ -173,7 +173,7 @@ public static class AbilityCategoryExtensions
             AbilityCategory.Rare => "#2ECCFA",
             AbilityCategory.Epic => "#BF40BF",
             AbilityCategory.Legend => "#FFC000",
-            AbilityCategory.Mythic => "#DF0101",
+            AbilityCategory.Mythic => "#FF2400",
             AbilityCategory.Ancient => "#008000",
             AbilityCategory.Synergy => "#DEEFED",
             _ => "white"
@@ -470,6 +470,7 @@ public enum AbilityType
     RARE_SCP049_PROFICIENCY, // [전용 희귀] 능수능란
     
     EPIC_SCP049_MEDICALACCIDENT, // [전용 영웅] 의료 사고
+    EPIC_SCP049_PLAGUECURSE, // [전용 영웅] 역병 저주
     
     LEGEND_SCP049_CONTAGION, // [전용 전설] 전염병
     LEGEND_SCP049_MUTATION, // [전용 전설] 돌연변이
@@ -508,10 +509,14 @@ public enum AbilityType
     
     RARE_SCP106_STICKYSWAMP, // [전용 희귀] 끈적한 늪
     RARE_SCP106_DIGESTION, // [전용 희귀] 소화
+    RARE_SCP106_ENERGIZER, // [전용 희귀] 에너자이저
     
     EPIC_SCP106_RETURN, // [전용 영웅] 회귀
+    EPIC_SCP106_EVADE, // [전용 영웅] 긴급 탈출
 
     LEGEND_SCP106_FLASHBACK, // [전용 전설] 회상
+    
+    MYTHIC_SCP106_REMINISCENCE, // [전용 신화] 회고 
     
     // SCP-939
     NORMAL_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이

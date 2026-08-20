@@ -9,8 +9,9 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Legend;
 
 [Ability("회상", 
     """
-               한 번의 공격으로 대상을 즉시 처치합니다. 해당 공격은 디버프 면역 효과와 무적 효과를 무시합니다.
+               한 번의 공격으로 대상을 즉시 처치합니다. 해당 공격은 디버프 면역 효과를 무시합니다.
                추가로, 자신의 이동 속도가 50% 증가합니다.
+               <color=#FF2400>[전용 신화]</color> 회고를 보유 중인 경우 해당 능력은 획득할 수 없습니다.
                """, 
     AbilityCategory.Legend,
     AbilityType.LEGEND_SCP106_FLASHBACK,
@@ -39,7 +40,10 @@ public class Flashback : Ability
         if (ev.DamageHandler.Type != DamageType.Scp106) return;
         if (_isExecuting) return;
         
-        ev.Player.RemoveAllAbilities();
+        // [영웅] 신성방어 능력을 가지고 있다면 최대 HP의 100%만큼 추가 피해
+        if (ev.Player.HasAbility(AbilityType.EPIC_HOLYPROTECTION))
+            ev.Player.Hurt(ev.Player.MaxHealth, DamageType.Scp106);
+        
         // ReceivingEffect 이벤트를 거치지 않아 디버프 면역 능력이 차단할 수 없다.
         if (!ev.Player.TryGetEffect(EffectType.Traumatized, out StatusEffectBase traumatized))
             return;

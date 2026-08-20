@@ -29,7 +29,7 @@ public class Digestion : Ability
         }
         else
         {
-            ev.Attacker.Health *= 1.02f;
+            ev.Attacker.Health *= 1.1f;
         }
     }
 }

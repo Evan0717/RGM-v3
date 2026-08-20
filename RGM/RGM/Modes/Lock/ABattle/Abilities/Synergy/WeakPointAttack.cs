@@ -3,6 +3,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerStatsSystem;
+using RGM.Modes.Abilities.Unique.Scp106.Mythic;
 
 namespace RGM.Modes.Abilities.Synergy;
 
@@ -12,7 +13,9 @@ namespace RGM.Modes.Abilities.Synergy;
 public class WeakPointAttack : Ability
 {
     public static bool ShouldIgnoreDefenses(Player attacker) =>
-        attacker != null && ABattle.Instance != null && attacker.HasAbility(AbilityType.SYNERGY_WEAKPOINTATTACK);
+        attacker != null &&
+        (Reminiscence.IsIgnoringDefenses(attacker) ||
+         (ABattle.Instance != null && attacker.HasAbility(AbilityType.SYNERGY_WEAKPOINTATTACK)));
 
     public override void OnEnabled()
     {

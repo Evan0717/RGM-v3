@@ -44,7 +44,7 @@ public class ABattle : Mode
 • <color=#2ECCFA>희귀</color> - 31.55%
 • <color=#BF40BF>영웅</color> - 5.85%
 • <color=#FFC000>전설</color> - 0.25%
-• <color=#DF0101>신화</color> - 0.05%
+• <color=#FF2400>신화</color> - 0.05%
 • <color=#008000>고대</color> - 0.01%
 • <color=#DEEFED>시너지</color> - ???
 
@@ -53,7 +53,7 @@ public class ABattle : Mode
 <color=#2ECCFA>희귀</color> - 7%
 <color=#BF40BF>영웅</color> - 10%
 <color=#FFC000>전설</color> - 20%
-<color=#DF0101>신화</color> - 25%
+<color=#FF2400>신화</color> - 25%
 <color=#008000>고대</color> - 40%
 (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
@@ -94,7 +94,7 @@ public class ABattle : Mode
         {"희귀", "#2ECCFA"},
         {"영웅", "#BF40BF"},
         {"전설", "#FFC000"},
-        {"신화", "#DF0101"},
+        {"신화", "#FF2400"},
         {"고대", "#008000"},
         {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
@@ -1289,11 +1289,11 @@ public class ABattle : Mode
     {
         return category switch
         {
-            AbilityCategory.Ancient => 40,
-            AbilityCategory.Mythic => 25,
-            AbilityCategory.Legend => 20,
-            AbilityCategory.Epic => 10,
-            AbilityCategory.Rare => 7,
+            AbilityCategory.Ancient => 45,
+            AbilityCategory.Mythic => 35,
+            AbilityCategory.Legend => 25,
+            AbilityCategory.Epic => 15,
+            AbilityCategory.Rare => 10,
             AbilityCategory.Normal => 5,
             _ => 5
         };

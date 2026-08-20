@@ -13,7 +13,7 @@ namespace RGM.Modes.Abilities.Ancient;
     """
     <color=#FF3131>모든 것을 허무로 되돌려버립니다.</color>
     획득 시, 자신과 아군을 제외한 모든 상대의 체력을 1로 상시 고정하고, 감소된 수치만큼 본인의 최대 HP가 상승합니다.
-    추가로, 자신의 최대 HP의 40%만큼 추가 피해를 입히며, 본인은 받는 피해가 최대 10까지 적용됩니다.
+    추가로, 자신의 최대 HP의 30%만큼 추가 피해를 입히며, 본인은 받는 피해가 최대 HP의 0.05%까지 적용됩니다.
     ALEPH-1은 1명만 존재할 수 있으며, 능력 획득 시 이전 ALEPH-1의 HP를 흡수한 뒤 모든 능력을 제거하고 관전자로 전환합니다.
     """,
     AbilityCategory.Ancient,
@@ -21,8 +21,8 @@ namespace RGM.Modes.Abilities.Ancient;
 public class AlephOne : Ability
 {
     private const float EnemyHealth = 1f;
-    private const float AdditionalDamageRatio = 0.4f;
-    private const float MaximumIncomingDamage = 10f;
+    private const float AdditionalDamageRatio = 0.3f;
+    private const float MaxHealthRatio = 0.0005f;
 
     private CoroutineHandle _healthLockCoroutine;
     private readonly HashSet<Player> _processedEnemies = [];
@@ -93,7 +93,7 @@ public class AlephOne : Ability
             foreach (Player enemy in PlayerManager.List.Where(IsEnemy))
                 ApplyHealthLock(enemy);
 
-            yield return Timing.WaitForSeconds(0.1f);
+            yield return Timing.WaitForSeconds(0.5f);
         }
     }
 
@@ -130,12 +130,12 @@ public class AlephOne : Ability
             if (ev.IsInstantKill)
             {
                 ev.IsAllowed = false;
-                Owner.Hurt(MaximumIncomingDamage, ev.DamageHandler.Type);
+                Owner.Hurt(Owner.MaxHealth * MaxHealthRatio, ev.DamageHandler.Type);
                 return;
             }
 
-            if (ev.DamageHandler.Damage > MaximumIncomingDamage)
-                ev.DamageHandler.Damage = MaximumIncomingDamage;
+            if (ev.DamageHandler.Damage > Owner.MaxHealth * MaxHealthRatio)
+                ev.DamageHandler.Damage = Owner.MaxHealth * MaxHealthRatio;
         }
 
         if (ev.Attacker == Owner && IsEnemy(ev.Player))
