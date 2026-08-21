@@ -1,5 +1,6 @@
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
+using PlayerStatsSystem;
 
 namespace RGM.Modes.Abilities.Unique.Scp3114;
 
@@ -22,6 +23,8 @@ public class SkilledAssassin : Ability
             return;
 
         if (ev.DamageHandler.Type == DamageType.Strangled)
-            ev.DamageHandler.Damage *= 77.7f;
+            ev.Player.Kill(new ScpDamageHandler(
+                Owner.ReferenceHub,
+                DeathTranslations.Scp3114Slap));
     }
 }

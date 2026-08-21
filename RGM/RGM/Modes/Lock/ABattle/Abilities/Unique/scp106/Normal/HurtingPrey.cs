@@ -22,6 +22,6 @@ public class HurtingPrey : Ability
         if (ev.Attacker == null || ev.Attacker != Owner)
             return;
 
-        ev.Attacker.EnableEffect(EffectType.MovementBoost, 15, 3);
+        ev.Attacker.AddEffect(EffectType.MovementBoost, 15, 3);
     }
 }

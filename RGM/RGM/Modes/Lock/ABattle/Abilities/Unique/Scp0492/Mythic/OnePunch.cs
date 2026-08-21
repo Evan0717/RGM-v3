@@ -9,7 +9,7 @@ namespace RGM.Modes.Abilities.Unique.Scp0492.Mythic;
 
 [Ability("ONE PUNCH MAN",
     """
-    자신의 일반 공격은 적을 즉사시킵니다.
+    자신의 일반 공격에 『절대 처치』 효과가 적용됩니다.
     추가로, [전설] 스피드왜건, [영웅] 거북 도사, [전용 희귀] 급식, [전용 희귀] 보호막 능력을 획득합니다.
     """,
     AbilityCategory.Mythic,

@@ -704,21 +704,21 @@ public class ABattle : Mode
     // 플레이어에게 특정 능력을 부여
     // reflectorChain: LEGEND_REFLECTOR로 인한 연쇄 횟수 (최대 3회)
     // allowReflector: false면 반사경 연쇄를 건너뜀 (복제 등)
-    public void AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true)
+    public bool AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true)
     {
-        if (player == null) return;
+        if (player == null) return false;
 
         if (!Abilities.ContainsKey(type))
         {
             Log.Error($"Ability {type} not found.");
-            return;
+            return false;
         }
 
         var addingAbilityEventArgs = new AddingAbilityEventArgs(player, type);
         AddingAbility?.Invoke(addingAbilityEventArgs);
 
         if (!addingAbilityEventArgs.IsAllowed)
-            return;
+            return false;
 
         if (type.ToString().Contains("LEGEND"))
         {
@@ -780,13 +780,13 @@ public class ABattle : Mode
         catch (Exception e)
         {
             Log.Error($"An error occurred while trying to create an instance of {abilityData.Name}: {e}");
-            return;
+            return false;
         }
 
         if (ability == null)
         {
             Log.Error($"An error occurred while trying to create an instance of {abilityData.Name}. The instance is null.");
-            return;
+            return false;
         }
 
         ability.Data = abilityData;
@@ -808,6 +808,8 @@ public class ABattle : Mode
             player.MaxHealth += heal;
             player.Health += heal;
         }
+
+        return true;
     }
 
     // 플레이어에게 시너지 능력 부여
@@ -1315,7 +1317,11 @@ public class ABattle : Mode
 
             var ability = Selections[player][index - 1];
 
-            player.AddAbility(ability);
+            if (!AddAbility(player, ability))
+            {
+                response = "해당 능력은 획득할 수 없습니다.";
+                return false;
+            }
 
             player.AddHint("/?/", "", 0.1f);
 

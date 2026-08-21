@@ -5,7 +5,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 
-namespace RGM.Modes.Abilities.Unique.Scp939;
+namespace RGM.Modes.Abilities.Unique.Scp939.Normal;
 
 [Ability("실명", "섬광탄 효과에 면역을 가집니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP939_NOEYES, RoleAbility.Scp939)]
 public class NoEyes : Ability

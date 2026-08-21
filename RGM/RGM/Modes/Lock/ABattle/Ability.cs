@@ -521,8 +521,15 @@ public enum AbilityType
     // SCP-939
     NORMAL_SCP939_HUGME, // [전용 일반] 그 시절 댕댕이
     NORMAL_SCP939_NOEYES, // [전용 일반] 실명
-    NORMAL_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
-    NORMAL_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
+    
+    RARE_SCP939_REINFORCECLAW, // [전용 희귀] 발톱 강화
+    RARE_SCP939_VAMPIRECLAW, // [전용 희귀] 흡혈 발톱
+    RARE_SCP939_SHARPNESS, // [전용 희귀] 연마
+    RARE_SCP939_BLEEDING, // [전용 희귀] 출혈
+    
+    EPIC_SCP939_AMNESIA, // [전용 영웅] 기억 소거
+    
+    LEGEND_SCP939_EARTHQUAKE, // [전용 전설] 지진
 
     // SCP-3114
     NORMAL_SCP3114_HALFBLOCK, // [전용 일반] 반블럭
