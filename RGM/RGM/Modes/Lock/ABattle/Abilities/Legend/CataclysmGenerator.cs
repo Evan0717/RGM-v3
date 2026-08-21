@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Extensions;
+using MEC;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -8,6 +9,10 @@ namespace RGM.Modes.Abilities.Legend;
 public class CataclysmGenerator : Ability
 {
     public override void OnEnabled()
+    {
+        Timing.RunCoroutine(Do());
+    }
+    private IEnumerator<float> Do() 
     {
         Dictionary<AbilityCategory, AbilityCategory> upgradable = new Dictionary<AbilityCategory, AbilityCategory>
         {
@@ -25,9 +30,15 @@ public class CataclysmGenerator : Ability
             abilityList.Add(upgradable[a.Data.Category]);
 
             Owner.RemoveAbility(a);
+            yield return Timing.WaitForOneFrame;
         }
 
         foreach (var ac in abilityList)
+        {
             Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, ac, 3).Where(x => x != AbilityType.LEGEND_CATACLYSMGENERATOR && x != AbilityType.LEGEND_REPLICATION).GetRandomValue());
+            yield return Timing.WaitForOneFrame;
+        }
+
+        yield break;
     }
 }
