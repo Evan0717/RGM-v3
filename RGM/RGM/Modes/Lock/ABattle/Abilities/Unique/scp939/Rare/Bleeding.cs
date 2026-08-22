@@ -2,10 +2,12 @@
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 
-namespace RGM.Modes.Abilities.Unique.Scp939;
+namespace RGM.Modes.Abilities.Unique.Scp939.Rare;
 
-[Ability("흡혈 발톱", "할퀴기로 공격 시 50의 HS가 회복됩니다.(최대 1250까지 적용)", AbilityCategory.Normal, AbilityType.NORMAL_SCP939_VAMPIRECLAW, RoleAbility.Scp939)]
-public class VampireClaw : Ability
+[Ability("출혈", "SCP-939의 기본 공격에 출혈 효과가 적용됩니다.",
+    AbilityCategory.Rare, AbilityType.RARE_SCP939_BLEEDING, RoleAbility.Scp939)]
+
+public class Bleeding : Ability
 {
     public override void OnEnabled()
     {
@@ -20,8 +22,9 @@ public class VampireClaw : Ability
     private void OnHurting(HurtingEventArgs ev)
     {
         if (Owner.Role is not Scp939Role scp939) return;
+        if (ev.Attacker == null || ev.Attacker.ReferenceHub != scp939.Owner.ReferenceHub) return;
         if (ev.DamageHandler.Type != DamageType.Scp939) return;
-        if (ev.Attacker.ReferenceHub == scp939.Owner.ReferenceHub && scp939.Owner.HumeShield < 1250)
-            scp939.Owner.HumeShield += 50;
+
+        ev.Player.EnableEffect(EffectType.Bleeding, 1, 15f);
     }
 }

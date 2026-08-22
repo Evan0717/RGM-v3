@@ -134,7 +134,7 @@ namespace RGM.Modes
                                 && report.Damage >= 3500)
             ];
 
-            reward -= roundHandler.AllWavesCleared ? 0 : 1;
+            reward += roundHandler.AllWavesCleared ? 1 : 0;
             reward = reward <= 0 ? 5 : reward;
             Timing.RunCoroutine(Tools.SetWinner(wonplayers, reward));
         }
