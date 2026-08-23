@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp939.Legend;
 
-[Ability("지진", """
+[Ability("지진", $"""
                SCP-939의 런지 착지 지점에 지진을 일으킵니다.
                지진 공격에 노출된 모든 적은 『불안정』 효과를 받습니다.
                """,
@@ -15,7 +15,7 @@ namespace RGM.Modes.Abilities.Unique.Scp939.Legend;
 public class Earthquake : Ability
 {
     private const float Radius = 12f;
-    private const float DamageRatio = 0.8f;
+    private const float DamageRatio = 0.7f;
     private const float DefaultUnstableDuration = 3f;
 
     private Scp939LungeAbility _lungeAbility;

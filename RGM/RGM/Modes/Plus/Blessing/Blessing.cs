@@ -13,7 +13,7 @@ using RGM.Variables;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Blessing)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Blessing)]
     public class Blessing : Mode
     {
         public override string Name => "축복";
@@ -34,8 +34,7 @@ namespace RGM.Modes
 5명 이상 - 바이패스 활성화
 8명 이상 - 유령화 효과
 12명 이상 - <color=#57F104>아</color><color=#5DEE03>이</color><color=#63EB03>템</color><color=#6AE803>이</color> <color=#76E202>지</color><color=#7DDF02>급</color><color=#83DD01>될</color> <color=#90D701>수</color> <color=#9DD100>있</color><color=#A3CE00>음</color>
-16명 이상 - <b><color=#2718F7>노</color><color=#222DEF>클</color><color=#1E42E7>립</color> <color=#156CD8>사</color><color=#1181D1>용</color> <color=#08ABC2>가</color><color=#04C0BA>능</color></b>
-20명 이상 - <b><color=#A400F0>투</color><color=#B600EE>명</color> <color=#DA00EC>효</color><color=#EC00EB>과</color></b>
+16명 이상 - <b><color=#A400F0>투</color><color=#B600EE>명</color> <color=#DA00EC>효</color><color=#EC00EB>과</color></b>
 
 * 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
@@ -116,20 +115,6 @@ namespace RGM.Modes
 
                         if (s >= 16)
                         {
-                            t = "대다수의 관전자들이 당신의 승리를 믿어 의심치 않습니다.";
-                            if (!player.IsNoclipPermitted)
-                                player.IsNoclipPermitted = true;
-
-                            player.AddHint("신의 권능", "<b>[ALT] 키를 눌러 <color=red>신의 권능</color>을 사용할 수 있습니다!!!</b>", 1.2f);
-                        }
-                        else
-                        {
-                            if (player.IsNoclipPermitted && (player.Group == null || player.Group.Permissions < 1))
-                                player.IsNoclipPermitted = false;
-                        }
-
-                        if (s >= 20)
-                        {
                             t = "<b><color=#bbebe7>모든 관전자들이 당신의 앞길을 축복합니다.</color></b>";
                             player.EnableEffect(EffectType.Invisible, 1, 1.2f);
                         }
@@ -146,7 +131,7 @@ $"""
             }
         }
 
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        private void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Attacker.Role.Type == RoleTypeId.Scp173)
                 return;
@@ -157,8 +142,8 @@ $"""
                 ev.DamageHandler.Damage = ev.DamageHandler.Damage + ev.DamageHandler.Damage * (0.15f * s);
             }
         }
-        
-        public IEnumerator<float> AutoWarhead()
+
+        private IEnumerator<float> AutoWarhead()
         {
             yield return Timing.WaitForSeconds(11 * 60);
 

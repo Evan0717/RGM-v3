@@ -18,11 +18,9 @@ public class ContExpert : Ability
         RoleTypeId.Scp0492
     ];  
 
-    public override void OnEnabled()
-        => Exiled.Events.Handlers.Player.Hurting += OnHurting;
+    public override void OnEnabled() => Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
-    public override void OnDisabled()
-        => Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+    public override void OnDisabled() => Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
     private void OnHurting(HurtingEventArgs ev)
     {

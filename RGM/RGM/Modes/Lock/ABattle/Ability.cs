@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using PlayerRoles;
 using RGM.API.Features;
@@ -146,7 +147,9 @@ public enum RoleAbility
     Scp939,
     Scp3114,
     Scp079,
-    Flamingo
+    Flamingo,
+    Human,
+    Scp
 }
 public static class AbilityCategoryExtensions
 {
@@ -183,6 +186,16 @@ public static class AbilityCategoryExtensions
 
 public static class RoleAbilityExtensions
 {
+    public static bool IsFactionRoleFor(this RoleAbility roleAbility, Player player)
+    {
+        return roleAbility switch
+        {
+            RoleAbility.Human => player.Role.Type.IsHuman(),
+            RoleAbility.Scp => player.Role.Type.IsScp(),
+            _ => false
+        };
+    }
+
     public static RoleAbility GetRoleAbility(this Player player)
     {
         RoleTypeId role = player.Role.Type;
@@ -263,6 +276,8 @@ public enum AbilityType
     DUMMY_INFILTRATIONFAIL, // [더미] 침투 실패
     DUMMY_INFORMATIONLEAK, // [더미] 개인 정보 유출
     DUMMY_DONEDUPLICATION, // [더미] 인공 중복기연
+    DUMMY_REBIRTHCOMPLETE, // [더미] 새로운 삶
+    DUMMY_GOCMEMBER, // [더미] U.N.G.O.C 대원
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -415,31 +430,44 @@ public enum AbilityType
     MYTHIC_SOLDIER76, // [신화] 솔져: 76
 
     // 고대 //
-    // ANCIENT_NOCLIP, // [고대] 노클립
     ANCIENT_ALEPHONE, // [고대] Aleph-1
     ANCIENT_EXPLOSIVEAMMO, // [고대] 폭발 탄환
     
     
     // 전용 //
+    // 인간진영 공통
+    NORMAL_HUMAN_DENYMESSAGE, // [전용 일반] 수신 차단
+    
+    RARE_HUMAN_MEDICALOFFICER, // [전용 희귀] 의무병
+    
+    EPIC_HUMAN_REBIRTH, // [전용 영웅] 환생
+    EPIC_HUMAN_URGENTSUPPORT, // [전용 영웅] 긴급 지원
+    
     // D계급
     NORMAL_CLASSD_LARCENY, // [전용 일반] 절도죄
     NORMAL_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
-    NORMAL_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
-    NORMAL_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
+    
+    RARE_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
+    RARE_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
+    RARE_CLASSD_CHAOSTICKET, // [전용 희귀] CHAOS 이용권
+    RARE_CLASSD_CLASSDSPEEDRUN,
+    
 
     // 과학자
     NORMAL_SCIENTIST_ENGINEERINGMAJOR, // [전용 일반] 공학 전공
     NORMAL_SCIENTIST_SEEDSOFMTF, // [전용 일반] 특무부대의 씨앗
-    NORMAL_SCIENTIST_05, // [전용 희귀] 05 평의회
+    NORMAL_SCIENTIST_05, // [전용 일반] 05 평의회
 
+    RARE_SCIENTIST_SCIENTISTSPEEDRUN, // [전용 희귀] 스피드런
+    RARE_SCIENTIST_NTFTICKET, // [전용 희귀] NTF 이용권
+    
     // NTF
     NORMAL_NTF_HEALTHCENTERSTAFF, // [전용 일반] 보건소 직원
-    NORMAL_NTF_QUARANTINEOBLIGATION, // [전용 일반] 격리 의무자
-    NORMAL_NTF_COLLECTIVEINTELLIGENCE, // [전용 일반] 집단 지성
-    NORMAL_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
+    RARE_NTF_MANAGERIALOBLIGATIONPERSON, // [전용 희귀] 관리 의무자
     NORMAL_NTF_INDUSTRIALACCIDENTINSURANCE, // [전용 희귀] 산업재해보험
-    NORMAL_NTF_MEDICALOFFICER, // [전용 희귀] 의무병
     NORMAL_NTF_RADAR, // [전용 희귀] 레이더
+    
+    LEGEND_NTF_UNGOC, // [전용 전설] U.N.G.O.C
 
     // 혼돈의 반란
     NORMAL_CHI_TOUCHOFCHAOS, // [전용 일반] 혼돈의 손길

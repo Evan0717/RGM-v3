@@ -50,11 +50,11 @@ public class ABattle : Mode
 
 • <color=#F7819F>전용</color> 
 <color=#A4A4A4>일반</color> - 5%
-<color=#2ECCFA>희귀</color> - 7%
-<color=#BF40BF>영웅</color> - 10%
-<color=#FFC000>전설</color> - 20%
-<color=#FF2400>신화</color> - 25%
-<color=#008000>고대</color> - 40%
+<color=#2ECCFA>희귀</color> - 10%
+<color=#BF40BF>영웅</color> - 15%
+<color=#FFC000>전설</color> - 25%
+<color=#FF2400>신화</color> - 35%
+<color=#008000>고대</color> - 45%
 (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
 66.6% 확률로 추가 모드가 활성화됩니다.
@@ -78,17 +78,18 @@ public class ABattle : Mode
 
     public Dictionary<Player, List<WorkstationController>> PlayerWorkstations = new();
     public Dictionary<AbilityType, AbilityData> Abilities = new();
-    public Dictionary<AbilityType, List<AbilityType>> SynergyAbilities = new();
     public Dictionary<Player, List<Ability>> PlayerAbilities = new();
     public Dictionary<Player, List<AbilityType>> Selections = new();
     public Dictionary<Player, bool> IsSelecting = new();
-    public Dictionary<Player, int> SelectionCursor = new();
     public Dictionary<Player, bool> IsLifeUsed = new();
+    
+    private Dictionary<AbilityType, List<AbilityType>> SynergyAbilities = new();
+    private Dictionary<Player, int> SelectionCursor = new();
     public event Action<AddingAbilityEventArgs> AddingAbility;
     private Mutex _chaosMutex = new();
     private ABattleEventHandler _eventHandler;
 
-    public static Dictionary<string, string> RatingColor = new()
+    public static readonly Dictionary<string, string> RatingColor = new()
     {
         {"일반", "#A4A4A4"},
         {"희귀", "#2ECCFA"},
@@ -99,7 +100,7 @@ public class ABattle : Mode
         {"전용", "#F7819F"},
         {"시너지", "#DEEFED"}
     };
-    public static Dictionary<string, string> SelectFormat = new()
+    public static readonly Dictionary<string, string> SelectFormat = new()
     {
         {"일반", "<b><color=#404040>일반</color></b>"},
         {"희귀", "<b><color=#47DAFF>희귀</color></b>"},
@@ -110,7 +111,7 @@ public class ABattle : Mode
         {"전용", "<b><color=#F7819F>전용</color></b>" },
         {"알 수 없음", "<b><color=#000000>알수없음</b>"}
     };
-    public static Dictionary<string, string> ExtraModes = new()
+    public static readonly Dictionary<string, string> ExtraModes = new()
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
@@ -126,7 +127,7 @@ public class ABattle : Mode
                 "아, 빼먹은 것이 있군요. <b><color=#FF5F1F>HYPER BURNING</color></b>이 활성화됩니다.\n"}
     };
 
-    public static List<ICommand> DotCommands =
+    private static readonly List<ICommand> DotCommands =
     [
         new SelectFirst(),
         new SelectSecond(),
@@ -137,14 +138,14 @@ public class ABattle : Mode
         new CASSIE(),
         new AbilityInformation()
     ];
-    
-    public static readonly List<ICommand> RemoteAdminCommands =
+
+    private static readonly List<ICommand> RemoteAdminCommands =
     [
         new AddAbility(),
         new AddExtraMode()
     ];
 
-    public static string ColorFormat(string text)
+    private static string ColorFormat(string text)
     {
         return 
             text.Replace("[시너지]", $"<color={RatingColor["시너지"]}>[시너지]</color>")
@@ -227,7 +228,7 @@ public class ABattle : Mode
         // 1. C.A.S.S.I.E 방송 후 딜레이
         // 2. 실행 후 딜레이
         const float waitTime = 5f;
-        const float chaosStopTime = 30f;
+        const float chaosStopTime = 55f;
 
         // (확률) = 100 - 값 + 1
         const int mythicChance = 99;
@@ -444,8 +445,8 @@ public class ABattle : Mode
     
     public static List<string> CurrentExtraModes = new();
 
-    CoroutineHandle _onModeStarted;
-    CoroutineHandle _hintCoroutine;
+    private CoroutineHandle _onModeStarted;
+    private CoroutineHandle _hintCoroutine;
 
     // 플러그인에 있는 모든 능력 검색
     public override void OnEnabled()
@@ -599,7 +600,7 @@ public class ABattle : Mode
         }
     }
 
-    public IEnumerator<float> ClearCache()
+    private IEnumerator<float> ClearCache()
     {
         while (true)
         {
@@ -615,7 +616,7 @@ public class ABattle : Mode
         }
     }
 
-    public IEnumerator<float> Backup()
+    private IEnumerator<float> Backup()
     {
         while (true)
         {
@@ -630,14 +631,7 @@ public class ABattle : Mode
 
     private string FormatHint(Player player)
     {
-        if (!PlayerAbilities.TryGetValue(player, out var ability))
-        {
-            return player.Role.Type == RoleTypeId.Scp079
-                ? "<align=left><b><size=22>워크스테이션 상단을 핑으로 찍으면 능력을 획득할 수 있습니다.</size></b></align>"
-                : "<align=left><b><size=22>워크스테이션 위에서 점프하면 능력을 획득할 수 있습니다.</size></b></align>";
-        }
-
-        if (!ability.Any())
+        if (!PlayerAbilities.TryGetValue(player, out var ability) || !ability.Any())
         {
             return player.Role.Type == RoleTypeId.Scp079
                 ? "<align=left><b><size=22>워크스테이션 상단을 핑으로 찍으면 능력을 획득할 수 있습니다.</size></b></align>"
@@ -798,13 +792,13 @@ public class ABattle : Mode
 
         string styleName = ColorFormat(abilityData.GetFormattedName());
 
-        string Message = $"<size=24>{styleName}</size>\n<size=18>{abilityData.Description}</size>";
-        player.AddBroadcast(10, Message);
+        string Message = $"<size=24>{styleName}</size>\n<size=20>{abilityData.Description}</size>";
+        player.AddBroadcast(8, Message);
         player.SendConsoleMessage($"\n{Message}", "white");
 
         if (CurrentExtraModes.Contains("스펙업"))
         {
-            int heal = player.IsScpRole() ? 50 : 10;
+            float heal = player.IsScpRole() ? player.MaxHealth * 0.015f : player.MaxHealth * 0.09f;
             player.MaxHealth += heal;
             player.Health += heal;
         }
@@ -944,7 +938,8 @@ public class ABattle : Mode
                 var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
                 return conditionAttr == null || conditionAttr.Abilities.All(player.HasAbility);
             })
-            .Where(x => x.Value.RoleAbility == roleAbility)
+            .Where(x => x.Value.RoleAbility == roleAbility ||
+                        (roleAbility != RoleAbility.None && x.Value.RoleAbility.IsFactionRoleFor(player)))
             .ToList();
 
 
@@ -1164,19 +1159,17 @@ public class ABattle : Mode
         {
             result = "";
 
-            if (Abilities[type].HolidayType == AbilityHolidayType.Halloween)
+            switch (Abilities[type].HolidayType)
             {
-                result = "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>EE</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b>";
-                return true;
+                case AbilityHolidayType.Halloween:
+                    result = "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>EE</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b>";
+                    return true;
+                case AbilityHolidayType.Christmas:
+                    result = "<b><color=#FC0000>[</color><color=#EA1300>C</color><color=#D82600>h</color><color=#C63900>r</color><color=#B44C00>i</color><color=#A25F00>s</color><color=#917200>t</color><color=#7F8500>m</color><color=#6D9800>a</color><color=#5BAB00>s</color><color=#49BE00>]</color></b>";
+                    return true;
+                default:
+                    return false;
             }
-
-            if (Abilities[type].HolidayType == AbilityHolidayType.Christmas)
-            {
-                result = "<b><color=#FC0000>[</color><color=#EA1300>C</color><color=#D82600>h</color><color=#C63900>r</color><color=#B44C00>i</color><color=#A25F00>s</color><color=#917200>t</color><color=#7F8500>m</color><color=#6D9800>a</color><color=#5BAB00>s</color><color=#49BE00>]</color></b>";
-                return true;
-            }
-
-            return false;
         }
 
         var abilities = Selections[player];
@@ -1187,9 +1180,7 @@ public class ABattle : Mode
             {
                 if (player.IsDead || !Selections.ContainsKey(player))
                 {
-                    if (Selections.ContainsKey(player))
-                        Selections.Remove(player);
-
+                    Selections.Remove(player);
                     SelectionCursor.Remove(player);
                     IsSelecting[player] = false;
 
@@ -1205,25 +1196,20 @@ public class ABattle : Mode
             yield return Timing.WaitForSeconds(0.1f);
         }
 
+        AbilityType selectedAbility;
+
         lock (_selectionLock)
         {
-            IsSelecting[player] = false;
-
-            if (!Selections.ContainsKey(player))
+            if (!Selections.TryGetValue(player, out var currentAbilities) || currentAbilities.Count == 0)
                 yield break;
 
-            var random = Random.Range(0, abilities.Count);
-
-            player.AddAbility(abilities[random]);
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                lock (_selectionLock) 
-                {
-                    Selections.Remove(player);
-                    SelectionCursor.Remove(player);
-                }
-            });
+            selectedAbility = currentAbilities[Random.Range(0, currentAbilities.Count)];
+            Selections.Remove(player);
+            SelectionCursor.Remove(player);
+            IsSelecting[player] = false;
         }
+
+        player.AddAbility(selectedAbility);
 
         yield break;
 
@@ -1287,7 +1273,7 @@ public class ABattle : Mode
         };
     }
 
-    public int GetRoleAbilityChance(AbilityCategory category)
+    private int GetRoleAbilityChance(AbilityCategory category)
     {
         return category switch
         {
@@ -1303,39 +1289,40 @@ public class ABattle : Mode
 
     public bool Select(Player player, int index, out string response)
     {
+        AbilityType ability;
+
         lock (_selectionLock)
         {
-            if (!Selections.ContainsKey(player))
+            if (!Selections.TryGetValue(player, out var abilities) || abilities.Count == 0)
             {
                 response = "선택할 수 있는 능력이 없습니다.";
                 return false;
             }
 
-            Log.Info("Select called with " + player.Nickname + " and " + index);
-
-            Log.Info("All abilities are not the same");
-
-            var ability = Selections[player][index - 1];
-
-            if (!AddAbility(player, ability))
+            if (index < 1 || index > abilities.Count)
             {
-                response = "해당 능력은 획득할 수 없습니다.";
+                response = $"{index}번에 할당된 능력이 존재하지 않습니다.";
                 return false;
             }
 
-            player.AddHint("/?/", "", 0.1f);
+            Log.Info("Select called with " + player.Nickname + " and " + index);
 
-            response = $"{index}번 능력 선택 완료!";
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                lock (_selectionLock)
-                {
-                    Selections.Remove(player);
-                    SelectionCursor.Remove(player);
-                }
-            });
-            return true;
+            // 첫 입력이 선택권을 즉시 소비하도록 처리해 다음 프레임에 도착한 입력을 차단한다.
+            ability = abilities[index - 1];
+            Selections.Remove(player);
+            SelectionCursor.Remove(player);
+            IsSelecting[player] = false;
         }
+
+        if (!AddAbility(player, ability))
+        {
+            response = "해당 능력은 획득할 수 없습니다.";
+            return false;
+        }
+
+        player.AddHint("/?/", "", 0.1f);
+        response = $"{index}번 능력 선택 완료!";
+        return true;
     }
 
     public void MoveSelectionCursor(Player player, int delta)

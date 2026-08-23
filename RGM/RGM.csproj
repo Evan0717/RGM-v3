@@ -137,7 +137,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Noclip.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
@@ -150,6 +149,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ExpiredInsurance.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\FinalExamFail.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\FinalExamSuccess.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\GOCMember.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\InfiltrationFail.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\InfiltrationSuccess.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\InformationLeak.cs" />
@@ -158,6 +158,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\NoAFK.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\RareTransitionFailure.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\RareTransitionSuccess.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\RebirthComplete.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\Teleported.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\TestFailure.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\TestSuccess.cs" />
@@ -325,24 +326,29 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Vampire.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\WeakPointAttack.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Winner.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\BagOfChaos.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\ChaosOfChaos.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\TouchOfChaos.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\IllegalWeapon.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Larceny.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\SeedsOfCHI.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Trespassing.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Normal\Larceny.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Normal\SeedsOfCHI.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Rare\ChaosTicket.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Rare\ClassDSpeedRun.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Rare\IllegalWeapon.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Rare\Trespassing.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Flamingo\MiniFactory.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\CollectiveIntelligence.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\HealthCenterStaff.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\IndustrialAccidentInsurance.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\ManagerialObligationPerson.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\MedicalOfficer.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\QuarantineObligation.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Radar.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\05.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\EngineeringMajor.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\SeedsOfMTF.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\Rebirth.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\UrgentSupport.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Normal\DenyMessage.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Rare\MedicalOfficer.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Legend\UNGOC.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Normal\HealthCenterStaff.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Normal\IndustrialAccidentInsurance.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Normal\Radar.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Rare\ManagerialObligationPerson.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Normal\05.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Normal\EngineeringMajor.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Normal\SeedsOfMTF.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Rare\NTFTicket.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Rare\ScientistSpeedRun.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Epic\MiniPlagueDoctor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Legend\Growth.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Mythic\OnePunch.cs" />
@@ -997,6 +1003,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayerManages\" />
+    <Folder Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />

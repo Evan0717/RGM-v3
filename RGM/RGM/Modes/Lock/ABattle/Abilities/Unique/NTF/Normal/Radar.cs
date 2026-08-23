@@ -4,9 +4,10 @@ using MEC;
 using RGM.API.DataBases;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Unique.NTF;
+namespace RGM.Modes.Abilities.Unique.NTF.Normal;
 
-[Ability("레이더", "가장 가까운 유기체와의 거리를 상시로 확인할 수 있습니다.", AbilityCategory.Normal, AbilityType.NORMAL_NTF_RADAR, RoleAbility.NTF)]
+[Ability("레이더", "가장 가까운 유기체와의 거리를 상시로 확인할 수 있습니다.", 
+    AbilityCategory.Normal, AbilityType.NORMAL_NTF_RADAR, RoleAbility.NTF)]
 public class Radar : Ability
 {
     CoroutineHandle _radar1;

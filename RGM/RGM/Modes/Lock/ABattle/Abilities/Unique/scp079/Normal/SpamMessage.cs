@@ -187,7 +187,10 @@ public class SpamMessage : Ability
     {
         for (var i = 0; i < 3; i++)
         {
-            foreach (var player in PlayerManager.List.Where(p => p.IsAlive && p.LeadingTeam != Owner.LeadingTeam))
+            foreach (var player in PlayerManager.List.Where(p =>
+                      p.IsAlive &&
+                      p.LeadingTeam != Owner.LeadingTeam &&
+                      !p.HasAbility(AbilityType.NORMAL_HUMAN_DENYMESSAGE)))
             {
                 player.AddHint("스팸 메시지", SpamMessages.GetRandomValue(), 20f);
             }
