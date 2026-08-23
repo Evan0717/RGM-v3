@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using PlayerRoles;
 
-namespace RGM.Modes.Abilities.Unique.Scientist;
+namespace RGM.Modes.Abilities.Unique.Scientist.Normal;
 
 [Ability("구미호의 씨앗", "NTF 스폰 영향력을 20 추가합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCIENTIST_SEEDSOFMTF, RoleAbility.Scientist)]
 public class SeedsOfMTF : Ability

@@ -165,7 +165,8 @@ namespace RGM.Modes
         {
             yield return Timing.WaitForSeconds(0.3f);
 
-            if (ev.Projectile is ExplosionGrenadeProjectile grenade && ev.Player.Role.Type != PlayerRoles.RoleTypeId.Scp079)
+            if (ev.Projectile is ExplosionGrenadeProjectile grenade && 
+                ev.Player.Role.Type != PlayerRoles.RoleTypeId.Scp079)
             {
                 while (!grenade.IsAlreadyDetonated)
                 {

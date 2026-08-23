@@ -1,4 +1,4 @@
-﻿namespace RGM.Modes.Abilities.Unique.Scientist;
+﻿namespace RGM.Modes.Abilities.Unique.Scientist.Normal;
 
 [Ability("05 평의회", "05등급 키카드를 지급받습니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCIENTIST_05, RoleAbility.Scientist)]
 public class Level05 : Ability

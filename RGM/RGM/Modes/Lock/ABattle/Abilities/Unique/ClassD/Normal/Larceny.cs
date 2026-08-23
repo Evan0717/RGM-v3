@@ -7,9 +7,9 @@ using MEC;
 using RGM.API.Features;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Unique.ClassD;
+namespace RGM.Modes.Abilities.Unique.ClassD.Normal;
 
-[Ability("절도죄", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 1분)", AbilityCategory.Normal, AbilityType.NORMAL_CLASSD_LARCENY, RoleAbility.ClassD)]
+[Ability("절도죄", "[ALT]를 눌러 상대의 아이템 중 하나를 빼앗을 수 있습니다. (쿨타임 30초)", AbilityCategory.Normal, AbilityType.NORMAL_CLASSD_LARCENY, RoleAbility.ClassD)]
 public class Larceny : Ability
 {
     private int _pickPocketCooldown;
@@ -29,16 +29,16 @@ public class Larceny : Ability
         if (ev.Player != Owner || _pickPocketCooldown > 0)
             return;
 
-        if (!ev.Player.TryGetLookPlayer(3f, out Player player, out RaycastHit? hit)) return;
-        _pickPocketCooldown = 60;
+        if (!ev.Player.TryGetLookPlayer(4f, out var player, out _)) return;
+        _pickPocketCooldown = 30;
 
         if (!player.IsInventoryEmpty)
         {
-            Item Item = player.Items.ToList().GetRandomValue();
+            Item item = player.Items.ToList().GetRandomValue();
 
-            player.RemoveItem(Item);
+            player.RemoveItem(item);
             player.AddHint("소매치기", "주머니가 허전합니다..", 1.2f);
-            ev.Player.AddItem(Item.Type);
+            ev.Player.AddItem(item.Type);
             ev.Player.AddHint("소매치기", "소매치기에 성공했습니다.", 1.2f);
 
             Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.7f);
@@ -49,7 +49,7 @@ public class Larceny : Ability
             ev.Player.AddHint("소매치기", "소매치기에 실패했습니다.\n대상은 아이템을 가지고 있지 않습니다.", 1.2f);
         }
 
-        Timing.CallDelayed(60, () =>
+        Timing.CallDelayed(30, () =>
         {
             _pickPocketCooldown = 0;
         });

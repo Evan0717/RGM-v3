@@ -6,18 +6,18 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using UnityEngine;
 
-namespace RGM.Modes.Abilities.Unique.ClassD;
+namespace RGM.Modes.Abilities.Unique.ClassD.Rare;
 
-[Ability("불법개조무기소지죄", "지면에 닿으면 폭발하는 수류탄을 지급받습니다.", AbilityCategory.Normal, AbilityType.NORMAL_CLASSD_ILLEGALWEAPON,  RoleAbility.ClassD)]
+[Ability("불법개조무기소지죄", """
+                      충격 수류탄을 지급받습니다.
+                      또한, 자신이 투척한 수류탄은 모두 충격 수류탄이 됩니다.
+                      """,
+    AbilityCategory.Rare, AbilityType.RARE_CLASSD_ILLEGALWEAPON,  RoleAbility.ClassD)]
 public class IllegalWeapon : Ability
 {
-    private ushort _id;
-
     public override void OnEnabled()
     {
-        Item item = Owner.AddItem(ItemType.GrenadeHE);
-        _id = item.Serial;
-
+        Owner.AddItem(ItemType.GrenadeHE);
         Exiled.Events.Handlers.Player.ThrownProjectile += OnThrownProjectile;
     }
 
@@ -28,9 +28,6 @@ public class IllegalWeapon : Ability
 
     private IEnumerator<float> OnThrownProjectile(ThrownProjectileEventArgs ev)
     {
-        if (ev.Item.Serial != _id)
-            yield break;
-
         yield return Timing.WaitForSeconds(0.3f);
 
         if (ev.Projectile is not ExplosionGrenadeProjectile grenade ||
