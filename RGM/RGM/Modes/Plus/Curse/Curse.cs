@@ -12,7 +12,7 @@ using RGM.Variables;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.Curse)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.Curse)]
     public class Curse : Mode
     {
         public override string Name => "저주";
