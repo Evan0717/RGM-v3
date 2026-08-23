@@ -29,7 +29,7 @@ using Random = UnityEngine.Random;
 
 namespace RGM.Modes;
 
-[Mode(ModeCategory.Private, ModeInfo.Lock, ModeType.ABattle)]  
+[Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.ABattle)]  
 public class ABattle : Mode
 {
     public override string Name => "워크스테이션 업그레이드";
@@ -1196,25 +1196,20 @@ public class ABattle : Mode
             yield return Timing.WaitForSeconds(0.1f);
         }
 
+        AbilityType selectedAbility;
+
         lock (_selectionLock)
         {
-            IsSelecting[player] = false;
-
-            if (!Selections.ContainsKey(player))
+            if (!Selections.TryGetValue(player, out var currentAbilities) || currentAbilities.Count == 0)
                 yield break;
 
-            var random = Random.Range(0, abilities.Count);
-
-            player.AddAbility(abilities[random]);
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                lock (_selectionLock) 
-                {
-                    Selections.Remove(player);
-                    SelectionCursor.Remove(player);
-                }
-            });
+            selectedAbility = currentAbilities[Random.Range(0, currentAbilities.Count)];
+            Selections.Remove(player);
+            SelectionCursor.Remove(player);
+            IsSelecting[player] = false;
         }
+
+        player.AddAbility(selectedAbility);
 
         yield break;
 
@@ -1294,39 +1289,40 @@ public class ABattle : Mode
 
     public bool Select(Player player, int index, out string response)
     {
+        AbilityType ability;
+
         lock (_selectionLock)
         {
-            if (!Selections.ContainsKey(player))
+            if (!Selections.TryGetValue(player, out var abilities) || abilities.Count == 0)
             {
                 response = "선택할 수 있는 능력이 없습니다.";
                 return false;
             }
 
-            Log.Info("Select called with " + player.Nickname + " and " + index);
-
-            Log.Info("All abilities are not the same");
-
-            var ability = Selections[player][index - 1];
-
-            if (!AddAbility(player, ability))
+            if (index < 1 || index > abilities.Count)
             {
-                response = "해당 능력은 획득할 수 없습니다.";
+                response = $"{index}번에 할당된 능력이 존재하지 않습니다.";
                 return false;
             }
 
-            player.AddHint("/?/", "", 0.1f);
+            Log.Info("Select called with " + player.Nickname + " and " + index);
 
-            response = $"{index}번 능력 선택 완료!";
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                lock (_selectionLock)
-                {
-                    Selections.Remove(player);
-                    SelectionCursor.Remove(player);
-                }
-            });
-            return true;
+            // 첫 입력이 선택권을 즉시 소비하도록 처리해 다음 프레임에 도착한 입력을 차단한다.
+            ability = abilities[index - 1];
+            Selections.Remove(player);
+            SelectionCursor.Remove(player);
+            IsSelecting[player] = false;
         }
+
+        if (!AddAbility(player, ability))
+        {
+            response = "해당 능력은 획득할 수 없습니다.";
+            return false;
+        }
+
+        player.AddHint("/?/", "", 0.1f);
+        response = $"{index}번 능력 선택 완료!";
+        return true;
     }
 
     public void MoveSelectionCursor(Player player, int delta)
