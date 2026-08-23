@@ -6,11 +6,13 @@ using Exiled.Events.EventArgs.Warhead;
 using MEC;
 using PlayerRoles;
 using RGM.API.DataBases;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("매드 사이언티스트", "사망 시, 10초 뒤에 해당 자리에서 리셋됩니다. 랜덤한 능력 5개가 지급됩니다.", AbilityCategory.Epic,
-    AbilityType.EPIC_MADSCIENTIST)]
+[Ability("매드 사이언티스트", 
+    "사망 시 10초 후 부활하며 랜덤한 능력 9개를 부여합니다.(별도 등급 확률 적용)", 
+    AbilityCategory.Epic, AbilityType.EPIC_MADSCIENTIST)]
 public class MadScientist : Ability
 {
     public override void OnEnabled()
@@ -39,12 +41,33 @@ public class MadScientist : Ability
 
                 Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                 {
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         try
                         {
-                            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(ev.Player,
-                                ABattle.Instance.GetCategory(Owner, allowAncient: false), 1)[0]);
+                            var rand = Random.Range(1, 501);
+                            switch (rand)
+                            {
+                                case 1: // 0.20%
+                                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Mythic, 1)[0]);
+                                    break;
+                    
+                                case <= 9: // 1.80%
+                                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Legend, 1)[0]);
+                                    break;
+                    
+                                case <= 75: // 15.0%
+                                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Epic, 1)[0]);
+                                    break;
+                    
+                                case <= 175: // 35.0%
+                                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Rare, 1)[0]);
+                                    break;
+                    
+                                default: // 48.0%
+                                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Normal, 1)[0]);
+                                    break;
+                            }
                         }
                         catch (Exception ex)
                         {

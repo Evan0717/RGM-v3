@@ -214,11 +214,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reflector.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reincarnation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Replication.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp008.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp035.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp457.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp966.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scp999.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scream.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SpeedWagon.cs" />
@@ -328,6 +323,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Winner.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\ChaosOfChaos.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\TouchOfChaos.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Epic\ChaosRecruit.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Normal\Larceny.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Normal\SeedsOfCHI.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Rare\ChaosTicket.cs" />
@@ -337,6 +333,11 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Flamingo\MiniFactory.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\Rebirth.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\UrgentSupport.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp008.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp035.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp457.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp966.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp999.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Normal\DenyMessage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Rare\MedicalOfficer.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Legend\UNGOC.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Normal\IndustrialAccidentInsurance.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Normal\Radar.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\NTF\Rare\ManagerialObligationPerson.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Epic\NTFRecruit.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Normal\05.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Normal\EngineeringMajor.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scientist\Normal\SeedsOfMTF.cs" />
@@ -1003,7 +1005,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayerManages\" />
-    <Folder Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
