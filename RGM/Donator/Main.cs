@@ -230,10 +230,9 @@ namespace RGM.Donator
 
             if (kE == "SCP999")
             {
-                PlaySound(_pos, "14", 3);
-
                 SchematicObject SCP999 = ObjectSpawner.SpawnSchematic("SCP_999_ke", new Vector3(_pos.x, _pos.y, _pos.z), rot);
-
+                    
+                Timing.CallDelayed(0.84f, () => PlaySound(_pos, "14", 3));
                 Timing.CallDelayed(3.17f, SCP999.Destroy);
             }
 
