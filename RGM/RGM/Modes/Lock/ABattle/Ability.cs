@@ -399,11 +399,6 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
-    LEGEND_SCP008, // [전설] SCP-008, 좀비 전염병
-    LEGEND_SCP035, // [전설] SCP-035, 빙의 가면
-    LEGEND_SCP457, // [전설] SCP-457, 불타는 남자
-    LEGEND_SCP966, // [전설] SCP-966, 잠을 죽이는 자
-    LEGEND_SCP999, // [전설] SCP-999, 간지럼 괴물
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
     LEGEND_REPLICATION, // [전설] 복제
@@ -443,6 +438,12 @@ public enum AbilityType
     EPIC_HUMAN_REBIRTH, // [전용 영웅] 환생
     EPIC_HUMAN_URGENTSUPPORT, // [전용 영웅] 긴급 지원
     
+    LEGEND_HUMAN_SCP008, // [전용 전설] SCP-008, 좀비 전염병
+    LEGEND_HUMAN_SCP035, // [전용 전설] SCP-035, 빙의 가면
+    LEGEND_HUMAN_SCP457, // [전용 전설] SCP-457, 불타는 남자
+    LEGEND_HUMAN_SCP966, // [전용 전설] SCP-966, 잠을 죽이는 자
+    LEGEND_HUMAN_SCP999, // [전용 전설] SCP-999, 간지럼 괴물
+    
     // D계급
     NORMAL_CLASSD_LARCENY, // [전용 일반] 절도죄
     NORMAL_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
@@ -450,7 +451,9 @@ public enum AbilityType
     RARE_CLASSD_TRESPASSING, // [전용 희귀] 주거침입죄
     RARE_CLASSD_ILLEGALWEAPON, // [전용 희귀] 불법개조무기소지죄
     RARE_CLASSD_CHAOSTICKET, // [전용 희귀] CHAOS 이용권
-    RARE_CLASSD_CLASSDSPEEDRUN,
+    RARE_CLASSD_CLASSDSPEEDRUN, // [전용 희귀] 스피드런
+    
+    EPIC_CLASSD_CHAOSRECRUIT, // [전용 영웅] 징집
     
 
     // 과학자
@@ -460,6 +463,8 @@ public enum AbilityType
 
     RARE_SCIENTIST_SCIENTISTSPEEDRUN, // [전용 희귀] 스피드런
     RARE_SCIENTIST_NTFTICKET, // [전용 희귀] NTF 이용권
+    
+    EPIC_SCIENTIST_NTFRECRUIT, // [전용 영웅] 모집
     
     // NTF
     NORMAL_NTF_HEALTHCENTERSTAFF, // [전용 일반] 보건소 직원
@@ -471,7 +476,6 @@ public enum AbilityType
 
     // 혼돈의 반란
     NORMAL_CHI_TOUCHOFCHAOS, // [전용 일반] 혼돈의 손길
-    NORMAL_CHI_BAGOFCHAOS, // [전용 일반] 혼돈의 가방
     NORMAL_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
 
     // 뱀의 손

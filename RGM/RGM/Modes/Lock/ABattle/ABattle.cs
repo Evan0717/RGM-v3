@@ -119,7 +119,7 @@ public class ABattle : Mode
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
         {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
-        {"스펙업", "능력을 획득하면 추가 최대 체력이 지급됩니다. (+10 (SCP의 경우 +50))"},
+        {"스펙업", "능력을 획득할 때마다 기본 최대 체력의 인간 9%, SCP 1.5%만큼 최대 체력이 증가합니다."},
         {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 18% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
@@ -798,9 +798,14 @@ public class ABattle : Mode
 
         if (CurrentExtraModes.Contains("스펙업"))
         {
-            float heal = player.IsScpRole() ? player.MaxHealth * 0.015f : player.MaxHealth * 0.09f;
-            player.MaxHealth += heal;
-            player.Health += heal;
+            float baseMaxHealth = player.ReferenceHub.roleManager
+                .GetRoleBase(player.Role.Type) is IHealthbarRole role
+                ? role.MaxHealth
+                : player.MaxHealth;
+            float healthIncrease = baseMaxHealth * (player.IsScpRole() ? 0.015f : 0.09f);
+
+            player.MaxHealth += healthIncrease;
+            player.Health += healthIncrease;
         }
 
         return true;
@@ -1432,9 +1437,9 @@ public class ABattle : Mode
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
                 [
-                    AbilityType.LEGEND_SCP008, AbilityType.LEGEND_SCP035,
-                    AbilityType.LEGEND_SCP457, AbilityType.LEGEND_SCP966, 
-                    AbilityType.LEGEND_SCP999
+                    AbilityType.LEGEND_HUMAN_SCP008, AbilityType.LEGEND_HUMAN_SCP035,
+                    AbilityType.LEGEND_HUMAN_SCP457, AbilityType.LEGEND_HUMAN_SCP966, 
+                    AbilityType.LEGEND_HUMAN_SCP999
                 ]).First());
             
         }
