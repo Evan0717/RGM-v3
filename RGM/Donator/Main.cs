@@ -227,6 +227,21 @@ namespace RGM.Donator
 
                 Timing.CallDelayed(1.5f, ChildrenDay.Destroy);
             }
+
+            if (kE == "SCP999")
+            {
+                SchematicObject SCP999 = ObjectSpawner.SpawnSchematic("SCP_999_ke", new Vector3(_pos.x, _pos.y, _pos.z), rot);
+                    
+                Timing.CallDelayed(0.84f, () => PlaySound(_pos, "14", 3));
+                Timing.CallDelayed(3.17f, SCP999.Destroy);
+            }
+
+            if (kE == "Lightning")
+            {
+                SchematicObject Lightning = ObjectSpawner.SpawnSchematic("LightningKE", new Vector3(_pos.x, _pos.y, _pos.z), rot);
+
+                Timing.CallDelayed(1.5f, Lightning.Destroy);
+            }
         }
 
         public IEnumerator<float> SpawnEffect(string sE, Player player, Vector3 _pos)
@@ -266,10 +281,20 @@ namespace RGM.Donator
                     {
                         Timing.RunCoroutine(KillEffect(kE, ev.Attacker, ev.Player, _role, _pos));
 
+                        string attackerFormatted = $"{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5><i>{ev.Attacker.DisplayNickname}</i></color>";
+                        string targetFormatted = $"{Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>";
+
+                        string broadcastMsg = kE switch
+                        {
+                            "SCP999" => $"<size=25>{attackerFormatted}의 {Datas.KillEffectData[kE][0]}가 {targetFormatted}(을)를 꼭 안아줬습니다!</size>",
+                            "Lightning" => $"<size=25>{attackerFormatted}(이)가 {targetFormatted}(을)를 {Datas.KillEffectData[kE][1]}시켰습니다!</size>",
+
+                            _ => $"<size=25>{attackerFormatted}(이)가 {Datas.KillEffectData[kE][0]}(으)로 {targetFormatted}(을)를 {Datas.KillEffectData[kE][1]}시켰습니다!</size>"
+                        };
+
                         foreach (var _player in PlayerManager.List.Where(x => x.IsDead || Vector3.Distance(x.Position, _pos) <= 10 || Vector3.Distance(x.Position, ev.Attacker.Position) <= 10))
                         {
-                            if (Datas.KillEffectData.ContainsKey(kE))
-                                _player.AddBroadcast(6, $"<size=25>{Tools.BadgeFormat(ev.Attacker)}<color=#CEF6F5><i>{ev.Attacker.DisplayNickname}</i></color>(이)가 {Datas.KillEffectData[kE][0]}(으)로 {Tools.BadgeFormat(ev.Player)}<color=#CEF6F5>{ev.Player.DisplayNickname}</color>(을)를 {Datas.KillEffectData[kE][1]}시켰습니다!</size>", tag: "kill");
+                            _player.AddBroadcast(6, broadcastMsg, tag: "kill");
                         }
                     }
                 }
