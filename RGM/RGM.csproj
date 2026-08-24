@@ -268,12 +268,11 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Training.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Workout.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\AdhesivePlaster.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Alchemy.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Collector.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BomberMan.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\BullsEye.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\CandyBag.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Claymore.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Clone.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Contract.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Dnd.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\DobbyIsFree.cs" />

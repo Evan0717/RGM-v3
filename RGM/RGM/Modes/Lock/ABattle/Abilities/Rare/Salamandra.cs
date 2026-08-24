@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using AdminToys;
+using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using MEC;
 using ProjectMER.Features;
 using ProjectMER.Features.Objects;
@@ -15,9 +17,28 @@ public class Salamandra : Ability
     public override void OnEnabled()
     {
         Light(Owner, Color.red);
+        Exiled.Events.Handlers.Player.Hurt += OnHurt;
     }
-    
-    private void Light(Player player, Color color)
+
+    public override void OnDisabled()
+    {
+        Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+    }
+
+    private void OnHurt(HurtEventArgs ev)
+    {
+        if (ev.Attacker != Owner ||
+            ev.DamageHandler.Damage <= 0f ||
+            !Owner.HasAbility(AbilityType.SYNERGY_DRUID) ||
+            !HitboxIdentity.IsEnemy(Owner.ReferenceHub, ev.Player.ReferenceHub))
+        {
+            return;
+        }
+
+        ev.Player.EnableEffect(EffectType.Burned, 1, 5f);
+    }
+
+    private static void Light(Player player, Color color)
     {
         try
         {

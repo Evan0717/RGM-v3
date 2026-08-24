@@ -5,7 +5,14 @@ using RGM.API.DataBases;
 namespace RGM.Modes.Abilities.Synergy;
 
 [RequiresAbility(AbilityType.RARE_SALAMANDRA, AbilityType.RARE_UNDINE, AbilityType.RARE_GNOME, AbilityType.RARE_SYLPH)]
-[Ability("드루이드", "<살라만드라, 운디네, 노움, 실프> 4대 정령의 가호가 당신과 함께합니다. 75% 확률(<color=red>SCP</color>의 경우 45%)로 상대방의 공격을 반사합니다.", AbilityCategory.Synergy, AbilityType.SYNERGY_DRUID)]
+[Ability("드루이드",
+    """
+    <살라만드라, 운디네, 노움, 실프> 4대 정령의 가호가 당신과 함께합니다.
+    76% 확률(<color=red>SCP</color>의 경우 49%)로 상대방의 공격을 반사합니다.
+    추가로, 4대 정령에 특수 능력이 부여됩니다.
+    """,
+    AbilityCategory.Synergy,
+    AbilityType.SYNERGY_DRUID)]
 public class Druid : Ability
 {
     private static bool _isReflecting;
@@ -30,7 +37,7 @@ public class Druid : Ability
             WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
-        float reflectChance = ev.Player.IsScpRole() ? 45 : 75;
+        float reflectChance = ev.Player.IsScpRole() ? 49 : 76;
 
         if (!(UnityEngine.Random.Range(1, 101) <= reflectChance)) return;
         ev.IsAllowed = false;

@@ -7,10 +7,10 @@ using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("하이패스", "15초 간 모든 공격에 무적이 됩니다.", AbilityCategory.Rare, AbilityType.RARE_HYPASS)]
+[Ability("하이패스", "45초 간 모든 공격에 무적이 됩니다.", AbilityCategory.Rare, AbilityType.RARE_HYPASS)]
 public class Hypass : Ability
 {
-    private const float Duration = 15f;
+    private const float Duration = 45f;
 
     private static bool _isDetonatingState;
 
