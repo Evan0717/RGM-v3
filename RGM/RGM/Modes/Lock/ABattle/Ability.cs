@@ -326,7 +326,7 @@ public enum AbilityType
     RARE_MARTYRDOM, // [희귀] 순교
     RARE_HYPASS, // [희귀] 하이패스
     RARE_TRIPLEAXEL, // [희귀] 트리플악셀
-    RARE_ALCHEMY, // [희귀] 연금
+    RARE_COLLECTOR, // [희귀] 수집가
     RARE_ADHESIVEPLASTER, // [희귀] 반창고
     RARE_WEAPONEXPERT, // [희귀] 무기 전문가
     RARE_PANACEA, // [희귀] 만병통치약
@@ -338,7 +338,6 @@ public enum AbilityType
     RARE_TRANSITION, // [희귀] 하급 변이
     RARE_UPGRADE, // [희귀] 강화
     RARE_DND, // [희귀] 자리 비움
-    RARE_CLONE, // [희귀] 분신
     RARE_SPACETRAVEL, // [희귀] 이차원 도약
     RARE_ORGANICMILK, // [희귀] 유기농 우유
     RARE_CANDYBAG, // [희귀] 사탕 봉지

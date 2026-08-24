@@ -17,7 +17,7 @@ public class Undine : Ability
         Light(Owner, Color.blue);
     }
     
-    private void Light(Player player, Color color)
+    private static void Light(Player player, Color color)
     {
         try
         {

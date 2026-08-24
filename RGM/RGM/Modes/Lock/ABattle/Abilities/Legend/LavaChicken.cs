@@ -36,12 +36,14 @@ public class LavaChicken : Ability
 
                 foreach (var player in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
-                    if (!(Vector3.Distance(player.Position, Owner.Position) <= 6.3f)) continue;
+                    if (!(Vector3.Distance(player.Position, Owner.Position) <= 6.5f)) continue;
                     var damage = player.IsScpRole() ? player.MaxHealth * 0.007f : player.MaxHealth * 0.021f;
 
                     if (player.HasAbility(AbilityType.RARE_UNDINE))
                     {
-                        damage /= 1 + player.AbilityCount(AbilityType.RARE_UNDINE);
+                        damage /= 1 + (player.HasAbility(AbilityType.SYNERGY_DRUID)
+                            ? player.AbilityCount(AbilityType.RARE_UNDINE) * 2
+                            : player.AbilityCount(AbilityType.RARE_UNDINE));
 
                         player.AddHint("운디네", $"<color={ABattle.RatingColor["희귀"]}><b>운디네</b></color>가 화염으로부터 당신을 보호하기 위해 노력하고 있습니다.", 0.5f);
                     }
