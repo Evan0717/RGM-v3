@@ -27,14 +27,16 @@ public class Amnesia : Ability
     {
         while (true)
         {
-            foreach (var near in PlayerManager.List.Where(x => x.IsAlive && Vector3.Distance(x.Position, Owner.Position) <= 22))
+            foreach (var near in PlayerManager.List.Where(x => x.IsAlive
+                                                               && x != Owner
+                                                               && Vector3.Distance(x.Position, Owner.Position) <= 22
+                                                               && HitboxIdentity.IsEnemy(Owner.ReferenceHub,
+                                                                   x.ReferenceHub)))
             {
-                if (Owner != near && HitboxIdentity.IsEnemy(Owner.ReferenceHub, near.ReferenceHub))
-                {
-                    near.EnableEffect(EffectType.AmnesiaItems, 1, 1.5f);
-                    near.EnableEffect(EffectType.AmnesiaVision, 1, 1.5f);
-                }
+                near.AddEffect(EffectType.AmnesiaItems, 1, 1.5f);
+                near.AddEffect(EffectType.AmnesiaVision, 1, 1.5f);
             }
+
             yield return Timing.WaitForSeconds(1f);
         }
     }

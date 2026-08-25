@@ -22,8 +22,8 @@ public class Earthquake : Ability
 
     public override void OnEnabled()
     {
-        if (Owner.Role is not Exiled.API.Features.Roles.Scp939Role scp939)
-            return;
+        if (Owner.Role is not Exiled.API.Features.Roles.Scp939Role scp939
+            || scp939.LungeAbility == null) return;
 
         _lungeAbility = scp939.LungeAbility;
         _lungeAbility.OnStateChanged += OnLungeStateChanged;
@@ -54,11 +54,11 @@ public class Earthquake : Ability
 
     private static void ApplyUnstable(Exiled.API.Features.Player target)
     {
-        target.EnableEffect(EffectType.Ensnared, 1, DefaultUnstableDuration);
-        target.EnableEffect(EffectType.SinkHole, 1, DefaultUnstableDuration);
-        target.EnableEffect(EffectType.Slowness, 60, DefaultUnstableDuration + 2f);
-        target.EnableEffect(EffectType.AmnesiaItems, 1, DefaultUnstableDuration + 7f);
-        target.EnableEffect(EffectType.AmnesiaVision, 1, DefaultUnstableDuration + 7f);
+        target.AddEffect(EffectType.Ensnared, 1, DefaultUnstableDuration);
+        target.AddEffect(EffectType.SinkHole, 1, DefaultUnstableDuration);
+        target.AddEffect(EffectType.Slowness, 60, DefaultUnstableDuration + 2f);
+        target.AddEffect(EffectType.AmnesiaItems, 1, DefaultUnstableDuration + 7f);
+        target.AddEffect(EffectType.AmnesiaVision, 1, DefaultUnstableDuration + 7f);
 
         if (target.IsInventoryEmpty)
             return;

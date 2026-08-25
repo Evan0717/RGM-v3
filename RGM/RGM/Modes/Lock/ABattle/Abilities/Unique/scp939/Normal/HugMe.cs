@@ -24,6 +24,6 @@ public class HugMe : Ability
             return;
 
         // 피격될 때마다 지속 시간만 갱신하고, 이동 속도 증가 효과를 중첩하지 않습니다.
-        ev.Player.EnableEffect(EffectType.MovementBoost, 20, 3);
+        ev.Player.AddEffect(EffectType.MovementBoost, 20, 3);
     }
 }

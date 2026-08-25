@@ -114,7 +114,7 @@ namespace RGM.Modes
         {
             while (true)
             {
-                foreach (var player in dict.Keys.Where(x => !x.IsNonePlayer()))
+                foreach (var player in dict.Keys.Where(x => !x.IsDead))
                 {
                     try
                     {
@@ -158,7 +158,7 @@ namespace RGM.Modes
 
         void OnJumping(JumpingEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.점프)
@@ -167,7 +167,7 @@ namespace RGM.Modes
 
         void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (ev.Attacker != null && dict.ContainsKey(ev.Attacker) && dict[ev.Attacker] == BlockedActions.공격)
@@ -176,7 +176,7 @@ namespace RGM.Modes
         
         void OnVoiceChatting(VoiceChattingEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.말하기 && !ev.Player.IsDead)
@@ -185,7 +185,7 @@ namespace RGM.Modes
 
         void OnUsedItem(UsingItemEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.아이템_사용)
@@ -194,7 +194,7 @@ namespace RGM.Modes
 
         void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.문_상호작용)
@@ -203,7 +203,7 @@ namespace RGM.Modes
 
         void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.발전기_열기)
@@ -212,7 +212,7 @@ namespace RGM.Modes
 
         void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player)) 
@@ -230,7 +230,7 @@ namespace RGM.Modes
 
         void OnEscaping(EscapingEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer())
+            if (ev.Player.IsDead)
                 return;
 
             if (dict.ContainsKey(ev.Player) && dict[ev.Player] == BlockedActions.탈출하기)
