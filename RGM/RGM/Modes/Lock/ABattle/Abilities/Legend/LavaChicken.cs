@@ -11,7 +11,8 @@ using Mirror;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("Lava Chicken", "6.3m 반경의 적들을 태웁니다.", AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
+[Ability("Lava Chicken", "6.5m 반경의 적들을 태웁니다.",
+    AbilityCategory.Legend, AbilityType.LEGEND_LAVACHICKEN)]
 public class LavaChicken : Ability
 {
     private CoroutineHandle _onStarted;

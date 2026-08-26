@@ -9,8 +9,7 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Legend;
 
 [Ability("회상", 
     """
-               한 번의 공격으로 대상을 즉시 처치합니다. 해당 공격은 디버프 면역 효과를 무시합니다.
-               추가로, 자신의 이동 속도가 50% 증가합니다.
+               대상에게 『죽음에 이르는 공격』을 가합니다. 추가로, 자신의 이동 속도가 50% 증가합니다.
                <color=#FF2400>[전용 신화]</color> 회고를 보유 중인 경우 해당 능력은 획득할 수 없습니다.
                """, 
     AbilityCategory.Legend,

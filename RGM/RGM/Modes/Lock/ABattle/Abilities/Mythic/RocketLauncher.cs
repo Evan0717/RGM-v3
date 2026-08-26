@@ -8,7 +8,8 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("로켓 런처", "공격 시, 10% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 40%)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
+[Ability("로켓 런처", "공격 시, 10% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 40%)",
+    AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
 public class RocketLauncher : Ability
 {
     private readonly List<Player> _isInRocket = [];

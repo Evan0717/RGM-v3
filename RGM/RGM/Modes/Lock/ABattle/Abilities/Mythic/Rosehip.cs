@@ -6,7 +6,10 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("장미칼", "이 명검은 무한으로 발산하는 힘을 가지고 있습니다...\n(30% 확률로 진영을 변경하며, 변경 실패 시 마다 공격력이 2배 증가합니다. 기본 데미지가 50 증가합니다.)", AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
+[Ability("장미칼", """
+                이 명검은 무한으로 발산하는 힘을 가지고 있습니다...
+                35% 확률로 진영을 변경하며, 변경 실패 시 마다 공격력이 2배 증가합니다. 기본 데미지가 50 증가합니다.
+                """, AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
 public class Rosehip : Ability
 {
     private ushort _serial;
@@ -35,7 +38,7 @@ public class Rosehip : Ability
         if (ev.Attacker == null ||
             ev.Attacker.CurrentItem == null ||
             ev.Attacker.CurrentItem.Serial != _serial) return;
-        if (UnityEngine.Random.Range(1, 101) <= 30)
+        if (UnityEngine.Random.Range(1, 101) <= 35)
         {
             _damageMultiplier = 2f;
             ev.IsAllowed = false;

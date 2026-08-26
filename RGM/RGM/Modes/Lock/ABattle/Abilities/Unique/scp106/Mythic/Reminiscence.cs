@@ -16,8 +16,8 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Mythic;
 
 [Ability("회고", 
     """
-    <color=#FFC000>[전용 전설]</color> 회상을 강화합니다. 스토킹에서 나올 때와 텔레포트 후 나오는 지점 반경 20m 내의 모든 적에게 <color=#FFC000>[전용 전설]</color> 회상 공격을 적용합니다.
-    추가로, 해당 공격은 적의 방어 효과, 무적 효과를 무시하며, 자신의 이동 속도가 110% 증가합니다.
+    스토킹에서 나올 때와 텔레포트 후 나오는 지점 반경 14m 내의 모든 적을 『사망』시킵니다.
+    추가로, 기본 공격이 대상에게 『죽음에 이르는 공격』을 가하며, 자신의 이동 속도가 110% 증가합니다.
     능력 획득 시, <color=#FFC000>[전용 전설]</color> 회상이 있다면 <color=#FF2400>[전용 신화]</color> 회고로 대체됩니다.
     """, 
     AbilityCategory.Mythic,
@@ -26,7 +26,7 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Mythic;
 
 public class Reminiscence : Ability
 {
-    private const float AttackRange = 20f;
+    private const float AttackRange = 14f;
     private const float Scp106AttackDamage = 40f;
 
     private static readonly HashSet<Player> DefenseIgnoringAttackers = [];

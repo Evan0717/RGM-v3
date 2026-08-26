@@ -10,11 +10,9 @@ namespace RGM.Modes.Abilities.Unique.Scp0492.Legend;
 [Ability("성장",
     """
     SCP-079를 제외한 무작위 SCP로 성장하며, 워크스테이션 이용 기록을 초기화합니다.
-    성장 전 체력이 해당 SCP의 기본 체력보다 높다면 해당 체력을 그대로 전수받습니다.
+    성장 전 HP가 해당 SCP의 기본 HP보다 높다면 해당 HP를 전수받습니다.
     """,
-    AbilityCategory.Legend,
-    AbilityType.LEGEND_SCP0492_GROWTH,
-    RoleAbility.Scp0492)]
+    AbilityCategory.Legend, AbilityType.LEGEND_SCP0492_GROWTH, RoleAbility.Scp0492)]
 public class Growth : Ability
 {
     private static readonly List<RoleTypeId> GrowthRoles = Tools.EnumToList<RoleTypeId>()

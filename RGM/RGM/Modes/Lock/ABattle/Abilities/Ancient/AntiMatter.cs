@@ -9,8 +9,8 @@ namespace RGM.Modes.Abilities.Ancient;
 [Ability(
     "ANTI MATTER",
     """
-    자신의 모든 공격에 폭발을 일으킵니다. 해당 피해는 적의 방어 효과를 무시합니다.
-    추가로, 받는 데미지가 1로 고정되며, 해당 효과는 방어 무시 능력의 영향을 받지 않습니다.
+    자신의 모든 공격에 폭발을 일으킵니다. 해당 피해는 『파열』 효과가 적용됩니다.
+    추가로, 『피격 제한』이 1까지 적용됩니다.
     """,
     AbilityCategory.Ancient,
     AbilityType.ANCIENT_EXPLOSIVEAMMO)]
@@ -50,6 +50,7 @@ public class AntiMatter : Ability
             !ev.IsAllowed ||
             ev.DamageHandler.Damage <= 0f ||
             ev.DamageHandler.Type == DamageType.Explosion ||
+            ev.DamageHandler.Type == DamageType.Falldown ||
             !HitboxIdentity.IsEnemy(Owner.ReferenceHub, ev.Player.ReferenceHub) ||
             Time.time < _nextExplosionTime)
         {

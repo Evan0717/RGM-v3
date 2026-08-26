@@ -4,10 +4,11 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes.Abilities.Unique.Scp096.Epic;
 
-[Ability("분노의 일격", "SCP-096의 기본 공격 데미지가 120 증가합니다.", AbilityCategory.Epic, AbilityType.EPIC_SCP096_RAGINGATTACK, RoleAbility.Scp096)]
+[Ability("분노의 일격", "SCP-096의 기본 공격에 추가 데미지 180이 적용됩니다.",
+    AbilityCategory.Epic, AbilityType.EPIC_SCP096_RAGINGATTACK, RoleAbility.Scp096)]
 public class RagingAttack : Ability
 {
-    private const float DamageIncrease = 120f;
+    private const float DamageIncrease = 180f;
     
     public override void OnEnabled()
     {

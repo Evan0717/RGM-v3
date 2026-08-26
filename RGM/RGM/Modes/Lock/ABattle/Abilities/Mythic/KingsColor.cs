@@ -9,7 +9,8 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("패왕색 패기", "누군가가 당신을 쳐다본다면, 그 사람은 이제 없는 존재가 되겠지요!", AbilityCategory.Mythic, AbilityType.MYTHIC_KINGSCOLOR)]
+[Ability("패왕색 패기", "누군가가 당신을 쳐다본다면, 그 사람은 이제 없는 존재가 되겠지요!", 
+    AbilityCategory.Mythic, AbilityType.MYTHIC_KINGSCOLOR)]
 public class KingsColor : Ability
 {
     private CoroutineHandle _king;

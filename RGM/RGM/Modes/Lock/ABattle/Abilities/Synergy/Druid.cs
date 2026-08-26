@@ -1,6 +1,12 @@
-﻿using Exiled.Events.EventArgs.Player;
+﻿using Exiled.API.Enums;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp106;
+using CustomPlayerEffects;
+using PlayerRoles.PlayableScps.Scp106;
+using PlayerStatsSystem;
 using RGM.API.Features;
 using RGM.API.DataBases;
+using Scp106Role = Exiled.API.Features.Roles.Scp106Role;
 
 namespace RGM.Modes.Abilities.Synergy;
 
@@ -20,11 +26,13 @@ public class Druid : Ability
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
+        Exiled.Events.Handlers.Scp106.Attacking += OnScp106Attacking;
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+        Exiled.Events.Handlers.Scp106.Attacking -= OnScp106Attacking;
     }
 
     private void OnHurting(HurtingEventArgs ev)
@@ -41,13 +49,62 @@ public class Druid : Ability
 
         if (!(UnityEngine.Random.Range(1, 101) <= reflectChance)) return;
         ev.IsAllowed = false;
-
+        
         _isReflecting = true;
         try
         {
             ev.Attacker.Hit(ev.Player, ev.Amount);
             ev.Attacker.AddHint("드루이드", "당신의 공격이 반사되었습니다.");
             ev.Player.AddHint("드루이드", $"상대의 공격이 반사되었습니다.");
+        }
+        finally
+        {
+            _isReflecting = false;
+        }
+    }
+
+    private void OnScp106Attacking(AttackingEventArgs ev)
+    {
+        if (_isReflecting ||
+            ev.Target != Owner ||
+            ev.Player.Role is not Scp106Role scp106 ||
+            !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Target.ReferenceHub) ||
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Player))
+            return;
+
+        bool isCorroding = ev.Player.IsEffectActive<Corroding>();
+        int attackDamage = 0;
+        if (!isCorroding)
+        {
+            if (!scp106.SubroutineModule.TryGetSubroutine<Scp106Attack>(out Scp106Attack attack))
+                return;
+
+            attackDamage = attack._damage;
+        }
+
+        float reflectChance = ev.Target.IsScpRole() ? 49 : 76;
+        if (UnityEngine.Random.Range(1, 101) > reflectChance)
+            return;
+
+        ev.IsAllowed = false;
+        _isReflecting = true;
+        try
+        {
+            if (isCorroding)
+            {
+                ev.Player.EnableEffect(EffectType.PocketCorroding, 1);
+            }
+            else
+            {
+                ev.Player.Hurt(new ScpDamageHandler(
+                    Owner.ReferenceHub,
+                    attackDamage,
+                    DeathTranslations.PocketDecay));
+                ev.Player.AddEffect(EffectType.Corroding, 1, Scp106Attack.CorrodingTime);
+            }
+
+            ev.Player.AddHint("드루이드", "당신의 공격이 반사되었습니다.");
+            ev.Target.AddHint("드루이드", "상대의 공격이 반사되었습니다.");
         }
         finally
         {

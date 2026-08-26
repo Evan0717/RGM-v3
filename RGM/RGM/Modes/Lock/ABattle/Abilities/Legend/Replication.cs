@@ -4,7 +4,8 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("복제", $"가지고 있는 능력의 개수를 2배로 증가시킵니다.", AbilityCategory.Legend, AbilityType.LEGEND_REPLICATION, RoleAbility.None, true)]
+[Ability("복제", $"가지고 있는 능력의 개수를 2배로 증가시킵니다.",
+    AbilityCategory.Legend, AbilityType.LEGEND_REPLICATION, RoleAbility.None, true)]
 public class Replication : Ability
 {
     public override void OnEnabled()

@@ -13,7 +13,8 @@ using LabApi.Features.Wrappers;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("눈빛맨", "상대는 눈에 띄는 것만으로도 압도당할 것입니다!", AbilityCategory.Mythic, AbilityType.MYTHIC_EYEMAN)]
+[Ability("눈빛맨", "상대는 눈에 띄는 것만으로도 압도당할 것입니다!", 
+    AbilityCategory.Mythic, AbilityType.MYTHIC_EYEMAN)]
 public class EyeMan : Ability
 {
     private CoroutineHandle _twinkle;

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("랜덤택배", "고가치 아이템을 30개 드롭합니다.", AbilityCategory.Legend, AbilityType.LEGEND_RANDOMPACKAGE)]
+//[Ability("랜덤택배", "고가치 아이템을 30개 드롭합니다.", AbilityCategory.Legend, AbilityType.LEGEND_RANDOMPACKAGE)]
 public class RandomPackage : Ability
 {
     private readonly List<ItemType> _highvalueitems =

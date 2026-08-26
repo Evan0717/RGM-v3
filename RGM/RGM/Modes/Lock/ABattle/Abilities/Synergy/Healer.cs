@@ -19,6 +19,6 @@ public class Healer : Ability
     private void OnHealing(HealingEventArgs ev)
     {
         if (ev.Player == Owner)
-            ev.Amount *= 4;
+            ev.Amount *= 4.5f;
     }
 }

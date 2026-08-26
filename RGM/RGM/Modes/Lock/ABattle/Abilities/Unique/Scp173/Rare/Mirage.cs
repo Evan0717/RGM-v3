@@ -3,7 +3,8 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes.Abilities.Unique.Scp173.Rare;
 
-[Ability("신기루", "데미지를 입을 때 10% 확률로 1초 동안 투명화가 됩니다.", AbilityCategory.Rare, AbilityType.RARE_SCP173_MIRAGE, RoleAbility.Scp173)]
+[Ability("신기루", "데미지를 입을 때 10% 확률로 1초 동안 투명화가 됩니다.",
+    AbilityCategory.Rare, AbilityType.RARE_SCP173_MIRAGE, RoleAbility.Scp173)]
 public class Mirage : Ability
 {
     public override void OnEnabled()

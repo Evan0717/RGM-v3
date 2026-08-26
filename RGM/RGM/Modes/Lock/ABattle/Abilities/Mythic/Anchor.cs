@@ -14,9 +14,11 @@ using Scp106AttackingEventArgs = Exiled.Events.EventArgs.Scp106.AttackingEventAr
 namespace RGM.Modes.Abilities.Mythic;
 
 [Ability(
-    "구속", "적을 공격 불가 상태로 구속할 수 있는 리볼버를 얻습니다. (관통샷 가능, 사거리 100)\nalt를 눌러 대상의 구속을 해제할 수 있습니다.",
-    AbilityCategory.Mythic,
-    AbilityType.MYTHIC_ANCHOR)] 
+    "구속", """
+          적을 공격 불가 상태로 구속할 수 있는 리볼버를 얻습니다. (관통샷 가능, 사거리 100)
+          alt를 눌러 대상의 구속을 해제할 수 있습니다.
+          """,
+    AbilityCategory.Mythic, AbilityType.MYTHIC_ANCHOR)] 
 public class Anchor : Ability
 {
     private ushort _itemSerial;

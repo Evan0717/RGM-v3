@@ -8,7 +8,8 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("마술사", "피해를 입으면 피해량의 85%만큼 최대 HP가 늘어납니다.", AbilityCategory.Legend, AbilityType.LEGEND_MAGICIAN)]
+[Ability("마술사", "피해를 입으면 피해량의 85%만큼 최대 HP가 늘어납니다.",
+    AbilityCategory.Legend, AbilityType.LEGEND_MAGICIAN)]
 public class Magician : Ability
 {
     public override void OnEnabled()

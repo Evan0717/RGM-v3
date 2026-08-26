@@ -209,7 +209,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\LavaChicken.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\LegendTransition.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Magician.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Psychics.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\RandomPackage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reflector.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reincarnation.cs" />
@@ -257,7 +256,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\RandomCandy.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\ReRoll.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Rush.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Shell.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Sneak.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\StaminaReplenishment.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Supply.cs" />
@@ -355,7 +353,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Mythic\OnePunch.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Normal\Confusion.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Normal\Infection.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Hurger.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Hunger.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Meals.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp0492\Rare\Shield.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Epic\PlagueCurse.cs" />

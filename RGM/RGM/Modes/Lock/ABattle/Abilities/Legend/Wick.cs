@@ -2,7 +2,8 @@ using System.Collections.Generic;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("존 윅", "권총류 데미지가 770% 증가합니다. Com18 1정과 탄약을 얻습니다.", AbilityCategory.Legend, AbilityType.LEGEND_JOHNWICK)]
+[Ability("존 윅", "권총류 데미지가 770% 증가합니다. Com18 1정과 탄약을 얻습니다.",
+    AbilityCategory.Legend, AbilityType.LEGEND_JOHNWICK)]
 public class Wick : Ability
 {
     private static readonly List<ItemType> Pistols =

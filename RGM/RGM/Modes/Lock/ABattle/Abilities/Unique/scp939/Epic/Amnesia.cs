@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp939.Epic;
 
-[Ability("기억 소거", "자신을 기준으로 반경 22m 내의 모든 적에게 기억 소거 효과를 적용합니다.",
+[Ability("기억 소거", "반경 22m 내의 모든 적에게 『기억 소거 · 강화』 효과를 적용합니다.",
     AbilityCategory.Epic, AbilityType.EPIC_SCP939_AMNESIA, RoleAbility.Scp939)]
 
 public class Amnesia : Ability

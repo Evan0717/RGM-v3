@@ -9,11 +9,12 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("딸깍", "지급된 동전을 튕기면 보는 방향에 워크스테이션을 설치합니다. 단, 2% 확률로 즉사합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
+[Ability("딸깍", "지급된 동전을 튕기면 보는 방향에 워크스테이션을 설치합니다. 단, 2% 확률로 즉사합니다.",
+    AbilityCategory.Mythic, AbilityType.MYTHIC_TOOLGUN)]
 public class ToolGun : Ability
 {
     private const float ForwardOffset = 1.5f;
-    private const float DownwardOffset = 0.75f;
+    private const float DownwardOffset = 0.85f;
 
     private ushort _coinSerial;
 

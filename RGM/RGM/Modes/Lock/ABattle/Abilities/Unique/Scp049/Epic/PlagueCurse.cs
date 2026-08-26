@@ -5,7 +5,7 @@ using PlayerStatsSystem;
 namespace RGM.Modes.Abilities.Unique.Scp049.Epic;
 
 [Ability("역병 저주",
-    "상대가 [영웅] 신성방어 능력을 보유 중인 경우, 대상 최대 HP의 100%만큼 피해를 입힙니다.",
+    "상대가 [영웅] 신성방어 능력을 보유 중인 경우, 대상에게 『죽음에 이르는 공격』을 가합니다.",
     AbilityCategory.Epic,
     AbilityType.EPIC_SCP049_PLAGUECURSE,
     RoleAbility.Scp049)]

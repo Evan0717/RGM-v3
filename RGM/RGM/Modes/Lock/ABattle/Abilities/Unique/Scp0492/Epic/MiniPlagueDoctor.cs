@@ -7,7 +7,7 @@ namespace RGM.Modes.Abilities.Unique.Scp0492.Epic;
 [Ability("작은 역병 의사",
     """
     자신의 공격에 심장 마비 효과가 적용됩니다.
-    이미 심장 마비 효과가 있는 대상을 공격 시, 대상을 즉시 처치합니다.
+    이미 심장 마비 효과가 있는 대상을 공격 시, 『죽음에 이르는 공격』을 가합니다.
     """,
     AbilityCategory.Epic,
     AbilityType.EPIC_SCP0492_MINIPLAGUEDOCTOR,

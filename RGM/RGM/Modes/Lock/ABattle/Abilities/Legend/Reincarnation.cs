@@ -10,7 +10,10 @@ using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("리인카네이션", "사망 판정을 받을 시, 60초간 모든 공격에 무적이 되며, 능력치가 상승합니다.\n단, 일정 횟수 이상 적 타격에 실패할 시 사망합니다.", AbilityCategory.Legend, AbilityType.LEGEND_REINCARNATION)]
+[Ability("리인카네이션", """
+                   사망 판정을 받을 시, 60초간 모든 공격에 무적이 되며, 능력치가 상승합니다.
+                   단, 일정 횟수 이상 적 타격에 실패할 시 사망합니다.
+                   """, AbilityCategory.Legend, AbilityType.LEGEND_REINCARNATION)]
 public class Reincarnation : Ability
 {
     private const float ContractDuration = 60f;
