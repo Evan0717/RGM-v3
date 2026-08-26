@@ -34,8 +34,6 @@ public class Glory : Ability
 
         while (Owner.IsAlive)
         {
-            if (Owner.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
-            {
                 foreach (var player in PlayerManager.List)
                 {
                     if (player == Owner || !player.IsAlive) continue;
@@ -43,38 +41,18 @@ public class Glory : Ability
 
                     lightSource.Position = Owner.Position;
 
-                    if (player.IsLookingAt(Owner, fov: 5))
+                    if (!player.IsLookingAt(Owner, fov: 30)) continue;
+
+                    float damage = player.MaxHealth * 0.02f;
+                    if (Owner.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
                     {
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 2f);
+                        player.Hit(Owner, damage);
                         player.EnableEffect(EffectType.Burned, 1, 10f);
-                        player.EnableEffect(EffectType.Flashed, 1, 1.5f);
-                        player.AddHint("따가움", "<b><color=#FFFF00>불타는 안구</color></b>");
                     }
-
-                    else if (player.IsLookingAt(Owner, fov: 30))
-                    {
-                        Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
-                        player.EnableEffect(EffectType.Flashed, 1, 1.5f);
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(0.05f);
-            }
-
-            else
-            {
-                foreach (var player in PlayerManager.List)
-                {
-                    if (!player.TryGetLookPlayer(45f, out Exiled.API.Features.Player target, out _)) continue;
-                    if (Owner != target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
-                    lightSource.Position = Owner.Position;
-
-                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.8f);
+                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
                     player.EnableEffect(EffectType.Flashed, 1, 1.5f);
-                }
 
                 yield return Timing.WaitForSeconds(0.05f);
-
             }
         }
     }
