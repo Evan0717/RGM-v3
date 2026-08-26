@@ -5,7 +5,7 @@ using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("거북 도사", "『피격 상한』이 40까지 적용됩니다.", AbilityCategory.Epic, AbilityType.EPIC_TURTLE)]
+[Ability("거북 도사", "『피격 제한』이 40까지 적용됩니다.", AbilityCategory.Epic, AbilityType.EPIC_TURTLE)]
 public class Turtle : Ability
 {
     private const float MaxDamage = 40f;

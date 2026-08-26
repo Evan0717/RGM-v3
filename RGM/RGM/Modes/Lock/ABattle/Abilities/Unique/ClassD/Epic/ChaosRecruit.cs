@@ -13,12 +13,12 @@ public class ChaosRecruit : Ability
     public override void OnEnabled()
     {
         Vector3 pos = Owner.Position;
+        Owner.Role.Set(RoleTypeId.ChaosConscript, RoleSpawnFlags.AssignInventory);
+        Owner.Position = pos;
 
         Timing.CallDelayed(0.1f, () =>
         {
             if (!Owner.IsDead) return;
-            Owner.Role.Set(RoleTypeId.ChaosConscript, RoleSpawnFlags.AssignInventory);
-            Owner.Position = pos;
             Owner.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
         });
     }

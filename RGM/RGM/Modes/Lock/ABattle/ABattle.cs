@@ -1189,7 +1189,7 @@ public class ABattle : Mode
 
         var abilities = Selections[player];
 
-        for (var i = 0; i < 200; i++)
+        for (var i = 0; i < 40; i++)
         {
             lock (_selectionLock)
             {
@@ -1205,10 +1205,22 @@ public class ABattle : Mode
 
             var text = BuildSelectionText();
             player.AddHint("능력 선택",
-            $"<align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(int)((200 - i) / 10)})</b></size>\n\n<size=30>{text}</size>\n\n<size=25><b>위/아래 키로 선택 후, Enter 키로 확정하세요.</b></size>\n<size=20><color=#bcbcbc><i>[ESC] -> [Settings] -> [Server-specific]</i></color></size></align>\n\n\n\n\n",
-            1.2f);
+                $"""
+                 <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(int)((40 - i) / 2)})</b></size>
 
-            yield return Timing.WaitForSeconds(0.1f);
+                 <size=30>{text}</size>
+
+                 <size=25><b>위/아래 키로 선택 후, Enter 키로 확정하세요.</b></size>
+                 <size=20><color=#bcbcbc><i>[ESC] -> [Settings] -> [Server-specific]</i></color></size></align>
+
+
+
+
+
+                 """,
+            1.1f);
+
+            yield return Timing.WaitForSeconds(0.5f);
         }
 
         AbilityType selectedAbility;
@@ -1446,17 +1458,14 @@ public class ABattle : Mode
             }
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
-                [
-                    AbilityType.LEGEND_HUMAN_SCP008, AbilityType.LEGEND_HUMAN_SCP035,
-                    AbilityType.LEGEND_HUMAN_SCP457, AbilityType.LEGEND_HUMAN_SCP966, 
-                    AbilityType.LEGEND_HUMAN_SCP999, AbilityType.LEGEND_RANDOMPACKAGE
+                [AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST
                 ]).First());
             
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)
         {
-            player.AddAbility(AbilityType.NORMAL_RABBIT);
+            Timing.CallDelayed(Timing.WaitForOneFrame, () => player.AddAbility(AbilityType.NORMAL_RABBIT));
         }
     }
 }

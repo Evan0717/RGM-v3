@@ -38,7 +38,7 @@ public class LavaChicken : Ability
                 foreach (var player in PlayerManager.List.Where(x => HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
                     if (!(Vector3.Distance(player.Position, Owner.Position) <= 6.5f)) continue;
-                    var damage = player.IsScpRole() ? player.MaxHealth * 0.007f : player.MaxHealth * 0.021f;
+                    var damage = player.IsScpRole() ? player.MaxHealth * 0.008f : player.MaxHealth * 0.024f;
 
                     if (player.HasAbility(AbilityType.RARE_UNDINE))
                     {
@@ -57,7 +57,7 @@ public class LavaChicken : Ability
             {
                 Log.Error($"LavaChicken 오류: {e}");
             }
-            yield return Timing.WaitForSeconds(0.0417f);
+            yield return Timing.WaitForSeconds(0.05f);
         }
 
         NetworkServer.Destroy(lava.gameObject);

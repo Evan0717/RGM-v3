@@ -70,8 +70,18 @@ namespace RGM.API.Features
         /// <returns>방해 금지 활성 시 <b>True</b>를 반환합니다.</returns>
         public static bool IsDND(this Player player)
         {
-            if (player.IsNPC) return true;
-            return !Main.Instance.Config.FixedModes.Any() && UsersManager.UsersCache[player.UserId][23] is "1";
+            if (player == null || player.IsNPC)
+                return true;
+
+            if (Main.Instance.Config.FixedModes.Any() ||
+                string.IsNullOrEmpty(player.UserId) ||
+                !UsersManager.UsersCache.TryGetValue(player.UserId, out List<string> userData) ||
+                userData.Count <= 23)
+            {
+                return false;
+            }
+
+            return userData[23] is "1";
         }
 
         /// <summary>

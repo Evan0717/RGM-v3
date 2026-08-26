@@ -15,7 +15,7 @@ namespace RGM.Modes.Abilities.Unique.Scp173.Mythic;
 [Ability("강박증",
     """
     50m 이내의 플레이어가 자신을 강제로 보게 합니다.
-    추가로, 『피격 상한』이 자신의 최대 HP의 0.25%까지 적용됩니다.
+    추가로, 『피격 제한』이 자신의 최대 HP의 0.25%까지 적용됩니다.
     """,
     AbilityCategory.Mythic,
     AbilityType.MYTHIC_SCP173_COMPULSION,

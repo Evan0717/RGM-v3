@@ -137,6 +137,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Satellite.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reflector.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Reincarnation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Replication.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Resurrection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Scream.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SnakeHandRadio.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\SpeedWagon.cs" />
