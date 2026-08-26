@@ -7,13 +7,13 @@ namespace RGM.Modes.Abilities.Dummy;
 
 public class GOCMember : Ability
 {
-    private const float InitHealth = 240f;
+    private const float AddHealth = 140f;
     public override void OnEnabled()
     {
         Timing.CallDelayed(0.1f, () =>
         {
-            Owner.MaxHealth = InitHealth;
-            Owner.Health = InitHealth;
+            Owner.MaxHealth += AddHealth;
+            Owner.Health += AddHealth;
             
             Owner.AddAbility(AbilityType.EPIC_CONTEXPERT);
             Owner.AddAbility(AbilityType.EPIC_TURTLE);

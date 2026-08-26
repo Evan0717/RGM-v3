@@ -29,8 +29,8 @@ public class Glory : Ability
     {
         LightSourceToy lightSource = LightSourceToy.Create();
         lightSource.Color = Color.yellow;
-        lightSource.Intensity = 50;
-        lightSource.Range = 10;
+        lightSource.Intensity = 10;
+        lightSource.Range = 25;
 
         while (Owner.IsAlive)
         {
@@ -58,7 +58,7 @@ public class Glory : Ability
                     }
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(0.05f);
             }
 
             else
@@ -73,7 +73,7 @@ public class Glory : Ability
                     player.EnableEffect(EffectType.Flashed, 1, 1.5f);
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(0.05f);
 
             }
         }

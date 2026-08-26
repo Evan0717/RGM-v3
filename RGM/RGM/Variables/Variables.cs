@@ -44,7 +44,8 @@ namespace RGM.Variables
         public static ShootingTargetToy Target1;
         public static ShootingTargetToy Target2;
         
-        public static readonly TimeSpan BanTime = TimeSpan.TryParse(Main.Instance.Config.BanTime, out var data) ? data : TimeSpan.FromDays(7);
+        public static TimeSpan BanTime =>
+            TimeSpan.TryParse(Main.Instance?.Config?.BanTime, out var data) ? data : TimeSpan.FromDays(7);
 
         // -------------------------------------------------------------------------------------------------
 

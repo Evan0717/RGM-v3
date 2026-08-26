@@ -8,7 +8,10 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("로켓 런처", "공격 시, 10% 확률로 상대방을 하늘로 승천시킬 수 있습니다! (<color=red>SCP</color>는 40%)",
+[Ability("로켓 런처", """
+                  공격 시, 10% 확률로 상대방을 하늘로 승천시킬 수 있습니다!
+                  <color=red>SCP</color>는 40% 확률로 적용되며, 『사망』 효과가 적용됩니다.
+                  """,
     AbilityCategory.Mythic, AbilityType.MYTHIC_ROCKETLAUNCHER)]
 public class RocketLauncher : Ability
 {
@@ -28,14 +31,14 @@ public class RocketLauncher : Ability
     {
         if (ev.Attacker == null || ev.Attacker != Owner || !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
-
+        
         if (_isInRocket.Contains(ev.Player)) return;
         if (ev.Attacker.IsScpRole())
         {
             if (Random.Range(1, 101) > 10) return;
             _isInRocket.Add(ev.Player);
 
-            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
+            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, ignoreDefenses: true));
             Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
             Timing.CallDelayed(1, () =>
@@ -48,7 +51,7 @@ public class RocketLauncher : Ability
             if (Random.Range(1, 101) > 40) return;
             _isInRocket.Add(ev.Player);
 
-            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1));
+            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, ignoreDefenses: true));
             Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
             Timing.CallDelayed(1, () =>

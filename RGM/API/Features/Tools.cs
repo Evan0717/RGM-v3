@@ -1032,7 +1032,7 @@ $"""
             return $"#{colorValue:X6}";
         }
 
-        public static IEnumerator<float> DoRocket(Player attacker, Player player, float speed)
+        public static IEnumerator<float> DoRocket(Player attacker, Player player, float speed, bool ignoreDefenses = false)
         {
             int amnt = 0;
             while (player.Role != RoleTypeId.Spectator)
@@ -1047,14 +1047,16 @@ $"""
                     ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, null);
                     grenade.FuseTime = 0.5f;
                     grenade.SpawnActive(player.Position, attacker);
-                    player.Hit(attacker, player.MaxHealth);
+                    if (ignoreDefenses)
+                        player.Hurt(amount: player.MaxHealth, damageType: DamageType.Crushed, attacker: attacker);
+                    else
+                        player.Hit(attacker, player.MaxHealth);
+
                     grenade = null;
                 }
 
                 yield return float.NegativeInfinity;
             }
-
-            yield break;
         }
 
         public static LabApi.Features.Wrappers.TextToy CreateText(Vector3 pos, Quaternion rot, string text, float time = 20)

@@ -6,7 +6,8 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("도굴꾼", "사망한 아군의 능력 중 하나를 랜덤으로 획득합니다. (4회)", AbilityCategory.Epic, AbilityType.EPIC_GRAVEROBBER)]
+[Ability("도굴꾼", "사망한 아군의 능력 중 하나를 랜덤으로 획득합니다. (4회)", 
+    AbilityCategory.Epic, AbilityType.EPIC_GRAVEROBBER)]
 public class GraveRobber : Ability
 {
     private int _count = 4;

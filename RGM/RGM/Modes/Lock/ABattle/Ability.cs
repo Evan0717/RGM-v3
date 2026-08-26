@@ -403,6 +403,7 @@ public enum AbilityType
     LEGEND_REINCARNATION, // [전설] 리인카네이션
     LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
     LEGEND_GAMBLER, // [전설] 도박사
+    LEGEND_RESURRECTION, // [전설] 리저렉션
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
@@ -423,7 +424,8 @@ public enum AbilityType
 
     // 고대 //
     ANCIENT_ALEPHONE, // [고대] Aleph-1
-    ANCIENT_EXPLOSIVEAMMO, // [고대] 폭발 탄환
+    ANCIENT_EXPLOSIVEAMMO, // [고대] Anti Matter
+    ANCIENT_SATELLITE, // [고대] Celestial
     
     
     // 전용 //
