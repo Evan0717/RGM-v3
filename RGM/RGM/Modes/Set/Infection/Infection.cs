@@ -49,6 +49,7 @@ namespace RGM.Modes
             Round.IsLocked = true;
 
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
+            // Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
 
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -62,6 +63,7 @@ namespace RGM.Modes
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
+            // Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
 
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
@@ -245,6 +247,18 @@ namespace RGM.Modes
             }
             else
                 ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+        }
+
+        private void OnStopping(StoppingEventArgs e)
+        {
+            if (e.Player.Role != RoleTypeId.Scp0492 || e.Player.IsNPC || e.Player.IsHost) return;
+
+            e.Player.Ban(BanTime, $"""
+                                   ------[자동 제재(감염)]------
+                                   사유: SCP-049-2 상태에서 핵을 정지하였습니다.
+                                   해제일: {(BanTime.TotalDays != 0 ? string.Concat(BanTime.TotalDays, "일") : string.Concat(BanTime.TotalHours, "시간"))} 후
+                                   제재소명을 통하여 더 빠르게 해제할 수 있습니다.
+                                   """);
         }
     }
 }

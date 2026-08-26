@@ -76,7 +76,7 @@ namespace RGM.API.Features
                     else
                         SubModeVote.Add(ModeType.None);
                 }
-                List<List<Transform>> Pads = new List<List<Transform>>() { First, Second, Third, Fourth };
+                List<List<Transform>> Pads = [First, Second, Third, Fourth];
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -1258,6 +1258,37 @@ $"""
             Floor = 1 << 0, // 1
             Wall  = 1 << 1, // 2
             Both  = Floor | Wall // 3
+        }
+
+        public static void CallAutoBan(
+            this Player player,
+            string reason,
+            ModeData data,
+            Func<Player, bool> predicate) => CallBan(player, reason, data, BanTime, predicate);
+
+        public static void CallAutoBan(
+            this Player player,
+            string reason,
+            ModeData data,
+            TimeSpan banTime,
+            Func<Player, bool> predicate) => CallBan(player, reason, data, banTime, predicate);
+
+        private static void CallBan(
+            Player player,
+            string reason,
+            ModeData data,
+            TimeSpan banTime,
+            Func<Player, bool> predicate)
+        {
+            if (player.IsNPC || player.IsHost || !predicate(player)) return;
+            
+            player.Ban(banTime, 
+                $"""
+                 -----[자동제재({data.Name})]----- 
+                 사유: {reason} 
+                 제재 해제일: {banTime.Days}일 {banTime.Hours}시간 {banTime.Minutes}분 후
+                  제재 소명을 통하여 더 빠르게 해제하실 수 있습니다.
+                 """);
         }
     }
 }

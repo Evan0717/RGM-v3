@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp939.Rare;
 
@@ -25,6 +26,6 @@ public class Bleeding : Ability
         if (ev.Attacker == null || ev.Attacker.ReferenceHub != scp939.Owner.ReferenceHub) return;
         if (ev.DamageHandler.Type != DamageType.Scp939) return;
 
-        ev.Player.EnableEffect(EffectType.Bleeding, 1, 15f);
+        ev.Player.AddEffect(EffectType.Bleeding, 1, 15f);
     }
 }
