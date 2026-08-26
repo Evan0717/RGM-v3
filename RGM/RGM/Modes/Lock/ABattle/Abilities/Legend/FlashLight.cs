@@ -50,7 +50,7 @@ public class FlashLight : Ability
 
                     if (!player.IsLookingAt(target, fov: 20)) continue;
 
-                    float damage = target.MaxHealth * 0.02f;
+                    float damage = 3f;
                     if (player.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
                     {
                         target.Hit(player, damage);

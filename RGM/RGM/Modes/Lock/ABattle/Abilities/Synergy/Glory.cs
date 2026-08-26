@@ -43,7 +43,7 @@ public class Glory : Ability
 
                     if (!player.IsLookingAt(Owner, fov: 30)) continue;
 
-                    float damage = player.MaxHealth * 0.02f;
+                    float damage = 3f;
                     if (Owner.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
                     {
                         player.Hit(Owner, damage);
