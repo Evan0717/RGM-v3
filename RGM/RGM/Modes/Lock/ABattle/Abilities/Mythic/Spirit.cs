@@ -10,7 +10,11 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 
-[Ability("스피릿", "영혼 상태로 상시 전환됩니다! 5m 반경에 있는 플레이어가 SCP-1344 아이템을 가지고 있을 경우, 즉시 제거합니다.", AbilityCategory.Mythic, AbilityType.MYTHIC_SPIRIT)]
+[Ability("스피릿", """
+                영혼 상태로 상시 전환됩니다!
+                8m 반경에 있는 플레이어가 SCP-1344 아이템을 가지고 있을 경우, 즉시 제거합니다.
+                """,
+    AbilityCategory.Mythic, AbilityType.MYTHIC_SPIRIT)]
 public class Spirit : Ability
 {
     CoroutineHandle _onStarted;
@@ -35,7 +39,7 @@ public class Spirit : Ability
         {
             Owner.EnableEffect(EffectType.Invisible);
 
-            foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 5))
+            foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 8))
             {
                 try
                 {
@@ -44,6 +48,9 @@ public class Spirit : Ability
                         if (item.Type == ItemType.SCP1344)
                             player.RemoveItem(item);
                     }
+
+                    if (player.HasAbility(AbilityType.EPIC_SCP1344))
+                        player.RemoveAbility(AbilityType.EPIC_SCP1344);
                 }
                 catch (Exception e)
                 {

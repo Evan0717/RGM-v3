@@ -343,7 +343,9 @@ namespace RGM.Variables
             {"수렴형 레이저", "찰나의 순간, 아래에서 올라오는 빛을 보게 되겠죠."},
             {"5월 5일", "마음만큼은 어린이날에 머물러 있답니다."},
             {"카피바라", "카피바라~ 카피바라카피바라카피바라카피바라.."},
-            {"찰칵", "연말의 마지막 순간을 박제하는 소리가 들려요."}
+            {"찰칵", "연말의 마지막 순간을 박제하는 소리가 들려요."},
+            {"SCP999", "이 귀여운 생명체는 뭐죠...?"},
+            {"Lightning", "찌리찌리 짜라짜라"}
         };
         public static Dictionary<string, string> SpawnEffects = new Dictionary<string, string>()
         {

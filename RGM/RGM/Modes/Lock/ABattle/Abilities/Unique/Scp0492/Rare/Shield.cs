@@ -13,7 +13,7 @@ namespace RGM.Modes.Abilities.Unique.Scp0492.Rare;
 
 public class Shield : Ability
 {
-    private const float AddHS = 500f;
+    private const float AddHS = 300f;
     private const float AddHSRegen = 5f;
     private const float RegenInterval = 0.2f;
     private const float RegenBlockDuration = 5f;

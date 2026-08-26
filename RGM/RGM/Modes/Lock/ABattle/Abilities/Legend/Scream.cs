@@ -10,7 +10,10 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("괴성", "적을 보고 있을 때 마이크를 키면 모든 적군을 일정 시간동안 행동 불가 상태로 만들고, 무장을 해제한 뒤 15초간 아이템을 들지 못하게 합니다. (쿨타임 60초)\n이후 영향을 받은 대상에게 30초간 출혈 효과를 부여합니다.", AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
+[Ability("괴성", """
+               적을 보고 있을 때 마이크를 키면 모든 적군을 3초간 『기절』 상태로 만들고, 15초간 『무장 해제』 효과를 부여합니다. (쿨타임 60초)
+               이후 영향을 받은 대상에게 30초간 출혈 효과를 부여합니다.
+               """, AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
 public class GmanRoaringSound : Ability
 {
     private const int RoaringSoundCooldownDuration = 60;
@@ -61,7 +64,7 @@ public class GmanRoaringSound : Ability
             player.EnableEffect(EffectType.Flashed, 1, 3f);
             player.EnableEffect(EffectType.Blurred, 1, 15f);
             player.EnableEffect(EffectType.Deafened, 1, 15f);
-            player.EnableEffect(EffectType.SinkHole, 1, 10f);
+            player.EnableEffect(EffectType.SinkHole, 1, 6f);
             player.EnableEffect(EffectType.Slowness, 120, 6f);
             player.EnableEffect(EffectType.Disabled, 1, 15f);
             player.EnableEffect(EffectType.Stained, 1, 5f);

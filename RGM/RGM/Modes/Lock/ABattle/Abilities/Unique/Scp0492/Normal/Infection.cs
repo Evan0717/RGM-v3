@@ -4,7 +4,8 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp0492.Normal;
 
-[Ability("감염", "사망시키면 같은 진영으로 만듭니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP0492_INFECTION, RoleAbility.Scp0492)]
+[Ability("감염", "적 처치 시 대상을 같은 진영으로 만듭니다.",
+    AbilityCategory.Normal, AbilityType.NORMAL_SCP0492_INFECTION, RoleAbility.Scp0492)]
 public class Infection : Ability
 {
     public override void OnEnabled()

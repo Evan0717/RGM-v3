@@ -28,18 +28,18 @@ public class Evade : Ability
     private void OnStalking(StalkingEventArgs ev)
     {
         if (ev.Player != Owner || !ev.IsAllowed) return;
-        Owner.ApplyGodMode(3.6f);
+        Owner.ApplyGodMode(3f);
     }
 
     private void OnExitStalking(ExitStalkingEventArgs ev)
     {
         if (ev.Player != Owner || !ev.IsAllowed) return;
-        Owner.ApplyGodMode(3.6f);
+        Owner.ApplyGodMode(3f);
     }
 
     private void OnTeleporting(TeleportingEventArgs ev)
     {
         if (ev.Player != Owner || !ev.IsAllowed) return;
-        Owner.ApplyGodMode(3.6f);
+        Owner.ApplyGodMode(3f);
     }
 }

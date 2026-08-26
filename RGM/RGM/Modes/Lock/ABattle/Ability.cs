@@ -310,7 +310,6 @@ public enum AbilityType
     NORMAL_EXCHANGE, // [일반] 교환
     NORMAL_RABBIT, // [일반] 토끼뜀
     NORMAL_RANDOMCANDY, // [일반] 트릭 오어 트릿
-    NORMAL_SHELL, // [일반] 껍데기
     NORMAL_CLOAK, // [일반] 망토
     NORMAL_NIGHTOWL, // [일반] 밤눈
 
@@ -389,7 +388,6 @@ public enum AbilityType
     LEGEND_MAGICIAN, // [전설] 마술사
     LEGEND_FLASHLIGHT, // [전설] 플래시라이트
     LEGEND_KILLSTREAK, // [전설] 킬스트릭
-    LEGEND_PSYCHICS, // [전설] 영매
     LEGEND_SCREAM, // [전설] 괴성
     LEGEND_TRANSITION, // [전설] 상급 변이
     LEGEND_CANDYADDICT, // [전설] 마약 중독자

@@ -4,7 +4,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("신성방어", "대부분의 디버프에 면역을 가집니다.", AbilityCategory.Epic, AbilityType.EPIC_HOLYPROTECTION)]
+[Ability("홀리 프로텍션", "자신에게 『상태이상 면역』을 부여합니다.", AbilityCategory.Epic, AbilityType.EPIC_HOLYPROTECTION)]
 public class HolyProtection : Ability
 {
     public override void OnEnabled()

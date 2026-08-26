@@ -9,7 +9,11 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("이계의 빛", "시공의 빛으로 적을 멸합니다.\n지급된 동전으로 상대 타격 시, 상대의 현재 체력, 실드를 1로 만듭니다.\n타격 시 10초간 HS 회복이 차단되며, 재사용 대기시간 90초가 적용됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_OTHERWORLDLIGHT)]
+[Ability("이계의 빛", """
+                  시공의 빛으로 적을 멸합니다.
+                  지급된 동전으로 상대 타격 시, 상대의 현재 체력, 실드를 1로 만듭니다. 해당 공격은 『관통』 효과가 적용됩니다.
+                  타격 시 10초간 HS 회복이 차단되며, 재사용 대기시간 90초가 적용됩니다.
+                  """, AbilityCategory.Legend, AbilityType.LEGEND_OTHERWORLDLIGHT)]
 public class OtherworldLight : Ability
 {
     private const float HsBlockDuration = 10f;

@@ -16,9 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using CustomPlayerEffects;
-using Exiled.API.Enums;
 using Exiled.API.Features.Doors;
-using Exiled.API.Features.Items;
 using Mirror;
 using NetworkManagerUtils.Dummies;
 using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
@@ -109,12 +107,13 @@ public class ABattle : Mode
         {"신화", "<b><color=#F52500>신화</color></b>"},
         {"고대", "<b><color=#008000>고대</color></b>"},
         {"전용", "<b><color=#F7819F>전용</color></b>" },
-        {"알 수 없음", "<b><color=#000000>알수없음</b>"}
+        {"알 수 없음", "<b><color=#333333>알수없음</b>"}
     };
     public static readonly Dictionary<string, string> ExtraModes = new()
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
+        {"테무산 반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
         {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."},
@@ -697,8 +696,10 @@ public class ABattle : Mode
 
     // 플레이어에게 특정 능력을 부여
     // reflectorChain: LEGEND_REFLECTOR로 인한 연쇄 횟수 (최대 3회)
+    // extraReflectorChain: 추가 모드 반사경으로 인한 연쇄 횟수 (최대 2회)
     // allowReflector: false면 반사경 연쇄를 건너뜀 (복제 등)
-    public bool AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true)
+    public bool AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true,
+        int extraReflectorChain = 0)
     {
         if (player == null) return false;
 
@@ -748,12 +749,21 @@ public class ABattle : Mode
                 Tools.PlayGlobalAudio(name, 2f);
         }
 
-        // LEGEND_REFLECTOR: 50% 확률로 동일 능력 추가 획득. 동일 능력 연쇄는 최대 3회까지.
-        if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
-            reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR))
+        if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient)
         {
-            if (Random.Range(1, 101) <= 50)
-                AddAbility(player, type, reflectorChain + 1, allowReflector);
+            // LEGEND_REFLECTOR: 50% 확률로 동일 능력 추가 획득. 동일 능력 연쇄는 최대 3회까지.
+            if (reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR) &&
+                Random.Range(1, 101) <= 50)
+            {
+                AddAbility(player, type, reflectorChain + 1, allowReflector, extraReflectorChain);
+            }
+
+            // 추가 모드 반사경: 15% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 2회까지.
+            if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
+                Random.Range(1, 101) <= 25)
+            {
+                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 1);
+            }
         }
 
         Log.Info("AddAbility called with " + player.Nickname + " and " + type);
@@ -1251,30 +1261,30 @@ public class ABattle : Mode
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
 
-        var random = Random.Range(1, 10001); //0.01 단위
+        var random = Random.Range(1, 100001); // 0.001 단위
         var hasBlackMarket = player.HasAbility(AbilityType.SYNERGY_BLACKMARKET);
 
         if (CurrentExtraModes.Contains("잔칫상"))
         {
             return random switch
             {
-                <= 2 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.02
-                <= 15 => AbilityCategory.Mythic, // 0.15
-                <= 70 => AbilityCategory.Legend, // 0.70
-                <= 985 => AbilityCategory.Epic, // 9.85
-                <= 3858 => AbilityCategory.Rare, // 38.58
-                _ => AbilityCategory.Normal // 50.70
+                <= 10 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.010
+                <= 150 => AbilityCategory.Mythic, // 0.150
+                <= 700 => AbilityCategory.Legend, // 0.700
+                <= 9850 => AbilityCategory.Epic, // 9.850
+                <= 38580 => AbilityCategory.Rare, // 38.580
+                _ => AbilityCategory.Normal // 50.710
             };
         }
 
         return random switch
         {
-            1 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.01
-            <= 5 => AbilityCategory.Mythic, // 0.05
-            <= 25 => AbilityCategory.Legend, // 0.25
-            <= 575 => AbilityCategory.Epic, // 5.75
-            <= 3185 => AbilityCategory.Rare, // 31.55
-            _ => AbilityCategory.Normal // 62.40
+            <= 5 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.005
+            <= 50 => AbilityCategory.Mythic, // 0.050
+            <= 250 => AbilityCategory.Legend, // 0.250
+            <= 5750 => AbilityCategory.Epic, // 5.750
+            <= 31850 => AbilityCategory.Rare, // 31.850
+            _ => AbilityCategory.Normal // 62.405
         };
     }
 
@@ -1282,9 +1292,9 @@ public class ABattle : Mode
     {
         return category switch
         {
-            AbilityCategory.Ancient => 45,
-            AbilityCategory.Mythic => 35,
-            AbilityCategory.Legend => 25,
+            AbilityCategory.Ancient => 40,
+            AbilityCategory.Mythic => 30,
+            AbilityCategory.Legend => 22,
             AbilityCategory.Epic => 15,
             AbilityCategory.Rare => 10,
             AbilityCategory.Normal => 5,
@@ -1439,7 +1449,7 @@ public class ABattle : Mode
                 [
                     AbilityType.LEGEND_HUMAN_SCP008, AbilityType.LEGEND_HUMAN_SCP035,
                     AbilityType.LEGEND_HUMAN_SCP457, AbilityType.LEGEND_HUMAN_SCP966, 
-                    AbilityType.LEGEND_HUMAN_SCP999
+                    AbilityType.LEGEND_HUMAN_SCP999, AbilityType.LEGEND_RANDOMPACKAGE
                 ]).First());
             
         }

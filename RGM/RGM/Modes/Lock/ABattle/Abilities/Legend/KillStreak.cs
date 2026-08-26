@@ -6,7 +6,8 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("킬스트릭", "적을 처치할 때마다 새로운 능력을 얻습니다. (인간 진영의 경우 능력 12개를 지급받습니다.)", AbilityCategory.Legend, AbilityType.LEGEND_KILLSTREAK)]
+[Ability("킬스트릭", "적을 처치할 때마다 새로운 능력을 얻습니다. (인간 진영의 경우 능력 12개를 지급받습니다.)",
+    AbilityCategory.Legend, AbilityType.LEGEND_KILLSTREAK)]
 public class KillStreak : Ability
 {
 

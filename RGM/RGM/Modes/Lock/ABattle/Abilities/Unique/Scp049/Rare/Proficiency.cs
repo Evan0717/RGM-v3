@@ -4,7 +4,7 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Unique.Scp049.Rare;
 
-[Ability("능수능란", "상대 처치 시 대상을 즉시 049-2로 만듭니다.", AbilityCategory.Rare, AbilityType.RARE_SCP049_PROFICIENCY, RoleAbility.Scp049)]
+[Ability("능수능란", "처치 시 대상을 즉시 049-2로 만듭니다.", AbilityCategory.Rare, AbilityType.RARE_SCP049_PROFICIENCY, RoleAbility.Scp049)]
 public class Proficiency : Ability
 {
     public override void OnEnabled()

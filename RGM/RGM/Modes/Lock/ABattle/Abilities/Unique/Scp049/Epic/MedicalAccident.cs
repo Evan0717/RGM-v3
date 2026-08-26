@@ -8,7 +8,7 @@ namespace RGM.Modes.Abilities.Unique.Scp049.Epic;
 
 [Ability("의료 사고",
     """
-    SCP-049의 F 스킬 사용 시, 적용한 대상에게 심장 마비 효과를 부여하고, 이후 049가 공격한 판정을 입힙니다.
+    SCP-049의 F 스킬 사용 시, 대상에게 『죽음에 이르는 공격』을 가합니다.
     <color=#DF0101>[전용 신화]</color> PANDEMIC 능력을 보유 중인 경우, <color=#BF40BF>[전용 영웅]</color> 의료 사고 능력을 획득할 수 없습니다.
     """,
     AbilityCategory.Epic,

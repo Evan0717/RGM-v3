@@ -11,8 +11,8 @@ namespace RGM.Modes.Abilities.Unique.Scp049.Legend;
 
 [Ability("전염병",
     """
-    자신과 아군을 제외한 상대 중, 서로 6m 이내에 있는 대상에게 『사회적 거리두기 · 봉쇄』 효과를 적용합니다.
-    해당 효과는 디버프 제거 효과와 무적 효과를 무시합니다.
+    획득 시, 서로 6m 이내에 있는 적군에게 『사회적 거리두기 · 봉쇄』 효과를 적용합니다.
+    해당 효과는 『파열』 효과가 적용됩니다.
     """,
     AbilityCategory.Legend,
     AbilityType.LEGEND_SCP049_CONTAGION,

@@ -4,7 +4,8 @@ using PlayerRoles;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("격리 전문가", "SCP 개체에 가하는 데미지가 100%p 증가합니다(999, 035는 제외).", AbilityCategory.Epic, AbilityType.EPIC_CONTEXPERT)]
+[Ability("격리 전문가", "SCP 개체에 가하는 데미지가 100%p 증가합니다(999, 035는 제외).",
+    AbilityCategory.Epic, AbilityType.EPIC_CONTEXPERT)]
 public class ContExpert : Ability
 {
     private readonly List<RoleTypeId> _scpRoles =

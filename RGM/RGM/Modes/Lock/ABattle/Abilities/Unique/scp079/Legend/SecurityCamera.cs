@@ -8,7 +8,7 @@ using Exiled.API.Features.Roles;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Legend;
 
-[Ability("감시 카메라", "자신이 보는 대상에게 피해를 입힙니다.(0.1초당 1데미지)", AbilityCategory.Legend, AbilityType.LEGEND_SCP079_SECURITYCAMERA, RoleAbility.Scp079)]
+[Ability("감시 카메라", "자신이 보는 대상에게 피해를 입힙니다.(0.2초당 대상 최대 HP의 2% 데미지)", AbilityCategory.Legend, AbilityType.LEGEND_SCP079_SECURITYCAMERA, RoleAbility.Scp079)]
 public class SecurityCamera : Ability
 {
     CoroutineHandle SecurityCameraHandle;
@@ -34,7 +34,7 @@ public class SecurityCamera : Ability
                         if (player == null) continue;
                         if (!HitboxIdentity.IsEnemy(Owner.ReferenceHub, player.ReferenceHub)) continue;
 
-                        var damage = player.AbilityCount(AbilityType.NORMAL_SHELL) + 1;
+                        var damage = player.MaxHealth * 0.02f;
 
                         player.AddHint("알림", $"<color=red>SCP-079</color>에게 감시당하고 있습니다...", 0.5f);
 
@@ -49,7 +49,7 @@ public class SecurityCamera : Ability
                 Log.Error($"SecurityCamera Error : {e}");
             }
 
-            yield return Timing.WaitForSeconds(0.1f);
+            yield return Timing.WaitForSeconds(0.2f);
         }
     }
 

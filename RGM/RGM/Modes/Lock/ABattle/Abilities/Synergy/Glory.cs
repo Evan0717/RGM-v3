@@ -46,7 +46,6 @@ public class Glory : Ability
                     if (player.IsLookingAt(Owner, fov: 5))
                     {
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 2f);
-                        player.Hit(Owner, player.AbilityCount(AbilityType.NORMAL_SHELL) + 1);
                         player.EnableEffect(EffectType.Burned, 1, 10f);
                         player.EnableEffect(EffectType.Flashed, 1, 1.5f);
                         player.AddHint("따가움", "<b><color=#FFFF00>불타는 안구</color></b>");
