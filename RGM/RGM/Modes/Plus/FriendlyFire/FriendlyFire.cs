@@ -38,7 +38,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
 
         public static FriendlyFire Instance;
 
-        public const float Meleedamage = 25f;
+        private const float Meleedamage = 25f;
         List<Player> HumanMeleeCooldown = new();
         int Scp106AttackTeamCoolDown = 0;
         List<Player> Scp106Stacks = new();
@@ -46,7 +46,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
         private CoroutineHandle _onModeStarted;
         private CoroutineHandle _autoWarhead;
 
-        Harmony harmony;
+        private Harmony harmony;
 
         public override void OnEnabled()
         {

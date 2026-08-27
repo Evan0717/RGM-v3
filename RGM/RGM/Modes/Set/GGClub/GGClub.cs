@@ -138,7 +138,7 @@ namespace RGM.Modes
                                     player.Kill("황금색 발판을 밟지 못한 자여.");
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             if (player.IsAlive && !player.IsNPC)
                                 player.Kill("황금색 발판을 밟지 못한 자여..");

@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace RGM.Modes
+﻿namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.JohnWick)]
     public class JohnWick : Mode
     {
         public override string Name => "존 윅";
-        public override string Description => "권총류 무기의 데미지가 400% 상승합니다.";
+        public override string Description => "권총류 무기의 데미지가 일정 배율로 상승합니다.";
         public override string Detail =>
 """
 COM-15
@@ -28,23 +26,17 @@ COM-45
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         }
 
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        private void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
-            if (ev.Attacker != null)
+            if (ev.Attacker == null) return;
+            ev.Amount *= ev.Attacker.CurrentItem.Type switch
             {
-                List<ItemType> Pistols = new List<ItemType>()
-                {
-                    ItemType.GunCOM15,
-                    ItemType.GunCOM18,
-                    ItemType.GunCom45,
-                    ItemType.GunRevolver
-                };
-
-                if (Pistols.Contains(ev.Attacker.CurrentItem.Type))
-                {
-                    ev.DamageHandler.Damage = 4 * ev.DamageHandler.Damage;
-                }
-            }
+                ItemType.GunCOM15 => 6.5f,
+                ItemType.GunCOM18 => 3.8f,
+                ItemType.GunCom45 => 2.6f,
+                ItemType.GunRevolver => 1.8f,
+                _ => 1f
+            };
         }
     }
 }

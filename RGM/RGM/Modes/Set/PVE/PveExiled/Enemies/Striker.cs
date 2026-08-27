@@ -212,7 +212,7 @@ namespace RGM.Modes.PveExiledSystem.Enemies
             {
                 if (player.Nickname != "Tester") return false;
             }
-            if (player.Role.Type != RoleTypeId.NtfSpecialist) return false;
+            if (player.Role.Type != RoleTypeId.Scientist) return false;
             return true;
         }
     }

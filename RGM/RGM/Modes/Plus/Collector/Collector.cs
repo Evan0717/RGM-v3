@@ -16,11 +16,7 @@ namespace RGM.Modes
         public override string Name => "수집가";
         public override string Description => "SCP 아이템 3개를 가지고 시작합니다.";
         public override string Detail =>
-"""
-이름에 <color=#FE2E2E>SCP</color>가 들어가는 모든 아이템 중에서 랜덤으로 3개를 지급받고 시작합니다.
-
-<color=#FE2E2E>SCP</color>의 경우에는 하나의 <b><color=#FE2E2E>SCP</color> 아이템</b>만 지급받습니다.
-""";
+            "이름에 <color=#FE2E2E>SCP</color>가 들어가는 모든 아이템 중에서 랜덤으로 3개를 지급받고 시작합니다.";
         public override string Color => "FFBF00";
 
         public static Collector Instance;
@@ -41,7 +37,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
@@ -54,12 +50,12 @@ namespace RGM.Modes
             yield return 0;
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        private static void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Timing.RunCoroutine(Spawned(ev.Player));
         }
 
-        public IEnumerator<float> Spawned(Player player)
+        private static IEnumerator<float> Spawned(Player player)
         {
             if (player.Role.Type == RoleTypeId.Scp079 || !player.IsAlive || player.IsNonePlayer())
                 yield break;

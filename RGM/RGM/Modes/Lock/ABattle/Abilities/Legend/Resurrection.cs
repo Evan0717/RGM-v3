@@ -23,13 +23,17 @@ public class Resurrection : Ability
             .Where(role => role.IsScp() && role is not RoleTypeId.Scp0492 and not RoleTypeId.Scp079)
     ];
 
+    private static readonly List<AbilityType> ExceptAbilities =
+    [
+        AbilityType.LEGEND_RESURRECTION,
+        AbilityType.EPIC_PRIEST,
+        AbilityType.LEGEND_CATACLYSMGENERATOR,
+        AbilityType.LEGEND_REPLICATION
+    ];
+
     public override void OnEnabled()
     {
         Timing.RunCoroutine(Resurrect());
-    }
-
-    public override void OnDisabled()
-    {
     }
 
     private IEnumerator<float> Resurrect()
@@ -37,8 +41,7 @@ public class Resurrection : Ability
         List<AbilityType> transferableAbilities = Owner.GetAbilities()
             .Where(ability => ability.Data.RoleAbility == RoleAbility.None &&
                               ability.Data.Category is >= AbilityCategory.Normal and <= AbilityCategory.Legend &&
-                              ability.Data.AbilityType is not AbilityType.LEGEND_RESURRECTION
-                                  and not AbilityType.EPIC_PRIEST)
+                              !ExceptAbilities.Contains(ability.Data.AbilityType))
             .Select(ability => ability.Data.AbilityType)
             .ToList();
 

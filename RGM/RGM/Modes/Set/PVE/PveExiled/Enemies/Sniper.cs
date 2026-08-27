@@ -109,7 +109,7 @@ namespace RGM.Modes.PveExiledSystem.Enemies
             {
                 yield return Timing.WaitForSeconds(updateDuration);
                 FollowAndLook();
-                if (targetPlayer == null || targetPlayer.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist)
+                if (targetPlayer == null || targetPlayer.Role.Type != PlayerRoles.RoleTypeId.Scientist)
                 {
                     doUnzoom();
                     continue;
