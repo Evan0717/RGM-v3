@@ -49,7 +49,7 @@ namespace RGM.Modes
             Round.IsLocked = true;
 
             Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
-            // Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
+            Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
 
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -63,7 +63,7 @@ namespace RGM.Modes
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
-            // Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
+            Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
 
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
@@ -76,7 +76,7 @@ namespace RGM.Modes
             audio.IsPaused = true;
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
@@ -132,7 +132,10 @@ namespace RGM.Modes
             {
                 Round.IsLocked = false;
                 IsHumanEnd = true;
-                Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsHuman).ToList(), PlayerManager.List.Where(x => x.IsHuman).Count() == 1 ? 10 : 1));
+                Timing.RunCoroutine(Tools.SetWinner(
+                    PlayerManager.List.Where(x => x.IsHuman).ToList(), 
+                    PlayerManager.List.Count(x => x.IsHuman) == 1 
+                        ? PlayerManager.List.Count : 1));
 
                 foreach (var player in PlayerManager.List)
                 {
@@ -144,11 +147,11 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> CheckEnd()
+        private IEnumerator<float> CheckEnd()
         {
             while (!Round.IsEnded)
             {
-                if (PlayerManager.List.Where(x => x.IsHuman).Count() < 1)
+                if (PlayerManager.List.Count(x => x.IsHuman) < 1)
                 {
                     Round.IsLocked = false;
                     Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492).ToList(), 1));
@@ -172,12 +175,12 @@ namespace RGM.Modes
             }
         }
 
-        public void OnVerified(VerifiedEventArgs ev)
+        private void OnVerified(VerifiedEventArgs ev)
         {
             ev.Player.Kill("동료들과 함께 인간을 섬멸하십시오.");
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
@@ -204,7 +207,7 @@ namespace RGM.Modes
             });
         }
 
-        public void OnInteractingDoor(InteractingDoorEventArgs ev)
+        private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
             if (HostZombies.Contains(ev.Player))
             {
@@ -215,7 +218,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> OnDied(DiedEventArgs ev)
+        private IEnumerator<float> OnDied(DiedEventArgs ev)
         {
             for (int i = 0; i < 9; i++)
             {
@@ -240,7 +243,7 @@ namespace RGM.Modes
                     else
                         ev.Player.Position = zombies.Select(x => x.Position).ToList().GetRandomValue();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ev.Player.Position = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList().GetRandomValue();
                 }
@@ -249,16 +252,11 @@ namespace RGM.Modes
                 ev.Player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
         }
 
-        private void OnStopping(StoppingEventArgs e)
+        private static void OnStopping(StoppingEventArgs ev)
         {
-            if (e.Player.Role != RoleTypeId.Scp0492 || e.Player.IsNPC || e.Player.IsHost) return;
-
-            e.Player.Ban(BanTime, $"""
-                                   ------[자동 제재(감염)]------
-                                   사유: SCP-049-2 상태에서 핵을 정지하였습니다.
-                                   해제일: {(BanTime.TotalDays != 0 ? string.Concat(BanTime.TotalDays, "일") : string.Concat(BanTime.TotalHours, "시간"))} 후
-                                   제재소명을 통하여 더 빠르게 해제할 수 있습니다.
-                                   """);
+            if (ev.Player.Role != RoleTypeId.Scp0492 || ev.Player.IsNPC) return;
+            
+            ev.IsAllowed = false;
         }
     }
 }
