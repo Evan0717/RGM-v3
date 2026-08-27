@@ -13,6 +13,7 @@ public class FlashLight : Ability
 {
     CoroutineHandle _onStarted;
     private ushort _flashLightSerial;
+    
 
     public override void OnEnabled()
     {
@@ -42,33 +43,20 @@ public class FlashLight : Ability
              player.CurrentItem != null &&
              _flashLightSerial == player.CurrentItem.Serial))
             {
-                if (player.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
+                foreach (var target in PlayerManager.List.Where(p => p != null && p.IsAlive))
                 {
-                    foreach (var target in PlayerManager.List.Where(p => p != null && p.IsAlive))
+                    if (target == player) continue;
+                    if (!HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
+
+                    if (!player.IsLookingAt(target, fov: 20)) continue;
+
+                    float damage = 3f;
+                    if (player.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
                     {
-                        if (target == player) continue;
-                        if (!HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
-
-                        if (player.IsLookingAt(target, fov: 5))
-                        {
-                            Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 2f);
-                            target.EnableEffect(EffectType.Burned, 1, 10f);
-                            target.EnableEffect(EffectType.Flashed, 1, 1.5f);
-                            target.AddHint("따가움", "<b><color=#FFFF00>불타는 안구</color></b>");
-                        }
-                        else if (player.IsLookingAt(target, fov: 20))
-                        {
-                            Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
-                            target.EnableEffect(EffectType.Flashed, 1, 1.5f);
-                        }
+                        target.Hit(player, damage);
+                        target.EnableEffect(EffectType.Burned, 1, 10f);
                     }
-                }
-                else
-                {
-                    if (!player.TryGetLookPlayer(45, out var target, out _)) continue;
-                    if (player == target || !HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
-
-                    Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 0.8f);
+                    Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);
                     target.EnableEffect(EffectType.Flashed, 1, 1.5f);
                 }
             }
