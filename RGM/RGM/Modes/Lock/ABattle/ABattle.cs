@@ -1198,6 +1198,7 @@ public class ABattle : Mode
                     Selections.Remove(player);
                     SelectionCursor.Remove(player);
                     IsSelecting[player] = false;
+                    player.AddHint("능력 선택", "", 0.1f);
 
                     yield break;
                 }
@@ -1206,7 +1207,7 @@ public class ABattle : Mode
             var text = BuildSelectionText();
             player.AddHint("능력 선택",
                 $"""
-                 <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(int)((40 - i) / 2)})</b></size>
+                 <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(40 - i) / 2})</b></size>
 
                  <size=30>{text}</size>
 
@@ -1236,6 +1237,7 @@ public class ABattle : Mode
             IsSelecting[player] = false;
         }
 
+        player.AddHint("능력 선택", "", 0.1f);
         player.AddAbility(selectedAbility);
 
         yield break;
@@ -1347,7 +1349,7 @@ public class ABattle : Mode
             return false;
         }
 
-        player.AddHint("/?/", "", 0.1f);
+        player.AddHint("능력 선택", "", 0.1f);
         response = $"{index}번 능력 선택 완료!";
         return true;
     }
