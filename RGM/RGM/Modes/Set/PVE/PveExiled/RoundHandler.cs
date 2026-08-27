@@ -40,9 +40,7 @@ namespace RGM.Modes.PveExiledSystem
         private SpecialWave specialWave;
         private int cursor = 0;
 
-        AudioPlayer globalBGM;
-
-        AudioPlayer glabalSFX;
+        private AudioClipPlayback _globalBGM;
 
         public void OnRoundStarted()
         {
@@ -67,35 +65,40 @@ namespace RGM.Modes.PveExiledSystem
                 door.IsOpen = (door.Name != "INTERCOM" && door.Name != "Unsecured" && door.Type != DoorType.EscapePrimary);
                 if (Bdoor != null && !door.IsOpen)
                 {
-                    Bdoor.MaxHealth = 1000000;
-                    Bdoor.Health = 1000000;
+                    Bdoor.IsDestroyed = false;
                 }
             }
             foreach (Room room in Room.List)//Room for
             {
                 if (room.Zone != ZoneType.Entrance) continue;
-                if (room.Type == RoomType.EzVent || room.Type == RoomType.EzCollapsedTunnel || room.Type == RoomType.EzShelter)
+                switch (room.Type)
                 {
-                    if (room.Type == RoomType.EzCollapsedTunnel || room.Type == RoomType.EzShelter)
+                    case RoomType.EzVent or RoomType.EzCollapsedTunnel or RoomType.EzShelter:
                     {
-                        enemySpawnPoints.Add(room.Doors.First().Position + Vector3.up);
+                        if (room.Type is RoomType.EzCollapsedTunnel or RoomType.EzShelter)
+                        {
+                            enemySpawnPoints.Add(room.Doors.First().Position + Vector3.up);
+                        }
+                        else
+                        {
+                            enemySpawnPoints.Add(room.Position + Vector3.up);
+                        }
+                        continue;
                     }
-                    else
+                    case RoomType.EzUpstairsPcs:
+                        playerSpawnPoint = room.Position + Vector3.up;
+                        continue;
+                    case RoomType.EzCheckpointHallwayA:
+                    case RoomType.EzCheckpointHallwayB:
+                    case RoomType.EzGateA:
+                    case RoomType.EzGateB:
                     {
-                        enemySpawnPoints.Add(room.Position + Vector3.up);
-                    }
-                    continue;
-                }
-                if (room.Type == RoomType.EzUpstairsPcs)
-                {
-                    playerSpawnPoint = room.Position + Vector3.up;
-                    continue;
-                }
-                if (room.Type == RoomType.EzCheckpointHallwayA || room.Type == RoomType.EzCheckpointHallwayB || room.Type == RoomType.EzGateA || room.Type == RoomType.EzGateB)
-                {
-                    foreach (Door door in room.Doors)
-                    {
-                        door.IsOpen = false;
+                        foreach (Door door in room.Doors)
+                        {
+                            door.IsOpen = false;
+                        }
+
+                        break;
                     }
                 }
             }
@@ -129,15 +132,9 @@ namespace RGM.Modes.PveExiledSystem
 
             enemySpawnPoints.Clear();
 
-            if (globalBGM != null)
-            {
-                globalBGM.RemoveAllClips();
-                globalBGM.RemoveSpeaker("Main");
-                globalBGM.Destroy();
-                glabalSFX.RemoveAllClips();
-                glabalSFX.RemoveSpeaker("Main");
-                glabalSFX.Destroy();
-            }//destroyAudioplayer
+            if (_globalBGM != null)
+                _globalBGM.IsPaused = true;
+            _globalBGM = null;
 
             //이벤트해제
             if (waveConfig != null)
@@ -148,8 +145,8 @@ namespace RGM.Modes.PveExiledSystem
                 Exiled.Events.Handlers.Map.PlacingBulletHole -= waveConfig.OnPlacingBulletHole;
                 Exiled.Events.Handlers.Server.RespawningTeam -= waveConfig.OnRespawningTeam;
                 Exiled.Events.Handlers.Map.AnnouncingScpTermination -= waveConfig.OnAnnouncingScpTermination;
-                Exiled.Events.Handlers.Player.ChangingRole -= waveConfig.OnChangingRole;
-                Exiled.Events.Handlers.Player.ThrownProjectile -= waveConfig.OnThrownProjectile;
+                PlayerEvents.ChangingRole -= waveConfig.OnChangingRole;
+                PlayerEvents.ThrownProjectile -= waveConfig.OnThrownProjectile;
             }
             waveConfig = null;
 
@@ -197,7 +194,7 @@ namespace RGM.Modes.PveExiledSystem
                     foreach (Player player in Player.List)//투표스폰
                     {
                         if (!IsValidPlayer(player)) continue;
-                        player.Role.Set(RoleTypeId.Tutorial, SpawnReason.ForceClass);
+                        player.Role.Set(RoleTypeId.Tutorial);
                         Timing.CallDelayed(1f, () =>
                         {
                             if (player == null || player.Role.Type != RoleTypeId.Tutorial) return;
@@ -211,10 +208,10 @@ namespace RGM.Modes.PveExiledSystem
                     dummyList[0].authManager.syncMode = (SyncMode)ClientInstanceMode.Dummy;
                     dummyList[1].authManager.syncMode = (SyncMode)ClientInstanceMode.Dummy;
                     dummyList[2].authManager.syncMode = (SyncMode)ClientInstanceMode.Dummy;
-                    Player.Get(dummyList[0]).Role.Set(RoleTypeId.ClassD, SpawnReason.ForceClass);
-                    Player.Get(dummyList[1]).Role.Set(RoleTypeId.ChaosMarauder, SpawnReason.ForceClass);
+                    Player.Get(dummyList[0]).Role.Set(RoleTypeId.ClassD);
+                    Player.Get(dummyList[1]).Role.Set(RoleTypeId.ChaosMarauder);
                     Player.Get(dummyList[1]).ClearInventory();
-                    Player.Get(dummyList[2]).Role.Set(RoleTypeId.Scp939, SpawnReason.ForceClass);
+                    Player.Get(dummyList[2]).Role.Set(RoleTypeId.Scp173);
                     dummyList[0].transform.position = spawnPoint + hang * 5;
                     dummyList[1].transform.position = spawnPoint;
                     dummyList[2].transform.position = spawnPoint + hang * -5;
@@ -253,9 +250,15 @@ namespace RGM.Modes.PveExiledSystem
                             }
                         }
 
-                        Map.ShowHint($"<color=\"orange\">보통</color>: {difficultyVote[0]}\n\n<color=\"green\">어려움</color>: {difficultyVote[1]}\n\n<color=\"red\">지옥</color>: {difficultyVote[2]}", 1);
+                        Map.ShowHint($"""
+                                      <color="orange">보통</color>: {difficultyVote[0]}
 
-                        yield return Timing.WaitForSeconds(1);
+                                      <color="green">어려움</color>: {difficultyVote[1]}
+
+                                      <color="red">지옥</color>: {difficultyVote[2]}
+                                      """, 1.01f);
+
+                        yield return Timing.WaitForSeconds(1f);
                     }
                     DummyUtils.DestroyAllDummies();
                     int selected = 0;
@@ -275,18 +278,9 @@ namespace RGM.Modes.PveExiledSystem
                 Exiled.Events.Handlers.Map.PlacingBulletHole += waveConfig.OnPlacingBulletHole;
                 Exiled.Events.Handlers.Server.RespawningTeam += waveConfig.OnRespawningTeam;
                 Exiled.Events.Handlers.Map.AnnouncingScpTermination += waveConfig.OnAnnouncingScpTermination;
-                Exiled.Events.Handlers.Player.ChangingRole += waveConfig.OnChangingRole;
-                Exiled.Events.Handlers.Player.ThrownProjectile += waveConfig.OnThrownProjectile;
+                PlayerEvents.ChangingRole += waveConfig.OnChangingRole;
+                PlayerEvents.ThrownProjectile += waveConfig.OnThrownProjectile;
 
-                //스피커생성
-                glabalSFX = AudioPlayer.CreateOrGet($"SeigeGlobalSFX", onIntialCreation: (p) =>
-                {
-                    Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-                });
-                globalBGM = AudioPlayer.CreateOrGet($"SeigeGlobalSFX", onIntialCreation: (p) =>
-                {
-                    Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-                });
             }
             yield return Timing.WaitForSeconds(5);
             bool won = true;
@@ -360,10 +354,6 @@ namespace RGM.Modes.PveExiledSystem
                     {
                         if (spawnQueue.Count <= 0) break;
                         string random = spawnQueue.Last();
-                        /*if (spawnQueue.Count % 20 == 0)
-                        {
-                            Map.CleanAllRagdolls();
-                        }*/
                         spawnQueue.RemoveAt(spawnQueue.Count - 1);
                         SpawnEnemy(random);
                         if (enemies.Count >= maxEnemy)
@@ -378,32 +368,34 @@ namespace RGM.Modes.PveExiledSystem
                 else if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 0.3f)
                 {
                     //스페셜웨이브
-                    Type[] types = {
+                    Type[] types = [
                     typeof(SpecialWaves.Blackout),
                     typeof(SpecialWaves.DemolisherRush),
                     typeof(SpecialWaves.Spirit),
                     typeof(SpecialWaves.Mirrored),
-                    typeof(SpecialWaves.Upgraded)};
+                    typeof(SpecialWaves.Upgraded)
+                    ];
 
                     Type selectedType = types[UnityEngine.Random.Range(0, types.Length)];
                     specialWave = (SpecialWave)Activator.CreateInstance(selectedType);
 
                     mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: $"스페셜 웨이브: {specialWave.SpecialWaveName}");
 
-                    glabalSFX.AddClip("SpecialWaveSound");
+                    Tools.PlayGlobalAudio("SpecialWaveSound", isNoNotice: true);
 
                     yield return Timing.WaitForSeconds(7f);
 
-                    globalBGM.AddClip(specialWave.SoundtrackName, loop: true);
+                    _globalBGM = Tools.PlayGlobalAudio(specialWave.SoundtrackName, loop: true, isNoNotice: true);
                     specialWave.Enable(this, waveConfig, waveInfo);
                     while (!specialWave.Ended) yield return Timing.WaitForSeconds(1);//ㄱㄷ22
-                    globalBGM.RemoveClipByName(specialWave.SoundtrackName);
+                    _globalBGM.IsPaused = true;
+                    _globalBGM = null;
                     specialWave = null;
                 }
                 else
                 {
                     mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: waveInfo.BCtext);
-                    glabalSFX.AddClip("WaveStartSound");
+                    Tools.PlayGlobalAudio("WaveStartSound", isNoNotice: true);
 
                     List<string> spawnQueue = new List<string>();
                     int maxEnemy = (int)(waveInfo.MaxEnemyCount + waveConfig.MulCount * waveInfo.MaxEnemyPerPlayer);
@@ -433,16 +425,13 @@ namespace RGM.Modes.PveExiledSystem
                 }
 
                 if (GetAlivePlayerCount() <= 0) { won = false; break; }
-                glabalSFX.AddClip("WaveEndSound");
+                Tools.PlayGlobalAudio("WaveEndSound", isNoNotice: true);
             }
-            if (won)
-            {
-                mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#1010ff>Site-02</color> 구성원들이 시설 방어에 성공했습니다.");
-            }
-            else
-            {
-                mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#1010ff>Site-02</color> 시설이 <color=#80ff80>혼돈의 반란</color> 세력에게 점령당했습니다.");
-            }
+
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10,
+                text: won
+                    ? "<color=#1010ff>Site-02</color> 구성원들이 시설 방어에 성공했습니다."
+                    : "<color=#1010ff>Site-02</color> 시설이 <color=#80ff80>혼돈의 반란</color> 세력에게 점령당했습니다.");
             AllWavesCleared = won;
             OnEndingRound();
         }
@@ -452,19 +441,24 @@ namespace RGM.Modes.PveExiledSystem
             foreach (Player player in Player.List)
             {
                 if (!IsValidPlayer(player)) continue;
-                if (player.Role.Type == RoleTypeId.NtfSpecialist) continue;
-                player.Role.Set(RoleTypeId.NtfSpecialist, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
-                Timing.CallDelayed(0.5f, () =>
+                if (player.Role.Type == RoleTypeId.Scientist) continue;
+                player.Role.Set(RoleTypeId.Scientist);
+                Timing.CallDelayed(0.25f, () =>
                 {
-                    if (player == null || player.Role.Type != RoleTypeId.NtfSpecialist) return;
+                    if (player == null || player.Role.Type != RoleTypeId.Scientist) return;
                     player.ClearInventory();
                     player.Position = playerSpawnPoint;
                     if (!waveConfig.IsSpecial)
                     {
+                        if (SelectedDifficulty == 2 && CurrentWave >= 6)
+                        {
+                            player.Inventory.ServerAddItem(ItemType.GunFSP9, InventorySystem.Items.ItemAddReason.AdminCommand);
+                            player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 240);
+                        }
                         player.Inventory.ServerAddItem(ItemType.GunCOM18, InventorySystem.Items.ItemAddReason.AdminCommand);
                         player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 120);
                     }
-                    player.EnableEffect<HeavyFooted>(255, -1, false);
+                    player.EnableEffect<HeavyFooted>(100, -1);
                 });
             }
         }
@@ -497,7 +491,7 @@ namespace RGM.Modes.PveExiledSystem
             foreach (Player player in Player.List)
             {
                 if (!IsValidPlayer(player)) continue;
-                if (player.Role.Type != RoleTypeId.NtfSpecialist) continue;
+                if (player.Role.Type != RoleTypeId.Scientist) continue;
                 count++;
             }
             return count;
@@ -518,7 +512,7 @@ namespace RGM.Modes.PveExiledSystem
             {
                 if (player.Nickname != "Tester") return false;
             }
-            if (player.Role.Type != RoleTypeId.NtfSpecialist) return false;
+            if (player.Role.Type != RoleTypeId.Scientist) return false;
             return true;
         }
     }

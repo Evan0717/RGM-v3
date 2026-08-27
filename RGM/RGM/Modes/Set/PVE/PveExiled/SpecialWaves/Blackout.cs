@@ -20,7 +20,7 @@ namespace RGM.Modes.PveExiledSystem.SpecialWaves
             Map.ShowHint("아무것도 보이지 않습니다.", 10);
             foreach(Player player in Player.List)
             {
-                if (player.Role.Type == PlayerRoles.RoleTypeId.NtfSpecialist)
+                if (player.Role.Type == PlayerRoles.RoleTypeId.Scientist)
                 {
                     player.Inventory.ServerAddItem(ItemType.Flashlight, InventorySystem.Items.ItemAddReason.AdminCommand);
                 }
