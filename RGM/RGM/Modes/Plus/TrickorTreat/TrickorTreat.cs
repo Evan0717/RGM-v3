@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
 using RGM.Commands.RemoteAdminCommands;
@@ -48,7 +49,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_autoWarhead);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
@@ -59,38 +60,36 @@ namespace RGM.Modes
             {
                 foreach (var door in Door.List)
                 {
-                    if (UnityEngine.Random.Range(0, 100) < 1)
+                    if (Random.Range(0, 100) < 1)
                     {
-                        for (int i = 0; i < UnityEngine.Random.Range(1, 10); i++)
-                            CandyParty.Create(Tools.PickRandomCandy(), UnityEngine.Random.Range(0.1f, 50), door.Position + new Vector3(0, 2, 0));
+                        for (int i = 0; i < Random.Range(1, 10); i++)
+                            CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.1f, 50), door.Position + new Vector3(0, 2, 0));
                     }
                 }
 
                 foreach (var player in PlayerManager.List)
                 {
-                    if (UnityEngine.Random.Range(0, 100) < 2)
-                        CandyParty.Create(Tools.PickRandomCandy(), UnityEngine.Random.Range(0.1f, 50), player.Position);
+                    if (Random.Range(0, 100) < 2)
+                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.1f, 50), player.Position);
                 }
 
                 GlobalPlayer.TryPlay("treat or treat", 1.5f);
 
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(1, 300));
+                yield return Timing.WaitForSeconds(Random.Range(1, 300));
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
             if (player.IsAlive && !player.IsNonePlayer())
             {
                 Timing.CallDelayed(1f, () =>
                 {
-                    var Scp330 = player.AddItem(ItemType.SCP330);
-
                     for (int i = 1; i < 4; i++)
                     {
                         player.AddRandomCandy();
@@ -99,15 +98,15 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        private void OnDying(DyingEventArgs ev)
         {
             if (ev.Attacker == null)
                 return;
 
             ev.Attacker.AddRandomCandy();
         }
-        
-        public IEnumerator<float> AutoWarhead()
+
+        private static IEnumerator<float> AutoWarhead()
         {
             yield return Timing.WaitForSeconds(11 * 60);
 

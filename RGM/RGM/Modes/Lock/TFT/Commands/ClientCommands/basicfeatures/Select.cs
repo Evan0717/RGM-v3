@@ -23,7 +23,7 @@ public class SelectTFTFirst : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "1번에 할당된 능력이 존재하지 않습니다.";
             return false;
@@ -53,7 +53,7 @@ public class SelectTFTSecond : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "2번에 할당된 능력이 존재하지 않습니다.";
             return false;

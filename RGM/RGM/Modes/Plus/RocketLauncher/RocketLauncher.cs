@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
 using RGM.API.DataBases;
@@ -34,7 +35,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
         }
 
-        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        private void OnHurt(HurtEventArgs ev)
         {
             if (ev.Attacker == null || 
                 !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||

@@ -12,15 +12,12 @@ namespace RGM.Modes
     {
         public override string Name => "야간 작전";
         public override string Description => "모두가 SCP-1344 효과를 받습니다.";
-        public override string Detail =>
-"""
-SCP-1344 효과 - 투시
-""";
+        public override string Detail => "SCP-1344 효과 - 투시";
         public override string Color => "F4FA58";
 
         public static Clairvoyance Instance;
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -36,7 +33,7 @@ SCP-1344 효과 - 투시
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
@@ -46,22 +43,15 @@ SCP-1344 효과 - 투시
             yield break;
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private static void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private static void Spawned(Player player)
         {
             if (player.IsAlive)
-            {
-                player.DisableEffect(EffectType.Scp1344);
-
-                Timing.CallDelayed(1, () =>
-                {
-                    player.EnableEffect(EffectType.Scp1344);
-                });
-            }
+                Timing.CallDelayed(Timing.WaitForOneFrame, () => player.EnableEffect(EffectType.Scp1344));
         }
     }
 }
