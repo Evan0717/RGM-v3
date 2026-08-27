@@ -64,7 +64,7 @@ namespace RGM.Modes
 
                 foreach (var player in DamagePlayers.Where(x => x.Role.Type != RoleTypeId.Scp079))
                 {
-                    player.Hurt(player.IsScpRole() ? 30 : 2, "인싸는 죽었습니다.");
+                    player.Hurt(player.IsScpRole() ? player.MaxHealth * 0.008f : player.MaxHealth * 0.024f, "인싸는 죽었습니다.");
 
                     if (player.IsAlive)
                     {
