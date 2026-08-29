@@ -1006,7 +1006,7 @@ $"""
 
                 return map;
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 Log.Error($"맵 '{mapName}'을(를) 찾을 수 없습니다. 로드 실패.");
                 return null;
@@ -1130,10 +1130,7 @@ $"""
 
         public static CandyKindID PickRandomCandy()
         {
-            // 맵의 시드를 활용하여 난수 생성 오브젝트 생성
-            Random rand = new(Map.Seed);
             List<CandyKindID> poll = [];
-            // 추후 constant로 옮길 예정
             List<CandyKindID> mythos =
             [
                 CandyKindID.Evil
@@ -1166,28 +1163,21 @@ $"""
                 CandyKindID.Purple
             ];
             
-            List<CandyKindID> etc =
-            [
-                CandyKindID.Brown
-            ];
-            
-            poll.AddRange(mythos.Where(_ => Mathf.Clamp01((float)rand.NextDouble()) <= .1f));
-            
-            for (int i = 0; i < 2; i++)
-                if (Mathf.Clamp01((float) rand.NextDouble()) <= .2f)
-                    poll.AddRange(legendary);
-            
-            for (int i = 0; i < 8; i++) 
-                poll.AddRange(epic);
+            // 총 100개의 아이템 카테고리를 가중치에 따라 담고, 그 내에서 랜덤 추출
+            for (int i = 0; i < 3; i++) 
+                poll.AddRange(mythos); // 3%
 
-            for (int i = 0; i < 13; i++) 
-                poll.AddRange(rare);
+            for (int i = 0; i < 6; i++) 
+                poll.AddRange(legendary); // 6%
 
-            for (int i = 0; i < 23; i++) 
-                poll.AddRange(general);
-            
-            for (int i = 0; i < 3; i++)
-                 poll.AddRange(etc);
+            for (int i = 0; i < 16; i++) 
+                poll.AddRange(epic); // 16%
+
+            for (int i = 0; i < 30; i++) 
+                poll.AddRange(rare); // 30%
+
+            for (int i = 0; i < 45; i++) 
+                poll.AddRange(general); // 45%
 
             return poll.GetRandomValue();
         }

@@ -33,7 +33,7 @@ namespace RGM.Modes.PveExiledSystem.Enemies
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.Scp939, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.All);
             foreach(Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
             {
-                if (player != null && player.Role.Type == PlayerRoles.RoleTypeId.NtfSpecialist)
+                if (player != null && player.Role.Type == PlayerRoles.RoleTypeId.Scientist)
                 {
                     player.EnableEffect<AmnesiaVision>(0, false);
                 }
@@ -68,7 +68,7 @@ namespace RGM.Modes.PveExiledSystem.Enemies
 
             foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
             {
-                if (player != null && player.Role.Type == PlayerRoles.RoleTypeId.NtfSpecialist)
+                if (player != null && player.Role.Type == PlayerRoles.RoleTypeId.Scientist)
                 {
                     player.DisableEffect<AmnesiaVision>();
                 }

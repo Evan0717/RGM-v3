@@ -8,6 +8,7 @@ using static RGM.Variables.Variable;
 using RGM.API.Features;
 using MapGeneration.Holidays;
 using UnityEngine;
+using RGM.API.DataBases;
 
 namespace RGM.Modes
 {
@@ -88,7 +89,9 @@ namespace RGM.Modes
 
         public IEnumerator<float> OnDied(DiedEventArgs ev)
         {
-            if (spirits.Contains(ev.Player) || ev.DamageHandler.Type == DamageType.Falldown || ev.DamageHandler.Type == DamageType.Warhead)
+            if (spirits.Contains(ev.Player) || 
+                Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type)
+                )
             {
                 ev.Player.AddHint("스피릿 성불", $"성불했습니다..", 3);
                 spirits.Remove(ev.Player);

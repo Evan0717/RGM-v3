@@ -59,7 +59,7 @@ public class Gnome : Ability
 
             Timing.CallDelayed(5, schematic.Destroy);
         }
-        catch (NullReferenceException e)
+        catch (NullReferenceException)
         {
             Log.Warn("Failure to fetch object 'light'.");
         }

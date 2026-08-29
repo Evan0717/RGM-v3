@@ -23,7 +23,7 @@ public class SelectFirst : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "1번에 할당된 능력이 존재하지 않습니다.";
             return false;
@@ -53,7 +53,7 @@ public class SelectSecond : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "2번에 할당된 능력이 존재하지 않습니다.";
             return false;
@@ -83,7 +83,7 @@ public class SelectThird : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "3번에 할당된 능력이 존재하지 않습니다.";
             return false;
@@ -113,7 +113,7 @@ public class SelectFourth : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "4번에 할당된 능력이 존재하지 않습니다.";
             return false;
@@ -143,7 +143,7 @@ public class SelectFifth : ICommand
 
             return result;
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             response = "5번에 할당된 능력이 존재하지 않습니다.";
             return false;

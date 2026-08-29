@@ -44,9 +44,9 @@ namespace RGM.Modes.PveExiledSystem
             hub = DummyUtils.SpawnDummy(enemyName);
             hub.authManager.syncMode = (SyncMode)ClientInstanceMode.Dummy;
             hub.playerStats.OnThisPlayerDied += RemoveEnemy;
-            selfPlayer = Exiled.API.Features.Player.Get(hub);
-            this.Id = id;
-            this.Container = container;
+            selfPlayer = Player.Get(hub);
+            Id = id;
+            Container = container;
             getCloserPlayerCycle = 3 - (waveConfig.Difficulty * 0.75f);
         }
         public virtual void RemoveEnemy(DamageHandlerBase _) => RemoveEnemy();
@@ -120,7 +120,6 @@ namespace RGM.Modes.PveExiledSystem
                         break;
                     }
                 }
-                continue;
             }
         }
         protected Player GetClosestPlayer()
@@ -197,14 +196,14 @@ namespace RGM.Modes.PveExiledSystem
             {
                 if (player.Nickname != "Tester") return false;
             }
-            if (player.Role.Type != RoleTypeId.NtfSpecialist) return false;
+            if (player.Role.Type != RoleTypeId.Scientist) return false;
             if (!hiddenDetect && player.IsEffectActive<Invisible>()) return false;
             return true;
         }
         private void AntiStock()
         {
             if (!canMove) return;
-            if (selfPlayer.CurrentRoom.Type == RoomType.EzCollapsedTunnel || selfPlayer.CurrentRoom.Type == RoomType.EzShelter)
+            if (selfPlayer.CurrentRoom.Type is RoomType.EzCollapsedTunnel or RoomType.EzShelter)
             {
                 selfPlayer.Position = selfPlayer.CurrentRoom.Doors.First().Position + Vector3.up;
             }
