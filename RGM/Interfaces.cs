@@ -163,7 +163,8 @@ public enum ModeType
     Rank,
     Chess,
     Store,
-    EchoBattle
+    EchoBattle,
+    DistractedDriver
 }
 
 
