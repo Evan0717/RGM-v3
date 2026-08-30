@@ -14,7 +14,6 @@ using RGM.API.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using RGM.Modes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -27,9 +26,9 @@ namespace RGM.Variables
         public static AudioPlayer GlobalPlayer;
         public static string SelectMode = "";
         public static string Tip = Tips.LobbyTips.GetRandomValue();
-        public static string Logo = UnityEngine.Random.Range(1, 3) == 1 ? "❓" : "❔";
+        public static string Logo = Random.Range(1, 3) == 1 ? "❓" : "❔";
         public static string WinMessage = "";
-        public static int StartupRandom = UnityEngine.Random.Range(1, 31);
+        public static int StartupRandom = Random.Range(1, 31);
         public static bool FreezeGameStart = false;
         public static bool ShootingTargetSignal = false;
         public static bool IsBugVoteProcessing = false;
