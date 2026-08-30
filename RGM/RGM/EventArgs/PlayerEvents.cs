@@ -476,26 +476,16 @@ namespace RGM.EventArgs
 
         public static IEnumerator<float> OnLeft(LeftEventArgs ev)
         {
-            if (TranslatorPlayers.ContainsKey(ev.Player))
-                TranslatorPlayers.Remove(ev.Player);
-
-            if (Chats.ContainsKey(ev.Player))
-                Chats.Remove(ev.Player);
-
+            TranslatorPlayers.Remove(ev.Player);
+            Chats.Remove(ev.Player);
             if (Texts.ContainsKey(ev.Player))
             {
                 Texts[ev.Player].Destroy();
                 Texts.Remove(ev.Player);
             }
-
-            if (OnGround.ContainsKey(ev.Player.UserId))
-                OnGround.Remove(ev.Player.UserId);
-
-            if (PlayersAudio.ContainsKey(ev.Player))
-                PlayersAudio.Remove(ev.Player);
-
-            if (EffectIntensities.ContainsKey(ev.Player))
-                EffectIntensities.Remove(ev.Player);
+            OnGround.Remove(ev.Player.UserId);
+            PlayersAudio.Remove(ev.Player);
+            EffectIntensities.Remove(ev.Player);
 
             if (Round.IsLobby)
             {
@@ -725,43 +715,39 @@ namespace RGM.EventArgs
 
         public static void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (ev.Player.IsScpRole())
+            if (!ev.Player.IsScpRole()) return;
+            if (ev.Door.Type.ToString().Contains("Checkpoint"))
             {
-                if (ev.Door.Type.ToString().Contains("Checkpoint"))
-                {
-                    if (ev.Player.CurrentItem != null)
-                        ev.Door.IsOpen = false;
+                if (ev.Player.CurrentItem != null)
+                    ev.Door.IsOpen = false;
 
-                    if (ev.Door.IsFullyClosed)
+                if (ev.Door.IsFullyClosed)
+                {
+                    Timing.CallDelayed(Timing.WaitForOneFrame, () => { ev.Door.IsOpen = true; });
+                }
+            }
+
+            else if (ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Door.IsOpen &&
+                     !ev.Door.Type.ToString().Contains("Scp079"))
+            {
+                Timing.CallDelayed(0.1f, () =>
+                {
+                    if (ev.Door.IsOpen) return;
+                    if (!InteractedDoors.ContainsKey(ev.Door))
+                        InteractedDoors.Add(ev.Door, 0);
+
+                    InteractedDoors[ev.Door] += 1;
+
+                    if (InteractedDoors[ev.Door] >= 500)
                     {
-                        Timing.CallDelayed(Timing.WaitForOneFrame, () => { ev.Door.IsOpen = true; });
+                        ev.Door.IsOpen = true;
+
+                        InteractedDoors.Remove(ev.Door);
                     }
-                }
-
-                else if (ev.Player.Role.Type != RoleTypeId.Scp079 && !ev.Door.IsOpen &&
-                         !ev.Door.Type.ToString().Contains("Scp079"))
-                {
-                    Timing.CallDelayed(0.1f, () =>
-                    {
-                        if (!ev.Door.IsOpen)
-                        {
-                            if (!InteractedDoors.ContainsKey(ev.Door))
-                                InteractedDoors.Add(ev.Door, 0);
-
-                            InteractedDoors[ev.Door] += 1;
-
-                            if (InteractedDoors[ev.Door] >= 500)
-                            {
-                                ev.Door.IsOpen = true;
-
-                                InteractedDoors.Remove(ev.Door);
-                            }
-                            else
-                                ev.Player.AddHint("SCP 문 강제 개폐",
-                                    $"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
-                        }
-                    });
-                }
+                    else
+                        ev.Player.AddHint("SCP 문 강제 개폐",
+                            $"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
+                });
             }
         }
 
@@ -809,7 +795,7 @@ namespace RGM.EventArgs
                     (ev.DamageHandler.Type.IsWeapon() || 
                      ev.DamageHandler.Type == DamageType.Scp127 || 
                      ev.DamageHandler.Type == DamageType.Scp1509))
-                    ev.DamageHandler.Damage *= 0.65f;
+                    ev.DamageHandler.Damage *= 0.7f;
 
                 float damage = ev.IsInstantKill
                     ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
@@ -961,11 +947,11 @@ namespace RGM.EventArgs
         {
             if (ev.ClaimedTarget == null) return;
             if (ev.Player.Role is not Scp173Role scp173) return;
-            if (!ev.Player.TryGetLookPlayer(1000, out Player target, out RaycastHit? hit)) return;
+            if (!ev.Player.TryGetLookPlayer(1000, out Player target, out _)) return;
             if (ev.ClaimedTarget != target) return;
             if (!scp173.IsObserved) return;
             ev.ClaimedTarget.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub,
-                ev.Firearm.Damage * 0.65f, DeathTranslations.Scp173));
+                ev.Firearm.Damage * 0.7f, DeathTranslations.Scp173));
 
             ev.Player.ShowHitMarker();
         }
@@ -1020,15 +1006,11 @@ namespace RGM.EventArgs
 
         public static void OnEscaping(EscapingEventArgs ev)
         {
-            if (ev.Player.IsCuffed && ev.IsAllowed)
-            {
-                if (ev.Player.Cuffer.Role.Type == RoleTypeId.Tutorial)
-                {
-                    ev.IsAllowed = false;
+            if (!ev.Player.IsCuffed || !ev.IsAllowed) return;
+            if (ev.Player.Cuffer.Role.Type != RoleTypeId.Tutorial) return;
+            ev.IsAllowed = false;
 
-                    Tools.MakeSnake(ev.Player);
-                }
-            }
+            Tools.MakeSnake(ev.Player);
         }
     }
 }
