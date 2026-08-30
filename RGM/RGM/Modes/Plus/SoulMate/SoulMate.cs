@@ -7,10 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Extensions;
+using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.SoulMate)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.SoulMate)]
     class SoulMate : Mode
     {
         public override string Name => "소울메이트";
@@ -71,7 +72,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_checkIfScpSoulMate);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             while (true)
             {
@@ -90,7 +91,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> SoulMateMatching()
+        private IEnumerator<float> SoulMateMatching()
         {
             while (true)
             {
@@ -162,7 +163,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> CurrentItemCoroutine() // CurrentItemAsync..?
+        private IEnumerator<float> CurrentItemCoroutine() // CurrentItemAsync..?
         {
             Dictionary<Player, Item> currentItems = new Dictionary<Player, Item>();
 
@@ -202,7 +203,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> CheckIfScpSoulMate()
+        private IEnumerator<float> CheckIfScpSoulMate()
         {
             var teamKillEnabled = false;
             while (true)
@@ -239,7 +240,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDying(DyingEventArgs ev)
+        private void OnDying(DyingEventArgs ev)
         {
             if (!_soulMates.TryGetValue(ev.Player, out Player soulMate) || soulMate == null) return;
 
@@ -260,33 +261,34 @@ namespace RGM.Modes
                 });
 
                 soulMate.ClearInventory();
+                if (GodModePlayers.Contains(soulMate)) GodModePlayers.Remove(soulMate);
                 soulMate.Kill(ev.DamageHandler);
 
                 Tools.MessageTranslated("", $"<color=red>{ev.Attacker?.DisplayNickname}</color>(이)가 영혼의 단짝이였던 <color=#5858FA>{ev.Player.DisplayNickname}</color>와(과) <color=#FE2EF7>{soulMate.DisplayNickname}</color>을(를) 사이좋게 하늘로 보냈습니다.");
             });
         }
 
-        public void OnHurt(HurtEventArgs ev)
+        private void OnHurt(HurtEventArgs ev)
         {
             if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
             soulMate.MaxHealth = ev.Player.MaxHealth;
             soulMate.Health = ev.Player.Health;
         }
 
-        public void OnHealed(HealedEventArgs ev)
+        private void OnHealed(HealedEventArgs ev)
         {
             if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
             soulMate.MaxHealth = ev.Player.MaxHealth;
             soulMate.Health = ev.Player.Health;
         }
 
-        public void OnPickingUpItem(PickingUpItemEventArgs ev)
+        private void OnPickingUpItem(PickingUpItemEventArgs ev)
         {
             if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
             soulMate.AddItem(ev.Pickup.Type);
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
             foreach (var Item in soulMate.Items)
@@ -299,7 +301,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnUsingItemCompleted(UsingItemCompletedEventArgs ev)
+        private void OnUsingItemCompleted(UsingItemCompletedEventArgs ev)
         {
             if (!_soulMates.TryGetValue(ev.Player, out var soulMate)) return;
             foreach (var Item in soulMate.Items)
@@ -312,7 +314,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnEscaping(EscapingEventArgs ev)
+        private void OnEscaping(EscapingEventArgs ev)
         {
             Timing.CallDelayed(0.1f, () =>
             {
@@ -326,7 +328,7 @@ namespace RGM.Modes
             });
         }
 
-        public void OnRevealing(Exiled.Events.EventArgs.Scp3114.RevealingEventArgs ev) 
+        private void OnRevealing(Exiled.Events.EventArgs.Scp3114.RevealingEventArgs ev) 
             => ev.Player.DropItems();
     }
 }

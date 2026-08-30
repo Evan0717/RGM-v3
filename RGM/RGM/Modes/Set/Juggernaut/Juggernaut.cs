@@ -25,7 +25,7 @@ using Warhead = Exiled.API.Features.Warhead;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Juggernaut)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Juggernaut)]
     class Juggernaut : Mode
     {
         public override string Name => "저거너트";
@@ -110,7 +110,7 @@ namespace RGM.Modes
                 _speaker.Destroy();
         }
 
-        public IEnumerator<float> JuggernautExternalTimer()
+        private IEnumerator<float> JuggernautExternalTimer()
         {
             for (int i = 1; i < 75; i++)
             {
@@ -122,7 +122,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> RoundTimer()
+        private IEnumerator<float> RoundTimer()
         {
             for (int i = 1; i < 821; i++)
             {
@@ -136,7 +136,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> AnnihilationTimer()
+        private IEnumerator<float> AnnihilationTimer()
         {
             for (int i = 1; i < 120; i++)
             {
@@ -149,12 +149,12 @@ namespace RGM.Modes
             }
         }
 
-        bool IsJuggernautTeam(Player player)
+        private bool IsJuggernautTeam(Player player)
         {
             return player == _juggernaut || player.Role.Type == RoleTypeId.Tutorial;
         }
 
-        bool TryGetExternalSupportWave<T>(out SpawnableWaveBase wave) where T : SpawnableWaveBase
+        private bool TryGetExternalSupportWave<T>(out SpawnableWaveBase wave) where T : SpawnableWaveBase
         {
             if (WaveManager.TryGet<T>(out T spawnWave))
             {
@@ -166,7 +166,7 @@ namespace RGM.Modes
             return false;
         }
 
-        bool TryGetRandomSupportWave(out SpawnableWaveBase wave)
+        private bool TryGetRandomSupportWave(out SpawnableWaveBase wave)
         {
             if (Random.Range(1, 3) == 1)
             {
@@ -178,7 +178,7 @@ namespace RGM.Modes
                    TryGetExternalSupportWave<NtfMiniWave>(out wave);
         }
 
-        void CallJuggernautExternalSupport()
+        private void CallJuggernautExternalSupport()
         {
             if (Round.IsEnded || !PlayerManager.List.Any(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch))
                 return;
@@ -191,7 +191,7 @@ namespace RGM.Modes
             WaveManager.Spawn(wave);
         }
 
-        void CallRegularSupport()
+        private void CallRegularSupport()
         {
             if (Round.IsEnded || !PlayerManager.List.Any(x => x.IsDead && x.Role.Type != RoleTypeId.Overwatch))
                 return;
@@ -208,7 +208,7 @@ namespace RGM.Modes
                 w.SetTime(0);
         }
 
-        void TriggerAnnihilation()
+        private void TriggerAnnihilation()
         {
             Warhead.Detonate();
             foreach (var player in PlayerManager.List.Where(x => true))
@@ -217,7 +217,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             if (Random.Range(1, 101) <= 10)
             {
@@ -235,11 +235,11 @@ namespace RGM.Modes
             _juggernaut = PlayerManager.List.ToList().GetRandomValue();
             _juggernaut.Role.Set(RoleTypeId.Tutorial);
             _juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            _juggernaut.MaxHealth = 550 * PlayerManager.List.Count;
+            _juggernaut.MaxHealth = 640 * PlayerManager.List.Count;
             _juggernaut.Health = _juggernaut.MaxHealth;
             _juggernaut.IsBypassModeEnabled = true;
             _juggernaut.EnableEffect(EffectType.SinkHole);
-            _juggernaut.EnableEffect(EffectType.Slowness, 3);
+            _juggernaut.EnableEffect(EffectType.Slowness, 5);
             _juggernaut.EnableEffect(EffectType.BodyshotReduction, 4);
             _juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25>본인을 제외한 모두를 사살하십시오.</size>");
             _juggernaut.Position = new Vector3(123.3271f, 288.7908f, 27.01838f);
@@ -291,6 +291,8 @@ namespace RGM.Modes
 
 
             bool IsEnd = false;
+            bool juggernautWon = false;
+            List<Player> winners = [];
             while (!IsEnd)
             {
                 if (_juggernaut.IsAlive)
@@ -303,26 +305,35 @@ namespace RGM.Modes
                         PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20,
                             "<size=25>더 이상 저지할 수 있는 <b>Site-76 구성원</b>이 없습니다.</size>\n<color=#298A08>저거너트</color>의 승리입니다."));
                         IsEnd = true;
-                        Timing.RunCoroutine(Tools.SetWinner(aliveJuggernautTeam,
-                            aliveJuggernautTeam.Count == 1 ? 20 : 4));
+                        juggernautWon = true;
+                        winners = aliveJuggernautTeam;
+                        Timing.RunCoroutine(Tools.SetWinner(winners, winners.Count == 1 ? 20 : 4));
                     }
                 }
                 else
                 {
+                    winners = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC && !IsJuggernautTeam(x)).ToList();
+                    foreach (var ally in PlayerManager.List.Where(x => x.IsAlive && IsJuggernautTeam(x)))
+                        ally.Kill("저거너트가 사망했습니다.");
+
                     PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20,
                         "<size=25><color=#298A08>저거너트</color>가 사망했습니다.</size>\n<b>Site-76 구성원</b>들의 승리입니다."));
                     IsEnd = true;
-                    Timing.RunCoroutine(Tools.SetWinner(PlayerManager.List.Where(x => x.IsAlive).ToList(), 2));
+                    Timing.RunCoroutine(Tools.SetWinner(winners, 2));
                 }
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            PlayerManager.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
+            if (juggernautWon)
+                PlayerManager.List.ToList().ForEach(x => x.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None));
+            else
+                winners.ForEach(x => x.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None));
+
             Round.IsLocked = false;
         }
 
-        public IEnumerator<float> AutoWarhead()
+        private IEnumerator<float> AutoWarhead()
         {
             yield return Timing.WaitForSeconds(11 * 60);
 
@@ -357,7 +368,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> MusicAsync()
+        private IEnumerator<float> MusicAsync()
         {
             AudioPlayer audioPlayer = AudioPlayer.CreateOrGet($"Player {_juggernaut.DisplayNickname}",
                 condition: (ReferenceHub hub) => { return !MuteBGMPlayers.Contains(Player.Get(hub)); },
@@ -376,7 +387,7 @@ namespace RGM.Modes
             yield return 0;
         }
 
-        public IEnumerator<float> ReduceWaveTimer()
+        private IEnumerator<float> ReduceWaveTimer()
         {
             while (true)
             {
@@ -392,12 +403,12 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void OnRespawnedTeam(RespawnedTeamEventArgs ev)
+        private void OnRespawnedTeam(RespawnedTeamEventArgs ev)
         {
             if (!_juggernautExternalSupportWaves.Remove(ev.Wave))
                 return;
@@ -405,7 +416,7 @@ namespace RGM.Modes
             EventArgs.ServerEvents.CallTutorialSupport(ev.Players);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
             if (player.IsAlive && player.IsScpRole())
             {
@@ -424,25 +435,25 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSearchingPickup(SearchingPickupEventArgs ev)
+        private void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (ev.Player == _juggernaut)
                 ev.IsAllowed = false;
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if (ev.Player == _juggernaut)
                 ev.IsAllowed = false;
         }
 
-        public void OnShooting(ShootingEventArgs ev)
+        private void OnShooting(ShootingEventArgs ev)
         {
             if (ev.Player == _juggernaut)
-                ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 250;
+                ev.Player.CurrentItem.As<Firearm>().MagazineAmmo = 101;
         }
 
-        public IEnumerator<float> OnHurting(HurtingEventArgs ev)
+        private IEnumerator<float> OnHurting(HurtingEventArgs ev)
         {
             if (ev.Attacker != null)
             {
@@ -465,7 +476,7 @@ namespace RGM.Modes
                             } damageHandler)
                             damageHandler.Damage /= 2;
 
-                        ev.DamageHandler.Damage *= 3.35f;
+                        ev.DamageHandler.Damage *= 3.1f;
                     }
                     else if (ev.Player == _juggernaut)
                     {
@@ -495,16 +506,16 @@ namespace RGM.Modes
                                 w.SetTime((int)w.TimeLeft.TotalSeconds - 5);
                         }
 
-                        List<RoleTypeId> Scps = new List<RoleTypeId>()
-                        {
+                        List<RoleTypeId> listscp =
+                        [
                             RoleTypeId.Scp173,
                             RoleTypeId.Scp106,
                             RoleTypeId.Scp096,
                             RoleTypeId.Scp939,
                             RoleTypeId.Scp0492
-                        };
+                        ];
 
-                        if (ev.IsInstantKill || (Scps.Contains(ev.Attacker.Role.Type) &&
+                        if (ev.IsInstantKill || (listscp.Contains(ev.Attacker.Role.Type) &&
                                                  !_scpAttackCooldown.Contains(ev.Attacker)))
                         {
                             ev.IsAllowed = false;
@@ -522,7 +533,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnReceivingEffect(ReceivingEffectEventArgs ev)
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
         {
             if (ev.Player == _juggernaut && ev.Effect.GetEffectType() != EffectType.SinkHole)
             {
@@ -539,12 +550,12 @@ namespace RGM.Modes
             }
         }
 
-        public void OnHandcuffing(HandcuffingEventArgs ev)
+        private void OnHandcuffing(HandcuffingEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnChargingJailbird(Exiled.Events.EventArgs.Item.ChargingJailbirdEventArgs ev)
+        private void OnChargingJailbird(Exiled.Events.EventArgs.Item.ChargingJailbirdEventArgs ev)
         {
             if (ev.Player == _juggernaut)
                 ev.Item.As<Jailbird>().TotalCharges = 0;

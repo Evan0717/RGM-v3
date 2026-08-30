@@ -253,8 +253,7 @@ namespace RGM.API.Features
                 if (uc[num] == "0")
                     return "-";
 
-                else
-                    return string.Join(", ", uc[num].Split('/'));
+                return string.Join(", ", uc[num].Split('/'));
             }
 
             return
@@ -375,7 +374,7 @@ $"""
 
                 UsersManager.SaveUsers();
 
-                WinMessage = $"<size={30 - Math.Round(playerList.Count() * 0.5f)}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}><i>{x.DisplayNickname}</i></color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다";
+                WinMessage = $"<size={30 - Math.Round(playerList.Count * 0.5f)}><color=yellow><b>✨</b></color> <b>{string.Join($", ", playerList.Select(x => $"<color={x.Role.Color.ToHex()}><i>{x.DisplayNickname}</i></color>"))}</b>(이)가 <b>{amount}</b> EXP, 랜덤코인을 획득하였습니다";
             }
             else
             {
@@ -388,8 +387,7 @@ $"""
             nearestPlayer = null;
             radius = 99999;
 
-            if (exceptPlayers == null)
-                exceptPlayers = new List<Player>();
+            exceptPlayers ??= new List<Player>();
 
             foreach (var near in PlayerManager.List.Where(x => x.IsAlive && x != player && !exceptPlayers.Contains(x)))
             {

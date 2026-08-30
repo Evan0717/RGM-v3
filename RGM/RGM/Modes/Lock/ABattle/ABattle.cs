@@ -122,8 +122,8 @@ public class ABattle : Mode
         {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 18% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
-        {"난장판", "유령이 시스템을 장악하여 난장판이 되었습니다. 이로 인해 관리자의 제약이 모두 풀립니다.\n" +
-                "아, 빼먹은 것이 있군요. <b><color=#FF5F1F>HYPER BURNING</color></b>이 활성화됩니다.\n"}
+        /*{"난장판", "유령이 시스템을 장악하여 난장판이 되었습니다. 이로 인해 관리자의 제약이 모두 풀립니다.\n" +
+                "아, 빼먹은 것이 있군요. <b><color=#FF5F1F>HYPER BURNING</color></b>이 활성화됩니다.\n"}*/
     };
 
     private static readonly List<ICommand> DotCommands =
@@ -557,7 +557,7 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (Random.Range(1, 101) <= 5 && !ExtraModes.ContainsKey("난장판"))
+        if (Random.Range(1, 101) <= 7 && !ExtraModes.ContainsKey("난장판"))
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
@@ -755,14 +755,14 @@ public class ABattle : Mode
             if (reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR) &&
                 Random.Range(1, 101) <= 50)
             {
-                AddAbility(player, type, reflectorChain + 1, allowReflector, extraReflectorChain);
+                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain);
             }
 
-            // 추가 모드 반사경: 15% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 2회까지.
+            // 추가 모드 반사경: 25% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 2회까지.
             if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
                 Random.Range(1, 101) <= 25)
             {
-                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 1);
+                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain);
             }
         }
 
@@ -812,7 +812,7 @@ public class ABattle : Mode
                 .GetRoleBase(player.Role.Type) is IHealthbarRole role
                 ? role.MaxHealth
                 : player.MaxHealth;
-            float healthIncrease = baseMaxHealth * (player.IsScpRole() ? 0.015f : 0.09f);
+            float healthIncrease = baseMaxHealth * (player.IsScpRole() ? 0.015f : 0.12f);
 
             player.MaxHealth += healthIncrease;
             player.Health += healthIncrease;

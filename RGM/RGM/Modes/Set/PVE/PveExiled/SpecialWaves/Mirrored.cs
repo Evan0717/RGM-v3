@@ -17,7 +17,7 @@ namespace RGM.Modes.PveExiledSystem.SpecialWaves
             Map.ShowHint("거꾸로", 10);
             foreach(Player player in Player.List)
             {
-                if (player.Role.Type == PlayerRoles.RoleTypeId.NtfSpecialist)
+                if (player.Role.Type == PlayerRoles.RoleTypeId.Scientist)
                 {
                     player.EnableEffect<Slowness>(200, 0, false);
                 }
@@ -32,7 +32,7 @@ namespace RGM.Modes.PveExiledSystem.SpecialWaves
             Timing.KillCoroutines(runningSpecialWave);
             foreach (Player player in Player.List)
             {
-                if (player.Role.Type == PlayerRoles.RoleTypeId.NtfSpecialist)
+                if (player.Role.Type == PlayerRoles.RoleTypeId.Scientist)
                 {
                     player.DisableEffect<Slowness>();
                 }
