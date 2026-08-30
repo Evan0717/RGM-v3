@@ -381,11 +381,11 @@ namespace RGM.Modes.PveExiledSystem
 
                     mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: $"스페셜 웨이브: {specialWave.SpecialWaveName}");
 
-                    Tools.PlayGlobalAudio("SpecialWaveSound", isNoNotice: true);
+                    Tools.PlayGlobalAudio("SpecialWaveSound", volume:1.5f, isNoNotice: true);
 
                     yield return Timing.WaitForSeconds(7f);
 
-                    _globalBGM = Tools.PlayGlobalAudio(specialWave.SoundtrackName, loop: true, isNoNotice: true);
+                    _globalBGM = Tools.PlayGlobalAudio(specialWave.SoundtrackName, volume:1.5f, loop: true, isNoNotice: true);
                     specialWave.Enable(this, waveConfig, waveInfo);
                     while (!specialWave.Ended) yield return Timing.WaitForSeconds(1);//ㄱㄷ22
                     _globalBGM.IsPaused = true;
@@ -395,7 +395,7 @@ namespace RGM.Modes.PveExiledSystem
                 else
                 {
                     mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: waveInfo.BCtext);
-                    Tools.PlayGlobalAudio("WaveStartSound", isNoNotice: true);
+                    Tools.PlayGlobalAudio("WaveStartSound", volume:1.5f, isNoNotice: true);
 
                     List<string> spawnQueue = new List<string>();
                     int maxEnemy = (int)(waveInfo.MaxEnemyCount + waveConfig.MulCount * waveInfo.MaxEnemyPerPlayer);
@@ -425,7 +425,7 @@ namespace RGM.Modes.PveExiledSystem
                 }
 
                 if (GetAlivePlayerCount() <= 0) { won = false; break; }
-                Tools.PlayGlobalAudio("WaveEndSound", isNoNotice: true);
+                Tools.PlayGlobalAudio("WaveEndSound", volume:1.5f, isNoNotice: true);
             }
 
             mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10,
@@ -450,15 +450,18 @@ namespace RGM.Modes.PveExiledSystem
                     player.Position = playerSpawnPoint;
                     if (!waveConfig.IsSpecial)
                     {
-                        if (SelectedDifficulty == 2 && CurrentWave >= 6)
+                        if (CurrentWave >= 6)
                         {
-                            player.Inventory.ServerAddItem(ItemType.GunFSP9, InventorySystem.Items.ItemAddReason.AdminCommand);
-                            player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 240);
+                            player.AddItem(ItemType.GunFSP9);
+                            player.AddItem(ItemType.Ammo9x19, 10);
                         }
-                        player.Inventory.ServerAddItem(ItemType.GunCOM18, InventorySystem.Items.ItemAddReason.AdminCommand);
-                        player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 120);
+                        else
+                        {
+                            player.AddItem(ItemType.GunCOM18);
+                            player.AddItem(ItemType.Ammo9x19, 5);
+                        }
                     }
-                    player.EnableEffect<HeavyFooted>(100, -1);
+                    player.EnableEffect(EffectType.HeavyFooted, 100, -1);
                 });
             }
         }
