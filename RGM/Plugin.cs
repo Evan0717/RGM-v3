@@ -165,6 +165,14 @@ namespace RGM
                 Exiled.Events.Handlers.Player.Verified += OnFixedModeVerified;
                 Exiled.Events.Handlers.Player.Left += OnFixedModeLeft;
             }
+
+            // ------------------------------------------------------------------------------------------------------
+
+            // SCP 동작 보정은 고정 모드 서버에서도 모드가 설치되므로 항상 적용합니다.
+            Harmony scpHarmony = new Harmony($"Harmony.Scp - {DateTime.Now.Ticks}");
+
+            Scp049Patch.Apply(scpHarmony);
+            Scp173Patch.Apply(scpHarmony);
         }
 
         public static void OnFixedModeWaitingForPlayers()
