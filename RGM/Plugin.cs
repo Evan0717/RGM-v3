@@ -168,11 +168,15 @@ namespace RGM
 
             // ------------------------------------------------------------------------------------------------------
 
-            // SCP 동작 보정은 고정 모드 서버에서도 모드가 설치되므로 항상 적용합니다.
+            // SCP·무기 동작 보정은 고정 모드 서버에서도 모드가 설치되므로 항상 적용합니다.
             Harmony scpHarmony = new Harmony($"Harmony.Scp - {DateTime.Now.Ticks}");
 
             Scp049Patch.Apply(scpHarmony);
             Scp173Patch.Apply(scpHarmony);
+
+            Harmony weaponHarmony = new Harmony($"Harmony.Weapon - {DateTime.Now.Ticks}");
+
+            WeaponPatch.Apply(weaponHarmony);
         }
 
         public static void OnFixedModeWaitingForPlayers()

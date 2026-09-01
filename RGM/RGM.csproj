@@ -843,6 +843,7 @@
     <Compile Include="RGM\Patches\FirearmTriggerState.cs" />
     <Compile Include="RGM\Patches\Scp049.cs" />
     <Compile Include="RGM\Patches\Scp173.cs" />
+    <Compile Include="RGM\Patches\Weapon.cs" />
     <Compile Include="RGM\UserSettings\Settings\SettingVariables.cs" />
     <Compile Include="RGM\UserSettings\UserSetting.cs" />
     <Compile Include="RGM\UserSettings\Settings\Main\BGMVolumeSetting.cs" />
