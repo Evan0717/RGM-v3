@@ -235,7 +235,7 @@ namespace RGM.Modes
             _juggernaut = PlayerManager.List.ToList().GetRandomValue();
             _juggernaut.Role.Set(RoleTypeId.Tutorial);
             _juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            _juggernaut.MaxHealth = 640 * PlayerManager.List.Count;
+            _juggernaut.MaxHealth = 680 * PlayerManager.List.Count;
             _juggernaut.Health = _juggernaut.MaxHealth;
             _juggernaut.IsBypassModeEnabled = true;
             _juggernaut.EnableEffect(EffectType.SinkHole);
@@ -252,6 +252,8 @@ namespace RGM.Modes
             };
             foreach (var item in items)
                 _juggernaut.AddItem(item);
+
+            Timing.RunCoroutine(MonitorRoundEnd());
 
             // 이 아래부터 초토화 작전 부 까지, Warhead.IsDetonated 이후 작동되도록 설계해야 함.
             Timing.RunCoroutine(RoundTimer());
@@ -288,12 +290,14 @@ namespace RGM.Modes
             Timing.RunCoroutine(AnnihilationTimer());
             yield return Timing.WaitForSeconds(120f); // 외부지원 호출에도 게임이 끝나지 않을 경우
             TriggerAnnihilation();
+        }
 
-
+        private IEnumerator<float> MonitorRoundEnd()
+        {
             bool IsEnd = false;
             bool juggernautWon = false;
             List<Player> winners = [];
-            while (!IsEnd)
+            while (!IsEnd && !Round.IsEnded)
             {
                 if (_juggernaut.IsAlive)
                 {

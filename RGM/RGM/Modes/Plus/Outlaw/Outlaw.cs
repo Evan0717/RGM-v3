@@ -29,9 +29,9 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
 
         public static Outlaw Instance;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _autoWarhead;
-
+        private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _autoWarhead;
+        
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RespawningTeam += OnRespawningTeam;

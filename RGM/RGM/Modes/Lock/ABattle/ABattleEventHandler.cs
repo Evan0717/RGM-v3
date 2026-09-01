@@ -129,6 +129,9 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private IEnumerator<float> OnChangingRole(ChangingRoleEventArgs ev)
     {
+        if (!ev.NewRole.IsDead())
+            aBattle.LastDeathRoles.Remove(ev.Player);
+
         if (ev.Player.IsDead || ev.NewRole.IsDead() || !ev.Player.GetAbilities().Any())
             Timing.CallDelayed(Timing.WaitForOneFrame, () => aBattle.Reset(ev.Player));
 
@@ -139,6 +142,8 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnDied(DiedEventArgs ev)
     {
+        aBattle.LastDeathRoles[ev.Player] = ev.TargetOldRole;
+
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
             aBattle.Reset(ev.Player);

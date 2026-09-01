@@ -45,9 +45,13 @@ public class Resurrection : Ability
             .Select(ability => ability.Data.AbilityType)
             .ToList();
 
+        List<Player> deadPlayers = PlayerManager.List.Where(player => player.IsDead).ToList();
         List<Player> reviveTargets = Owner.IsScpRole()
-            ? PlayerManager.List.Where(player => player.IsDead).Take(1).ToList()
-            : PlayerManager.List.Where(player => player.IsDead && player.LeadingTeam == Owner.LeadingTeam).ToList();
+            ? deadPlayers.Count > 0 ? [deadPlayers.GetRandomValue()] : []
+            : deadPlayers.Where(player =>
+                ABattle.Instance.LastDeathRoles.TryGetValue(player, out RoleTypeId deathRole) &&
+                RoleExtensions.GetTeam(deathRole) == RoleExtensions.GetTeam(Owner.Role.Type))
+                .ToList();
 
         foreach (Player target in reviveTargets)
         {
@@ -57,17 +61,17 @@ public class Resurrection : Ability
 
             target.Role.Set(role, RoleSpawnFlags.None);
             target.Position = Owner.Position;
+        }
 
-            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                if (!target.IsAlive)
-                    return;
+        yield return Timing.WaitForSeconds(0.1f);
 
-                foreach (AbilityType ability in transferableAbilities)
-                    ABattle.Instance.AddAbility(target, ability, allowReflector: false);
-            });
+        foreach (Player target in reviveTargets)
+        {
+            if (!target.IsAlive)
+                continue;
 
-            yield return Timing.WaitForSeconds(0.1f);
+            foreach (AbilityType ability in transferableAbilities)
+                ABattle.Instance.AddAbility(target, ability, allowReflector: false);
         }
     }
 }

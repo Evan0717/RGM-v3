@@ -80,6 +80,7 @@ public class ABattle : Mode
     public Dictionary<Player, List<AbilityType>> Selections = new();
     public Dictionary<Player, bool> IsSelecting = new();
     public Dictionary<Player, bool> IsLifeUsed = new();
+    public Dictionary<Player, RoleTypeId> LastDeathRoles = new();
     
     private Dictionary<AbilityType, List<AbilityType>> SynergyAbilities = new();
     private Dictionary<Player, int> SelectionCursor = new();
@@ -113,7 +114,7 @@ public class ABattle : Mode
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
-        {"테무산 반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다."},
+        //{"테무산 반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
         {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."},
