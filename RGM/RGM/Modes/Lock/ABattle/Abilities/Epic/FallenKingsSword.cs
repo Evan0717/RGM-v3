@@ -12,10 +12,6 @@ namespace RGM.Modes.Abilities.Epic;
     AbilityCategory.Epic, AbilityType.EPIC_FALLENKINGSSWORD)]
 public class FallenKingsSword : Ability
 {
-    private readonly List<RoleTypeId> _ignoredRoles =
-    [
-        RoleTypeId.Scp173
-    ];  
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -30,8 +26,7 @@ public class FallenKingsSword : Ability
     {
         if (ev.Attacker == null || 
             ev.Attacker != Owner || 
-            ev.Player == ev.Attacker || 
-            _ignoredRoles.Contains(ev.Attacker.Role)) return;
+            ev.Player == ev.Attacker) return;
         if (!HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub)) return;
         if (ABattle.Instance.GetAbility(Owner, AbilityType.EPIC_FALLENKINGSSWORD) != this) return;
 

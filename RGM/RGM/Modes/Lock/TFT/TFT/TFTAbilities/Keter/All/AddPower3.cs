@@ -7,12 +7,6 @@ namespace DAONTFT.Core.TFT.Keter.All;
 [TFTAbility("단련 · 통달", "피해 증폭을 얻습니다. (+60%)", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower3, "💪")]
 public class AddPower3 : TFTAbility
 {
-    List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
-    {
-        RoleTypeId.Scp173,
-        RoleTypeId.Scp049
-    };
-
     public override void OnEnabled()
     {
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -25,7 +19,7 @@ public class AddPower3 : TFTAbility
 
     public void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker != Owner || ignoredRoles.Contains(ev.Attacker.Role))
+        if (ev.Attacker != Owner)
             return;
 
         ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.6f;
