@@ -1,7 +1,10 @@
-﻿using Exiled.API.Enums;
+﻿using System.Collections.Generic;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using MEC;
 using PlayerRoles;
 using RGM.API.Features;
 
@@ -9,11 +12,13 @@ namespace RGM.Modes.Abilities.Mythic;
 
 [Ability("장미칼", """
                 이 명검은 무한으로 발산하는 힘을 가지고 있습니다...
-                50% 확률로 진영을 변경하며, 변경 실패 시 적을 『사망』 시킵니다.
+                50% 확률로 진영을 변경하며, 변경 실패 시 『죽음에 이르는 공격』을 가합니다.
                 """, AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
 public class Rosehip : Ability
 {
     private ushort _serial;
+    private readonly HashSet<Player> _sideChangedTargets = [];
+    private readonly HashSet<Player> _lethalAttackTargets = [];
 
     public override void OnEnabled()
     {
@@ -37,13 +42,28 @@ public class Rosehip : Ability
         if (ev.Attacker == null ||
             ev.Attacker.CurrentItem == null ||
             ev.Attacker.CurrentItem.Serial != _serial) return;
-        if (UnityEngine.Random.Range(1, 101) <= 50)
+
+        if (_sideChangedTargets.Contains(ev.Player))
         {
             ev.IsAllowed = false;
-            ev.Player.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
             return;
         }
-        
-        ev.Player.Hurt(amount: ev.Player.MaxHealth, damageType: DamageType.Crushed, attacker: ev.Attacker);
+
+        if (_lethalAttackTargets.Remove(ev.Player))
+            return;
+
+        ev.IsAllowed = false;
+        if (UnityEngine.Random.Range(1, 101) <= 50)
+        {
+            _sideChangedTargets.Add(ev.Player);
+            ev.Player.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
+            Timing.CallDelayed(Timing.WaitForOneFrame, () => _sideChangedTargets.Remove(ev.Player));
+            return;
+        }
+
+        var shieldvalue = ev.Player.IsScpRole() ? ev.Player.MaxHumeShield : ev.Player.MaxArtificialHealth;
+        _lethalAttackTargets.Add(ev.Player);
+        Timing.CallDelayed(Timing.WaitForOneFrame, () => _lethalAttackTargets.Remove(ev.Player));
+        ev.Player.Hurt(ev.Attacker, ev.Player.MaxHealth + shieldvalue, damageType:DamageType.Scp1509);
     }
 }

@@ -1,8 +1,10 @@
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
+using Exiled.Events.EventArgs.Warhead;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
@@ -21,7 +23,9 @@ public class Reincarnation : Ability
     private const int RequiredHits = 70;
     private const int RequiredKills = 5;
     private const int MovementBoostIntensity = 40;
-
+    
+    private static bool _isDetonatingState;
+    
     private bool _isContractActive;
     private bool _isCoolingDown;
     private int _hitCount;
@@ -35,6 +39,7 @@ public class Reincarnation : Ability
         Exiled.Events.Handlers.Player.Hurt += OnHurt;
         Exiled.Events.Handlers.Player.Died += OnDied;
         Exiled.Events.Handlers.Scp106.Attacking += OnScp106Attacking;
+        Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;
     }
 
     public override void OnDisabled()
@@ -44,6 +49,7 @@ public class Reincarnation : Ability
         Exiled.Events.Handlers.Player.Hurt -= OnHurt;
         Exiled.Events.Handlers.Player.Died -= OnDied;
         Exiled.Events.Handlers.Scp106.Attacking -= OnScp106Attacking;
+        Exiled.Events.Handlers.Warhead.Detonating -= OnDetonating;
 
         _contractVersion++;
 
@@ -54,6 +60,15 @@ public class Reincarnation : Ability
         _isCoolingDown = false;
         _hitCount = 0;
         _killCount = 0;
+    }
+
+    private void OnDetonating(DetonatingEventArgs _)
+    {
+        if (_isDetonatingState)
+            return;
+
+        _isDetonatingState = true;
+        Timing.CallDelayed(Timing.WaitForOneFrame, () => _isDetonatingState = false);
     }
 
     private void OnDying(DyingEventArgs ev)
@@ -222,6 +237,10 @@ public class Reincarnation : Ability
 
     private static bool IsContractExemptDamage(DamageType damageType)
     {
-        return damageType is DamageType.Warhead or DamageType.PocketDimension or DamageType.Crushed;
+        if (_isDetonatingState ||
+            damageType is DamageType.Warhead or DamageType.PocketDimension or DamageType.Crushed or DamageType.Falldown)
+            return true;
+
+        return false;
     }
 }
