@@ -114,7 +114,7 @@ public class ABattle : Mode
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
         //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
-        //{"테무산 반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다."},
+        {"반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
         {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."},
@@ -710,7 +710,12 @@ public class ABattle : Mode
             return false;
         }
 
-        var addingAbilityEventArgs = new AddingAbilityEventArgs(player, type);
+        var addingAbilityEventArgs = new AddingAbilityEventArgs(
+            player,
+            type,
+            reflectorChain,
+            allowReflector,
+            extraReflectorChain);
         AddingAbility?.Invoke(addingAbilityEventArgs);
 
         if (!addingAbilityEventArgs.IsAllowed)
@@ -752,18 +757,11 @@ public class ABattle : Mode
 
         if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient)
         {
-            // LEGEND_REFLECTOR: 50% 확률로 동일 능력 추가 획득. 동일 능력 연쇄는 최대 3회까지.
-            if (reflectorChain < 3 && player.HasAbility(AbilityType.LEGEND_REFLECTOR) &&
-                Random.Range(1, 101) <= 50)
-            {
-                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain);
-            }
-
             // 추가 모드 반사경: 25% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 2회까지.
             if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
                 Random.Range(1, 101) <= 25)
             {
-                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain);
+                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 1);
             }
         }
 

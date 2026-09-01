@@ -20,10 +20,23 @@ public abstract class Ability
     public Player Owner { get; set; }
 }
 
-public sealed class AddingAbilityEventArgs(Player player, AbilityType abilityType) : System.EventArgs
+public sealed class AddingAbilityEventArgs(
+    Player player,
+    AbilityType abilityType,
+    int reflectorChain,
+    bool allowReflector,
+    int extraReflectorChain) : System.EventArgs
 {
+    public AddingAbilityEventArgs(Player player, AbilityType abilityType)
+        : this(player, abilityType, 0, true, 0)
+    {
+    }
+
     public Player Player { get; } = player;
     public AbilityType AbilityType { get; } = abilityType;
+    public int ReflectorChain { get; } = reflectorChain;
+    public bool AllowReflector { get; } = allowReflector;
+    public int ExtraReflectorChain { get; } = extraReflectorChain;
     public bool IsAllowed { get; set; } = true;
 }
 
