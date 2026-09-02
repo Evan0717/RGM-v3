@@ -238,9 +238,13 @@ namespace RGM.Donator
 
             if (kE == "Lightning")
             {
-                SchematicObject Lightning = ObjectSpawner.SpawnSchematic("LightningKE", new Vector3(_pos.x, _pos.y, _pos.z), rot);
+                SchematicObject Lightning1 = ObjectSpawner.SpawnSchematic("LightningKE", new Vector3(_pos.x, _pos.y, _pos.z), rot);
+                yield return Timing.WaitForSeconds(0.25f);
+                Lightning1.Destroy();
 
-                Timing.CallDelayed(1.5f, Lightning.Destroy);
+                SchematicObject Lightning2 = ObjectSpawner.SpawnSchematic("LightningKE", new Vector3(_pos.x, _pos.y, _pos.z), rot * Quaternion.Euler(0f, 180f, 0f));
+                yield return Timing.WaitForSeconds(0.25f);
+                Lightning2.Destroy();
             }
         }
 
