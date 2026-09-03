@@ -567,7 +567,10 @@ public class ABattle : Mode
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
             {
-                player.AddBroadcast(10, $"<size=25><b><color=#FF5F1F>HYPER BURNING</color></b></size>\n<size=20><color=#DC143C>더욱 더 많은 워크스테이션!!!</color></size>");
+                player.AddBroadcast(10, $"""
+                                         <size=25><b><color=#FF5F1F>HYPER BURNING</color></b></size>
+                                         <size=20><color=#DC143C>더욱 더 많은 워크스테이션!!!</color></size>
+                                         """);
             }
         }
         foreach (var player in PlayerManager.List)
@@ -583,8 +586,6 @@ public class ABattle : Mode
                 Log.Error($"An error occurred while trying to add <b><i>{player.Nickname}</i></b> to the dictionary: {e}");
             }
         }
-
-        yield break;
     }
 
     private IEnumerator<float> HintCoroutine()
@@ -613,7 +614,7 @@ public class ABattle : Mode
                 PlayerWorkstations[player].Clear();
 
                 if (player != null && player.IsConnected)
-                    player.AddBroadcast(10, $"<b><size=20>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
+                    player.AddBroadcast(10, $"<b><size=25>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
             }
 
             yield return Timing.WaitForSeconds(60 * 8);
