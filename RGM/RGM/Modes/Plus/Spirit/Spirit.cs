@@ -90,8 +90,7 @@ namespace RGM.Modes
         public IEnumerator<float> OnDied(DiedEventArgs ev)
         {
             if (spirits.Contains(ev.Player) || 
-                Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type)
-                )
+                Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
             {
                 ev.Player.AddHint("스피릿 성불", $"성불했습니다..", 3);
                 spirits.Remove(ev.Player);

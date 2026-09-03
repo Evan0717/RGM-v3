@@ -14,7 +14,7 @@ namespace RGM.Modes.Abilities.Unique.Scp173.Legend;
 
 public class Debris : Ability
 {
-    private const float Radius = 11f;
+    private const float Radius = 15f;
     private const float CooldownDuration = 30f;
 
     private bool _isCoolingDown;

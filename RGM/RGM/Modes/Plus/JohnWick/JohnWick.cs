@@ -7,10 +7,10 @@
         public override string Description => "권총류 무기의 데미지가 일정 배율로 상승합니다.";
         public override string Detail =>
 """
-COM-15
-COM-18
-COM-45
-.44 리볼버
+COM-15 -> 610% 증가
+COM-18 -> 290% 증가
+COM-45 -> 170% 증가
+.44 리볼버 -> 80% 증가
 """;
         public override string Color => "2EFEF7";
 
@@ -31,9 +31,9 @@ COM-45
             if (ev.Attacker == null) return;
             ev.Amount *= ev.Attacker.CurrentItem.Type switch
             {
-                ItemType.GunCOM15 => 6.5f,
+                ItemType.GunCOM15 => 7.1f,
                 ItemType.GunCOM18 => 3.8f,
-                ItemType.GunCom45 => 2.6f,
+                ItemType.GunCom45 => 2.7f,
                 ItemType.GunRevolver => 1.8f,
                 _ => 1f
             };

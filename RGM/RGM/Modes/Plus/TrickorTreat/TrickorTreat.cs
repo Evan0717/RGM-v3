@@ -5,6 +5,7 @@ using MEC;
 using RGM.API.Features;
 using RGM.Commands.RemoteAdminCommands;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static RGM.Variables.Variable;
 
@@ -60,22 +61,19 @@ namespace RGM.Modes
             {
                 foreach (var door in Door.List)
                 {
-                    if (Random.Range(0, 100) < 1)
-                    {
-                        for (int i = 0; i < Random.Range(1, 10); i++)
-                            CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.1f, 50), door.Position + new Vector3(0, 2, 0));
-                    }
+                    if (Random.Range(1, 101) > 3) continue;
+                    for (int i = 0; i < Random.Range(1, 10); i++)
+                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 32), door.Position + new Vector3(0, 2, 0));
                 }
 
-                foreach (var player in PlayerManager.List)
+                foreach (var player in PlayerManager.List.Where(player => Random.Range(1, 101) <= 3))
                 {
-                    if (Random.Range(0, 100) < 2)
-                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.1f, 50), player.Position);
+                    CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 32), player.Position);
                 }
 
                 GlobalPlayer.TryPlay("treat or treat", 1.5f);
 
-                yield return Timing.WaitForSeconds(Random.Range(1, 300));
+                yield return Timing.WaitForSeconds(Random.Range(30, 150));
             }
         }
 
@@ -90,7 +88,7 @@ namespace RGM.Modes
             {
                 Timing.CallDelayed(1f, () =>
                 {
-                    for (int i = 1; i < 4; i++)
+                    for (int i = 1; i < 5; i++)
                     {
                         player.AddRandomCandy();
                     }

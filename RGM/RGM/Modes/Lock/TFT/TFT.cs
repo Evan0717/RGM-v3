@@ -154,11 +154,7 @@ public class TFT : Mode
         {
             foreach (var player in Player.List)
             {
-                if (role.ContainsKey(player))
-                    player.Role.Set(role[player]);
-
-                else
-                    player.Role.Set(RoleTypeId.ClassD);
+                player.Role.Set(role.TryGetValue(player, out var value) ? value : RoleTypeId.ClassD);
             }
 
             try

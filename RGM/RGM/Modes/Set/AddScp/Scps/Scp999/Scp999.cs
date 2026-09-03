@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -11,6 +12,7 @@ using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Sets.AddScp.Scps
 {
@@ -30,19 +32,19 @@ namespace RGM.Modes.Sets.AddScp.Scps
             {
                 player.Scale = new Vector3(0.3f, 0.3f, 0.3f);
             });
-            player.AddHint("SCP-999 설명",
-"""        
-<size=25>
-당신은 <color=red>SCP-999</color>(<color=#a4fc16>Safe</color>)입니다.
-</size>
-<size=20>
-모두에게 중립이며, 그들에게 버프를 줄 수 있습니다.
-• 플레이어를 바라보면, 속도가 증가합니다.
-• 플레이어 근처에 가면, 체력을 회복시킵니다.
-• 종종 [ALT]키를 눌러 애교를 부릴 수 있습니다.
-• 아이템을 들 수는 있으나, 무기를 쥘 수 없습니다.
-</size>
-""", 20);
+            player.AddHint("SCP-999 설명", """        
+                                         <size=25>
+                                         당신은 <color=red>SCP-999</color>(<color=#a4fc16>Safe</color>)입니다.
+                                         </size>
+                                         <size=20>
+                                         모두에게 중립이며, 그들에게 버프를 줄 수 있습니다.
+                                         • 플레이어를 바라보면, 속도가 증가합니다.
+                                         • 플레이어 근처에 가면, 체력을 회복시킵니다.
+                                         • 종종 [ALT]키를 눌러 애교를 부릴 수 있습니다.
+                                         • 해당 애교는 1% 확률로 적을 심장마비로 사망시킬 수 있습니다!
+                                         • 아이템을 들 수는 있으나, 무기를 쥘 수 없습니다.
+                                         </size>
+                                         """, 20);
                 
             SchematicObject schematic = ObjectSpawner.SpawnSchematic("SCP_999", new Vector3(player.Position.x, player.Position.y - 0.1f, player.Position.z), player.Rotation, new Vector3(3, 3, 3));
             schematic.transform.parent = player.Transform;
@@ -66,8 +68,9 @@ namespace RGM.Modes.Sets.AddScp.Scps
                             player.EnableEffect(EffectType.Slowness, 20);
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        Log.Error($"Reason: {e.Message}, StackTrace: {e.StackTrace}");
                     }
 
                     player.Heal(0.2f);
@@ -119,10 +122,14 @@ namespace RGM.Modes.Sets.AddScp.Scps
                     schematic.AnimationController.Play(name);
                     Tools.PlaySound(schematic.transform, "scp-999", 2);
 
-                    foreach (var p in PlayerManager.List.Where(x => Vector3.Distance(player.Position, x.Position) < 10))
+                    foreach (var p in PlayerManager.List.Where(x => Vector3.Distance(player.Position, x.Position) < 15))
                     {
                         p.AddEffect(EffectType.MovementBoost, 15, 7);
                         p.AddEffect(EffectType.Invigorated, 1, 7);
+                        if (Random.Range(1, 101) == 44)
+                        {
+                            p.Kill("SCP-999의 애교에 심장이 버티지 못했습니다.");
+                        }
                     }
 
                     cuteCooldown = true;

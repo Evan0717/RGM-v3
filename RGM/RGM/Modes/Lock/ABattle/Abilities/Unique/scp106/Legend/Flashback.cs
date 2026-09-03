@@ -9,7 +9,7 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Legend;
 
 [Ability("회상", 
     """
-               대상에게 『죽음에 이르는 공격』을 가합니다. 추가로, 자신의 이동 속도가 50% 증가합니다.
+               대상에게 『죽음에 이르는 공격』을 가합니다. 추가로, 자신의 이동 속도가 20% 증가합니다.
                <color=#FF2400>[전용 신화]</color> 회고를 보유 중인 경우 해당 능력은 획득할 수 없습니다.
                """, 
     AbilityCategory.Legend,
@@ -22,13 +22,13 @@ public class Flashback : Ability
 
     public override void OnEnabled()
     {
-        Owner.AddEffect(EffectType.MovementBoost, 50);
+        Owner.AddEffect(EffectType.MovementBoost, 20);
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
 
     public override void OnDisabled()
     {
-        Owner.RemoveEffect(EffectType.MovementBoost, 50);
+        Owner.RemoveEffect(EffectType.MovementBoost, 20);
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 

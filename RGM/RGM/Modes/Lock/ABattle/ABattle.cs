@@ -119,7 +119,7 @@ public class ABattle : Mode
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
         {"프리즘 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."},
         {"잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다."},
-        {"스펙업", "능력을 획득할 때마다 기본 최대 체력의 인간 9%, SCP 1.5%만큼 최대 체력이 증가합니다."},
+        //{"스펙업", "능력을 획득할 때마다 기본 최대 체력의 인간 9%, SCP 1.5%만큼 최대 체력이 증가합니다."},
         {"캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다."},
         {"대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 18% 확률로 아사합니다."},
         {"지원", "1~3분마다 모두에게 능력 선택창이 열립니다."},
@@ -138,7 +138,7 @@ public class ABattle : Mode
         new CASSIE(),
         new AbilityInformation()
     ];
-
+    
     private static readonly List<ICommand> RemoteAdminCommands =
     [
         new AddAbility(),
@@ -206,18 +206,22 @@ public class ABattle : Mode
         if (!newlyAdded)
             return extraMode;
         
-        if (extraMode == "캐시 청소")
-            Timing.RunCoroutine(Instance.ClearCache());
-        
-        if (extraMode == "지원")
-            Timing.RunCoroutine(Instance.Backup());
-        
-        if (extraMode == "난장판")
+        switch (extraMode)
         {
-            for (int i = 0; i < 3; i++)
-                PickExtraMode(exceptModes: ["난장판"], allowBasic: false);
-            Tools.LoadMap("AddWorkstation");
-            Timing.CallDelayed(1f, ActivateExtraModeForChaos);
+            case "캐시 청소":
+                Timing.RunCoroutine(Instance.ClearCache());
+                break;
+            case "지원":
+                Timing.RunCoroutine(Instance.Backup());
+                break;
+            case "난장판":
+            {
+                for (int i = 0; i < 3; i++)
+                    PickExtraMode(exceptModes: ["난장판"], allowBasic: false);
+                Tools.LoadMap("AddWorkstation");
+                Timing.CallDelayed(1f, ActivateExtraModeForChaos);
+                break;
+            }
         }
 
         return extraMode;
@@ -558,12 +562,15 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (Random.Range(1, 101) <= 7 && !ExtraModes.ContainsKey("난장판"))
+        if (Random.Range(1, 101) <= 10 && !ExtraModes.ContainsKey("난장판"))
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
             {
-                player.AddBroadcast(10, $"<size=25><b><color=#FF5F1F>HYPER BURNING</color></b></size>\n<size=20><color=#DC143C>더욱 더 많은 워크스테이션!!!</color></size>");
+                player.AddBroadcast(10, $"""
+                                         <size=25><b><color=#FF5F1F>HYPER BURNING</color></b></size>
+                                         <size=20><color=#DC143C>더욱 더 많은 워크스테이션!!!</color></size>
+                                         """);
             }
         }
         foreach (var player in PlayerManager.List)
@@ -579,8 +586,6 @@ public class ABattle : Mode
                 Log.Error($"An error occurred while trying to add <b><i>{player.Nickname}</i></b> to the dictionary: {e}");
             }
         }
-
-        yield break;
     }
 
     private IEnumerator<float> HintCoroutine()
@@ -609,7 +614,7 @@ public class ABattle : Mode
                 PlayerWorkstations[player].Clear();
 
                 if (player != null && player.IsConnected)
-                    player.AddBroadcast(10, $"<b><size=20>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
+                    player.AddBroadcast(10, $"<b><size=25>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
             }
 
             yield return Timing.WaitForSeconds(60 * 8);
@@ -833,11 +838,9 @@ public class ABattle : Mode
             {
                 int requiredCount = req.Count();
                 int playerCount = abilities.Count(a => a.Data.AbilityType == req.Key);
-                if (playerCount < requiredCount)
-                {
-                    hasAllRequired = false;
-                    break;
-                }
+                if (playerCount >= requiredCount) continue;
+                hasAllRequired = false;
+                break;
             }
 
             if (!hasAllRequired)
@@ -1459,17 +1462,24 @@ public class ABattle : Mode
             }
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
-                [AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST
+                [
+                    AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST,
+                    AbilityType.LEGEND_RESURRECTION
                 ]).First());
             
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)
         {
-            Timing.CallDelayed(Timing.WaitForOneFrame, () => player.AddAbility(AbilityType.NORMAL_RABBIT));
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                player.AddAbility(AbilityType.NORMAL_RABBIT);
+                player.AddAbility(AbilityType.NORMAL_RABBIT);
+            });
         }
     }
 }
+
 
 public static class ABattleExtensions
 {
@@ -1514,17 +1524,13 @@ public static class ABattleExtensions
         {
             if (p == player) continue;
 
-            Ability EnemyAnchor = ABattle.Instance.GetAbility(p, AbilityType.MYTHIC_ANCHOR);
-            if (EnemyAnchor == null) continue;
-
-            if (EnemyAnchor is Abilities.Mythic.Anchor anchor && anchor.TargetPlayer != null)
-            {
-                if (anchor.TargetPlayer.Contains(player))
-                {
-                    anchorOwner = p;
-                    return true;
-                }
-            }
+            Ability enemyAnchor = ABattle.Instance.GetAbility(p, AbilityType.MYTHIC_ANCHOR);
+            if (enemyAnchor == null) continue;
+            if (enemyAnchor is not Abilities.Mythic.Anchor { TargetPlayer: not null } anchor) continue;
+            if (!anchor.TargetPlayer.Contains(player)) continue;
+            
+            anchorOwner = p;
+            return true;
         }
         anchorOwner = null;
         return false;

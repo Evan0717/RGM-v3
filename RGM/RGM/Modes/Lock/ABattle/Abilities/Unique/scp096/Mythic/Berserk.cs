@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System.Collections.Generic;
+using Exiled.API.Enums;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
@@ -19,6 +20,7 @@ namespace RGM.Modes.Abilities.Unique.Scp096.Mythic;
 public class Berserk : Ability
 {
     private bool _berserkExplosionActive;
+    private CoroutineHandle _regenerationCoroutine;
 
     public override void OnEnabled()
     {
@@ -27,11 +29,13 @@ public class Berserk : Ability
         Owner.AddAbility(AbilityType.EPIC_SCP096_STARTEARING);
         Owner.AddEffect(EffectType.DamageReduction, 100);
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
+        _regenerationCoroutine = Timing.RunCoroutine(RegenerateHumeShield());
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+        Timing.KillCoroutines(_regenerationCoroutine);
         _berserkExplosionActive = false;
     }
 
@@ -65,5 +69,16 @@ public class Berserk : Ability
         grenade.SpawnActive(Owner.Position, Owner);
 
         Timing.CallDelayed(0.5f, () => _berserkExplosionActive = false);
+    }
+
+    private IEnumerator<float> RegenerateHumeShield()
+    {
+        while (true)
+        {
+            if (Owner.IsAlive && Owner.HumeShield < Owner.MaxHumeShield)
+                Owner.HumeShield = System.Math.Min(Owner.HumeShield + 50, Owner.MaxHumeShield);
+
+            yield return Timing.WaitForSeconds(1f);
+        }
     }
 }

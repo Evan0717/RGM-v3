@@ -15,9 +15,9 @@ namespace RGM.Modes
         public override string Description => "무슨 이유로든 피격당하면 일정 확률로 승천합니다.";
         public override string Detail =>
 """
-공격자가 <b>인간</b>인 경우 - 5%
-공격자가 <b>SCP</b>인 경우 - 50%
-공격자가 <b>???</b>인 경우 - 200%!!!!!
+공격자가 <b>인간</b>인 경우 - 6%
+공격자가 <b>SCP</b>인 경우 - 51%
+공격자가 <b>???</b>인 경우 - 173%!!!!!
 """;
         public override string Color => "FA8258";
 
@@ -58,9 +58,9 @@ namespace RGM.Modes
             int GetPercent()
             {
                 if (ev.Attacker.IsScpRole())
-                    return 50;
+                    return 51;
 
-                return ev.Attacker.Role.Type == RoleTypeId.Tutorial ? 200 : 5;
+                return ev.Attacker.Role.Type == RoleTypeId.Tutorial ? 173 : 6;
             }
         }
     }
