@@ -138,7 +138,7 @@ public class ABattle : Mode
         new CASSIE(),
         new AbilityInformation()
     ];
-
+    
     private static readonly List<ICommand> RemoteAdminCommands =
     [
         new AddAbility(),
@@ -206,18 +206,22 @@ public class ABattle : Mode
         if (!newlyAdded)
             return extraMode;
         
-        if (extraMode == "캐시 청소")
-            Timing.RunCoroutine(Instance.ClearCache());
-        
-        if (extraMode == "지원")
-            Timing.RunCoroutine(Instance.Backup());
-        
-        if (extraMode == "난장판")
+        switch (extraMode)
         {
-            for (int i = 0; i < 3; i++)
-                PickExtraMode(exceptModes: ["난장판"], allowBasic: false);
-            Tools.LoadMap("AddWorkstation");
-            Timing.CallDelayed(1f, ActivateExtraModeForChaos);
+            case "캐시 청소":
+                Timing.RunCoroutine(Instance.ClearCache());
+                break;
+            case "지원":
+                Timing.RunCoroutine(Instance.Backup());
+                break;
+            case "난장판":
+            {
+                for (int i = 0; i < 3; i++)
+                    PickExtraMode(exceptModes: ["난장판"], allowBasic: false);
+                Tools.LoadMap("AddWorkstation");
+                Timing.CallDelayed(1f, ActivateExtraModeForChaos);
+                break;
+            }
         }
 
         return extraMode;
@@ -558,7 +562,7 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (Random.Range(1, 101) <= 7 && !ExtraModes.ContainsKey("난장판"))
+        if (Random.Range(1, 101) <= 10 && !ExtraModes.ContainsKey("난장판"))
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
@@ -833,11 +837,9 @@ public class ABattle : Mode
             {
                 int requiredCount = req.Count();
                 int playerCount = abilities.Count(a => a.Data.AbilityType == req.Key);
-                if (playerCount < requiredCount)
-                {
-                    hasAllRequired = false;
-                    break;
-                }
+                if (playerCount >= requiredCount) continue;
+                hasAllRequired = false;
+                break;
             }
 
             if (!hasAllRequired)
@@ -1459,17 +1461,24 @@ public class ABattle : Mode
             }
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
-                [AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST
+                [
+                    AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST,
+                    AbilityType.LEGEND_RESURRECTION
                 ]).First());
             
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)
         {
-            Timing.CallDelayed(Timing.WaitForOneFrame, () => player.AddAbility(AbilityType.NORMAL_RABBIT));
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                player.AddAbility(AbilityType.NORMAL_RABBIT);
+                player.AddAbility(AbilityType.NORMAL_RABBIT);
+            });
         }
     }
 }
+
 
 public static class ABattleExtensions
 {
@@ -1514,17 +1523,13 @@ public static class ABattleExtensions
         {
             if (p == player) continue;
 
-            Ability EnemyAnchor = ABattle.Instance.GetAbility(p, AbilityType.MYTHIC_ANCHOR);
-            if (EnemyAnchor == null) continue;
-
-            if (EnemyAnchor is Abilities.Mythic.Anchor anchor && anchor.TargetPlayer != null)
-            {
-                if (anchor.TargetPlayer.Contains(player))
-                {
-                    anchorOwner = p;
-                    return true;
-                }
-            }
+            Ability enemyAnchor = ABattle.Instance.GetAbility(p, AbilityType.MYTHIC_ANCHOR);
+            if (enemyAnchor == null) continue;
+            if (enemyAnchor is not Abilities.Mythic.Anchor { TargetPlayer: not null } anchor) continue;
+            if (!anchor.TargetPlayer.Contains(player)) continue;
+            
+            anchorOwner = p;
+            return true;
         }
         anchorOwner = null;
         return false;

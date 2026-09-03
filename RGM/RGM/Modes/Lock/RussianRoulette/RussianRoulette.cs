@@ -4,7 +4,7 @@ using System.Linq;
 using Exiled.API.Features;
 using MEC;
 using Mirror;
-
+using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using UnityEngine;
 using Exiled.API.Enums;
@@ -35,11 +35,11 @@ namespace RGM.Modes
         public static RussianRoulette Instance;
 
         int RequiredFinals;
-        List<Player> pl = new List<Player>();
-        List<Player> Finals = new List<Player>();
+        List<Player> pl = new();
+        List<Player> Finals = new();
 
-        Dictionary<Vector3, List<Player>> TablePositions = new Dictionary<Vector3, List<Player>>();
-        Dictionary<Player, Player> ShotChecks = new Dictionary<Player, Player>();
+        Dictionary<Vector3, List<Player>> TablePositions = new();
+        Dictionary<Player, Player> ShotChecks = new();
 
         CoroutineHandle _onModeStarted;
 
@@ -66,7 +66,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var ply in PlayerManager.List)
             {
@@ -158,7 +158,7 @@ namespace RGM.Modes
             yield break;
         }
 
-        public IEnumerator<float> Process(string roundName, Vector3 key)
+        private IEnumerator<float> Process(string roundName, Vector3 key)
         {
             List<Player> Players = roundName == "예선전" ? TablePositions[key] : Finals;
 
@@ -180,7 +180,10 @@ namespace RGM.Modes
                     Revolver.BarrelAmmo = 1;
 
                     Players[currentPlayerIndex].CurrentItem = Revolver;
-                    Players[currentPlayerIndex].AddHint("러시안 룰렛", $"<size=25>당신의 차례입니다.\n다른 유저를 사살하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>");
+                    Players[currentPlayerIndex].AddHint("러시안 룰렛", $"""
+                                                                   <size=25>당신의 차례입니다.
+                                                                   다른 유저를 사살하거나, 자신을 공격함으로써 공격 기회를 한번 더 얻을 수 있습니다.</size>
+                                                                   """);
 
                     for (int i = 1; i < 11; i++)
                     {
@@ -278,22 +281,23 @@ namespace RGM.Modes
 
             yield break;
         }
-        public void OnShot(Exiled.Events.EventArgs.Player.ShotEventArgs ev)
+
+        private void OnShot(ShotEventArgs ev)
         {
             ShotChecks.Add(ev.Player, ev.Target);
         }
 
-        public void OnSearchingPickup(Exiled.Events.EventArgs.Player.SearchingPickupEventArgs ev)
+        private void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingItem(Exiled.Events.EventArgs.Player.DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        private void OnKicking(KickingEventArgs ev)
         {
             if (ev.Reason.ToLower().Contains("afk"))
                 ev.IsAllowed = false;
