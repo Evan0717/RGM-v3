@@ -8,6 +8,7 @@ using PlayerRoles;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Server;
+using Exiled.Events.EventArgs.Player;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -52,7 +53,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             Timing.KillCoroutines(_autoWarhead);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
@@ -65,12 +66,12 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             yield break;
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
@@ -93,13 +94,13 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             });
         }
 
-        public void OnRespawningTeam(RespawningTeamEventArgs ev)
+        private void OnRespawningTeam(RespawningTeamEventArgs ev)
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
         }
-        
-        public IEnumerator<float> AutoWarhead()
+
+        private IEnumerator<float> AutoWarhead()
         {
             yield return Timing.WaitForSeconds(13 * 60);
 

@@ -424,16 +424,22 @@ namespace RGM.Modes
         {
             if (player.IsAlive && player.IsScpRole())
             {
-                List<RoleTypeId> ScpsList = new List<RoleTypeId>()
-                {
+                List<RoleTypeId> scpsList =
+                [
                     RoleTypeId.Scp3114,
                     RoleTypeId.Scp079,
-                    RoleTypeId.Scp049
-                };
+                    RoleTypeId.Scp049,
+                    RoleTypeId.Flamingo,
+                    RoleTypeId.AlphaFlamingo,
+                    RoleTypeId.ChaosFlamingo,
+                    RoleTypeId.NtfFlamingo,
+                    RoleTypeId.ZombieFlamingo
+                ];
 
-                if (ScpsList.Contains(player.Role))
+                if (scpsList.Contains(player.Role))
                 {
-                    player.Role.Set(Tools.EnumToList<RoleTypeId>().Where(x => !ScpsList.Contains(x) && x.IsScpRole())
+                    player.Role.Set(Tools.EnumToList<RoleTypeId>()
+                        .Where(x => !scpsList.Contains(x) && x.IsScpRole())
                         .ToList().GetRandomValue());
                 }
             }

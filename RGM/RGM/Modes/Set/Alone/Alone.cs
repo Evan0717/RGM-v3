@@ -51,18 +51,27 @@ $"""
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             alone = PlayerManager.List.Where(x => !x.IsNPC).GetRandomValue();
-            List<RoleTypeId> ignoredRoles = new List<RoleTypeId> 
-            { 
+            List<RoleTypeId> ignoredRoles =
+            [
                 RoleTypeId.Scp079,
                 RoleTypeId.Scp3114,
-                RoleTypeId.Scp0492
-            };
-            List<RoleTypeId> scpRoles = Tools.EnumToList<RoleTypeId>().Where(x => x.IsScp() && !ignoredRoles.Contains(x)).ToList();
-            List<ItemType> items = new List<ItemType>() 
-            {
+                RoleTypeId.Scp0492,
+                RoleTypeId.Flamingo,
+                RoleTypeId.AlphaFlamingo,
+                RoleTypeId.ChaosFlamingo,
+                RoleTypeId.NtfFlamingo,
+                RoleTypeId.ZombieFlamingo
+            ];
+            
+            List<RoleTypeId> scpRoles = Tools.EnumToList<RoleTypeId>()
+                .Where(x => x.IsScp() && !ignoredRoles.Contains(x))
+                .ToList();
+            
+            List<ItemType> items =
+            [
                 ItemType.KeycardO5,
                 ItemType.SCP500,
                 ItemType.SCP268,
@@ -71,7 +80,7 @@ $"""
                 ItemType.Jailbird,
                 ItemType.MicroHID,
                 ItemType.SCP207
-            };
+            ];
 
             alone.Role.Set(RoleTypeId.ClassD);
             alone.EnableEffect(EffectType.MovementBoost, 255);
@@ -85,7 +94,7 @@ $"""
             yield break;
         }
 
-        public void OnEscaped(EscapedEventArgs ev)
+        private void OnEscaped(EscapedEventArgs ev)
         {
             if (ev.Player == alone)
             {
@@ -96,15 +105,19 @@ $"""
             } 
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count())
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

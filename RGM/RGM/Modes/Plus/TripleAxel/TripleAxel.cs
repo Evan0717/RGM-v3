@@ -22,12 +22,15 @@ namespace RGM.Modes
 COM-45로 인한 데미지가 77%로 하향됩니다.
 
 해당 모드에서는 SCP-173이 등장하지 않으며, Flashlight 아이템이 기본 지급됩니다.
+
+* 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "DF7401";
 
         public static TripleAxel Instance;
 
         private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _autoWarhead;
 
         public override void OnEnabled()
         {
@@ -36,6 +39,7 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
         }
 
         public override void OnDisabled()
@@ -45,6 +49,7 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
+            Timing.KillCoroutines(_autoWarhead);
         }
         
         private IEnumerator<float> OnModeStarted()
@@ -103,6 +108,22 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
             player.ClearAmmo();
             player.AddItem(ItemType.Flashlight);
             player.AddItem(ItemType.Ammo9x19, 30);
+        }
+        private IEnumerator<float> AutoWarhead()
+        {
+            yield return Timing.WaitForSeconds(11 * 60);
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
+
+            if (Warhead.IsDetonated)
+                yield break;
+
+            yield return Timing.WaitForSeconds(1 * 60);
+
+            DeadmanSwitch.StartWarhead();
         }
     }
 };
