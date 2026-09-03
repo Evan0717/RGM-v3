@@ -111,7 +111,7 @@ SCP-079
 
             Timing.CallDelayed(1f, () =>
             {
-                if (Random.Range(1, 11) == 1)
+                if (Random.Range(1, 101) <= 44)
                 {
                     RoleTypeId _roleId = _roleList.GetRandomValue();
 
