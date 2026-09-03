@@ -1,28 +1,33 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Features;
 using MEC;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using PlayerRoles;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.TripleAxel)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.TripleAxel)]
     public class TripleAxel : Mode
     {
         public override string Name => "트리플악셀";
-        public override string Description => "획득한 총기는 COM-45로 변환됩니다. 대신 데미지가 70%로 하향됩니다.";
+        public override string Description => "획득한 총기는 COM-45로 변환됩니다. 대신 데미지가 77%로 하향됩니다.";
         public override string Detail =>
 """
 총기를 습득하는 그 순간부터 COM-45로 변환됩니다.
 탄약을 습득하는 그 순간부터 9x19 탄약으로 변경됩니다.
-COM-45로 인한 데미지가 70%로 하향됩니다.
+COM-45로 인한 데미지가 77%로 하향됩니다.
+
+해당 모드에서는 SCP-173이 등장하지 않으며, Flashlight 아이템이 기본 지급됩니다.
 """;
         public override string Color => "DF7401";
 
         public static TripleAxel Instance;
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -41,18 +46,16 @@ COM-45로 인한 데미지가 70%로 하향됩니다.
 
             Timing.KillCoroutines(_onModeStarted);
         }
-
-        public IEnumerator<float> OnModeStarted()
+        
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
                 foreach (var item in player.Items)
                 {
-                    if (item.IsFirearm && item.Type != ItemType.GunCom45)
-                    {
-                        player.RemoveItem(item);
-                        player.AddItem(ItemType.GunCom45);
-                    }
+                    if (!item.IsFirearm || item.Type == ItemType.GunCom45) continue;
+                    player.RemoveItem(item);
+                    player.AddItem(ItemType.GunCom45);
                 }
 
                 Spawned(player);
@@ -61,38 +64,45 @@ COM-45로 인한 데미지가 70%로 하향됩니다.
             yield break;
         }
 
-        public void OnItemAdded(ItemAddedEventArgs ev)
+        private void OnItemAdded(ItemAddedEventArgs ev)
         {
-            if (ev.Item.IsFirearm && ev.Item.Type != ItemType.GunCom45)
-            {
-                ev.Player.RemoveItem(ev.Item);
-                ev.Player.AddItem(ItemType.GunCom45);
-            }
+            if (!ev.Item.IsFirearm || ev.Item.Type == ItemType.GunCom45) return;
+            ev.Player.RemoveItem(ev.Item);
+            ev.Player.AddItem(ItemType.GunCom45);
         }
 
-        public void OnHurting(HurtingEventArgs ev)
+        private void OnHurting(HurtingEventArgs ev)
         {
             if (ev.Attacker != null && ev.Attacker.CurrentItem.Type == ItemType.GunCom45)
-                ev.DamageHandler.Damage *= 0.7f;
+                ev.DamageHandler.Damage *= 0.77f;
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
-            if (player.IsAlive)
+            if (!player.IsAlive) return;
+
+            if (player.Role.Type == RoleTypeId.Scp173)
             {
-                ushort totalAmmo = 0;
+                List<RoleTypeId> scpRoles =
+                [
+                    RoleTypeId.Scp049,
+                    RoleTypeId.Scp096,
+                    RoleTypeId.Scp106,
+                    RoleTypeId.Scp939,
+                    RoleTypeId.Scp3114
+                ];
 
-                foreach (var ammo in player.Ammo.Values)
-                    totalAmmo += (ushort)(ammo * 3);
-
-                player.ClearAmmo();
-                player.AddAmmo(AmmoType.Nato9, totalAmmo);
+                player.Role.Set(scpRoles.GetRandomValue());
             }
+
+            player.ClearAmmo();
+            player.AddItem(ItemType.Flashlight);
+            player.AddItem(ItemType.Ammo9x19, 30);
         }
     }
 };
