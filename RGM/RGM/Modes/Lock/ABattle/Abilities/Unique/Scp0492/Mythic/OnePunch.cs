@@ -42,10 +42,11 @@ public class OnePunch : Ability
             ev.DamageHandler.Type != DamageType.Scp0492)
             return;
         
+        ev.Player.RemoveAllAbilities();
+        
         if (GodModePlayers.Contains(ev.Player))
             GodModePlayers.Remove(ev.Player);
 
-        ev.Player.RemoveAllAbilities();
-        Timing.CallDelayed(0.11f, () => ev.Player.Hit(ev.Attacker, ev.Player.MaxHealth));
+        Timing.CallDelayed(Timing.WaitForOneFrame, () => ev.Player.Hit(ev.Attacker, ev.Player.MaxHealth));
     }
 }
