@@ -235,7 +235,7 @@ namespace RGM.Modes
             _juggernaut = PlayerManager.List.ToList().GetRandomValue();
             _juggernaut.Role.Set(RoleTypeId.Tutorial);
             _juggernaut.Scale = new Vector3(1.12f, 1.12f, 1.12f);
-            _juggernaut.MaxHealth = 680 * PlayerManager.List.Count;
+            _juggernaut.MaxHealth = 630 * PlayerManager.List.Count;
             _juggernaut.Health = _juggernaut.MaxHealth;
             _juggernaut.IsBypassModeEnabled = true;
             _juggernaut.EnableEffect(EffectType.SinkHole);
@@ -244,12 +244,12 @@ namespace RGM.Modes
             _juggernaut.AddBroadcast(10, "<b><size=30>당신은 <color=#298A08>저거너트</color>입니다.</size></b>\n<size=25>본인을 제외한 모두를 사살하십시오.</size>");
             _juggernaut.Position = new Vector3(123.3271f, 288.7908f, 27.01838f);
 
-            List<ItemType> items = new List<ItemType>()
-            {
+            List<ItemType> items =
+            [
                 ItemType.GunLogicer,
                 ItemType.Jailbird,
                 ItemType.ArmorHeavy
-            };
+            ];
             foreach (var item in items)
                 _juggernaut.AddItem(item);
 
@@ -273,6 +273,13 @@ namespace RGM.Modes
             _juggernaut.EnableEffect(EffectType.FogControl, 1);
             _juggernaut.EnableEffect(EffectType.Bleeding, 5);
             _juggernaut.EnableEffect(EffectType.Burned, 1);
+
+            _juggernaut.ClearInventory();
+            _juggernaut.AddItem(ItemType.GunLogicer);
+            _juggernaut.AddItem(ItemType.ArmorHeavy);
+            
+            _juggernaut.AddHint("", "과부하의 영항으로 Jailbird가 파괴되었습니다.", 10f);
+            
             PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(10,
                 "<b><size=30><color=#298A08>저거너트</color>가 과부하 상태에 돌입합니다!</size></b>\n<size=25>모든 능력치가 강화되는 대신 지속 피해를 받으며, 받는 피해가 25% 증가합니다.</size>"));
             yield return Timing.WaitForSeconds(10f);

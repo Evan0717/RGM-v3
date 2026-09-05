@@ -55,7 +55,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                 {
                     try
                     {
-                        if (Tools.TryGetLookPlayer(player, 15, out Player target, out RaycastHit? hit))
+                        if (player.TryGetLookPlayer(15, out Player target, out _))
                         {
                             player.DisableEffect(EffectType.Slowness);
                             player.EnableEffect(EffectType.MovementBoost, 20);
@@ -73,7 +73,7 @@ namespace RGM.Modes.Sets.AddScp.Scps
                         Log.Error($"Reason: {e.Message}, StackTrace: {e.StackTrace}");
                     }
 
-                    player.Heal(0.2f);
+                    player.Heal(1f);
 
                     yield return Timing.WaitForOneFrame;
                 }

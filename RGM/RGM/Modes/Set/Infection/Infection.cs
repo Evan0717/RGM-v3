@@ -35,14 +35,36 @@ namespace RGM.Modes
 
         public static Infection Instance;
 
-        List<Player> HostZombies = new();
-        bool IsHumanEnd = false;
+        private readonly List<Player> _hostZombies = [];
+        private readonly List<Player> _heroes = [];
+        
+        private bool _isHumanEnd = false;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _checkEnd;
+        private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _checkEnd;
 
-        AudioClipPlayback audio;
+        private AudioClipPlayback _audio;
 
+        private static readonly List<ItemType> HumanItem = [
+            ItemType.KeycardScientist,
+            ItemType.GunFRMG0,
+            ItemType.Radio,
+            ItemType.Adrenaline,
+            ItemType.GrenadeHE,
+            ItemType.Medkit
+        ];
+        
+        private static readonly List<ItemType> HeroItem = [
+            ItemType.KeycardFacilityManager,
+            ItemType.GunLogicer,
+            ItemType.SCP1509,
+            ItemType.SCP500,
+            ItemType.Radio,
+            ItemType.Adrenaline,
+            ItemType.GrenadeHE,
+            ItemType.SCP500
+        ];
+        
         public override void OnEnabled()
         {
             Respawn.PauseWaves();
@@ -73,7 +95,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
             Timing.KillCoroutines(_checkEnd);
 
-            audio.IsPaused = true;
+            _audio.IsPaused = true;
         }
 
         private IEnumerator<float> OnModeStarted()
@@ -81,13 +103,15 @@ namespace RGM.Modes
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
             }
-            audio = Tools.PlayGlobalAudio("Voices", 0.3f, true);
+            _audio = Tools.PlayGlobalAudio("Voices", 0.3f, true);
 
-            for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count() / 7); i++)
+            for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count / 5); i++)
             {
-                Player hostZombie = PlayerManager.List.Where(x => x.IsAlive && !HostZombies.Contains(x)).ToList().GetRandomValue();
+                Player hostZombie = PlayerManager.List.Where(x => x.IsAlive && !_hostZombies.Contains(x) && !_heroes.Contains(x))
+                    .ToList()
+                    .GetRandomValue();
 
-                HostZombies.Add(hostZombie);
+                _hostZombies.Add(hostZombie);
 
                 Timing.CallDelayed(1, () =>
                 {
@@ -95,24 +119,46 @@ namespace RGM.Modes
                 });
             }
 
+            for (int i = 0; i < Mathf.Max(1, PlayerManager.List.Count / 5); i++)
+            {
+                Player heroes = PlayerManager.List.Where(x => x.IsAlive && !_hostZombies.Contains(x) && !_heroes.Contains(x))
+                    .ToList()
+                    .GetRandomValue();
+                
+                _heroes.Add(heroes);
+            }
+
             foreach (var player in PlayerManager.List)
             {
                 try
                 {
-                    if (!HostZombies.Contains(player))
+                    if (_hostZombies.Contains(player)) continue;
+                    if (_heroes.Contains(player))
                     {
-                        player.Role.Set(RoleTypeId.NtfCaptain, RoleSpawnFlags.AssignInventory);
-                        player.AddItem(ItemType.Ammo556x45, 10);
-
-                        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                        player.Role.Set(RoleTypeId.NtfCaptain, RoleSpawnFlags.None);
+                        player.ClearInventory();
+                        foreach (var heroitems in HeroItem)
                         {
-                            foreach (var item in player.Items)
-                            {
-                                if (item.Type == ItemType.KeycardMTFCaptain)
-                                    player.RemoveItem(item);
-                            }
-                        });
-                        player.AddItem(ItemType.KeycardScientist);
+                            player.AddItem(heroitems);
+                        }
+                        player.AddItem(ItemType.Ammo762x39, 30);
+
+                        player.MaxHealth += 100;
+                        player.Health = player.MaxHealth;
+                        player.EnableEffect(EffectType.MovementBoost, 10);
+                        player.EnableEffect(EffectType.Lightweight, 10);
+                        player.EnableEffect(EffectType.Scp1344);
+                        player.Scale = new Vector3(0.92f, 0.92f, 0.92f);
+                    }
+                    else
+                    {
+                        player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
+                        player.ClearInventory();
+                        foreach (var humanitems in HumanItem)
+                        {
+                            player.AddItem(humanitems);
+                        }
+                        player.AddItem(ItemType.Ammo556x45, 15);
                     }
                 }
                 catch (Exception ex)
@@ -131,7 +177,7 @@ namespace RGM.Modes
             if (!Round.IsEnded)
             {
                 Round.IsLocked = false;
-                IsHumanEnd = true;
+                _isHumanEnd = true;
                 Timing.RunCoroutine(Tools.SetWinner(
                     PlayerManager.List.Where(x => x.IsHuman).ToList(), 
                     PlayerManager.List.Count(x => x.IsHuman) == 1 
@@ -165,7 +211,7 @@ namespace RGM.Modes
             }
         }
 
-        void OnDetonating(DetonatingEventArgs ev)
+        private void OnDetonating(DetonatingEventArgs ev)
         {
             Door door = Door.Get(DoorType.NukeSurface);
 
@@ -184,68 +230,65 @@ namespace RGM.Modes
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                ev.Player.EnableEffect(EffectType.FogControl, 7);
+                ev.Player.EnableEffect(EffectType.FogControl, 12);
 
-                if (HostZombies.Contains(ev.Player))
+                if (_hostZombies.Contains(ev.Player))
                 {
-                    ev.Player.MaxHealth = 555;
+                    ev.Player.MaxHealth = 666;
                     ev.Player.Health = ev.Player.MaxHealth;
                     ev.Player.AddEffect(EffectType.MovementBoost, 5);
+                    ev.Player.AddEffect(EffectType.Lightweight, 10);
+                    ev.Player.Scale = new Vector3(0.9f, 0.9f, 0.9f);
                     ev.Player.IsBypassModeEnabled = true;
                 }
 
-                if (ev.Player.Role.Type == RoleTypeId.Scp079)
-                {
-                    if (!HostZombies.Contains(ev.Player))
-                        HostZombies.Add(ev.Player);
+                if (ev.Player.Role.Type != RoleTypeId.Scp079) return;
+                
+                if (!_hostZombies.Contains(ev.Player))
+                    _hostZombies.Add(ev.Player);
 
-                    if (GodModePlayers.Contains(ev.Player))
-                        GodModePlayers.Remove(ev.Player);
+                if (GodModePlayers.Contains(ev.Player))
+                    GodModePlayers.Remove(ev.Player);
 
-                    ev.Player.Kill("숙주 좀비가 될 것입니다.");
-                }
+                ev.Player.Kill("숙주 좀비가 될 것입니다.");
             });
         }
 
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (HostZombies.Contains(ev.Player))
-            {
-                if (ev.Door is BreakableDoor door)
-                {
-                    door.Break();
-                }
-            }
+            if (!_hostZombies.Contains(ev.Player)) return;
+            if (ev.Door is BreakableDoor door)
+                door.Break();
         }
 
         private IEnumerator<float> OnDied(DiedEventArgs ev)
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 5; i++)
             {
-                ev.Player.ShowHint($"<size=25>{9 - i}초 뒤 <color=red>동료</color> 근처에서 부활합니다.</size>", 1.2f);
+                ev.Player.ShowHint($"<size=25>{5 - i}초 뒤 <color=red>동료</color> 근처에서 부활합니다.</size>", 1.2f);
 
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            if (!IsHumanEnd)
+            if (!_isHumanEnd)
             {
                 ev.Player.Role.Set(RoleTypeId.Scp0492);
-                ev.Player.MaxHealth = 455;
+                ev.Player.MaxHealth = 444;
                 ev.Player.Health = ev.Player.MaxHealth;
 
                 try
                 {
                     IEnumerable<Player> zombies = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
 
-                    if (zombies.Count() < 1)
-                        ev.Player.Position = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList().GetRandomValue();
-
-                    else
-                        ev.Player.Position = zombies.Select(x => x.Position).ToList().GetRandomValue();
+                    ev.Player.Position = zombies.Count() < 1
+                        ? PlayerManager.List.Where(x => x.Role.Type is RoleTypeId.NtfCaptain or RoleTypeId.FacilityGuard).Select(x => x.Position)
+                            .ToList().GetRandomValue()
+                        : zombies.Select(x => x.Position).ToList().GetRandomValue();
                 }
                 catch (Exception)
                 {
-                    ev.Player.Position = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.NtfCaptain).Select(x => x.Position).ToList().GetRandomValue();
+                    ev.Player.Position = PlayerManager.List.Where(x => x.Role.Type is RoleTypeId.NtfCaptain or RoleTypeId.FacilityGuard)
+                        .Select(x => x.Position).ToList().GetRandomValue();
                 }
             }
             else
