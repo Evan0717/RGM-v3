@@ -8,7 +8,7 @@ namespace RGM.Modes.Lock.ABattle
     {
         public static void OnSSInput(ReferenceHub sender, ServerSpecificSettingBase setting)
         {
-            if (setting is not SSKeybindSetting keybind || !keybind.SyncIsPressed)
+            if (setting is not SSKeybindSetting { SyncIsPressed: true })
                 return;
 
             Player player = Player.Get(sender);

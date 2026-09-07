@@ -311,7 +311,7 @@ public class ABattle : Mode
                                 try
                                 {
                                     player.AddAbility(Instance.GetRandomAbilities(player,
-                                        Instance.GetCategory(player, allowAncient: false), 1)[0]);
+                                        GetCategory(player, allowAncient: false), 1)[0]);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1194,7 +1194,7 @@ public class ABattle : Mode
 
         var abilities = Selections[player];
 
-        for (var i = 0; i < 40; i++)
+        for (var i = 0; i < 100; i++)
         {
             lock (_selectionLock)
             {
@@ -1212,7 +1212,7 @@ public class ABattle : Mode
             var text = BuildSelectionText();
             player.AddHint("능력 선택",
                 $"""
-                 <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(40 - i) / 2})</b></size>
+                 <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(100 - i) / 5})</b></size>
 
                  <size=30>{text}</size>
 
@@ -1224,9 +1224,9 @@ public class ABattle : Mode
 
 
                  """,
-            1.1f);
+            1f);
 
-            yield return Timing.WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(0.2f);
         }
 
         AbilityType selectedAbility;
@@ -1276,38 +1276,38 @@ public class ABattle : Mode
         }
     }
 
-    public AbilityCategory GetCategory(Player player, bool allowAncient = true)
+    public static AbilityCategory GetCategory(Player player, bool allowAncient = true)
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
-
-        var random = Random.Range(1, 100001); // 0.001 단위
+        
+        var random = Convert.ToInt16(Random.Range(1, 20001)); // 0.005 단위
         var hasBlackMarket = player.HasAbility(AbilityType.SYNERGY_BLACKMARKET);
 
         if (CurrentExtraModes.Contains("잔칫상"))
         {
             return random switch
             {
-                <= 10 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.010
-                <= 150 => AbilityCategory.Mythic, // 0.150
-                <= 700 => AbilityCategory.Legend, // 0.700
-                <= 9850 => AbilityCategory.Epic, // 9.850
-                <= 38580 => AbilityCategory.Rare, // 38.580
+                <= 2 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.010
+                <= 30 => AbilityCategory.Mythic, // 0.150
+                <= 140 => AbilityCategory.Legend, // 0.700
+                <= 1970 => AbilityCategory.Epic, // 9.850
+                <= 7716 => AbilityCategory.Rare, // 38.580
                 _ => AbilityCategory.Normal // 50.710
             };
         }
 
         return random switch
         {
-            <= 5 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.005
-            <= 50 => AbilityCategory.Mythic, // 0.050
-            <= 250 => AbilityCategory.Legend, // 0.250
-            <= 5750 => AbilityCategory.Epic, // 5.750
-            <= 31850 => AbilityCategory.Rare, // 31.850
+            1 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.005
+            <= 10 => AbilityCategory.Mythic, // 0.050
+            <= 50 => AbilityCategory.Legend, // 0.250
+            <= 1150 => AbilityCategory.Epic, // 5.750
+            <= 6370 => AbilityCategory.Rare, // 31.850
             _ => AbilityCategory.Normal // 62.405
         };
     }
 
-    private int GetRoleAbilityChance(AbilityCategory category)
+    private static byte GetRoleAbilityChance(AbilityCategory category)
     {
         return category switch
         {
@@ -1452,7 +1452,8 @@ public class ABattle : Mode
                     AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, 
                     AbilityType.EPIC_SUICIDEBOMBER, AbilityType.EPIC_TERRORISTREMAINS,
                     AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
-                    AbilityType.EPIC_CSTC, AbilityType.EPIC_RANDOMCHEST
+                    AbilityType.EPIC_CSTC, AbilityType.EPIC_RANDOMCHEST,
+                    AbilityType.EPIC_GRAVEROBBER
                 ]).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
@@ -1467,7 +1468,7 @@ public class ABattle : Mode
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
                 [
                     AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST,
-                    AbilityType.LEGEND_RESURRECTION
+                    AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
                 ]).First());
             
         }
