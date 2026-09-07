@@ -5,6 +5,7 @@ using MEC;
 using PlayerRoles;
 using RGM.API.DataBases;
 using RGM.API.Features;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -18,21 +19,27 @@ namespace RGM.Modes
 공격자가 <b>인간</b>인 경우 - 6%
 공격자가 <b>SCP</b>인 경우 - 51%
 공격자가 <b>???</b>인 경우 - 173%!!!!!
+
+* 게임 시작 14분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "FA8258";
 
         public static RocketLauncher Instance;
 
+        private readonly AutoWarhead _autoWarhead = new(14, 1);
+        
         List<Player> queue = new();
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+            _autoWarhead.KillCoroutine();
         }
 
         private void OnHurt(HurtEventArgs ev)

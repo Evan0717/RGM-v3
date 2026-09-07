@@ -8,6 +8,7 @@ using RGM.API.Features;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using RGM.Patches;
 using RGM.Variables;
 
 namespace RGM.Modes
@@ -41,8 +42,8 @@ namespace RGM.Modes
 
         public static Curse Instance;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _autoWarhead;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(10, 1);
 
         public override void OnEnabled()
         {
@@ -51,7 +52,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -59,7 +60,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();            
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -150,23 +151,6 @@ namespace RGM.Modes
             float increaseRate = 1f + (0.01f * spectatorCount);
 
             ev.DamageHandler.Damage *= increaseRate;
-        }
-        
-        public IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(11 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
         }
     }
 }

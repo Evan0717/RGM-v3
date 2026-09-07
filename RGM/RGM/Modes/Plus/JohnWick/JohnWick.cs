@@ -1,4 +1,6 @@
-﻿namespace RGM.Modes
+﻿using RGM.Patches;
+
+namespace RGM.Modes
 {
     [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.JohnWick)]
     public class JohnWick : Mode
@@ -11,19 +13,25 @@ COM-15 -> 610% 증가
 COM-18 -> 290% 증가
 COM-45 -> 170% 증가
 .44 리볼버 -> 80% 증가
+
+* 게임 시작 14분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "2EFEF7";
 
         public static JohnWick Instance;
+        
+        private readonly AutoWarhead _autoWarhead = new(14, 1);
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            _autoWarhead.KillCoroutine();
         }
 
         private void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)

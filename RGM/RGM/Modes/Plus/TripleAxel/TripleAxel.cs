@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using PlayerRoles;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -30,7 +31,7 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
         public static TripleAxel Instance;
 
         private CoroutineHandle _onModeStarted;
-        private CoroutineHandle _autoWarhead;
+        private readonly AutoWarhead _autoWarhead = new(12, 1);
 
         private static readonly List<RoleTypeId> ScpRoles =
         [
@@ -48,7 +49,7 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -58,7 +59,7 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
         
         private IEnumerator<float> OnModeStarted()
@@ -106,22 +107,6 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
             player.ClearAmmo();
             player.AddItem(ItemType.Flashlight);
             player.AddItem(ItemType.Ammo9x19, 30);
-        }
-        private IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(11 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
         }
     }
 };

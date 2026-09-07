@@ -10,6 +10,7 @@ using RGM.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp079;
 using Exiled.API.Features.Pickups.Projectiles;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -34,8 +35,8 @@ namespace RGM.Modes
 
         bool isScp079Cooldown = false;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _autoWarhead;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(10, 1);
 
         public override void OnEnabled()
         {
@@ -47,7 +48,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -60,7 +61,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -89,24 +90,7 @@ namespace RGM.Modes
                 yield return Timing.WaitForSeconds(7f);
             }
         }
-
-        public IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(9 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
-        }
-
+        
         public void OnItemAdded(ItemAddedEventArgs ev)
         {
             if (ev.Item is Firearm firearm)

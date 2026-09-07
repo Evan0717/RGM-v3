@@ -10,14 +10,13 @@ using PlayerRoles;
 using ProjectMER.Features;
 using RGM.API.Components;
 using RGM.API.Features;
-using RGM.Modes;
 using RGM.Modes.Sets.AddScp.Scps;
-using RGM.RGM.Modes.Tiny.대인전;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using RGM.Patches;
 using UnityEngine;
 using static RGM.IEnumerators.LobbyIEnumerator;
 using static RGM.IEnumerators.ServerIEnumerator;
@@ -234,18 +233,7 @@ namespace RGM.EventArgs
                     }
                 }
 
-                int warheadDelaySeconds = 20 * 60;
-                if (CurrentMode == ModeType.EchoBattle)
-                    warheadDelaySeconds += EchoBattle.RoundStartDelaySeconds;
-
-                yield return Timing.WaitForSeconds(warheadDelaySeconds);
-
-                if (!Warhead.IsDetonated && CurrentMode.GetModeData().Type != ModeType.Develop)
-                {
-                    DeadmanSwitch.StartWarhead();
-
-                    Tools.MessageTranslated("", $"<color=red>예정된 시설 자폭 프로세스가 시작되었습니다.</color> <b>대피하십시오.</b>");
-                }
+                yield return Timing.WaitUntilDone(new AutoWarhead().RunCoroutine());
             }
         }
 

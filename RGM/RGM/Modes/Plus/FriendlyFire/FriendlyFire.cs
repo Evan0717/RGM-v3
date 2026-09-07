@@ -8,6 +8,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using RGM.API.DataBases;
 using Exiled.API.Enums;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -44,7 +45,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
         List<Player> Scp106Stacks = new();
 
         private CoroutineHandle _onModeStarted;
-        private CoroutineHandle _autoWarhead;
+        private readonly AutoWarhead _autoWarhead = new(10, 1);
 
         private Harmony harmony;
 
@@ -58,7 +59,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
             Exiled.Events.Handlers.Scp939.Lunging += OnLunging;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
 
             harmony = new Harmony($"FriendlyFire - {DateTime.Now.Ticks}");
             harmony.Patch(AccessTools.Method(typeof(HitboxIdentity), nameof(HitboxIdentity.IsEnemy), [typeof(Team), typeof(Team)]), 
@@ -91,7 +92,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
             Exiled.Events.Handlers.Scp939.Lunging -= OnLunging;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
 
             harmony.UnpatchAll();
         }
@@ -105,24 +106,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
 
             yield break;
         }
-
-        public IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(9 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
-        }
-
+        
         public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Spawned(ev.Player);

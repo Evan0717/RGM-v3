@@ -14,6 +14,7 @@ using RGM.API.Features;
 using static RGM.Variables.Variable;
 using Respawning;
 using Exiled.API.Features.Waves;
+using RGM.Patches;
 using Door = Exiled.API.Features.Doors.Door;
 using ChaosMiniWave = Respawning.Waves.ChaosMiniWave;
 using NtfMiniWave = Respawning.Waves.NtfMiniWave;
@@ -55,10 +56,10 @@ namespace RGM.Modes
         private float _stack;
 
         private CoroutineHandle _onModeStarted;
-        private CoroutineHandle _autoWarhead;
         private CoroutineHandle _findLocate;
         private CoroutineHandle _musicAsync;
         private CoroutineHandle _reduceWaveTimer;
+        private readonly AutoWarhead _autoWarhead = new(12, 1);
 
         public override void OnEnabled()
         {
@@ -78,10 +79,10 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
             _findLocate = Timing.RunCoroutine(FindLocate());
             _musicAsync = Timing.RunCoroutine(MusicAsync());
             _reduceWaveTimer = Timing.RunCoroutine(ReduceWaveTimer());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -101,10 +102,10 @@ namespace RGM.Modes
             _juggernautExternalSupportWaves.Clear();
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
             Timing.KillCoroutines(_findLocate);
             Timing.KillCoroutines(_musicAsync);
             Timing.KillCoroutines(_reduceWaveTimer);
+            _autoWarhead.KillCoroutine();
 
             if (_speaker != null)
                 _speaker.Destroy();
@@ -345,24 +346,7 @@ namespace RGM.Modes
             Round.IsLocked = false;
         }
 
-        private IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(11 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
-        }
-
-        public IEnumerator<float> FindLocate()
+        private IEnumerator<float> FindLocate()
         {
             while (!Round.IsEnded)
             {

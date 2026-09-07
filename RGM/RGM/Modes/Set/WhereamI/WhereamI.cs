@@ -8,6 +8,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -19,12 +20,15 @@ namespace RGM.Modes
         public override string Detail =>
 """
 여긴 어디? []
+
+* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "B40486";
 
         public static WhereamI Instance;
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(10, 1);
 
         public override void OnEnabled()
         {
@@ -33,6 +37,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -41,6 +46,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()
