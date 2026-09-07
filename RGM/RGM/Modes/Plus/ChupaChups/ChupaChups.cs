@@ -6,6 +6,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -24,8 +25,8 @@ namespace RGM.Modes
 
         public static ChupaChups Instance;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _autoWarhead;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(14, 1);
 
         public override void OnEnabled()
         {
@@ -34,7 +35,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -43,7 +44,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -72,23 +73,6 @@ namespace RGM.Modes
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
-        }
-        
-        public IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(13 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
         }
     }
 }

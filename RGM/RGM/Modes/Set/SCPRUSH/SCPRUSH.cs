@@ -7,6 +7,7 @@ using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Server;
 using RGM.API.Features;
 using Exiled.API.Extensions;
+using RGM.Patches;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -19,18 +20,22 @@ namespace RGM.Modes
         public override string Detail =>
 """
 SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
+
+* 게임 시작 14분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "FE2E2E";
 
         public static SCPRUSH Instance;
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(14, 1);
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -38,6 +43,7 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
             Timing.KillCoroutines(_onModeStarted);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()

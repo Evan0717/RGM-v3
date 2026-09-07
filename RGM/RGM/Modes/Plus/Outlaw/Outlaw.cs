@@ -9,6 +9,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Server;
 using Exiled.Events.EventArgs.Player;
+using RGM.Patches;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -31,7 +32,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
         public static Outlaw Instance;
 
         private CoroutineHandle _onModeStarted;
-        private CoroutineHandle _autoWarhead;
+        private readonly AutoWarhead _autoWarhead = new(14, 1);
         
         public override void OnEnabled()
         {
@@ -40,7 +41,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -50,7 +51,7 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
 
         private IEnumerator<float> OnModeStarted()
@@ -98,23 +99,6 @@ SCP는 매 지원마다 새로운 무기를 받습니다.
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.IsScpRole() && x.Role.Type != RoleTypeId.Scp079))
                 Spawned(player);
-        }
-
-        private IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(13 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
         }
     }
 }

@@ -6,6 +6,7 @@ using Exiled.API.Features.Roles;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
+using RGM.Patches;
 using RGM.Variables;
 using UnityEngine;
 
@@ -34,11 +35,11 @@ namespace RGM.Modes
         Dictionary<Player, Vector3> PlayerPosition = new Dictionary<Player, Vector3>();
         Dictionary<Player, Quaternion> PlayerRotation = new Dictionary<Player, Quaternion>();
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _recordPlayerInfo;
-        CoroutineHandle _checkRedLight;
-        CoroutineHandle _autoWarhead;
-
+        private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _recordPlayerInfo;
+        private CoroutineHandle _checkRedLight;
+        private readonly AutoWarhead _autoWarhead = new(8, 1);
+        
         public Quaternion rot(Player player)
         {
             if (player.Role is Scp079Role scp079role)
@@ -56,7 +57,7 @@ namespace RGM.Modes
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
             _recordPlayerInfo = Timing.RunCoroutine(RecordPlayerInfo());
             _checkRedLight = Timing.RunCoroutine(CheckRedLight());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -64,7 +65,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
             Timing.KillCoroutines(_recordPlayerInfo);
             Timing.KillCoroutines(_checkRedLight);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -152,23 +153,6 @@ namespace RGM.Modes
                     yield return Timing.WaitForSeconds(0.1f);
                 }
             }
-        }
-        
-        public IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(7 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
         }
     }
 }

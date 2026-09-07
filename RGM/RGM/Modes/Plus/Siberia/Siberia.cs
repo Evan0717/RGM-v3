@@ -6,6 +6,7 @@ using UnityEngine;
 using Exiled.API.Enums;
 using PlayerRoles;
 using RGM.API.Features;
+using RGM.Patches;
 
 namespace RGM.Modes
 {
@@ -27,15 +28,15 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 
         public static Siberia Instance;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _autoWarhead;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(8, 1);
 
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -43,7 +44,7 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()
@@ -95,23 +96,6 @@ SCP-079가 시설 내 냉각 장치와 에어컨을 풀로 틀어버렸습니다
 
             if (player.Role.Type == RoleTypeId.Scp079)
                 player.Health += 100000;
-        }
-        
-        public IEnumerator<float> AutoWarhead()
-        {
-            yield return Timing.WaitForSeconds(7 * 60);
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            Tools.MessageTranslated("", $"1분 뒤 <color=red>자동핵</color>이 작동됩니다.");
-
-            if (Warhead.IsDetonated)
-                yield break;
-
-            yield return Timing.WaitForSeconds(1 * 60);
-
-            DeadmanSwitch.StartWarhead();
         }
     }
 }

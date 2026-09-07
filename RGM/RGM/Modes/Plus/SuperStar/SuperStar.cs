@@ -7,7 +7,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.SuperStar)]
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.SuperStar)]
     class SuperStar : Mode
     {
         public override string Name => "슈퍼 스타";

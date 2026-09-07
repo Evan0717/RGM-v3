@@ -8,6 +8,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using RGM.API.Features;
 using Exiled.Events.EventArgs.Server;
+using RGM.Patches;
 using UnityEngine;
 
 namespace RGM.Modes
@@ -25,7 +26,7 @@ namespace RGM.Modes
 <color=#000000><b>05 평의회</b></color>가 사살될 경우,
 <color=#088A08>혼돈의 반란</color> 진영이 승리합니다.
 
-* 게임 시작 10분 뒤 <color=red>자동핵</color>이 작동됩니다.
+* 게임 시작 8분 뒤 <color=red>자동핵</color>이 작동됩니다.
 """;
         public override string Color => "0040FF";
 
@@ -34,8 +35,8 @@ namespace RGM.Modes
         Player Level05;
         Player Assassin;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _autoWarhead;
+        private CoroutineHandle _onModeStarted;
+        private readonly AutoWarhead _autoWarhead = new(8, 1);
 
         public override void OnEnabled()
         {
@@ -46,7 +47,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
-            _autoWarhead = Timing.RunCoroutine(AutoWarhead());
+            _autoWarhead.RunCoroutine();
         }
 
         public override void OnDisabled()
@@ -58,7 +59,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
 
             Timing.KillCoroutines(_onModeStarted);
-            Timing.KillCoroutines(_autoWarhead);
+            _autoWarhead.KillCoroutine();
         }
 
         public IEnumerator<float> OnModeStarted()
