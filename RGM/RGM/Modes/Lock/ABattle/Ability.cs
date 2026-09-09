@@ -401,7 +401,7 @@ public enum AbilityType
     LEGEND_CANDYADDICT, // [전설] 마약 중독자
     LEGEND_REFLECTOR, // [전설] 반사경
     LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
-    LEGEND_LAVACHICKEN, // [전설] La-La-La Lava Ch-Ch-Ch Chicken
+    LEGEND_LAVACHICKEN, // [전설] Lava Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
