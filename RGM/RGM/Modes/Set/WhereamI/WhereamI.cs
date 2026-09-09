@@ -49,7 +49,7 @@ namespace RGM.Modes
             _autoWarhead.KillCoroutine();
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
@@ -59,14 +59,15 @@ namespace RGM.Modes
             yield return Timing.WaitForSeconds(1f);
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        private void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
             Door SelectedDoor = null;
+            if (Warhead.IsDetonated) return;
 
             if (Exiled.API.Features.Map.IsLczDecontaminated)
                 SelectedDoor = Door.List.Where(x => !x.IsElevator && x.Zone != ZoneType.LightContainment && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue();
@@ -77,7 +78,7 @@ namespace RGM.Modes
             player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
 
