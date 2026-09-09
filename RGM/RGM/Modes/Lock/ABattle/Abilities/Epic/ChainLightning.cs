@@ -7,18 +7,19 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("체인 라이트닝", """
-                  적 공격 시, 피해량의 일부를 대상 기준 주변 10m 적에게 전이합니다.
-                  전이 시 마다 최종 데미지가 15%p씩 감소하고 최대 75%p까지 적용되며, 최대 8명까지만 전이 가능합니다.
+/*[Ability("체인 라이트닝", """
+                  적 공격 시, 피해량의 일부를 대상 기준 주변 7.2m 적에게 전이합니다.
+                  전이 시 마다 최종 데미지가 20%p씩 감소하고 최대 80%p까지 적용되며, 최대 6명까지만 전이 가능합니다.
+                  또한, 전이되는 데미지는 100을 초과할 수 없습니다.
                   """,
-    AbilityCategory.Epic, AbilityType.EPIC_CHAINLIGHTNING)]
+    AbilityCategory.Epic, AbilityType.EPIC_CHAINLIGHTNING)]*/
 
 public class ChainLightning : Ability
 {
-    private const float ChainRange = 10f;
-    private const int MaxChainTargets = 8;
-    private const float DamageReductionPerChain = 0.15f;
-    private const float MinimumDamageMultiplier = 0.25f;
+    private const float ChainRange = 7.2f;
+    private const int MaxChainTargets = 6;
+    private const float DamageReductionPerChain = 0.2f;
+    private const float MinimumDamageMultiplier = 0.2f;
 
     private bool _isApplyingChainDamage;
 
