@@ -16,8 +16,8 @@ namespace RGM.Modes.Abilities.Mythic;
                  """, AbilityCategory.Mythic, AbilityType.MYTHIC_BOMBGUN)]
 public class BombGun : Ability
 {
-    const float OwnerExplosionDamageMultiplier = 0.02f;
-    const float WarMachineGrenadeDamageMultiplier = 0.6f;
+    private const float OwnerExplosionDamageMultiplier = 0.02f;
+    private const float WarMachineGrenadeDamageMultiplier = 0.6f;
 
     private ushort _itemSerial;
     private readonly List<ExplosionGrenadeProjectile> _bombGunGrenades = new();

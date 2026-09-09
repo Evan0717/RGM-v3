@@ -31,9 +31,9 @@ namespace RGM.EventArgs
         {
             if (ev.Player == null)
                 yield return Timing.WaitForOneFrame;
-            
+
             if (ev.Player == null) yield break;
-            
+
             ev.Player.Setup();
 
             List<string> defaultValues = Enumerable.Repeat("0", 35).ToList();
@@ -483,6 +483,7 @@ namespace RGM.EventArgs
                 Texts[ev.Player].Destroy();
                 Texts.Remove(ev.Player);
             }
+
             OnGround.Remove(ev.Player.UserId);
             PlayersAudio.Remove(ev.Player);
             EffectIntensities.Remove(ev.Player);
@@ -557,10 +558,7 @@ namespace RGM.EventArgs
 
         public static void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
         {
-            Timing.CallDelayed(5 * 60, () =>
-            {
-                ev.Ragdoll?.Destroy();
-            });
+            Timing.CallDelayed(5 * 60, () => { ev.Ragdoll?.Destroy(); });
         }
 
         public static void OnChangingRole(ChangingRoleEventArgs ev)
@@ -693,7 +691,7 @@ namespace RGM.EventArgs
                 }
             }
 
-            if (ev.Player.IsAlive && 
+            if (ev.Player.IsAlive &&
                 Round.IsStarted &&
                 CurrentMode != ModeType.None &&
                 new List<SpawnReason>
@@ -767,7 +765,7 @@ namespace RGM.EventArgs
             }
 
             if (ev.Player.IsNonePlayer()) return;
-            
+
             if (ev.DamageHandler.Type == DamageType.Falldown &&
                 ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) &&
                 lightweight.IsEnabled)
@@ -791,9 +789,9 @@ namespace RGM.EventArgs
             }
             else if (ev.Attacker != null && !ev.Attacker.IsNonePlayer())
             {
-                if (ev.Attacker.IsScpRole() && 
-                    (ev.DamageHandler.Type.IsWeapon() || 
-                     ev.DamageHandler.Type == DamageType.Scp127 || 
+                if (ev.Attacker.IsScpRole() &&
+                    (ev.DamageHandler.Type.IsWeapon() ||
+                     ev.DamageHandler.Type == DamageType.Scp127 ||
                      ev.DamageHandler.Type == DamageType.Scp1509))
                     ev.DamageHandler.Damage *= 0.7f;
 
@@ -872,7 +870,9 @@ namespace RGM.EventArgs
             {
                 string MessageFormat()
                 {
-                    return ev.Attacker == null ? $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}" : $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
+                    return ev.Attacker == null
+                        ? $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}"
+                        : $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
                 }
 
                 foreach (var player in PlayerManager.List.Where(x => x.IsDead || x == ev.Attacker))
@@ -926,10 +926,7 @@ namespace RGM.EventArgs
 
         public static void OnDroppedItem(DroppedItemEventArgs ev)
         {
-            Timing.CallDelayed(5 * 60, () =>
-            {
-                ev.Pickup?.Destroy();
-            });
+            Timing.CallDelayed(5 * 60, () => { ev.Pickup?.Destroy(); });
         }
 
         public static void OnDroppedAmmo(DroppedAmmoEventArgs ev)
@@ -947,11 +944,21 @@ namespace RGM.EventArgs
         {
             if (ev.ClaimedTarget == null) return;
             if (ev.Player.Role is not Scp173Role scp173) return;
-            if (!ev.Player.TryGetLookPlayer(1000, out Player target, out _)) return;
+            if (!ev.Player.TryGetLookPlayer(1000, out Player target, out RaycastHit? raycastHit)) return;
             if (ev.ClaimedTarget != target) return;
             if (!scp173.IsObserved) return;
+
+            HitboxType hitbox = raycastHit?.collider.TryGetComponent(out HitboxIdentity hitboxIdentity) == true
+                ? hitboxIdentity.HitboxType
+                : HitboxType.Body;
+            float hitboxMultiplier = FirearmDamageHandler.HitboxDamageMultipliers.TryGetValue(
+                hitbox,
+                out float multiplier)
+                ? multiplier
+                : 1f;
+
             ev.ClaimedTarget.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub,
-                ev.Firearm.Damage * 0.7f, DeathTranslations.Scp173));
+                ev.Firearm.Damage * 0.7f * hitboxMultiplier, DeathTranslations.Scp173));
 
             ev.Player.ShowHitMarker();
         }

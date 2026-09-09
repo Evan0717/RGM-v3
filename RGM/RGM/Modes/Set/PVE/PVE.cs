@@ -94,34 +94,30 @@ namespace RGM.Modes
                     <= 10 => 3,
                     <= 12 => 4,
                     <= 14 => 5,
-                    15 => 6,
                     _ => reward
                 },
                 1 => roundHandler.CurrentWave switch
                 {
-                  <= 2 => 1,
-                  <= 4 => 2,
-                  <= 6 => 3,
-                  <= 8 => 4,
-                  <= 10 => 5,
-                  11 => 6,
-                  12 => 7,
-                  <= 14 => 8,
-                  15 => 12,
+                  <= 4 => 1,
+                  <= 6 => 2,
+                  <= 8 => 3,
+                  <= 10 => 4,
+                  11 => 5,
+                  12 => 6,
+                  <= 14 => 7,
                   _ => reward
                 },
                 2 => roundHandler.CurrentWave switch
                 {
                     <= 2 => 1,
-                    3 => 2,
-                    <= 5 => 3,
-                    6 => 4,
-                    <= 8 => 5,
-                    9 => 6,
-                    <= 11 => 7,
-                    13 => 8,
-                    14 => 9,
-                    15 => 18,
+                    3 => 3,
+                    <= 5 => 5,
+                    6 => 6,
+                    <= 8 => 7,
+                    9 => 8,
+                    <= 11 => 9,
+                    13 => 10,
+                    14 => 11,
                     _ => reward
                 },
                 _ => reward
@@ -134,7 +130,7 @@ namespace RGM.Modes
                                 && report.Damage >= 3500)
             ];
 
-            reward += roundHandler.AllWavesCleared ? 1 : 0;
+            reward *= roundHandler.AllWavesCleared ? 2 : 1;
             reward = reward <= 0 ? 5 : reward;
             Timing.RunCoroutine(Tools.SetWinner(wonplayers, reward));
         }
