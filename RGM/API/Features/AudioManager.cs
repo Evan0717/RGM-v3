@@ -30,10 +30,8 @@ namespace RGM.API.Features
 
                 return audioClipPlayback;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
     }
 }

@@ -28,9 +28,9 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
         public override string Color => "F5A9E1";
         public override string Map => "HideAndSeek1205";
 
-        List<Player> finders = new List<Player>();
+        private readonly List<Player> _finders = [];
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -54,14 +54,14 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             for (float i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
-                finders.Add(PlayerManager.List.Where(x => !finders.Contains(x)).ToList().GetRandomValue());
+                _finders.Add(PlayerManager.List.Where(x => !_finders.Contains(x)).ToList().GetRandomValue());
 
             PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
 
-            foreach (var player in PlayerManager.List.Where(x => !finders.Contains(x)))
+            foreach (var player in PlayerManager.List.Where(x => !_finders.Contains(x)))
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = GameObject.Find("StartPoint").transform.position;
@@ -74,12 +74,12 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            int remaining = 75;
+            const int remaining = 75;
 
-            foreach (var Finder in finders)
+            foreach (var finder in _finders)
             {
-                Finder.Role.Set(RoleTypeId.Scp939);
-                Finder.Position = GameObject.Find("StartPoint").transform.position;
+                finder.Role.Set(RoleTypeId.Scp939);
+                finder.Position = GameObject.Find("StartPoint").transform.position;
             }
 
             yield return Timing.WaitForSeconds(1f);
@@ -98,29 +98,31 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
             }
 
             if (!Round.IsEnded)
-                finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
+                _finders.ForEach(x => x.Kill($"제한 시간 안에 생존자를 전부 죽이지 못했습니다."));
         }
 
-        void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+        private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (Tools.TryGetLookPlayer(ev.Player, 2, out Player target, out RaycastHit? hit))
+            if (!ev.Player.TryGetLookPlayer(2, out Player target, out RaycastHit? hit)) return;
+            if (!target.IsScpRole())
             {
-                if (!target.IsScpRole())
-                {
-                    ev.Player.Push(target);
-                }
+                ev.Player.Push(target);
             }
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

@@ -64,7 +64,7 @@ namespace RGM.IEnumerators
             if (SelectMode == "RandomSelect")
                 Tools.PickModes();
 
-            foreach (var player in Player.List.Where(x => !x.IsDND()))
+            foreach (var player in Player.List.Where(x => !x.IsDnd()))
             {
                 player.ClearInventory();
                 player.Role.Set(RoleTypeId.Spectator);

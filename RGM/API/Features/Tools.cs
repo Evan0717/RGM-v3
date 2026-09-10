@@ -22,19 +22,18 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using static RGM.Variables.Variable;
-using Random = System.Random;
 
 namespace RGM.API.Features
 {
     public static class Tools
     {
-        [Obsolete("이 메서드 대신 Exiled 의 확장 메서드 GetRandomValue를 사용하세요")]
+        /*[Obsolete("이 메서드 대신 Exiled 의 확장 메서드 GetRandomValue를 사용하세요")]
         public static T GetRandomValue<T>(List<T> list)
         {
             System.Random random = new System.Random();
             int index = random.Next(0, list.Count);
             return list[index];
-        }
+        }*/
 
         public static List<T> EnumToList<T>()
         {
@@ -66,8 +65,8 @@ namespace RGM.API.Features
 
                 for (int i = 1; i < 5; i++)
                 {
-                    var StaticModeList = ModeList.Keys.Where(x => ModeList[x].Category == ModeCategory.Public && !ModeVote.ContainsKey(x)).ToList();
-                    var mode = StaticModeList.GetRandomValue();
+                    var staticModeList = ModeList.Keys.Where(x => ModeList[x].Category == ModeCategory.Public && !ModeVote.ContainsKey(x)).ToList();
+                    var mode = staticModeList.GetRandomValue();
                     ModeVote.Add(mode, new List<Player>());
 
                     if (mode.GetModeData().Info != ModeInfo.Lock && UnityEngine.Random.Range(1, 11) == 1)
@@ -76,7 +75,7 @@ namespace RGM.API.Features
                     else
                         SubModeVote.Add(ModeType.None);
                 }
-                List<List<Transform>> Pads = [First, Second, Third, Fourth];
+                List<List<Transform>> pads = [First, Second, Third, Fourth];
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -84,7 +83,7 @@ namespace RGM.API.Features
                         ? color
                         : Color.white;
 
-                    SetPrimitiveColor(Pads[i], padColor);
+                    SetPrimitiveColor(pads[i], padColor);
                 }
 
                 Color randomColor = GetRandomColor(true);
@@ -135,15 +134,15 @@ namespace RGM.API.Features
 
         public static void TeleportToLobby(Player player)
         {
-            List<RoleTypeId> humans = new List<RoleTypeId>()
-            {
+            List<RoleTypeId> humans =
+            [
                 RoleTypeId.ClassD,
                 RoleTypeId.Scientist,
                 RoleTypeId.FacilityGuard,
                 RoleTypeId.ChaosConscript,
                 RoleTypeId.NtfSpecialist,
                 RoleTypeId.Tutorial
-            };
+            ];
             
             player.Role.Set(humans.GetRandomValue());
             player.ClearInventory();
@@ -152,25 +151,32 @@ namespace RGM.API.Features
             
             player.Position = GameObject.Find("LobbyStartPoint").transform.position;
 
-            if (SelectMode == "FightVote")
-            {
-                switch (UnityEngine.Random.Range(1, 16)) 
-                {
-                    case 1:
-                        player.AddItem(ItemType.GunRevolver);
-                        player.AddAmmo(AmmoType.Ammo44Cal, 120);
-                        break;
+            if (SelectMode != "FightVote") return;
 
-                    case 2:
-                        player.AddItem(ItemType.GrenadeHE);
-                        break;
-                }
+            var fightvoterand = UnityEngine.Random.Range(1, 101);
+
+            if (fightvoterand <= 8)
+            {
+                player.AddItem(ItemType.GunRevolver);
+                player.AddAmmo(AmmoType.Ammo44Cal, 120);
+            }
+            else if (fightvoterand is >= 9 and <= 15)
+            {
+                player.AddItem(ItemType.GrenadeHE);
+            }
+            else if (fightvoterand == 44)
+            {
+                player.AddItem(ItemType.SCP1509);
+            }
+            else if (fightvoterand == 66)
+            {
+                player.AddItem(ItemType.GunSCP127);
             }
         }
 
-        public static List<Transform> GetObjectList(string Name)
+        public static List<Transform> GetObjectList(string name)
         {
-            return GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.InstanceID).Where(t => t.name == Name).ToList();
+            return GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.InstanceID).Where(t => t.name == name).ToList();
         }
 
         /// <summary>
@@ -212,49 +218,39 @@ namespace RGM.API.Features
             return positions;
         }
 
-        public static List<string> GetModeDesc(ModeType ModeType, ModeType SubModeType)
+        public static List<string> GetModeDesc(ModeType modeType, ModeType subModeType)
         {
-            string Color = ModeList[ModeType].Color;
-            string Name = ModeList[ModeType].Name;
-            string Description = ModeList[ModeType].Description;
-            string Detail = ModeList[ModeType].Detail;
+            string color = ModeList[modeType].Color;
+            string name = ModeList[modeType].Name;
+            string description = ModeList[modeType].Description;
+            string detail = ModeList[modeType].Detail;
 
-            string Message = Notions.StartModeDescription
-                .Replace("{ModeColor}", Color)
-                .Replace("{CurrentMode}", Name)
-                .Replace("{CurrentSubMode}", SubModeType != ModeType.None ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[SubModeType].Color}>{ModeList[SubModeType].Name}</color></size>\n" : "")
-                .Replace("{ModeDescription}", Description)
-                .Replace("{ModeInfo}", ModeType.GetModeData().Info.ToString());
+            string message = Notions.StartModeDescription
+                .Replace("{ModeColor}", color)
+                .Replace("{CurrentMode}", name)
+                .Replace("{CurrentSubMode}", subModeType != ModeType.None ? $"<size=20>추가된 서브 모드 : <color=#{ModeList[subModeType].Color}>{ModeList[subModeType].Name}</color></size>\n" : "")
+                .Replace("{ModeDescription}", description)
+                .Replace("{ModeInfo}", modeType.GetModeData().Info.ToString());
 
-            return new List<string>() 
-            { 
-                Message,
-                            "성공적으로 모드 설명을 불러왔습니다.",
-                            "해당 모드에 대한 자세한 설명이 없습니다.", 
-                Detail 
-            };
+            return
+            [
+                message,
+                "성공적으로 모드 설명을 불러왔습니다.",
+                "해당 모드에 대한 자세한 설명이 없습니다.",
+                detail
+            ];
         }
 
-        public static Color GetRandomColor(bool Transparency = false)
+        private static Color GetRandomColor(bool transparency = false)
         {
-            if (!Transparency)
-                return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
-
-            else
-                return new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+            return !transparency
+                ? new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1)
+                : new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
         }
 
         public static string GetPlayerInfo(Player player)
         {
             List<string> uc = UsersManager.UsersCache[player.UserId];
-
-            string GetJoinedInfo(int num)
-            {
-                if (uc[num] == "0")
-                    return "-";
-
-                return string.Join(", ", uc[num].Split('/'));
-            }
 
             return
 $"""
@@ -265,7 +261,7 @@ $"""
 <size=15>SteamID: {player.UserId}</size>
 <size=15>Exp: {uc[0]}</size>
 <size=15>랜덤코인: {uc[1]}</size>
-<size=15>Cash: ₩{int.Parse(uc[2]).ToString("N0")}</size>
+<size=15>Cash: ₩{int.Parse(uc[2]):N0}</size>
 <size=15>누적 출석: {uc[27]}회 · 현재 {uc[30]}일 연속 출석 중 (최대 {uc[28]}일)</size>
 
 <size=15>보유한 킬이펙트: {GetJoinedInfo(3)}</size>
@@ -294,49 +290,55 @@ $"""
 <size=15>장착한 아이콘: {(uc[25] == "0" ? "-" : uc[25])} ({(uc[26] == "0" ? "랜덤 적용 ❌" : "랜덤 적용 ✅")})</size>
 <size=10>{(uc[25] == "0" ? "'.아이콘 <아이콘 이름>' 명령어를 사용하여 아이콘을 장착할 수 있습니다." : Icons[uc[25]])}</size>
 """;
+
+            string GetJoinedInfo(int num)
+            {
+                if (uc[num] == "0")
+                    return "-";
+
+                return string.Join(", ", uc[num].Split('/'));
+            }
         }
 
-        public static void ChangePaint(Player player, string Color)
+        public static void ChangePaint(Player player, string color)
         {
-            if (Color != "0")
+            if (color == "0") return;
+            Dictionary<string, string[]> colorDictionary = new Dictionary<string, string[]>
             {
-                Dictionary<string, string[]> ColorDictionary = new Dictionary<string, string[]>()
-                {
-                    {"블랙골드", new string[] { "brown", "yellow" } },
-                    {"핫핑크", new string[] { "magenta", "pink" } },
-                    {"레인보우", Datas.Colors.Keys.ToArray() },
-                    {"분홍색", new string[] { "pink" } },
-                    {"빨간색", new string[] { "red" } },
-                    {"흰색", new string[] { "default" } },
-                    {"갈색", new string[] { "brown" } },
-                    {"은색", new string[] { "silver" } },
-                    {"밝은 녹색", new string[] { "light_green" } },
-                    {"진홍색", new string[] { "crimson" } },
-                    {"청록색", new string[] { "cyan" } },
-                    {"옥색", new string[] { "aqua" } },
-                    {"진한 분홍색", new string[] { "deep_pink" } },
-                    {"토마토색", new string[] { "tomato" } },
-                    {"노란색", new string[] { "yellow" } },
-                    {"짙은 홍색", new string[] { "magenta" } },
-                    {"푸른 녹색", new string[] { "blue_green" } },
-                    {"주황색", new string[] { "orange" } },
-                    {"라임색", new string[] { "lime" } },
-                    {"초록색", new string[] { "green" } },
-                    {"에메랄드색", new string[] { "emerald" } },
-                    {"카민색", new string[] { "carmine" } },
-                    {"니켈색", new string[] { "nickel" } },
-                    {"박하색", new string[] { "mint" } },
-                    {"군대 녹색", new string[] { "army_green" } },
-                    {"호박색", new string[] { "pumpkin" } }
-                };
+                {"블랙골드", ["brown", "yellow"] },
+                {"핫핑크", ["magenta", "pink"] },
+                {"레인보우", [.. Datas.Colors.Keys] },
+                {"분홍색", ["pink"] },
+                {"빨간색", ["red"] },
+                {"흰색", ["default"] },
+                {"갈색", ["brown"] },
+                {"은색", ["silver"] },
+                {"밝은 녹색", ["light_green"] },
+                {"진홍색", ["crimson"] },
+                {"청록색", ["cyan"] },
+                {"옥색", ["aqua"] },
+                {"진한 분홍색", ["deep_pink"] },
+                {"토마토색", ["tomato"] },
+                {"노란색", ["yellow"] },
+                {"짙은 홍색", ["magenta"] },
+                {"푸른 녹색", ["blue_green"] },
+                {"주황색", ["orange"] },
+                {"라임색", ["lime"] },
+                {"초록색", ["green"] },
+                {"에메랄드색", ["emerald"] },
+                {"카민색", ["carmine"] },
+                {"니켈색", ["nickel"] },
+                {"박하색", ["mint"] },
+                {"군대 녹색", ["army_green"] },
+                {"호박색", ["pumpkin"] }
+            };
 
-                if (player.GameObject.TryGetComponent<TagController>(out TagController rtc))
-                    UnityEngine.Object.Destroy(rtc);
+            if (player.GameObject.TryGetComponent<TagController>(out TagController rtc))
+                UnityEngine.Object.Destroy(rtc);
 
-                TagController rtController = player.GameObject.AddComponent<TagController>();
-                rtController.Colors = ColorDictionary[Color];
-                rtController.Interval = 1;
-            }
+            TagController rtController = player.GameObject.AddComponent<TagController>();
+            rtController.Colors = colorDictionary[color];
+            rtController.Interval = 1;
         }
 
         public static void RemovePaint(Player player)
@@ -378,6 +380,19 @@ $"""
             }
         }
 
+        /*
+         * SetPersonalWin 구상
+         *
+         * 
+         */
+        
+        /*
+        public static IEnumerator<float> SetPersonalWin(List<Player> playerList, int amount)
+        {
+           
+        }
+        */
+    
         public static bool TryGetNearestPlayer(this Player player, out Player nearestPlayer, out float radius, List<Player> exceptPlayers = null)
         {
             nearestPlayer = null;
@@ -739,11 +754,7 @@ $"""
             if (Name.Contains("@steam"))
                 return Name;
 
-            else if (Player.TryGet(Name, out Player player))
-                return player.UserId;
-
-            else
-                return null;
+            return Player.TryGet(Name, out Player player) ? player.UserId : null;
         }
 
         public static List<Vector3> GetCirclePoints(Vector3 center, float radius, int pointCount)
@@ -844,32 +855,32 @@ $"""
 
         public static void MakeSnake(Player player)
         {
-            List<ItemType> Items = new List<ItemType>
-            {
+            List<ItemType> items =
+            [
                 ItemType.KeycardFacilityManager,
                 ItemType.GunFSP9,
                 ItemType.GunRevolver,
                 ItemType.Adrenaline,
                 ItemType.SCP500,
                 ItemType.ArmorLight
-            };
+            ];
 
-            List<ItemType> Ammos = new List<ItemType>
-            {
+            List<ItemType> ammos =
+            [
                 ItemType.Ammo44cal,
                 ItemType.Ammo9x19
-            };
+            ];
 
             player.Role.Set(RoleTypeId.Tutorial);
             player.Position = new Vector3(0.125f, 300.9572f, 4.960938f);
 
-            foreach (ItemType Item in Items)
-                player.AddItem(Item);
+            foreach (ItemType item in items)
+                player.AddItem(item);
 
             for (int i = 1; i < 3; i++)
             {
-                foreach (var Ammo in Ammos)
-                    player.AddItem(Ammo);
+                foreach (var ammo in ammos)
+                    player.AddItem(ammo);
             }
         }
 
@@ -884,21 +895,17 @@ $"""
                 convener.AddHint("뱀의 손", $"{snakeHands.Count()}명의 <color=#FE2EF7>동료</color>들이 당신과 함께합니다..", 5f);
         }
 
-        public static string ColorFormat(string cn)
+        private static string ColorFormat(string cn)
         {
             if (ColorUtility.TryParseHtmlString(cn, out Color color))
                 return color.ToHex();
 
-            else
-            {
-                var cd = Datas.Colors;
+            var cd = Datas.Colors;
 
-                if (cd.ContainsKey(cn))
-                    return cd[cn];
+            if (cd.TryGetValue(cn, out var colorFormat))
+                return colorFormat;
 
-                else
-                    return "#FFFFFF";
-            }
+            return "#FFFFFF";
         }
 
         public static string BadgeFormat(Player player)
@@ -1042,9 +1049,11 @@ $"""
                     grenade.FuseTime = 0.5f;
                     grenade.SpawnActive(player.Position, attacker);
                     if (ignoreDefenses)
-                        player.Hurt(amount: player.MaxHealth, damageType: DamageType.Crushed, attacker: attacker);
-                    else
-                        player.Hit(attacker, player.MaxHealth);
+                    {
+                        if (GodModePlayers.Contains(player)) GodModePlayers.Remove(player);
+                    }
+
+                    player.Hit(attacker, player.MaxHealth);
 
                     grenade = null;
                 }

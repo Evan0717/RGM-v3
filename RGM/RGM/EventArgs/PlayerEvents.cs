@@ -36,6 +36,9 @@ namespace RGM.EventArgs
 
             ev.Player.Setup();
 
+            /*
+             * 현재 출석 체크 기능 작동 안 함. 점검 필요.
+             */
             List<string> defaultValues = Enumerable.Repeat("0", 35).ToList();
 
             if (!UsersManager.UsersCache.ContainsKey(ev.Player.UserId))
@@ -393,13 +396,9 @@ namespace RGM.EventArgs
                                             $" <size=20><color=white>Idea by <i>{ModeList[SelectedMode].Suggester}</i></color></size>";
                                 }
 
-                                string s(int num)
+                                string St(int num)
                                 {
-                                    if (SelectMode.Contains("Secret"))
-                                        return "?";
-
-                                    else
-                                        return ModeVote[iv(num)].Count().ToString();
+                                    return SelectMode.Contains("Secret") ? "?" : ModeVote[iv(num)].Count.ToString();
                                 }
 
                                 List<string> uc = UsersManager.UsersCache[ev.Player.UserId];
@@ -416,7 +415,7 @@ namespace RGM.EventArgs
                                             ? $" + <b> <size=20><color=#{ModeList[SubModeVote[0]].Color}>{SubModeVote[0].GetModeData().Name}</color></size></b>"
                                             : ""))
                                     .Replace("{FirstVote}",
-                                        ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{s(1)}</color>" : s(1))
+                                        ModeVote[iv(1)].Contains(ev.Player) ? $"<color=yellow>{St(1)}</color>" : St(1))
                                     .Replace("{Second}",
                                         (CurrentMode != ModeType.None
                                             ? CurrentMode.GetModeData().Name
@@ -425,7 +424,7 @@ namespace RGM.EventArgs
                                             ? $" + <b><size=20><color=#{ModeList[SubModeVote[1]].Color}>{SubModeVote[1].GetModeData().Name}</color></size></b>"
                                             : ""))
                                     .Replace("{SecondVote}",
-                                        ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{s(2)}</color>" : s(2))
+                                        ModeVote[iv(2)].Contains(ev.Player) ? $"<color=yellow>{St(2)}</color>" : St(2))
                                     .Replace("{Third}",
                                         (CurrentMode != ModeType.None
                                             ? CurrentMode.GetModeData().Name
@@ -434,7 +433,7 @@ namespace RGM.EventArgs
                                             ? $" + <b> <size=20><color=#{ModeList[SubModeVote[2]].Color}>{SubModeVote[2].GetModeData().Name}</color></size></b>"
                                             : ""))
                                     .Replace("{ThirdVote}",
-                                        ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{s(3)}</color>" : s(3))
+                                        ModeVote[iv(3)].Contains(ev.Player) ? $"<color=yellow>{St(3)}</color>" : St(3))
                                     .Replace("{Fourth}",
                                         (CurrentMode != ModeType.None
                                             ? CurrentMode.GetModeData().Name
@@ -443,14 +442,14 @@ namespace RGM.EventArgs
                                             ? $" + <b> <size=20><color=#{ModeList[SubModeVote[3]].Color}>{SubModeVote[3].GetModeData().Name}</color></size></b>"
                                             : ""))
                                     .Replace("{FourthVote}",
-                                        ModeVote[iv(4)].Contains(ev.Player) ? $"<color=yellow>{s(4)}</color>" : s(4))
+                                        ModeVote[iv(4)].Contains(ev.Player) ? $"<color=yellow>{St(4)}</color>" : St(4))
                                     .Replace("{ModeName}",
                                         $"{(SelectedMode == ModeType.None ? "참고" : SelectedMode.GetModeData().Name)}{createBy()}{IdeaBy()}")
                                     .Replace("{ModeColor}", $"{Color}").Replace("{ModeDescription}", $"{Description}")
                                     .Replace("{Lines}", $"{(Description.Contains("\n") ? "\n" : "\n\n")}")
                                     .Replace("{Exp}", $"{uc[0]}")
                                     .Replace("{RC}", $"{uc[1]}")
-                                    .Replace("{Cash}", $"{int.Parse(uc[2]).ToString("N0")}")
+                                    .Replace("{Cash}", $"{int.Parse(uc[2]):N0}")
                                     .Replace("{Tip}", Tip)
                                     .Replace("{Version}", $"{Main.Instance.Version}")
                                     .Replace("{Logo}", $"{Logo}");
@@ -563,7 +562,7 @@ namespace RGM.EventArgs
 
         public static void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (ev.Player.IsDND() && ev.NewRole.IsFlamingo())
+            if (ev.Player.IsDnd() && ev.NewRole.IsFlamingo())
                 ev.IsAllowed = false;
         }
 
@@ -736,7 +735,7 @@ namespace RGM.EventArgs
 
                     InteractedDoors[ev.Door] += 1;
 
-                    if (InteractedDoors[ev.Door] >= 500)
+                    if (InteractedDoors[ev.Door] >= 444)
                     {
                         ev.Door.IsOpen = true;
 
@@ -744,7 +743,7 @@ namespace RGM.EventArgs
                     }
                     else
                         ev.Player.AddHint("SCP 문 강제 개폐",
-                            $"앞으로 {500 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
+                            $"앞으로 {444 - InteractedDoors[ev.Door]}번 상호작용하면 문이 강제로 열립니다.");
                 });
             }
         }
@@ -758,7 +757,7 @@ namespace RGM.EventArgs
                     ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
                     : ev.DamageHandler.Damage;
 
-                if (ev.Attacker != ev.Player && damage < 10000)
+                if (ev.Attacker != ev.Player && damage < 65536)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
 
                 return;
@@ -801,7 +800,7 @@ namespace RGM.EventArgs
 
                 if ((HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
                      ev.Attacker.LeadingTeam != ev.Player.LeadingTeam || Server.FriendlyFire) &&
-                    ev.Attacker != ev.Player && damage < 10000)
+                    ev.Attacker != ev.Player && damage < 65536)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
             }
         }

@@ -14,7 +14,7 @@ namespace RGM.API.Features
         /// <summary>
         /// 해당 플레이어 객체의 힌트 정보를 기록합니다.
         /// </summary>
-        private static Dictionary<Player, Dictionary<string, (string, float)>> _playerHints = new(); // Custom ID, (힌트, 남은 시간)
+        private static readonly Dictionary<Player, Dictionary<string, (string, float)>> PlayerHints = new(); // Custom ID, (힌트, 남은 시간)
         
         /**
          * <summary>살아있는 플레이어에게 힌트를 띄웁니다</summary>
@@ -24,9 +24,9 @@ namespace RGM.API.Features
         {
             while (!Round.IsEnded)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x) && _playerHints[x].Count > 0))
+                foreach (var player in Player.List.Where(x => x.IsAlive && PlayerHints.ContainsKey(x) && PlayerHints[x].Count > 0))
                 {
-                    string message = $"{string.Join("\n", _playerHints[player].Values.Select(x => x.Item1))}";
+                    string message = $"{string.Join("\n", PlayerHints[player].Values.Select(x => x.Item1))}";
 
                     message = message.Replace("<color=#855439>*</color>", "");
 
@@ -53,17 +53,17 @@ namespace RGM.API.Features
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsAlive && _playerHints.ContainsKey(x)))
+                foreach (var player in Player.List.Where(x => x.IsAlive && PlayerHints.ContainsKey(x)))
                 {
-                    foreach (var hint in _playerHints[player].ToList())
+                    foreach (var hint in PlayerHints[player].ToList())
                     {
                         if (hint.Value.Item2 <= 0)
                         {
-                            _playerHints[player].Remove(hint.Key);
+                            PlayerHints[player].Remove(hint.Key);
                         }
                         else
                         {
-                            _playerHints[player][hint.Key] = (hint.Value.Item1, hint.Value.Item2 - 0.1f);
+                            PlayerHints[player][hint.Key] = (hint.Value.Item1, hint.Value.Item2 - 0.1f);
                         }
                     }
                 }
@@ -83,17 +83,17 @@ namespace RGM.API.Features
         {
             duration = (int)duration;
 
-            if (!_playerHints.ContainsKey(player))
-                _playerHints[player] = new Dictionary<string, (string, float)> { };
+            if (!PlayerHints.ContainsKey(player))
+                PlayerHints[player] = new Dictionary<string, (string, float)> { };
 
-            if (_playerHints[player].ContainsKey(customId))
+            if (PlayerHints[player].ContainsKey(customId))
             {
-                _playerHints[player].Remove(customId);
-                _playerHints[player].Add(customId, (hint, duration));
+                PlayerHints[player].Remove(customId);
+                PlayerHints[player].Add(customId, (hint, duration));
             }
             else
             {
-                _playerHints[player].Add(customId, (hint, duration));
+                PlayerHints[player].Add(customId, (hint, duration));
             }
         }
     }

@@ -71,8 +71,9 @@ namespace RGM.Variables
         public static List<Player> MuteBGMPlayers = new();
         public static List<string> UsedItems = new();
         public static List<string> UsingGameChipUsers = new();
-        public static List<string> Maps = new()
-        {
+        
+        public static readonly List<string> Maps =
+        [
             "BarotraumaWinterhalter3",
             "City17v3",
             "DeathInAir4",
@@ -89,16 +90,19 @@ namespace RGM.Variables
             "FNAF2",
             // "VirtualWorld",
             "SnowForest"
-        };
-        public static List<string> Specials = new()
-        {
+        ];
+        
+        public static readonly List<string> Specials =
+        [
             //"TRRBR",
             "Moszka",
             "Agar"
-        };
-        public static List<Product> Products = new()
-        {
-            new Product()
+        ];
+        
+        public static readonly List<Product> Products =
+        [
+
+            new()
             {
                 IsPubliced = true,
                 Name = "인형 소환",
@@ -107,36 +111,41 @@ namespace RGM.Variables
                 Check = (player, arg) => { return Round.IsLobby; },
                 Script = (player, arg) =>
                 {
-                    Ragdoll.CreateAndSpawn(Tools.EnumToList<RoleTypeId>().GetRandomValue(), "인형", "이 깜찍한 인형 좀 보세요.", player.Position);
+                    Ragdoll.CreateAndSpawn(Tools.EnumToList<RoleTypeId>().GetRandomValue(), "인형", "이 깜찍한 인형 좀 보세요.",
+                        player.Position);
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "랜덤박스",
                 Description = ".구매 랜덤박스/0ㅣ랜덤한 아이템을 얻습니다. 로비 또는 라운드 종료 시에만 사용할 수 있습니다.",
                 Price = 3,
                 Check = (player, arg) => { return Round.IsLobby || Round.IsEnded; },
-                Script = (player, arg) =>
-                {
-                    player.AddRandomItem();
-                }
+                Script = (player, arg) => { player.AddRandomItem(); }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "모드 추천서",
                 Description = $".구매 모드 추천서/{{모드 이름}}ㅣ해당 모드가 투표 목록에 있다면 이름을 강조 처리합니다.",
                 Price = 5,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg); },
+                Check = (player, arg) =>
+                {
+                    return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg);
+                },
                 Script = (player, arg) =>
                 {
                     HighlightModes.Add(ModeList.Keys.First(x => x.GetModeData().Name == arg));
 
-                    Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b>{ModeList.Keys.First(x => x.GetModeData().Name == arg).GetModeData().Name}</b> 모드를 추천하였습니다.");
+                    Tools.MessageTranslated("",
+                        $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b>{ModeList.Keys.First(x => x.GetModeData().Name == arg).GetModeData().Name}</b> 모드를 추천하였습니다.");
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "휴대용 라디오",
@@ -145,16 +154,15 @@ namespace RGM.Variables
                 Check = (player, arg) => { return player.IsAlive; },
                 Script = (player, arg) =>
                 {
-                    AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}",  condition: (ReferenceHub hub) =>
-                    {
-                        return !MuteBGMPlayers.Contains(Player.Get(hub));
-                    }, onIntialCreation: (p) =>
-                    {
-                        p.transform.parent = player.GameObject.transform;
-                        Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 1f, maxDistance: 50f);
-                        speaker.transform.parent = player.GameObject.transform;
-                        speaker.transform.localPosition = Vector3.zero;
-                    });
+                    AudioPlayer radio = AudioPlayer.CreateOrGet($"Radio {player.UserId}",
+                        condition: (ReferenceHub hub) => { return !MuteBGMPlayers.Contains(Player.Get(hub)); },
+                        onIntialCreation: (p) =>
+                        {
+                            p.transform.parent = player.GameObject.transform;
+                            Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 1f, maxDistance: 50f);
+                            speaker.transform.parent = player.GameObject.transform;
+                            speaker.transform.localPosition = Vector3.zero;
+                        });
 
                     string audioDir = Paths.Plugins + "/audio/";
                     string[] audioFiles = Directory.GetFiles(audioDir).Select(Path.GetFileName).ToArray();
@@ -170,7 +178,8 @@ namespace RGM.Variables
                     player.AddHint("휴대용 라디오", $"<size=20>{clipName} 재생 중..</size>", 5);
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "확성기",
@@ -182,7 +191,7 @@ namespace RGM.Variables
                     string text = string.Concat(new string[]
                     {
                         $"<size=40><b>확성기</b>ㅣ{Tools.BadgeFormat(player)}<color={player.Role.Color.ToHex()}>",
-                         Trans.Role[player.Role.Type],
+                        Trans.Role[player.Role.Type],
                         $"</color> (<b><i>{player.DisplayNickname}</i></b>) <b> | </b>",
                         arg.Replace("=", "❤️"),
                         "</size>"
@@ -194,13 +203,20 @@ namespace RGM.Variables
                     }
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "모드 제안서",
-                Description = $".구매 모드 제안서/{{모드 이름}}ㅣ현재 투표 목록에 없는 모드로 4번째 투표 목록을 10% 확률로 교체합니다. 한 라운드 당 한번만 구매할 수 있습니다.",
+                Description =
+                    $".구매 모드 제안서/{{모드 이름}}ㅣ현재 투표 목록에 없는 모드로 4번째 투표 목록을 10% 확률로 교체합니다. 한 라운드 당 한번만 구매할 수 있습니다.",
                 Price = 10,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("모드 제안서"); },
+                Check = (player, arg) =>
+                {
+                    return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) &&
+                           !ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg) &&
+                           !UsedItems.Contains("모드 제안서");
+                },
                 Script = (player, arg) =>
                 {
                     if (ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg))
@@ -208,7 +224,9 @@ namespace RGM.Variables
 
                     UsedItems.Add("모드 제안서");
 
-                    string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;
+                    string modeName = ModeList.Keys
+                        .First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private)
+                        .GetModeData().Name;
                     bool flag = Random.Range(1, 11) == 1;
 
                     if (flag)
@@ -216,21 +234,29 @@ namespace RGM.Variables
                         ModeVote.Remove(ModeVote.ElementAt(3).Key);
                         ModeVote.Add(ModeList.First(x => x.Value.Name == arg).Key, new List<Player>());
 
-                        Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b>{modeName}</b> 모드를 제안하는 데 성공했습니다!!");
+                        Tools.MessageTranslated("",
+                            $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b>{modeName}</b> 모드를 제안하는 데 성공했습니다!!");
                     }
                     else
                     {
-                        Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b>{modeName}</b> 모드를 제안하는 데 실패했습니다.");
+                        Tools.MessageTranslated("",
+                            $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b>{modeName}</b> 모드를 제안하는 데 실패했습니다.");
                     }
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = false,
                 Name = "고급 모드 제안서",
                 Description = $".사용 고급 모드 제안서/{{모드 이름}}ㅣ현재 투표 목록에 없는 모드로 4번째 투표 목록을 무조건 교체합니다.",
                 Price = 1205,
-                Check = (player, arg) => { return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg) && !UsedItems.Contains("고급 모드 제안서"); },
+                Check = (player, arg) =>
+                {
+                    return Round.IsLobby && ModeList.Keys.Select(x => x.GetModeData().Name).Contains(arg) &&
+                           !ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg) &&
+                           !UsedItems.Contains("고급 모드 제안서");
+                },
                 Script = (player, arg) =>
                 {
                     if (ModeVote.Keys.Select(x => x.GetModeData().Name).Contains(arg))
@@ -238,15 +264,19 @@ namespace RGM.Variables
 
                     UsedItems.Add("고급 모드 제안서");
 
-                    string modeName = ModeList.Keys.First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private).GetModeData().Name;
+                    string modeName = ModeList.Keys
+                        .First(x => x.GetModeData().Name == arg && x.GetModeData().Category != ModeCategory.Private)
+                        .GetModeData().Name;
 
                     ModeVote.Remove(ModeVote.ElementAt(3).Key);
                     ModeVote.Add(ModeList.First(x => x.Value.Name == arg).Key, new List<Player>());
 
-                    Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b><color=#ffd700>고급 모드 제안서</color></b>를 사용하여, <b>{modeName}</b> 모드를 제안하는 데 성공했습니다!!");
+                    Tools.MessageTranslated("",
+                        $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b><color=#ffd700>고급 모드 제안서</color></b>를 사용하여, <b>{modeName}</b> 모드를 제안하는 데 성공했습니다!!");
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "모드 리롤권",
@@ -263,15 +293,18 @@ namespace RGM.Variables
                     {
                         Tools.PickModes();
 
-                        Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 투표 목록을 갱신하는 데 성공했습니다!!");
+                        Tools.MessageTranslated("",
+                            $"<b><i>{player.DisplayNickname}</i></b>(이)가 투표 목록을 갱신하는 데 성공했습니다!!");
                     }
                     else
                     {
-                        Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 투표 목록을 갱신하는 데 실패했습니다.");
+                        Tools.MessageTranslated("",
+                            $"<b><i>{player.DisplayNickname}</i></b>(이)가 투표 목록을 갱신하는 데 실패했습니다.");
                     }
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = false,
                 Name = "고급 모드 리롤권",
@@ -284,22 +317,21 @@ namespace RGM.Variables
 
                     Tools.PickModes();
 
-                    Tools.MessageTranslated("", $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b><color=#ffd700>고급 모드 리롤권</color></b>를 사용하여, 투표 목록을 갱신하는 데 성공했습니다!!");
+                    Tools.MessageTranslated("",
+                        $"<b><i>{player.DisplayNickname}</i></b>(이)가 <b><color=#ffd700>고급 모드 리롤권</color></b>를 사용하여, 투표 목록을 갱신하는 데 성공했습니다!!");
                 }
             },
-            new Product()
+
+            new()
             {
                 IsPubliced = true,
                 Name = "게임 칩",
                 Description = $".사용 이번 라운드에서 승리 시 10배만큼 랜덤코인을 추가로 얻습니다.",
                 Price = 5,
                 Check = (player, arg) => { return Round.IsLobby && !UsingGameChipUsers.Contains(player.UserId); },
-                Script = (player, arg) =>
-                {
-                    UsingGameChipUsers.Add(player.UserId);
-                }
-            },
-        };
+                Script = (player, arg) => { UsingGameChipUsers.Add(player.UserId); }
+            }
+        ];
 
         public static readonly List<ModeType> SuicideBlockedModes =
         [
