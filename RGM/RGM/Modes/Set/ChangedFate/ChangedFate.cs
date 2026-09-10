@@ -10,7 +10,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.ChangedFate)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.ChangedFate)]
     public class ChangedFate : Mode
     {
         public override string Name => "뒤바뀐 운명";

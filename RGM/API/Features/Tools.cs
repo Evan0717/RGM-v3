@@ -357,13 +357,9 @@ $"""
             {
                 int IsUsingGameChipUsers(Player player)
                 {
-                    if (UsingGameChipUsers.Contains(player.UserId))
-                    {
-                        PlaySound(player.Transform, "money-soundfx", 2);
-                        return 10;
-                    }
-
-                    return 1;
+                    if (!UsingGameChipUsers.Contains(player.UserId)) return 1;
+                    PlaySound(player.Transform, "money-soundfx", 2);
+                    return 10;
                 }
 
                 foreach (var player in playerList.Where(x => !x.IsNonePlayer() && UsersManager.UsersCache.ContainsKey(x.UserId)))
