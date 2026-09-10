@@ -58,7 +58,7 @@ namespace RGM.Modes
             _autoWarhead.KillCoroutine();
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             while (true)
             {
@@ -134,18 +134,22 @@ namespace RGM.Modes
             }
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             ev.Player.AddHint("나는 누구?", $"<b>⚠️ 주의하세요</b>, <color=red>죽어야 하는 장소에 스폰했을 때 [.자살] 명령어를 입력하지 않으면 제재 대상입니다.</color>", 10);
         }

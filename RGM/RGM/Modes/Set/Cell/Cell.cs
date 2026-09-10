@@ -28,9 +28,9 @@ namespace RGM.Modes
 
         public static Cell Instance;
 
-        List<Player> pl = new List<Player>();
+        private readonly List<Player> _pl = [];
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -52,9 +52,9 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
-            PlayerManager.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().CopyTo(_pl);
 
             foreach (var player in PlayerManager.List)
             {
@@ -76,20 +76,16 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        private void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            if (pl.Contains(ev.Player))
-            {
-                pl.Remove(ev.Player);
+            if (!_pl.Contains(ev.Player)) return;
+            _pl.Remove(ev.Player);
 
-                if (pl.Count() < 2)
-                {
-                    Round.IsLocked = false;
+            if (_pl.Count() >= 2) return;
+            Round.IsLocked = false;
 
-                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
-                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
-                }
-            }
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {_pl[0].DisplayNickname}"));
+            Timing.RunCoroutine(Tools.SetWinner([_pl[0]], 5));
         }
     }
 }

@@ -36,17 +36,22 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
 
         public static DoubleUp Instance;
 
-        static Dictionary<ModeType, ModeData> Mods = ModeList;
+        private static readonly Dictionary<ModeType, ModeData> Mods = ModeList;
 
-        static List<ModeType> ModeKeys = ModeList.Keys.Where(x => Mods[x].Category == ModeCategory.Public && Mods[x].Info != ModeInfo.Lock).ToList();
-        static ModeType mod1 = ModeKeys.GetRandomValue();
-        static ModeType mod2 = ModeKeys.Where(x => (mod1.GetModeData().Info == ModeInfo.Set ? x != mod1 : true) && ModeList.Keys.Where(x => x.GetModeData().Info != ModeInfo.Set).Contains(x)).ToList().GetRandomValue();
+        private static readonly List<ModeType> ModeKeys = ModeList.Keys
+            .Where(x => Mods[x].Category == ModeCategory.Public && Mods[x].Info != ModeInfo.Lock).ToList();
+        
+        private static readonly ModeType Mod1 = ModeKeys.GetRandomValue();
+        private static readonly ModeType Mod2 = ModeKeys
+            .Where(x => (Mod1.GetModeData().Info != ModeInfo.Set || x != Mod1) &&
+                        ModeList.Keys.Where(y => y.GetModeData().Info != ModeInfo.Set).Contains(x)).ToList()
+            .GetRandomValue();
 
-        List<ModeType> Modes = new List<ModeType>() { mod1, mod2 };
+        private readonly List<ModeType> _modes = [Mod1, Mod2];
 
-        static string Desc = $"<size=25><b>[<color=#{Mods[mod1].Color}>{mod1.GetModeData().Name}</color> + <color=#{Mods[mod2].Color}>{mod2.GetModeData().Name}</color>]</b></size>";
+        private static readonly string Desc = $"<size=25><b>[<color=#{Mods[Mod1].Color}>{Mod1.GetModeData().Name}</color> + <color=#{Mods[Mod2].Color}>{Mod2.GetModeData().Name}</color>]</b></size>";
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -65,10 +70,10 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             for (int i = 0; i < 2; i++)
-                Tools.TryInstallMode(Mods[Modes[i]].Type);
+                Tools.TryInstallMode(Mods[_modes[i]].Type);
 
             foreach (var player in PlayerManager.List.Where(x => !x.IsNPC))
             {
@@ -79,21 +84,25 @@ Plus(Sub) - 서브로만 등장하는 모드입니다. (ex. 한국인이 좋아�
             yield break;
         }
 
-        public void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
+        private void OnVerified(Exiled.Events.EventArgs.Player.VerifiedEventArgs ev)
         {
             ev.Player.AddBroadcast(10, Desc);
             ev.Player.SendConsoleMessage($"\n{Desc}", "white");
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

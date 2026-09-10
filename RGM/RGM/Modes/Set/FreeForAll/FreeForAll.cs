@@ -171,7 +171,7 @@ namespace RGM.Modes
 
                 if (_kills[ev.Attacker] >= TargetKills)
                 {
-                    EndMatch(new List<Player> { ev.Attacker });
+                    EndMatch([ev.Attacker]);
                     return;
                 }
             }

@@ -66,27 +66,28 @@ namespace RGM.Modes
 
         private void Spawned(Player player)
         {
-            Door SelectedDoor = null;
             if (Warhead.IsDetonated) return;
 
-            if (Exiled.API.Features.Map.IsLczDecontaminated)
-                SelectedDoor = Door.List.Where(x => !x.IsElevator && x.Zone != ZoneType.LightContainment && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue();
+            var selectedDoor = Exiled.API.Features.Map.IsLczDecontaminated
+                ? Door.List.Where(x => !x.IsElevator && x.Zone != ZoneType.LightContainment && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue()
+                : Door.List.Where(x => !x.IsElevator && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue();
 
-            else
-                SelectedDoor = Door.List.Where(x => !x.IsElevator && !x.Type.ToString().Contains("Scp079")).ToList().GetRandomValue();
-
-            player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
+            player.Position = new Vector3(selectedDoor.Position.x, selectedDoor.Position.y + 2, selectedDoor.Position.z);
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

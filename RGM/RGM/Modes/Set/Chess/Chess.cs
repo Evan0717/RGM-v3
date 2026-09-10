@@ -32,21 +32,21 @@ namespace RGM.Modes
         public override string Color => "637c66";
         public override string Map => "Chess";
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
-        List<Player> special = new();
-        List<Player> teamA = new();
-        List<Player> teamB = new();
-        Player kingA = null;
-        Player kingB = null;
-        Player queenA = null;
-        Player queenB = null;
-        List<Player> knightA = new();
-        List<Player> knightB = new();
-        List<Player> bishopA = new();
-        List<Player> bishopB = new();
-        List<Player> rookA = new();
-        List<Player> rookB = new();
+        private List<Player> _special = [];
+        private List<Player> _teamA = [];
+        private List<Player> _teamB = [];
+        private Player _kingA;
+        private Player _kingB;
+        private Player _queenA;
+        private Player _queenB;
+        private List<Player> _knightA = [];
+        private List<Player> _knightB = [];
+        private List<Player> _bishopA = [];
+        private List<Player> _bishopB = [];
+        private List<Player> _rookA = [];
+        private List<Player> _rookB = [];
 
         public override void OnEnabled()
         {
@@ -76,7 +76,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             var players = PlayerManager.List.Where(x => !x.IsTutorial).ToList();
             if (players.Count < 2)
@@ -85,21 +85,21 @@ namespace RGM.Modes
             players.ShuffleList();
 
             int halfCount = players.Count / 2;
-            special = new();
-            teamA = players.Take(halfCount).ToList();
-            teamB = players.Skip(halfCount).ToList();
-            kingA = teamA.GetRandomValue();
-            special.Add(kingA);
-            kingB = teamB.GetRandomValue();
-            special.Add(kingB);
-            queenA = null;
-            queenB = null;
-            knightA = new();
-            knightB = new();
-            bishopA = new();
-            bishopB = new();
-            rookA = new();
-            rookB = new();
+            _special = [];
+            _teamA = players.Take(halfCount).ToList();
+            _teamB = players.Skip(halfCount).ToList();
+            _kingA = _teamA.GetRandomValue();
+            _special.Add(_kingA);
+            _kingB = _teamB.GetRandomValue();
+            _special.Add(_kingB);
+            _queenA = null;
+            _queenB = null;
+            _knightA = [];
+            _knightB = [];
+            _bishopA = [];
+            _bishopB = [];
+            _rookA = [];
+            _rookB = [];
 
             bool canSpawnFullPieces = players.Count >= 16;
 
@@ -117,7 +117,7 @@ namespace RGM.Modes
                 Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
             });
 
-            void setupTeam(List<Player> team, RoleTypeId roleType, string color, Vector3 pos, Player king, Player queen, List<Player> knights, List<Player> rooks, List<Player> bishops)
+            void SetupTeam(List<Player> team, RoleTypeId roleType, string color, Vector3 pos, Player king, Player queen, List<Player> knights, List<Player> rooks, List<Player> bishops)
             {
                 foreach (var ply in team)
                 {
@@ -176,42 +176,42 @@ namespace RGM.Modes
 
             if (canSpawnFullPieces)
             {
-                queenA = teamA.GetRandomValue(x => !special.Contains(x));
-                special.Add(queenA);
-                queenB = teamB.GetRandomValue(x => !special.Contains(x));
-                special.Add(queenB);
-                knightA = teamA.Where(x => !special.Contains(x)).Take(2).ToList();
-                special.AddRange(knightA);
-                knightB = teamB.Where(x => !special.Contains(x)).Take(2).ToList();
-                special.AddRange(knightB);
-                bishopA = teamA.Where(x => !special.Contains(x)).Take(2).ToList();
-                special.AddRange(bishopA);
-                bishopB = teamB.Where(x => !special.Contains(x)).Take(2).ToList();
-                special.AddRange(bishopB);
-                rookA = teamA.Where(x => !special.Contains(x)).Take(2).ToList();
-                special.AddRange(rookA);
-                rookB = teamB.Where(x => !special.Contains(x)).Take(2).ToList();
-                special.AddRange(rookB);
+                _queenA = _teamA.GetRandomValue(x => !_special.Contains(x));
+                _special.Add(_queenA);
+                _queenB = _teamB.GetRandomValue(x => !_special.Contains(x));
+                _special.Add(_queenB);
+                _knightA = _teamA.Where(x => !_special.Contains(x)).Take(2).ToList();
+                _special.AddRange(_knightA);
+                _knightB = _teamB.Where(x => !_special.Contains(x)).Take(2).ToList();
+                _special.AddRange(_knightB);
+                _bishopA = _teamA.Where(x => !_special.Contains(x)).Take(2).ToList();
+                _special.AddRange(_bishopA);
+                _bishopB = _teamB.Where(x => !_special.Contains(x)).Take(2).ToList();
+                _special.AddRange(_bishopB);
+                _rookA = _teamA.Where(x => !_special.Contains(x)).Take(2).ToList();
+                _special.AddRange(_rookA);
+                _rookB = _teamB.Where(x => !_special.Contains(x)).Take(2).ToList();
+                _special.AddRange(_rookB);
             }
 
-            setupTeam(teamA, RoleTypeId.Scientist, "red", new Vector3(34.60717f, 381.5809f, -30.17525f), kingA, queenA, knightA, rookA, bishopA); // A팀 (과학자)
+            SetupTeam(_teamA, RoleTypeId.Scientist, "red", new Vector3(34.60717f, 381.5809f, -30.17525f), _kingA, _queenA, _knightA, _rookA, _bishopA); // A팀 (과학자)
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                setupTeam(teamB, RoleTypeId.ClassD, "cyan", new Vector3(34.64063f, 381.5783f, -1.050781f), kingB, queenB, knightB, rookB, bishopB);    // B팀 (죄수)
+                SetupTeam(_teamB, RoleTypeId.ClassD, "cyan", new Vector3(34.64063f, 381.5783f, -1.050781f), _kingB, _queenB, _knightB, _rookB, _bishopB);    // B팀 (죄수)
             });
         }
 
-        void OnDied(DiedEventArgs ev)
+        private void OnDied(DiedEventArgs ev)
         {
-            if (new List<Player> { kingA, kingB }.Contains(ev.Player))
+            if (new List<Player> { _kingA, _kingB }.Contains(ev.Player))
             {
                 List<Player> winTeam = new();
 
-                if (ev.Player == kingA)
-                    winTeam.AddRange(teamB);
+                if (ev.Player == _kingA)
+                    winTeam.AddRange(_teamB);
 
-                if (ev.Player == kingB)
-                    winTeam.AddRange(teamA);
+                if (ev.Player == _kingB)
+                    winTeam.AddRange(_teamA);
 
                 Round.IsLocked = false;
 
@@ -222,22 +222,22 @@ namespace RGM.Modes
             }
         }
 
-        void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        void OnSearchingPickup(SearchingPickupEventArgs ev)
+        private void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        void OnResurrecting(ResurrectingEventArgs ev)
+        private void OnResurrecting(ResurrectingEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        void OnChargingJailbird(ChargingJailbirdEventArgs ev)
+        private void OnChargingJailbird(ChargingJailbirdEventArgs ev)
         {
             ev.IsAllowed = false;
         }

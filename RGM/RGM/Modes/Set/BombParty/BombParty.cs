@@ -36,9 +36,9 @@ namespace RGM.Modes
 
         public static BombParty Instance;
 
-        List<Player> pl = new List<Player>();
+        private readonly List<Player> _pl = [];
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -62,9 +62,9 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
-            PlayerManager.List.ToList().CopyTo(pl);
+            PlayerManager.List.ToList().CopyTo(_pl);
 
             foreach (var player in PlayerManager.List)
             {
@@ -84,16 +84,16 @@ namespace RGM.Modes
 
                 if (t > 30)
                 {
-                    if (UnityEngine.Random.Range(1, 4) == 1)
+                    if (Random.Range(1, 4) == 1)
                     {
-                        var g1 = (FlashGrenade)Item.Create(ItemType.GrenadeFlash);
-                        g1.FuseTime = 2f;
-                        g1.SpawnActive(GetRandomPosition());
+                        var f1 = (FlashGrenade)Item.Create(ItemType.GrenadeFlash);
+                        f1.FuseTime = 2f;
+                        f1.SpawnActive(GetRandomPosition());
                     }
                 }
                 if (t > 60)
                 {
-                    if (UnityEngine.Random.Range(1, 4) == 1)
+                    if (Random.Range(1, 4) == 1)
                     {
                         var g1 = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                         g1.FuseTime = 5f;
@@ -102,7 +102,7 @@ namespace RGM.Modes
                 }
                 if (t > 90)
                 {
-                    if (UnityEngine.Random.Range(1, 4) == 1)
+                    if (Random.Range(1, 4) == 1)
                     {
                         var scp244 = (Scp244)Item.Create(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }.GetRandomValue(), Server.Host);
                         scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
@@ -110,11 +110,28 @@ namespace RGM.Modes
                 }
                 if (t > 120)
                 {
-                    if (UnityEngine.Random.Range(1, 4) == 1)
+                    if (Random.Range(1, 4) == 1)
                     {
                         var scp018 = (Scp018)Item.Create(ItemType.SCP018, Server.Host);
                         scp018.SpawnActive(GetRandomPosition(), Server.Host);
                     }
+                }
+
+                if (t > 150)
+                {
+                    var g2 = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
+                    g2.FuseTime = 3f;
+                    g2.SpawnActive(GetRandomPosition(), Server.Host);
+                    
+                    var f2 = (FlashGrenade)Item.Create(ItemType.GrenadeFlash);
+                    f2.FuseTime = 2f;
+                    f2.SpawnActive(GetRandomPosition());
+                    
+                    var scp244 = (Scp244)Item.Create(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }.GetRandomValue(), Server.Host);
+                    scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
+                    
+                    var scp018 = (Scp018)Item.Create(ItemType.SCP018, Server.Host);
+                    scp018.SpawnActive(GetRandomPosition(), Server.Host);
                 }
 
                 PlayerManager.List.ToList().ForEach(x => x.DisableEffect(EffectType.Flashed));
@@ -122,25 +139,21 @@ namespace RGM.Modes
             }
         }
 
-        public Vector3 GetRandomPosition()
+        private Vector3 GetRandomPosition()
         {
-            return new Vector3(UnityEngine.Random.Range(-9.941405f, 10.92998f), 303.9572f, UnityEngine.Random.Range(-15.76172f, 2.550781f));
+            return new Vector3(Random.Range(-9.941405f, 10.92998f), 303.9572f, Random.Range(-15.76172f, 2.550781f));
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        private void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
-            if (pl.Contains(ev.Player))
-            {
-                pl.Remove(ev.Player);
+            if (!_pl.Contains(ev.Player)) return;
+            _pl.Remove(ev.Player);
 
-                if (pl.Count() < 2)
-                {
-                    Round.IsLocked = false;
+            if (_pl.Count() >= 2) return;
+            Round.IsLocked = false;
 
-                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
-                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
-                }
-            }
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {_pl[0].DisplayNickname}"));
+            Timing.RunCoroutine(Tools.SetWinner([_pl[0]], 5));
         }
     }
 }

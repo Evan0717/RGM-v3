@@ -56,7 +56,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var door in Door.List)
             {
@@ -178,28 +178,32 @@ namespace RGM.Modes
             }
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
 
-        void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        void OnDroppingAmmo(DroppingAmmoEventArgs ev)
+        private void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        void OnShot(ShotEventArgs ev)
+        private void OnShot(ShotEventArgs ev)
         {
             ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }

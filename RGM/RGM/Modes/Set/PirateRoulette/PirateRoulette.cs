@@ -64,7 +64,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             var scp = PlayerManager.List.ToList()[UnityEngine.Random.Range(0, PlayerManager.List.Count())];
             var bomb = PlayerManager.List.Where(x => x != scp).ToList()[UnityEngine.Random.Range(0, PlayerManager.List.Count() - 1)];
@@ -111,7 +111,7 @@ namespace RGM.Modes
             Timing.RunCoroutine(EndSequence());
         }
 
-        public IEnumerator<float> HurtScp049()
+        private IEnumerator<float> HurtScp049()
         {
             while (Scp049.IsAlive)
             {
@@ -121,7 +121,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> EndSequence()
+        private IEnumerator<float> EndSequence()
         {
             for (; ; )
             {
@@ -132,7 +132,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
+        private void OnReceivingEffect(Exiled.Events.EventArgs.Player.ReceivingEffectEventArgs ev)
         {
             if (ev.Intensity <= 0) return;
             if (!(ev.Effect is CardiacArrest ca)) return;
@@ -156,28 +156,28 @@ namespace RGM.Modes
             ev.IsAllowed = false;
         }
 
-        public void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
+        private void OnStartingRecall(Exiled.Events.EventArgs.Scp049.StartingRecallEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnRespawningTeam(Exiled.Events.EventArgs.Server.RespawningTeamEventArgs ev)
+        private void OnRespawningTeam(RespawningTeamEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
+        private void OnInteractingDoor(Exiled.Events.EventArgs.Player.InteractingDoorEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
+        private void OnKicking(Exiled.Events.EventArgs.Player.KickingEventArgs ev)
         {
             if (ev.Reason.ToLower().Contains("afk"))
                 ev.IsAllowed = false;
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             Timing.RunCoroutine(
                 PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList()[0].Role.Type == RoleTypeId.Scp049

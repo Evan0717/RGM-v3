@@ -87,7 +87,7 @@ namespace RGM.Modes
                         Round.IsLocked = false;
 
                         PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {_pl[0].DisplayNickname}"));
-                        Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { _pl[0] }, 5));
+                        Timing.RunCoroutine(Tools.SetWinner([_pl[0]], 5));
                     }
 
                     player.Kill("선을 넘어버렸다네~");

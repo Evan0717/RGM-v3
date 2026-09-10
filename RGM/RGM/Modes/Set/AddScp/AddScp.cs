@@ -36,9 +36,9 @@ namespace RGM.Modes
 
         public static AddScpMode Instance;
 
-        public static List<Player> SpecialScps = new();
+        public static readonly List<Player> SpecialScps = [];
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -58,7 +58,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
@@ -115,7 +115,7 @@ namespace RGM.Modes
             yield return 0f;
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive)
             {
@@ -126,15 +126,19 @@ namespace RGM.Modes
             }
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count())
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

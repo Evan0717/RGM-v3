@@ -84,7 +84,7 @@ namespace RGM.Modes
             audio.IsPaused = true;
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             PlayerManager.List.CopyTo(pl);
 
@@ -172,7 +172,7 @@ namespace RGM.Modes
                 PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(3, "게임이 종료되었습니다. 그나저나 어떻게 사셨"));
         }
 
-        public IEnumerator<float> gingerbreadHint()
+        private IEnumerator<float> gingerbreadHint()
         {
             while (true)
             {
@@ -183,7 +183,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> DJ()
+        private IEnumerator<float> DJ()
         {
             yield return Timing.WaitForSeconds(1f);
 
@@ -224,7 +224,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> ShowPhase()
+        private IEnumerator<float> ShowPhase()
         {
             while (Phase < 11)
             {
@@ -234,13 +234,13 @@ namespace RGM.Modes
             }
         }
 
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+        private void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
             IntercomPlayers.Add(ev.Player);
         }
 
-        public void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
+        private void OnDied(Exiled.Events.EventArgs.Player.DiedEventArgs ev)
         {
             if (pl.Contains(ev.Player))
             {
@@ -251,26 +251,30 @@ namespace RGM.Modes
             }
         }
 
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        private void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Player.IsNPC)
                 ev.IsAllowed = false;
         }
 
-        public void OnSpawnedRagdoll(Exiled.Events.EventArgs.Player.SpawnedRagdollEventArgs ev)
+        private void OnSpawnedRagdoll(Exiled.Events.EventArgs.Player.SpawnedRagdollEventArgs ev)
         {
             ev.Ragdoll.Destroy();
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

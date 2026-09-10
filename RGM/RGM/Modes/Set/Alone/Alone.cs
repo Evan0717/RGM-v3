@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
@@ -26,9 +27,9 @@ $"""
 
         public static Alone Instance;
 
-        Player alone;
+        private Player _alone;
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -53,7 +54,7 @@ $"""
 
         private IEnumerator<float> OnModeStarted()
         {
-            alone = PlayerManager.List.Where(x => !x.IsNPC).GetRandomValue();
+            _alone = PlayerManager.List.Where(x => !x.IsNPC).GetRandomValue();
             List<RoleTypeId> ignoredRoles =
             [
                 RoleTypeId.Scp079,
@@ -82,13 +83,13 @@ $"""
                 ItemType.SCP207
             ];
 
-            alone.Role.Set(RoleTypeId.ClassD);
-            alone.EnableEffect(EffectType.MovementBoost, 255);
+            _alone.Role.Set(RoleTypeId.ClassD);
+            _alone.AddEffect(EffectType.MovementBoost, Math.Min(20 * PlayerManager.List.Count, 255));
 
             foreach (var item in items)
-                alone.AddItem(item);
+                _alone.AddItem(item);
 
-            foreach (var player in PlayerManager.List.Where(x => x != alone))
+            foreach (var player in PlayerManager.List.Where(x => x != _alone))
                 player.Role.Set(scpRoles.GetRandomValue());
 
             yield break;
@@ -96,20 +97,18 @@ $"""
 
         private void OnEscaped(EscapedEventArgs ev)
         {
-            if (ev.Player == alone)
-            {
-                Timing.RunCoroutine(Tools.SetWinner(new List<Player> { alone }, 5));
+            if (ev.Player != _alone) return;
+            Timing.RunCoroutine(Tools.SetWinner([_alone], PlayerManager.List.Count / 2));
 
-                foreach (var player in PlayerManager.List.Where(x => x != alone && x.IsAlive))
-                    player.Role.Set(RoleTypeId.Tutorial);
-            } 
+            foreach (var player in PlayerManager.List.Where(x => x != _alone && x.IsAlive))
+                player.Role.Set(RoleTypeId.Tutorial);
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            switch (players.Count())
+            switch (players.Count)
             {
                 case 1:
                     Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));

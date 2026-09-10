@@ -28,41 +28,46 @@ $"""
 
         public static ChangedFate Instance;
 
-        static List<RoleTypeId> ignoredRoles = new List<RoleTypeId>
-        {
+        private static readonly List<RoleTypeId> IgnoredRoles =
+        [
             RoleTypeId.Scp3114,
-            RoleTypeId.Scp0492
-        };
-        Dictionary<RoleTypeId, List<RoleTypeId>> roleTypeIds = new Dictionary<RoleTypeId, List<RoleTypeId>>()
+            RoleTypeId.Scp0492,
+            RoleTypeId.Flamingo,
+            RoleTypeId.AlphaFlamingo,
+            RoleTypeId.ChaosFlamingo,
+            RoleTypeId.NtfFlamingo,
+            RoleTypeId.ZombieFlamingo
+        ];
+
+        private readonly Dictionary<RoleTypeId, List<RoleTypeId>> _roleTypeIds = new()
         {
-            { RoleTypeId.ClassD, new List<RoleTypeId> { RoleTypeId.Scientist } },
-            { RoleTypeId.Scientist, new List<RoleTypeId> { RoleTypeId.ClassD } },
-            { RoleTypeId.FacilityGuard, Tools.EnumToList<RoleTypeId>().Where(x => x.IsScpRole() && !ignoredRoles.Contains(x)).ToList() }
+            { RoleTypeId.ClassD, [RoleTypeId.Scientist] },
+            { RoleTypeId.Scientist, [RoleTypeId.ClassD] },
+            { RoleTypeId.FacilityGuard,
+                [.. Tools.EnumToList<RoleTypeId>().Where(x => x.IsScpRole() && !IgnoredRoles.Contains(x))]
+            }
         };
 
-        RoleTypeId selectRole(Player player)
+        private RoleTypeId SelectRole(Player player)
         {
-            if (roleTypeIds.ContainsKey(player.Role.Type))
+            if (_roleTypeIds.TryGetValue(player.Role.Type, out var roles))
             {
-                List<RoleTypeId> roles = roleTypeIds[player.Role.Type];
                 return roles.GetRandomValue();
             }
-            else
-            {
-                if (player.IsScpRole())
-                    return RoleTypeId.FacilityGuard;
 
-                if (player.IsNTF)
-                    return Tools.EnumToList<RoleTypeId>().Where(x => x.IsChaos()).GetRandomValue();
+            if (player.IsScpRole())
+                return RoleTypeId.FacilityGuard;
 
-                if (player.IsCHI)
-                    return Tools.EnumToList<RoleTypeId>().Where(x => x.IsNtf()).GetRandomValue();
+            if (player.IsNTF)
+                return Tools.EnumToList<RoleTypeId>().Where(x => x.IsChaos()).GetRandomValue();
 
-                return RoleTypeId.Tutorial;
-            }
+            if (player.IsCHI)
+                return Tools.EnumToList<RoleTypeId>().Where(x => x.IsNtf()).GetRandomValue();
+
+            return RoleTypeId.Tutorial;
         }
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -78,22 +83,22 @@ $"""
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
-                RoleTypeId roleType = selectRole(player);
+                RoleTypeId roleType = SelectRole(player);
                 player.Role.Set(roleType, SpawnReason.ItemUsage, RoleSpawnFlags.AssignInventory);
             }
 
             yield break;
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive && ev.Reason != SpawnReason.ItemUsage)
             {
-                RoleTypeId roleType = selectRole(ev.Player);
+                RoleTypeId roleType = SelectRole(ev.Player);
                 ev.Player.Role.Set(roleType, SpawnReason.ItemUsage, RoleSpawnFlags.AssignInventory);
             }
         }
