@@ -32,11 +32,11 @@ namespace RGM.Modes
 
         public static HIDE Instance;
 
-        List<Player> pl = new List<Player>();
-        Player monster = null;
+        private readonly List<Player> _pl = [];
+        private Player _monster;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _timer;
+        private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _timer;
 
         public override void OnEnabled()
         {
@@ -46,7 +46,6 @@ namespace RGM.Modes
             Server.ExecuteCommand($"/lock **");
 
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.Hurt += OnHurt;
 
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
@@ -57,7 +56,6 @@ namespace RGM.Modes
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
 
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
@@ -65,40 +63,38 @@ namespace RGM.Modes
             Timing.KillCoroutines(_timer);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
-            PlayerManager.List.ToList().CopyTo(pl);
-            monster = PlayerManager.List.ToList().GetRandomValue();
+            PlayerManager.List.ToList().CopyTo(_pl);
+            _monster = PlayerManager.List.ToList().GetRandomValue();
 
             try
             {
                 Timing.CallDelayed(1f, () =>
                 {
-                    monster.Role.Set(RoleTypeId.Scp3114);
-                    monster.RankName = "MONSTER";
-                    monster.RankColor = "red";
-                    monster.Position = new Vector3(-0.6015625f, 332.9026f, -32.56641f);
+                    _monster.Role.Set(RoleTypeId.Scp3114);
+                    _monster.RankName = "MONSTER";
+                    _monster.RankColor = "red";
+                    _monster.Position = new Vector3(-0.6015625f, 332.9026f, -32.56641f);
                     Server.ExecuteCommand($"/open ESCAPE_PRIMARY");
 
                     float health = 15 * PlayerManager.List.Count;
-                    monster.MaxHealth = health;
-                    monster.Health = health;
-                    monster.IsUsingStamina = false;
-                    monster.MaxHumeShield = 60;
-                    monster.HumeShield = monster.MaxHumeShield;
-                    monster.EnableEffect(EffectType.MovementBoost, 70);
-                    monster.EnableEffect(EffectType.Fade, 220);
-                    monster.EnableEffect(EffectType.Lightweight, 150);
+                    _monster.MaxHealth = health;
+                    _monster.Health = health;
+                    _monster.IsUsingStamina = false;
+                    _monster.MaxHumeShield = 60;
+                    _monster.HumeShield = _monster.MaxHumeShield;
+                    _monster.EnableEffect(EffectType.MovementBoost, 70);
+                    _monster.EnableEffect(EffectType.Fade, 220);
+                    _monster.EnableEffect(EffectType.Lightweight, 150);
 
                     foreach (var player in PlayerManager.List)
                     {
-                        if (player != monster)
-                        {
-                            player.Role.Set(RoleTypeId.NtfPrivate);
-                            player.Position = new Vector3(36.61497f, 332.9037f, -69.72147f);
-                            for (int i = 1; i < 10; i++)
-                                player.AddItem(ItemType.Ammo9x19);
-                        }
+                        if (player == _monster) continue;
+                        player.Role.Set(RoleTypeId.NtfPrivate);
+                        player.Position = new Vector3(36.61497f, 332.9037f, -69.72147f);
+                        for (int i = 1; i < 10; i++)
+                            player.AddItem(ItemType.Ammo9x19);
                     }
 
 
@@ -112,7 +108,7 @@ namespace RGM.Modes
             yield break;
         }
 
-        public IEnumerator<float> Timer()
+        private IEnumerator<float> Timer()
         {
             for (int i = 1; i < 180; i++)
             {
@@ -123,17 +119,15 @@ namespace RGM.Modes
 
             foreach (var player in PlayerManager.List)
             {
-                if (player.IsScpRole())
-                {
-                    if (GodModePlayers.Contains(player))
-                        GodModePlayers.Remove(player);
+                if (!player.IsScpRole()) continue;
+                if (GodModePlayers.Contains(player))
+                    GodModePlayers.Remove(player);
 
-                    player.Kill("제한시간이 초과하였습니다.");
-                }
+                player.Kill("제한시간이 초과하였습니다.");
             }
         }
 
-        public void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
+        private void OnHurting(Exiled.Events.EventArgs.Player.HurtingEventArgs ev)
         {
             if (ev.Attacker.IsScpRole() && ev.DamageHandler.Type != DamageType.Strangled) {
                 ev.DamageHandler.Damage += 79;
@@ -141,24 +135,19 @@ namespace RGM.Modes
             }
         }
 
-        public void OnHurt(Exiled.Events.EventArgs.Player.HurtEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            if (ev.Attacker != null && ev.Attacker == monster)
-                ev.Attacker.DisableEffect(EffectType.Invisible);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (ev.Player == monster)
-                ev.Player.DisableEffect(EffectType.Invisible);
-        }
-
-        public void OnRoundEnded(RoundEndedEventArgs ev)
-        {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
-
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

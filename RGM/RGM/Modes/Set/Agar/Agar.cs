@@ -22,18 +22,15 @@ namespace RGM.Modes
     {
         public override string Name => "세력 키우기";
         public override string Description => "SCP-1509를 사용하여 아군을 늘리고 적군을 몰살하세요!";
-        public override string Detail =>
-"""
-세력을 키우자~
-""";
+        public override string Detail => "세력을 키우자~";
         public override string Color => "f1a783";
 
         public static Agar Instance;
 
-        List<Player> TeamA = new List<Player>();
-        List<Player> TeamB = new List<Player>();
+        private List<Player> _teamA = [];
+        private List<Player> _teamB = [];
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -64,7 +61,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             Tools.LoadMap("Battle_AGAR");
             yield return Timing.WaitForSeconds(1f);
@@ -74,17 +71,17 @@ namespace RGM.Modes
 
             int halfCount = players.Count / 2;
 
-            TeamA = players.Take(halfCount).ToList();
-            TeamB = players.Skip(halfCount).ToList();
+            _teamA = players.Take(halfCount).ToList();
+            _teamB = players.Skip(halfCount).ToList();
 
-            foreach (var player in TeamA)
+            foreach (var player in _teamA)
             {
                 player.Role.Set(RoleTypeId.ClassD);
                 player.Position = Tools.GetObjectList("Spot A").GetRandomValue().position;
                 player.AddItem(ItemType.SCP1509);
             }
 
-            foreach (var player in TeamB)
+            foreach (var player in _teamB)
             {
                 player.Role.Set(RoleTypeId.Scientist);
                 player.ClearInventory();
@@ -103,24 +100,24 @@ namespace RGM.Modes
             }
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             Player winner = PlayerManager.List.First(x => x.UserId == PlayersReport
                     .OrderByDescending(kv => kv.Value.Damage)
                     .Take(1)
                     .ToList().First().Key);
 
-            Timing.RunCoroutine(Tools.SetWinner(new List<Player> { winner }, 5));
+            Timing.RunCoroutine(Tools.SetWinner([winner], 5));
         }
 
-        public void OnDied(DiedEventArgs ev)
+        private void OnDied(DiedEventArgs ev)
         {
             if (ev.Attacker != null)
             {
                 Player reviver = PlayerManager.List.GetRandomValue(x => x.Role.Type == RoleTypeId.Spectator);
                 reviver.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
                 if (reviver.Role.Team == Team.Dead)
-                    reviver.Role.Set(UnityEngine.Random.Range(1, 3) == 1 ? RoleTypeId.ClassD : RoleTypeId.Scientist, RoleSpawnFlags.None);
+                    reviver.Role.Set(Random.Range(1, 3) == 1 ? RoleTypeId.ClassD : RoleTypeId.Scientist, RoleSpawnFlags.None);
                 Item item = reviver.AddItem(ItemType.SCP1509);
                 reviver.CurrentItem = item;
             }
@@ -139,17 +136,17 @@ namespace RGM.Modes
             }
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
+        private void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnShot(ShotEventArgs ev)
+        private void OnShot(ShotEventArgs ev)
         {
             ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }

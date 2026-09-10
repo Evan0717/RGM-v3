@@ -278,9 +278,9 @@ namespace RGM.Modes
 
                 try
                 {
-                    IEnumerable<Player> zombies = PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492);
+                    List<Player> zombies = [.. PlayerManager.List.Where(x => x.Role.Type == RoleTypeId.Scp0492)];
 
-                    ev.Player.Position = zombies.Count() < 1
+                    ev.Player.Position = zombies.Count < 1
                         ? PlayerManager.List.Where(x => x.Role.Type is RoleTypeId.NtfCaptain or RoleTypeId.FacilityGuard).Select(x => x.Position)
                             .ToList().GetRandomValue()
                         : zombies.Select(x => x.Position).ToList().GetRandomValue();

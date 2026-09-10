@@ -29,6 +29,17 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
 
         private CoroutineHandle _onModeStarted;
         private readonly AutoWarhead _autoWarhead = new(14, 1);
+        
+        private readonly List<RoleTypeId> _scpRoles =
+        [
+            RoleTypeId.Scp049,
+            RoleTypeId.Scp096,
+            RoleTypeId.Scp106,
+            RoleTypeId.Scp173,
+            RoleTypeId.Scp939,
+            RoleTypeId.Scp079,
+            RoleTypeId.Scp3114
+        ];
 
         public override void OnEnabled()
         {
@@ -46,26 +57,17 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
             _autoWarhead.KillCoroutine();
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             if (Random.Range(1, 101) <= 10) { //10% 확률로 워크스테이션 업그레이드 시작
                 Tools.TryInstallMode(ModeType.ABattle);
             }
-            List<RoleTypeId> ScpRoles = new List<RoleTypeId>
-            {
-                RoleTypeId.Scp049,
-                RoleTypeId.Scp096,
-                RoleTypeId.Scp106,
-                RoleTypeId.Scp173,
-                RoleTypeId.Scp939,
-                RoleTypeId.Scp079,
-                RoleTypeId.Scp3114
-            };
-            RoleTypeId RandomScpRole = ScpRoles.GetRandomValue();
+            
+            RoleTypeId randomScpRole = _scpRoles.GetRandomValue();
 
-            foreach (var player in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != RandomScpRole))
+            foreach (var player in PlayerManager.List.Where(x => x.IsScpRole() && x.Role.Type != randomScpRole))
             {
-                player.Role.Set(RandomScpRole);
+                player.Role.Set(randomScpRole);
 
                 if (player.Role is Scp079Role scp079)
                     scp079.Level = 4;
@@ -74,15 +76,19 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
             yield break;
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            IEnumerable<Player> players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-            if (players.Count() == 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
-
-            else if (players.Count() > 1)
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 1));
+                    break;
+            }
         }
     }
 }

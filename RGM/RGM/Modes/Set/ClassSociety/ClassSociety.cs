@@ -29,8 +29,8 @@ namespace RGM.Modes
 
         public static ClassSociety Instance;
 
-        CoroutineHandle _onModeStarted;
-        CoroutineHandle _display;
+        private CoroutineHandle _onModeStarted;
+        private CoroutineHandle _display;
 
         public override void OnEnabled()
         {
@@ -64,7 +64,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_display);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             Exiled.API.Features.Map.CleanAllItems();
 
@@ -99,7 +99,7 @@ namespace RGM.Modes
             }
         }
 
-        public IEnumerator<float> Display()
+        private IEnumerator<float> Display()
         {
             while (!Round.IsEnded)
             {
@@ -112,80 +112,79 @@ namespace RGM.Modes
             }
         }
 
-        public void OnHurting(HurtingEventArgs ev)
+        private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Attacker != null)
+            if (ev.Attacker == null) return;
+            int attackerLevel = int.Parse(ev.Attacker.RankName);
+            int playerLevel = int.Parse(ev.Player.RankName);
+
+            switch (attackerLevel)
             {
-                int attackerLevel = int.Parse(ev.Attacker.RankName);
-                int playerLevel = int.Parse(ev.Player.RankName);
-
-                if (attackerLevel == 10 && playerLevel == 1)
-                {
+                case 10 when playerLevel == 1:
                     ev.IsAllowed = false;
-                }
-                else if (attackerLevel == 1 && playerLevel == 10)
+                    break;
+                case 1 when playerLevel == 10:
+                    break;
+                default:
                 {
-                    
-                }
-                else if (attackerLevel >= playerLevel)
-                {
+                    if (attackerLevel >= playerLevel)
+                    {
 
-                }
-                else
-                {
-                    ev.IsAllowed = false;
+                    }
+                    else
+                    {
+                        ev.IsAllowed = false;
+                    }
+
+                    break;
                 }
             }
         }
 
-        public void OnDied(DiedEventArgs ev) 
+        private void OnDied(DiedEventArgs ev) 
         {
             if (ev.Attacker != null)
             {
                 int attackerLevel = int.Parse(ev.Attacker.RankName);
 
-                if (attackerLevel == 10)
-                {
-                    ev.Attacker.RankName = "1";
-                }
-                else
-                {
-                    ev.Attacker.RankName = $"{attackerLevel + 1}";
-                }
+                ev.Attacker.RankName = attackerLevel == 10 ? "1" : $"{attackerLevel + 1}";
 
                 ev.Player.RankName = "탈락";
                 ev.Player.RankColor = "red";
             }
 
-            var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC);
+            var players = PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC).ToList();
 
-            if (players.Count() == 2)
+            switch (players.Count)
             {
-                foreach (var player in players)
+                case 2:
                 {
-                    player.RankName = "10";
+                    foreach (var player in players)
+                    {
+                        player.RankName = "10";
+                    }
+
+                    break;
                 }
-            }
+                case < 2:
+                    Round.IsLocked = false;
 
-            if (players.Count() < 2)
-            {
-                Round.IsLocked = false;
-
-                Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    Timing.RunCoroutine(Tools.SetWinner(players.ToList(), 5));
+                    break;
             }
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
+        private void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnShot(ShotEventArgs ev)
+        private void OnShot(ShotEventArgs ev)
         {
             ev.Player.AddAmmo(ev.Firearm.AmmoType, 1);
         }

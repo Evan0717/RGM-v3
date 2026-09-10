@@ -447,7 +447,6 @@ public class ABattle : Mode
             }
         }
     }
-    
     public static readonly List<string> CurrentExtraModes = new();
 
     private CoroutineHandle _onModeStarted;
@@ -652,7 +651,7 @@ public class ABattle : Mode
                     : g.First().Data.GetFormattedName())
                 .ToList());
 
-        return $"<align=left><b><size=25>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size>\n</align>";
+        return $"<align=left><b><size=24>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size>\n</align>";
     }
 
     public IEnumerator<float> RestoreAbilities(List<Player> players)
@@ -1010,13 +1009,13 @@ public class ABattle : Mode
         {
             switch (Random.Range(1, 4))
             {
-                case 1:
+                case 3:
                     count = 5;
                     break;
                 case 2:
                     count = 4;
                     break;
-                case 3:
+                case 1:
                     count = 3;
                     break;
             }
@@ -1056,7 +1055,7 @@ public class ABattle : Mode
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Epic, count);
+                abilities = GetRandomAbilities(player, AbilityCategory.Epic, count = 5);
                 category = AbilityCategory.Epic;
                 player.AddAbility(AbilityType.DUMMY_RARETRANSITIONSUCCESS);
             }

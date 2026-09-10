@@ -89,7 +89,7 @@ COM-15
             Timing.KillCoroutines(_scoreBoard);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var Door in Door.List.Where(x => x.Zone == ZoneType.HeavyContainment))
             {
@@ -134,7 +134,7 @@ COM-15
             Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { topPlayer }, 5));
         }
 
-        public IEnumerator<float> ScoreBoard()
+        private IEnumerator<float> ScoreBoard()
         {
             IEnumerator<float> Processing()
             {
@@ -162,9 +162,9 @@ COM-15
             }
         }
 
-        public void PlayerSpawn(Player player)
+        private void PlayerSpawn(Player player)
         {
-            Door SelectedDoor = Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
+            Door selectedDoor = Door.List.Where(x => !x.IsElevator && !x.IsPartOfCheckpoint && x.Zone == ZoneType.HeavyContainment && 
                                                      !new List<RoomType>(){ RoomType.Hcz939, RoomType.Hcz079, RoomType.Hcz049, RoomType.Hcz106, RoomType.HczNuke }.Contains(x.Room.Type)).ToList().GetRandomValue();
 
             player.Role.Set(RoleTypeId.ClassD);
@@ -172,25 +172,25 @@ COM-15
             player.EnableEffect(EffectType.Flashed, 1, 0.1f);
             player.ClearInventory();
             player.AddItem(GunsList[Stage[player]]);
-            player.Position = new Vector3(SelectedDoor.Position.x, SelectedDoor.Position.y + 2, SelectedDoor.Position.z);
+            player.Position = new Vector3(selectedDoor.Position.x, selectedDoor.Position.y + 2, selectedDoor.Position.z);
 
             Timing.CallDelayed(1, () =>
             {
-                List<ItemType> AmmosList = new List<ItemType>()
-            {
-                ItemType.Ammo12gauge,
-                ItemType.Ammo762x39,
-                ItemType.Ammo556x45,
-                ItemType.Ammo9x19,
-                ItemType.Ammo44cal
-            };
+                List<ItemType> ammosList =
+                [
+                    ItemType.Ammo12gauge,
+                    ItemType.Ammo762x39,
+                    ItemType.Ammo556x45,
+                    ItemType.Ammo9x19,
+                    ItemType.Ammo44cal
+                ];
 
-                foreach (var ammo in AmmosList)
+                foreach (var ammo in ammosList)
                     player.AddItem(ammo, 3);
             });
         }
 
-        public void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
+        private void OnDying(Exiled.Events.EventArgs.Player.DyingEventArgs ev)
         {
             if (Stage.ContainsKey(ev.Player))
             {
@@ -202,7 +202,7 @@ COM-15
             }
         }
 
-        public void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
+        private void OnLeft(Exiled.Events.EventArgs.Player.LeftEventArgs ev)
         {
             if (Server.PlayerCount < 2)
                 Round.IsLocked = false;
