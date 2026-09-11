@@ -31,6 +31,35 @@ $"""
 
         private CoroutineHandle _onModeStarted;
 
+        private readonly List<RoleTypeId> _ignoredRoles =
+        [
+            RoleTypeId.Scp079,
+            RoleTypeId.Scp3114,
+            RoleTypeId.Scp0492,
+            RoleTypeId.Flamingo,
+            RoleTypeId.AlphaFlamingo,
+            RoleTypeId.ChaosFlamingo,
+            RoleTypeId.NtfFlamingo,
+            RoleTypeId.ZombieFlamingo,
+            RoleTypeId.Overwatch,
+            RoleTypeId.Destroyed,
+            RoleTypeId.Tutorial,
+            RoleTypeId.Filmmaker,
+            RoleTypeId.None
+        ];
+
+        private readonly List<ItemType> _humanitems =
+        [
+            ItemType.KeycardO5,
+            ItemType.SCP500,
+            ItemType.SCP268,
+            ItemType.AntiSCP207,
+            ItemType.SCP2176,
+            ItemType.Jailbird,
+            ItemType.MicroHID,
+            ItemType.SCP207
+        ];
+
         public override void OnEnabled()
         {
             Respawn.PauseWaves();
@@ -55,38 +84,15 @@ $"""
         private IEnumerator<float> OnModeStarted()
         {
             _alone = PlayerManager.List.Where(x => !x.IsNPC).GetRandomValue();
-            List<RoleTypeId> ignoredRoles =
-            [
-                RoleTypeId.Scp079,
-                RoleTypeId.Scp3114,
-                RoleTypeId.Scp0492,
-                RoleTypeId.Flamingo,
-                RoleTypeId.AlphaFlamingo,
-                RoleTypeId.ChaosFlamingo,
-                RoleTypeId.NtfFlamingo,
-                RoleTypeId.ZombieFlamingo
-            ];
             
             List<RoleTypeId> scpRoles = Tools.EnumToList<RoleTypeId>()
-                .Where(x => x.IsScp() && !ignoredRoles.Contains(x))
+                .Where(x => x.IsScp() && !_ignoredRoles.Contains(x))
                 .ToList();
-            
-            List<ItemType> items =
-            [
-                ItemType.KeycardO5,
-                ItemType.SCP500,
-                ItemType.SCP268,
-                ItemType.AntiSCP207,
-                ItemType.SCP2176,
-                ItemType.Jailbird,
-                ItemType.MicroHID,
-                ItemType.SCP207
-            ];
 
             _alone.Role.Set(RoleTypeId.ClassD);
             _alone.AddEffect(EffectType.MovementBoost, Math.Min(20 * PlayerManager.List.Count, 255));
 
-            foreach (var item in items)
+            foreach (var item in _humanitems)
                 _alone.AddItem(item);
 
             foreach (var player in PlayerManager.List.Where(x => x != _alone))

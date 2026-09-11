@@ -36,7 +36,11 @@ $"""
             RoleTypeId.AlphaFlamingo,
             RoleTypeId.ChaosFlamingo,
             RoleTypeId.NtfFlamingo,
-            RoleTypeId.ZombieFlamingo
+            RoleTypeId.ZombieFlamingo,
+            RoleTypeId.Destroyed,
+            RoleTypeId.Overwatch,
+            RoleTypeId.Filmmaker,
+            RoleTypeId.None
         ];
 
         private readonly Dictionary<RoleTypeId, List<RoleTypeId>> _roleTypeIds = new()
@@ -59,10 +63,12 @@ $"""
                 return RoleTypeId.FacilityGuard;
 
             if (player.IsNTF)
-                return Tools.EnumToList<RoleTypeId>().Where(x => x.IsChaos()).GetRandomValue();
+                return Tools.EnumToList<RoleTypeId>()
+                    .Where(x => x.IsChaos() && x is not RoleTypeId.ChaosFlamingo and RoleTypeId.None).GetRandomValue();
 
             if (player.IsCHI)
-                return Tools.EnumToList<RoleTypeId>().Where(x => x.IsNtf()).GetRandomValue();
+                return Tools.EnumToList<RoleTypeId>()
+                    .Where(x => x.IsNtf() && x is not RoleTypeId.NtfFlamingo and RoleTypeId.None).GetRandomValue();
 
             return RoleTypeId.Tutorial;
         }
