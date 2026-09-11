@@ -16,9 +16,9 @@ public class NTFRecruit : Ability
         Owner.Role.Set(RoleTypeId.NtfSpecialist, RoleSpawnFlags.AssignInventory);
         Owner.Position = pos;
 
-        Timing.CallDelayed(0.1f, () =>
+        Timing.CallDelayed(0.5f, () =>
         {
-            if (!Owner.IsDead) return;
+            if (Owner.IsDead) return;
             Owner.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
         });
     }

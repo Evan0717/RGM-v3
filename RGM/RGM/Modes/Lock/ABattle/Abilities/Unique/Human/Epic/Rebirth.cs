@@ -19,12 +19,8 @@ public class Rebirth : Ability
 
         Timing.CallDelayed(0.1f, () =>
         {
-            if (Owner.Role.Type == RoleTypeId.Tutorial) {
-                Owner.Role.Set(roleId, RoleSpawnFlags.None);
-            }
-            else {
-                Owner.Role.Set(roleId);
-            }
+            Owner.Role.Set(roleId,
+                Owner.Role.Type == RoleTypeId.Tutorial ? RoleSpawnFlags.None : RoleSpawnFlags.UseSpawnpoint);
 
             Owner.AddAbility(AbilityType.EPIC_LUCKYVIKEY);
 
