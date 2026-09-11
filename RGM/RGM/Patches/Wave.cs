@@ -19,7 +19,7 @@ namespace RGM.Patches
 
                     if (ply == null) { __result = false; return; }
 
-                    __result = !ply.IsDND() && ply.IsDead;
+                    __result = !ply.IsDnd() && ply.IsDead;
                 }
             }
             catch (Exception e)

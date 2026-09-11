@@ -3,8 +3,8 @@ using RGM.Modes.Sets.AddScp.Scps;
 
 namespace RGM.Modes.Abilities.Unique.Human.Legend;
 
-[Ability("마체테 클로", "처치한 대상자를 자신의 진영으로 즉시 변경시킵니다.", 
-    AbilityCategory.Legend, AbilityType.LEGEND_HUMAN_SCP1509Hand, RoleAbility.Human)]
+/*[Ability("마체테 클로", "처치한 대상자를 자신의 진영으로 즉시 변경시킵니다.", 
+    AbilityCategory.Legend, AbilityType.LEGEND_HUMAN_SCP1509Hand, RoleAbility.Human)]*/
 public class ChangeScp1509Hand : Ability
 {
     public override void OnEnabled()

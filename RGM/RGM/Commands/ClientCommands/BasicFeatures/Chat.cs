@@ -30,22 +30,26 @@ namespace RGM.Commands.ClientCommands
                 response =  "보낼 메세지를 입력해주세요.";
                 return false;
             }
-            else if (ChatCooldown.Contains(player))
+
+            if (ChatCooldown.Contains(player))
             {
                 response =  "너무 빠른 간격으로 입력을 보내고 있습니다!";
                 return false;
             }
-            else if (player.IsMuted)
+
+            if (player.IsMuted)
             {
                 response =  "뮤트된 상태입니다.";
                 return false;
             }
-            else if (SelectMode.Contains("Secret") && Round.IsLobby)
+
+            if (SelectMode.Contains("Secret") && Round.IsLobby)
             {
                 response =  "비밀 선거 조항을 깨트리지 마십시오.";
                 return false;
             }
-            else if (EnabledModeList.Select(x => x.Data.Type).Contains(ModeType.Silent))
+
+            if (EnabledModeList.Select(x => x.Data.Type).Contains(ModeType.Silent))
             {
                 if (player.IsAlive)
                 {
@@ -122,7 +126,7 @@ namespace RGM.Commands.ClientCommands
                     return false;
                 }
 
-                foreach (Player ply in Player.List.Where(x => !x.IsNPC)) // PlayerManager를 쓰지 않는 이유: 훈련장의 인원들도 듣긴 들어야지..
+                foreach (Player ply in PlayerManager.List.Where(x => !x.IsNPC)) // PlayerManager를 쓰지 않는 이유: 훈련장의 인원들도 듣긴 들어야지... 하지만 훈련장 삭제했죠? 다시 쓰기
                 {
                     if (Check(ply))
                     {
@@ -166,21 +170,16 @@ namespace RGM.Commands.ClientCommands
                 return true;
             }
                 
-            if (player.CurrentItem is Scp1576 scp1576)
+            if (player.CurrentItem is Scp1576 { IsUsing: true })
             {
-                if (scp1576.IsUsing)
+                if (player.HasItem(ItemType.Radio))
                 {
-                    if (player.HasItem(ItemType.Radio))
-                    {
-                        response = ChatFormat("SCP-1576 + 무전기");
-                        return true;
-                    }
-                    else
-                    {
-                        response = ChatFormat("SCP-1576");
-                        return true;
-                    }
+                    response = ChatFormat("SCP-1576 + 무전기");
+                    return true;
                 }
+
+                response = ChatFormat("SCP-1576");
+                return true;
             }
                 
             if (player.HasItem(ItemType.Radio))
@@ -194,7 +193,7 @@ namespace RGM.Commands.ClientCommands
         }
 
         public string Command { get; } = "c";
-        public string[] Aliases { get; } = new string[] { "챗", "채팅", "chat", "ㅊ" };
+        public string[] Aliases { get; } = ["챗", "채팅", "chat", "ㅊ"];
         public string Description { get; } =  "[RGM] 텍스트 채팅을 사용할 수 있습니다.";
     }
 }

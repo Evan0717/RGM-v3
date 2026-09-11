@@ -45,7 +45,7 @@ namespace RGM.API.Features
             {
                 return Main.Instance.Config.FixedModes.Any()
                     ? Player.List.ToList()
-                    : Player.List.Where(x => !x.IsNPC || (!x.IsDND() && !x.IsNonePlayer())).ToList();
+                    : Player.List.Where(x => !x.IsNPC || (!x.IsDnd() && !x.IsNonePlayer())).ToList();
             }
         }
 
@@ -68,7 +68,7 @@ namespace RGM.API.Features
         /// </summary>
         /// <param name="player">대상 <c>Player</c>입니다. <b>NPC(null)은 제외</b>됩니다.</param>
         /// <returns>방해 금지 활성 시 <b>True</b>를 반환합니다.</returns>
-        public static bool IsDND(this Player player)
+        public static bool IsDnd(this Player player)
         {
             if (player == null || player.IsNPC)
                 return true;
@@ -588,11 +588,9 @@ namespace RGM.API.Features
                 UsersManager.SaveUsers();
                 return true;
             }
-            else
-            {
-                response = "This icon is not exist.";
-                return false;
-            }
+
+            response = "This icon is not exist.";
+            return false;
         }
 
         public static bool AddWarn(this string userId, string args, out string response,
@@ -626,7 +624,7 @@ namespace RGM.API.Features
             }
         }
 
-        public static Item AddCandy(this Player player, CandyKindID candyKindID)
+        public static void AddCandy(this Player player, CandyKindID candyKindID)
         {
             var existing = player.Items
                 .Where(x => x.Type == ItemType.SCP330)
@@ -636,14 +634,13 @@ namespace RGM.API.Features
             if (existing != null)
             {
                 existing.AddCandy(candyKindID);
-                return existing;
+                return;
             }
 
             Scp330 scp330 = (Scp330)Item.Create(ItemType.SCP330);
             scp330.AddCandy(candyKindID);
             scp330.RemoveCandy(scp330.Candies.ToList()[0]);
             player.AddItem(scp330);
-            return scp330;
         }
 
         public static void Push(this Player player, Player target, float distance = 5, float height = 1)
@@ -893,7 +890,7 @@ namespace RGM.API.Features
                     schematic.transform.localPosition = Vector3.zero;
 
                     light.NetworkLightColor = color;
-                    light.NetworkLightRange = 50;
+                    light.NetworkLightRange = 25;
                     light.NetworkLightIntensity = 8;
 
                     Timing.CallDelayed(3, schematic.Destroy);
