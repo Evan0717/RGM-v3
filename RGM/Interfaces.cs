@@ -164,7 +164,8 @@ public enum ModeType
     Chess,
     Store,
     EchoBattle,
-    DistractedDriver
+    DistractedDriver,
+    Scp1509Hand,
 }
 
 

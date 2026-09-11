@@ -451,7 +451,8 @@ public enum AbilityType
     LEGEND_HUMAN_SCP457, // [전용 전설] SCP-457, 불타는 남자
     LEGEND_HUMAN_SCP966, // [전용 전설] SCP-966, 잠을 죽이는 자
     LEGEND_HUMAN_SCP999, // [전용 전설] SCP-999, 간지럼 괴물
-    
+    LEGEND_HUMAN_SCP1509Hand, // [전용 전설] 마체테 클로
+
     // D계급
     NORMAL_CLASSD_LARCENY, // [전용 일반] 절도죄
     NORMAL_CLASSD_SEEDSOFCHI, // [전용 일반] 반란의 씨앗
