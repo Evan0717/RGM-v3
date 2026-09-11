@@ -333,6 +333,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Flamingo\MiniFactory.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\Rebirth.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\UrgentSupport.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp1509Hand.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp008.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp035.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\Scp457.cs" />
@@ -820,6 +821,7 @@
     <Compile Include="RGM\Modes\Plus\SuperStar\SuperStar.cs" />
     <Compile Include="RGM\Modes\Set\TailCatcher\TailCatcher.cs" />
     <Compile Include="RGM\Modes\Set\TeamMatch\TeamMatch.cs" />
+    <Compile Include="RGM\Modes\Set\Scp1509Hand\Scp1509Hand.cs" />
     <Compile Include="RGM\Modes\Set\Tomb\Tomb.cs" />
     <Compile Include="RGM\Modes\Plus\TrickorTreat\TrickorTreat.cs" />
     <Compile Include="RGM\Modes\Plus\Unlimited\Unlimited.cs" />

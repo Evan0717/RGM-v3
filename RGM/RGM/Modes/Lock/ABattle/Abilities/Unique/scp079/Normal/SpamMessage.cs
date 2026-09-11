@@ -1,13 +1,13 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Metadata;
-using RGM.API.Features;
-using PlayerRoles;
-using MultiBroadcast.Commands.Subcommands;
-using Exiled.API.Enums;
-
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using MEC;
+using MultiBroadcast.Commands.Subcommands;
+using PlayerRoles;
+using RGM.API.Features;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Metadata;
+using System.Security.Policy;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
@@ -173,6 +173,42 @@ public class SpamMessage : Ability
         <size=30>
         <b>
         [web발신]너는나를존중해야한다나는신화획득4회와수많은수많은SCP를죽였으며20000RGM코인을얻고사기를쳤으며카오스와MTF를이끌고결국라스트댄스에성공했고동시에한레전드에임소유자에다가역대최다신화를먹은사람이다또한역대최고의죄수를보내고100번이나신화와전설을차지한골든피그의상징이다또한99세의나이에도슾렙에서끔찍한부상에서복귀하자마자고대등급을먹는걸해내며내가세계최고의운발죄수임을증명해냈다은혜를모르는SCP들과관전자들은내가렌겜모의골칫덩이라며쫓아냈지만내가세계최초로MTF카오스통합을한사람이다웬만한애들보다운이좋다는사실은바뀌지 않는다내가렌겜모에간이유는슾렙에대한 자격지심이아니라렌겜모에서이룰수있는모든것을이루었기에새로운역사를쓰기위해간것이지단지사기를위해서간것이아니다 
+        </b>
+        </size>
+        """,
+        $"""
+        <size=30>
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후우후꾸후
+        </size>
+        """,
+        """
+        <size=30>
+        <b>
+        애쓰시피 아시는구나! 혹시 모르시는분들에 대해 설명해드립니다 땅콩이랑 댕댕이의 세가지 엔딩루트중 몰살엔딩의 최종보스로 진.짜.겁.나.어.렵.습.니.다 공격은 전부다 회피하고 만피가 3200인데 댕댕이의 공격은 1초당 40이 다는데다가 보이스테러까지 추가로 붙어있습니다.. 하지만 이러면 절대로 게임을 깰 수 가없으니 제작진이 치명적인 약점을 만들었죠. 댕댕이의 치명적인 약점이 바로 눈이안보인다는것입니다. 패턴들을 다 견디고나면 안보여서 자신의 안경을 찾습니다. 하지만 안경찾을때 뒤치기로 공격을 시도하고 댕댕이는 1차공격은 피하지만 그 후에 바로날아오는 2차 공격을 맞고 (하늘나라로) 갑니다
+        </b>
+        </size>
+        """,
+        """
+        <size=40>
+        <b>
+        <color=#FFF942>[</color><color=#FFF643>W</color><color=#FFF344>E</color><color=#FFF145>B</color> <color=#FFEC47>발</color><color=#FFE948>신</color><color=#FFE649>]</color> <color=#FFE14C>지</color><color=#FFDF4D>금</color> <color=#FFD94F>당</color><color=#FFD750>장</color> <color=#FFD252>골</color><color=#FFCF54>든</color><color=#FFCC55>피</color><color=#FFCA56>그</color><color=#FFC757>1</color><color=#FFC558>2</color><color=#FFC259>0</color><color=#FFBF5A>5</color> <color=#FFBA5D>유</color><color=#FFB85E>튜</color><color=#FFB55F>브</color> <color=#FFB061>구</color><color=#FFAD62>독</color><color=#FFAB63>!</color><color=#FFA864>
+        </color><color=#FFA666>당</color><color=#FFA367>신</color><color=#FFA068>도</color> <color=#FF9B6A>초</color><color=#FF996B>기</color> <color=#FF936D>구</color><color=#FF916F>독</color><color=#FF8E70>자</color><color=#FF8C71>가</color> <color=#FF8673>될</color> <color=#FF8175>수</color> <color=#FF7C78>있</color><color=#FF7979>다</color><color=#FF777A>?</color><color=#FF747B>?</color><color=#FF727C>?</color><color=#FF6F7D>?</color><color=#FF6C7E>?</color><color=#FF6A7F>?</color><color=#FF6781>
+        </color><color=#FF6582>랜</color><color=#FF6283>겜</color><color=#FF5F84>모</color><color=#FF5D85>와</color> <color=#FF5887>아</color><color=#FF5588>무</color> <color=#FF508B>관</color><color=#FF4D8C>련</color> <color=#FF488E>없</color><color=#FF468F>는</color> <color=#FF4091>사</color><color=#FF3E93>람</color><color=#FF3B94>이</color><color=#FF3995>지</color><color=#FF3696>만</color> <color=#FF3198>구</color><color=#FF2E99>독</color><color=#FF2C9A>하</color><color=#FF299C>면</color> <color=#FF249E>행</color><color=#FF219F>운</color><color=#FF1FA0>이</color> <color=#FF19A2>뿜</color><color=#FF17A3>뿜</color><color=#FF14A5>
+        </color><color=#FF12A6>고</color><color=#FF0FA7>대</color><color=#FF0CA8>에</color> <color=#FF07AA>합</color><color=#FF05AB>격</color><color=#FF02AC>할</color> <color=#FF00AD>확</color><color=#FF00AC>률</color><color=#FF00AB>이</color><color=#FF00AA>나</color> <color=#FF00A8>전</color><color=#FF00A8>설</color><color=#FF00A7>신</color><color=#FF00A6>화</color><color=#FF00A5>가</color> <color=#FF00A3>나</color><color=#FF00A3>올</color> <color=#FF00A1>확</color><color=#FF00A0>률</color><color=#FF009F>이</color> <color=#FF009D>증</color><color=#FF009D>가</color><color=#FF009C>한</color><color=#FF009B>다</color><color=#FF009A>고</color><color=#FF0099>?</color><color=#FF0098>
+        </color><color=#FF0098>어</color><color=#FF0097>머</color><color=#FF0096>나</color> <color=#FF0094>세</color><color=#FF0093>상</color><color=#FF0093>에</color> <color=#FF0091>이</color> <color=#FF008F>기</color><color=#FF008E>회</color><color=#FF008D>를</color> <color=#FF008C>놓</color><color=#FF008B>칠</color><color=#FF008A>수</color><color=#FF0089>는</color><color=#FF0088>없</color><color=#FF0088>따</color> <color=#FF0086>지</color><color=#FF0085>금</color> <color=#FF0083>당</color><color=#FF0082>장</color> <color=#FF0081>골</color><color=#FF0080>든</color><color=#FF007F>피</color><color=#FF007E>그</color><color=#FF007D>세</color><color=#FF007D>정</color><color=#FF007C>제</color><color=#FF007B>를</color> <color=#FF0079>구</color><color=#FF0078>매</color><color=#FF0078>하</color><color=#FF0077>세</color><color=#FF0076>요</color><color=#FF0075>@</color><color=#FF0074>@</color><color=#FF0073>@</color><color=#FF0072>
+        </color><color=#FF0072>
+        </color><color=#FF0071>무</color><color=#FF0070>/</color><color=#FF006F>료</color><color=#FF006E>/</color><color=#FF006D>수</color><color=#FF006D>/</color><color=#FF006C>신</color><color=#FF006B>/</color><color=#FF006A>거</color><color=#FF0069>/</color><color=#FF0068>부</color><color=#FF0067>:</color> <color=#FF0066>9</color><color=#FF0065>3</color><color=#FF0064>9</color><color=#FF0063>-</color><color=#FF0062>3</color><color=#FF0062>1</color><color=#FF0061>1</color><color=#FF0060>4</color><color=#FF005F>-</color><color=#FF005E>0</color><color=#FF005D>4</color><color=#FF005D>9</color>
         </b>
         </size>
         """
