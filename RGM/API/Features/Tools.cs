@@ -1050,7 +1050,7 @@ $"""
                     grenade.SpawnActive(player.Position, attacker);
                     if (ignoreDefenses)
                     {
-                        if (GodModePlayers.Contains(player)) GodModePlayers.Remove(player);
+                        player.Hurt(attacker, player.MaxHealth, DamageType.PocketDimension);
                     }
 
                     player.Hit(attacker, player.MaxHealth);
