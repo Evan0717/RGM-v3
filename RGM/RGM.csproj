@@ -791,6 +791,7 @@
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\SnakeGameMonitor.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\SnakeMarketSystem.cs" />
     <Compile Include="RGM\Modes\Set\SnowBallFight\SnowBallFight.cs" />
+    <Compile Include="RGM\Modes\Set\Stroking999\Stroking999.cs" />
     <Compile Include="RGM\Modes\Set\Tag\Tag.cs" />
     <Compile Include="RGM\Modes\Set\HIDE\HIDE.cs" />
     <Compile Include="RGM\Modes\Set\HotPotato\HotPotato.cs" />
