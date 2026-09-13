@@ -31,8 +31,8 @@ namespace RGM.Modes
 
         private static readonly int RaycastMask = 1 << 0;
         private readonly Dictionary<Player, int> _scores = new();
+        private bool gameStarted = false;
         private bool gameEnded = false;
-
         private int _time;
         private CoroutineHandle _timerHandle;
 
@@ -75,6 +75,7 @@ namespace RGM.Modes
             Player player = ev.Player;
             if (!_scores.ContainsKey(player))
                 return;
+            if (!gameStarted) return;
 
             Transform cam = player.ReferenceHub.PlayerCameraReference;
             Vector3 origin = cam.position;
@@ -116,10 +117,11 @@ namespace RGM.Modes
             for (int countdown = 10; countdown > 0; countdown--)
             {
                 foreach (var player in _scores.Keys)
-                    player.AddBroadcast(1, $"<size=25>게임이 {countdown}초 후 시작됩니다!</size>\nalt를 눌러 999를 쓰다듬을 수 있습니다.");
+                    player.AddBroadcast(1, $"게임이 {countdown}초 후 시작됩니다!\n<size=25>alt를 눌러 999를 쓰다듬을 수 있습니다.</size>");
 
                 yield return Timing.WaitForSeconds(1);
             }
+            gameStarted = true;
 
             while (_time < TimeLimit)
             {
