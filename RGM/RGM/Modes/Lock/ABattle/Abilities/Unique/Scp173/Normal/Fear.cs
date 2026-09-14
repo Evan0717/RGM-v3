@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp173.Normal;
 
-[Ability("공포", "적 처치 시 주변 상대를 0.75초간 속박시킵니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP173_FEAR, RoleAbility.Scp173)]
+[Ability("공포", "적 처치 시 주변 상대를 0.75초간 속박시킵니다.", 
+    AbilityCategory.Normal, AbilityType.NORMAL_SCP173_FEAR, RoleAbility.Scp173)]
 public class Fear : Ability
 {
     public override void OnEnabled()
