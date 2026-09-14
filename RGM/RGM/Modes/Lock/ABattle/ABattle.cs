@@ -447,7 +447,7 @@ public class ABattle : Mode
             }
         }
     }
-    public static readonly List<string> CurrentExtraModes = new();
+    public static readonly List<string> CurrentExtraModes = [];
 
     private CoroutineHandle _onModeStarted;
     private CoroutineHandle _hintCoroutine;
@@ -661,16 +661,18 @@ public class ABattle : Mode
             if (!PlayerAbilities.TryGetValue(player, out var playerAbilities) || playerAbilities.Count == 0)
                 continue;
 
-            List<AbilityType> _abilities = playerAbilities
-                .Where(x => x.Data.Category != AbilityCategory.Ancient)
-                .Select(x => x.Data.AbilityType)
-                .ToList();
+            List<AbilityType> abilities =
+            [
+                .. playerAbilities
+                    .Where(x => x.Data.Category != AbilityCategory.Ancient)
+                    .Select(x => x.Data.AbilityType)
+            ];
 
             Reset(player);
 
             yield return Timing.WaitForOneFrame;
 
-            foreach (var ability in _abilities)
+            foreach (var ability in abilities)
                 player.AddAbility(ability);
 
             yield return Timing.WaitForOneFrame;
@@ -817,6 +819,7 @@ public class ABattle : Mode
                 ? role.MaxHealth
                 : player.MaxHealth;
             float healthIncrease = baseMaxHealth * (player.IsScpRole() ? 0.015f : 0.12f);*/
+            // 왜 이 코드가 서버렉을 유발하는지 모르겠음
 
             var healthIncrease = player.IsScpRole() ? 50 : 10;
             
@@ -980,7 +983,7 @@ public class ABattle : Mode
             abilities = Abilities.ToList();
 
         if (abilities.Count <= 0)
-            return new List<AbilityType>();
+            return [];
 
         if (exceptTypes != null)
         {
@@ -1034,7 +1037,7 @@ public class ABattle : Mode
         if (category == AbilityCategory.Dummy)
             return;
 
-        int RoleAbilityChance = GetRoleAbilityChance(category);
+        int roleAbilityChance = GetRoleAbilityChance(category);
 
         /*if (CurrentExtraModes.Contains("1 + 1"))
         {
@@ -1051,11 +1054,11 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
 
-            var transition = Random.Range(1, 101) <= 25;
+            var transition = Random.Range(1, 101) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Epic, count = 5);
+                abilities = GetRandomAbilities(player, AbilityCategory.Epic, 5);
                 category = AbilityCategory.Epic;
                 player.AddAbility(AbilityType.DUMMY_RARETRANSITIONSUCCESS);
             }
@@ -1067,11 +1070,11 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.EPIC_TRANSITION);
 
-            var transition = Random.Range(1, 101) <= 25;
+            var transition = Random.Range(1, 101) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Legend, count);
+                abilities = GetRandomAbilities(player, AbilityCategory.Legend, 5);
                 category = AbilityCategory.Legend;
                 player.AddAbility(AbilityType.DUMMY_EPICTRANSITIONSUCCESS);
             }
@@ -1083,11 +1086,11 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
 
-            var transition = Random.Range(1, 101) <= 25;
+            var transition = Random.Range(1, 101) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Mythic, count);
+                abilities = GetRandomAbilities(player, AbilityCategory.Mythic, 5);
                 category = AbilityCategory.Mythic;
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONSUCCESS);
             }
@@ -1095,15 +1098,13 @@ public class ABattle : Mode
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONFAILURE);
         }
         
-        
-        
         lock (_selectionLock)
         {
             Selections[player] = abilities;
             SelectionCursor[player] = 0;
         }
 
-        if (Random.Range(1, 101) <= RoleAbilityChance) // 전용 능력
+        if (Random.Range(1, 101) <= roleAbilityChance) // 전용 능력
         {
             int index;
 
@@ -1448,11 +1449,9 @@ public class ABattle : Mode
             
             player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
                 [
-                    AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, 
-                    AbilityType.EPIC_SUICIDEBOMBER, AbilityType.EPIC_TERRORISTREMAINS,
-                    AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
-                    AbilityType.EPIC_CSTC, AbilityType.EPIC_RANDOMCHEST,
-                    AbilityType.EPIC_GRAVEROBBER
+                    AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER, 
+                    AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
+                    AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
                 ]).First());
         }
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
@@ -1466,8 +1465,7 @@ public class ABattle : Mode
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
                 [
-                    AbilityType.LEGEND_RANDOMPACKAGE, AbilityType.EPIC_PRIEST,
-                    AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
+                    AbilityType.EPIC_PRIEST, AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
                 ]).First());
             
         }

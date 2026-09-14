@@ -158,7 +158,7 @@ public enum RoleAbility
     Scp079,
     Flamingo,
     Human,
-    Scp
+    Scps
 }
 public static class AbilityCategoryExtensions
 {
@@ -200,7 +200,7 @@ public static class RoleAbilityExtensions
         return roleAbility switch
         {
             RoleAbility.Human => player.Role.Type.IsHuman(),
-            RoleAbility.Scp => player.Role.Type.IsScp(),
+            RoleAbility.Scps => player.Role.Type.IsScp(),
             _ => false
         };
     }
@@ -382,7 +382,7 @@ public enum AbilityType
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
-    EPIC_CSTC, // [영웅] 대학수학능력시험
+    EPIC_CSAT, // [영웅] 대학수학능력시험
     EPIC_HOLYPROTECTION, // [영웅] 신성방어
     EPIC_AN94, // [영웅] AN-94
     EPIC_SHARPEYES, // [영웅] 샤프 아이즈
@@ -496,6 +496,9 @@ public enum AbilityType
     NORMAL_TUTORIAL_THIRDFORCE, // [전용 일반] 제3세력
     NORMAL_TUTORIAL_RESEARCHER, // [전용 희귀] SCP 연구자
 
+    // SCP 공통
+    NORMAL_SCPS_HASTE, // [전용 일반] 가속
+    
     // SCP-173
     NORMAL_SCP173_FEAR, // [전용 일반] 공포
     NORMAL_SCP173_ABERRATION, // [전용 일반] 괴이
