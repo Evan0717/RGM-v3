@@ -76,7 +76,7 @@ SCP-3114도 동일한 확률로 러쉬에 참여할 수 있습니다.
             yield break;
         }
 
-        private void OnRoundEnded(RoundEndedEventArgs ev)
+        private static void OnRoundEnded(RoundEndedEventArgs ev)
         {
             List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 

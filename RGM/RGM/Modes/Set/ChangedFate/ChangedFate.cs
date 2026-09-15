@@ -7,6 +7,7 @@ using RGM.API.Features;
 using PlayerRoles;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
 
 namespace RGM.Modes
 {
@@ -78,6 +79,7 @@ $"""
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         }
@@ -85,6 +87,7 @@ $"""
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
             Timing.KillCoroutines(_onModeStarted);
         }
@@ -106,6 +109,21 @@ $"""
             {
                 RoleTypeId roleType = SelectRole(ev.Player);
                 ev.Player.Role.Set(roleType, SpawnReason.ItemUsage, RoleSpawnFlags.AssignInventory);
+            }
+        }
+        
+        private static void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
+
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner([.. players], 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner([.. players], 1));
+                    break;
             }
         }
     }
