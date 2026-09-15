@@ -31,7 +31,7 @@ namespace RGM.Modes
         private int seconds;
         private const string TargetObjectName = "Scp999"; // 목표 오브젝트 이름
 
-        private static readonly int RaycastMask = 1 << 0;
+        private const int RaycastMask = 1 << 0;
         private readonly Dictionary<Player, int> _scores = new();
         private bool gameStarted = false;
         private bool gameEnded = false;

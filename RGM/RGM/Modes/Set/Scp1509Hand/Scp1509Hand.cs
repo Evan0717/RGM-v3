@@ -1,15 +1,11 @@
-﻿using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Player;
-using MEC;
-using Mirror;
-using PlayerRoles;
-using RGM.API.DataBases;
-using RGM.API.Features;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
+using MEC;
+using PlayerRoles;
+using RGM.API.Features;
 
 namespace RGM.Modes
 {
@@ -29,22 +25,33 @@ SCP가 처치할 경우, SCP-049-2로 변경됩니다.
         public override void OnEnabled()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         }
 
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         }
 
-        void OnDied(DiedEventArgs ev)
+        private static void OnDied(DiedEventArgs ev)
         {
-            if (ev.Attacker != null)
-            {
-                if (ev.Attacker.IsScp)
-                    ev.Player.Role.Set(RoleTypeId.Scp0492);
+            if (ev.Attacker == null) return;
+            ev.Player.Role.Set(ev.Attacker.IsScp ? RoleTypeId.Scp0492 : ev.Attacker.Role.Type, RoleSpawnFlags.None);
+        }
+        
+        private static void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
 
-                else
-                    ev.Player.Role.Set(ev.Attacker.Role.Type);
+            switch (players.Count)
+            {
+                case 1:
+                    Timing.RunCoroutine(Tools.SetWinner([.. players], 5));
+                    break;
+                case > 1:
+                    Timing.RunCoroutine(Tools.SetWinner([.. players], 1));
+                    break;
             }
         }
     }
