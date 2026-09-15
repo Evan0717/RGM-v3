@@ -6,16 +6,16 @@ using MEC;
 using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
-using System.Linq; // PlayersReport
+using System.Linq;
 using UnityEngine;
 using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Stroking999)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Stroking999)]
     public class Stroking999 : Mode
     {
-        public override string Name => "999쓰다듬기(임시)";
+        public override string Name => "999 쓰다듬기";
         public override string Description => "Scp999를 최대한 많이 쓰다듬어 승리하세요.";
         public override string Color => "fb9517";
         public override string Author => "Ragdoll";
@@ -26,7 +26,9 @@ namespace RGM.Modes
             """;
 
         private const float RaycastDistance = 5f;
+        
         private int TimeLimit;
+        private int seconds;
         private const string TargetObjectName = "Scp999"; // 목표 오브젝트 이름
 
         private static readonly int RaycastMask = 1 << 0;
@@ -43,7 +45,8 @@ namespace RGM.Modes
             Respawn.PauseWaves();
             AFKManager._kickTime = 120500;
 
-            TimeLimit = Random.Range(20, 56);
+            seconds = Random.Range(20, 56);
+            TimeLimit = seconds * 5;
 
             foreach (var player in PlayerManager.List)
             {
@@ -51,7 +54,6 @@ namespace RGM.Modes
             }
 
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
-            Exiled.Events.Handlers.Player.Left += OnPlayerLeft;
 
             _timerHandle = Timing.RunCoroutine(OnModeStarted());
         }
@@ -59,15 +61,9 @@ namespace RGM.Modes
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
-            Exiled.Events.Handlers.Player.Left -= OnPlayerLeft;
             Timing.KillCoroutines(_timerHandle);
 
             _scores.Clear();
-        }
-
-        private void OnPlayerLeft(LeftEventArgs ev)
-        {
-            _scores.Remove(ev.Player);
         }
 
         private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
@@ -116,17 +112,15 @@ namespace RGM.Modes
 
             for (int countdown = 10; countdown > 0; countdown--)
             {
-                foreach (var player in _scores.Keys)
+                foreach (var player in PlayerManager.List.Where(p => p != null))
                     player.AddBroadcast(1, $"게임이 {countdown}초 후 시작됩니다!\n<size=25>alt를 눌러 999를 쓰다듬을 수 있습니다.</size>");
 
                 yield return Timing.WaitForSeconds(1);
             }
             gameStarted = true;
 
-            while (_time < TimeLimit)
+            for (_time = 0; _time < TimeLimit; _time++)
             {
-                _time++;
-
                 Player leader = null;
                 int leaderScore = 0;
 
@@ -143,14 +137,17 @@ namespace RGM.Modes
                     ? $"현재 1위: {leader.Nickname} ({leaderScore}회)"
                     : "현재 1위: 아직 기록 없음";
 
-                foreach (var player in _scores.Keys)
+                int remain = (TimeLimit - _time) / 5;
+
+                foreach (var player in PlayerManager.List.Where(p => p != null))
                 {
-                    int remain = TimeLimit - _time;
-                    player.AddBroadcast(1,
-                        $"<size=20>{remain}초 남음 | 클릭 수: {_scores[player]}회\n{leaderText}</size>");
+                    int score = _scores.TryGetValue(player, out int value) ? value : 0;
+                    float elapsedSeconds = _time / 5f;
+                    float cps = elapsedSeconds > 0 ? score / elapsedSeconds : 0f;
+                    player.AddHint("점수", $" <size=20>{remain}초 남음 | 클릭 수: {score}회\n{leaderText}\n당신의 초당 클릭 수: {cps:F2}</size>", 0.2f);
                 }
 
-                yield return Timing.WaitForSeconds(1);
+                yield return Timing.WaitForSeconds(0.2f);
             }
 
             AnnounceWinner();
@@ -176,9 +173,9 @@ namespace RGM.Modes
                 }
             }
 
-            foreach (var player in _scores.Keys.Where(p => !tops.Contains(p)))
+            foreach (var player in _scores.Keys.Where(p => p != null && !tops.Contains(p) && p.IsAlive))
             {
-                player.Kill("당신은 999에게 선택받지 못했습니다.");
+                player.Kill($"당신은 999에게 선택받지 못했습니다.\n당신의 평균 초당 클릭 수:{_scores[player] / (float)seconds:F2}");
             }
 
             Round.IsLocked = false;
