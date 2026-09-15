@@ -8,8 +8,8 @@ using PlayerRoles.PlayableScps.Scp079.Pinging;
 
 namespace RGM.Modes.Abilities.Unique.Scps.Normal;
 
-[Ability("가속", "SCP 진영의 스킬 쿨타임이 4%p 감소합니다. (최대 60%p까지 적용)",
-    AbilityCategory.Normal, AbilityType.NORMAL_SCPS_HASTE, RoleAbility.Scps)]
+/*[Ability("가속", "SCP 진영의 스킬 쿨타임이 4%p 감소합니다. (최대 60%p까지 적용)",
+    AbilityCategory.Normal, AbilityType.NORMAL_SCPS_HASTE, RoleAbility.Scps)]*/
 public class Haste : Ability
 {
     private const float ReductionPerAbility = 0.04f;
