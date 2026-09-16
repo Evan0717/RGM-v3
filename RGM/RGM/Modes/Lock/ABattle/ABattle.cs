@@ -654,31 +654,19 @@ public class ABattle : Mode
         return $"<align=left><b><size=24>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size>\n</align>";
     }
 
-    public IEnumerator<float> RestoreAbilities(List<Player> players)
+    public IEnumerator<float> RestoreAbilities(Player player, List<AbilityType> abilities)
     {
-        foreach (var player in players)
-        {
-            if (!PlayerAbilities.TryGetValue(player, out var playerAbilities) || playerAbilities.Count == 0)
-                continue;
+        yield return Timing.WaitForOneFrame;
 
-            List<AbilityType> abilities =
-            [
-                .. playerAbilities
-                    .Where(x => x.Data.Category != AbilityCategory.Ancient)
-                    .Select(x => x.Data.AbilityType)
-            ];
+        if (!player.IsAlive)
+            yield break;
 
-            Reset(player);
+        foreach (var ability in abilities)
+            player.AddAbility(ability);
 
-            yield return Timing.WaitForOneFrame;
+        yield return Timing.WaitForOneFrame;
 
-            foreach (var ability in abilities)
-                player.AddAbility(ability);
-
-            yield return Timing.WaitForOneFrame;
-
-            player.AddBroadcast(10, $"<size=25><b>모든 능력을 제거한 후, 수복하였습니다.</b></size>");
-        }
+        player.AddBroadcast(10, $"<size=25><b>모든 능력을 제거한 후, 수복하였습니다.</b></size>");
     }
 
     public void ExtraModeNotion(Player player, bool enableBroadcast = true)

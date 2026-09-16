@@ -21,6 +21,7 @@ namespace RGM.Modes;
 public class ABattleEventHandler(ABattle aBattle)
 {
     public static ABattleEventHandler Instance;
+    private readonly Dictionary<Player, List<AbilityType>> _pendingAbilityRestores = [];
 
     internal void RegisterEvents()
     {
@@ -32,7 +33,6 @@ public class ABattleEventHandler(ABattle aBattle)
         Exiled.Events.Handlers.Player.Died += OnDied;
 
         Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
-
         Exiled.Events.Handlers.Scp1507.SpawningFlamingos += OnSpawningFlamingos;
     }
 
@@ -46,7 +46,6 @@ public class ABattleEventHandler(ABattle aBattle)
         Exiled.Events.Handlers.Player.Died -= OnDied;
 
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
-
         Exiled.Events.Handlers.Scp1507.SpawningFlamingos -= OnSpawningFlamingos;
     }
 
@@ -63,6 +62,12 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnSpawned(SpawnedEventArgs ev)
     {
+        if (_pendingAbilityRestores.TryGetValue(ev.Player, out var abilities))
+        {
+            _pendingAbilityRestores.Remove(ev.Player);
+            Timing.RunCoroutine(aBattle.RestoreAbilities(ev.Player, abilities));
+        }
+
         Timing.RunCoroutine(Spawned(ev.Player));
     }
 
@@ -132,13 +137,16 @@ public class ABattleEventHandler(ABattle aBattle)
         if (!ev.NewRole.IsDead())
             aBattle.LastDeathRoles.Remove(ev.Player);
 
-        if (ev.Player.IsDead || ev.NewRole.IsDead() || !ev.Player.GetAbilities().Any())
+        bool shouldRestore = ev.Reason == SpawnReason.Escaped ||
+                             (ev.NewRole == RoleTypeId.Tutorial && ev.Player.IsCuffed);
+
+        if (shouldRestore)
+            QueueAbilityRestore(ev.Player);
+        else if (ev.Player.IsDead || ev.NewRole.IsDead() || !ev.Player.GetAbilities().Any())
             Timing.CallDelayed(Timing.WaitForOneFrame, () => aBattle.Reset(ev.Player));
 
-        yield return Timing.WaitForOneFrame;
-        if (ev.Reason == SpawnReason.Escaped || 
-            (ev.NewRole == RoleTypeId.Tutorial && ev.Player.IsCuffed))
-            Timing.RunCoroutine(aBattle.RestoreAbilities([ev.Player])); }
+        yield break;
+    }
 
     private void OnDied(DiedEventArgs ev)
     {
@@ -208,7 +216,28 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnSpawningFlamingos(SpawningFlamingosEventArgs ev)
     {
-        Timing.RunCoroutine(aBattle.RestoreAbilities(ev.SpawnablePlayers.ToList()));
+        foreach (var player in ev.SpawnablePlayers)
+            QueueAbilityRestore(player);
+    }
+
+    private void QueueAbilityRestore(Player player)
+    {
+        if (_pendingAbilityRestores.ContainsKey(player) ||
+            !aBattle.PlayerAbilities.TryGetValue(player, out var playerAbilities))
+            return;
+
+        List<AbilityType> abilities =
+        [
+            .. playerAbilities
+                .Where(x => x.Data.Category != AbilityCategory.Ancient)
+                .Select(x => x.Data.AbilityType)
+        ];
+
+        if (abilities.Count == 0)
+            return;
+
+        _pendingAbilityRestores.Add(player, abilities);
+        aBattle.Reset(player);
     }
 
     private static void OnRoundEnded(RoundEndedEventArgs ev)
