@@ -179,6 +179,11 @@ namespace RGM
             Harmony weaponHarmony = new Harmony($"Harmony.Weapon - {DateTime.Now.Ticks}");
 
             WeaponPatch.Apply(weaponHarmony);
+
+            Harmony seedHarmony = new Harmony($"Harmony.Seed - {DateTime.Now.Ticks}");
+
+            seedHarmony.CreateClassProcessor(typeof(SeedSynchronizerAwakePatch)).Patch();
+            seedHarmony.CreateClassProcessor(typeof(SeedSynchronizerNewPlayerPatch)).Patch();
         }
 
         public static void OnFixedModeWaitingForPlayers()
