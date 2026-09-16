@@ -3,6 +3,7 @@ using HarmonyLib;
 using InventorySystem.Items.Firearms;
 using InventorySystem.Items.Firearms.Modules;
 using InventorySystem.Items.Firearms.Modules.Scp127;
+using PlayerStatsSystem;
 using System;
 
 namespace RGM.Patches;
@@ -21,6 +22,13 @@ public static class WeaponPatch
 
     private const float Scp127Tier2FalloffBonus = 30f;
 
+    private const float Fsp9BaseDamageReduction = 6f;
+
+    private const float FrMg0BaseDamageBonus = 2f;
+
+    /// <summary>기본 헤드샷 배율에 합산할 MP7 보너스입니다. (753%p = 7.53배)</summary>
+    private const float Fsp9HeadshotMultiplierBonus = 7.53f;
+
     public static void Apply(Harmony harmony)
     {
         try
@@ -31,6 +39,15 @@ public static class WeaponPatch
                 AccessTools.PropertyGetter(typeof(HitscanHitregModuleBase),
                     nameof(HitscanHitregModuleBase.DamageFalloffDistance)),
                 postfix: new HarmonyMethod(typeof(WeaponPatch), nameof(DamageFalloffDistanceGetterPostfix)));
+
+            harmony.Patch(
+                AccessTools.PropertyGetter(typeof(HitscanHitregModuleBase),
+                    nameof(HitscanHitregModuleBase.BaseDamage)),
+                postfix: new HarmonyMethod(typeof(WeaponPatch), nameof(BaseDamageGetterPostfix)));
+
+            harmony.Patch(
+                AccessTools.Method(typeof(FirearmDamageHandler), nameof(FirearmDamageHandler.ProcessDamage)),
+                prefix: new HarmonyMethod(typeof(WeaponPatch), nameof(FirearmDamageHandlerProcessDamagePrefix)));
 
             Log.Info("[WeaponPatch] Applied.");
         }
@@ -63,6 +80,46 @@ public static class WeaponPatch
         catch (Exception e)
         {
             Log.Error($"[WeaponPatch] DamageFalloffDistanceGetterPostfix Exception: {e}");
+        }
+    }
+
+    public static void BaseDamageGetterPostfix(HitscanHitregModuleBase __instance, ref float __result)
+    {
+        try
+        {
+            switch (__instance.Firearm?.ItemTypeId)
+            {
+                case ItemType.GunFSP9:
+                    __result -= Fsp9BaseDamageReduction;
+                    break;
+
+                case ItemType.GunFRMG0:
+                    __result += FrMg0BaseDamageBonus;
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"[WeaponPatch] BaseDamageGetterPostfix Exception: {e}");
+        }
+    }
+
+    public static void FirearmDamageHandlerProcessDamagePrefix(FirearmDamageHandler __instance)
+    {
+        try
+        {
+            if (__instance.WeaponType != ItemType.GunFSP9 ||
+                __instance.Hitbox != HitboxType.Headshot ||
+                !FirearmDamageHandler.HitboxDamageMultipliers.TryGetValue(HitboxType.Headshot, out float baseMultiplier) ||
+                baseMultiplier <= 0f)
+                return;
+
+            // ProcessDamage가 뒤이어 기본 헤드샷 배율을 적용하므로, 선보정하여 최종 배율에 7.53를 합산합니다.
+            __instance.Damage *= (baseMultiplier + Fsp9HeadshotMultiplierBonus) / baseMultiplier;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"[WeaponPatch] FirearmDamageHandlerProcessDamagePrefix Exception: {e}");
         }
     }
 

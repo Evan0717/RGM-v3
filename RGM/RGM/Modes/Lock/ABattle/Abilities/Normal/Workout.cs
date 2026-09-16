@@ -14,9 +14,4 @@ public class Workout : Ability
         Owner.MaxHealth += _additionHealth;
         Owner.Health += _additionHealth;
     }
-
-    public override void OnDisabled()
-    {
-        Owner.MaxHealth -= _additionHealth;
-    }
 }

@@ -17,12 +17,4 @@ public class Evolution : Ability
         _applied = true;
         Owner.Scale = new Vector3(Owner.Scale.x - Scale, Owner.Scale.y - Scale, Owner.Scale.z - Scale);
     }
-
-    public override void OnDisabled()
-    {
-        if (!_applied)
-            return;
-
-        Owner.Scale = new Vector3(Owner.Scale.x + Scale, Owner.Scale.y + Scale, Owner.Scale.z + Scale);
-    }
 }
