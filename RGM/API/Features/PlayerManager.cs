@@ -747,9 +747,9 @@ namespace RGM.API.Features
                 ItemType.KeycardFacilityManager,
 
                 // 무기
-                ItemType.GunA7,
+                ItemType.GunRevolver,
                 ItemType.GunShotgun,
-                ItemType.GunCom45,
+                ItemType.GunFSP9,
 
                 // 치료
                 ItemType.Adrenaline,
@@ -771,8 +771,8 @@ namespace RGM.API.Features
 
                 // 무기
                 ItemType.GunCrossvec,
-                ItemType.GunRevolver,
-                ItemType.GunFSP9,
+                ItemType.GunCom45,
+                ItemType.GunA7,
 
                 // 치료
                 ItemType.Medkit,
@@ -806,18 +806,6 @@ namespace RGM.API.Features
                 ItemType.Lantern,
                 ItemType.Coin
             ];
-            /*
-             List<ItemType> customKeycard =
-            [
-                ItemType.KeycardCustomManagement,
-                ItemType.KeycardCustomMetalCase,
-                ItemType.KeycardCustomSite02,
-                ItemType.KeycardCustomTaskForce,
-
-                // 기타
-                ItemType.DebugRagdollMover
-            ];
-            */
 
             if (!PlayerRandomValueCount.ContainsKey(player))
                 PlayerRandomValueCount.Add(player, [0, 0]);
@@ -839,8 +827,8 @@ namespace RGM.API.Features
             }
 
             // 총 100개의 아이템 카테고리를 가중치에 따라 담고, 그 내에서 랜덤 추출
-            for (int i = 0; i < 3; i++) 
-                poll.AddRange(mythos); // 3%
+            for (int i = 0; i < 2; i++) 
+                poll.AddRange(mythos); // 2%
 
             for (int i = 0; i < 6; i++) 
                 poll.AddRange(legendary); // 6%
@@ -848,8 +836,8 @@ namespace RGM.API.Features
             for (int i = 0; i < 16; i++) 
                 poll.AddRange(epic); // 16%
 
-            for (int i = 0; i < 30; i++) 
-                poll.AddRange(rare); // 30%
+            for (int i = 0; i < 31; i++) 
+                poll.AddRange(rare); // 31%
 
             for (int i = 0; i < 45; i++) 
                 poll.AddRange(general); // 45%
