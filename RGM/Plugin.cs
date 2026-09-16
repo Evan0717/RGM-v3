@@ -174,6 +174,8 @@ namespace RGM
             Scp049Patch.Apply(scpHarmony);
             Scp173Patch.Apply(scpHarmony);
 
+            LoadoutPatch.Apply();
+
             Harmony weaponHarmony = new Harmony($"Harmony.Weapon - {DateTime.Now.Ticks}");
 
             WeaponPatch.Apply(weaponHarmony);
