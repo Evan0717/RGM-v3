@@ -174,18 +174,13 @@ namespace RGM
 
             // SCP·무기 동작 보정은 고정 모드 서버에서도 모드가 설치되므로 항상 적용합니다.
             Harmony scpHarmony = new Harmony($"Harmony.Scp - {DateTime.Now.Ticks}");
-
-            Scp049Patch.Apply(scpHarmony);
-            Scp173Patch.Apply(scpHarmony);
-
-            LoadoutPatch.Apply();
-
             Harmony weaponHarmony = new Harmony($"Harmony.Weapon - {DateTime.Now.Ticks}");
-
-            WeaponPatch.Apply(weaponHarmony);
-
             Harmony seedHarmony = new Harmony($"Harmony.Seed - {DateTime.Now.Ticks}");
 
+            LoadoutPatch.Apply();
+            Scp049Patch.Apply(scpHarmony);
+            Scp173Patch.Apply(scpHarmony);
+            WeaponPatch.Apply(weaponHarmony);
             seedHarmony.CreateClassProcessor(typeof(SeedSynchronizerAwakePatch)).Patch();
             seedHarmony.CreateClassProcessor(typeof(SeedSynchronizerNewPlayerPatch)).Patch();
         }
