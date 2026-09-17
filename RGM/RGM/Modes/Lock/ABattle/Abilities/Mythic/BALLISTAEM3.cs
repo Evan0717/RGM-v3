@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using PlayerRoles;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -93,7 +95,7 @@ public class BALLISTAEM3 : Ability
             
             if (!ABattle.Instance.PlayerAbilities.TryGetValue(player, out var ability) || ability.Count <= 0)
                 Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
-            else if (Mathf.Clamp01(Random.Range(0.0f, 1f)) >= .1f)
+            else if (Convert.ToByte(Random.Range(1, 101)) <= 10)
             {
                 Hit(player.ReferenceHub, ev.Attacker.ReferenceHub);
                 

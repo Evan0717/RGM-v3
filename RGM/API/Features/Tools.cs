@@ -1050,7 +1050,7 @@ $"""
                     grenade.SpawnActive(player.Position, attacker);
                     if (ignoreDefenses)
                     {
-                        player.Hurt(attacker, player.MaxHealth, DamageType.PocketDimension);
+                        player.Hurt(attacker, -1f, DamageType.ParticleDisruptor);
                     }
 
                     player.Hit(attacker, player.MaxHealth);

@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using PlayerStatsSystem;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -17,11 +18,11 @@ namespace RGM.Modes.Abilities.Legend;
 
 public class ZeroRule : Ability
 {
-    const float FixedDamage = 618.03f;
+    private const float FixedDamage = 618.03f;
 
-    static HurtingEventArgs _ignoreDefensesEvent;
+    private static HurtingEventArgs _ignoreDefensesEvent;
 
-    static readonly FieldInfo PenetrationField = typeof(FirearmDamageHandler).GetField(
+    private static readonly FieldInfo PenetrationField = typeof(FirearmDamageHandler).GetField(
         nameof(FirearmDamageHandler._penetration),
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -45,7 +46,7 @@ public class ZeroRule : Ability
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
-        if (Random.Range(1, 101) > 10)
+        if (Convert.ToByte(Random.Range(1, 101)) > 10)
             return;
 
         _ignoreDefensesEvent = ev;

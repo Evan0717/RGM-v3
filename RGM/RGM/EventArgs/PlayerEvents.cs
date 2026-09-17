@@ -557,7 +557,17 @@ namespace RGM.EventArgs
 
         public static void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
         {
-            Timing.CallDelayed(5 * 60, () => { ev.Ragdoll?.Destroy(); });
+            var ragdoll = ev.Ragdoll;
+            if (ragdoll == null)
+                return;
+
+            Timing.CallDelayed(5 * 60, () =>
+            {
+                if (ragdoll.Base == null)
+                    return;
+
+                ragdoll.Destroy();
+            });
         }
 
         public static void OnChangingRole(ChangingRoleEventArgs ev)
@@ -925,16 +935,33 @@ namespace RGM.EventArgs
 
         public static void OnDroppedItem(DroppedItemEventArgs ev)
         {
-            Timing.CallDelayed(5 * 60, () => { ev.Pickup?.Destroy(); });
+            var pickup = ev.Pickup;
+            if (pickup == null)
+                return;
+
+            Timing.CallDelayed(5 * 60, () =>
+            {
+                if (pickup.Base == null)
+                    return;
+
+                pickup.Destroy();
+            });
         }
 
         public static void OnDroppedAmmo(DroppedAmmoEventArgs ev)
         {
+            var ammoPickups = ev.AmmoPickups?.ToArray();
+            if (ammoPickups == null)
+                return;
+
             Timing.CallDelayed(5 * 60, () =>
             {
-                foreach (var ammo in ev.AmmoPickups)
+                foreach (var ammo in ammoPickups)
                 {
-                    ammo?.Destroy();
+                    if (ammo?.Base == null)
+                        continue;
+
+                    ammo.Destroy();
                 }
             });
         }

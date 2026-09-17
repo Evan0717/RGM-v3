@@ -45,7 +45,7 @@ public class MadScientist : Ability
                     {
                         try
                         {
-                            var rand = Random.Range(1, 501);
+                            var rand = Convert.ToInt16(Random.Range(1, 501));
                             switch (rand)
                             {
                                 case 1: // 0.20%

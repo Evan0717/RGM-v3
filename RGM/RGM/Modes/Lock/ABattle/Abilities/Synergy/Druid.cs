@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
 using CustomPlayerEffects;
@@ -6,6 +7,7 @@ using PlayerRoles.PlayableScps.Scp106;
 using PlayerStatsSystem;
 using RGM.API.Features;
 using RGM.API.DataBases;
+using Random = UnityEngine.Random;
 using Scp106Role = Exiled.API.Features.Roles.Scp106Role;
 
 namespace RGM.Modes.Abilities.Synergy;
@@ -47,7 +49,7 @@ public class Druid : Ability
 
         float reflectChance = ev.Player.IsScpRole() ? 49 : 76;
 
-        if (!(UnityEngine.Random.Range(1, 101) <= reflectChance)) return;
+        if (!(Convert.ToByte(Random.Range(1, 101)) <= reflectChance)) return;
         ev.IsAllowed = false;
         
         _isReflecting = true;
@@ -83,7 +85,7 @@ public class Druid : Ability
         }
 
         float reflectChance = ev.Target.IsScpRole() ? 49 : 76;
-        if (UnityEngine.Random.Range(1, 101) > reflectChance)
+        if (Convert.ToByte(Random.Range(1, 101)) > reflectChance)
             return;
 
         ev.IsAllowed = false;

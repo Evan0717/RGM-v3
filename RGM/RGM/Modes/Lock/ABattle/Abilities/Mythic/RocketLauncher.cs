@@ -1,10 +1,11 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.DataBases;
 using RGM.API.Features;
 using System.Collections.Generic;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -35,7 +36,7 @@ public class RocketLauncher : Ability
         if (_isInRocket.Contains(ev.Player)) return;
         if (ev.Attacker.IsScpRole())
         {
-            if (Random.Range(1, 101) > 10) return;
+            if (Convert.ToByte(Random.Range(1, 101)) > 10) return;
             _isInRocket.Add(ev.Player);
 
             Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, ignoreDefenses: true));
@@ -48,7 +49,7 @@ public class RocketLauncher : Ability
         }
         else
         {
-            if (Random.Range(1, 101) > 40) return;
+            if (Convert.ToByte(Random.Range(1, 101)) > 40) return;
             _isInRocket.Add(ev.Player);
 
             Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, ignoreDefenses: true));
