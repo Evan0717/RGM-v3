@@ -26,8 +26,8 @@ public static class WeaponPatch
 
     private const float FrMg0BaseDamageBonus = 2f;
 
-    /// <summary>기본 헤드샷 배율에 합산할 MP7 보너스입니다. (860%p = 8.6배)</summary>
-    private const float Fsp9HeadshotMultiplierBonus = 8.6f;
+    /// <summary>기본 헤드샷 배율에 합산할 MP7 보너스입니다. (850%p = 8.5배)</summary>
+    private const float Fsp9HeadshotMultiplierBonus = 8.5f;
 
     public static void Apply(Harmony harmony)
     {
@@ -114,7 +114,7 @@ public static class WeaponPatch
                 baseMultiplier <= 0f)
                 return;
 
-            // ProcessDamage가 뒤이어 기본 헤드샷 배율을 적용하므로, 선보정하여 최종 배율에 8.6를 합산합니다.
+            // ProcessDamage가 뒤이어 기본 헤드샷 배율을 적용하므로, 선보정하여 최종 배율에 8.5를 합산합니다.
             __instance.Damage *= (baseMultiplier + Fsp9HeadshotMultiplierBonus) / baseMultiplier;
         }
         catch (Exception e)
