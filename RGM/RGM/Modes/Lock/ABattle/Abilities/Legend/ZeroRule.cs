@@ -17,11 +17,11 @@ namespace RGM.Modes.Abilities.Legend;
 
 public class ZeroRule : Ability
 {
-    const float FixedDamage = 618.03f;
+    private const float FixedDamage = 618.03f;
 
-    static HurtingEventArgs _ignoreDefensesEvent;
+    private static HurtingEventArgs _ignoreDefensesEvent;
 
-    static readonly FieldInfo PenetrationField = typeof(FirearmDamageHandler).GetField(
+    private static readonly FieldInfo PenetrationField = typeof(FirearmDamageHandler).GetField(
         nameof(FirearmDamageHandler._penetration),
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 

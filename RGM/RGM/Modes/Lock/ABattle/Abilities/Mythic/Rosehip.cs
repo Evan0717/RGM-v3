@@ -61,9 +61,8 @@ public class Rosehip : Ability
             return;
         }
 
-        var shieldvalue = ev.Player.IsScpRole() ? ev.Player.MaxHumeShield : ev.Player.MaxArtificialHealth;
         _lethalAttackTargets.Add(ev.Player);
         Timing.CallDelayed(Timing.WaitForOneFrame, () => _lethalAttackTargets.Remove(ev.Player));
-        ev.Player.Hit(ev.Attacker, ev.Player.MaxHealth + shieldvalue);
+        ev.Player.Hurt(ev.Attacker, -1f, DamageType.Scp1509);
     }
 }
