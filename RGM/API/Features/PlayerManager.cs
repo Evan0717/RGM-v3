@@ -932,7 +932,7 @@ namespace RGM.API.Features
         }
 
         public static void ExplodeGrenade(this Player player, Vector3? pos = null, float fuseTime = 0,
-            ItemType grenade = ItemType.GrenadeHE, bool ignore = false, bool kill = true)
+            ItemType grenade = ItemType.GrenadeHE, bool ignore = false, bool instakill = true)
         {
             pos ??= player.Position;
             if (grenade == ItemType.GrenadeFlash)
@@ -948,8 +948,9 @@ namespace RGM.API.Features
                 g.MaxRadius = ignore ? 0 : g.MaxRadius;
                 g.SpawnActive(pos.Value, player);
 
-                if (kill)
-                    player.Kill(DamageType.Explosion);
+                if (!instakill) return;
+                if (GodModePlayers.Contains(player)) GodModePlayers.Remove(player);
+                player.Kill(DamageType.Explosion);
             }
         }
     }

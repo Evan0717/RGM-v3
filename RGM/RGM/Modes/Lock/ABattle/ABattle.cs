@@ -333,7 +333,7 @@ public class ABattle : Mode
                     Timing.CallDelayed(2f, () =>
                     {
                         for (var a = 0; a < 3; a++)
-                            player.ExplodeGrenade(kill: false);
+                            player.ExplodeGrenade(instakill: false);
                         player.Kill("강력한 폭8을 맛보았습니다.");
                     });
                 }
