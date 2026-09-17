@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using PlayerStatsSystem;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -45,7 +46,7 @@ public class ZeroRule : Ability
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
-        if (Random.Range(1, 101) > 10)
+        if (Convert.ToByte(Random.Range(1, 101)) > 10)
             return;
 
         _ignoreDefensesEvent = ev;

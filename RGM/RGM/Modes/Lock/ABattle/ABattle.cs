@@ -113,7 +113,7 @@ public class ABattle : Mode
     public static readonly Dictionary<string, string> ExtraModes = new()
     {
         {"기본", "워크스테이션 업그레이드를 즐기세요!"},
-        //{"1 + 1", "능력 선택창에 등장하는 능력의 수가 1개인 대신, 동일한 등급의 능력을 1개를 더 받습니다."},
+        //{"치매", "25% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
         {"반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다."},
         {"수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다."},
         {"골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)"},
@@ -168,7 +168,7 @@ public class ABattle : Mode
 
         string extraMode;
 
-        if (allowBasic && Random.Range(1, 7) == 1)
+        if (allowBasic && Convert.ToByte(Random.Range(1, 7)) == 1)
         {
             extraMode = "기본";
         }
@@ -562,7 +562,7 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (Random.Range(1, 101) <= 10 && !ExtraModes.ContainsKey("난장판"))
+        if (Convert.ToByte(Random.Range(1, 101)) <= 10 && !ExtraModes.ContainsKey("난장판"))
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
@@ -598,7 +598,7 @@ public class ABattle : Mode
                 var isStatusHint = CurrentHint != null && (CurrentHint.Content.Contains("워크스테이션") || CurrentHint.Content.Contains("보유 업그레이드"));
 
                 if (player.IsAlive)
-                    player.AddHint("워크스테이션 힌트", FormatHint(player), 1.2f);
+                    player.AddHint("워크스테이션 힌트", FormatHint(player), 1.1f);
             }
 
             yield return Timing.WaitForOneFrame;
@@ -627,10 +627,17 @@ public class ABattle : Mode
         {
             foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && PlayerManager.List.Contains(x)))
             {
+                player.AddBroadcast(10, "<size=24><b>10초 후 모든 생존 플레이어에게 능력 선택창이 열립니다.</b></size>");
+            }
+
+            yield return Timing.WaitForSeconds(10f);
+
+            foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && x.IsAlive && PlayerManager.List.Contains(x)))
+            {
                 StartSelect(player);
             }
 
-            yield return Timing.WaitForSeconds(Random.Range(1, 4) * 60);
+            yield return Timing.WaitForSeconds(Convert.ToByte(Random.Range(60, 181)));
         }
     }
 
@@ -654,7 +661,7 @@ public class ABattle : Mode
         return $"<align=left><b><size=24>보유 업그레이드</size></b>\n<size=20>{abilitiesText}</size>\n</align>";
     }
 
-    public IEnumerator<float> RestoreAbilities(Player player, List<AbilityType> abilities)
+    public static IEnumerator<float> RestoreAbilities(Player player, List<AbilityType> abilities)
     {
         yield return Timing.WaitForOneFrame;
 
@@ -669,13 +676,13 @@ public class ABattle : Mode
         player.AddBroadcast(10, $"<size=25><b>모든 능력을 제거한 후, 수복하였습니다.</b></size>");
     }
 
-    public void ExtraModeNotion(Player player, bool enableBroadcast = true)
+    public static void ExtraModeNotion(Player player, bool enableBroadcast = true)
     {
         if (player == null) return;
         
         foreach (var cem in CurrentExtraModes)
         {
-            string extraMode = $"<size=25><b><color=#fecdcd>{cem}</color></b></size>\n<size=20>{ExtraModes[cem]}</size>";
+            var extraMode = $"<size=25><b><color=#fecdcd>{cem}</color></b></size>\n<size=20>{ExtraModes[cem]}</size>";
 
             if (enableBroadcast)
                 player.AddBroadcast(10, extraMode);
@@ -754,7 +761,7 @@ public class ABattle : Mode
         {
             // 추가 모드 반사경: 25% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 2회까지.
             if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
-                Random.Range(1, 101) <= 25)
+                Convert.ToByte(Random.Range(1, 101)) <= 25)
             {
                 AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 1);
             }
@@ -992,13 +999,9 @@ public class ABattle : Mode
 
     public void StartSelect(Player player, List<AbilityType> abilities = null, int count = 3)
     {
-        /*if (CurrentExtraModes.Contains("1 + 1"))
-        {
-            count = 1;
-        }    */
         if (CurrentExtraModes.Contains("수저"))
         {
-            switch (Random.Range(1, 4))
+            switch (Convert.ToByte(Random.Range(1, 4)))
             {
                 case 3:
                     count = 5;
@@ -1013,7 +1016,7 @@ public class ABattle : Mode
         }
 
         if (!Selections.ContainsKey(player))
-            Selections.Add(player, new List<AbilityType>());
+            Selections.Add(player, []);
 
         lock (_selectionLock)
         {
@@ -1027,11 +1030,6 @@ public class ABattle : Mode
 
         int roleAbilityChance = GetRoleAbilityChance(category);
 
-        /*if (CurrentExtraModes.Contains("1 + 1"))
-        {
-            player.AddAbility(GetRandomAbilities(player, category, 1).First());
-        }*/
-
         abilities ??= GetRandomAbilities(player, category, count);
         var ignoredIndexes = new List<int>();
 
@@ -1042,7 +1040,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
 
-            var transition = Random.Range(1, 101) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
             {
@@ -1058,7 +1056,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.EPIC_TRANSITION);
 
-            var transition = Random.Range(1, 101) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
             {
@@ -1074,7 +1072,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
 
-            var transition = Random.Range(1, 101) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
             {
@@ -1092,12 +1090,12 @@ public class ABattle : Mode
             SelectionCursor[player] = 0;
         }
 
-        if (Random.Range(1, 101) <= roleAbilityChance) // 전용 능력
+        if (Convert.ToByte(Random.Range(1, 101)) <= roleAbilityChance) // 전용 능력
         {
             int index;
 
             do                
-                index = Random.Range(0, 3);
+                index = Convert.ToSByte(Random.Range(0, 3));
             while (ignoredIndexes.Contains(index));
 
             ignoredIndexes.Add(index);
@@ -1163,7 +1161,7 @@ public class ABattle : Mode
 
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
-        bool holidayFormat(AbilityType type, out string result)
+        bool HolidayFormat(AbilityType type, out string result)
         {
             result = "";
 
@@ -1191,7 +1189,7 @@ public class ABattle : Mode
                     Selections.Remove(player);
                     SelectionCursor.Remove(player);
                     IsSelecting[player] = false;
-                    player.AddHint("능력 선택", "", 0.1f);
+                    player.AddHint("능력 선택", "", 0.2f);
 
                     yield break;
                 }
@@ -1230,7 +1228,7 @@ public class ABattle : Mode
             IsSelecting[player] = false;
         }
 
-        player.AddHint("능력 선택", "", 0.1f);
+        player.AddHint("능력 선택", "", 0.2f);
         player.AddAbility(selectedAbility);
 
         yield break;
@@ -1259,7 +1257,7 @@ public class ABattle : Mode
             return string.Join("\n", abilities.Select((x, i) =>
             {
                 string prefix = i == cursor ? "▶ " : "   ";
-                return $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>{(holidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n";
+                return $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>{(HolidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n";
             }));
         }
     }
@@ -1395,13 +1393,13 @@ public class ABattle : Mode
             return;
 
         if (!PlayerWorkstations.ContainsKey(player))
-            PlayerWorkstations.Add(player, new List<WorkstationController>());
+            PlayerWorkstations.Add(player, []);
 
         if (!PlayerAbilities.ContainsKey(player))
-            PlayerAbilities.Add(player, new List<Ability>());
+            PlayerAbilities.Add(player, []);
 
         if (!Selections.ContainsKey(player))
-            Selections.Add(player, new List<AbilityType>());
+            Selections.Add(player, []);
 
         if (!IsSelecting.ContainsKey(player))
             IsSelecting.Add(player, false);
@@ -1445,7 +1443,7 @@ public class ABattle : Mode
         else if (CurrentExtraModes.Contains("프리즘 전주곡"))
         {
             if (player.IsNonePlayer()) return;
-            var prismrand = Random.Range(1, 101); 
+            var prismrand = Convert.ToByte(Random.Range(1, 101)); 
             AbilityCategory GetRandom()
             {
                 return prismrand <= 15 ? prismrand == 7 ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;

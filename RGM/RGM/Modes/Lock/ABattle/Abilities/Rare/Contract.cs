@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
-using UnityEngine;
-
 using static RGM.Variables.Variable;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Rare;
 
@@ -53,7 +53,7 @@ public class Contract : Ability
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    var rand = Random.Range(1, 501);
+                    var rand = Convert.ToInt16(Random.Range(1, 501));
                     switch (rand)
                     {
                         case 1: // 0.20%

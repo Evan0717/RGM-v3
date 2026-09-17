@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using ProjectMER.Features.Serializable;
@@ -6,6 +7,7 @@ using RGM.API.Features;
 using UnityEngine;
 
 using static RGM.Variables.Variable;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -41,7 +43,7 @@ public class ToolGun : Ability
             return;
 
         Player player = ev.Player;
-        if (Random.Range(1, 101) <= 3)
+        if (Convert.ToByte(Random.Range(1, 101)) <= 3)
         {
             if (GodModePlayers.Contains(player))
                 GodModePlayers.Remove(player);

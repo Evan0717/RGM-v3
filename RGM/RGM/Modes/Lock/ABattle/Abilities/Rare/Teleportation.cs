@@ -8,7 +8,8 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("순간이동", "랜덤한 유저의 위치로 순간이동합니다. 순간이동 후, 3초간 생존 보정을 받습니다.", AbilityCategory.Rare, AbilityType.RARE_TELEPORTATION)]
+[Ability("순간이동", "랜덤한 유저의 위치로 순간이동합니다. 순간이동 후, 3초간 생존 보정을 받습니다.",
+    AbilityCategory.Rare, AbilityType.RARE_TELEPORTATION)]
 public class Teleportation : Ability
 {
     public override void OnEnabled()

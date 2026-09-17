@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
@@ -7,6 +8,7 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
+using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -53,7 +55,7 @@ public class Rosehip : Ability
             return;
 
         ev.IsAllowed = false;
-        if (UnityEngine.Random.Range(1, 101) <= 50)
+        if (Convert.ToByte(Random.Range(1, 101)) <= 50)
         {
             _sideChangedTargets.Add(ev.Player);
             ev.Player.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);
