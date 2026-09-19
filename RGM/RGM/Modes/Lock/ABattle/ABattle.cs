@@ -1161,23 +1161,6 @@ public class ABattle : Mode
 
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
-        bool HolidayFormat(AbilityType type, out string result)
-        {
-            result = "";
-
-            switch (Abilities[type].HolidayType)
-            {
-                case AbilityHolidayType.Halloween:
-                    result = "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>EE</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b>";
-                    return true;
-                case AbilityHolidayType.Christmas:
-                    result = "<b><color=#FC0000>[</color><color=#EA1300>C</color><color=#D82600>h</color><color=#C63900>r</color><color=#B44C00>i</color><color=#A25F00>s</color><color=#917200>t</color><color=#7F8500>m</color><color=#6D9800>a</color><color=#5BAB00>s</color><color=#49BE00>]</color></b>";
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         var abilities = Selections[player];
 
         for (var i = 0; i < 100; i++)
@@ -1233,6 +1216,23 @@ public class ABattle : Mode
 
         yield break;
 
+        bool HolidayFormat(AbilityType type, out string result)
+        {
+            result = "";
+
+            switch (Abilities[type].HolidayType)
+            {
+                case AbilityHolidayType.Halloween:
+                    result = "<b><color=#FF9500>[</color><color=#FF9F09>H</color><color=#FFA912>A</color><color=#FFB31B>L</color><color=#FFBD24>L</color><color=#FFC72E>O</color><color=#FFDC37>W</color><color=#FFF240>E</color><color=#FFFF49>EE</color><color=#FFFF52>N</color><color=#FFFF5C>]</color></b>";
+                    return true;
+                case AbilityHolidayType.Christmas:
+                    result = "<b><color=#FC0000>[</color><color=#EA1300>C</color><color=#D82600>h</color><color=#C63900>r</color><color=#B44C00>i</color><color=#A25F00>s</color><color=#917200>t</color><color=#7F8500>m</color><color=#6D9800>a</color><color=#5BAB00>s</color><color=#49BE00>]</color></b>";
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         string CheckAbilityGrade(string text)
         {
             if (text.Contains("일반")) return "일반";
@@ -1266,7 +1266,7 @@ public class ABattle : Mode
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
         
-        var random = Convert.ToInt16(Random.Range(1, 20001)); // 0.005 단위
+        var random = Convert.ToUInt16(Random.Range(1, 20001)); // 0.005 단위
         var hasBlackMarket = player.HasAbility(AbilityType.SYNERGY_BLACKMARKET);
 
         if (CurrentExtraModes.Contains("잔칫상"))
