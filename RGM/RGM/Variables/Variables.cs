@@ -25,10 +25,10 @@ namespace RGM.Variables
         public static ModeType CurrentSubMode = ModeType.None;
         public static AudioPlayer GlobalPlayer;
         public static string SelectMode = "";
-        public static string Tip = Tips.LobbyTips.GetRandomValue();
-        public static string Logo = Random.Range(1, 3) == 1 ? "❓" : "❔";
+        public static readonly string Tip = Tips.LobbyTips.GetRandomValue();
+        public static readonly string Logo = Convert.ToByte(Random.Range(1, 3)) == 1 ? "❓" : "❔";
+        public static readonly byte StartupRandom = Convert.ToByte(Random.Range(1, 31));
         public static string WinMessage = "";
-        public static int StartupRandom = Random.Range(1, 31);
         public static bool FreezeGameStart = false;
         public static bool ShootingTargetSignal = false;
         public static bool IsBugVoteProcessing = false;
