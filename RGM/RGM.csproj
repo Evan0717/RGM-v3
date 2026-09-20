@@ -138,7 +138,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Satellite.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\AlphaOneMember.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\GrupMember.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
@@ -319,7 +319,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Vampire.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\WeakPointAttack.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\Winner.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\Legend\AlphaOne.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\Legend\Grup.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\Normal\TouchOfChaos.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\CHI\Rare\ChaosOfChaos.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\ClassD\Epic\ChaosRecruit.cs" />
@@ -387,7 +387,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\WorkoutOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\AirStrike.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AutoTesla.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\CallScp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\AvoidOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\CameraFlash.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\CASSIE.cs" />
@@ -412,7 +411,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Repair.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\RestArea.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Shutdown.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\StartWarhead.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\SystemHacking.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Mythic\ToolPing.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Epic\RagingAttack.cs" />
@@ -422,6 +420,8 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Normal\Enemy.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Normal\Rage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Rare\Seer.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Rare\Stable.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp096\Rare\Threat.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Epic\Evade.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Epic\Return.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp106\Legend\Flashback.cs" />

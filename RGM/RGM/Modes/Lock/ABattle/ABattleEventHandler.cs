@@ -6,11 +6,9 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Attachments;
 using MEC;
 using UnityEngine;
-
 using Exiled.Events.EventArgs.Scp079;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Scp1507;
-
 using static RGM.Variables.Variable;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Server;
@@ -29,6 +27,7 @@ public class ABattleEventHandler(ABattle aBattle)
     {
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         Exiled.Events.Handlers.Player.Verified += OnVerified;
+        Exiled.Events.Handlers.Player.Left += OnLeft;
         Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         Exiled.Events.Handlers.Player.Jumping += OnJumping;
         Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
@@ -42,6 +41,7 @@ public class ABattleEventHandler(ABattle aBattle)
     {
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         Exiled.Events.Handlers.Player.Verified -= OnVerified;
+        Exiled.Events.Handlers.Player.Left -= OnLeft;
         Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         Exiled.Events.Handlers.Player.Jumping -= OnJumping;
         Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
@@ -60,6 +60,12 @@ public class ABattleEventHandler(ABattle aBattle)
     {
         aBattle.EnsurePlayer(player);
         ABattle.ExtraModeNotion(player);
+    }
+
+    private void OnLeft(LeftEventArgs ev)
+    {
+        _pendingAbilityRestores.Remove(ev.Player);
+        aBattle.CleanupPlayer(ev.Player);
     }
 
     private void OnSpawned(SpawnedEventArgs ev)
@@ -89,7 +95,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
         if (!Physics.Raycast(ev.Player.Position, Vector3.down, out var hit, 5, (LayerMask)1)) return;
         if (hit.transform == null) return;
-        
+
         var controller = hit.transform.GetComponentInParent<WorkstationController>();
 
         if (controller == null) return;
@@ -148,10 +154,7 @@ public class ABattleEventHandler(ABattle aBattle)
     {
         aBattle.LastDeathRoles[ev.Player] = ev.TargetOldRole;
 
-        Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-        {
-            aBattle.Reset(ev.Player);
-        });
+        Timing.CallDelayed(Timing.WaitForOneFrame, () => { aBattle.Reset(ev.Player); });
     }
 
     private void OnPinging(PingingEventArgs ev)
@@ -162,7 +165,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
         if (!Physics.Raycast(new Vector3(pos.x, pos.y + 1, pos.z), Vector3.down, out var hit, 5, (LayerMask)1)) return;
         if (hit.transform == null) return;
-        
+
         var controller = hit.transform.GetComponentInParent<WorkstationController>();
 
         if (controller == null) return;
@@ -171,7 +174,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
         if (ABattle.CurrentExtraModes.Contains("대출"))
         {
-            if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) && 
+            if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
                 Convert.ToByte(Random.Range(1, 101)) <= 18)
             {
                 if (GodModePlayers.Contains(ev.Player))

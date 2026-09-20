@@ -180,7 +180,7 @@ namespace RGM.API.Features
             EffectIntensities[player][type] += intensity;
 
             const byte maxIntensity = 255;
-            byte applyIntensity = (byte)Math.Min(EffectIntensities[player][type], maxIntensity);
+            var applyIntensity = Convert.ToByte(Math.Min(EffectIntensities[player][type], maxIntensity));
 
             var effect = player.ActiveEffects.FirstOrDefault(x => x.GetEffectType() == type);
             float newDuration = effect != null && addDuration
@@ -204,7 +204,7 @@ namespace RGM.API.Features
                         }
                         else
                         {
-                            byte newApplyIntensity = (byte)Math.Min(EffectIntensities[player][type], 255);
+                            var newApplyIntensity = Convert.ToByte(Math.Min(EffectIntensities[player][type], 255));
                             player.EnableEffect(type, newApplyIntensity);
                         }
                     }
