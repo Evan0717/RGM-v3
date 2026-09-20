@@ -787,7 +787,7 @@ namespace RGM.EventArgs
                     (ev.DamageHandler.Type.IsWeapon() ||
                      ev.DamageHandler.Type == DamageType.Scp127 ||
                      ev.DamageHandler.Type == DamageType.Scp1509))
-                    ev.DamageHandler.Damage *= 0.7f;
+                    ev.DamageHandler.Damage *= 0.6f;
 
                 float damage = ev.IsInstantKill
                     ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
@@ -969,7 +969,7 @@ namespace RGM.EventArgs
                 : 1f;
 
             ev.ClaimedTarget.Hurt(new ScpDamageHandler(ev.Player.ReferenceHub,
-                ev.Firearm.Damage * 0.7f * hitboxMultiplier, DeathTranslations.Scp173));
+                ev.Firearm.Damage * 0.6f * hitboxMultiplier, DeathTranslations.Scp173));
 
             ev.Player.ShowHitMarker();
         }

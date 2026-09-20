@@ -10,7 +10,10 @@ using RGM.API.DataBases;
 namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 
-[Ability("초월", "핑을 찍으면 핑 근처 가장 가까운 인간 1명이 22% 확률로 승천합니다. (사거리 5m)", AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TRANSENDENCE, RoleAbility.Scp079)]
+[Ability("초월", """
+               핑을 찍으면 핑 근처 가장 가까운 인간 1명이 22% 확률로 승천합니다. (사거리 5m)
+               해당 승천은 『사망』 효과가 적용됩니다.
+               """, AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TRANSENDENCE, RoleAbility.Scp079)]
 public class Transendence : Ability
 {
     List<Player> isInRocket = new();
@@ -46,7 +49,7 @@ public class Transendence : Ability
         {
             isInRocket.Add(player);
 
-            Timing.RunCoroutine(Tools.DoRocket(Owner, player, 1));
+            Timing.RunCoroutine(Tools.DoRocket(Owner, player, 1, ignoreDefenses:true));
             Tools.MessageTranslated("", $"{player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{(Trans.Role[player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
             Timing.CallDelayed(1, () =>

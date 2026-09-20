@@ -102,7 +102,15 @@ public class AbilityData
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class AbilityAttribute(string name, string description, AbilityCategory category, AbilityType type, RoleAbility roleAbility = RoleAbility.None, bool _79Allowed = false, AbilityHolidayType holidayType = AbilityHolidayType.None, bool keep = false) : Attribute
+public class AbilityAttribute(
+    string name,
+    string description,
+    AbilityCategory category,
+    AbilityType type,
+    RoleAbility roleAbility = RoleAbility.None,
+    bool _79Allowed = false,
+    AbilityHolidayType holidayType = AbilityHolidayType.None,
+    bool keep = false) : Attribute
 {
     public string Name { get; } = name;
     public string Description { get; } = description;
@@ -286,7 +294,7 @@ public enum AbilityType
     DUMMY_DONEDUPLICATION, // [더미] 인공 중복기연
     DUMMY_REBIRTHCOMPLETE, // [더미] 새로운 삶
     DUMMY_GOCMEMBER, // [더미] U.N.G.O.C 대원
-    DUMMY_ALPHAONEMENBER, // [더미] ALPHA-1 대원
+    DUMMY_GRUPMENBER, // [더미] GRU-P 대원
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -489,7 +497,7 @@ public enum AbilityType
     
     RARE_CHI_CHAOSOFCHAOS, // [전용 희귀] 혼돈의 카오스
     
-    LEGEND_CHI_ALPHAONE, // [전용 전설] ALPHA-1, Red Right Hand
+    LEGEND_CHI_GRUP, // [전용 전설] GRU-P
 
     // 뱀의 손
     NORMAL_TUTORIAL_TONGUE, // [전용 일반] 세치 혀
@@ -540,11 +548,13 @@ public enum AbilityType
     MYTHIC_SCP0492_ONEPUNCH, // [전용 신화] ONE PUNCH MAN
 
     // SCP-096
-    NORMAL_SCP096_ENEMY, // [전용 일반] 원수
     NORMAL_SCP096_CANTMANAGEANGER, // [전용 일반] 분노 조절 문제
     NORMAL_SCP096_RAGE, // [전용 일반] 격노
+    NORMAL_SCP096_ENEMY, // [전용 일반] 원수
     
     RARE_SCP096_SEER, // [전용 희귀] 천리안
+    RARE_SCP096_STABLE, // [전용 희귀] 안정
+    RARE_SCP096_THREAT, // [전용 희귀] 위협
     
     EPIC_SCP096_STARTEARING, // [전용 영웅] 별자리 찢기
     EPIC_SCP096_RAGINGATTACK, // [전용 영웅] 분노의 일격

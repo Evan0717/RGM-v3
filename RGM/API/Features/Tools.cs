@@ -421,10 +421,16 @@ $"""
             target = null;
             raycastHit = null;
 
-            if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, distance) &&
-                    hit.collider.TryGetComponent(out IDestructible destructible))
+            if (player?.ReferenceHub?.PlayerCameraReference == null)
+                return false;
+
+            var camera = player.ReferenceHub.PlayerCameraReference;
+            if (Physics.Raycast(camera.position + camera.forward * 0.2f, camera.forward, out RaycastHit hit, distance) &&
+                hit.collider != null &&
+                hit.collider.TryGetComponent<IDestructible>(out _) &&
+                hit.collider.GetComponentInParent<ReferenceHub>() is { } referenceHub)
             {
-                if (Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>().gameObject, out Player t) && player != t)
+                if (Player.TryGet(referenceHub.gameObject, out Player t) && player != t)
                 {
                     target = t;
                     raycastHit = hit;
@@ -441,14 +447,20 @@ $"""
             targets = [];
             raycastHit = null;
 
-            var origin = player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f;
-            var direction = player.ReferenceHub.PlayerCameraReference.forward;
+            if (player?.ReferenceHub?.PlayerCameraReference == null)
+                return false;
+
+            var camera = player.ReferenceHub.PlayerCameraReference;
+            var origin = camera.position + camera.forward * 0.2f;
+            var direction = camera.forward;
             RaycastHit[] hits = Physics.RaycastAll(origin, direction, distance);
 
             foreach (var hit in hits.OrderBy(h => h.distance))
             {
                 if (!hit.collider.TryGetComponent<IDestructible>(out _) ||
-                    !Player.TryGet(hit.collider.GetComponentInParent<ReferenceHub>().gameObject, out Player t) ||
+                    hit.collider.GetComponentInParent<ReferenceHub>() is not { } referenceHub ||
+                    !Player.TryGet(referenceHub.gameObject, out Player t) ||
+                    player == t ||
                     targets.Contains(t)) continue;
                 
                 targets.Add(t);
@@ -1045,7 +1057,7 @@ $"""
                     grenade.SpawnActive(player.Position, attacker);
                     if (ignoreDefenses)
                     {
-                        player.Hurt(attacker, -1f, DamageType.ParticleDisruptor);
+                        player.Hit(attacker, -1f);
                     }
 
                     player.Hit(attacker, player.MaxHealth);
@@ -1053,13 +1065,13 @@ $"""
                     grenade = null;
                 }
 
-                yield return float.NegativeInfinity;
+                yield return Timing.WaitForOneFrame;
             }
         }
 
         public static LabApi.Features.Wrappers.TextToy CreateText(Vector3 pos, Quaternion rot, string text, float time = 20)
         {
-            LabApi.Features.Wrappers.TextToy textToy = LabApi.Features.Wrappers.TextToy.Create();
+            var textToy = LabApi.Features.Wrappers.TextToy.Create();
             textToy.Position = pos;
             textToy.Rotation = rot;
             textToy.DisplaySize = new Vector2(100000, 100000);

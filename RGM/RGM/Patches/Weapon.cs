@@ -22,12 +22,12 @@ public static class WeaponPatch
 
     private const float Scp127Tier2FalloffBonus = 30f;
 
-    private const float Fsp9BaseDamageReduction = 7f;
+    private const float Fsp9BaseDamageReduction = 6f;
 
     private const float FrMg0BaseDamageBonus = 2f;
 
-    /// <summary>기본 헤드샷 배율에 합산할 MP7 보너스입니다. (850%p = 8.5배)</summary>
-    private const float Fsp9HeadshotMultiplierBonus = 8.5f;
+    /// <summary>기본 헤드샷 배율에 합산할 MP7 보너스입니다. (800%p = 8.0배)</summary>
+    private const float Fsp9HeadshotMultiplierBonus = 8.0f;
 
     public static void Apply(Harmony harmony)
     {
@@ -44,6 +44,10 @@ public static class WeaponPatch
                 AccessTools.PropertyGetter(typeof(HitscanHitregModuleBase),
                     nameof(HitscanHitregModuleBase.BaseDamage)),
                 postfix: new HarmonyMethod(typeof(WeaponPatch), nameof(BaseDamageGetterPostfix)));
+
+            harmony.Patch(
+                AccessTools.Method(typeof(Scp127Hitscan), nameof(Scp127Hitscan.TryGetCurPair)),
+                prefix: new HarmonyMethod(typeof(WeaponPatch), nameof(Scp127TryGetCurPairPrefix)));
 
             harmony.Patch(
                 AccessTools.Method(typeof(FirearmDamageHandler), nameof(FirearmDamageHandler.ProcessDamage)),
@@ -104,17 +108,29 @@ public static class WeaponPatch
         }
     }
 
+    public static bool Scp127TryGetCurPairPrefix(Scp127Hitscan __instance, ref Scp127Hitscan.StatsTierPair ret)
+    {
+        // 플레이어 퇴장 시 인벤토리 아이템은 Owner가 해제된 뒤 픽업 정보가 생성될 수 있습니다.
+        // 원본 GetTierForItem은 이 경우 Owner.netId를 읽으므로, 기본 총기 수치를 사용하게 합니다.
+        if (__instance.Firearm?.Owner != null)
+            return true;
+
+        ret = default;
+        return false;
+    }
+
     public static void FirearmDamageHandlerProcessDamagePrefix(FirearmDamageHandler __instance)
     {
         try
         {
             if (__instance.WeaponType != ItemType.GunFSP9 ||
                 __instance.Hitbox != HitboxType.Headshot ||
-                !FirearmDamageHandler.HitboxDamageMultipliers.TryGetValue(HitboxType.Headshot, out float baseMultiplier) ||
+                !FirearmDamageHandler.HitboxDamageMultipliers.TryGetValue(HitboxType.Headshot,
+                    out float baseMultiplier) ||
                 baseMultiplier <= 0f)
                 return;
 
-            // ProcessDamage가 뒤이어 기본 헤드샷 배율을 적용하므로, 선보정하여 최종 배율에 8.5를 합산합니다.
+            // ProcessDamage가 뒤이어 기본 헤드샷 배율을 적용하므로, 선보정하여 최종 배율에 8.0를 합산합니다.
             __instance.Damage *= (baseMultiplier + Fsp9HeadshotMultiplierBonus) / baseMultiplier;
         }
         catch (Exception e)
