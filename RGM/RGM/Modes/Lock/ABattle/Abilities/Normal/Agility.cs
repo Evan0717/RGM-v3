@@ -8,7 +8,7 @@ namespace RGM.Modes.Abilities.Normal;
 
 [Ability("민첩", """
                회피율이 5%p 증가합니다.
-               자신이 SCP 진영일 경우 효율이 60% 감소합니다.
+               자신이 SCP 진영일 경우 효율이 40% 감소합니다.
                """, AbilityCategory.Normal, AbilityType.NORMAL_AGILITY)]
 public class Agility : Ability
 {
@@ -31,7 +31,7 @@ public class Agility : Ability
             WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
             return;
 
-        int dodgeChance = Owner.IsScpRole() ? 2 : 5;
+        int dodgeChance = Owner.IsScpRole() ? 3 : 5;
 
         if (Random.Range(1, 101) > dodgeChance) return;
         ev.IsAllowed = false;

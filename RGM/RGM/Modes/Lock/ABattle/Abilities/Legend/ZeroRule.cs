@@ -1,9 +1,4 @@
-﻿using System;
-using System.Reflection;
-using CustomPlayerEffects;
-using Exiled.API.Enums;
-using Exiled.Events.EventArgs.Player;
-using PlayerStatsSystem;
+﻿using Exiled.Events.EventArgs.Player;
 using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Legend;
@@ -19,15 +14,6 @@ namespace RGM.Modes.Abilities.Legend;
 public class ZeroRule : Ability
 {
     private const float FixedDamage = 618.03f;
-
-    private static HurtingEventArgs _ignoreDefensesEvent;
-
-    private static readonly FieldInfo PenetrationField = typeof(FirearmDamageHandler).GetField(
-        nameof(FirearmDamageHandler._penetration),
-        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-    public static bool ShouldIgnoreDefenses(HurtingEventArgs ev) =>
-        ev != null && ReferenceEquals(_ignoreDefensesEvent, ev);
     
     public override void OnEnabled()
     {
@@ -41,50 +27,16 @@ public class ZeroRule : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null ||
-            ev.Attacker != Owner ||
-            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
+        if (ev.Attacker != Owner ||
+            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
+            ApplyFixedDamage.IsApplying)
             return;
 
-        if (Convert.ToByte(Random.Range(1, 101)) > 10)
+        if (Random.Range(1, 101) > 10)
             return;
 
-        _ignoreDefensesEvent = ev;
-
-        HitboxType hitbox = ev.DamageHandler.Base is StandardDamageHandler standard
-            ? standard.Hitbox
-            : HitboxType.Body;
-
-        // Hurting 이후 ApplyDamage → ProcessDamage가 다시 돌므로,
-        // 고정 피해를 넣은 뒤 이후 적용될 감소를 미리 상쇄한다.
-        ev.DamageHandler.Damage = FixedDamage;
-
-        if (ev.DamageHandler.Base is FirearmDamageHandler firearm)
-        {
-            // SCP-173 Reinforced Concrete / 방어구 감소 무시 (penetration 100%)
-            // _penetration은 init-only라 reflection으로 설정
-            PenetrationField?.SetValue(firearm, 1f);
-
-            // ProcessDamage의 히트박스 배율 상쇄
-            if (firearm._useHumanHitboxes &&
-                FirearmDamageHandler.HitboxDamageMultipliers.TryGetValue(hitbox, out float hitboxMultiplier) &&
-                hitboxMultiplier > 0f)
-                ev.DamageHandler.Damage /= hitboxMultiplier;
-        }
-
-        // ProcessDamage의 DamageReduction / BodyshotReduction 상쇄
-        IgnoreDamageModifier(ev, EffectType.DamageReduction, hitbox);
-        IgnoreDamageModifier(ev, EffectType.BodyshotReduction, hitbox);
-    }
-
-    private static void IgnoreDamageModifier(HurtingEventArgs ev, EffectType effectType, HitboxType hitbox)
-    {
-        if (!ev.Player.TryGetEffect(effectType, out StatusEffectBase effect) ||
-            effect is not IDamageModifierEffect { DamageModifierActive: true } modifier)
-            return;
-
-        float damageModifier = modifier.GetDamageModifier(ev.DamageHandler.Damage, ev.DamageHandler.Base, hitbox);
-        if (damageModifier is > 0f and < 1f)
-            ev.DamageHandler.Damage /= damageModifier;
+        ev.IsAllowed = false;
+        if (ApplyFixedDamage.Apply(Owner, ev.Player, FixedDamage))
+            Owner.ShowHitMarker(1.25f);
     }
 }

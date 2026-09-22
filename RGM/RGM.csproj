@@ -135,6 +135,9 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\ApplyFixedDamage.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\ApplyInstantKill.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\ApplyLethalDamage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Satellite.cs" />
@@ -245,6 +248,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Exchange.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Friendship.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\HealGun.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Heredity.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Insurance.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Kick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Lucky.cs" />
@@ -259,6 +263,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Rush.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Sneak.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\StaminaReplenishment.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Study.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Supply.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\SuspiciousStew.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\Swift.cs" />
@@ -368,12 +373,10 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Normal\Death.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Rare\MedicalKnife.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp049\Rare\Proficiency.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\Protection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\AssultOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\Blessing.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\SecurityCamera.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AttackOrder.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SuicideOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SurpriseAttack.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SurvivalOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Legend\Blackout.cs" />
@@ -386,10 +389,8 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\SpamMessage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\WorkoutOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\AirStrike.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\AutoTesla.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\AvoidOrder.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\CameraFlash.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\CASSIE.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Epic\SystemInfiltration.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Duplication.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Hide.cs" />
@@ -408,6 +409,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\PortableCharger.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\PowerAbsorption.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\RandomFunction.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Protection.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\Repair.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Rare\RestArea.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Shutdown.cs" />

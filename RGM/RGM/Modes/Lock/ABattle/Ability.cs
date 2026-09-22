@@ -327,6 +327,8 @@ public enum AbilityType
     NORMAL_RANDOMCANDY, // [일반] 트릭 오어 트릿
     NORMAL_CLOAK, // [일반] 망토
     NORMAL_NIGHTOWL, // [일반] 밤눈
+    NORMAL_STUDY, // [일반] 공부
+    NORMAL_HEREDITY, // [일반] 유전
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
@@ -597,15 +599,13 @@ public enum AbilityType
 
     // SCP-079
     NORMAL_SCP079_PINGREMOTE, // [전용 일반] 핑 리모컨
-    //NORMAL_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
+    NORMAL_SCP079_PORTABLECHARGER, // [전용 일반] 간이 충전기
     NORMAL_SCP079_RANDOMFUNCTION, // [전용 일반] 랜덤 함수
     NORMAL_SCP079_SHUTDOWN, // [전용 일반] 셧다운제
     NORMAL_SCP079_OVERCLOCKING, // [전용 일반] 오버클럭
     NORMAL_SCP079_JUSTPRICE, // [전용 일반] 응당한 대가
     NORMAL_SCP079_CAMERAFLASH, // [전용 일반] 카메라 플래시
-    NORMAL_SCP079_CASSIE, // [전용 일반] C.A.S.S.I.E.
     NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
-    NORMAL_SCP079_AUTOTESLA, // [전용 일반] 자동 방어 시스템(x)
     NORMAL_SCP079_WORKOUTORDER, // [전용 일반] 운동 명령
     NORMAL_SCP079_SPAMMESSAGE, // [전용 일반] 스팸 문자
 
@@ -623,18 +623,15 @@ public enum AbilityType
     RARE_SCP079_SYSTEMHACKING, // [전용 희귀] 시스템 해킹
     RARE_SCP079_HIDE, // [전용 희귀] 은폐
     RARE_SCP079_DUPLICATION, // [전용 희귀] 중복
+    RARE_SCP079_PROTECTION, // [전용 영웅] 보호
 
-    EPIC_SCP079_CALLSCP, // [전용 영웅] SCP 지원 호출기
     EPIC_SCP079_LEVELUP, //[전용 영웅] 만렙
     EPIC_SCP079_SWIFTSUPPORT, // [전용 영웅] 신속 지원
     EPIC_SCP079_IMPORTUNITY, // [전용 영웅] 끈질김
     EPIC_SCP079_SystemInfiltration, // [전용 영웅] 시스템 침투
     EPIC_SCP079_SURVIVALORDER, // [전용 영웅] 생존 명령
-    EPIC_SCP079_SUICIDEORDER, // [전용 영웅] 희생 명령
     EPIC_SCP079_SURPRISEATTACK, // [전용 영웅] 기습
-    EPIC_SCP079_PROTECTION, // [전용 영웅] 보호
 
-    LEGEND_SCP079_STARTWARHEAD, // [전용 전설] 자폭 시퀸스
     LEGEND_SCP079_BLACKOUT, // [전용 전설] 블랙아웃
     LEGEND_SCP079_ASSULTORDER, // [전용 전설] 돌격 명령
     LEGEND_SCP079_EXPLOSIONISART, // [전용 전설] 폭발은 예술이다

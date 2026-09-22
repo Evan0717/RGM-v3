@@ -25,8 +25,8 @@ public class Turtle : Ability
     {
         if (ev.Player != Owner ||
             ev.DamageHandler.Type == DamageType.Crushed ||
-            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker) ||
-            ZeroRule.ShouldIgnoreDefenses(ev))
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker) || 
+            ApplyFixedDamage.IsApplying)
             return;
 
         if (ev.IsInstantKill)
