@@ -39,7 +39,7 @@ public class RocketLauncher : Ability
             if (Convert.ToByte(Random.Range(1, 101)) > 10) return;
             _isInRocket.Add(ev.Player);
 
-            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, ignoreDefenses: true));
+            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, isInstantKill: true));
             Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
             Timing.CallDelayed(1, () =>
@@ -52,7 +52,7 @@ public class RocketLauncher : Ability
             if (Convert.ToByte(Random.Range(1, 101)) > 40) return;
             _isInRocket.Add(ev.Player);
 
-            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, ignoreDefenses: true));
+            Timing.RunCoroutine(Tools.DoRocket(Owner, ev.Player, 1, isInstantKill: true));
             Tools.MessageTranslated("", $"{ev.Player.DisplayNickname}(<color={ev.Player.Role.Color.ToHex()}>{( Trans.Role[ev.Player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
 
             Timing.CallDelayed(1, () =>

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using RGM.Modes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using static RGM.Variables.Variable;
@@ -1040,7 +1041,7 @@ $"""
             return $"#{colorValue:X6}";
         }
 
-        public static IEnumerator<float> DoRocket(Player attacker, Player player, float speed, bool ignoreDefenses = false)
+        public static IEnumerator<float> DoRocket(Player attacker, Player player, float speed, bool isInstantKill = false)
         {
             int amnt = 0;
             while (player.Role != RoleTypeId.Spectator)
@@ -1055,9 +1056,9 @@ $"""
                     ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, null);
                     grenade.FuseTime = 0.5f;
                     grenade.SpawnActive(player.Position, attacker);
-                    if (ignoreDefenses)
+                    if (isInstantKill)
                     {
-                        player.Hit(attacker, -1f);
+                        ApplyInstantKill.Apply(attacker, player);
                     }
 
                     player.Hit(attacker, player.MaxHealth);

@@ -45,18 +45,16 @@ public class Transendence : Ability
         if (player == null) return;
 
 
-        if (Random.Range(1, 101) <= 22)
+        if (Random.Range(1, 101) > 22) return;
+        isInRocket.Add(player);
+
+        Timing.RunCoroutine(Tools.DoRocket(Owner, player, 1, isInstantKill:true));
+        Tools.MessageTranslated("", $"{player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)(이)가 하늘로 승천했습니다.");
+
+        Timing.CallDelayed(1, () =>
         {
-            isInRocket.Add(player);
+            isInRocket.Remove(player);
+        });
 
-            Timing.RunCoroutine(Tools.DoRocket(Owner, player, 1, ignoreDefenses:true));
-            Tools.MessageTranslated("", $"{player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{(Trans.Role[player.Role.Type])}</color>)(이)가 하늘로 승천했습니다.");
-
-            Timing.CallDelayed(1, () =>
-            {
-                isInRocket.Remove(player);
-            });
-        }
-        
     }
 }

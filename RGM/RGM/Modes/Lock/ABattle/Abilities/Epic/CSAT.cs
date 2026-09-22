@@ -19,7 +19,8 @@ public class CSAT : Ability
         Timing.CallDelayed(3.1f, () =>
         {
             if (!Owner.IsAlive) return;
-            if (Convert.ToByte(Random.Range(1, 101)) <= (ABattle.CurrentExtraModes.Contains("잔칫상") ? 28 : 20))
+            if (Convert.ToByte(Random.Range(1, 101)) <= 5 * Owner.AbilityCount(AbilityType.NORMAL_STUDY) + 
+                (ABattle.CurrentExtraModes.Contains("잔칫상") ? 28 : 20))
             {
                 Owner.AddHint("대학수학능력시험 1등급", "<b>능력을 3개 더 얻었습니다!</b>");
 

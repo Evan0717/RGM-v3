@@ -1,17 +1,12 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Extensions;
 using MEC;
-using MultiBroadcast.Commands.Subcommands;
-using PlayerRoles;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Metadata;
-using System.Security.Policy;
 
 namespace RGM.Modes.Abilities.Unique.Scp079.Common;
 
-[Ability("스팸 문자", "적들에게 20초짜리 스팸 문자 3개를 보내 시야를 60초간 방해합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP079_SPAMMESSAGE, RoleAbility.Scp079)]
+[Ability("스팸 문자", "적들에게 10초짜리 스팸 문자 4개를 보내 시야를 방해합니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP079_SPAMMESSAGE, RoleAbility.Scp079)]
 
 public class SpamMessage : Ability
 {
