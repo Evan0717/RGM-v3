@@ -32,7 +32,7 @@ namespace RGM.Modes
             if (ev.Player.IsNonePlayer())
                 return;
 
-            Timing.RunCoroutine(Tools.DoRocket(ev.Player, ev.Player, 1, ignoreDefenses:true));
+            Timing.RunCoroutine(Tools.DoRocket(ev.Player, ev.Player, 1, isInstantKill:true));
         }
     }
 }

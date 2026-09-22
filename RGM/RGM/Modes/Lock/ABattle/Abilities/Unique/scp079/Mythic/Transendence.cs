@@ -48,7 +48,7 @@ public class Transendence : Ability
         if (Random.Range(1, 101) > 22) return;
         isInRocket.Add(player);
 
-        Timing.RunCoroutine(Tools.DoRocket(Owner, player, 1, ignoreDefenses:true));
+        Timing.RunCoroutine(Tools.DoRocket(Owner, player, 1, isInstantKill:true));
         Tools.MessageTranslated("", $"{player.DisplayNickname}(<color={player.Role.Color.ToHex()}>{Trans.Role[player.Role.Type]}</color>)(이)가 하늘로 승천했습니다.");
 
         Timing.CallDelayed(1, () =>

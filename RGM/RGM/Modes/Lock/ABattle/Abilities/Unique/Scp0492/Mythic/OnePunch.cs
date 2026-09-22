@@ -42,6 +42,7 @@ public class OnePunch : Ability
             ev.DamageHandler.Type != DamageType.Scp0492)
             return;
 
-        ApplyInstantKill.Apply(Owner, ev.Player);
+        if (ApplyInstantKill.Apply(Owner, ev.Player))
+            Owner.ShowHitMarker(1.5f);
     }
 }
