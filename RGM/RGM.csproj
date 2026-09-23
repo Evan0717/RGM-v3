@@ -135,6 +135,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SoccerKick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyFixedDamage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyInstantKill.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyLethalDamage.cs" />
@@ -226,7 +227,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Wick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\ZeroRule.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\Anchor.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\BALLISTAEM3.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\BallistaEM3.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\BombGun.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\DimensionThief.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\EyeMan.cs" />

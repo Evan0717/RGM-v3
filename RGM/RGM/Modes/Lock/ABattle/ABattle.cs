@@ -1209,7 +1209,7 @@ public class ABattle : Mode
         if (abilities.Distinct().Count() == 1 &&
             abilities.Count > 2 &&
             abilities.All(ability =>
-                Abilities[ability].Category != AbilityCategory.Ancient)) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 전부 중복인 경우
+                Abilities[ability].Category != AbilityCategory.Ancient)) // 능력 선택창에 등장한 능력이 최소 3개 이상이고, 중복인 경우
         {
             player.AddAbility(AbilityType.SYNERGY_DUPLICATEFATE);
 
