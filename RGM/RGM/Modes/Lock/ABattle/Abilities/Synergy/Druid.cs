@@ -19,8 +19,7 @@ namespace RGM.Modes.Abilities.Synergy;
     76% 확률(<color=red>SCP</color>의 경우 49%)로 상대방의 공격을 반사합니다.
     추가로, 4대 정령에 특수 능력이 부여됩니다.
     """,
-    AbilityCategory.Synergy,
-    AbilityType.SYNERGY_DRUID)]
+    AbilityCategory.Synergy, AbilityType.SYNERGY_DRUID)]
 public class Druid : Ability
 {
     private static bool _isReflecting;
@@ -44,7 +43,8 @@ public class Druid : Ability
             ev.Attacker == null ||
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
             Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type) ||
-            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker) || 
+            ApplyFixedDamage.IsApplying)
             return;
 
         float reflectChance = ev.Player.IsScpRole() ? 49 : 76;
@@ -71,14 +71,15 @@ public class Druid : Ability
             ev.Target != Owner ||
             ev.Player.Role is not Scp106Role scp106 ||
             !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Target.ReferenceHub) ||
-            WeakPointAttack.ShouldIgnoreDefenses(ev.Player))
+            WeakPointAttack.ShouldIgnoreDefenses(ev.Player) || 
+            ApplyFixedDamage.IsApplying)
             return;
 
         bool isCorroding = ev.Player.IsEffectActive<Corroding>();
         int attackDamage = 0;
         if (!isCorroding)
         {
-            if (!scp106.SubroutineModule.TryGetSubroutine<Scp106Attack>(out Scp106Attack attack))
+            if (!scp106.SubroutineModule.TryGetSubroutine(out Scp106Attack attack))
                 return;
 
             attackDamage = attack._damage;

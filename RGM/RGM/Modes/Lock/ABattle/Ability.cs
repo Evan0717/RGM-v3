@@ -674,8 +674,7 @@ public enum AbilityType
     SYNERGY_ASSASSIN, // [시너지] 암살자
     SYNERGY_LOSER, // [시너지] 패배자
     SYNERGY_WINNER, // [시너지] 승리자
-    SYNERGY_VAMPIRE, // [시너지] 뱀파이어,
-    SYNERGY_GMAN, // [시너지] G맨
+    SYNERGY_VAMPIRE, // [시너지] 뱀파이어
     SYNERGY_RICH1, // [시너지] 부자Ⅰ
     SYNERGY_RICH2, // [시너지] 부자Ⅱ
     SYNERGY_AFK, // [시너지] AFK
@@ -686,6 +685,7 @@ public enum AbilityType
     SYNERGY_HEALER, // [시너지] 비숍
     SYNERGY_REFLECTEDLIGHT, // [시너지] 반사광
     SYNERGY_JUGGERNAUT, // [시너지] 저거너트
+    SYNERGY_SOCCERKICK, // [시너지] Soccer Kick
 }
 
 public static class AbilityTypeExtensions
