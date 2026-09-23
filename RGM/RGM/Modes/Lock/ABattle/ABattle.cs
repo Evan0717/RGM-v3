@@ -1100,7 +1100,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
 
-            var transition = Convert.ToByte(Random.Range(1, 101)) <= 5 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) +
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= 4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) +
                 (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
@@ -1117,7 +1117,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.EPIC_TRANSITION);
 
-            var transition = Convert.ToByte(Random.Range(1, 101)) <= 5 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + 
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= 4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + 
                 (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)
@@ -1134,7 +1134,7 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
 
-            var transition = Convert.ToByte(Random.Range(1, 101)) <= 5 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + 
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= 4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + 
                 (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
 
             if (transition)

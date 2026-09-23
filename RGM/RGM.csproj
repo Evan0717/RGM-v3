@@ -135,7 +135,10 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\BrilliantMind.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SoccerKick.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Instruct.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Tactic.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyFixedDamage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyInstantKill.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyLethalDamage.cs" />
@@ -145,8 +148,8 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\GrupMember.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCFail.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSTCSuccess.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSATFail.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\CSATSuccess.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\DoneDuplication.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\DopamineReleased.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\EpicTransitionFailure.cs" />

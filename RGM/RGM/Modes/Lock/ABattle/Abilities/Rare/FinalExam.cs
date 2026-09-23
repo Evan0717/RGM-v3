@@ -18,13 +18,16 @@ public class FinalExam : Ability
         Timing.CallDelayed(3.1f, () =>
         {
             if (!Owner.IsAlive) return;
-            if (Convert.ToByte(Random.Range(1, 101)) <= 5 * Owner.AbilityCount(AbilityType.NORMAL_STUDY) + 
+            if (Convert.ToByte(Random.Range(1, 101)) <= 4 * Owner.AbilityCount(AbilityType.NORMAL_STUDY) + 
                 (ABattle.CurrentExtraModes.Contains("잔칫상") ? 36 : 25))
             {
                 Owner.AddHint("기말고사 수석", "<b>능력을 3개 더 얻었습니다!</b>");
 
-                for (int i = 0; i < 3; i++) {
-                    var category = Convert.ToByte(Random.Range(1, 101)) <= 20 ? AbilityCategory.Epic : AbilityCategory.Rare;
+                for (int i = 0; i < (Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND) ? 6 : 3); i++) {
+                    var category = Convert.ToByte(Random.Range(1, 101)) <= 20 
+                        ? Convert.ToByte(Random.Range(1, 101)) <= 50 && Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND)
+                            ? AbilityCategory.Legend : AbilityCategory.Epic : AbilityCategory.Rare;
+                    
                     Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, [AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
                 }
                 Owner.AddAbility(AbilityType.DUMMY_FINALEXAMSUCCESS);
