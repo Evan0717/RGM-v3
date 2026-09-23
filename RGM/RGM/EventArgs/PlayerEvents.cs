@@ -701,7 +701,7 @@ namespace RGM.EventArgs
                   CurrentMode != ModeType.RussianRoulette &&
                   CurrentMode != ModeType.WitGame)))
             {
-                ev.Player.ApplyGodMode(9);
+                ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 10);
             }
         }
 
@@ -752,7 +752,7 @@ namespace RGM.EventArgs
                     ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
                     : ev.DamageHandler.Damage;
 
-                if (ev.Attacker != ev.Player && damage <= 65535)
+                if (ev.Attacker != ev.Player && damage <= ushort.MaxValue)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
 
                 return;
@@ -795,7 +795,7 @@ namespace RGM.EventArgs
 
                 if ((HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
                      ev.Attacker.LeadingTeam != ev.Player.LeadingTeam || Server.FriendlyFire) &&
-                    ev.Attacker != ev.Player && damage <= 65535)
+                    ev.Attacker != ev.Player && damage <= ushort.MaxValue)
                     PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
             }
         }
