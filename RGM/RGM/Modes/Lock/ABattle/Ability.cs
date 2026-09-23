@@ -286,8 +286,8 @@ public enum AbilityType
     DUMMY_TELEPORTED, // [더미] 순간이동됨
     DUMMY_FINALEXAMSUCCESS, // [더미] 기말고사 수석
     DUMMY_FINALEXAMFAIL, // [더미] 기말고사 낙제
-    DUMMY_CSTCSUCCESS, // [더미] 대학수학능력시험 1등급
-    DUMMY_CSTCFAIL, // [더미] 대학수학능력시험 9등급
+    DUMMY_CSATSUCCESS, // [더미] 대학수학능력시험 1등급
+    DUMMY_CSATFAIL, // [더미] 대학수학능력시험 9등급
     DUMMY_INFILTRATIONSUCCESS, // [더미] 침투 성공
     DUMMY_INFILTRATIONFAIL, // [더미] 침투 실패
     DUMMY_INFORMATIONLEAK, // [더미] 개인 정보 유출
@@ -437,7 +437,6 @@ public enum AbilityType
     MYTHIC_KINGSCOLOR, // [신화] 패왕색 패기
     MYTHIC_ROSEHIP, // [신화] 장미칼
     MYTHIC_HAMMER, // [신화] 철퇴
-    MYTHIC_UNLIMITED, // [신화] 무제한
     MYTHIC_ANCHOR, //[신화] 구속
     MYTHIC_SOLDIER76, // [신화] 솔져: 76
 
@@ -608,13 +607,15 @@ public enum AbilityType
     NORMAL_SCP079_ATTACKORDER, // [전용 일반] 공격 명령
     NORMAL_SCP079_WORKOUTORDER, // [전용 일반] 운동 명령
     NORMAL_SCP079_SPAMMESSAGE, // [전용 일반] 스팸 문자
+    NORMAL_SCP079_INSTRUCT, // [전용 일반] 지도
+    NORMAL_SCP079_TACTIC, // [전용 일반] 전략
 
     RARE_SCP079_OVERCURRENT, // [전용 희귀] 과전류(x)
     RARE_SCP079_OVERWHELMING, // [전용 희귀] 고대의 존재 압도
     RARE_SCP079_POWERABSORPTION, // [전용 희귀] 전력 흡수
     RARE_SCP079_PINGHOOK, // [전용 희귀] 핑 갈고리
     RARE_SCP079_AVOIDORDER, // [전용 희귀] 회피 명령
-    RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄(x)
+    RARE_SCP079_LOCKDOWN, // [전용 희귀] 봉쇄
     RARE_SCP079_REPAIR, // [전용 희귀] 수리수리 마수리
     RARE_SCP079_RESTAREA, // [전용 희귀] 휴게소
     RARE_SCP079_FREEDOM, // [전용 희귀] 자유
@@ -686,6 +687,7 @@ public enum AbilityType
     SYNERGY_REFLECTEDLIGHT, // [시너지] 반사광
     SYNERGY_JUGGERNAUT, // [시너지] 저거너트
     SYNERGY_SOCCERKICK, // [시너지] Soccer Kick
+    SYNERGY_BRILLIANTMIND, // [시너지] 수재
 }
 
 public static class AbilityTypeExtensions
