@@ -1053,17 +1053,17 @@ $"""
                 if (flag)
                 {
                     player.IsGodModeEnabled = false;
-                    ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, null);
+                    ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
                     grenade.FuseTime = 0.5f;
                     grenade.SpawnActive(player.Position, attacker);
                     if (isInstantKill)
                     {
                         ApplyInstantKill.Apply(attacker, player);
                     }
-
-                    player.Hit(attacker, player.MaxHealth);
-
-                    grenade = null;
+                    else
+                    {
+                        player.Hit(attacker, player.MaxHealth);
+                    }
                 }
 
                 yield return Timing.WaitForOneFrame;
