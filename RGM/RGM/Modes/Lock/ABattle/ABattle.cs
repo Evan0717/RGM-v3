@@ -575,7 +575,7 @@ public class ABattle : Mode
         yield return Timing.WaitForOneFrame;
 
         Tools.LoadMap("AddCamera");
-        if (CurrentExtraModes.Contains("난장판") || Convert.ToByte(Random.Range(1, 101)) <= 10)
+        if (CurrentExtraModes.Contains("난장판") || Convert.ToByte(Random.Range(1, 101)) <= 8)
         {
             Tools.LoadMap("AddWorkstation");
             foreach (var player in PlayerManager.List)
@@ -1155,7 +1155,7 @@ public class ABattle : Mode
 
         if (Convert.ToByte(Random.Range(1, 101)) <= roleAbilityChance) // 전용 능력
         {
-            int index;
+            sbyte index;
 
             do
                 index = Convert.ToSByte(Random.Range(0, 3));
@@ -1365,8 +1365,8 @@ public class ABattle : Mode
         return category switch
         {
             AbilityCategory.Ancient => 40,
-            AbilityCategory.Mythic => 30,
-            AbilityCategory.Legend => 22,
+            AbilityCategory.Mythic => 25,
+            AbilityCategory.Legend => 20,
             AbilityCategory.Epic => 15,
             AbilityCategory.Rare => 10,
             AbilityCategory.Normal => 5,
@@ -1515,9 +1515,9 @@ public class ABattle : Mode
 
             AbilityCategory GetRandom()
             {
-                return prismrand <= 15
-                    ? prismrand == 7 ? AbilityCategory.Mythic : AbilityCategory.Legend
-                    : AbilityCategory.Epic;
+                return prismrand <= 15 
+                    ? prismrand == 7 
+                        ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;
             }
 
             player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,

@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp096.Rare;
 
-[Ability("위협", "SCP-096 주변 12m에 접근한 적을 강제로 목격 대상으로 포함합니다.",
+[Ability("위협", "SCP-096 주변 18m에 접근한 적을 강제로 목격 대상으로 포함합니다.",
     AbilityCategory.Rare, AbilityType.RARE_SCP096_THREAT, RoleAbility.Scp096)]
 
 public class Threat : Ability
 {
-    private const float Range = 12f;
+    private const float Range = 18f;
     private readonly HashSet<Exiled.API.Features.Player> _targets = [];
     private CoroutineHandle _targetRefreshCoroutine;
 
