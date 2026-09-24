@@ -48,7 +48,7 @@ public class Earthquake : Ability
                      Vector3.Distance(player.Position, Owner.Position) <= Radius))
         {
             ApplyUnstable(target);
-            target.Hurt(Owner, target.MaxHealth * DamageRatio, DamageType.Scp939);
+            ApplyFixedDamage.Apply(Owner, target, target.MaxHealth * DamageRatio);
         }
     }
 
