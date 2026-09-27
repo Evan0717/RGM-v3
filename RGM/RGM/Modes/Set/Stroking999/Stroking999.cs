@@ -52,7 +52,6 @@ namespace RGM.Modes
             foreach (var player in PlayerManager.List)
             {
                 _scores[player] = 0;
-                player.EnableEffect(EffectType.Fade, intensity: 100);
             }
 
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
@@ -110,6 +109,7 @@ namespace RGM.Modes
             {
                 player.Role.Set(RoleTypeId.Tutorial);
                 player.Position = Tools.GetObjectList("SpawnSpot").GetRandomValue().position;
+                player.EnableEffect(EffectType.Fade, intensity: 100);
             }
 
             for (int countdown = 10; countdown > 0; countdown--)

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.GulliversTravels)] //Onlysub
+    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.GulliversTravels)] 
     public class GulliversTravels : Mode
     {
         public override string Name => "걸리버 여행기";
