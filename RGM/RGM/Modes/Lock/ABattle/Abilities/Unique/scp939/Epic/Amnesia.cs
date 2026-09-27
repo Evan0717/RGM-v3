@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Unique.Scp939.Epic;
 
-[Ability("기억 소거", "반경 22m 내의 모든 적에게 『기억 소거 · 강화』 효과를 적용합니다.",
+[Ability("기억 소거", "반경 11m 내의 모든 적에게 『기억 소거 · 강화』 효과를 적용합니다.",
     AbilityCategory.Epic, AbilityType.EPIC_SCP939_AMNESIA, RoleAbility.Scp939)]
 
 public class Amnesia : Ability
@@ -27,11 +27,9 @@ public class Amnesia : Ability
     {
         while (true)
         {
-            foreach (var near in PlayerManager.List.Where(x => x.IsAlive
-                                                               && x != Owner
-                                                               && Vector3.Distance(x.Position, Owner.Position) <= 22
-                                                               && HitboxIdentity.IsEnemy(Owner.ReferenceHub,
-                                                                   x.ReferenceHub)))
+            foreach (var near in PlayerManager.List.Where(x =>
+                         x.IsAlive && x != Owner && Vector3.Distance(x.Position, Owner.Position) <= 11 &&
+                         HitboxIdentity.IsEnemy(Owner.ReferenceHub, x.ReferenceHub)))
             {
                 near.AddEffect(EffectType.AmnesiaItems, 1, 1.5f);
                 near.AddEffect(EffectType.AmnesiaVision, 1, 1.5f);
