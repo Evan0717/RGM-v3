@@ -28,6 +28,24 @@ namespace RGM.EventArgs
 {
     public static class PlayerEvents
     {
+        private static bool TryGetPlayerReport(Player player, out PlayerReport report)
+        {
+            report = null;
+
+            if (player == null || string.IsNullOrEmpty(player.UserId))
+                return false;
+
+            if (PlayersReport.TryGetValue(player.UserId, out report))
+                return true;
+
+            report = new PlayerReport
+            {
+                LastDeath = DateTime.MinValue
+            };
+            PlayersReport.Add(player.UserId, report);
+            return true;
+        }
+
         public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
             if (ev.Player == null)
@@ -568,7 +586,7 @@ namespace RGM.EventArgs
 
         public static void OnSpawned(SpawnedEventArgs ev)
         {
-            if (ev.Player.IsNPC || ev.Player == null || ev.Player.IsHost)
+            if (ev.Player == null || ev.Player.IsNPC || ev.Player.IsHost || string.IsNullOrEmpty(ev.Player.UserId))
                 return;
 
             ev.Player.EnableEffect(EffectType.FogControl, 1);
@@ -606,8 +624,8 @@ namespace RGM.EventArgs
                 if (Round.IsLobby || ev.Reason == SpawnReason.RoundStart)
                 {
                 }
-                else
-                    PlayersReport[ev.Player.UserId].Revive += 1;
+                else if (TryGetPlayerReport(ev.Player, out var report))
+                    report.Revive += 1;
 
                 if (ev.Player.IsScpRole())
                     Timing.RunCoroutine(ScpGlow(ev.Player));
@@ -839,10 +857,13 @@ namespace RGM.EventArgs
 
         public static void OnDied(DiedEventArgs ev)
         {
-            if (ev.Player.IsNonePlayer() ||
+            if (ev.Player == null ||
+                ev.Player.IsNonePlayer() ||
                 Round.IsEnded ||
                 (ev.Attacker != null && ev.Attacker.IsNonePlayer()))
                 return;
+
+            string victimUserId = ev.Player.UserId;
 
             // 저장된 효과 삭제
             if (EffectIntensities.TryGetValue(ev.Player, out var effectIntensities))
@@ -865,29 +886,33 @@ namespace RGM.EventArgs
                 string MessageFormat()
                 {
                     return ev.Attacker == null
-                        ? $"{(PlayersInfo.ContainsKey(ev.Player.UserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}"
+                        ? $"{(!string.IsNullOrEmpty(victimUserId) && PlayersInfo.ContainsKey(victimUserId) && ev.DamageHandler.Type == DamageType.Unknown ? "⏳ <color=#FF0000><b>SCP 탈주</b></color>(3분 내로 재접속 가능)" : "💀 <color=#A4A4A4>자살</color>")}ㅣ{Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}"
                         : $"💔 <color=#FAAC58>{(ev.Player.IsCuffed ? "<b>체포킬</b>(신고 가능 여부는 규칙 확인)" : "사살")}</color>ㅣ{Tools.BadgeFormat(ev.Attacker)}<color=#F2F5A9><i>{ev.Attacker.DisplayNickname}</i></color>(<color={ev.Attacker.Role.Color.ToHex()}>{Trans.Role[ev.Attacker.Role.Type]}</color>) -> {Tools.BadgeFormat(ev.Player)}<color=#F2F5A9>{ev.Player.DisplayNickname}</color>(<color={ev.TargetOldRole.GetColor().ToHex()}>{Trans.Role[ev.TargetOldRole]}</color>) - {ev.DamageHandler.Type}";
                 }
 
                 foreach (var player in PlayerManager.List.Where(x => x.IsDead || x == ev.Attacker))
                     player.AddBroadcast(10, $"<size=20>{MessageFormat()}</size>", tag: "kill");
 
-                if (ev.Attacker != null && !ev.Attacker.IsNPC)
+                if (ev.Attacker != null && !ev.Attacker.IsNPC &&
+                    TryGetPlayerReport(ev.Attacker, out var attackerReport))
                 {
-                    PlayersReport[ev.Attacker.UserId].Kill += 1;
+                    attackerReport.Kill += 1;
 
                     if (ev.TargetOldRole.IsScpRole())
-                        PlayersReport[ev.Attacker.UserId].KillScp += 1;
+                        attackerReport.KillScp += 1;
                     else
-                        PlayersReport[ev.Attacker.UserId].KillHuman += 1;
+                        attackerReport.KillHuman += 1;
 
                     if (PlayersAudio.TryGetValue(ev.Attacker, out var attackerAudio))
                         attackerAudio.TryPlay("Overwatch2Kill", 2);
                 }
 
                 if (ev.Player.IsNPC) return;
-                PlayersReport[ev.Player.UserId].Death += 1;
-                PlayersReport[ev.Player.UserId].LastDeath = DateTime.UtcNow;
+                if (TryGetPlayerReport(ev.Player, out var victimReport))
+                {
+                    victimReport.Death += 1;
+                    victimReport.LastDeath = DateTime.UtcNow;
+                }
             }
         }
 

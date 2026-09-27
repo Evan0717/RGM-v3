@@ -22,6 +22,7 @@ public class ABattleEventHandler(ABattle aBattle)
 {
     public static ABattleEventHandler Instance;
     private readonly Dictionary<Player, List<AbilityType>> _pendingAbilityRestores = [];
+    private readonly Dictionary<Player, HashSet<WorkstationController>> _dementiaFailedWorkstations = [];
 
     internal void RegisterEvents()
     {
@@ -65,6 +66,7 @@ public class ABattleEventHandler(ABattle aBattle)
     private void OnLeft(LeftEventArgs ev)
     {
         _pendingAbilityRestores.Remove(ev.Player);
+        _dementiaFailedWorkstations.Remove(ev.Player);
         aBattle.CleanupPlayer(ev.Player);
     }
 
@@ -99,6 +101,9 @@ public class ABattleEventHandler(ABattle aBattle)
         var controller = hit.transform.GetComponentInParent<WorkstationController>();
 
         if (controller == null) return;
+        if (IsDementiaReuseBlocked(ev.Player, controller))
+            return;
+
         if (!ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
             return;
 
@@ -169,6 +174,9 @@ public class ABattleEventHandler(ABattle aBattle)
         var controller = hit.transform.GetComponentInParent<WorkstationController>();
 
         if (controller == null) return;
+        if (IsDementiaReuseBlocked(ev.Player, controller))
+            return;
+
         if (!ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
             return;
 
@@ -205,6 +213,43 @@ public class ABattleEventHandler(ABattle aBattle)
 
             aBattle.StartSelect(ev.Player);
         }
+    }
+
+    private bool IsDementiaReuseBlocked(Player player, WorkstationController controller)
+    {
+        if (!ABattle.CurrentExtraModes.Contains("치매"))
+            return false;
+
+        if (!aBattle.PlayerWorkstations.TryGetValue(player, out var workstations) ||
+            !workstations.Contains(controller))
+        {
+            // LuckyVicky 등으로 기록이 초기화된 경우에는 다시 사용할 수 있다.
+            if (_dementiaFailedWorkstations.TryGetValue(player, out var failedWorkstations))
+                failedWorkstations.Remove(controller);
+
+            return false;
+        }
+
+        if (!_dementiaFailedWorkstations.TryGetValue(player, out var failed))
+        {
+            failed = [];
+            _dementiaFailedWorkstations.Add(player, failed);
+        }
+
+        // 이미 실패한 워크스테이션은 기록 초기화 능력이 있기 전까지 재시도할 수 없다.
+        if (failed.Contains(controller))
+            return true;
+
+        if (Convert.ToByte(Random.Range(1, 101)) <= 30)
+        {
+            // 전체 기록이 아닌, 이번에 사용한 워크스테이션의 기록만 제거한다.
+            player.AddHint("워크 치매", "<b><color=#D23265>내가 이 워크스테이션을 먹었던가...?</color></b>", 2);
+            workstations.Remove(controller);
+            return false;
+        }
+
+        failed.Add(controller);
+        return true;
     }
 
     private void OnSpawningFlamingos(SpawningFlamingosEventArgs ev)

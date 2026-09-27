@@ -117,8 +117,8 @@ public class ABattle : Mode
     public static readonly Dictionary<string, string> ExtraModes = new()
     {
         { "기본", "워크스테이션 업그레이드를 즐기세요!" },
-        //{"치매", "25% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
-        { "반사경", "능력 획득 시, 25% 확률로 반사경 효과가 적용됩니다." },
+        { "치매", "30% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
+        { "반사경", "능력 획득 시, 40% 확률로 능력이 복제됩니다." },
         { "수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다." },
         { "골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)" },
         {
@@ -126,8 +126,7 @@ public class ABattle : Mode
             $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."
         },
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
-        //{"스펙업", "능력을 획득할 때마다 기본 최대 체력의 인간 9%, SCP 1.5%만큼 최대 체력이 증가합니다."},
-        { "스펙업", "능력을 획득할 때마다 10(SCP 50)만큼 최대 체력이 증가합니다." },
+        { "스펙업", "능력을 획득할 때마다 15(SCP 45)만큼 최대 체력이 증가합니다." },
         { "캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다." },
         { "대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 18% 확률로 아사합니다." },
         { "지원", "1~3분마다 모두에게 능력 선택창이 열립니다." },
@@ -779,11 +778,11 @@ public class ABattle : Mode
         if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
             Abilities[type].Category != AbilityCategory.Synergy)
         {
-            // 추가 모드 반사경: 25% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 2회까지.
+            // 추가 모드 반사경: 40% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 1회까지.
             if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
-                Convert.ToByte(Random.Range(1, 101)) <= 25)
+                Convert.ToByte(Random.Range(1, 101)) <= 40)
             {
-                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 1);
+                AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 2);
             }
         }
 
@@ -837,7 +836,7 @@ public class ABattle : Mode
             float healthIncrease = baseMaxHealth * (player.IsScpRole() ? 0.015f : 0.12f);*/
             // 왜 이 코드가 서버렉을 유발하는지 모르겠음
 
-            var healthIncrease = player.IsScpRole() ? 50 : 10;
+            var healthIncrease = player.IsScpRole() ? 45 : 15;
 
             player.MaxHealth += healthIncrease;
             player.Health += healthIncrease;
@@ -956,10 +955,16 @@ public class ABattle : Mode
 
         PlayerWorkstations.Remove(player);
         Selections.Remove(player);
-        IsSelecting.Remove(player);
+        lock (_selectionLock)
+        {
+            IsSelecting.Remove(player);
+        }
         IsLifeUsed.Remove(player);
         LastDeathRoles.Remove(player);
-        SelectionCursor.Remove(player);
+        lock (_cursorLock)
+        {
+            SelectionCursor.Remove(player);
+        }
     }
 
     // 플레이어로부터 모든 능력 제거
@@ -1225,39 +1230,51 @@ public class ABattle : Mode
 
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
-        var abilities = Selections[player];
-
         for (var i = 0; i < 100; i++)
         {
-            lock (_selectionLock)
-            {
-                if (player.IsDead || !Selections.ContainsKey(player))
-                {
-                    Selections.Remove(player);
-                    SelectionCursor.Remove(player);
-                    IsSelecting[player] = false;
-                    player.AddHint("능력 선택", "", 0.2f);
+            string text = null;
+            bool shouldClose = false;
 
-                    yield break;
+            lock (_cursorLock)
+            {
+                lock (_selectionLock)
+                {
+                    if (player.IsDead ||
+                        !Selections.TryGetValue(player, out var abilities) ||
+                        abilities.Count == 0)
+                    {
+                        Selections.Remove(player);
+                        SelectionCursor.Remove(player);
+                        IsSelecting[player] = false;
+                        shouldClose = true;
+                    }
+                    else
+                    {
+                        text = BuildSelectionText(abilities);
+                    }
+                }
+
+                if (shouldClose)
+                {
+                    player.AddHint("능력 선택", "", 0.2f);
+                }
+                else
+                {
+                    player.AddHint("능력 선택",
+                        $"""
+                         <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(100 - i) / 5})</b></size>
+
+                         <size=30>{text}</size>
+
+                         <size=25><b>위/아래 키로 선택 후, Enter 키로 확정하세요.</b></size>
+                         <size=20><color=#bcbcbc><i>[ESC] -> [Settings] -> [Server-specific]</i></color></size></align>
+                         """,
+                        1f);
                 }
             }
 
-            var text = BuildSelectionText();
-            player.AddHint("능력 선택",
-                $"""
-                 <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(100 - i) / 5})</b></size>
-
-                 <size=30>{text}</size>
-
-                 <size=25><b>위/아래 키로 선택 후, Enter 키로 확정하세요.</b></size>
-                 <size=20><color=#bcbcbc><i>[ESC] -> [Settings] -> [Server-specific]</i></color></size></align>
-
-
-
-
-
-                 """,
-                1f);
+            if (shouldClose)
+                yield break;
 
             yield return Timing.WaitForSeconds(0.2f);
         }
@@ -1311,7 +1328,7 @@ public class ABattle : Mode
             return "알 수 없음";
         }
 
-        string BuildSelectionText()
+        string BuildSelectionText(List<AbilityType> abilities)
         {
             if (!SelectionCursor.ContainsKey(player))
                 SelectionCursor[player] = 0;
@@ -1324,7 +1341,9 @@ public class ABattle : Mode
             {
                 string prefix = i == cursor ? "▶ " : "   ";
                 return
-                    $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>{(HolidayFormat(x, out string result) ? $"{result} " : "")}{Abilities[x].Description}</size>\n";
+                    $"{prefix}[{i + 1}] {x.GetTranslation()}\n<size=20>" +
+                    $"{(HolidayFormat(x, out string result) ? $"{result} " : "")}" +
+                    $"{Abilities[x].Description}</size>\n";
             }));
         }
     }
@@ -1377,28 +1396,31 @@ public class ABattle : Mode
     public bool Select(Player player, int index, out string response)
     {
         AbilityType ability;
-
-        lock (_selectionLock)
+        
+        lock (_cursorLock)
         {
-            if (!Selections.TryGetValue(player, out var abilities) || abilities.Count == 0)
+            lock (_selectionLock)
             {
-                response = "선택할 수 있는 능력이 없습니다.";
-                return false;
+                if (!Selections.TryGetValue(player, out var abilities) || abilities.Count == 0)
+                {
+                    response = "선택할 수 있는 능력이 없습니다.";
+                    return false;
+                }
+
+                if (index < 1 || index > abilities.Count)
+                {
+                    response = $"{index}번에 할당된 능력이 존재하지 않습니다.";
+                    return false;
+                }
+
+                Log.Info("Select called with " + player.Nickname + " and " + index);
+
+                // 첫 입력이 선택권을 즉시 소비하도록 처리해 다음 프레임에 도착한 입력을 차단한다.
+                ability = abilities[index - 1];
+                Selections.Remove(player);
+                SelectionCursor.Remove(player);
+                IsSelecting[player] = false;
             }
-
-            if (index < 1 || index > abilities.Count)
-            {
-                response = $"{index}번에 할당된 능력이 존재하지 않습니다.";
-                return false;
-            }
-
-            Log.Info("Select called with " + player.Nickname + " and " + index);
-
-            // 첫 입력이 선택권을 즉시 소비하도록 처리해 다음 프레임에 도착한 입력을 차단한다.
-            ability = abilities[index - 1];
-            Selections.Remove(player);
-            SelectionCursor.Remove(player);
-            IsSelecting[player] = false;
         }
 
         if (!AddAbility(player, ability))
@@ -1468,8 +1490,11 @@ public class ABattle : Mode
         if (!Selections.ContainsKey(player))
             Selections.Add(player, []);
 
-        if (!IsSelecting.ContainsKey(player))
-            IsSelecting.Add(player, false);
+        lock (_selectionLock)
+        {
+            if (!IsSelecting.ContainsKey(player))
+                IsSelecting.Add(player, false);
+        }
 
         if (!IsLifeUsed.ContainsKey(player))
             IsLifeUsed.Add(player, false);

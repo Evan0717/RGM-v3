@@ -18,9 +18,14 @@ public class Magician : Ability
 
     private void OnHurt(HurtEventArgs ev)
     {
-        if (ev.Player != Owner || ev.Attacker == null || !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Attacker.ReferenceHub))
+        if (ev.Player != Owner || 
+            ev.Attacker == null || 
+            !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, ev.Attacker.ReferenceHub))
             return;
-
+        
+        if (ABattle.Instance.GetAbility(Owner, AbilityType.LEGEND_MAGICIAN) != this)
+            return;
+        
         var add = ev.DamageHandler.Damage * 0.85f;
         ev.Player.MaxHealth += add;
         ev.Player.Health += add;

@@ -135,6 +135,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Operator.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\BrilliantMind.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SoccerKick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Instruct.cs" />

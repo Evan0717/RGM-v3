@@ -423,6 +423,7 @@ public enum AbilityType
     LEGEND_GAMBLER, // [전설] 도박사
     LEGEND_RESURRECTION, // [전설] 리저렉션
     LEGEND_UNLIMITEDAMMO, // [전설] 무한 탄환
+    LEGEND_OPERATOR, // [전설] 오퍼레이터
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처

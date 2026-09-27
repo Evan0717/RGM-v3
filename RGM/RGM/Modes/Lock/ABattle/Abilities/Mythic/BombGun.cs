@@ -20,7 +20,7 @@ public class BombGun : Ability
     private const float WarMachineGrenadeDamageMultiplier = 0.6f;
 
     private ushort _itemSerial;
-    private readonly List<ExplosionGrenadeProjectile> _bombGunGrenades = new();
+    private readonly Dictionary<ExplosionGrenadeProjectile, Vector3> _bombGunGrenadePositions = new();
 
     public override void OnEnabled()
     {
@@ -35,7 +35,7 @@ public class BombGun : Ability
 
     public override void OnDisabled()
     {
-        _bombGunGrenades.Clear();
+        _bombGunGrenadePositions.Clear();
     }
 
     private void OnChangedItem(ChangedItemEventArgs ev)
@@ -66,7 +66,8 @@ public class BombGun : Ability
         if (ABattle.Instance.HasAbility(ev.Player, AbilityType.MYTHIC_BOMBGUN))
             ev.DamageHandler.Damage *= OwnerExplosionDamageMultiplier;
 
-        if (ev.Attacker == Owner && _bombGunGrenades.Any(grenade => grenade != null && Vector3.Distance(grenade.Position, ev.Player.Position) <= 10f))
+        if (ev.Attacker == Owner &&
+            _bombGunGrenadePositions.Values.Any(position => Vector3.Distance(position, ev.Player.Position) <= 10f))
             ev.DamageHandler.Damage *= WarMachineGrenadeDamageMultiplier;
     }
 
@@ -77,11 +78,19 @@ public class BombGun : Ability
         if (throwable.Projectile is not ExplosionGrenadeProjectile grenade)
             yield break;
 
-        _bombGunGrenades.Add(grenade);
+        if (!TryGetPosition(grenade, out Vector3 position))
+            yield break;
+
+        _bombGunGrenadePositions[grenade] = position;
 
         while (!grenade.IsAlreadyDetonated)
         {
-            if (Physics.OverlapSphere(grenade.Position, 0.3f).Count() > 4)
+            if (!TryGetPosition(grenade, out position))
+                break;
+
+            _bombGunGrenadePositions[grenade] = position;
+
+            if (Physics.OverlapSphere(position, 0.3f).Count() > 4)
             {
                 grenade.Base.Network_syncTargetTime = 0.1f;
             }
@@ -89,6 +98,25 @@ public class BombGun : Ability
             yield return Timing.WaitForOneFrame;
         }
 
-        Timing.CallDelayed(0.5f, () => _bombGunGrenades.Remove(grenade));
+        Timing.CallDelayed(0.5f, () => _bombGunGrenadePositions.Remove(grenade));
+    }
+
+    private static bool TryGetPosition(ExplosionGrenadeProjectile grenade, out Vector3 position)
+    {
+        try
+        {
+            position = grenade.Position;
+            return true;
+        }
+        catch (MissingReferenceException)
+        {
+            position = default;
+            return false;
+        }
+        catch (System.NullReferenceException)
+        {
+            position = default;
+            return false;
+        }
     }
 }
