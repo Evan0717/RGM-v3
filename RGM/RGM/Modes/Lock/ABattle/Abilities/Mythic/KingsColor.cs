@@ -108,9 +108,7 @@ public class KingsColor : Ability
 
                     foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != Owner))
                     {
-                        player.RemoveAllAbilities();
-                        if (GodModePlayers.Contains(player)) GodModePlayers.Remove(player);
-                        player.Kill("패기에 의해 공중분해 되었습니다");
+                        ApplyInstantKill.Apply(Owner, player);
                     }
                 });
 
