@@ -25,7 +25,7 @@ public class Soldier76 : Ability
     private ushort _serial;
     private Item _item;
     
-    public  override void OnEnabled()
+    public override void OnEnabled()
     {
         _item = Owner.AddItem(ItemType.GunE11SR);
         _serial = _item.Serial;
@@ -48,14 +48,17 @@ public class Soldier76 : Ability
         }
     }
 
-    private void OnChangedItem(ChangedItemEventArgs e)
+    private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        if (e.Player == null || e.Player.IsDead) return;
+        if (ev.Player == null || ev.Player.IsDead) return;
         
-        if (e.Player.CurrentItem?.Serial == _serial)
-            e.Player.AddEffect(EffectType.Scp1344, 1);
+        if (ev.Item?.Serial == _serial)
+        {
+            ev.Player.AddEffect(EffectType.Scp1344, 1);
+            ev.Player.AddHint("솔져76", $"<b><color={ABattle.RatingColor["신화"]}>솔져:76</color></b> 능력이 있는 E11sr 입니다.");
+        }
         else 
-            e.Player.RemoveEffect(EffectType.Scp1344, 1);
+            ev.Player.RemoveEffect(EffectType.Scp1344, 1);
     }
     
     private void OnShooting(ShootingEventArgs ev)
@@ -77,7 +80,8 @@ public class Soldier76 : Ability
             (hit != null && 
              hit.Value.collider.gameObject != player.GameObject))
         {
-            player.Hurt(new FirearmDamageHandler(ev.Firearm.Base, ev.Firearm.Damage * multiplier,
+            player.Hurt(new FirearmDamageHandler(ev.Firearm.Base,
+                ev.Firearm.Damage * multiplier + player.MaxHealth * 0.093f,
                 ev.Firearm.Penetration));
             ev.Player.ShowHitMarker();
         }

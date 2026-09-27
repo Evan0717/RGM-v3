@@ -1230,7 +1230,7 @@ public class ABattle : Mode
 
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < 80; i++)
         {
             string text = null;
             bool shouldClose = false;
@@ -1256,13 +1256,13 @@ public class ABattle : Mode
 
                 if (shouldClose)
                 {
-                    player.AddHint("능력 선택", "", 0.2f);
+                    player.AddHint("능력 선택", "", 0.25f);
                 }
                 else
                 {
                     player.AddHint("능력 선택",
                         $"""
-                         <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(100 - i) / 5})</b></size>
+                         <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(80 - i) / 4})</b></size>
 
                          <size=30>{text}</size>
 
@@ -1276,7 +1276,7 @@ public class ABattle : Mode
             if (shouldClose)
                 yield break;
 
-            yield return Timing.WaitForSeconds(0.2f);
+            yield return Timing.WaitForSeconds(0.25f);
         }
 
         AbilityType selectedAbility;
@@ -1292,7 +1292,7 @@ public class ABattle : Mode
             IsSelecting[player] = false;
         }
 
-        player.AddHint("능력 선택", "", 0.2f);
+        player.AddHint("능력 선택", "", 0.25f);
         player.AddAbility(selectedAbility);
 
         yield break;
