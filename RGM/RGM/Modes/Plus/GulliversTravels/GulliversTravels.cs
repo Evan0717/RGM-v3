@@ -15,10 +15,10 @@ namespace RGM.Modes
         public override string Description => "모두가 소인화가 되었습니다!";
         public override string Detail =>
 """
-크기가 90% 작아지고 점프력이 70% 증가합니다.
+크기가 60% 작아지고 점프력이 50% 증가합니다.
 """;
         public override string Color => "473417";
-        private const float Scale = 0.9f;
+        private const float Scale = 0.6f;
         CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
@@ -33,7 +33,7 @@ namespace RGM.Modes
             Timing.KillCoroutines(_onModeStarted);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             yield return Timing.WaitForSeconds(2f);
 
@@ -44,15 +44,17 @@ namespace RGM.Modes
 
             yield break;
         }
-        public void OnSpawned(SpawnedEventArgs ev)
+
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
-        public void Spawned(Player player) 
+
+        private static void Spawned(Player player) 
         {
             if (player == null || !player.IsAlive) return;
             player.Scale = new Vector3(player.Scale.x - Scale, player.Scale.y - Scale, player.Scale.z - Scale);
-            player.EnableEffect(EffectType.Lightweight, 70);
+            player.EnableEffect(EffectType.Lightweight, 50);
         }
         
     }
