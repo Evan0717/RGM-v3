@@ -122,15 +122,19 @@ namespace RGM.Modes
                     var g2 = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Server.Host);
                     g2.FuseTime = 3f;
                     g2.SpawnActive(GetRandomPosition(), Server.Host);
+                    g2.SpawnActive(GetRandomPosition(), Server.Host);
                     
                     var f2 = (FlashGrenade)Item.Create(ItemType.GrenadeFlash);
                     f2.FuseTime = 2f;
                     f2.SpawnActive(GetRandomPosition());
+                    f2.SpawnActive(GetRandomPosition());
                     
                     var scp244 = (Scp244)Item.Create(new List<ItemType>() { ItemType.SCP244a, ItemType.SCP244b }.GetRandomValue(), Server.Host);
                     scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
+                    scp244.CreatePickup(GetRandomPosition(), new Quaternion(45, 0, 0, 0));
                     
                     var scp018 = (Scp018)Item.Create(ItemType.SCP018, Server.Host);
+                    scp018.SpawnActive(GetRandomPosition(), Server.Host);
                     scp018.SpawnActive(GetRandomPosition(), Server.Host);
                 }
 
