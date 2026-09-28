@@ -167,7 +167,8 @@ public enum ModeType
     DistractedDriver,
     Scp1509Hand,
     Stroking999,
-    GulliversTravels
+    GulliversTravels,
+    SpearShield,
 }
 
 

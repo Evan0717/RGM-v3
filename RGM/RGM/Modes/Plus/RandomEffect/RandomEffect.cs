@@ -1,5 +1,4 @@
-﻿using DiscordInteraction.Discord;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -7,11 +6,10 @@ using MEC;
 using RGM.API.Features;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.OnlySub, ModeInfo.Plus, ModeType.RandomEffect)]
+    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.RandomEffect)]
     class RandomEffect : Mode
     {
         public override string Name => "랜덤효과";
