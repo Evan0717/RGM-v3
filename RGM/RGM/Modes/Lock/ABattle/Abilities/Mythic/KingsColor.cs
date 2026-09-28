@@ -40,8 +40,8 @@ public class KingsColor : Ability
     {
         _lightSource = LabApi.Features.Wrappers.LightSourceToy.Create();
         _lightSource.Color = Color.red;
-        _lightSource.Intensity = 40;
-        _lightSource.Range = 10;
+        _lightSource.Intensity = 8;
+        _lightSource.Range = 24;
 
         while (Owner.IsAlive)
         {
@@ -92,6 +92,7 @@ public class KingsColor : Ability
 
                     foreach (var player in PlayerManager.List.Where(x => x.IsAlive && Owner.LeadingTeam != x.LeadingTeam))
                     {
+                        player.EnableEffect(EffectType.Ensnared, 1, 1);
                         player.EnableEffect(EffectType.SinkHole, 1, 3);
                         player.EnableEffect(EffectType.Blinded, 1, 3);
                     }

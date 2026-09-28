@@ -26,10 +26,6 @@ public static class ApplyLethalDamage
         if (!target.IsAlive || target.MaxHealth <= 0f)
             return false;
 
-        return ApplyFixedDamage.Apply(
-            attacker,
-            target,
-            target.MaxHealth,
-            deathReason);
+        return ApplyFixedDamage.Apply(attacker, target, target.MaxHealth, deathReason);
     }
 }
