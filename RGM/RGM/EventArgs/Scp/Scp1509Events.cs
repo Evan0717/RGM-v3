@@ -9,17 +9,9 @@ namespace RGM.EventArgs
     {
         public static void OnResurrecting(ResurrectingEventArgs ev)
         {
-            if (!ev.Player.IsScpRole()) return;
-            ev.IsAllowed = false;
-                
+            // SCP-1509에 의해 부활한 대상은 1509Resurrected 이펙트를 적용받지 않게 함.
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
-            {
-                if (ev.Player.IsScp)
-                    ev.Victim.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
-
-                else
-                    ev.Victim.Role.Set(ev.Player.Role.Type, RoleSpawnFlags.None);
-            });
+                ev.Player.DisableEffect<CustomPlayerEffects.Scp1509Resurrected>());
         }
     }
 }
