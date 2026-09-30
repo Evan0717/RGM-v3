@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 namespace RGM.Modes.Abilities.Mythic;
 
 [Ability("조커", """
-               사망할 시 부활하며 최대 체력이 5배 증가하고, 10초간 생존 보정을 받습니다.
+               사망할 시 부활하며 최대 체력이 5배 증가하고, 10초간 『생존』 효과를 받습니다.
                추가로, 전설(15% 확률로 신화) 능력 5개를 얻습니다.
                """, 
     AbilityCategory.Mythic, AbilityType.MYTHIC_JOKER)]
@@ -30,8 +30,9 @@ public class Joker : Ability
 
         ev.IsAllowed = false;
 
-        ev.Player.AddEffect(EffectType.Invisible,1 ,10);
-        ev.Player.AddEffect(EffectType.Ghostly,1 ,10);
+        ev.Player.AddEffect(EffectType.Invisible,1,10);
+        ev.Player.AddEffect(EffectType.Ghostly,1,10);
+        ev.Player.AddEffect(EffectType.MovementBoost,40,10);
         ev.Player.ApplyGodMode(10);
 
         ev.Player.MaxHealth *= 5;

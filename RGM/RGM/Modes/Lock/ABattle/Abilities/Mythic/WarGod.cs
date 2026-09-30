@@ -3,6 +3,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
+using Exiled.Events.EventArgs.Item;
 
 namespace RGM.Modes.Abilities.Mythic;
 
@@ -20,6 +21,7 @@ public class WarGod : Ability
 
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
+        Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
     }
 
     private void OnChangedItem(ChangedItemEventArgs ev)
@@ -49,7 +51,6 @@ public class WarGod : Ability
                 {
                     if (ev.Attacker.CurrentItem is Jailbird jailbird)
                     {
-                        jailbird.TotalCharges = 0;
                         jailbird.TotalDamageDealt = 0;
                     } 
 
@@ -68,5 +69,13 @@ public class WarGod : Ability
         if (ev.Player != Owner) return;
         if (ev.DamageHandler.Type == DamageType.Explosion)
             ev.IsAllowed = false;
+    }
+    
+    private void OnChargingJailbird(ChargingJailbirdEventArgs ev)
+    {
+        if (ev.Item == null || ev.Player == null) return;
+        if (ev.Item?.Serial != _lightWarriorSerial) return;
+            
+        ev.Item.As<Jailbird>().TotalCharges = 0;
     }
 }
