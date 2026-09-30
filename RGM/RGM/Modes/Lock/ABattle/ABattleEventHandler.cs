@@ -240,7 +240,7 @@ public class ABattleEventHandler(ABattle aBattle)
         if (failed.Contains(controller))
             return true;
 
-        if (Convert.ToByte(Random.Range(1, 101)) <= 30)
+        if (Convert.ToByte(Random.Range(1, 101)) <= 33)
         {
             // 전체 기록이 아닌, 이번에 사용한 워크스테이션의 기록만 제거한다.
             player.AddHint("워크 치매", "<b><color=#D23265>내가 이 워크스테이션을 먹었던가...?</color></b>", 2);

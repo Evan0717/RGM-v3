@@ -135,6 +135,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattle.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Terminal.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Operator.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\BrilliantMind.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SoccerKick.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyLethalDamage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Satellite.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\GrupMember.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\BackedUp.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\ColdStew.cs" />

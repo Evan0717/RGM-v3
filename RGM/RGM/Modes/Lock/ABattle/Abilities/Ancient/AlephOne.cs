@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -12,28 +13,28 @@ namespace RGM.Modes.Abilities.Ancient;
     "ALEPH-1", 
     """
     <color=#FF3131>모든 것을 허무로 되돌려버립니다.</color>
-    획득 시, 자신과 아군을 제외한 모든 상대의 체력을 1로 상시 고정하고, 감소된 수치만큼 본인의 최대 HP가 상승합니다.
-    추가로, 자신의 최대 HP의 30%만큼 추가 피해를 입히며, 본인은 『피격 제한』이 최대 HP의 0.1%까지 적용됩니다.
+    획득 시, 자신과 아군을 제외한 모든 상대의 체력을 초당 최대 체력의 5%만큼 감소시키며, 최대 95%까지 적용됩니다.
+    추가로, 감소된 수치만큼 본인의 최대 HP가 상승하며, 『피격 제한』이 최대 HP의 0.1%까지 적용됩니다.
     ALEPH-1은 1명만 존재할 수 있으며, 능력 획득 시 이전 ALEPH-1의 HP를 흡수한 뒤 모든 능력을 제거하고 관전자로 전환합니다.
     """,
     AbilityCategory.Ancient,
     AbilityType.ANCIENT_ALEPHONE)] 
 public class AlephOne : Ability
 {
-    private const float EnemyHealth = 1f;
-    private const float AdditionalDamageRatio = 0.3f;
+    private const float HealthReductionPerSecondRatio = 0.05f;
+    private const float MaximumHealthReductionRatio = 0.95f;
     private const float MaxHealthRatio = 0.001f;
 
     private CoroutineHandle _healthLockCoroutine;
-    private readonly HashSet<Player> _processedEnemies = [];
+    private readonly Dictionary<Player, float> _reducedHealthByEnemy = [];
 
     public override void OnEnabled()
     {        
-        _processedEnemies.Clear();
+        _reducedHealthByEnemy.Clear();
         AbsorbPreviousAlephOnes();
 
         foreach (Player enemy in PlayerManager.List.Where(IsEnemy))
-            ApplyHealthLock(enemy);
+            ApplyHealthReduction(enemy);
 
         Exiled.Events.Handlers.Player.Healing += OnHealing;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -71,7 +72,7 @@ public class AlephOne : Ability
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         Exiled.Events.Handlers.Player.Died -= OnDied;
         Timing.KillCoroutines(_healthLockCoroutine);
-        _processedEnemies.Clear();
+        _reducedHealthByEnemy.Clear();
     }
 
     private bool IsEnemy(Player player) =>
@@ -79,37 +80,33 @@ public class AlephOne : Ability
         player.IsAlive &&
         HitboxIdentity.IsEnemy(Owner.ReferenceHub, player.ReferenceHub);
 
-    private static void LockHealth(Player player)
-    {
-        player.Health = EnemyHealth;
-        player.ArtificialHealth = 0f;
-        player.HumeShield = 1f;
-    }
-
     private IEnumerator<float> LockEnemyHealth()
     {
         while (true)
         {
-            foreach (Player enemy in PlayerManager.List.Where(IsEnemy))
-                ApplyHealthLock(enemy);
+            yield return Timing.WaitForSeconds(1f);
 
-            yield return Timing.WaitForSeconds(0.5f);
+            foreach (Player enemy in PlayerManager.List.Where(IsEnemy))
+                ApplyHealthReduction(enemy);
         }
     }
 
-    private void ApplyHealthLock(Player enemy)
+    private void ApplyHealthReduction(Player enemy)
     {
-        if (_processedEnemies.Add(enemy))
-        {
-            float reducedHealth = enemy.Health - EnemyHealth;
-            if (reducedHealth > 0f)
-            {
-                Owner.MaxHealth += reducedHealth;
-                Owner.Health += reducedHealth;
-            }
-        }
+        _reducedHealthByEnemy.TryGetValue(enemy, out float reducedHealth);
+        float maximumReduction = enemy.MaxHealth * MaximumHealthReductionRatio;
+        float reduction = Math.Min(
+            enemy.MaxHealth * HealthReductionPerSecondRatio,
+            maximumReduction - reducedHealth);
+        reduction = Math.Min(reduction, Math.Max(0f, enemy.Health - (enemy.MaxHealth - maximumReduction)));
 
-        LockHealth(enemy);
+        if (reduction <= 0f)
+            return;
+
+        enemy.Health -= reduction;
+        Owner.MaxHealth += reduction;
+        Owner.Health += reduction;
+        _reducedHealthByEnemy[enemy] = reducedHealth + reduction;
     }
 
     private void OnHealing(HealingEventArgs ev)
@@ -120,7 +117,7 @@ public class AlephOne : Ability
 
     private void OnDied(DiedEventArgs ev)
     {
-        _processedEnemies.Remove(ev.Player);
+        _reducedHealthByEnemy.Remove(ev.Player);
     }
 
     private void OnHurting(HurtingEventArgs ev)
@@ -137,8 +134,5 @@ public class AlephOne : Ability
             if (ev.DamageHandler.Damage > Owner.MaxHealth * MaxHealthRatio)
                 ev.DamageHandler.Damage = Owner.MaxHealth * MaxHealthRatio;
         }
-
-        if (ev.Attacker == Owner && IsEnemy(ev.Player))
-            ev.DamageHandler.Damage += Owner.MaxHealth * AdditionalDamageRatio;
     }
 }

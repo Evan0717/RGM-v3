@@ -444,7 +444,7 @@ public enum AbilityType
     // 고대 //
     ANCIENT_ALEPHONE, // [고대] Aleph-1
     ANCIENT_EXPLOSIVEAMMO, // [고대] Anti Matter
-    ANCIENT_SATELLITE, // [고대] Satellite Attack
+    ANCIENT_TERMINAL, // [고대] Terminal
     
     
     // 전용 //

@@ -9,7 +9,7 @@ namespace RGM.Modes.Abilities.Ancient;
 [Ability(
     "ANTI MATTER",
     """
-    자신의 모든 공격에 폭발을 일으킵니다. 해당 피해는 『파열』 효과가 적용됩니다.
+    자신의 모든 공격에 폭발을 일으킵니다. 해당 피해는 『사망』 효과가 적용됩니다.
     추가로, 『피격 제한』이 1까지 적용됩니다.
     """,
     AbilityCategory.Ancient,
@@ -62,6 +62,7 @@ public class AntiMatter : Ability
         var grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
         grenade.FuseTime = 0.01f;
         grenade.SpawnActive(ev.Player.Position, Owner);
+        ApplyInstantKill.Apply(Owner, ev.Player);
     }
 
     private static void FixIncomingDamage(HurtingEventArgs ev)

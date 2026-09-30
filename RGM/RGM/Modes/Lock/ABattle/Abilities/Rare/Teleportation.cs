@@ -10,7 +10,7 @@ namespace RGM.Modes.Abilities.Rare;
 
 [Ability("순간이동", """
                  랜덤한 유저의 위치로 순간이동합니다. 
-                 순간이동 후, 5초간 생존 보정을 받습니다.
+                 순간이동 후, 5초간 『생존』 효과를 받습니다.
                  """,
     AbilityCategory.Rare, AbilityType.RARE_TELEPORTATION)]
 public class Teleportation : Ability
@@ -21,6 +21,7 @@ public class Teleportation : Ability
         Owner.Position = target.Position;
         Owner.AddEffect(EffectType.Invisible, 1, 5);
         Owner.AddEffect(EffectType.Ghostly, 1, 5);
+        Owner.AddEffect(EffectType.MovementBoost, 40, 5);
         Owner.ApplyGodMode(5);
 
         Timing.CallDelayed(0.5f, () =>

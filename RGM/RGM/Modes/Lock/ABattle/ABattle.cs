@@ -117,13 +117,14 @@ public class ABattle : Mode
     public static readonly Dictionary<string, string> ExtraModes = new()
     {
         { "기본", "워크스테이션 업그레이드를 즐기세요!" },
-        { "치매", "30% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
+        { "치매", "33% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
         { "반사경", "능력 획득 시, 40% 확률로 능력이 복제됩니다." },
         { "수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다." },
-        { "골드 전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다. (일부 능력 제한)" },
-        {
-            "프리즘 전주곡",
-            $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color>(15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color>) 등급의 능력을 얻습니다."
+        { "전주곡",
+            $"""
+             스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다.
+             30% 확률로 프리즘이 활성화되며, 이때 15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color> 등급의 능력을 얻습니다.
+             """
         },
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
         { "스펙업", "능력을 획득할 때마다 15(SCP 45)만큼 최대 체력이 증가합니다." },
@@ -1522,33 +1523,36 @@ public class ABattle : Mode
 
     public static void ApplyPrelude(Player player)
     {
-        if (CurrentExtraModes.Contains("골드 전주곡"))
+        if (CurrentExtraModes.Contains("전주곡"))
         {
             if (player.IsNonePlayer()) return;
+            var isPrismRand = Convert.ToByte(Random.Range(1, 101));
+            var categoryRand = Convert.ToByte(Random.Range(1, 101));
 
-            player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
-            [
-                AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
-                AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
-                AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
-            ]).First());
-        }
-        else if (CurrentExtraModes.Contains("프리즘 전주곡"))
-        {
-            if (player.IsNonePlayer()) return;
-            var prismrand = Convert.ToByte(Random.Range(1, 101));
-
-            AbilityCategory GetRandom()
+            AbilityCategory GetPrismRandom()
             {
-                return prismrand <= 15 
-                    ? prismrand == 7 
+                return categoryRand <= 15 
+                    ? categoryRand == 7 
                         ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;
             }
-
-            player.AddAbility(Instance.GetRandomAbilities(player, GetRandom(), 1,
-            [
-                AbilityType.EPIC_PRIEST, AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
-            ]).First());
+            
+            if (isPrismRand <= 30)
+            {
+                player.AddBroadcast(10, "<b><color=#D23265>프리즘 전주곡 활성화</color></b>");
+                player.AddAbility(Instance.GetRandomAbilities(player, GetPrismRandom(), 1,
+                [
+                    AbilityType.EPIC_PRIEST, AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
+                ]).First());
+            }
+            else
+            {
+                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+                [
+                    AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
+                    AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
+                    AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
+                ]).First());
+            }
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)
