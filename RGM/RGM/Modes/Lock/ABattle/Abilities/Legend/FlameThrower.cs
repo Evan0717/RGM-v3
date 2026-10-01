@@ -9,12 +9,11 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("화염 방사기", "위력은 41%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.",
+[Ability("화염 방사기", "위력은 45%로 낮아지지만, 상대를 불태우고 자동으로 충전되는 화염 방사기를 받습니다.",
     AbilityCategory.Legend, AbilityType.LEGEND_FLAMETHROWER)]
 public class FlameThrower : Ability
 {
     private ushort _flamethrowerSerial;
-    CoroutineHandle _onStarted;
 
     public override void OnEnabled()
     {
@@ -25,20 +24,20 @@ public class FlameThrower : Ability
         Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
 
-        _onStarted = Timing.RunCoroutine(OnStarted());
+        Timing.RunCoroutine(OnStarted());
     }
 
     private IEnumerator<float> OnStarted()
     {
         while (true)
         {
-            foreach (var Item in Item.List.Where(x => x.Type == ItemType.MicroHID))
+            foreach (var item in Item.List.Where(x => x.Type == ItemType.MicroHID))
             {
-                if (_flamethrowerSerial != Item.Serial) continue;
-                MicroHid MicroHID = (MicroHid)Item;
+                if (_flamethrowerSerial != item.Serial) continue;
+                MicroHid MicroHID = (MicroHid)item;
 
-                if (MicroHID.Energy < 1)
-                    MicroHID.Energy += 0.03f;
+                if (MicroHID.Energy < 1 && MicroHID.State == MicroHidPhase.Standby)
+                    MicroHID.Energy += 0.1f;
             }
 
             yield return Timing.WaitForSeconds(1f);
@@ -65,7 +64,7 @@ public class FlameThrower : Ability
             return;
 
         if (ev.Attacker.CurrentItem == null || _flamethrowerSerial != ev.Attacker.CurrentItem.Serial) return;
-        ev.DamageHandler.Damage *= 0.41f;
+        ev.DamageHandler.Damage *= 0.45f;
 
         ev.Player.EnableEffect(EffectType.Burned, 1, 1.5f);
     }
