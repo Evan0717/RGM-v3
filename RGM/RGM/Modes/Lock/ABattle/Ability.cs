@@ -91,6 +91,7 @@ public class AbilityData
     public List<AbilityType> Requires { get; set; }
     public bool Keep { get; set; }
     public bool _79Allowed { get; set; }
+    public bool IsUnique { get; set; }
     public RoleAbility RoleAbility { get; set; }
 
     public string GetFormattedName()
@@ -110,7 +111,8 @@ public class AbilityAttribute(
     RoleAbility roleAbility = RoleAbility.None,
     bool _79Allowed = false,
     AbilityHolidayType holidayType = AbilityHolidayType.None,
-    bool keep = false) : Attribute
+    bool keep = false,
+    bool isUnique = false) : Attribute
 {
     public string Name { get; } = name;
     public string Description { get; } = description;
@@ -120,6 +122,7 @@ public class AbilityAttribute(
     public RoleAbility RoleAbility { get; } = roleAbility;
     public AbilityHolidayType HolidayType { get; set; } = holidayType;
     public bool Keep { get; set; } = false;
+    public bool IsUnique { get; } = isUnique;
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -362,7 +365,6 @@ public enum AbilityType
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
     RARE_CLAYMORE, // [희귀] Claymore
-    RARE_SAVELOCATION, // [희귀] 위치 저장
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
@@ -372,8 +374,6 @@ public enum AbilityType
     EPIC_LUCKYVIKEY, // [영웅] 럭키비키
     EPIC_EXTREMEPOISON, // [영웅] 극독
     EPIC_SURVIVOR, // [영웅] 구사일생
-    EPIC_GHOSTRULE, // [영웅] 고스트룰
-    EPIC_DIVER, // [영웅] 잠수부
     EPIC_BLINK, // [영웅] 점멸
     EPIC_TRANSITION, // [영웅] 변이
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
@@ -386,17 +386,14 @@ public enum AbilityType
     EPIC_MADSCIENTIST, // [영웅] 매드 사이언티스트
     EPIC_SCP127, // [영웅] 인생의 동반자
     EPIC_ANTISCP207, // [영웅] 초재생
-    EPIC_FOODRESEARCHER, // [영웅] 요리 연구가,
     EPIC_SCP1509, // [영웅] 마체테
     EPIC_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSAT, // [영웅] 대학수학능력시험
-    EPIC_HOLYPROTECTION, // [영웅] 신성방어
     EPIC_AN94, // [영웅] AN-94
     EPIC_SHARPEYES, // [영웅] 샤프 아이즈
-    EPIC_TURTLE, // [영웅] 거북 도사
     EPIC_CHAINLIGHTNING, // [영웅] 체인 라이트닝
 
     // 전설 //
@@ -409,27 +406,20 @@ public enum AbilityType
     LEGEND_SCREAM, // [전설] 괴성
     LEGEND_TRANSITION, // [전설] 상급 변이
     LEGEND_CANDYADDICT, // [전설] 마약 중독자
-    LEGEND_REFLECTOR, // [전설] 반사경
-    LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
     LEGEND_LAVACHICKEN, // [전설] Lava Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
     LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
-    LEGEND_REPLICATION, // [전설] 복제
-    LEGEND_CLEARCACHE, // [전설] 캐시 청소
     LEGEND_REINCARNATION, // [전설] 리인카네이션
     LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
-    LEGEND_GAMBLER, // [전설] 도박사
     LEGEND_RESURRECTION, // [전설] 리저렉션
     LEGEND_UNLIMITEDAMMO, // [전설] 무한 탄환
     LEGEND_OPERATOR, // [전설] 오퍼레이터
 
     // 신화 //
     MYTHIC_ROCKETLAUNCHER, // [신화] 로켓 런처
-    MYTHIC_SPIRIT, // [신화] 스피릿
     MYTHIC_EYEMAN, // [신화] 눈빛맨
-    MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
     MYTHIC_JOKER, // [신화] 조커
     MYTHIC_BOMBGUN, // [신화] 워 머신
     MYTHIC_WARGOD, // [신화] 광전사
@@ -446,6 +436,30 @@ public enum AbilityType
     ANCIENT_EXPLOSIVEAMMO, // [고대] Anti Matter
     ANCIENT_TERMINAL, // [고대] Terminal
     
+    // 유니크 //
+    // 유니크 능력은 선택창에서 한 번만 획득 가능하며, 반사경이나 복제 등으로 능력 개수가 변동되지 않음.
+    // 능력 강탈 또는 랜덤 획득을 통해서 능력을 획득할 때에도 유니크로 지정된 능력은 항상 1개로 적용.(없으면 가져오고, 있으면 제외)
+
+    // 유니크 희귀
+    RARE_SAVELOCATION, // [희귀] 위치 저장
+
+    // 유니크 영웅
+    EPIC_HOLYPROTECTION, // [영웅] 신성방어
+    EPIC_FOODRESEARCHER, // [영웅] 요리 연구가
+    EPIC_GHOSTRULE, // [영웅] 고스트룰
+    EPIC_DIVER, // [영웅] 잠수부
+    EPIC_TURTLE, // [영웅] 거북 도사
+
+    // 유니크 전설
+    LEGEND_REFLECTOR, // [전설] 반사경
+    LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
+    LEGEND_REPLICATION, // [전설] 복제
+    LEGEND_CLEARCACHE, // [전설] 캐시 청소
+    LEGEND_GAMBLER, // [전설] 도박사
+
+    // 유니크 신화
+    MYTHIC_SPIRIT, // [신화] 스피릿
+    MYTHIC_DIMENSIONTHIEF, // [신화] 차원 강탈자
     
     // 전용 //
     // 인간진영 공통

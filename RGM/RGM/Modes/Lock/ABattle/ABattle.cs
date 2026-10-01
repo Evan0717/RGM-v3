@@ -509,6 +509,7 @@ public class ABattle : Mode
                 HolidayType = abilityAttribute.HolidayType,
                 Keep = abilityAttribute.Keep,
                 _79Allowed = abilityAttribute._79Allowed,
+                IsUnique = abilityAttribute.IsUnique,
                 RoleAbility = abilityAttribute.RoleAbility
             });
 
@@ -731,6 +732,9 @@ public class ABattle : Mode
             return false;
         }
 
+        if (Abilities[type].IsUnique && HasAbility(player, type))
+            return false;
+
         var addingAbilityEventArgs = new AddingAbilityEventArgs(
             player,
             type,
@@ -776,7 +780,7 @@ public class ABattle : Mode
                 Tools.PlayGlobalAudio(name, 2f);
         }
 
-        if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
+        if (!Abilities[type].IsUnique && allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
             Abilities[type].Category != AbilityCategory.Synergy)
         {
             // 추가 모드 반사경: 40% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 1회까지.
@@ -1020,6 +1024,7 @@ public class ABattle : Mode
                 var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
                 return conditionAttr == null || conditionAttr.Abilities.All(player.HasAbility);
             })
+            .Where(x => !x.Value.IsUnique || !player.HasAbility(x.Key))
             .Where(x => x.Value.RoleAbility == roleAbility ||
                         (roleAbility != RoleAbility.None && x.Value.RoleAbility.IsFactionRoleFor(player)))
             .ToList();
@@ -1036,6 +1041,7 @@ public class ABattle : Mode
                     var conditionAttr = x.Value.Type.GetCustomAttribute<ConditionAbilityAttribute>();
                     return conditionAttr == null || conditionAttr.Abilities.All(player.HasAbility);
                 })
+                .Where(x => !x.Value.IsUnique || !player.HasAbility(x.Key))
                 .ToList();
         }
 
