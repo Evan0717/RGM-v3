@@ -4,7 +4,8 @@ namespace RGM.UserSettings;
 
 public static partial class MainSettingManager
 {
-    private static CustomHeader Setting { get; } = new("<b>랜덤게임모드</b>");
+    // private static CustomHeader Setting { get; } = new("<b>랜덤게임모드</b>");
+    private static CustomHeader Setting => new CustomHeader("<b>기본 설정</b>");
     private static CustomKeybindSetting ScpCanEquipRandomItem { get; set; }
     private static CustomTwoButtonSetting MuteBGM { get; set; }
     private static CustomDropdownSetting Translation { get; set; }
@@ -14,7 +15,6 @@ public static partial class MainSettingManager
     private static CustomKeybindSetting RightKey { get; set; }
     private static CustomKeybindSetting EnterKey { get; set; }
     private static CustomKeybindSetting DetailInfoKey { get; set; }  
-    private static CustomSliderSetting BGMVolume { get; set; }
     
     public static void Init()
     {
@@ -44,18 +44,20 @@ public static partial class MainSettingManager
             DetailInfoKey
         ]);
     }
-    
-    
-    public sealed partial class MuteBGMSetting;
-        
-    public sealed partial class MuteBGMSetting;
-    public sealed partial class ScpCanEquipRandomItemSetting;
+
+    private sealed partial class MenuSetting;
+
+    private sealed partial class MuteBGMSetting;
+
+    private sealed partial class MuteBGMSetting;
+
+    private sealed partial class ScpCanEquipRandomItemSetting;
         
     private sealed partial class TranslationSetting;
 
     private sealed partial class UpKeySetting;
 
-    public sealed partial class DownKeySetting;
+    private sealed partial class DownKeySetting;
 
     private sealed partial class LeftKeySetting;
 
@@ -64,6 +66,4 @@ public static partial class MainSettingManager
     private sealed partial class EnterKeySetting : CustomKeybindSetting;
 
     private sealed partial class DetailInfoKeySetting;
-
-    private sealed partial class BGMVolumeSetting;
 }
