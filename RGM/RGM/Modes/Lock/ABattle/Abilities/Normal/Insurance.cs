@@ -29,6 +29,7 @@ public class Insurance : Ability
             return;
 
         ev.IsAllowed = false;
+        if (ev.Player.Health <= 0) ev.Player.Health = 0.1f;
         ev.Player.RemoveAbility(this);
         OnDisabled();
 
@@ -39,7 +40,7 @@ public class Insurance : Ability
         Timing.CallDelayed(Timing.WaitForOneFrame, () => ABattle.Instance.IsLifeUsed[Owner] = false);
     }
 
-    private void OnDetonating(DetonatingEventArgs e)
+    private static void OnDetonating(DetonatingEventArgs e)
     {
         if (_isDetonatingState) return;
         

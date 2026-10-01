@@ -23,7 +23,7 @@ public class Training : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker != Owner)
+        if (ev.Attacker != Owner || ev.Attacker == null)
             return;
 
         if (ABattle.Instance.GetAbility(Owner, AbilityType.NORMAL_TRAINING) != this)

@@ -38,7 +38,7 @@ public class Kick : Ability
         
         if (Owner.HasAbility(AbilityType.SYNERGY_SOCCERKICK))
         {
-            ev.Player.ExplodeGrenade(ignore:true, instakill:false);
+            player.ExplodeGrenade(ignore:true, instakill:false);
             ApplyInstantKill.Apply(Owner, player);
         }
         else
