@@ -41,7 +41,7 @@ public class AlephOne : Ability
         Exiled.Events.Handlers.Player.Died += OnDied;
         _healthLockCoroutine = Timing.RunCoroutine(LockEnemyHealth());
         
-        Timing.CallDelayed(0.5f, () =>
+        Timing.CallDelayed(Timing.WaitForOneFrame * 5, () =>
         {
             Owner.AddAbility(AbilityType.EPIC_SHARPEYES);
             Owner.AddAbility(AbilityType.EPIC_SHARPEYES);
