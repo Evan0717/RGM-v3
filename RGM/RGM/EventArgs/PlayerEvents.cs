@@ -770,8 +770,9 @@ namespace RGM.EventArgs
                     ? ev.Player.MaxHealth + ev.Player.MaxArtificialHealth + ev.Player.MaxHumeShield
                     : ev.DamageHandler.Damage;
 
-                if (ev.Attacker != ev.Player && damage <= ushort.MaxValue)
-                    PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
+                if (ev.Attacker != ev.Player && damage <= ushort.MaxValue &&
+                    TryGetPlayerReport(ev.Attacker, out var attackerReport))
+                    attackerReport.Damage += (int)damage;
 
                 return;
             }
@@ -799,7 +800,7 @@ namespace RGM.EventArgs
                     !WeakPointAttack.ShouldIgnoreDefenses(ev.Attacker))
                     ev.IsAllowed = false;
             }
-            else if (ev.Attacker != null && !ev.Attacker.IsNonePlayer())
+            else if (ev.Attacker != null && !ev.Attacker.IsNPC && !ev.Attacker.IsNonePlayer())
             {
                 if (ev.Attacker.IsScpRole() &&
                     (ev.DamageHandler.Type.IsWeapon() ||
@@ -813,8 +814,9 @@ namespace RGM.EventArgs
 
                 if ((HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
                      ev.Attacker.LeadingTeam != ev.Player.LeadingTeam || Server.FriendlyFire) &&
-                    ev.Attacker != ev.Player && damage <= ushort.MaxValue)
-                    PlayersReport[ev.Attacker.UserId].Damage += (int)damage;
+                    ev.Attacker != ev.Player && damage <= ushort.MaxValue &&
+                    TryGetPlayerReport(ev.Attacker, out var attackerReport))
+                    attackerReport.Damage += (int)damage;
             }
         }
 
