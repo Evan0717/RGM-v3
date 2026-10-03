@@ -21,6 +21,9 @@ public class Spirit : Ability
 
     public override void OnEnabled()
     {
+        Owner.EnableEffect(EffectType.Ghostly, 1);
+        Owner.AddEffect(EffectType.MovementBoost, 40);
+        
         Exiled.Events.Handlers.Player.Hurt += OnHurt;
 
         _onStarted = Timing.RunCoroutine(OnStarted());
@@ -38,8 +41,6 @@ public class Spirit : Ability
         while (true)
         {
             Owner.EnableEffect(EffectType.Invisible, 1);
-            Owner.EnableEffect(EffectType.Ghostly, 1);
-            Owner.AddEffect(EffectType.MovementBoost, 40);
             
             foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 8))
             {

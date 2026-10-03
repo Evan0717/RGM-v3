@@ -118,7 +118,7 @@ public class ABattle : Mode
     {
         { "기본", "워크스테이션 업그레이드를 즐기세요!" },
         { "치매", "33% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
-        { "반사경", "능력 획득 시, 40% 확률로 능력이 복제됩니다." },
+        //{ "반사경", "능력 획득 시, 40% 확률로 능력이 복제됩니다." },
         { "수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다." },
         { "전주곡",
             $"""
@@ -1544,7 +1544,7 @@ public class ABattle : Mode
             
             if (isPrismRand <= 30)
             {
-                player.AddBroadcast(10, "<b><color=#D23265>프리즘 전주곡 활성화</color></b>");
+                player.AddBroadcast(10, "<b><size=25><color=#D23265>프리즘 전주곡 활성화</color></size></b>");
                 player.AddAbility(Instance.GetRandomAbilities(player, GetPrismRandom(), 1,
                 [
                     AbilityType.EPIC_PRIEST, AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
