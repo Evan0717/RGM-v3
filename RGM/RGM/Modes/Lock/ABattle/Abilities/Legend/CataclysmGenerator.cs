@@ -33,12 +33,15 @@ public class CataclysmGenerator : Ability
             yield return Timing.WaitForOneFrame;
         }
 
+        IEnumerable<AbilityType> types = [];
+        var abilityTypes = types as AbilityType[] ?? [.. types];
         foreach (var ac in abilityList)
         {
-            Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, ac, 3).Where(x => x != AbilityType.LEGEND_CATACLYSMGENERATOR && x != AbilityType.LEGEND_REPLICATION).GetRandomValue());
+            abilityTypes.ToList().Add(ABattle.Instance.GetRandomAbilities(Owner, ac, 3).Where(x =>
+                x != AbilityType.LEGEND_CATACLYSMGENERATOR && x != AbilityType.LEGEND_REPLICATION).GetRandomValue());
             yield return Timing.WaitForOneFrame;
         }
-
-        yield break;
+        Owner.AddAbilityAsync(abilityTypes);
     }
 }
+    

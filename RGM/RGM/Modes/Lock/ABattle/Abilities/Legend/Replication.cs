@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MEC;
 
 namespace RGM.Modes.Abilities.Legend;
 
@@ -10,11 +9,14 @@ public class Replication : Ability
 {
     public override void OnEnabled()
     {
+        List<AbilityType> types = [];
         Owner.GetAbilities().Where(a =>
                 a.Data.Category != AbilityCategory.Ancient &&
                 a.Data.AbilityType != AbilityType.LEGEND_REPLICATION &&
                 a.Data.AbilityType != AbilityType.LEGEND_CATACLYSMGENERATOR).ToList()
-            .ForEach(x => Timing.RunCoroutine(ABattle.Instance.AddAbilityCoroutine(Owner, 
-                [x.Data.AbilityType], allowReflector: false)));
+            .ForEach(x => types.Add(x.Data.AbilityType));
+
+
+        _ = ABattle.Instance.AddAbilityAsync(Owner, types, allowReflector: false);
     }
 }

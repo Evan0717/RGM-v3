@@ -24,9 +24,8 @@ public class Reflector : Ability
             Convert.ToByte(Random.Range(1, 101)) > ReflectionChance)
             return;
 
-        ABattle.Instance.AddAbility(
-            ev.Player,
-            ev.AbilityType,
+        _ = ABattle.Instance.AddAbilityAsync(ev.Player,
+            [ev.AbilityType],
             reflectorChain: ev.ReflectorChain + 1,
             allowReflector: ev.AllowReflector,
             extraReflectorChain: ev.ExtraReflectorChain);
