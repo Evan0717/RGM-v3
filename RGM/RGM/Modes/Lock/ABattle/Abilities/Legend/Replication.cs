@@ -16,14 +16,5 @@ public class Replication : Ability
                 a.Data.AbilityType != AbilityType.LEGEND_CATACLYSMGENERATOR).ToList()
             .ForEach(x => Timing.RunCoroutine(ABattle.Instance.AddAbilityCoroutine(Owner, 
                 [x.Data.AbilityType], allowReflector: false)));
-        
-        Timing.RunCoroutine(Do());
-    }
-
-    private IEnumerator<float> Do()
-    {
-
-
-        yield break;
     }
 }
