@@ -2,9 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Discord;
+using Exiled.API.Features;
 using Exiled.API.Features.Roles;
+using HarmonyLib;
 using MEC;
+using PlayerRoles;
+using PlayerRoles.PlayableScps.Scp049;
 using PlayerRoles.PlayableScps.Scp079.Pinging;
+using RGM.API.Features;
+using RGM.Modes.Patches;
+using UnityEngine;
+using Scp049Role = Exiled.API.Features.Roles.Scp049Role;
 
 namespace RGM.Modes.Abilities.Unique.Scps.Normal;
 
@@ -15,6 +24,7 @@ public class Haste : Ability
     private const float ReductionPerAbility = 0.04f;
     private const float MaximumReduction = 0.6f;
     private const float PingCooldown = 3f;
+    private const string ModeID = "com.RGM.Modes.ABattle.Haste";
 
     private static readonly FieldInfo PingRateLimiterField = typeof(Scp079PingAbility).GetField(
         "_rateLimiter",
@@ -22,8 +32,19 @@ public class Haste : Ability
 
     private CoroutineHandle _onStarted;
 
+    public static byte Count { get; private set; }
+    private static Harmony _harmony;
+
     public override void OnEnabled()
     {
+        if (Count < 15)
+            Count++;
+        
+        _harmony ??= new Harmony(ModeID);
+        if (!_harmony.GetPatchedMethods().Any(x => x is ScpPatch))
+            _harmony.Patch(AccessTools.PropertyGetter(
+                    typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
+                postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
         Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
         _onStarted = Timing.RunCoroutine(OnStarted());
@@ -31,6 +52,8 @@ public class Haste : Ability
 
     public override void OnDisabled()
     {
+        _harmony.UnpatchAll(ModeID);
+        _harmony = null;
         Exiled.Events.Handlers.Scp079.Pinging -= OnPinging;
 
         Timing.KillCoroutines(_onStarted);
@@ -122,5 +145,22 @@ public class Haste : Ability
     private static float ReduceCooldown(float cooldown, float amount)
     {
         return cooldown > 0f ? Math.Max(0f, cooldown - amount) : cooldown;
+    }
+}
+
+public class Scp049Patches
+{
+    private const float Scp049ResurrectDuration = 7;
+
+    public static void Scp049Postfix(ref float __result)
+    {
+        try
+        {
+            __result = Mathf.Max(0.2f, Scp049ResurrectDuration - Haste.Count * .8f);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"[KoreanSpeed/Scp049Postfix] Exception: {e}");
+        }
     }
 }
