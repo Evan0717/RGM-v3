@@ -14,8 +14,7 @@ public class KillStreak : Ability
         if (!Owner.IsScpRole()) {
             for (int i = 0; i < 15; i++)
                 Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner,
-                    ABattle.GetCategory(Owner,
-                        allowAncient: false),
+                    ABattle.GetCategory(Owner, allowAncient: false),
                     1,
                     [AbilityType.NORMAL_FRIENDSHIP, AbilityType.NORMAL_REROLL, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_DND]).First());
         }

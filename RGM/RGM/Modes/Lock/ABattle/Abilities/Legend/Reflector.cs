@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("반사경", "능력을 획득하면 50% 확률로 동일한 능력을 하나 더 얻습니다. (최대 3회 연쇄 가능.)",
-    AbilityCategory.Legend, AbilityType.LEGEND_REFLECTOR, RoleAbility.None, true)]
+    AbilityCategory.Legend, AbilityType.LEGEND_REFLECTOR, RoleAbility.None, true, isUnique: true)]
 public class Reflector : Ability
 {
     private const byte MaxChainCount = 3;
@@ -19,7 +19,8 @@ public class Reflector : Ability
         if (!ev.IsAllowed || !ev.AllowReflector || ev.Player != Owner || ev.ReflectorChain >= MaxChainCount)
             return;
 
-        if (ABattle.Instance.Abilities[ev.AbilityType].Category == AbilityCategory.Ancient ||
+        if (ABattle.Instance.Abilities[ev.AbilityType].IsUnique ||
+            ABattle.Instance.Abilities[ev.AbilityType].Category == AbilityCategory.Ancient ||
             ABattle.Instance.Abilities[ev.AbilityType].Category == AbilityCategory.Synergy ||
             Convert.ToByte(Random.Range(1, 101)) > ReflectionChance)
             return;

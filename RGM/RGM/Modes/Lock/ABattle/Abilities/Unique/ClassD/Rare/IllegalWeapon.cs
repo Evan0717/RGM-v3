@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -31,10 +29,12 @@ public class IllegalWeapon : Ability
         yield return Timing.WaitForSeconds(0.3f);
 
         if (ev.Projectile is not ExplosionGrenadeProjectile grenade ||
-            ev.Player.Role.Type == PlayerRoles.RoleTypeId.Scp079) yield break;
+            ev.Player.Role.Type == PlayerRoles.RoleTypeId.Scp079 ||
+            !Owner.HasAbility(AbilityType.RARE_CLASSD_ILLEGALWEAPON)) yield break;
+        
         while (!grenade.IsAlreadyDetonated)
         {
-            if (Physics.OverlapSphere(grenade.Position, 0.3f).Count() > 4)
+            if (Physics.OverlapSphere(grenade.Position, 0.3f).Length > 4)
             {
                 grenade.Base.Network_syncTargetTime = 0.1f;
             }

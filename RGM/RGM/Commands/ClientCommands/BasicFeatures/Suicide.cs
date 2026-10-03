@@ -29,6 +29,7 @@ namespace RGM.Commands.ClientCommands
 
             if (player.IsAlive && Round.IsStarted)
             {
+                if (GodModePlayers.Contains(player)) GodModePlayers.Remove(player); 
                 player.Kill(DamageType.Poison);
 
                 response =  "당신의 기도는 저 하늘에 닿았습니다.";

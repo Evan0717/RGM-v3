@@ -4,7 +4,8 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("잠수부", "시야가 개선되고 스테미나가 줄어들지 않습니다.", AbilityCategory.Epic, AbilityType.EPIC_DIVER)]
+[Ability("잠수부", "시야가 개선되고 스테미나가 줄어들지 않습니다.", AbilityCategory.Epic, AbilityType.EPIC_DIVER,
+    isUnique: true)]
 public class Diver : Ability
 {
     private CoroutineHandle _diverRotation;

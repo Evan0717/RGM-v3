@@ -131,6 +131,7 @@ public class SpearShield : Mode
             foreach (var player in players.Where(x => x.IsAlive))
                 player.AddHint("창과 방패", $"<b>남은 시간: {second}초</b>", 1.05f);
 
+            Exiled.API.Features.Map.CleanAllItems();
             yield return Timing.WaitForSeconds(1f);
         }
 

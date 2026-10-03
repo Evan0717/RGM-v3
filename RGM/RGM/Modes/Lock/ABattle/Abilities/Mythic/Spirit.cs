@@ -14,13 +14,16 @@ namespace RGM.Modes.Abilities.Mythic;
                 자신에게 『생존』 효과를 무제한으로 부여합니다!
                 추가로, 8m 반경에 있는 플레이어가 SCP-1344 아이템을 가지고 있을 경우, 즉시 제거합니다.
                 """,
-    AbilityCategory.Mythic, AbilityType.MYTHIC_SPIRIT)]
+    AbilityCategory.Mythic, AbilityType.MYTHIC_SPIRIT, isUnique: true)]
 public class Spirit : Ability
 {
     private CoroutineHandle _onStarted;
 
     public override void OnEnabled()
     {
+        Owner.EnableEffect(EffectType.Ghostly, 1);
+        Owner.AddEffect(EffectType.MovementBoost, 40);
+        
         Exiled.Events.Handlers.Player.Hurt += OnHurt;
 
         _onStarted = Timing.RunCoroutine(OnStarted());
@@ -38,8 +41,6 @@ public class Spirit : Ability
         while (true)
         {
             Owner.EnableEffect(EffectType.Invisible, 1);
-            Owner.EnableEffect(EffectType.Ghostly, 1);
-            Owner.AddEffect(EffectType.MovementBoost, 40);
             
             foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 8))
             {

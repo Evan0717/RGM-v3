@@ -58,7 +58,8 @@ public class KingsColor : Ability
                 Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 1f);
                 player.EnableEffect(EffectType.Slowness, 80, 1f);
                 player.CurrentItem = null;
-                player.Hit(Owner, target.IsScpRole() ? target.MaxHealth * 0.06f : target.MaxHealth * 0.21f);
+                ApplyFixedDamage.Apply(player, target,
+                    target.IsScpRole() ? target.MaxHealth * 0.05f : target.MaxHealth * 0.2f);
             }
 
             yield return Timing.WaitForSeconds(0.05f);

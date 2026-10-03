@@ -5,7 +5,7 @@ using RGM.API.Features;
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("캐시 청소", $"4분마다 자신의 워크스테이션 업그레이드 이용 기록을 초기화합니다.", 
-    AbilityCategory.Legend, AbilityType.LEGEND_CLEARCACHE, RoleAbility.None, true)]
+    AbilityCategory.Legend, AbilityType.LEGEND_CLEARCACHE, RoleAbility.None, true, isUnique: true)]
 
 public class ClearCache : Ability
 {
