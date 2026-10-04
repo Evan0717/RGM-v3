@@ -169,6 +169,7 @@ public enum ModeType
     Stroking999,
     GulliversTravels,
     SpearShield,
+    MaxRandom,
 }
 
 

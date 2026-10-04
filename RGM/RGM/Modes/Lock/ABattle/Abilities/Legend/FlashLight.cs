@@ -47,12 +47,12 @@ public class FlashLight : Ability
                     if (target == player) continue;
                     if (!HitboxIdentity.IsEnemy(player.ReferenceHub, target.ReferenceHub)) continue;
 
-                    if (!player.IsLookingAt(target, fov: 10)) continue;
+                    if (!player.IsLookingAt(target, maxDistance: 20, fov: 5)) continue;
 
-                    float damage = 3f;
+                    var damage = target.MaxHealth * 0.03f;
                     if (player.HasAbility(AbilityType.SYNERGY_REFLECTEDLIGHT))
                     {
-                        target.Hit(player, damage);
+                        ApplyFixedDamage.Apply(player, target, damage);
                         target.EnableEffect(EffectType.Burned, 1, 10f);
                     }
                     Hitmarker.SendHitmarkerDirectly(player.ReferenceHub, 1f);

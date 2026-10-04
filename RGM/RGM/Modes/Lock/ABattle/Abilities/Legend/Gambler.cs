@@ -7,7 +7,7 @@ using RGM.API.Features;
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("도박사", "아이템을 버리면 새로운 아이템으로 변환합니다.",
-    AbilityCategory.Legend, AbilityType.LEGEND_GAMBLER)]
+    AbilityCategory.Legend, AbilityType.LEGEND_GAMBLER, isUnique: true)]
 public class Gambler : Ability
 {
     private Mutex _mutex;

@@ -62,16 +62,17 @@ $"""
 
             if (player.IsScpRole())
                 return RoleTypeId.FacilityGuard;
-
-            if (player.IsNTF)
-                return Tools.EnumToList<RoleTypeId>()
-                    .Where(x => x.IsChaos() && x is not RoleTypeId.ChaosFlamingo and RoleTypeId.None).GetRandomValue();
-
-            if (player.IsCHI)
-                return Tools.EnumToList<RoleTypeId>()
-                    .Where(x => x.IsNtf() && x is not RoleTypeId.NtfFlamingo and RoleTypeId.None).GetRandomValue();
-
-            return RoleTypeId.Tutorial;
+            
+            return player.Role.Type switch
+            {
+                RoleTypeId.NtfCaptain => RoleTypeId.ChaosRepressor,
+                RoleTypeId.NtfSergeant => RoleTypeId.ChaosMarauder,
+                RoleTypeId.NtfPrivate => RoleTypeId.ChaosRifleman,
+                RoleTypeId.ChaosRepressor => RoleTypeId.NtfCaptain,
+                RoleTypeId.ChaosMarauder => RoleTypeId.NtfSergeant,
+                RoleTypeId.ChaosRifleman => RoleTypeId.NtfPrivate,
+                _ => RoleTypeId.Tutorial
+            };
         }
 
         private CoroutineHandle _onModeStarted;

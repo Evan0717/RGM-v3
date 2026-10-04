@@ -7,7 +7,7 @@ using System.Linq;
 namespace RGM.Modes.Abilities.Mythic;
 
 [Ability("차원 강탈자", "처치한 자의 능력을 모조리 흡수합니다! (반사경 효과 미적용)",
-    AbilityCategory.Mythic, AbilityType.MYTHIC_DIMENSIONTHIEF)]
+    AbilityCategory.Mythic, AbilityType.MYTHIC_DIMENSIONTHIEF, isUnique: true)]
 public class DimensionThief : Ability
 {
     public override void OnEnabled()

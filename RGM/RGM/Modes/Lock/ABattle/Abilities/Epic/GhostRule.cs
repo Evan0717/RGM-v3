@@ -4,7 +4,8 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("고스트룰", "유령이 되어 문을 통과할 수 있게 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_GHOSTRULE)]
+[Ability("고스트룰", "유령이 되어 문을 통과할 수 있게 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_GHOSTRULE,
+    isUnique: true)]
 public class GhostRule : Ability
 {
     private CoroutineHandle _ghostRotation;

@@ -199,7 +199,7 @@ namespace RGM.Modes
                 Timing.RunCoroutine(RespawnPlayer(ev.Player, _modeId));
         }
 
-        private void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
+        private static void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
         {
             ev.Ragdoll?.Destroy();
         }
