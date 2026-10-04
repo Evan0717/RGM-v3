@@ -48,18 +48,17 @@ public class ToolGun : Ability
         if (ev.Item.Serial != _coinSerial)
             return;
 
-        if (_count >= MaxCount)
-        {
-            _delay = WaitTime;
-            _count = 0;
-            Timing.RunCoroutine(CountRoutine());
-        }
-        
-        if (_delay != 0)
-        {
-            ev.Player.AddHint("딜레이",$"{_delay} 후 다시 사용해주세요.");
-            return;
-        }
+        // if (_count >= MaxCount)
+        // {
+        //     _delay = WaitTime;
+        //     _count = 0;
+        //     Timing.RunCoroutine(CountRoutine());
+        // }
+        // if (_delay != 0)
+        // {
+        //     ev.Player.AddHint("딜레이",$"{_delay} 후 다시 사용해주세요.");
+        //     return;
+        // }
 
         Player player = ev.Player;
         if (Convert.ToByte(Random.Range(1, 101)) <= 3)
