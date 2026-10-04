@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using CustomPlayerEffects;
 using Exiled.API.Features.Doors;
 using Mirror;
@@ -850,6 +851,125 @@ public class ABattle : Mode
         return true;
     }
 
+    public async Task AddAbilityAsync(Player player, IEnumerable<AbilityType> types, int reflectorChain = 0,
+        bool allowReflector = true, int extraReflectorChain = 0)
+    {
+        {
+            if (player == null) return;
+
+            foreach (var type in types)
+            {
+                await Task.Delay(1);
+                if (!Abilities.ContainsKey(type))
+                {
+                    Log.Error($"Ability {type} not found.");
+                    continue;
+                }
+
+                if (type.ToString().Contains("LEGEND"))
+                {
+                    string name;
+
+                    switch (type)
+                    {
+                        case AbilityType.LEGEND_LAVACHICKEN: name = "LavaChicken"; break;
+                        default: name = "누군가가 전설 능력을 획득하였습니다"; break;
+                    }
+
+                    if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
+                        Tools.PlayGlobalAudio(name, 1.5f);
+                }
+                else if (type.ToString().Contains("MYTHIC"))
+                {
+                    string name;
+
+                    switch (type)
+                    {
+                        case AbilityType.MYTHIC_KINGSCOLOR: name = "시산혈해의 파도가 보인다"; break;
+                        default: name = "누군가가 신화 능력을 영접하였습니다"; break;
+                    }
+
+                    if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
+                        Tools.PlayGlobalAudio(name, 2.5f);
+                }
+                else if (type.ToString().Contains("ANCIENT"))
+                {
+                    const string name = "누군가가 고대의 무한한 힘을 손에 얻었습니다";
+
+                    if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
+                        Tools.PlayGlobalAudio(name, 2f);
+                }
+
+                if (allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
+                    Abilities[type].Category != AbilityCategory.Synergy)
+                {
+                    // 추가 모드 반사경: 40% 확률로 동일 능력 추가 획득. 해당 모드의 연쇄는 최대 1회까지.
+                    if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
+                        Convert.ToByte(Random.Range(1, 101)) <= 40)
+                    {
+                        _ = AddAbilityAsync(player, [type], reflectorChain, allowReflector, extraReflectorChain + 2);
+                    }
+                }
+
+                Log.Info("AddAbility called with " + player.Nickname + " and " + type);
+
+                if (!PlayerAbilities.ContainsKey(player))
+                {
+                    Log.Info("No key");
+                    PlayerAbilities.Add(player, []);
+                }
+
+                var abilityData = Abilities[type];
+                Ability ability;
+
+                try
+                {
+                    ability = Activator.CreateInstance(Abilities[type].Type) as Ability;
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"An error occurred while trying to create an instance of {abilityData.Name}: {e}");
+                    continue;
+                }
+
+                if (ability == null)
+                {
+                    Log.Error(
+                        $"An error occurred while trying to create an instance of {abilityData.Name}. The instance is null.");
+                    continue;
+                }
+
+                ability.Data = abilityData;
+                ability.Owner = player;
+                ability.OnEnabled();
+
+                PlayerAbilities[player].Add(ability);
+                EnableSynergyAbility(player);
+
+                string styleName = ColorFormat(abilityData.GetFormattedName());
+
+                string Message = $"<size=24>{styleName}</size>\n<size=20>{abilityData.Description}</size>";
+                player.AddBroadcast(8, Message);
+                player.SendConsoleMessage($"\n{Message}", "white");
+
+                if (CurrentExtraModes.Contains("스펙업"))
+                {
+                    /*float baseMaxHealth = player.ReferenceHub.roleManager
+                        .GetRoleBase(player.Role.Type) is IHealthbarRole role
+                        ? role.MaxHealth
+                        : player.MaxHealth;
+                    float healthIncrease = baseMaxHealth * (player.IsScpRole() ? 0.015f : 0.12f);*/
+                    // 왜 이 코드가 서버렉을 유발하는지 모르겠음
+
+                    var healthIncrease = player.IsScpRole() ? 45 : 15;
+
+                    player.MaxHealth += healthIncrease;
+                    player.Health += healthIncrease;
+                }
+            }
+        }
+    }
+
     // 플레이어에게 시너지 능력 부여
     private void EnableSynergyAbility(Player player)
     {
@@ -1579,6 +1699,11 @@ public static class ABattleExtensions
         ABattle.Instance.AddAbility(player, type);
     }
 
+    public static void AddAbilityAsync(this Player player, IEnumerable<AbilityType> type)
+    {
+        _ = ABattle.Instance.AddAbilityAsync(player, type);
+    }
+    
     public static void RemoveAbility(this Player player, AbilityType type)
     {
         ABattle.Instance.RemoveAbility(player, type);

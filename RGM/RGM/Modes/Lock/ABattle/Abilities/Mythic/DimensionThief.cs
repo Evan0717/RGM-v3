@@ -35,8 +35,7 @@ public class DimensionThief : Ability
         yield return Timing.WaitForOneFrame;
 
         if (!ev.Player.IsDead) yield break;
-        foreach (var abilityType in abilityTypes)
-            ABattle.Instance.AddAbility(ev.Attacker, abilityType, allowReflector: false);
+        _ = ABattle.Instance.AddAbilityAsync(ev.Attacker, abilityTypes, allowReflector: false);
 
         ev.Player.AddHint("차원 강탈자", "능력을 강탈당했습니다!");
     }
