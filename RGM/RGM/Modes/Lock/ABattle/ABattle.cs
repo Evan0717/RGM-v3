@@ -907,7 +907,7 @@ public class ABattle : Mode
                     if (CurrentExtraModes.Contains("반사경") && extraReflectorChain < 2 &&
                         Convert.ToByte(Random.Range(1, 101)) <= 40)
                     {
-                        AddAbility(player, type, reflectorChain, allowReflector, extraReflectorChain + 2);
+                        _ = AddAbilityAsync(player, [type], reflectorChain, allowReflector, extraReflectorChain + 2);
                     }
                 }
 
