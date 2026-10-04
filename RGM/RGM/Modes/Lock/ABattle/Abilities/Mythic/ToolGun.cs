@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using MEC;
 using ProjectMER.Features.Serializable;
 using RGM.API.Features;
 using UnityEngine;
@@ -17,9 +19,13 @@ public class ToolGun : Ability
 {
     private const float ForwardOffset = 1.5f;
     private const float DownwardOffset = 0.85f;
+    private const byte MaxCount = 20;
+    private const int WaitTime = 60;
 
     private ushort _coinSerial;
-
+    private byte _count;
+    private byte _delay;
+    
     public override void OnEnabled()
     {
         Item coin = Owner.AddItem(ItemType.Coin);
@@ -42,6 +48,19 @@ public class ToolGun : Ability
         if (ev.Item.Serial != _coinSerial)
             return;
 
+        if (_count >= MaxCount)
+        {
+            _delay = WaitTime;
+            _count = 0;
+            Timing.RunCoroutine(CountRoutine());
+        }
+        
+        if (_delay != 0)
+        {
+            ev.Player.AddHint("딜레이",$"{_delay} 후 다시 사용해주세요.");
+            return;
+        }
+
         Player player = ev.Player;
         if (Convert.ToByte(Random.Range(1, 101)) <= 3)
         {
@@ -55,6 +74,7 @@ public class ToolGun : Ability
         Vector3 forward = player.CameraTransform.forward;
         forward.y = 0;
         forward.Normalize();
+        _count++;
 
         Vector3 rayOrigin = player.Position + forward * ForwardOffset + Vector3.up;
         if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
@@ -67,5 +87,14 @@ public class ToolGun : Ability
             Rotation = new Vector3(0, player.Rotation.eulerAngles.y, 0),
             Scale = Vector3.one
         }.SpawnOrUpdateObject();
+    }
+
+    private IEnumerator<float> CountRoutine()
+    {
+        while (_count != 0)
+        {
+            yield return Timing.WaitForSeconds(1f);
+            _count--;
+        }
     }
 }

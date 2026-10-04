@@ -1695,8 +1695,7 @@ public static class ABattleExtensions
 
     public static void AddAbilityAsync(this Player player, IEnumerable<AbilityType> type)
     {
-        var func = async () => await ABattle.Instance.AddAbilityAsync(player, type);
-        _ = func.Invoke();
+        _ = ABattle.Instance.AddAbilityAsync(player, type);
     }
     
     public static void RemoveAbility(this Player player, AbilityType type)
