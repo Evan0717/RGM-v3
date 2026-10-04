@@ -316,7 +316,6 @@ public enum AbilityType
     NORMAL_ESCAPE, // [일반] 위기 탈출
     NORMAL_FRIENDSHIP, // [일반] 우애
     NORMAL_RAINBOW, // [일반] 무지개
-    NORMAL_BODYBACK, // [일반] 바디백
     NORMAL_DOPAMINE, // [일반] 도파민
     NORMAL_TEST, // [일반] 시험
     NORMAL_AGILITY, // [일반] 민첩
@@ -440,6 +439,9 @@ public enum AbilityType
     // 유니크 능력은 선택창에서 한 번만 획득 가능하며, 반사경이나 복제 등으로 능력 개수가 변동되지 않음.
     // 능력 강탈 또는 랜덤 획득을 통해서 능력을 획득할 때에도 유니크로 지정된 능력은 항상 1개로 적용.(없으면 가져오고, 있으면 제외)
 
+    // 유니크 일반    
+    NORMAL_BODYBACK, // [일반] 바디백
+    
     // 유니크 희귀
     RARE_SAVELOCATION, // [희귀] 위치 저장
 

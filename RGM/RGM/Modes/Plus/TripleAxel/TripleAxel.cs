@@ -88,7 +88,7 @@ COM-45로 인한 데미지가 77%로 하향됩니다.
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Attacker != null && ev.Attacker.CurrentItem.Type == ItemType.GunCom45)
+            if (ev.Attacker?.CurrentItem?.Type == ItemType.GunCom45)
                 ev.DamageHandler.Damage *= 0.77f;
         }
 
