@@ -1057,7 +1057,7 @@ $"""
                     while (player.IsAlive)
                     {
                         ApplyInstantKill.Apply(attacker, player);
-                        Timing.WaitForSeconds(0.2f);
+                        yield return Timing.WaitForSeconds(0.2f);
                     }
 
                     yield break;
