@@ -824,9 +824,11 @@ public class ABattle : Mode
 
         ability.Data = abilityData;
         ability.Owner = player;
-        ability.OnEnabled();
-
         PlayerAbilities[player].Add(ability);
+
+        // OnEnabled에서 다른 능력을 추가하면 시너지 검사가 다시 실행된다.
+        // 현재 능력을 먼저 등록해 두어, 자기 자신을 다시 부여하는 재진입을 방지한다.
+        ability.OnEnabled();
         EnableSynergyAbility(player);
 
         string styleName = ColorFormat(abilityData.GetFormattedName());
@@ -943,9 +945,11 @@ public class ABattle : Mode
 
                 ability.Data = abilityData;
                 ability.Owner = player;
-                ability.OnEnabled();
-
                 PlayerAbilities[player].Add(ability);
+
+                // OnEnabled에서 다른 능력을 추가하면 시너지 검사가 다시 실행된다.
+                // 현재 능력을 먼저 등록해 두어, 자기 자신을 다시 부여하는 재진입을 방지한다.
+                ability.OnEnabled();
                 EnableSynergyAbility(player);
 
                 string styleName = ColorFormat(abilityData.GetFormattedName());
