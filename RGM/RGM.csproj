@@ -137,6 +137,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Terminal.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Operator.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\FastReturn.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\BrilliantMind.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SoccerKick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\Scp1509Hand.cs" />

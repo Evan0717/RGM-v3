@@ -331,6 +331,7 @@ public enum AbilityType
     NORMAL_NIGHTOWL, // [일반] 밤눈
     NORMAL_STUDY, // [일반] 공부
     NORMAL_HEREDITY, // [일반] 유전
+    NORMAL_FASTRETURN, // [일반] 빠른 복귀
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
