@@ -146,6 +146,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyFixedDamage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyInstantKill.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyLethalDamage.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\DeathPrevention.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AlephOne.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\AntiMatter.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\GrupMember.cs" />
