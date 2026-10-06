@@ -33,6 +33,10 @@ namespace RGM.Modes
         private readonly List<Player> _player = [];
         private readonly List<ItemType> _ignoreItems = 
         [
+            ItemType.Snowball,
+            ItemType.Coal,
+            ItemType.SpecialCoal,
+            ItemType.SCP1507Tape,
             ItemType.SCP244a,
             ItemType.SCP244b,
             ItemType.SCP018,
@@ -71,7 +75,9 @@ namespace RGM.Modes
 
             PlayerManager.List.CopyTo(_player);
 
-            var itemTypes = Tools.EnumToList<ItemType>().Where(x => !Datas.ExceptItems.Contains(x) || !_ignoreItems.Contains(x)).ToList();
+            var itemTypes = Tools.EnumToList<ItemType>()
+                .Where(x => !_ignoreItems.Contains(x))
+                .ToList();
             var ammoTypes = Tools.EnumToList<ItemType>().Where(x => x.IsAmmo()).ToList();
 
             for (int i = 1; i <= 999; i++)
@@ -88,7 +94,6 @@ namespace RGM.Modes
                 catch (Exception e)
                 {
                     Log.Error($"Mod Error: {e}");
-                    yield break;
                 }
             }
 
@@ -103,7 +108,6 @@ namespace RGM.Modes
                 catch (Exception e)
                 {
                     Log.Error($"Mod Error: {e}");
-                    yield break;
                 }
             }
 
@@ -117,7 +121,6 @@ namespace RGM.Modes
                 catch (Exception e)
                 {
                     Log.Error($"Mod Error: {e}");
-                    yield break;
                 }
             }
             yield return 0f;
