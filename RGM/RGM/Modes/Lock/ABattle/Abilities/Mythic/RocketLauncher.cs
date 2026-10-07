@@ -34,6 +34,7 @@ public class RocketLauncher : Ability
     {
         if (ev.Attacker == null || 
             ev.Attacker != Owner || 
+            ev.Player == ev.Attacker ||
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
         
