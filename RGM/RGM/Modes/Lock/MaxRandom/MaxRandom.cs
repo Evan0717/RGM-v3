@@ -17,6 +17,7 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Server;
 using Respawning;
+using RGM.Patches;
 
 namespace RGM.Modes;
 
@@ -29,7 +30,7 @@ public class MaxRandom : Mode
         """
         모든 시스템이 랜덤으로 결정됩니다.
         
-        스폰 진영, 위치, 아이템, 사이즈, 지원, 최대 체력, 데미지, 치유량, 효과
+        스폰 진영, 위치, 아이템, 사이즈, 지원, 최대 체력, 데미지, 치유량, 효과, 자동핵 시간
         모두 랜덤으로 정해집니다.
         """;
     public override string Color => "FA67FC";
@@ -83,6 +84,7 @@ public class MaxRandom : Mode
     private static bool _isEnabled;
     private CoroutineHandle _randomBox;
     private CoroutineHandle _randomFactionSpawn;
+    private readonly AutoWarhead _autoWarhead = new(Random.Range(8, 21), 1);
     
     public override void OnEnabled()
     {
@@ -105,6 +107,7 @@ public class MaxRandom : Mode
         
         _randomBox = Timing.RunCoroutine(RandomBoxCoroutine());
         _randomFactionSpawn = Timing.RunCoroutine(RandomFactionSpawnCoroutine());
+        _autoWarhead.RunCoroutine();
     }
     public override void OnDisabled()
     {
@@ -127,6 +130,7 @@ public class MaxRandom : Mode
 
         Timing.KillCoroutines(_randomBox);
         Timing.KillCoroutines(_randomFactionSpawn);
+        _autoWarhead.KillCoroutine();
         foreach (var player in PlayerManager.List)
             Timing.KillCoroutines(GetSpawnInventoryCoroutineName(player));
     }
@@ -207,7 +211,7 @@ public class MaxRandom : Mode
             List<EffectType> effects = [.. Tools.EnumToList<EffectType>().Where(x => !_ignoredEffect.Contains(x))];
 
             var effect = effects.GetRandomValue();
-            var intensity = Convert.ToByte(Random.Range(1, 101));
+            var intensity = Convert.ToByte(Random.Range(1, 128));
 
             player.EnableEffect(effect, intensity);
             player.AddHint("랜덤효과 안내", $"<color=#D0FA58>{effect}</color> 효과가 {intensity}만큼 적용되는 중입니다.", short.MaxValue);
