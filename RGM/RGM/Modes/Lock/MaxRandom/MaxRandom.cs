@@ -15,23 +15,44 @@ using Random = UnityEngine.Random;
 using InventorySystem.Items;
 using Exiled.API.Features.Doors;
 using Exiled.API.Enums;
+using Exiled.Events.EventArgs.Server;
+using Respawning;
 
 namespace RGM.Modes;
 
-[Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.MaxRandom)]
-public class MaxRandom  : Mode
+[Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.MaxRandom)]
+public class MaxRandom : Mode
 {
     public override string Name => "MAX RANDOM";
     public override string Description => "모든 것을 랜덤으로 정합니다!";
     public override string Detail =>
         """
-        모든 시스템이 랜덤으로 변경됩니다.
+        모든 시스템이 랜덤으로 결정됩니다.
         
-        스폰 진영, 스폰 위치, 시작 아이템, 사이즈, 지원 진영, 최대 체력, 데미지 모두 랜덤으로 정해집니다.
+        스폰 진영, 위치, 아이템, 사이즈, 지원, 최대 체력, 데미지, 치유량, 효과
+        모두 랜덤으로 정해집니다.
         """;
-    public override string Color => "BFFF00";
+    public override string Color => "FA67FC";
     public override string Author => "DeniA";
 
+    private readonly List<EffectType> _ignoredEffect =
+    [
+        EffectType.PocketCorroding,
+        EffectType.PitDeath,
+        EffectType.CardiacArrest,
+        EffectType.Poisoned,
+        EffectType.SpawnProtected,
+        EffectType.Ensnared,
+        EffectType.Flashed,
+        EffectType.SeveredHands,
+        EffectType.Invisible,
+        EffectType.None,
+        EffectType.MovementBoost,
+        EffectType.Slowness,
+        EffectType.HeavyFooted,
+        EffectType.Lightweight,
+    ];
+    
     private static readonly List<RoleTypeId> IgnoredRoles =
     [
         RoleTypeId.Flamingo,
@@ -60,8 +81,8 @@ public class MaxRandom  : Mode
     };
     
     private static bool _isEnabled;
-    private CoroutineHandle _onModeStarted;
     private CoroutineHandle _randomBox;
+    private CoroutineHandle _randomFactionSpawn;
     
     public override void OnEnabled()
     {
@@ -69,6 +90,7 @@ public class MaxRandom  : Mode
         
         Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
+        Exiled.Events.Handlers.Player.Healing += OnHealing;
         
         Exiled.Events.Handlers.Scp079.GainingExperience += OnGainingExperience;
         Exiled.Events.Handlers.Scp079.InteractingTesla += OnInteractingTesla;
@@ -79,8 +101,10 @@ public class MaxRandom  : Mode
         
         Exiled.Events.Handlers.Scp173.Blinking += OnBlinking;
 
-        _onModeStarted = Timing.RunCoroutine(OnModeStarted());
+        Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+        
         _randomBox = Timing.RunCoroutine(RandomBoxCoroutine());
+        _randomFactionSpawn = Timing.RunCoroutine(RandomFactionSpawnCoroutine());
     }
     public override void OnDisabled()
     {
@@ -88,6 +112,7 @@ public class MaxRandom  : Mode
         
         Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+        Exiled.Events.Handlers.Player.Healing -= OnHealing;
         
         Exiled.Events.Handlers.Scp079.GainingExperience -= OnGainingExperience;
         Exiled.Events.Handlers.Scp079.InteractingTesla -= OnInteractingTesla;
@@ -97,22 +122,14 @@ public class MaxRandom  : Mode
         Exiled.Events.Handlers.Scp079.LosingSignal -= OnLosingSignal;
         
         Exiled.Events.Handlers.Scp173.Blinking -= OnBlinking;
+        
+        Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
-        Timing.KillCoroutines(_onModeStarted);
         Timing.KillCoroutines(_randomBox);
+        Timing.KillCoroutines(_randomFactionSpawn);
         foreach (var player in PlayerManager.List)
             Timing.KillCoroutines(GetSpawnInventoryCoroutineName(player));
     }
-    private IEnumerator<float> OnModeStarted()
-    {
-        foreach (var player in PlayerManager.List)
-        {
-            RoleTypeId roleType = SelectRole(player);
-            player.Role.Set(roleType, SpawnReason.ItemUsage, RoleSpawnFlags.AssignInventory);
-        }
-        yield break;
-    }
-
     private void OnSpawned(SpawnedEventArgs ev)
     {
         if (ev.Player.IsNonePlayer())
@@ -139,18 +156,18 @@ public class MaxRandom  : Mode
 
     private static void StartSpawnCoroutine(Player player)
     {
-        string coroutineName = GetSpawnInventoryCoroutineName(player);
+        var coroutineName = GetSpawnInventoryCoroutineName(player);
         Timing.KillCoroutines(coroutineName);
         Timing.RunCoroutine(SpawnCoroutine(player), coroutineName);
     }
 
-    private static void Spawned(Player player)
+    private void Spawned(Player player)
     {
-        Timing.CallDelayed(0.09f, () =>
+        Timing.CallDelayed(0.05f, () =>
         {
             player.MaxHealth *= Random.Range(0.5f, 2.5f);
             player.Health = player.MaxHealth;
-            
+
             if (!player.IsScpRole()) return;
 
             if (player.ReferenceHub.roleManager.CurrentRole is not IHumeShieldedRole { HumeShieldModule: { } humeShieldModule })
@@ -159,8 +176,45 @@ public class MaxRandom  : Mode
             player.MaxHumeShield = Mathf.Max(100f, humeShieldModule.HsMax * Random.Range(0.5f, 2.5f));
             player.HumeShield = player.MaxHumeShield;
         });
+
+        Timing.CallDelayed(0.05f, () =>
+        {
+            var movementSpeedIntensity = Random.Range(-50, 101);
+            switch (movementSpeedIntensity)
+            {
+                case 0:
+                    break;
+                case > 0:
+                    player.AddEffect(EffectType.MovementBoost, movementSpeedIntensity);
+                    break;
+                case < 0:
+                    player.AddEffect(EffectType.Slowness, -movementSpeedIntensity);
+                    break;
+            }
+            var jumpIntensity = Random.Range(-50, 101);
+            switch (jumpIntensity)
+            {
+                case 0:
+                    break;
+                case > 0:
+                    player.AddEffect(EffectType.Lightweight, jumpIntensity);
+                    break;
+                case < 0:
+                    player.AddEffect(EffectType.HeavyFooted, -jumpIntensity);
+                    break;
+            }
+            
+            List<EffectType> effects = [.. Tools.EnumToList<EffectType>().Where(x => !_ignoredEffect.Contains(x))];
+
+            var effect = effects.GetRandomValue();
+            var intensity = Convert.ToByte(Random.Range(1, 101));
+
+            player.EnableEffect(effect, intensity);
+            player.AddHint("랜덤효과 안내", $"<color=#D0FA58>{effect}</color> 효과가 {intensity}만큼 적용되는 중입니다.", short.MaxValue);
+
+        });
         
-        Timing.CallDelayed(0.11f, () => 
+        Timing.CallDelayed(0.1f, () => 
         {
             player.Scale = new Vector3(Random.Range(0.1f, 1.2f), Random.Range(0.3f, 1.2f), Random.Range(0.1f, 1.2f));
         });
@@ -185,6 +239,12 @@ public class MaxRandom  : Mode
             ev.Attacker.ShowHitMarker();
     }
     
+    private static void OnHealing(HealingEventArgs ev)
+    {
+        if (ev.Player == null) return;
+        ev.Amount *= Random.Range(0.1f, 5.1f);
+    }
+    
     private RoleTypeId SelectRole(Player player)
     {
         if (_roleTypeIds.TryGetValue(player.Role.Type, out var roles))
@@ -199,51 +259,50 @@ public class MaxRandom  : Mode
         return RoleTypeId.Tutorial;
     }
 
-    private void OnBlinking(BlinkingEventArgs ev)
-    {
-        ev.BlinkCooldown = Random.Range(0.2f, 5.0f);
-    }
-
-    private void OnGainingExperience(GainingExperienceEventArgs ev)
+    private static void OnBlinking(BlinkingEventArgs ev)
     {
         if (_isEnabled)
-            ev.Amount = Random.Range(1, 128);
+            ev.BlinkCooldown = Random.Range(0.2f, 5.0f);
     }
 
-    private void OnInteractingTesla(InteractingTeslaEventArgs ev)
+    private static void OnGainingExperience(GainingExperienceEventArgs ev)
+    {
+        if (_isEnabled)
+            ev.Amount = Random.Range(1, 101);
+    }
+
+    private static void OnInteractingTesla(InteractingTeslaEventArgs ev)
     {
         if (_isEnabled)
             ev.Scp079.TeslaAbility._cooldown = Random.Range(1, 31);
     }
 
-    private void OnRoomBlackout(RoomBlackoutEventArgs ev)
+    private static void OnRoomBlackout(RoomBlackoutEventArgs ev)
     {
         if (_isEnabled)
             ev.Cooldown = Random.Range(1, 61);
     }
 
-    private void OnZoneBlackout(ZoneBlackoutEventArgs ev)
+    private static void OnZoneBlackout(ZoneBlackoutEventArgs ev)
     {
-        if (_isEnabled)
+        if (!_isEnabled) return;
+        try
         {
-            try
-            {
-                ev.Cooldown = Random.Range(5, 121);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
+            ev.Cooldown = Random.Range(5, 121);
+        }
+        catch (Exception e)
+        {
+            Log.Error(e);
         }
     }
 
-    private void OnLockingDown(LockingDownEventArgs ev)
+    private static void OnLockingDown(LockingDownEventArgs ev)
     {
         if (_isEnabled)
             ev.Scp079.LockdownRoomAbility._cooldown = Random.Range(1, 31);
     }
 
-    private void OnLosingSignal(LosingSignalEventArgs ev)
+    private static void OnLosingSignal(LosingSignalEventArgs ev)
     {
         if (_isEnabled)
             ev.Scp079.Scp2176LostTime = Random.Range(1, 31);
@@ -263,11 +322,11 @@ public class MaxRandom  : Mode
 
         // 탄약 아이템은 인벤토리 슬롯을 점유하므로, 예비 탄약으로 직접 지급합니다.
         // 아래 랜덤 아이템 6개가 슬롯 부족으로 누락되지 않도록 합니다.
-        player.AddAmmo(AmmoType.Nato9, 90);
-        player.AddAmmo(AmmoType.Nato556, 60);
-        player.AddAmmo(AmmoType.Nato762, 60);
-        player.AddAmmo(AmmoType.Ammo12Gauge, 16);
-        player.AddAmmo(AmmoType.Ammo44Cal, 10);
+        player.AddAmmo(AmmoType.Nato9, Convert.ToByte(Random.Range(1, 256)));
+        player.AddAmmo(AmmoType.Nato556, Convert.ToByte(Random.Range(1, 256)));
+        player.AddAmmo(AmmoType.Nato762, Convert.ToByte(Random.Range(1, 256)));
+        player.AddAmmo(AmmoType.Ammo12Gauge, Convert.ToByte(Random.Range(1, 64)));
+        player.AddAmmo(AmmoType.Ammo44Cal, Convert.ToByte(Random.Range(1, 32)));
 
         for (int i = 1; i < 7; i++)
         {
@@ -279,15 +338,15 @@ public class MaxRandom  : Mode
         }
     }
 
-    private IEnumerator<float> RandomBoxCoroutine()
+    private static IEnumerator<float> RandomBoxCoroutine()
     {
-        yield return Timing.WaitForSeconds(20f);
+        yield return Timing.WaitForSeconds(Convert.ToByte(Random.Range(10, 61)));
 
         foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
             try
             {
-                List<ItemType> itemList = Tools.EnumToList<ItemType>();
-                ItemType item = itemList.GetRandomValue();
+                var itemList = Tools.EnumToList<ItemType>();
+                var item = itemList.GetRandomValue();
                 player.AddItem(item);
 
                 player.AddHint("랜덤박스", $"<color=#F3F781>{item.GetName()}</color>(을)를 지급받았습니다.",
@@ -296,5 +355,44 @@ public class MaxRandom  : Mode
             catch (KeyNotFoundException e)
             { Log.Warn($"[RGM] RandomItem card fetch failure: {e.Message}"); }
             catch (Exception ex) { Log.Error($"[RGM] RandomItem Mode Error: {ex}"); }
+    }
+
+    private static IEnumerator<float> RandomFactionSpawnCoroutine()
+    {
+        while (true)
+        {
+            var faction = Convert.ToByte(Random.Range(1, 101)) <= 50 ? Faction.FoundationEnemy : Faction.FoundationStaff;
+            Timing.CallDelayed(Convert.ToInt16(Random.Range(60, 301)), () => 
+            {
+                Respawn.GrantTokens(faction, 1);
+                if (WaveManager.TryGet(faction, out var wave)) WaveManager.Spawn(wave);
+            });
+            
+            yield return Timing.WaitForOneFrame;
+        }
+    }
+    
+    private static void OnRoundEnded(RoundEndedEventArgs ev)
+    {
+        List<Player> players = [.. PlayerManager.List.Where(x => !x.IsNPC)];
+
+        if (players.Count == 0)
+            return;
+
+        // 1 ~ 실제 대상 후보 수 (int 버전 Range의 상한은 제외됨)
+        var targetCount = Random.Range(1, players.Count + 1);
+
+        // Fisher–Yates shuffle: 각 플레이어는 정확히 한 번만 존재
+        for (int i = players.Count - 1; i > 0; i--)
+        {
+            var randomIndex = Random.Range(0, i + 1);
+            (players[i], players[randomIndex]) = (players[randomIndex], players[i]);
+        }
+
+        List<Player> winners = [.. players.Take(targetCount)];
+        
+        var reward = Random.Range(1, players.Count + 1);
+
+        Timing.RunCoroutine(Tools.SetWinner(winners, reward));
     }
 }
