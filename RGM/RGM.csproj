@@ -581,14 +581,7 @@
     <Compile Include="RGM\Modes\Lock\TFT\Commands\RemoteadminCommands\adminfeatures\AddTFTAbility.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Commands\RemoteadminCommands\adminfeatures\ShowHint.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\Commands\RemoteadminCommands\adminfeatures\StartSelect.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\MapEvents.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\MEREvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\EventArgs\PlayerEvents.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp096Events.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp3114Events.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\Scp\Scp330Events.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\ServerEvents.cs" />
-    <Compile Include="RGM\Modes\Lock\TFT\EventArgs\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\IEnumerators\Base.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Euclid\Human\Miniaturization2.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT\TFTAbilities\Keter\Human\Miniaturization3.cs" />

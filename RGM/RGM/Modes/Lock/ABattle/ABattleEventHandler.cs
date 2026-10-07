@@ -72,7 +72,7 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnSpawned(SpawnedEventArgs ev)
     {
-        if(!ev.Player.IsScpRole()) ev.Player.ApplyGodMode(60f);
+        if(!ev.Player.IsScpRole()) ev.Player.ApplyGodMode(50f);
         
         if (_pendingAbilityRestores.TryGetValue(ev.Player, out var abilities))
         {

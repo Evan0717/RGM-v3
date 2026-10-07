@@ -590,6 +590,7 @@ public enum AbilityType
     
     EPIC_SCP106_RETURN, // [전용 영웅] 회귀
     EPIC_SCP106_EVADE, // [전용 영웅] 긴급 탈출
+    EPIC_SCP106_STEPPING, // [전용 영웅] 긴급 탈출
 
     LEGEND_SCP106_FLASHBACK, // [전용 전설] 회상
     
