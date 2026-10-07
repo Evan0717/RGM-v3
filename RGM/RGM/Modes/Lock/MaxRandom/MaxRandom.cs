@@ -15,6 +15,7 @@ using Random = UnityEngine.Random;
 using InventorySystem.Items;
 using Exiled.API.Features.Doors;
 using Exiled.API.Enums;
+using Exiled.CustomItems.API.EventArgs;
 using Exiled.Events.EventArgs.Server;
 using Respawning;
 using RGM.Patches;
@@ -84,6 +85,7 @@ public class MaxRandom : Mode
     private static bool _isEnabled;
     private CoroutineHandle _randomBox;
     private CoroutineHandle _randomFactionSpawn;
+    private CoroutineHandle _onModeStarted;
     private readonly AutoWarhead _autoWarhead = new(Random.Range(8, 21), 1);
     
     public override void OnEnabled()
@@ -105,6 +107,7 @@ public class MaxRandom : Mode
 
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         
+        _onModeStarted = Timing.RunCoroutine(OnModeStarted());
         _randomBox = Timing.RunCoroutine(RandomBoxCoroutine());
         _randomFactionSpawn = Timing.RunCoroutine(RandomFactionSpawnCoroutine());
         _autoWarhead.RunCoroutine();
@@ -128,12 +131,24 @@ public class MaxRandom : Mode
         
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
+        Timing.KillCoroutines(_onModeStarted);
         Timing.KillCoroutines(_randomBox);
         Timing.KillCoroutines(_randomFactionSpawn);
         _autoWarhead.KillCoroutine();
         foreach (var player in PlayerManager.List)
             Timing.KillCoroutines(GetSpawnInventoryCoroutineName(player));
     }
+
+    private IEnumerator<float> OnModeStarted()
+    {
+        // RoundStarted 시점에는 기본 역할 배정이 이미 끝나 Spawned 이벤트를 놓칠 수 있습니다.
+        // 현재 생존 중인 인원을 직접 재배정해 첫 스폰에도 모드 효과를 적용합니다.
+        foreach (var player in PlayerManager.List.Where(x => x.IsAlive && !x.IsNonePlayer()))
+            player.Role.Set(SelectRole(player), SpawnReason.ItemUsage, RoleSpawnFlags.AssignInventory);
+
+        yield break;
+    }
+
     private void OnSpawned(SpawnedEventArgs ev)
     {
         if (ev.Player.IsNonePlayer())
@@ -231,16 +246,24 @@ public class MaxRandom : Mode
 
         player.Position = new Vector3(selectedDoor.Position.x, selectedDoor.Position.y + 2, selectedDoor.Position.z);
     }
-
+    
     private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker == null ||
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub) ||
-            ApplyFixedDamage.IsApplying) return;
+            ApplyFixedDamage.IsApplying)
+            return;
 
-        ev.IsAllowed = false;
-        if (ApplyFixedDamage.Apply(ev.Attacker, ev.Player, Random.Range(1, sbyte.MaxValue)))
-            ev.Attacker.ShowHitMarker();
+        if (ev.Attacker.Role.Type == RoleTypeId.Scp173)
+        {
+            ev.IsAllowed = false;
+            if (ApplyFixedDamage.Apply(ev.Attacker, ev.Player, Random.Range(1, 128))) 
+                ev.Attacker.ShowHitMarker();
+        }
+        else
+        {
+            ev.DamageHandler.Damage = Random.Range(1, 128);
+        }
     }
     
     private static void OnHealing(HealingEventArgs ev)
@@ -332,47 +355,49 @@ public class MaxRandom : Mode
         player.AddAmmo(AmmoType.Ammo12Gauge, Convert.ToByte(Random.Range(1, 64)));
         player.AddAmmo(AmmoType.Ammo44Cal, Convert.ToByte(Random.Range(1, 32)));
 
-        for (int i = 1; i < 7; i++)
-        {
-            var item = itemList.GetRandomValue();
-                
-            player.AddItem(item);
-
-            yield return Timing.WaitForSeconds(1);
-        }
+        // 역할 변경 시 이 코루틴은 새 역할용 코루틴으로 교체됩니다.
+        // 아이템 사이에 대기하지 않아 중간에 취소되어 일부만 지급되는 일을 막습니다.
+        for (int i = 0; i < 6; i++)
+            player.AddItem(itemList.GetRandomValue());
     }
 
     private static IEnumerator<float> RandomBoxCoroutine()
     {
-        yield return Timing.WaitForSeconds(Convert.ToByte(Random.Range(10, 61)));
+        while (_isEnabled)
+        {
+            yield return Timing.WaitForSeconds(Random.Range(10, 61));
 
-        foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
-            try
-            {
-                var itemList = Tools.EnumToList<ItemType>();
-                var item = itemList.GetRandomValue();
-                player.AddItem(item);
+            foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x.Role.Type != RoleTypeId.Scp079))
+                try
+                {
+                    var itemList = Tools.EnumToList<ItemType>();
+                    var item = itemList.GetRandomValue();
+                    player.AddItem(item);
 
-                player.AddHint("랜덤박스", $"<color=#F3F781>{item.GetName()}</color>(을)를 지급받았습니다.",
-                    5);
-            }
-            catch (KeyNotFoundException e)
-            { Log.Warn($"[RGM] RandomItem card fetch failure: {e.Message}"); }
-            catch (Exception ex) { Log.Error($"[RGM] RandomItem Mode Error: {ex}"); }
+                    player.AddHint("랜덤박스", $"<color=#F3F781>{item.GetName()}</color>(을)를 지급받았습니다.",
+                        5);
+                }
+                catch (KeyNotFoundException e)
+                { Log.Warn($"[RGM] RandomItem card fetch failure: {e.Message}"); }
+                catch (Exception ex) { Log.Error($"[RGM] RandomItem Mode Error: {ex}"); }
+        }
     }
 
     private static IEnumerator<float> RandomFactionSpawnCoroutine()
     {
-        while (true)
+        while (_isEnabled)
         {
+            // 이전 구현은 매 프레임마다 지연 호출을 예약해 60초 후부터 지원이 연속 발생했습니다.
+            // 지원을 생성한 뒤 다음 지원까지 60~300초를 실제로 대기합니다.
+            yield return Timing.WaitForSeconds(Random.Range(60, 301));
+
+            if (!_isEnabled)
+                yield break;
+
             var faction = Convert.ToByte(Random.Range(1, 101)) <= 50 ? Faction.FoundationEnemy : Faction.FoundationStaff;
-            Timing.CallDelayed(Convert.ToInt16(Random.Range(60, 301)), () => 
-            {
-                Respawn.GrantTokens(faction, 1);
-                if (WaveManager.TryGet(faction, out var wave)) WaveManager.Spawn(wave);
-            });
-            
-            yield return Timing.WaitForOneFrame;
+            Respawn.GrantTokens(faction, 1);
+            if (WaveManager.TryGet(faction, out var wave))
+                WaveManager.Spawn(wave);
         }
     }
     
