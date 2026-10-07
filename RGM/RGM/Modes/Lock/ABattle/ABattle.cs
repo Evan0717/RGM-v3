@@ -1481,35 +1481,53 @@ public class ABattle : Mode
         }
     }
 
+    private static readonly (AbilityCategory Category, int Weight)[] DefaultCategoryWeights =
+    [
+        (AbilityCategory.Ancient, 1),
+        (AbilityCategory.Mythic, 9),
+        (AbilityCategory.Legend, 40),
+        (AbilityCategory.Epic, 1100),
+        (AbilityCategory.Rare, 5220),
+        (AbilityCategory.Normal, 13630)
+    ];
+
+    private static readonly (AbilityCategory Category, int Weight)[] FeastCategoryWeights =
+    [
+        (AbilityCategory.Ancient, 2),
+        (AbilityCategory.Mythic, 28),
+        (AbilityCategory.Legend, 110),
+        (AbilityCategory.Epic, 1830),
+        (AbilityCategory.Rare, 5746),
+        (AbilityCategory.Normal, 12284)
+    ];
+
     public static AbilityCategory GetCategory(Player player, bool allowAncient = true)
     {
         if (!player.IsAlive) return AbilityCategory.Dummy;
 
-        var random = Convert.ToUInt16(Random.Range(1, 20001)); // 0.005 단위
-        var hasBlackMarket = player.HasAbility(AbilityType.SYNERGY_BLACKMARKET);
+        var weights = CurrentExtraModes.Contains("잔칫상")
+            ? FeastCategoryWeights
+            : DefaultCategoryWeights;
+        var canGetAncient = allowAncient && !player.HasAbility(AbilityType.SYNERGY_BLACKMARKET);
+        var ancientWeight = weights[0].Weight;
+        var roll = Random.Range(0, weights.Sum(x => x.Weight));
+        var cumulativeWeight = 0;
 
-        if (CurrentExtraModes.Contains("잔칫상"))
+        foreach (var (category, weight) in weights)
         {
-            return random switch
-            {
-                <= 2 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.010
-                <= 30 => AbilityCategory.Mythic, // 0.150
-                <= 140 => AbilityCategory.Legend, // 0.700
-                <= 1970 => AbilityCategory.Epic, // 9.850
-                <= 7716 => AbilityCategory.Rare, // 38.580
-                _ => AbilityCategory.Normal // 50.710
-            };
+            if (category == AbilityCategory.Ancient && !canGetAncient)
+                continue;
+
+            // 고대 획득이 불가능하면 기존 로직과 동일하게 그 확률을 신화에 합산한다.
+            cumulativeWeight += category == AbilityCategory.Mythic && !canGetAncient
+                ? weight + ancientWeight
+                : weight;
+
+            if (roll < cumulativeWeight)
+                return category;
         }
 
-        return random switch
-        {
-            1 when allowAncient && !hasBlackMarket => AbilityCategory.Ancient, // 0.005
-            <= 10 => AbilityCategory.Mythic, // 0.050
-            <= 50 => AbilityCategory.Legend, // 0.250
-            <= 1150 => AbilityCategory.Epic, // 5.750
-            <= 6370 => AbilityCategory.Rare, // 31.850
-            _ => AbilityCategory.Normal // 62.405
-        };
+        return AbilityCategory.Normal;
     }
 
     private static byte GetRoleAbilityChance(AbilityCategory category)
