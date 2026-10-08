@@ -143,6 +143,10 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\Scp1509Hand.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Instruct.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Tactic.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\Legend\Execution.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\Normal\DoraemonPocket.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\Normal\HalfBlock.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\Normal\Showmanship.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyFixedDamage.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyInstantKill.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ApplyLethalDamage.cs" />
@@ -446,10 +450,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Normal\Fear.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Rare\ImmenseWeight.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Rare\Mirage.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\DoraemonPocket.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\HalfBlock.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\Showmanship.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\SkilledAssassin.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp939\Epic\Amnesia.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp939\Legend\Earthquake.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp939\Normal\HugMe.cs" />
