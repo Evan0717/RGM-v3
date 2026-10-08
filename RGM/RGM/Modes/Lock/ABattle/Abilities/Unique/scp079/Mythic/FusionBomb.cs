@@ -13,7 +13,7 @@ namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 
 [Ability("융단 폭격",
     """
-    핑을 찍은 지점 20m 이내에서 10초간 0.1초 간격으로 미사일이 쏟아집니다. (쿨타임 15초, 중복 불가)
+    핑을 찍은 지점 20m 이내에서 8초간 0.1초 간격으로 미사일이 쏟아집니다. (쿨타임 16초, 중복 불가)
     해당 능력으로 적 처치 시 대상을 049-2로 변환합니다.
     """,
     AbilityCategory.Mythic,
@@ -48,7 +48,7 @@ public class FusionBomb : Ability
                     Vector3 centerPos = ev.Position + new Vector3(0, 0.1f, 0);
                     Timing.RunCoroutine(StartBombardment(centerPos));
 
-                    Timing.CallDelayed(15f, () =>
+                    Timing.CallDelayed(16f, () =>
                     {
                         _isScp079Cooldown = false;
                     });
@@ -65,7 +65,7 @@ public class FusionBomb : Ability
 
     private IEnumerator<float> StartBombardment(Vector3 centerPos)
     {
-        float duration = 10f;
+        float duration = 8f;
         float interval = 0.1f;
         float elapsedTime = 0f;
 

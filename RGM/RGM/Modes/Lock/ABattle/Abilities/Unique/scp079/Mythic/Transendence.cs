@@ -13,7 +13,7 @@ namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
 [Ability("초월", """
                핑을 찍으면 핑 근처 가장 가까운 인간 1명이 17% 확률로 승천합니다. (사거리 5m)
                해당 승천은 『사망』 효과가 적용됩니다.
-               """, AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TRANSENDENCE, RoleAbility.Scp079)]
+               """, AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_TRANSENDENCE, RoleAbility.Scp079, isUnique:true)]
 public class Transendence : Ability
 {
     private readonly List<Player> _isInRocket = [];
