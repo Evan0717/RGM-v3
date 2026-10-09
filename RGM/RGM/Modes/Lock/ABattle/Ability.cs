@@ -607,6 +607,7 @@ public enum AbilityType
     RARE_SCP939_BLEEDING, // [전용 희귀] 출혈
     
     EPIC_SCP939_AMNESIA, // [전용 영웅] 기억 소거
+    EPIC_SCP939_HEAVYINJURE, // [전용 영웅] 중상
     
     LEGEND_SCP939_EARTHQUAKE, // [전용 전설] 지진
 

@@ -20,7 +20,7 @@ public class Dnd : Ability
     
     public override void OnEnabled()
     {
-        var time = Mathf.Max(5, Immobilizeduration - 5 * Owner.AbilityCount(AbilityType.NORMAL_FASTRETURN));
+        var time = Mathf.Max(5, Immobilizeduration - 8 * Owner.AbilityCount(AbilityType.NORMAL_FASTRETURN));
         Timing.RunCoroutine(Enumerator());
         return;
 

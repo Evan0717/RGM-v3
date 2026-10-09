@@ -16,17 +16,17 @@ namespace RGM.Modes.Abilities.Unique.Human.Legend;
 [Ability("EMP",
     """
     시설에 강력한 전자기장 공격을 가합니다.
-    모든 시설이 15초 간 정지되며, SCP-079의 신호를 50초간 차단시키고, 레벨을 1로 초기화합니다.
-    사용 시 재사용 대기시간 150초가 적용됩니다.
+    모든 시설이 15초 간 정지되며, SCP-079의 신호를 45초간 차단시키고, 레벨을 1로 초기화합니다.
+    사용 시 재사용 대기시간 120초가 적용됩니다.
     """, 
     AbilityCategory.Legend, AbilityType.LEGEND_HUMAN_EMP, RoleAbility.Human)]
 
 public class EMP : Ability
 {
     private ushort _empSerial;
-    private const float EmpCooldown = 150f;
+    private const float EmpCooldown = 120f;
     private const float BlackoutDuration = 15f;
-    private const float Scp079SignalLostDuration = 50f;
+    private const float Scp079SignalLostDuration = 45f;
     private bool _isCoolingDown;
     private bool _suppressScp2176Effect;
 
