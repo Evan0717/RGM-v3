@@ -31,8 +31,8 @@ namespace RGM.Modes;
 [Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.ABattle)]
 public class ABattle : Mode
 {
-    public override string Name => "워크스테이션 업그레이드";
-    public override string Description => "워크스테이션에서 업그레이드하세요!";
+    public override string Name => "연두색 강화 뛰기";
+    public override string Description => "작업대에서 강화 뛰기를 하세요!";
 
     public override string Detail =>
         """
@@ -118,13 +118,13 @@ public class ABattle : Mode
     public static readonly Dictionary<string, string> ExtraModes = new()
     {
         { "기본", "워크스테이션 업그레이드를 즐기세요!" },
-        { "치매", "33% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
+        { "치매", "32% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
         //{ "반사경", "능력 획득 시, 40% 확률로 능력이 복제됩니다." },
         { "수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다." },
         { "전주곡",
             $"""
              스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다.
-             30% 확률로 프리즘이 활성화되며, 이때 15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color> 등급의 능력을 얻습니다.
+             25% 확률로 프리즘이 활성화되며, 이때 15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color> 등급의 능력을 얻습니다.
              """
         },
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
@@ -1238,8 +1238,8 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
 
-            var transition = Convert.ToByte(Random.Range(1, 101)) <= 4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) +
-                (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= Mathf.Min(80,
+                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 25));
 
             if (transition)
             {
@@ -1255,8 +1255,8 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.EPIC_TRANSITION);
 
-            var transition = Convert.ToByte(Random.Range(1, 101)) <= 4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + 
-                (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= Mathf.Min(80,
+                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 25));
 
             if (transition)
             {
@@ -1272,8 +1272,8 @@ public class ABattle : Mode
         {
             player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
 
-            var transition = Convert.ToByte(Random.Range(1, 101)) <= 4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + 
-                (CurrentExtraModes.Contains("잔칫상") ? 40 : 25);
+            var transition = Convert.ToByte(Random.Range(1, 101)) <= Mathf.Min(80,
+                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 25));
 
             if (transition)
             {
@@ -1535,12 +1535,11 @@ public class ABattle : Mode
         return category switch
         {
             AbilityCategory.Ancient => 40,
-            AbilityCategory.Mythic => 25,
-            AbilityCategory.Legend => 20,
-            AbilityCategory.Epic => 15,
-            AbilityCategory.Rare => 10,
-            AbilityCategory.Normal => 5,
-            _ => 5
+            AbilityCategory.Mythic => 20,
+            AbilityCategory.Legend => 15,
+            AbilityCategory.Epic => 12,
+            AbilityCategory.Rare => 9,
+            _ => 6
         };
     }
 
@@ -1686,7 +1685,7 @@ public class ABattle : Mode
                         ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;
             }
             
-            if (isPrismRand <= 30)
+            if (isPrismRand <= 25)
             {
                 player.AddBroadcast(10, "<b><size=25><color=#D23265>프리즘 전주곡 활성화</color></size></b>");
                 player.AddAbility(Instance.GetRandomAbilities(player, GetPrismRandom(), 1,

@@ -16,9 +16,7 @@ namespace RGM.Modes.Abilities.Unique.Scp079.Mythic;
     핑을 찍은 지점 20m 이내에서 8초간 0.1초 간격으로 미사일이 쏟아집니다. (쿨타임 16초, 중복 불가)
     해당 능력으로 적 처치 시 대상을 049-2로 변환합니다.
     """,
-    AbilityCategory.Mythic,
-    AbilityType.MYTHIC_SCP079_FUSIONBOMB,
-    RoleAbility.Scp079)]
+    AbilityCategory.Mythic, AbilityType.MYTHIC_SCP079_FUSIONBOMB, RoleAbility.Scp079, isUnique:true)]
 public class FusionBomb : Ability
 {
     private static bool _isScp079Cooldown;
