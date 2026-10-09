@@ -15,7 +15,7 @@ namespace RGM.Modes.Abilities.Unique.Scp0492.Epic;
 
 public class MiniPlagueDoctor : Ability
 {
-    private const float CardiacArrestDuration = 60f;
+    private const float CardiacArrestDuration = 30f;
 
     public override void OnEnabled()
     {

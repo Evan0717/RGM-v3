@@ -16,8 +16,8 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Mythic;
 
 [Ability("회고", 
     """
-    스토킹에서 나올 때와 텔레포트 후 나오는 지점 반경 14m 내의 모든 적을 『사망』시킵니다.
-    추가로, 기본 공격이 대상에게 『죽음에 이르는 공격』을 가하며, 자신의 이동 속도가 60% 증가합니다.
+    스토킹에서 나올 때와 텔레포트 후 나오는 지점 반경 10m 내의 모든 적을 『사망』시킵니다.
+    추가로, 기본 공격이 대상에게 『죽음에 이르는 공격』을 가하며, 자신의 이동 속도가 45% 증가합니다.
     능력 획득 시, <color=#FFC000>[전용 전설]</color> 회상이 있다면 <color=#FF2400>[전용 신화]</color> 회고로 대체됩니다.
     """, 
     AbilityCategory.Mythic,
@@ -26,7 +26,7 @@ namespace RGM.Modes.Abilities.Unique.Scp106.Mythic;
 
 public class Reminiscence : Ability
 {
-    private const float AttackRange = 14f;
+    private const float AttackRange = 10f;
     private const float Scp106AttackDamage = 40f;
 
     private static readonly HashSet<Player> DefenseIgnoringAttackers = [];
@@ -45,7 +45,7 @@ public class Reminiscence : Ability
         if (Owner.HasAbility(AbilityType.LEGEND_SCP106_FLASHBACK))
             Owner.RemoveAbility(AbilityType.LEGEND_SCP106_FLASHBACK);
 
-        Owner.AddEffect(EffectType.MovementBoost, 60);
+        Owner.AddEffect(EffectType.MovementBoost, 45);
         Exiled.Events.Handlers.Scp106.ExitStalking += OnExitStalking;
         Exiled.Events.Handlers.Scp106.Teleporting += OnTeleporting;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -56,7 +56,7 @@ public class Reminiscence : Ability
     {
         _isEnabled = false;
 
-        Owner.RemoveEffect(EffectType.MovementBoost, 60);
+        Owner.RemoveEffect(EffectType.MovementBoost, 45);
         Exiled.Events.Handlers.Scp106.ExitStalking -= OnExitStalking;
         Exiled.Events.Handlers.Scp106.Teleporting -= OnTeleporting;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;

@@ -8,7 +8,7 @@ using RGM.API.Features;
 namespace RGM.Modes.Abilities.Rare;
 
 [Ability("아드레날린", """
-                  지급된 동전을 사용 시 15초 간 이동 속도가 70%p 증가합니다. (재사용 대기시간 60초)
+                  지급된 동전을 사용 시 15초 간 이동 속도가 60%p 증가합니다. (재사용 대기시간 60초)
                   효과 종료 후, 약물 부작용으로 3초간 이동이 불가합니다.
                   """, 
     AbilityCategory.Rare, AbilityType.RARE_ADRENALINE)]
@@ -43,7 +43,7 @@ public class Adrenaline : Ability
             return;
         }
         
-        ev.Player.AddEffect(EffectType.MovementBoost, 70, 15);
+        ev.Player.AddEffect(EffectType.MovementBoost, 60, 15);
         Timing.CallDelayed(15f, () =>
         {
             ev.Player.AddEffect(EffectType.Ensnared, 1, 3);

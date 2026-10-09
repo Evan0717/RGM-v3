@@ -3,7 +3,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("육체 강화", "1초당 1p만큼 체력을 회복합니다.", AbilityCategory.Rare, AbilityType.RARE_PHYSICALSTRENGTHENING)]
+[Ability("육체 강화", "4초당 3p만큼 체력을 회복합니다.", AbilityCategory.Rare, AbilityType.RARE_PHYSICALSTRENGTHENING)]
 public class PhysicalStrengthening : Ability
 {
     private CoroutineHandle _upgradeBody;
@@ -22,10 +22,9 @@ public class PhysicalStrengthening : Ability
     {
         while (true)
         {
-            if (Owner.MaxHealth > Owner.Health)
-                Owner.Health += 1;
+            Owner.Heal(3);
 
-            yield return Timing.WaitForSeconds(1f);
+            yield return Timing.WaitForSeconds(4f);
         }
     }
 }

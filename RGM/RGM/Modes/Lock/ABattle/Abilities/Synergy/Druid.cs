@@ -16,7 +16,7 @@ namespace RGM.Modes.Abilities.Synergy;
 [Ability("드루이드",
     """
     <살라만드라, 운디네, 노움, 실프> 4대 정령의 가호가 당신과 함께합니다.
-    76% 확률(<color=red>SCP</color>의 경우 49%)로 상대방의 공격을 반사합니다.
+    70% 확률(<color=red>SCP</color>의 경우 45%)로 상대방의 공격을 반사합니다.
     추가로, 4대 정령에 특수 능력이 부여됩니다.
     """,
     AbilityCategory.Synergy, AbilityType.SYNERGY_DRUID)]
@@ -47,7 +47,7 @@ public class Druid : Ability
             ApplyFixedDamage.IsApplying)
             return;
 
-        float reflectChance = ev.Player.IsScpRole() ? 49 : 76;
+        float reflectChance = ev.Player.IsScpRole() ? 45 : 70;
 
         if (!(Convert.ToByte(Random.Range(1, 101)) <= reflectChance)) return;
         ev.IsAllowed = false;

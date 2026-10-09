@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("마술사", "피해를 입으면 피해량의 85%만큼 최대 HP가 늘어납니다.",
+[Ability("마술사", "피해를 입으면 피해량의 75%만큼 최대 HP가 늘어납니다.",
     AbilityCategory.Legend, AbilityType.LEGEND_MAGICIAN)]
 public class Magician : Ability
 {
@@ -26,7 +26,7 @@ public class Magician : Ability
         if (ABattle.Instance.GetAbility(Owner, AbilityType.LEGEND_MAGICIAN) != this)
             return;
         
-        var add = ev.DamageHandler.Damage * 0.85f;
+        var add = ev.DamageHandler.Damage * 0.75f;
         ev.Player.MaxHealth += add;
         ev.Player.Health += add;
     }

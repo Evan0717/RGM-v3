@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("존 윅", "권총류 데미지가 770% 증가합니다. Com18 1정과 탄약을 얻습니다.",
+[Ability("존 윅", "권총류 데미지가 700% 증가합니다. Com18 1정과 탄약을 얻습니다.",
     AbilityCategory.Legend, AbilityType.LEGEND_JOHNWICK)]
 public class Wick : Ability
 {
@@ -34,6 +34,6 @@ public class Wick : Ability
             return;
 
         if (Pistols.Contains(ev.Attacker.CurrentItem.Type))
-            ev.DamageHandler.Damage *= 7.7f;
+            ev.DamageHandler.Damage *= 7f;
     }
 }
