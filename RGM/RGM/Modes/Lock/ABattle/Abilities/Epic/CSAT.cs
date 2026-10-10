@@ -2,6 +2,7 @@ using System;
 using MEC;
 using RGM.API.Features;
 using UnityEngine;
+using RGM.Modes.Abilities.Normal;
 using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Epic;
@@ -30,7 +31,7 @@ public class CSAT : Ability
                     var category = Convert.ToByte(Random.Range(1, 101)) <= 15 
                         ? Convert.ToByte(Random.Range(1, 101)) <= 15 && Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND)
                             ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1)[0]);
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, Test.ExceptAbilities)[0]);
                 }
                 Owner.AddAbility(AbilityType.DUMMY_CSATSUCCESS);
             }

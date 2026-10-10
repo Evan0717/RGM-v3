@@ -1,7 +1,9 @@
 ﻿using System;
 using MEC;
+using MultiBroadcast.Commands.Subcommands;
 using RGM.API.Features;
 using UnityEngine;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Normal;
@@ -12,6 +14,14 @@ namespace RGM.Modes.Abilities.Normal;
                """, AbilityCategory.Normal, AbilityType.NORMAL_TEST, RoleAbility.None, true)]
 public class Test : Ability
 {
+    public static List<AbilityType> ExceptAbilities =
+        [
+            AbilityType.NORMAL_TEST,
+            AbilityType.RARE_FINALEXAM,
+            AbilityType.EPIC_CSAT,
+            AbilityType.RARE_DND,
+            AbilityType.RARE_TELEPORTATION
+        ];
     public override void OnEnabled()
     {
         Owner.AddHint("시험", "과연 결과는..?");
@@ -30,7 +40,7 @@ public class Test : Ability
                         ? Convert.ToByte(Random.Range(1, 101)) <= 55 && Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND)
                             ? AbilityCategory.Epic : AbilityCategory.Rare : AbilityCategory.Normal;
 
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, [AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);   //시험류 안 나오게 해야할 것 같음. (보류)
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, ExceptAbilities)[0]);   //시험류 안 나오게 해야할 것 같음. (보류)
                 }
                 Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);
             }
