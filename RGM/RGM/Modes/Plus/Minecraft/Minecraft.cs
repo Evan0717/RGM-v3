@@ -14,7 +14,7 @@ using AdminToys;
 
 namespace RGM.Modes;
 
-[Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.Minecraft)]
+[Mode(ModeCategory.Private, ModeInfo.Lock, ModeType.Minecraft)]
 public class Minecraft : Mode
 {
     public override string Name => "마인크래프트";
