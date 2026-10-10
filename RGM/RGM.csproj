@@ -706,6 +706,10 @@
     <Compile Include="RGM\Modes\OnlySub\SuperStar\SuperStar.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
     <Compile Include="RGM\Modes\Lock\MaxRandom\MaxRandom.cs" />
+    <Compile Include="RGM\Modes\Plus\Minecraft\Block.cs" />
+    <Compile Include="RGM\Modes\Plus\Minecraft\MinecraftEventHandler.cs" />
+    <Compile Include="RGM\Modes\Plus\Minecraft\Blocks\WhiteConcrete.cs" />
+    <Compile Include="RGM\Modes\Plus\Minecraft\Minecraft.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
     <Compile Include="RGM\Modes\Plus\Store\Store.cs" />
@@ -1021,7 +1025,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayerManages\" />
-    <Folder Include="RGM\Modes\OnlySub\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />

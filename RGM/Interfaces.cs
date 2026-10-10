@@ -170,6 +170,7 @@ public enum ModeType
     GulliversTravels,
     SpearShield,
     MaxRandom,
+    Minecraft,
 }
 
 
