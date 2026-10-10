@@ -1,32 +1,16 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
-using MEC;
+﻿namespace RGM.Modes.Abilities.Epic;
 
-namespace RGM.Modes.Abilities.Epic;
-
-[Ability("잠수부", "시야가 개선되고 스테미나가 줄어들지 않습니다.", AbilityCategory.Epic, AbilityType.EPIC_DIVER,
+[Ability("잠수부", "스테미나가 무제한이 됩니다.", AbilityCategory.Epic, AbilityType.EPIC_DIVER,
     isUnique: true)]
 public class Diver : Ability
 {
-    private CoroutineHandle _diverRotation;
-
-    public override void OnEnabled() 
-        => _diverRotation = Timing.RunCoroutine(DiverRotation());
+    public override void OnEnabled()
+    {
+        Owner.IsUsingStamina = false;
+    }
 
     public override void OnDisabled()
     {
-        Timing.KillCoroutines(_diverRotation);
-
-        Owner.DisableEffect(EffectType.Invigorated);
-    }
-
-    private IEnumerator<float> DiverRotation()
-    {
-        while (true)
-        {
-            Owner.EnableEffect(EffectType.Invigorated);
-
-            yield return Timing.WaitForSeconds(1f);
-        }
+        Owner.IsUsingStamina = true;
     }
 }

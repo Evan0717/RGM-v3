@@ -2,7 +2,7 @@
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("흡혈귀", "상대에게 입힌 피해량의 22%만큼 AHP를 받습니다.", AbilityCategory.Rare, AbilityType.RARE_VAMPIRE)]
+[Ability("흡혈귀", "상대에게 입힌 피해량의 20%만큼 AHP를 받습니다.", AbilityCategory.Rare, AbilityType.RARE_VAMPIRE)]
 public class Vampire : Ability
 {
     public override void OnEnabled()

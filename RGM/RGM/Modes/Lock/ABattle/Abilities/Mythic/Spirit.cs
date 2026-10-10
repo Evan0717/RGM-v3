@@ -11,8 +11,8 @@ using RGM.API.Features;
 namespace RGM.Modes.Abilities.Mythic;
 
 [Ability("스피릿", """
-                자신에게 『생존』 효과를 무제한으로 부여합니다!
-                추가로, 8m 반경에 있는 플레이어가 SCP-1344 아이템을 가지고 있을 경우, 즉시 제거합니다.
+                자신에게 『생존』 효과를 무제한으로 부여합니다! (무적 효과는 적용되지 않습니다.)
+                추가로, 6m 반경에 있는 플레이어가 SCP-1344 아이템을 가지고 있을 경우, 즉시 제거합니다.
                 """,
     AbilityCategory.Mythic, AbilityType.MYTHIC_SPIRIT, isUnique: true)]
 public class Spirit : Ability
@@ -42,7 +42,7 @@ public class Spirit : Ability
         {
             Owner.EnableEffect(EffectType.Invisible, 1);
             
-            foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 8))
+            foreach (var player in PlayerManager.List.Where(x => Vector3.Distance(x.Position, Owner.Position) <= 6))
             {
                 try
                 {

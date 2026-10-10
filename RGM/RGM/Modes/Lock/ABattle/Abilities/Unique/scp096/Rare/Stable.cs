@@ -4,7 +4,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp096.Rare;
 
-[Ability("안정", "SCP-096의 TryingNotToCry 스킬 사용 시 초당 최대 HP의 0.5%만큼 회복합니다.",
+[Ability("안정", "SCP-096의 TryingNotToCry 스킬 사용 시 초당 최대 HP의 1%만큼 회복합니다.",
     AbilityCategory.Rare, AbilityType.RARE_SCP096_STABLE, RoleAbility.Scp096)]
 
 public class Stable : Ability
@@ -29,7 +29,7 @@ public class Stable : Ability
             {
                 if (scp096.TryNotToCryActive)
                 {
-                    Owner.Heal(Owner.MaxHealth * 0.005f);
+                    Owner.Heal(Owner.MaxHealth * 0.01f);
                 }
             }
             yield return Timing.WaitForSeconds(1);

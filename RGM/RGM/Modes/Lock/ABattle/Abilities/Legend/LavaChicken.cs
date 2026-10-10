@@ -49,7 +49,7 @@ public class LavaChicken : Ability
                              HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
                     if (Vector3.Distance(player.Position, ownerPosition) > 6.5f) continue;
-                    var damage = player.IsScpRole() ? player.MaxHealth * 0.01f : player.MaxHealth * 0.03f;
+                    var damage = player.IsScpRole() ? player.MaxHealth * 0.007f : player.MaxHealth * 0.021f;
 
                     if (player.HasAbility(AbilityType.RARE_UNDINE))
                     {

@@ -31,8 +31,8 @@ namespace RGM.Modes;
 [Mode(ModeCategory.Public, ModeInfo.Lock, ModeType.ABattle)]
 public class ABattle : Mode
 {
-    public override string Name => "연두색 강화 뛰기";
-    public override string Description => "작업대에서 강화 뛰기를 하세요!";
+    public override string Name => "워크스테이션 업그레이드";
+    public override string Description => "워크스테이션에서 업그레이드를 하세요!";
 
     public override string Detail =>
         """
@@ -45,7 +45,7 @@ public class ABattle : Mode
         • <color=#BF40BF>영웅</color> - 5.85%
         • <color=#FFC000>전설</color> - 0.25%
         • <color=#FF2400>신화</color> - 0.05%
-        • <color=#008000>고대</color> - 0.01%
+        • <color=#008000>고대</color> - 0.001%
         • <color=#DEEFED>시너지</color> - ???
 
         • <color=#F7819F>전용</color> 
@@ -1483,22 +1483,22 @@ public class ABattle : Mode
 
     private static readonly (AbilityCategory Category, int Weight)[] DefaultCategoryWeights =
     [
-        (AbilityCategory.Ancient, 1),
-        (AbilityCategory.Mythic, 9),
-        (AbilityCategory.Legend, 40),
-        (AbilityCategory.Epic, 1100),
-        (AbilityCategory.Rare, 5220),
-        (AbilityCategory.Normal, 13630)
+        (AbilityCategory.Ancient, 1), // 0.001
+        (AbilityCategory.Mythic, 19), // 0.019
+        (AbilityCategory.Legend, 200), // 0.200
+        (AbilityCategory.Epic, 9390), // 9.390
+        (AbilityCategory.Rare, 28895), // 28.895
+        (AbilityCategory.Normal, 61495) // 61.495
     ];
 
     private static readonly (AbilityCategory Category, int Weight)[] FeastCategoryWeights =
     [
-        (AbilityCategory.Ancient, 2),
-        (AbilityCategory.Mythic, 28),
-        (AbilityCategory.Legend, 110),
-        (AbilityCategory.Epic, 1830),
-        (AbilityCategory.Rare, 5746),
-        (AbilityCategory.Normal, 12284)
+        (AbilityCategory.Ancient, 2), // 0.002
+        (AbilityCategory.Mythic, 38), // 0.038
+        (AbilityCategory.Legend, 575), // 0.575
+        (AbilityCategory.Epic, 15570), // 15.570
+        (AbilityCategory.Rare, 34315), // 34.315
+        (AbilityCategory.Normal, 49500) // 49.500
     ];
 
     public static AbilityCategory GetCategory(Player player, bool allowAncient = true)

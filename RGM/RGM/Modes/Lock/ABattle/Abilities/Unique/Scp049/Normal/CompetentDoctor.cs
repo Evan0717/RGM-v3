@@ -3,7 +3,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp049.Normal;
 
-[Ability("유능한 의사", "소생된 좀비의 체력이 50% 추가됩니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP049_COMPETENTDOCTOR, RoleAbility.Scp049)]
+[Ability("유능한 의사", "소생된 좀비의 체력이 60% 추가됩니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP049_COMPETENTDOCTOR, RoleAbility.Scp049)]
 public class CompetentDoctor : Ability
 {
     public override void OnEnabled()
@@ -22,7 +22,7 @@ public class CompetentDoctor : Ability
         {
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                ev.Target.MaxHealth *= 1.5f;
+                ev.Target.MaxHealth *= 1.6f;
                 ev.Target.Health = ev.Target.MaxHealth;
             });
         }

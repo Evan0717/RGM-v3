@@ -59,10 +59,10 @@ public class KingsColor : Ability
                 player.EnableEffect(EffectType.Slowness, 80, 1f);
                 player.CurrentItem = null;
                 ApplyFixedDamage.Apply(player, target,
-                    target.IsScpRole() ? target.MaxHealth * 0.05f : target.MaxHealth * 0.2f);
+                    target.IsScpRole() ? target.MaxHealth * 0.04f : target.MaxHealth * 0.16f);
             }
 
-            yield return Timing.WaitForSeconds(0.05f);
+            yield return Timing.WaitForSeconds(0.067f);
         }
 
         if (_lightSource == null) yield break;

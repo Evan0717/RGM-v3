@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("수집가", "랜덤한 SCP 아이템을 2개 획득합니다. 20% 확률로 2개를 추가로 획득합니다.", AbilityCategory.Rare, AbilityType.RARE_COLLECTOR)]
+[Ability("수집가", "랜덤한 SCP 아이템을 2개 획득합니다. 20% 확률로 1개를 추가로 획득합니다.", AbilityCategory.Rare, AbilityType.RARE_COLLECTOR)]
 public class Collector : Ability
 {
     public override void OnEnabled()
@@ -16,7 +16,7 @@ public class Collector : Ability
             .Where(x => x.ToString().Contains("SCP") && !Datas.ExceptItems.Contains(x))
             .ToList();
 
-        var itemCount = Convert.ToByte(Random.Range(1, 101)) <= 20 ? 4 : 2;
+        var itemCount = Convert.ToByte(Random.Range(1, 101)) <= 20 ? 3 : 2;
         for (int i = 0; i < itemCount; i++)
         {
             Owner.AddItem(scpItems.GetRandomValue());

@@ -9,7 +9,7 @@ public class WeaponExpert : Ability
     public override void OnEnabled()
     {
         Owner.AddItem(ItemType.SCP1853);
-        if (Convert.ToByte(Random.Range(1, 101)) <= 25) {
+        if (Convert.ToByte(Random.Range(1, 101)) <= 20) {
             Owner.AddItem(ItemType.SCP1853);
         }
     }
