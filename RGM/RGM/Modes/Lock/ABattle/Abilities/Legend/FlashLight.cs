@@ -60,7 +60,7 @@ public class FlashLight : Ability
                 }
             }
 
-            yield return Timing.WaitForSeconds(0.05f);
+            yield return Timing.WaitForSeconds(0.067f);
         }
     }
 }
