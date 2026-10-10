@@ -6,11 +6,11 @@ using MEC;
 namespace RGM.Modes.Abilities.Legend;
 
 // Still in WIP
-[Ability("대격변 생성기", """
-                    가지고 있는 모든 능력의 등급이 1단계 높은 등급의 랜덤한 능력으로 변경됩니다.
-                    단, 전설 이상으로는 적용되지 않습니다.
-                    """, 
-    AbilityCategory.Legend, AbilityType.LEGEND_CATACLYSMGENERATOR, isUnique: true)]
+//[Ability("대격변 생성기", """
+//                    가지고 있는 모든 능력의 등급이 1단계 높은 등급의 랜덤한 능력으로 변경됩니다.
+         //           단, 전설 이상으로는 적용되지 않습니다.
+       //             """, 
+//    AbilityCategory.Legend, AbilityType.LEGEND_CATACLYSMGENERATOR, isUnique: true)]  //주석 대충달긴 했는데 음 일단
 public class CataclysmGenerator : Ability
 {
     public override void OnEnabled()
