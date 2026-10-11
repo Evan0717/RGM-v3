@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace RGM.Modes;
 
-/// <summary>설치된 블록 하나(개체). 위치와 상태는 여기에 둔다.</summary>
 public abstract class Block
 {
     public BlockInfo Info { get; internal set; }
@@ -18,8 +17,6 @@ public abstract class Block
     public virtual bool OnInteract(Player player) => false; // true면 상호작용이 처리됨
     public virtual void OnBroken(Player player) { }
 }
-
-/// <summary>블록 "종류"의 설계도. 모드 시작 때 한 번 만들어 모두가 공유한다.</summary>
 public class BlockInfo
 {
     public Type Type { get; set; }
@@ -81,25 +78,25 @@ public class BlockVisual
                     : toy.NetworkPrimitiveFlags & ~PrimitiveFlags.Collidable;
         }
 
-        // Placed는 Animator의 기본 상태(Entry → Placed)라 재생할 필요가 없음.
-        // 그래야 AnimationController 캐시에 설치된 블록이 쌓이지 않음.
         if (form == BlockForm.Placed)
             return;
 
         var anim = AnimationController.Get(Schematic);
         if (anim.Animators.Count > 0)
-            anim.Play(form.ToString()); // "Held" / "Dropped"
+            anim.Play(form.ToString());
     }
 
     public void PlaySwing()
     {
+        if (Schematic == null) return;
         var anim = AnimationController.Get(Schematic);
         if (anim.Animators.Count > 0)
-            anim.Animators[0].Play("Swing", 0, 0f); // 매번 처음부터
+            anim.Animators[0].Play("Swing", 0, 0f);
     }
 
     public void AttachTo(Transform parent)
     {
+        if (Schematic == null) return;
         Schematic.transform.parent = parent;
         Schematic.transform.localPosition = Vector3.zero;
         Schematic.transform.localRotation = Quaternion.identity;

@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Exiled.API.Features;
-using ProjectMER.Features;
-using ProjectMER.Features.Objects;
 using Exiled.API.Features.Items;
 using RGM.API.Features;
 using UnityEngine;
 using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
-using AdminToys;
+using Exiled.API.Features.Pickups;
 
 namespace RGM.Modes;
 
@@ -33,14 +31,13 @@ public class Minecraft : Mode
     public const float MaxDistance = 10f;
     public const int BuildMask = 1 << 0;
     public readonly ItemType MinecraftItemType = ItemType.Coin; // 블록 설치용 아이템
-
-    // 종류 레지스트리: BlockType -> 설계도
     public readonly Dictionary<BlockType, BlockInfo> Blocks = new();
-
-    // 월드: 칸 좌표 -> 설치된 블록 개체
     public readonly Dictionary<Vector3Int, Block> World = new();
-    public readonly Dictionary<ushort, BlockData> BlockSerials = new(); //ItemSerial
+    public readonly Dictionary<ushort, BlockData> BlockSerials = new();
     private MinecraftEventHandler _eventHandler;
+    private CoroutineHandle _startHandle;
+
+    // Lifecycle
     public override void OnEnabled()
     {
         Instance = this;
@@ -72,20 +69,32 @@ public class Minecraft : Mode
                 DestroyTime = blockAttribute.DestroyTime
             });
         }
-        Timing.RunCoroutine(OnModeStarted());
+        _startHandle = Timing.RunCoroutine(OnModeStarted());
         _eventHandler.RegisterEvents();
+        MinecraftSetting.Register();
     }
 
     public override void OnDisabled()
     {
+        _eventHandler.UnRegisterEvents();   // 이벤트를 먼저 끊고
+        Timing.KillCoroutines(_startHandle);
+
         foreach (var block in World.Values)
             block.Schematic?.Destroy();
-
         World.Clear();
+
+        foreach (var player in Player.List)
+            foreach (var item in player.Items.Where(i => BlockSerials.ContainsKey(i.Serial)).ToList())
+                player.RemoveItem(item);
+
+        foreach (var pickup in Pickup.List.Where(p => BlockSerials.ContainsKey(p.Serial)).ToList())
+            pickup.Destroy(); // Dropped 스키매틱도 같이 사라짐
+
+        BlockSerials.Clear();
         Blocks.Clear();
-        _eventHandler.UnRegisterEvents();
     }
 
+    // Startup coroutine
     private IEnumerator<float> OnModeStarted()
     {
         yield return Timing.WaitForSeconds(1f);
@@ -95,16 +104,22 @@ public class Minecraft : Mode
         }
     }
 
-    private static Vector3Int ToGrid(Vector3 pos) => new(
-        Mathf.RoundToInt(pos.x / GridSize),
-        Mathf.RoundToInt(pos.y / GridSize),
-        Mathf.RoundToInt(pos.z / GridSize));
+    // Spawn / Inventory API
+    public void Spawned(Player player)
+    {
+        BlockType RandomBlockType = Tools.EnumToList<BlockType>().Where(t => t != BlockType.Air).GetRandomValue();
+        AddBlock(RandomBlockType, (ushort)32, player);
+    }
 
-    private static Vector3 ToWorld(Vector3Int grid) => new(
-        grid.x * GridSize,
-        grid.y * GridSize,
-        grid.z * GridSize);
+    public void AddBlock(BlockType type, ushort count, Player player)
+    {
+        Item item = player.AddItem(MinecraftItemType);
+        ushort ItemSerial = item.Serial;
 
+        BlockSerials.Add(ItemSerial, new BlockData { Type = type, Count = count });
+    }
+
+    // Placement / Interaction API
     public bool TryPlaceBlock(Player player, BlockType type)
     {
         if (!Blocks.TryGetValue(type, out var info))
@@ -133,6 +148,37 @@ public class Minecraft : Mode
 
         World[grid] = block;
         block.OnPlaced(player, hit);
+        _eventHandler.SwingHeld(player);
+        return true;
+    }
+
+    public bool TryPlaceHeldBlock(Player player)
+    {
+        if (player.CurrentItem is not { } item || !BlockSerials.TryGetValue(item.Serial, out BlockData data))
+            return false;
+
+        if (!TryPlaceBlock(player, data.Type))
+            return false;
+
+        if (--data.Count <= 0)
+        {
+            BlockSerials.Remove(item.Serial);
+            player.RemoveItem(item); // 개수가 0이면 아이템 제거
+        }
+
+        _eventHandler.SwingHeld(player);
+        return true;
+    }
+
+    public bool TryInteract(Player player)
+    {
+        if (!TryGetLookedBlock(player, out Block block))
+            return false;
+
+        if (!block.OnInteract(player))
+            return false;
+
+        _eventHandler.SwingHeld(player);
         return true;
     }
 
@@ -144,9 +190,11 @@ public class Minecraft : Mode
         block.OnBroken(player);
         block.Schematic?.Destroy();
         World.Remove(block.GridPos);
+        _eventHandler.SwingHeld(player);
         return true;
     }
 
+    // Helpers
     private bool TryGetLookedBlock(Player player, out Block block)
     {
         block = null;
@@ -159,17 +207,13 @@ public class Minecraft : Mode
         return World.TryGetValue(grid, out block);
     }
 
-    public void AddBlock(BlockType type, ushort count, Player player)
-    {
-        Item item = player.AddItem(MinecraftItemType);
-        ushort ItemSerial = item.Serial;
+    private static Vector3Int ToGrid(Vector3 pos) => new(
+        Mathf.RoundToInt(pos.x / GridSize),
+        Mathf.RoundToInt(pos.y / GridSize),
+        Mathf.RoundToInt(pos.z / GridSize));
 
-        BlockSerials.Add(ItemSerial, new BlockData { Type = type, Count = count });
-    }
-
-    public void Spawned(Player player)
-    {
-        BlockType RandomBlockType = Tools.EnumToList<BlockType>().Where(t => t != BlockType.Air).GetRandomValue();
-        AddBlock(RandomBlockType, (ushort)32, player);
-    }
+    private static Vector3 ToWorld(Vector3Int grid) => new(
+        grid.x * GridSize,
+        grid.y * GridSize,
+        grid.z * GridSize);
 }
