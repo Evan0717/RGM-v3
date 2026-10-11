@@ -119,9 +119,9 @@ public class Minecraft : Mode
         BlockType RandomBlockType = Tools.EnumToList<BlockType>().Where(t => t != BlockType.Air).GetRandomValue();
         AddBlock(RandomBlockType, (ushort)32, player);
 
+        player.EnableEffect(EffectType.Lightweight, 30);
         if (player.Role == RoleTypeId.Scp096)
             player.EnableEffect(EffectType.Lightweight, 40);
-        player.EnableEffect(EffectType.Lightweight, 30);
     }
 
     public void AddBlock(BlockType type, ushort count, Player player)
