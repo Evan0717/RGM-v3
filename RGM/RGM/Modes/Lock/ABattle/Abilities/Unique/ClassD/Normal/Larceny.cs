@@ -35,6 +35,7 @@ public class Larceny : Ability
         if (!player.IsInventoryEmpty)
         {
             Item item = player.Items.ToList().GetRandomValue();
+            // item.Serial = player.Items.FirstOrDefault(x => x == item)!.Serial;
 
             player.RemoveItem(item);
             player.AddHint("소매치기", "주머니가 허전합니다..", 1.2f);
