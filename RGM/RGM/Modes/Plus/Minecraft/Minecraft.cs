@@ -9,6 +9,8 @@ using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Enums;
+using PlayerRoles;
 
 namespace RGM.Modes;
 
@@ -28,7 +30,7 @@ public class Minecraft : Mode
     public static Minecraft Instance;
 
     public const float GridSize = 1f;
-    public const float MaxDistance = 10f;
+    public const float MaxDistance = 5f;
     public const int BuildMask = 1 << 0;
     public readonly ItemType MinecraftItemType = ItemType.KeycardJanitor; // 블록 설치용 아이템
     public readonly Dictionary<BlockType, BlockInfo> Blocks = new();
@@ -116,6 +118,10 @@ public class Minecraft : Mode
     {
         BlockType RandomBlockType = Tools.EnumToList<BlockType>().Where(t => t != BlockType.Air).GetRandomValue();
         AddBlock(RandomBlockType, (ushort)32, player);
+
+        if (player.Role == RoleTypeId.Scp096)
+            player.EnableEffect(EffectType.Lightweight, 40);
+        player.EnableEffect(EffectType.Lightweight, 30);
     }
 
     public void AddBlock(BlockType type, ushort count, Player player)
