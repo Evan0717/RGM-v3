@@ -19,7 +19,7 @@ public class Minecraft : Mode
     public override string Description => "A mode that turns the map into a Minecraft world.";
     public override string Detail =>
         """
-        [ESC] ->[Server Specific Settings] -> 상호작용, 설치, 파괴 키를 할당하세요.
+        [ESC] -> [Settings] -> [Server-specific] -> 상호작용, 설치, 파괴 키를 할당하세요.
         블록은 설치할 수 있으며, 도구는 파괴 속도에 영향을 줍니다.
         """;
     public override string Color => "#00FF00";
@@ -101,6 +101,13 @@ public class Minecraft : Mode
         foreach (var player in PlayerManager.List.Where(p => p != null && p.IsAlive))
         {
             Spawned(player);
+            player.AddHint("경고", 
+                $"""
+                [ESC] -> [Settings] -> [Server-specific] -> 상호작용, 설치, 파괴 키를 할당하세요.
+                <color=#ff0000>블록을 이용한 맵 탈출, 아군 세력간 트롤은 제재될 수 있습니다.
+                플레이어 위치에 블록을 설치하면 튕겨나올 수 있으니 가급적이면 자제하세요.</color>
+                """,
+                10f);
         }
     }
 
@@ -191,6 +198,20 @@ public class Minecraft : Mode
         block.Schematic?.Destroy();
         World.Remove(block.GridPos);
         _eventHandler.SwingHeld(player);
+
+        try
+        {
+            Pickup pickup = Pickup.CreateAndSpawn(MinecraftItemType, ToWorld(block.GridPos));
+            if (pickup != null)
+                BlockSerials[pickup.Serial] = new BlockData { Type = block.Info.BlockType, Count = 1 };
+            var visual = new BlockVisual(block.Info, BlockForm.Dropped, pickup.Transform.position);
+            visual.AttachTo(pickup.Transform);
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Failed to spawn block pickup: {ex}");
+        }
+
         return true;
     }
 
