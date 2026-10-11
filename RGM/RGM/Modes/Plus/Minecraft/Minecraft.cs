@@ -30,7 +30,7 @@ public class Minecraft : Mode
     public const float GridSize = 1f;
     public const float MaxDistance = 10f;
     public const int BuildMask = 1 << 0;
-    public readonly ItemType MinecraftItemType = ItemType.Coin; // 블록 설치용 아이템
+    public readonly ItemType MinecraftItemType = ItemType.KeycardJanitor; // 블록 설치용 아이템
     public readonly Dictionary<BlockType, BlockInfo> Blocks = new();
     public readonly Dictionary<Vector3Int, Block> World = new();
     public readonly Dictionary<ushort, BlockData> BlockSerials = new();

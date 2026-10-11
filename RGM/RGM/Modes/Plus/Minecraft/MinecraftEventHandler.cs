@@ -52,7 +52,7 @@ public class MinecraftEventHandler(Minecraft minecraft)
         visual.AttachTo(ev.Player.Transform);
         _held[ev.Player] = visual;
 
-        ev.Player.AddHint("minecraft_held", $"<size=5>{minecraft.Blocks[data.Type].Name} x{data.Count}</size>", 3f);
+        ev.Player.AddHint("minecraft_held", $"<size=25>{minecraft.Blocks[data.Type].Name} x{data.Count}</size>", 3f);
     }
 
     private void OnDroppedItem(DroppedItemEventArgs ev)
