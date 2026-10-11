@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using RGM.API.Features;
 using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes;
@@ -50,6 +51,8 @@ public class MinecraftEventHandler(Minecraft minecraft)
         var visual = new BlockVisual(minecraft.Blocks[data.Type], BlockForm.Held, ev.Player.Position);
         visual.AttachTo(ev.Player.Transform);
         _held[ev.Player] = visual;
+
+        ev.Player.AddHint("minecraft_held", $"<size=5>{minecraft.Blocks[data.Type].Name} x{data.Count}</size>", 3f);
     }
 
     private void OnDroppedItem(DroppedItemEventArgs ev)
@@ -86,6 +89,9 @@ public class MinecraftEventHandler(Minecraft minecraft)
         owned.Count += picked.Count;
         minecraft.BlockSerials.Remove(ev.Item.Serial);
         ev.Player.RemoveItem(ev.Item);
+
+        /*if (ev.Player.CurrentItem is { } cur && minecraft.BlockSerials.TryGetValue(cur.Serial, out var curData))
+            ev.Player.AddHint("minecraft_held", $"{minecraft.Blocks[curData.Type].Name} x{curData.Count}", 3f);*/
     }
 
     private void OnLeft(LeftEventArgs ev) => RemoveHeld(ev.Player);
