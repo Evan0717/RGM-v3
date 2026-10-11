@@ -81,7 +81,7 @@ namespace RGM.Modes
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
             _cleanupDecals = Timing.RunCoroutine(CleanDecals());
             _scoreHint = Timing.RunCoroutine(ScoreHintCoroutine());
-            _userScan = Timing.RunCoroutine(UserScan());
+            // _userScan = Timing.RunCoroutine(UserScan());
         }
 
         public override void OnDisabled()
