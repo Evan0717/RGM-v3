@@ -44,7 +44,6 @@ namespace RGM.Modes
         {
            EffectType.AmnesiaItems,
            EffectType.AmnesiaVision,
-           EffectType.
         };
 
         List<EffectType> HalloweenEffect = new List<EffectType>
