@@ -11,14 +11,14 @@ public class AFK : Ability
     {
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, AbilityCategory.Epic, 1)[0]);
             }
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 4; i++) {
                 Owner.AddAbility(ABattle.Instance.GetRandomAbilities(
                     Owner, AbilityCategory.Rare, 1,[AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
             }
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                 Owner.AddAbility(ABattle.Instance.GetRandomAbilities(
                     Owner, AbilityCategory.Normal, 1,[AbilityType.NORMAL_REROLL])[0]);
             }

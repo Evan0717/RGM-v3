@@ -20,9 +20,9 @@ public class Reincarnation : Ability, IDeathPreventionAbility
 {
     private const float ContractDuration = 60f;
     private const float CooldownDuration = 120f;
-    private const int RequiredHits = 70;
-    private const int RequiredKills = 5;
-    private const int MovementBoostIntensity = 40;
+    private const int RequiredHits = 60;
+    private const int RequiredKills = 4;
+    private const int MovementBoostIntensity = 50;
     
     private static bool _isDetonatingState;
 

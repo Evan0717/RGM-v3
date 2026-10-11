@@ -14,7 +14,7 @@ namespace RGM.Modes.Abilities.Mythic;
 
 [Ability("장미칼", """
                 이 명검은 무한으로 발산하는 힘을 가지고 있습니다...
-                50% 확률로 진영을 변경하며, 변경 실패 시 대상을 『사망』시킵니다.
+                40% 확률로 진영을 변경하며, 변경 실패 시 대상을 『사망』시킵니다.
                 """, AbilityCategory.Mythic, AbilityType.MYTHIC_ROSEHIP)]
 public class Rosehip : Ability
 {
@@ -55,7 +55,7 @@ public class Rosehip : Ability
             return;
 
         ev.IsAllowed = false;
-        if (Convert.ToByte(Random.Range(1, 101)) <= 50)
+        if (Convert.ToByte(Random.Range(1, 101)) <= 40)
         {
             _sideChangedTargets.Add(ev.Player);
             ev.Player.Role.Set(Tools.EnumToList<RoleTypeId>().GetRandomValue(x => x.GetSide() == ev.Attacker.Role.Type.GetSide()), RoleSpawnFlags.None);

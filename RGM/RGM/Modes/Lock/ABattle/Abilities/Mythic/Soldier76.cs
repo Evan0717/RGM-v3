@@ -81,7 +81,7 @@ public class Soldier76 : Ability
              hit.Value.collider.gameObject != player.GameObject))
         {
             player.Hurt(new FirearmDamageHandler(ev.Firearm.Base,
-                ev.Firearm.Damage * multiplier + player.MaxHealth * 0.093f,
+                ev.Firearm.Damage * multiplier + player.MaxHealth * 0.075f,
                 ev.Firearm.Penetration));
             ev.Player.ShowHitMarker();
         }

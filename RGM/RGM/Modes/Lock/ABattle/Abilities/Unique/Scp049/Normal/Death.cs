@@ -3,7 +3,7 @@ using MEC;
 
 namespace RGM.Modes.Abilities.Unique.Scp049.Normal;
 
-[Ability("사신", "공격 쿨타임이 35% 줄어듭니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP049_DEATH, RoleAbility.Scp049)]
+[Ability("사신", "공격 쿨타임이 30% 줄어듭니다.", AbilityCategory.Normal, AbilityType.NORMAL_SCP049_DEATH, RoleAbility.Scp049)]
 public class Death : Ability
 {
     public override void OnEnabled()
@@ -23,6 +23,6 @@ public class Death : Ability
 
         yield return Timing.WaitForOneFrame;
 
-        ev.Scp049.RemainingAttackCooldown *= 0.65f;
+        ev.Scp049.RemainingAttackCooldown *= 0.7f;
     }
 }

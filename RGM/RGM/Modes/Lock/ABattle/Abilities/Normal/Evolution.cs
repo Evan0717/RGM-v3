@@ -5,11 +5,11 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes.Abilities.Normal;
 
-[Ability("진화", "몸의 크기가 8%p 작아집니다. (최대 80%p까지 적용)", AbilityCategory.Normal, AbilityType.NORMAL_EVOLUTION)]
+[Ability("진화", "몸의 크기가 7%p 작아집니다. (최대 70%p까지 적용)", AbilityCategory.Normal, AbilityType.NORMAL_EVOLUTION)]
 public class Evolution : Ability
 {
-    private const float Scale = 0.08f;
-    private readonly Vector3 _deadline = new(0.2f, 0.2f, 0.2f);
+    private const float Scale = 0.07f;
+    private readonly Vector3 _deadline = new(0.3f, 0.3f, 0.3f);
 
     public override void OnEnabled()
     {

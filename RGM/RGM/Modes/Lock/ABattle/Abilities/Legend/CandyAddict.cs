@@ -6,7 +6,7 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 
-[Ability("마약 중독자", "8초마다 랜덤한 사탕이 지급됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_CANDYADDICT)]
+[Ability("마약 중독자", "10초마다 랜덤한 사탕이 지급됩니다.", AbilityCategory.Legend, AbilityType.LEGEND_CANDYADDICT)]
 public class CandyAddict : Ability
 {
     private CoroutineHandle _candyAddict;
@@ -21,7 +21,7 @@ public class CandyAddict : Ability
         {
             Owner.AddCandy(Tools.EnumToList<CandyKindID>().GetRandomValue());
 
-            yield return Timing.WaitForSeconds(8f);
+            yield return Timing.WaitForSeconds(10f);
         } 
     }
 }

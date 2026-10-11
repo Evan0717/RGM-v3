@@ -3,7 +3,7 @@
 namespace RGM.Modes.Abilities.Unique.Scp0492.Rare;
 
 [Ability("허기",
-    "치료 효율이 100% 증가되고, 시체 섭취 시 마다 치료 효율과 최대 HP가 20% 증가합니다.",
+    "치료 효율이 120% 증가되고, 시체 섭취 시 마다 치료 효율과 최대 HP가 40% 증가합니다.",
     AbilityCategory.Rare, AbilityType.RARE_SCP0492_HUNGER, RoleAbility.Scp0492)]
 public class Hunger : Ability
 {
@@ -12,8 +12,8 @@ public class Hunger : Ability
 
     public override void OnEnabled()
     {
-        _additionalHealing = 100f;
-        _maximumHealthIncrease = Owner.MaxHealth * 0.2f;
+        _additionalHealing = 120f;
+        _maximumHealthIncrease = Owner.MaxHealth * 0.4f;
         Exiled.Events.Handlers.Scp0492.ConsumingCorpse += OnConsumingCorpse;
     }
     
@@ -28,7 +28,7 @@ public class Hunger : Ability
             return;
 
         float additionalHealing = _additionalHealing;
-        _additionalHealing += 20f;
+        _additionalHealing += 40f;
 
         Timing.CallDelayed(0.1f, () =>
         {

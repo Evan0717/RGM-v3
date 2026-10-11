@@ -3,7 +3,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("불스아이", "헤드샷 데미지 배율이 80%p 증가합니다.", AbilityCategory.Rare, AbilityType.RARE_BULLSEYE)]
+[Ability("불스아이", "헤드샷 데미지 배율이 75%p 증가합니다.", AbilityCategory.Rare, AbilityType.RARE_BULLSEYE)]
 public class BullsEye : Ability
 {
     public override void OnEnabled() 
@@ -18,6 +18,6 @@ public class BullsEye : Ability
             return;
 
         if (damageHandler.Hitbox == HitboxType.Headshot)
-            damageHandler.Damage *= 1f + 0.8f * Owner.AbilityCount(AbilityType.RARE_BULLSEYE);
+            damageHandler.Damage *= 1f + 0.75f * Owner.AbilityCount(AbilityType.RARE_BULLSEYE);
     }
 }

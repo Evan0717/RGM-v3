@@ -5,7 +5,7 @@ using Exiled.Events.EventArgs.Player;
 namespace RGM.Modes.Abilities.Unique.Scp939.Epic;
 
 [Ability("중상", "SCP-939의 기본 공격에 대상의 최대 HP 30%만큼 추가 데미지를 가합니다.", 
-    AbilityCategory.Epic, AbilityType.LEGEND_HUMAN_EMP, RoleAbility.Human, isUnique:true)]
+    AbilityCategory.Epic, AbilityType.EPIC_SCP939_HEAVYINJURE, RoleAbility.Scp939, isUnique:true)]
 
 public class HeavyInjure : Ability
 {

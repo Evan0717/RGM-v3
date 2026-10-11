@@ -11,13 +11,13 @@ using UnityEngine;
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("괴성", """
-               적을 보고 있을 때 마이크를 키면 모든 적군을 3초간 『기절』 상태로 만들고, 15초간 『무장 해제』 효과를 부여합니다. (쿨타임 60초)
-               이후 영향을 받은 대상에게 30초간 출혈 효과를 부여합니다.
+               적을 보고 있을 때 마이크를 키면 모든 적군을 2초간 『기절』 상태로 만들고, 12초간 『무장 해제』 효과를 부여합니다. (쿨타임 60초)
+               이후 영향을 받은 대상에게 25초간 출혈 효과를 부여합니다.
                """, AbilityCategory.Legend, AbilityType.LEGEND_SCREAM)]
 public class GmanRoaringSound : Ability
 {
-    private const int RoaringSoundCooldownDuration = 60;
-    private const float DisarmDuration = 15f;
+    private const int RoaringSoundCooldownDuration = 75;
+    private const float DisarmDuration = 12f;
     private int _roaringSoundCooldown;
     private readonly HashSet<Player> _disarmedPlayers = new();
 
@@ -48,7 +48,7 @@ public class GmanRoaringSound : Ability
         if (_roaringSoundCooldown > 0)
             yield break;
 
-        if (!ev.Player.TryGetLookPlayer(16f, out Player target, out RaycastHit? hit) ||
+        if (!ev.Player.TryGetLookPlayer(36f, out Player target, out _) ||
             !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, target.ReferenceHub)) yield break;
         
         _roaringSoundCooldown = RoaringSoundCooldownDuration;
@@ -60,17 +60,17 @@ public class GmanRoaringSound : Ability
 
         foreach (var player in PlayerManager.List.Where(x => !x.IsNPC && HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, x.ReferenceHub) && x.IsAlive))
         {
-            player.EnableEffect(EffectType.Ensnared, 1, 1.5f);
-            player.EnableEffect(EffectType.Flashed, 1, 3f);
-            player.EnableEffect(EffectType.Blurred, 1, 15f);
-            player.EnableEffect(EffectType.Deafened, 1, 15f);
-            player.EnableEffect(EffectType.SinkHole, 1, 6f);
-            player.EnableEffect(EffectType.Slowness, 120, 6f);
-            player.EnableEffect(EffectType.Disabled, 1, 15f);
-            player.EnableEffect(EffectType.Stained, 1, 5f);
-            player.EnableEffect(EffectType.AmnesiaItems, 1, 15f);
+            player.EnableEffect(EffectType.Ensnared, 1, 1f);
+            player.EnableEffect(EffectType.Flashed, 1, 2f);
+            player.EnableEffect(EffectType.Blurred, 1, 12f);
+            player.EnableEffect(EffectType.Deafened, 1, 12f);
+            player.EnableEffect(EffectType.SinkHole, 1, 5f);
+            player.EnableEffect(EffectType.Slowness, 120, 5f);
+            player.EnableEffect(EffectType.Disabled, 1, 12f);
+            player.EnableEffect(EffectType.Stained, 1, 4f);
+            player.EnableEffect(EffectType.AmnesiaItems, 1, 12f);
             if (player.Role.Type != RoleTypeId.Scp079)
-                player.EnableEffect(EffectType.Bleeding, 1, 30f);
+                player.EnableEffect(EffectType.Bleeding, 1, 25f);
 
             player.CurrentItem = null;
             _disarmedPlayers.Add(player);

@@ -6,7 +6,7 @@ namespace RGM.Modes.Abilities.Epic;
 
 [Ability("샤프 아이즈", """
                    크리티컬 확률이 50% 증가합니다.
-                   크리티컬 발동 시 50%p의 추가 피해를 입히며, 추가 획득 시 크리티컬 데미지가 100%p씩 증가합니다.
+                   크리티컬 발동 시 50%p의 추가 피해를 입히며, 추가 획득 시 크리티컬 데미지가 75%p씩 증가합니다.
                    """, AbilityCategory.Epic, AbilityType.EPIC_SHARPEYES)]
 public class SharpEyes : Ability
 {
@@ -33,7 +33,7 @@ public class SharpEyes : Ability
         if (Random.Range(1, 101) > chance)
             return;
 
-        ev.DamageHandler.Damage *= 0.5f + 1f * count;
+        ev.DamageHandler.Damage *= 0.5f + 0.75f * count;
 
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {

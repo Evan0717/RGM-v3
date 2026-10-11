@@ -22,6 +22,6 @@ public class Confusion : Ability
         if (ev.Player != Owner)
             return;
 
-        ev.Target.EnableEffect(EffectType.Blurred, 1, 0.3f);
+        ev.Target.EnableEffect(EffectType.Blurred, 1, 0.16f);
     }
 }

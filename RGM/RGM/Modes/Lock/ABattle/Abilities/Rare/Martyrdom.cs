@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RGM.Modes.Abilities.Rare;
 
-[Ability("순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다.", AbilityCategory.Rare, AbilityType.RARE_MARTYRDOM)]
+//[Ability("순교", "사망할 시 해당 지역에 점화된 수류탄을 떨굽니다.", AbilityCategory.Rare, AbilityType.RARE_MARTYRDOM)]
 public class Martyrdom : Ability
 {
     public override void OnEnabled()

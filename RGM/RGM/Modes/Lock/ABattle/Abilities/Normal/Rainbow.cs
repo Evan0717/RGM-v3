@@ -11,7 +11,7 @@ public class Rainbow : Ability
     public override void OnEnabled()
     {
         Owner.AddCandy(CandyKindID.Rainbow);
-        while (Convert.ToByte(Random.Range(1, 101)) <= 25) {
+        while (Convert.ToByte(Random.Range(1, 101)) <= 20) {
             Owner.AddCandy(CandyKindID.Rainbow);
         }
     }

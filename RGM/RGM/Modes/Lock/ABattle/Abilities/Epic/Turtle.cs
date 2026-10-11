@@ -5,7 +5,7 @@ using RGM.Modes.Abilities.Synergy;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("거북 도사", "『피격 제한』이 35까지 적용됩니다.", 
+[Ability("거북 도사", "『피격 제한』이 40까지 적용됩니다.", 
     AbilityCategory.Epic, AbilityType.EPIC_TURTLE, isUnique: true)]
 public class Turtle : Ability
 {

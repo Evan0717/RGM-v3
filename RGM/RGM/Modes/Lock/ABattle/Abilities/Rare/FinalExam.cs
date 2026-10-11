@@ -2,6 +2,7 @@ using System;
 using MEC;
 using RGM.API.Features;
 using UnityEngine;
+using RGM.Modes.Abilities.Normal;
 using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Rare;
@@ -30,7 +31,7 @@ public class FinalExam : Ability
                         ? Convert.ToByte(Random.Range(1, 101)) <= 35 && Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND)
                             ? AbilityCategory.Legend : AbilityCategory.Epic : AbilityCategory.Rare;
                     
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, [AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION])[0]);
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, Test.ExceptAbilities)[0]);
                 }
                 Owner.AddAbility(AbilityType.DUMMY_FINALEXAMSUCCESS);
             }
