@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 namespace RGM.Modes.Abilities.Legend;
 
 [Ability("랜덤택배", "40초마다 고가치 아이템 1개를 획득합니다. 10% 확률로 특수 아이템을 획득할 수 있습니다.",
-    AbilityCategory.Legend, AbilityType.LEGEND_RANDOMPACKAGE)]
+    AbilityCategory.Legend, AbilityType.LEGEND_RANDOMPACKAGE, isUnique:true)]
 public class RandomPackage : Ability
 {
     private readonly List<ItemType> _highvalueitems =

@@ -14,7 +14,7 @@ public class Protection : Ability
         {
             for (int i = 0; i < 3; i++)
             {
-                p.AddAbility(AbilityType.RARE_STEELSHELL);
+                p.AddAbility(AbilityType.NORMAL_STEELSHELL);
             }
             p.AddAbility(AbilityType.RARE_HYPASS);
         }

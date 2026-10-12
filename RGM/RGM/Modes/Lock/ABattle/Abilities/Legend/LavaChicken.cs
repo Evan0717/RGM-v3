@@ -28,7 +28,9 @@ public class LavaChicken : Ability
 
     private IEnumerator<float> OnStarted()
     {
-        _lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205));
+        // 동일 능력을 처음 획득했을 때만 스키매틱을 생성한다.
+        if (Owner.AbilityCount(AbilityType.LEGEND_LAVACHICKEN) == 1)
+            _lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205));
 
         while (IsOwnerValid())
         {
@@ -36,7 +38,7 @@ public class LavaChicken : Ability
             {
                 Vector3 ownerPosition = Owner.Position;
 
-                if (Physics.Raycast(ownerPosition, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
+                if (_lava != null && Physics.Raycast(ownerPosition, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
                 {
                     _lava.Position = hit.point;
                 }

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace RGM.Modes.Abilities.Normal;
 
 [Ability("민첩", """
-               회피율이 4%p 증가합니다.
+               회피율이 5%p 증가합니다.
                자신이 SCP 진영일 경우 2%p 감소되어 적용됩니다.
                """, AbilityCategory.Normal, AbilityType.NORMAL_AGILITY)]
 public class Agility : Ability

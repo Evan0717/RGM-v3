@@ -14,14 +14,14 @@ namespace RGM.Modes.Abilities.Normal;
                """, AbilityCategory.Normal, AbilityType.NORMAL_TEST, RoleAbility.None, true)]
 public class Test : Ability
 {
-    public static List<AbilityType> ExceptAbilities =
+    public static readonly List<AbilityType> ExceptAbilities =
         [
-            AbilityType.NORMAL_TEST,
-            AbilityType.RARE_FINALEXAM,
-            AbilityType.EPIC_CSAT,
-            AbilityType.RARE_DND,
-            AbilityType.RARE_TELEPORTATION
+            AbilityType.NORMAL_TEST, AbilityType.RARE_FINALEXAM, AbilityType.EPIC_CSAT,
+            AbilityType.NORMAL_REROLL, AbilityType.NORMAL_EXCHANGE, AbilityType.NORMAL_SUSPICIOUSSTEW,
+            AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_UPGRADE,
+            AbilityType.RARE_CONTRACT, AbilityType.EPIC_GRAVEROBBER
         ];
+    
     public override void OnEnabled()
     {
         Owner.AddHint("시험", "과연 결과는..?");

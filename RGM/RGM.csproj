@@ -136,12 +136,16 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleEventHandler.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Terminal.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\DestroyedReflector.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Operator.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\FastReturn.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\SteelShell.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\MiniReflector.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\BrilliantMind.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Synergy\SoccerKick.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Epic\Scp1509Hand.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Legend\EMP.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Human\Mythic\DualPersonality.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Instruct.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp079\Normal\Tactic.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp3114\Legend\Execution.cs" />
@@ -186,7 +190,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AddWorkstation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\ChainLightning.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\SharpEyes.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AN94.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\AntiScp207.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\Blink.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Epic\ContExpert.cs" />
@@ -306,7 +309,6 @@
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Salamandra.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SaveLocation.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SpaceTravel.cs" />
-    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\SteelShell.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Adrenaline.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\StopWatch.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Rare\Sylph.cs" />
