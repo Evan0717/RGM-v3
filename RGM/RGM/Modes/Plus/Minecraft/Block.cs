@@ -102,5 +102,9 @@ public class BlockVisual
         Schematic.transform.localRotation = Quaternion.identity;
     }
 
-    public void Destroy() => Schematic?.Destroy();
+    public void Destroy()
+    {
+        if (Schematic != null)   // 유니티의 null 체크는 파괴된 오브젝트도 걸러냄
+            Schematic.Destroy();
+    }
 }

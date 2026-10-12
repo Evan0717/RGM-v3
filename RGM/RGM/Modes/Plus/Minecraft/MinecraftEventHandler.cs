@@ -45,10 +45,12 @@ public class MinecraftEventHandler(Minecraft minecraft)
     {
         RemoveHeld(ev.Player);
 
-        if (ev.Item == null || !minecraft.BlockSerials.TryGetValue(ev.Item.Serial, out var data))
+        if (ev.Item == null
+    || !minecraft.BlockSerials.TryGetValue(ev.Item.Serial, out var data)
+    || !minecraft.Blocks.TryGetValue(data.Type, out var info))
             return;
 
-        var visual = new BlockVisual(minecraft.Blocks[data.Type], BlockForm.Held, ev.Player.Position);
+        var visual = new BlockVisual(info, BlockForm.Held, ev.Player.Position);
         visual.AttachTo(ev.Player.Transform);
         _held[ev.Player] = visual;
 
