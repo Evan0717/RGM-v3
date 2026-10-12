@@ -99,7 +99,7 @@ namespace RGM.Modes
                 {
                     if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 3f, (LayerMask)1))
                     {
-                        OnGround[player] = 1;
+                        OnGround[player] = 2.1f;
 
                         if (hit.transform.name == "Platform") 
                         {

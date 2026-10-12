@@ -112,11 +112,12 @@ public class ABattleEventHandler(ABattle aBattle)
         if (ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
             Convert.ToByte(Random.Range(1, 101)) <= 18)
         {
-            if (GodModePlayers.Contains(ev.Player))
+            /*if (GodModePlayers.Contains(ev.Player))
                 GodModePlayers.Remove(ev.Player);
 
             ev.Player.RemoveAllAbilities();
-            ev.Player.Kill("욕심을 부리다가 아사했습니다.");
+            ev.Player.Kill("욕심을 부리다가 아사했습니다.");*/
+            ApplyInstantKill.Apply(ev.Player, ev.Player);
             return;
         }
 
@@ -187,11 +188,12 @@ public class ABattleEventHandler(ABattle aBattle)
             if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
                 Convert.ToByte(Random.Range(1, 101)) <= 18)
             {
-                if (GodModePlayers.Contains(ev.Player))
-                    GodModePlayers.Remove(ev.Player);
+                /*if (GodModePlayers.Contains(ev.Player))
+                GodModePlayers.Remove(ev.Player);
 
                 ev.Player.RemoveAllAbilities();
-                ev.Player.Kill("욕심을 부리다가 아사했습니다.");
+                ev.Player.Kill("욕심을 부리다가 아사했습니다.");*/
+                ApplyInstantKill.Apply(ev.Player, ev.Player);
                 return;
             }
         }

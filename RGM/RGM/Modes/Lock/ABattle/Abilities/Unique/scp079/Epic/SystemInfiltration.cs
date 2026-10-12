@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RGM.Modes.Abilities.Unique.Scp079.Epic;
 
 
-[Ability("시스템 침투", "35% 확률로 [워크스테이션 업그레이드]추가 모드를 추가합니다.",
+[Ability("시스템 침투", "25% 확률로 [워크스테이션 업그레이드]추가 모드를 추가합니다.",
     AbilityCategory.Epic, AbilityType.EPIC_SCP079_SystemInfiltration, RoleAbility.Scp079)]
 public class SystemInfiltration : Ability
 {
@@ -32,7 +32,7 @@ public class SystemInfiltration : Ability
         {
             if (Owner.IsAlive)
             {
-                if (Random.Range(1, 101) <= 35)
+                if (Random.Range(1, 101) <= 25)
                 { 
                     string extraMode = _instance.PickExtraMode();
                     if (extraMode != null)

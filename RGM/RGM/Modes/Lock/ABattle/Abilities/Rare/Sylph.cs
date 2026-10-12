@@ -16,7 +16,7 @@ namespace RGM.Modes.Abilities.Rare;
 [Ability("실프", "싱그러운 바람의 기운! 물, 불, 흙의 정령을 모으면..?", AbilityCategory.Rare, AbilityType.RARE_SYLPH)]
 public class Sylph : Ability
 {
-    private const byte MovementBoostPerStack = 8;
+    private const byte MovementBoostPerStack = 5;
     private const byte MaxStacks = 8;
     private const float CombatTimeout = 5f;
 

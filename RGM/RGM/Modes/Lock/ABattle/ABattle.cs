@@ -40,20 +40,20 @@ public class ABattle : Mode
         <color=red>SCP-079</color>일 경우, 레벨이 올라갈 때마다 능력을 1개 얻습니다.
 
         각 능력 등급들의 확률을 확인하려면 아래를 참고하십시오.
-        • <color=#A4A4A4>일반</color> - 62.40%
-        • <color=#2ECCFA>희귀</color> - 31.55%
-        • <color=#BF40BF>영웅</color> - 5.85%
-        • <color=#FFC000>전설</color> - 0.25%
-        • <color=#FF2400>신화</color> - 0.05%
+        • <color=#A4A4A4>일반</color> - 61.495%
+        • <color=#2ECCFA>희귀</color> - 28.890%
+        • <color=#BF40BF>영웅</color> - 9.390%
+        • <color=#FFC000>전설</color> - 0.200%
+        • <color=#FF2400>신화</color> - 0.019%
         • <color=#008000>고대</color> - 0.001%
         • <color=#DEEFED>시너지</color> - ???
 
         • <color=#F7819F>전용</color> 
         <color=#A4A4A4>일반</color> - 5%
         <color=#2ECCFA>희귀</color> - 10%
-        <color=#BF40BF>영웅</color> - 15%
-        <color=#FFC000>전설</color> - 25%
-        <color=#FF2400>신화</color> - 35%
+        <color=#BF40BF>영웅</color> - 13%
+        <color=#FFC000>전설</color> - 17%
+        <color=#FF2400>신화</color> - 20%
         <color=#008000>고대</color> - 45%
         (등급에 따라 확률 변동, 능력 선택 옵션 독립)
 
@@ -119,14 +119,9 @@ public class ABattle : Mode
     {
         { "기본", "워크스테이션 업그레이드를 즐기세요!" },
         { "치매", "32% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
-        //{ "반사경", "능력 획득 시, 40% 확률로 능력이 복제됩니다." },
+        { "3 + 1", "능력 획득 시, 동일 등급의 랜덤한 능력을 1개 얻습니다." },
         { "수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다." },
-        { "전주곡",
-            $"""
-             스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다.
-             25% 확률로 프리즘이 활성화되며, 이때 15% 확률로 <color={RatingColor["전설"]}>전설</color>, 1% 확률로 <color={RatingColor["신화"]}>신화</color> 등급의 능력을 얻습니다.
-             """
-        },
+        { "전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다." },
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
         { "스펙업", "능력을 획득할 때마다 15(SCP 45)만큼 최대 체력이 증가합니다." },
         { "캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다." },
@@ -725,7 +720,7 @@ public class ABattle : Mode
     // extraReflectorChain: 추가 모드 반사경으로 인한 연쇄 횟수 (최대 2회)
     // allowReflector: false면 반사경 연쇄를 건너뜀 (복제 등)
     public bool AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true,
-        int extraReflectorChain = 0)
+        int extraReflectorChain = 0, bool isSelectionAbility = false)
     {
         if (player == null) return false;
 
@@ -735,6 +730,9 @@ public class ABattle : Mode
             return false;
         }
 
+        if (type == AbilityType.RARE_MINIREFLECTOR && HasAbility(player, AbilityType.LEGEND_REFLECTOR))
+            return false;
+
         if (Abilities[type].IsUnique && HasAbility(player, type))
             return false;
 
@@ -743,7 +741,8 @@ public class ABattle : Mode
             type,
             reflectorChain,
             allowReflector,
-            extraReflectorChain);
+            extraReflectorChain,
+            isSelectionAbility);
         AddingAbility?.Invoke(addingAbilityEventArgs);
 
         if (!addingAbilityEventArgs.IsAllowed)
@@ -1226,6 +1225,15 @@ public class ABattle : Mode
         if (category == AbilityCategory.Dummy)
             return;
 
+        if (CurrentExtraModes.Contains("3 + 1"))
+        {
+            player.AddAbility(GetRandomAbilities(player, category, 1,
+                [
+                    AbilityType.NORMAL_REROLL, AbilityType.NORMAL_EXCHANGE, AbilityType.NORMAL_SUSPICIOUSSTEW,
+                    AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_UPGRADE,
+                    AbilityType.RARE_CONTRACT, AbilityType.EPIC_GRAVEROBBER]).First());
+        }
+        
         int roleAbilityChance = GetRoleAbilityChance(category);
 
         abilities ??= GetRandomAbilities(player, category, count);
@@ -1239,11 +1247,11 @@ public class ABattle : Mode
             player.RemoveAbility(AbilityType.RARE_TRANSITION);
 
             var transition = Convert.ToByte(Random.Range(1, 101)) <= Mathf.Min(80,
-                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 25));
+                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 35 : 25));
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Epic, 5);
+                abilities = GetRandomAbilities(player, AbilityCategory.Epic, 4);
                 category = AbilityCategory.Epic;
                 player.AddAbility(AbilityType.DUMMY_RARETRANSITIONSUCCESS);
             }
@@ -1256,11 +1264,11 @@ public class ABattle : Mode
             player.RemoveAbility(AbilityType.EPIC_TRANSITION);
 
             var transition = Convert.ToByte(Random.Range(1, 101)) <= Mathf.Min(80,
-                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 25));
+                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 30));
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Legend, 5);
+                abilities = GetRandomAbilities(player, AbilityCategory.Legend, 4);
                 category = AbilityCategory.Legend;
                 player.AddAbility(AbilityType.DUMMY_EPICTRANSITIONSUCCESS);
             }
@@ -1273,11 +1281,11 @@ public class ABattle : Mode
             player.RemoveAbility(AbilityType.LEGEND_TRANSITION);
 
             var transition = Convert.ToByte(Random.Range(1, 101)) <= Mathf.Min(80,
-                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 40 : 25));
+                4 * player.AbilityCount(AbilityType.NORMAL_HEREDITY) + (CurrentExtraModes.Contains("잔칫상") ? 45 : 35));
 
             if (transition)
             {
-                abilities = GetRandomAbilities(player, AbilityCategory.Mythic, 5);
+                abilities = GetRandomAbilities(player, AbilityCategory.Mythic, 4);
                 category = AbilityCategory.Mythic;
                 player.AddAbility(AbilityType.DUMMY_LEGENDTRANSITIONSUCCESS);
             }
@@ -1426,7 +1434,7 @@ public class ABattle : Mode
         }
 
         player.AddHint("능력 선택", "", 0.25f);
-        player.AddAbility(selectedAbility);
+        AddAbility(player, selectedAbility, isSelectionAbility: true);
 
         yield break;
 
@@ -1573,7 +1581,7 @@ public class ABattle : Mode
             }
         }
 
-        if (!AddAbility(player, ability))
+        if (!AddAbility(player, ability, isSelectionAbility: true))
         {
             response = "해당 능력은 획득할 수 없습니다.";
             return false;
@@ -1675,33 +1683,13 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("전주곡"))
         {
             if (player.IsNonePlayer()) return;
-            var isPrismRand = Convert.ToByte(Random.Range(1, 101));
-            var categoryRand = Convert.ToByte(Random.Range(1, 101));
 
-            AbilityCategory GetPrismRandom()
-            {
-                return categoryRand <= 15 
-                    ? categoryRand == 7 
-                        ? AbilityCategory.Mythic : AbilityCategory.Legend : AbilityCategory.Epic;
-            }
-            
-            if (isPrismRand <= 25)
-            {
-                player.AddBroadcast(10, "<b><size=25><color=#D23265>프리즘 전주곡 활성화</color></size></b>");
-                player.AddAbility(Instance.GetRandomAbilities(player, GetPrismRandom(), 1,
-                [
-                    AbilityType.EPIC_PRIEST, AbilityType.LEGEND_RESURRECTION, AbilityType.EPIC_GRAVEROBBER
-                ]).First());
-            }
-            else
-            {
-                player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
-                [
-                    AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
-                    AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
-                    AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
-                ]).First());
-            }
+            player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+            [
+                AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
+                AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
+                AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
+            ]).First());
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)

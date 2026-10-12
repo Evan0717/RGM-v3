@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
-using InventorySystem.Items.Firearms.Attachments;
-using MEC;
-using UnityEngine;
-using Exiled.Events.EventArgs.Scp079;
-using Exiled.API.Extensions;
-using Exiled.Events.EventArgs.Scp1507;
-using static RGM.Variables.Variable;
-using Exiled.API.Enums;
-using Exiled.Events.EventArgs.Server;
-using PlayerRoles;
 using RGM.API.Features;
-using Random = UnityEngine.Random;
+using Exiled.Events.EventArgs.Player;
 
 namespace RGM.Modes;
 
 public class MinecraftEventHandler(Minecraft minecraft) 
 {
     private readonly Dictionary<Player, BlockVisual> _held = new();
-    private readonly Dictionary<ushort, BlockVisual> _dropped = new();
 
     internal void RegisterEvents()
     {
@@ -32,6 +19,7 @@ public class MinecraftEventHandler(Minecraft minecraft)
         Exiled.Events.Handlers.Player.Left += OnLeft;
         Exiled.Events.Handlers.Player.Died += OnDied;
     }
+
     internal void UnRegisterEvents()
     {
         Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
@@ -40,11 +28,22 @@ public class MinecraftEventHandler(Minecraft minecraft)
         Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
         Exiled.Events.Handlers.Player.Left -= OnLeft;
         Exiled.Events.Handlers.Player.Died -= OnDied;
+
+        foreach (var visual in _held.Values.ToList())
+            visual.Destroy();
+        _held.Clear();
+    }
+
+    private void OnSpawned(SpawnedEventArgs ev)
+    {
+        if (ev.Player == null || ev.Player.IsNPC || !ev.Player.IsAlive)
+            return;
+        minecraft.Spawned(ev.Player);
     }
 
     private void OnChangedItem(ChangedItemEventArgs ev)
     {
-        RemoveHeld(ev.Player); // 무엇을 들든 기존 Held는 먼저 제거
+        RemoveHeld(ev.Player);
 
         if (ev.Item == null || !minecraft.BlockSerials.TryGetValue(ev.Item.Serial, out var data))
             return;
@@ -52,26 +51,47 @@ public class MinecraftEventHandler(Minecraft minecraft)
         var visual = new BlockVisual(minecraft.Blocks[data.Type], BlockForm.Held, ev.Player.Position);
         visual.AttachTo(ev.Player.Transform);
         _held[ev.Player] = visual;
+
+        ev.Player.AddHint("minecraft_held", $"<size=25>{minecraft.Blocks[data.Type].Name} x{data.Count}</size>", 3f);
     }
 
     private void OnDroppedItem(DroppedItemEventArgs ev)
     {
         if (!minecraft.BlockSerials.TryGetValue(ev.Pickup.Serial, out var data))
             return;
-
+        if (ev.Player.CurrentItem == null)
+            RemoveHeld(ev.Player);
         var visual = new BlockVisual(minecraft.Blocks[data.Type], BlockForm.Dropped, ev.Pickup.Position);
-        visual.AttachTo(ev.Pickup.Base.transform);
-        _dropped[ev.Pickup.Serial] = visual;
+        visual.AttachTo(ev.Pickup.Transform);
     }
 
     private void OnItemAdded(ItemAddedEventArgs ev)
     {
-        // 주웠으면 땅에 있던 Dropped 제거
-        if (_dropped.TryGetValue(ev.Item.Serial, out var visual))
+        if (!minecraft.BlockSerials.TryGetValue(ev.Item.Serial, out BlockData picked))
+            return;
+
+        BlockData owned = null;
+        foreach (var item in ev.Player.Items)
         {
-            visual.Destroy();
-            _dropped.Remove(ev.Item.Serial);
+            if (item.Serial == ev.Item.Serial)
+                continue;
+
+            if (minecraft.BlockSerials.TryGetValue(item.Serial, out BlockData data) && data.Type == picked.Type)
+            {
+                owned = data;
+                break;
+            }
         }
+
+        if (owned == null)
+            return;
+
+        owned.Count += picked.Count;
+        minecraft.BlockSerials.Remove(ev.Item.Serial);
+        ev.Player.RemoveItem(ev.Item);
+
+        /*if (ev.Player.CurrentItem is { } cur && minecraft.BlockSerials.TryGetValue(cur.Serial, out var curData))
+            ev.Player.AddHint("minecraft_held", $"{minecraft.Blocks[curData.Type].Name} x{curData.Count}", 3f);*/
     }
 
     private void OnLeft(LeftEventArgs ev) => RemoveHeld(ev.Player);
@@ -90,10 +110,5 @@ public class MinecraftEventHandler(Minecraft minecraft)
             visual.Destroy();
             _held.Remove(player);
         }
-    }
-
-    private void OnSpawned(SpawnedEventArgs ev)
-    {
-        minecraft.Spawned(ev.Player);
     }
 }
