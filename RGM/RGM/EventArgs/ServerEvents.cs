@@ -290,7 +290,10 @@ namespace RGM.EventArgs
                 }
             }
 
-            Tools.TryInstallMode(ModeType.FriendlyFire);
+            if (CurrentMode != ModeType.ABattle)
+            {
+                Tools.TryInstallMode(ModeType.FriendlyFire);
+            }
 
             foreach (var player in Player.List)
             {
