@@ -5,7 +5,8 @@ using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Epic;
 
-[Ability("수리 기사", "모든 잠겨진 문에 액세스할 수 있으며, 테슬라를 작동시키지 않습니다.", AbilityCategory.Epic, AbilityType.EPIC_REPAIRMAN)]
+[Ability("수리 기사", "모든 잠겨진 문에 액세스할 수 있으며, 테슬라를 작동시키지 않습니다.", 
+    AbilityCategory.Epic, AbilityType.EPIC_REPAIRMAN, isUnique:true)]
 public class RepairMan : Ability
 {
     public override void OnEnabled()

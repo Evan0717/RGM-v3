@@ -12,7 +12,7 @@ using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.RandomBlockMode)]
+    [Mode(ModeCategory.Private, ModeInfo.Plus, ModeType.RandomBlockMode)]
     public class RandomBlockMode : Mode
     {
         public override string Name => "랜덤금지모드";

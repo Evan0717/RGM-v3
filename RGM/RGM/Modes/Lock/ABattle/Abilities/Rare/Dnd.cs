@@ -26,6 +26,7 @@ public class Dnd : Ability
 
         IEnumerator<float> Enumerator()
         {
+            yield return Timing.WaitForSeconds(0.05f);
             Owner.EnableEffect(EffectType.Ensnared, 1, time);
 
             for (int i = 0; i < time; i++)
@@ -52,18 +53,19 @@ public class Dnd : Ability
                     try
                     {
                         Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 3).ToList().Where(x => x != AbilityType.RARE_DND).GetRandomValue());
-                        Timing.CallDelayed(1, () =>
-                        {
-                            Owner.RemoveAbility(this);
-                        });
                     }
                     catch (Exception e)
                     {
                         Log.Error($"Error while adding ability to {Owner.Nickname} ({Owner.UserId}): {e}");
                     }
                 }
-                Owner.DisableEffect(EffectType.Ensnared);
-                Owner.AddAbility(AbilityType.DUMMY_NOAFK);
+
+                Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                {
+                    Owner.RemoveAbility(this);
+                    Owner.DisableEffect(EffectType.Ensnared);
+                    Owner.AddAbility(AbilityType.DUMMY_NOAFK);
+                });
             }
             
         }

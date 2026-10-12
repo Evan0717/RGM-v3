@@ -298,6 +298,7 @@ public enum AbilityType
     DUMMY_REBIRTHCOMPLETE, // [더미] 새로운 삶
     DUMMY_GOCMEMBER, // [더미] U.N.G.O.C 대원
     DUMMY_GRUPMENBER, // [더미] GRU-P 대원
+    DUMMY_DESTROYEDREFLECTOR, // [더미] 파괴된 반사경
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -332,10 +333,10 @@ public enum AbilityType
     NORMAL_STUDY, // [일반] 공부
     NORMAL_HEREDITY, // [일반] 유전
     NORMAL_FASTRETURN, // [일반] 빠른 복귀
+    NORMAL_STEELSHELL, // [일반] 강철 껍질
 
     // 희귀 //
     RARE_PHYSICALSTRENGTHENING, // [희귀] 육체 강화
-    RARE_STEELSHELL, // [희귀] 강철 껍질
     RARE_TRANSPARENTCLOAK, // [희귀] 투명 망토
     RARE_VAMPIRE, // [희귀] 흡혈귀
     RARE_TELEPORTATION, // [희귀] 순간이동
@@ -365,11 +366,11 @@ public enum AbilityType
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
     RARE_CLAYMORE, // [희귀] Claymore
+    RARE_MINIREFLECTOR, // [희귀] 일회용 반사경
 
     // 영웅 //
     EPIC_TERRORISTREMAINS, // [영웅] 테러리스트의 유품
     EPIC_RANDOMCHEST, // [영웅] 랜덤상자
-    EPIC_REPAIRMAN, // [영웅] 수리 기사
     EPIC_SUPERSTAR, // [영웅] 슈퍼 스타
     EPIC_LUCKYVIKEY, // [영웅] 럭키비키
     EPIC_EXTREMEPOISON, // [영웅] 극독
@@ -392,14 +393,12 @@ public enum AbilityType
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
     EPIC_CSAT, // [영웅] 대학수학능력시험
-    EPIC_AN94, // [영웅] AN-94
     EPIC_SHARPEYES, // [영웅] 샤프 아이즈
     EPIC_CHAINLIGHTNING, // [영웅] 체인 라이트닝
 
     // 전설 //
     LEGEND_SPEEDWAGON, // [전설] 스피드왜건
     LEGEND_SNAKEHANDRADIO, // [전설] 뱀의 손 무전기
-    LEGEND_RANDOMPACKAGE, // [전설] 랜덤택배
     LEGEND_MAGICIAN, // [전설] 마술사
     LEGEND_FLASHLIGHT, // [전설] 플래시라이트
     LEGEND_KILLSTREAK, // [전설] 킬스트릭
@@ -423,8 +422,8 @@ public enum AbilityType
     MYTHIC_JOKER, // [신화] 조커
     MYTHIC_BOMBGUN, // [신화] 워 머신
     MYTHIC_WARGOD, // [신화] 광전사
-    MYTHIC_BALLISTAEM3, // [신화] 발리스타 MP3
-    MYTHIC_TOOLGUN, // [신화] 툴건
+    MYTHIC_BALLISTAEM3, // [신화] BALLISTA EM-3
+    MYTHIC_TOOLGUN, // [신화] 딸깍
     MYTHIC_KINGSCOLOR, // [신화] 패왕색 패기
     MYTHIC_ROSEHIP, // [신화] 장미칼
     MYTHIC_HAMMER, // [신화] 철퇴
@@ -452,13 +451,15 @@ public enum AbilityType
     EPIC_GHOSTRULE, // [영웅] 고스트룰
     EPIC_DIVER, // [영웅] 잠수부
     EPIC_TURTLE, // [영웅] 거북 도사
-
+    EPIC_REPAIRMAN, // [영웅] 수리 기사
+    
     // 유니크 전설
     LEGEND_REFLECTOR, // [전설] 반사경
     LEGEND_CATACLYSMGENERATOR, // [전설] 대격변 생성기
     LEGEND_REPLICATION, // [전설] 복제
     LEGEND_CLEARCACHE, // [전설] 캐시 청소
     LEGEND_GAMBLER, // [전설] 도박사
+    LEGEND_RANDOMPACKAGE, // [전설] 랜덤택배
 
     // 유니크 신화
     MYTHIC_SPIRIT, // [신화] 스피릿
@@ -480,6 +481,8 @@ public enum AbilityType
     LEGEND_HUMAN_SCP966, // [전용 전설] SCP-966, 잠을 죽이는 자
     LEGEND_HUMAN_SCP999, // [전용 전설] SCP-999, 간지럼 괴물
     LEGEND_HUMAN_EMP, // [전용 전설] EMP
+    
+    MYTHIC_HUMAN_DUALPERSONALITY, // [전용 신화] 이중인격
 
     // D계급
     NORMAL_CLASSD_LARCENY, // [전용 일반] 절도죄
