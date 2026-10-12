@@ -712,6 +712,7 @@
     <Compile Include="RGM\Modes\Plus\Minecraft\MinecraftEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Minecraft\Blocks\WhiteConcrete.cs" />
     <Compile Include="RGM\Modes\Plus\Minecraft\Minecraft.cs" />
+    <Compile Include="RGM\Modes\Plus\Minecraft\MinecraftSetting.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
     <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
     <Compile Include="RGM\Modes\Plus\Store\Store.cs" />

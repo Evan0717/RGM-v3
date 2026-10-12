@@ -22,77 +22,6 @@ namespace RGM.Modes
         public override string Suggester => "몬키키";
 
         public static RandomEffect Instance;
-
-        /*public static readonly Dictionary<string, string> ExtraModes = new()
-        {
-            { "맛있는 스튜", "긍정적 효과만 적용됩니다."},
-            { "맛없는 스튜", "부정적 효과만 적용됩니다."},
-            { "이상한 스튜", "효과가 2개 적용됩니다." },
-            { "기묘한 스튜", "효과가 3개 적용됩니다."},
-            { "섞인 스튜", "1분마다 효과가 추가됩니다."},
-            { "평범한 스튜", "추가된 것 없이 효과 1개만 적용됩니다."},
-            { "식은 스튜", "효과가 1만큼만 적용됩니다."},
-            { "넘치는 스튜", "효과가 255만큼 적용됩니다."}
-        };
-
-        public string PickExtraMode(List<string> exceptModes = null, bool allowBasic = true)
-        {
-            exceptModes ??= new List<string>();
-
-            var candidates = ExtraModes.Keys
-                .Where(x => x != "평범한 스튜" && !exceptModes.Contains(x) && !CurrentExtraModes.Contains(x))
-                .ToList();
-
-            string extraMode;
-
-            if (allowBasic && Random.Range(1, 7) == 1)
-            {
-                extraMode = "평범한 스튜";
-            }
-            else if (candidates.Count == 0)
-            {
-                if (!allowBasic)
-                    return null;
-
-                extraMode = "평범한 스튜";
-            }
-            else
-            {
-                extraMode = candidates.GetRandomValue();
-            }
-
-            bool newlyAdded = false;
-
-            if (extraMode == "평범한 스튜")
-            {
-                if (CurrentExtraModes.Count == 0)
-                {
-                    CurrentExtraModes.Add("평범한 스튜");
-                    newlyAdded = true;
-                }
-            }
-            else if (!CurrentExtraModes.Contains(extraMode))
-            {
-                CurrentExtraModes.Remove("평범한 스튜");
-                CurrentExtraModes.Add(extraMode);
-                newlyAdded = true;
-            }
-
-            Webhook.Send($"추가 모드: {extraMode}");
-            Log.Info($"추가 모드: {extraMode}");
-
-            if (!newlyAdded)
-                return extraMode;
-
-            switch (extraMode)
-            {
-            }
-
-            return extraMode;
-        }
-
-        public List<string> CurrentExtraModes = new();*/
-
         List<EffectType> ignoredEffect = new List<EffectType>
         {
             EffectType.PocketCorroding,
@@ -106,9 +35,7 @@ namespace RGM.Modes
         };
 
 
-        //뭔 효관지 모르는거: ?(뒤에 ??도 포함), 실제로 기능하는 효관지 모르는거: ?? 
-        //그리고 특수한 경우(할로윈)에 적용되는 효과가 아닌 거 중에서 모르는 거는 중립에 떄려 박음
-        /*List<EffectType> GoodEffect = new List<EffectType>
+        List<EffectType> GoodEffect = new List<EffectType>
         {
             
         };
@@ -117,7 +44,6 @@ namespace RGM.Modes
         {
            EffectType.AmnesiaItems,
            EffectType.AmnesiaVision,
-           EffectType.
         };
 
         List<EffectType> HalloweenEffect = new List<EffectType>
@@ -152,7 +78,7 @@ namespace RGM.Modes
             EffectType.Scp559,
             EffectType.Scp956Target, //??
             EffectType.Snowed
-        };*/
+        };
 
         CoroutineHandle _onModeStarted;
 
@@ -200,11 +126,6 @@ namespace RGM.Modes
         /*public bool AddEffect(Player player, EffectType effect, byte intensity)
         {
             return false;
-        }
-
-        public IEnumerator<float> MixedStew() 
-        {
-            yield break;
         }*/
     }
 }
