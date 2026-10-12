@@ -23,7 +23,7 @@ using static RGM.IEnumerators.LobbyIEnumerator;
 using static RGM.IEnumerators.ServerIEnumerator;
 using static RGM.Variables.Variable;
 
-namespace RGM.EventArgs
+namespace RGM.Events
 {
     public static class ServerEvents
     {
@@ -112,7 +112,6 @@ namespace RGM.EventArgs
 
             while (true)
             {
-                TranslationManager.EnsureFileCacheLoaded();
                 UsersManager.LoadUsers();
 
                 yield return Timing.WaitForSeconds(1f);

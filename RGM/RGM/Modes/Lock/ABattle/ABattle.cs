@@ -244,8 +244,8 @@ public class ABattle : Mode
         // (확률) = 100 - 값 + 1
         const int mythicChance = 99;
         const int legendaryChance = 97;
-        const int epicChance = 80;
-        const int explodeChance = 98;
+        const int epicChance = 90;
+        const int explodeChance = 85;
         const int repeatCount = 5;
         const int explodeCount = 5;
 

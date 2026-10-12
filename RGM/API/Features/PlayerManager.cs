@@ -898,38 +898,17 @@ namespace RGM.API.Features
             string tag = "")
         {
             message = message.Replace("<color=#855439>*</color>", "");
-            
-            
-            if (TranslatorPlayers.ContainsKey(player) && 
-                player.IsUsingTranslator() && 
-                tag != "chat" && tag != "kill")
-                
-                TranslationManager.TranslatePreserveNewlines(message, TranslatorPlayers[player], translated
-                    => MultiBroadcast.API.BroadcastExtensions.AddBroadcast(player, duration, translated, priority,
-                        tag));
-            else
-                MultiBroadcast.API.BroadcastExtensions.AddBroadcast(player, duration, message, priority, tag);
+            MultiBroadcast.API.BroadcastExtensions.AddBroadcast(player, duration, message, priority, tag);
         }
 
         public static void EditBroadcast(this Player player, string text, string tag)
         {
-            if (player.IsUsingTranslator())
-                TranslationManager.TranslatePreserveNewlines(text, TranslatorPlayers[player], translated
-                    => MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, translated, tag));
-            else
-                MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, text, tag);
+            MultiBroadcast.API.BroadcastExtensions.EditBroadcast(player, text, tag);
         }
 
         public static void AddCustomHint(this Player player, HintServiceMeow.Core.Models.Hints.Hint hint)
         {
-            if (player.IsUsingTranslator())
-                TranslationManager.TranslatePreserveNewlines(hint.Text, TranslatorPlayers[player], translated =>
-                {
-                    hint.Text = translated;
-                    HintServiceMeow.Core.Extension.ExiledPlayerExtension.AddHint(player, hint);
-                });
-            else
-                HintServiceMeow.Core.Extension.ExiledPlayerExtension.AddHint(player, hint);
+            HintServiceMeow.Core.Extension.ExiledPlayerExtension.AddHint(player, hint);
         }
 
         public static void ExplodeGrenade(this Player player, Vector3? pos = null, float fuseTime = 0,

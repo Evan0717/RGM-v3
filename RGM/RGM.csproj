@@ -111,8 +111,8 @@
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\DailyCheck.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SpawnEffect.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRC.cs" />
-    <Compile Include="RGM\EventArgs\MEREvents.cs" />
-    <Compile Include="RGM\EventArgs\Scp\Scp1509Events.cs" />
+    <Compile Include="RGM\Events\MEREvents.cs" />
+    <Compile Include="RGM\Events\Scp\Scp1509Events.cs" />
     <Compile Include="RGM\IEnumerators\LobbyIEnumerator.cs" />
     <Compile Include="RGM\IEnumerators\ServerIEnumerator.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Custom.cs" />
@@ -706,6 +706,7 @@
     <Compile Include="RGM\Modes\OnlySub\Silent\Silent.cs" />
     <Compile Include="RGM\Modes\OnlySub\SitDown\SitDown.cs" />
     <Compile Include="RGM\Modes\OnlySub\SuperStar\SuperStar.cs" />
+    <Compile Include="RGM\Modes\Plus\CBR\CBR.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
     <Compile Include="RGM\Modes\Lock\MaxRandom\MaxRandom.cs" />
     <Compile Include="RGM\Modes\Plus\Minecraft\Block.cs" />
@@ -724,7 +725,6 @@
     <Compile Include="RGM\Modes\Plus\DogFight\DogFight.cs" />
     <Compile Include="RGM\Modes\Plus\ChupaChups\ChupaChups.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Commands\SetCount.cs" />
-    <Compile Include="RGM\Modes\Plus\KoreanSpeed\Features\Interfaces\ILogicFeatures.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Features\PlayerFeatures.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Features\ScpFeatures.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Variables\SpeedStore.cs" />
@@ -845,12 +845,12 @@
     <Compile Include="RGM\Modes\Set\WhoamI1\WhoamI1.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RGM\EventArgs\PlayerEvents.cs" />
-    <Compile Include="RGM\EventArgs\Scp\Scp079Events.cs" />
-    <Compile Include="RGM\EventArgs\Scp\Scp244Events.cs" />
-    <Compile Include="RGM\EventArgs\Scp\Scp330Events.cs" />
-    <Compile Include="RGM\EventArgs\ServerEvents.cs" />
-    <Compile Include="RGM\EventArgs\WarheadEvents.cs" />
+    <Compile Include="RGM\Events\PlayerEvents.cs" />
+    <Compile Include="RGM\Events\Scp\Scp079Events.cs" />
+    <Compile Include="RGM\Events\Scp\Scp244Events.cs" />
+    <Compile Include="RGM\Events\Scp\Scp330Events.cs" />
+    <Compile Include="RGM\Events\ServerEvents.cs" />
+    <Compile Include="RGM\Events\WarheadEvents.cs" />
     <Compile Include="RGM\Modes\Set\WhoamI2\WhoamI2.cs" />
     <Compile Include="RGM\Modes\Lock\WitGame\WitGame.cs" />
     <Compile Include="RGM\Modes\Tiny\대인전\대인전.cs" />
@@ -939,9 +939,9 @@
     <Reference Include="LabApi">
       <HintPath>$(EXILED_REFERENCES)\LabApi.dll</HintPath>
     </Reference>
-    <Reference Include="LabApiExtensions">
+<!--    <Reference Include="LabApiExtensions">
       <HintPath>$(EXILED_REFERENCES)\LabApiExtensions.dll</HintPath>
-    </Reference>
+    </Reference>-->
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>

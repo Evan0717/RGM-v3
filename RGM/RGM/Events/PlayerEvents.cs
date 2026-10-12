@@ -24,7 +24,7 @@ using static RGM.IEnumerators.ServerIEnumerator;
 using static RGM.Variables.Variable;
 
 
-namespace RGM.EventArgs
+namespace RGM.Events
 {
     public static class PlayerEvents
     {
@@ -1009,6 +1009,16 @@ namespace RGM.EventArgs
                 return;
             }
 
+            if (ev.Player.IsScpRole() && PlayerManager.List.Any(x => x.Role == RoleTypeId.Spectator))
+            {
+                var role = ev.Player.Role;
+                var target = PlayerManager.List.Where(x => !x.IsNPC && x.IsDead).GetRandomValue();
+                float hp = ev.Player.Health;
+            
+                target.RoleManager.ServerSetRole(role.Type, RoleChangeReason.None);
+                target.Health = hp;
+            }
+            
             MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10,
                 $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>추방</color>되었습니다. (사유: {ev.Reason})</size>");
         }
