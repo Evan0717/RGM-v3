@@ -25,13 +25,15 @@ public sealed class AddingAbilityEventArgs(
     AbilityType abilityType,
     int reflectorChain = 0,
     bool allowReflector = true,
-    int extraReflectorChain = 0) : System.EventArgs
+    int extraReflectorChain = 0,
+    bool isSelectionAbility = false) : System.EventArgs
 {
     public Player Player { get; } = player;
     public AbilityType AbilityType { get; } = abilityType;
     public int ReflectorChain { get; } = reflectorChain;
     public bool AllowReflector { get; } = allowReflector;
     public int ExtraReflectorChain { get; } = extraReflectorChain;
+    public bool IsSelectionAbility { get; } = isSelectionAbility;
     public bool IsAllowed { get; set; } = true;
 }
 

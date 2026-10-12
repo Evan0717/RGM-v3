@@ -720,7 +720,7 @@ public class ABattle : Mode
     // extraReflectorChain: 추가 모드 반사경으로 인한 연쇄 횟수 (최대 2회)
     // allowReflector: false면 반사경 연쇄를 건너뜀 (복제 등)
     public bool AddAbility(Player player, AbilityType type, int reflectorChain = 0, bool allowReflector = true,
-        int extraReflectorChain = 0)
+        int extraReflectorChain = 0, bool isSelectionAbility = false)
     {
         if (player == null) return false;
 
@@ -730,6 +730,9 @@ public class ABattle : Mode
             return false;
         }
 
+        if (type == AbilityType.RARE_MINIREFLECTOR && HasAbility(player, AbilityType.LEGEND_REFLECTOR))
+            return false;
+
         if (Abilities[type].IsUnique && HasAbility(player, type))
             return false;
 
@@ -738,7 +741,8 @@ public class ABattle : Mode
             type,
             reflectorChain,
             allowReflector,
-            extraReflectorChain);
+            extraReflectorChain,
+            isSelectionAbility);
         AddingAbility?.Invoke(addingAbilityEventArgs);
 
         if (!addingAbilityEventArgs.IsAllowed)
@@ -1430,7 +1434,7 @@ public class ABattle : Mode
         }
 
         player.AddHint("능력 선택", "", 0.25f);
-        player.AddAbility(selectedAbility);
+        AddAbility(player, selectedAbility, isSelectionAbility: true);
 
         yield break;
 
@@ -1577,7 +1581,7 @@ public class ABattle : Mode
             }
         }
 
-        if (!AddAbility(player, ability))
+        if (!AddAbility(player, ability, isSelectionAbility: true))
         {
             response = "해당 능력은 획득할 수 없습니다.";
             return false;
