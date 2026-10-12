@@ -41,10 +41,6 @@ public class Haste : Ability
             Count++;
         
         _harmony ??= new Harmony(ModeID);
-        if (!_harmony.GetPatchedMethods().Any(x => x is ScpPatch))
-            _harmony.Patch(AccessTools.PropertyGetter(
-                    typeof(Scp049ResurrectAbility), nameof(Scp049ResurrectAbility.Duration)),
-                postfix: new HarmonyMethod(typeof(ScpPatch), nameof(ScpPatch.Scp049Postfix)));
         Exiled.Events.Handlers.Scp079.Pinging += OnPinging;
 
         _onStarted = Timing.RunCoroutine(OnStarted());

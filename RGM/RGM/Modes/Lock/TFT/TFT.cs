@@ -427,10 +427,9 @@ public class TFT : Mode
 
     void DebugBroadcast(string message, Player player = null)
     {
-        if (!DebugUpgradeTimer)
-            return;
+        if (!DebugUpgradeTimer) return;
 
-        try
+        /*try
         {
             string text = $"<size=18><color=#00ffff>[TFT DEBUG]</color> {message}</size>";
 
@@ -443,7 +442,7 @@ public class TFT : Mode
             foreach (var target in PlayerManager.List.Where(x => !x.IsNPC))
                 target.AddBroadcast(3, text);
         }
-        catch { }
+        catch { }*/
     }
 
     void OnRoundEnded(RoundEndedEventArgs ev)

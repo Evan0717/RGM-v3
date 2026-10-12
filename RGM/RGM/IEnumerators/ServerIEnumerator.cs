@@ -38,18 +38,8 @@ namespace RGM.IEnumerators
                             if (overwatch.SpectatedPlayer != null && overwatch.SpectatedPlayer.CurrentHint != null)
                             {
                                 string content = overwatch.SpectatedPlayer.CurrentHint.Content;
-
-                                if (player.IsUsingTranslator())
-                                {
-                                    TranslationManager.TranslatePreserveNewlines(content, TranslatorPlayers[player],
-                                        translated =>
-                                        {
-                                            player.ShowHint(translated, 1.2f);
-                                        }
-                                    );
-                                }
-                                else
-                                    player.ShowHint(content, 1.2f);
+                                
+                                player.ShowHint(content, 1.2f);
                             }
 
                             break;
@@ -59,18 +49,7 @@ namespace RGM.IEnumerators
                             if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
                             {
                                 string content = spectator.SpectatedPlayer.CurrentHint.Content;
-
-                                if (player.IsUsingTranslator())
-                                {
-                                    TranslationManager.TranslatePreserveNewlines(content, TranslatorPlayers[player],
-                                        translated =>
-                                        {
-                                            player.ShowHint(translated, 1.2f);
-                                        }
-                                    );
-                                }
-                                else
-                                    player.ShowHint(content, 1.2f);
+                                player.ShowHint(content, 1.2f);
                             }
 
                             break;

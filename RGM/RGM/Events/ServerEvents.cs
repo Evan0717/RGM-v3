@@ -112,7 +112,6 @@ namespace RGM.Events
 
             while (true)
             {
-                TranslationManager.EnsureFileCacheLoaded();
                 UsersManager.LoadUsers();
 
                 yield return Timing.WaitForSeconds(1f);

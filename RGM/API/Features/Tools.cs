@@ -1205,15 +1205,7 @@ $"""
 
         public static void MessageTranslated(string message, string translation, bool isHeld = false, bool isNoisy = true, bool isSubtitles = true)
         {
-            if (Main.Instance.Config.EN)
-            {
-                TranslationManager.TranslatePreserveNewlines(message, "en", translated =>
-                {
-                    Exiled.API.Features.Cassie.MessageTranslated(message, translated, isHeld, isNoisy, isSubtitles);
-                });
-            }                
-            else    
-                Exiled.API.Features.Cassie.MessageTranslated(message, translation, isHeld, isNoisy, isSubtitles);
+            Exiled.API.Features.Cassie.MessageTranslated(message, translation, isHeld, isNoisy, isSubtitles);
         }
 
         public static string InsertBreaks(string input, int maxLineLength)

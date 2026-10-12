@@ -704,6 +704,7 @@
     <Compile Include="RGM\Modes\OnlySub\Silent\Silent.cs" />
     <Compile Include="RGM\Modes\OnlySub\SitDown\SitDown.cs" />
     <Compile Include="RGM\Modes\OnlySub\SuperStar\SuperStar.cs" />
+    <Compile Include="RGM\Modes\Plus\CBR\CBR.cs" />
     <Compile Include="RGM\Modes\Plus\KoreanSpeed\Patches\ScpPatch.cs" />
     <Compile Include="RGM\Modes\Lock\MaxRandom\MaxRandom.cs" />
     <Compile Include="RGM\Modes\Plus\Minecraft\Block.cs" />
@@ -935,9 +936,9 @@
     <Reference Include="LabApi">
       <HintPath>$(EXILED_REFERENCES)\LabApi.dll</HintPath>
     </Reference>
-    <Reference Include="LabApiExtensions">
+<!--    <Reference Include="LabApiExtensions">
       <HintPath>$(EXILED_REFERENCES)\LabApiExtensions.dll</HintPath>
-    </Reference>
+    </Reference>-->
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>

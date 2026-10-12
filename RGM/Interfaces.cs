@@ -171,6 +171,7 @@ public enum ModeType
     SpearShield,
     MaxRandom,
     Minecraft,
+    CBR
 }
 
 
