@@ -10,14 +10,27 @@ public class Proficiency : Ability
 {
     public override void OnEnabled()
     {
-        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.Dying += OnDying;
+        // Exiled.Events.Handlers.Player.Died += OnDied;
     }
 
     public override void OnDisabled()
     {
+        // Exiled.Events.Handlers.Player.Dying -= OnDying;
         Exiled.Events.Handlers.Player.Died -= OnDied;
     }
-
+    
+    private void OnDying(DyingEventArgs ev)
+    {
+        if (ev.Attacker != Owner || 
+            ev.Player == Owner ||
+            ev.Player.Role.Type == RoleTypeId.Scp0492)  return;
+        
+        ev.Player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
+        ev.IsAllowed = false;
+    }
+    
+    
     private void OnDied(DiedEventArgs ev)
     {
         if (ev.Attacker != Owner || ev.Player == Owner)
@@ -27,5 +40,5 @@ public class Proficiency : Ability
         {
             ev.Player.Role.Set(RoleTypeId.Scp0492, RoleSpawnFlags.None);
         });
-    }
+    }  
 }
