@@ -805,6 +805,7 @@
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\SnakeGameMonitor.cs" />
     <Compile Include="RGM\Modes\Set\Snake\SnakeSystem\SnakeMarketSystem.cs" />
     <Compile Include="RGM\Modes\Set\SnowBallFight\SnowBallFight.cs" />
+    <Compile Include="RGM\Modes\Set\SoulMate\SoulMate.cs" />
     <Compile Include="RGM\Modes\Set\SpearShield\SpearShield.cs" />
     <Compile Include="RGM\Modes\Set\Stroking999\Stroking999.cs" />
     <Compile Include="RGM\Modes\Set\Tag\Tag.cs" />
@@ -827,7 +828,6 @@
     <Compile Include="RGM\Modes\Set\Run!\Run.cs" />
     <Compile Include="RGM\Modes\Set\SCPRUSH\SCPRUSH.cs" />
     <Compile Include="RGM\Modes\Plus\Siberia\Siberia.cs" />
-    <Compile Include="RGM\Modes\Plus\SoulMate\SoulMate.cs" />
     <Compile Include="RGM\Modes\Set\Rescue05\Rescue05.cs" />
     <Compile Include="RGM\Modes\Lock\RussianRoulette\RussianRoulette.cs" />
     <Compile Include="RGM\Modes\Set\Snake\Snake.cs" />

@@ -7,11 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Extensions;
+using Exiled.Events.EventArgs.Server;
 using static RGM.Variables.Variable;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Plus, ModeType.SoulMate)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.SoulMate)]
     class SoulMate : Mode
     {
         public override string Name => "소울메이트";
@@ -47,6 +48,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
             Exiled.Events.Handlers.Scp3114.Revealing += OnRevealing;
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
             _soulMateMatching = Timing.RunCoroutine(SoulMateMatching());
@@ -65,6 +67,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
 
             Exiled.Events.Handlers.Scp3114.Revealing -= OnRevealing;
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
 
             Timing.KillCoroutines(_onModeStarted);
             Timing.KillCoroutines(_soulMateMatching);
@@ -330,5 +333,31 @@ namespace RGM.Modes
 
         private void OnRevealing(Exiled.Events.EventArgs.Scp3114.RevealingEventArgs ev) 
             => ev.Player.DropItems();
+        
+        private void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            List<Player> players = [.. PlayerManager.List.Where(x => x.IsAlive && !x.IsNPC)];
+            List<Player> loneWinners = [];
+            List<Player> soulMateWinners = [];
+
+            switch (players.Count)
+            {
+                case 1:
+                    loneWinners.AddRange(players);
+                    Timing.RunCoroutine(Tools.SetWinner(loneWinners, players.Count / 2));
+                    break;
+                case 2 when
+                    _soulMates.TryGetValue(players[0], out var soulMate) &&
+                    soulMate == players[1] &&
+                    _soulMates.TryGetValue(players[1], out soulMate) &&
+                    soulMate == players[0]:
+                    soulMateWinners.AddRange(players);
+                    Timing.RunCoroutine(Tools.SetWinner(soulMateWinners, players.Count / 4));
+                    break;
+                case > 0:
+                    Timing.RunCoroutine(Tools.SetWinner(players, 1));
+                    break;
+            }
+        }
     }
 }
