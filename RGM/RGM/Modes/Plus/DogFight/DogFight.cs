@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features.Items;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using MEC;
 using UnityEngine;
@@ -9,6 +10,8 @@ using RGM.API.Features;
 using Exiled.Events.EventArgs.Scp079;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Server;
+using InventorySystem.Items.Usables.Scp330;
+using MapGeneration.Holidays;
 
 namespace RGM.Modes
 {
@@ -28,7 +31,7 @@ namespace RGM.Modes
 
         public static DogFight Instance;
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
         public override void OnEnabled()
         {
@@ -64,7 +67,7 @@ namespace RGM.Modes
             Tools.UnInstallMode(ModeType.Ghost);
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
@@ -74,18 +77,25 @@ namespace RGM.Modes
             yield break;
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             if (ev.Player.IsAlive)
                 Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
-            player.AddItem(ItemType.GunRevolver);
+            if (HolidayUtils.IsHolidayActive(HolidayType.Halloween))
+            {
+                player.EnableEffect(EffectType.Marshmallow);
+            }
+            else
+            {
+                player.AddItem(ItemType.GunRevolver);
+            }
         }
 
-        public void OnShooting(ShootingEventArgs ev)
+        private void OnShooting(ShootingEventArgs ev)
         {
             if (ev.Item.Type == ItemType.GunRevolver)
             {
@@ -104,7 +114,7 @@ namespace RGM.Modes
             }
         }
 
-        public void OnHurting(HurtingEventArgs ev)
+        private void OnHurting(HurtingEventArgs ev)
         {
             if (ev.Attacker != null && ev.Attacker.CurrentItem != null && ev.Attacker.CurrentItem.Type == ItemType.GunRevolver)
             {
@@ -112,16 +122,16 @@ namespace RGM.Modes
             }
         }
 
-        public void OnPinging(PingingEventArgs ev)
+        private void OnPinging(PingingEventArgs ev)
         {
             Pickup.CreateAndSpawn(ItemType.SCP018, ev.Position, new Quaternion(Random.Range(1, 180), Random.Range(1, 180), Random.Range(1, 180), Random.Range(1, 180)), ev.Player);
         }
 
-        public void OnRoundEnded(RoundEndedEventArgs ev)
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive))
             {
-                Server.ExecuteCommand($"/drop {player.Id} 31 25");
+                Server.ExecuteCommand($"/drop {player.Id} 31 1");
             }
         }
     }
