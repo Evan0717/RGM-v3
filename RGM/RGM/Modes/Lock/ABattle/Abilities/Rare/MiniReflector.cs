@@ -41,7 +41,7 @@ public class MiniReflector : Ability
         if (!shouldReflect)
             return;
 
-        _ = ABattle.Instance.AddAbilityAsync(ev.Player,
+        _ = ABattle.Instance.AddAbilityAsync(Owner,
             [ev.AbilityType],
             reflectorChain: ev.ReflectorChain + 1,
             allowReflector: ev.AllowReflector,

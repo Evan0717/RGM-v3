@@ -186,7 +186,7 @@ public class ABattleEventHandler(ABattle aBattle)
         if (ABattle.CurrentExtraModes.Contains("대출"))
         {
             if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
-                Convert.ToByte(Random.Range(1, 101)) <= 18)
+                Convert.ToByte(Random.Range(1, 101)) <= 10)
             {
                 /*if (GodModePlayers.Contains(ev.Player))
                 GodModePlayers.Remove(ev.Player);
@@ -289,7 +289,7 @@ public class ABattleEventHandler(ABattle aBattle)
         switch (players.Count)
         {
             case 1:
-                Timing.RunCoroutine(Tools.SetWinner([.. players], 5));
+                Timing.RunCoroutine(Tools.SetWinner([.. players], players.Count / 2));
                 break;
             case > 1:
                 Timing.RunCoroutine(Tools.SetWinner([.. players], 1));
