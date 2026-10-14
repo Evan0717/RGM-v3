@@ -67,12 +67,12 @@ namespace RGM.Modes
                 {
                     if (Random.Range(1, 101) > (_isHalloween ? 8 : 3)) continue;
                     for (int i = 0; i < Random.Range(1, _isHalloween ? 30 : 10); i++)
-                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 32), door.Position + new Vector3(0, 2, 0));
+                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 16), door.Position + new Vector3(0, 2, 0));
                 }
 
                 foreach (var player in PlayerManager.List.Where(_ => Random.Range(1, 101) <= (_isHalloween ? 8 : 3)))
                 {
-                    CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 32), player.Position);
+                    CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 16), player.Position);
                 }
 
                 GlobalPlayer.TryPlay("treat or treat", 1.5f);
