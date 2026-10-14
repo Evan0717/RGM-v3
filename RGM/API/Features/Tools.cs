@@ -354,6 +354,7 @@ $"""
 
         public static IEnumerator<float> SetWinner(List<Player> playerList, int amount)
         {
+            const bool isPreSeason = false; // 프리시즌 때 마다 Toggle. True 시 EXP 지급을 pass.
             if (IsWinnerSelected || Main.Instance.Config.FixedModes.Any()) yield break;
 
             IsWinnerSelected = true;
@@ -369,8 +370,11 @@ $"""
 
                 foreach (var player in playerList.Where(x => !x.IsNonePlayer() && UsersManager.UsersCache.ContainsKey(x.UserId)))
                 {
-                    UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + amount).ToString();
-                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * IsUsingGameChipUsers(player)).ToString();
+                    if (!isPreSeason) 
+                    {
+                        UsersManager.UsersCache[player.UserId][0] = (int.Parse(UsersManager.UsersCache[player.UserId][0]) + amount).ToString(); // EXP
+                    }
+                    UsersManager.UsersCache[player.UserId][1] = (int.Parse(UsersManager.UsersCache[player.UserId][1]) + amount * IsUsingGameChipUsers(player)).ToString(); // 랜덤코인
                 }
 
                 UsersManager.SaveUsers();
