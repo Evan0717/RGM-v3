@@ -4,13 +4,7 @@
     isUnique: true)]
 public class Diver : Ability
 {
-    public override void OnEnabled()
-    {
-        Owner.IsUsingStamina = false;
-    }
+    public override void OnEnabled() => Owner.IsUsingStamina = false;
 
-    public override void OnDisabled()
-    {
-        Owner.IsUsingStamina = true;
-    }
+    public override void OnDisabled() => Owner.IsUsingStamina = true;
 }

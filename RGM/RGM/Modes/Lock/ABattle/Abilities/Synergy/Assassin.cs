@@ -3,7 +3,7 @@
 namespace RGM.Modes.Abilities.Synergy;
 
 [RequiresAbility(AbilityType.NORMAL_SWIFT, AbilityType.NORMAL_SNEAK, AbilityType.RARE_TRANSPARENTCLOAK)]
-[Ability("암살자", "<경공, 잠행, 투명 망토> 더 빠르게 상대를 처단하세요. 경공 능력을 3개 더 받습니다.",
+[Ability("암살자", "<경공, 잠행, 투명 망토> 더 빠르게 상대를 처단하세요. 경공 능력을 2개 더 받습니다.",
     AbilityCategory.Synergy, AbilityType.SYNERGY_ASSASSIN)]
 public class Assassin : Ability
 {
@@ -11,7 +11,7 @@ public class Assassin : Ability
     {
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
                 Owner.AddAbility(AbilityType.NORMAL_SWIFT);
         });
     }

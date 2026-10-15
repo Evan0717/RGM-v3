@@ -9,9 +9,8 @@ public class RandomBox : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddRandomItem();
-        while (Convert.ToByte(Random.Range(1, 101)) <= 20) {
+        do {
             Owner.AddRandomItem();
-        }
+        } while (Convert.ToByte(Random.Range(1, 101)) <= 20) ;
     }
 }

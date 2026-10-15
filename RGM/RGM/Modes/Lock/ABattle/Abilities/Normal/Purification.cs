@@ -10,9 +10,8 @@ public class Purification : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddCandy(CandyKindID.Green);
-        while (Convert.ToByte(Random.Range(1, 101)) <= 20) {
+        do { 
             Owner.AddCandy(CandyKindID.Green);
-        }
+        } while (Convert.ToByte(Random.Range(1, 101)) <= 20);
     }
 }

@@ -10,10 +10,8 @@ public class StaminaReplenishment : Ability
 {
     public override void OnEnabled()
     {
-        Owner.AddCandy(CandyKindID.Blue);
-        while (Convert.ToByte(Random.Range(1, 101)) <= 20)
-        {
+        do {
             Owner.AddCandy(CandyKindID.Blue);
-        }
+        } while (Convert.ToByte(Random.Range(1, 101)) <= 20);
     }
 }
