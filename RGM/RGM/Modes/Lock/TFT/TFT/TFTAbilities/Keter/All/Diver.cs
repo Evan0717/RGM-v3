@@ -1,33 +1,20 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
-using MEC;
+﻿using Exiled.API.Enums;
+using RGM.API.Features;
 
 namespace DAONTFT.Core.TFT.Keter.All;
 
-[TFTAbility("잠수부", "시야가 개선되고 스태미나가 무제한이 됩니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.Diver, "🫁")]
+[TFTAbility("잠수부", "스태미나가 무제한이 되며, 발소리가 제거됩니다.", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.Diver, "🫁")]
 public class Diver : TFTAbility
 {
-    CoroutineHandle _diverRotation;
-
     public override void OnEnabled()
     {
-        _diverRotation = Timing.RunCoroutine(DiverRotation());
+        Owner.IsUsingStamina = false;
+        Owner.AddEffect(EffectType.SilentWalk, 11);
     }
 
     public override void OnDisabled()
     {
-        Timing.KillCoroutines(_diverRotation);
-
-        Owner.DisableEffect(EffectType.Invigorated);
-    }
-
-    public IEnumerator<float> DiverRotation()
-    {
-        while (true)
-        {
-            Owner.EnableEffect(EffectType.Invigorated);
-
-            yield return Timing.WaitForSeconds(1f);
-        }
+        Owner.IsUsingStamina = true;
+        Owner.RemoveEffect(EffectType.SilentWalk, 11);
     }
 }
