@@ -37,7 +37,7 @@ public class Minecraft : Mode
     public readonly Dictionary<Vector3Int, Block> World = new();
     public readonly Dictionary<ushort, BlockData> BlockSerials = new();
     private const float MiningTick = 0.1f;      // 진행도를 갱신하는 간격(초)
-    private const float SwingInterval = 0.4f;   // 파는 동안 휘두르는 간격(초)
+    private const float SwingInterval = 0.2f;   // 파는 동안 휘두르는 간격(초)
     private const float BreakCooldown = 0.25f;  // 블록 하나를 부순 뒤 다음 블록을 파기 전 대기
     private MinecraftEventHandler _eventHandler;
     private CoroutineHandle _startHandle;
@@ -71,7 +71,8 @@ public class Minecraft : Mode
                 Name = blockAttribute.Name,
                 SchematicName = blockAttribute.SchematicName,
                 BlockType = blockAttribute.blockType,
-                DestroyTime = blockAttribute.DestroyTime
+                DestroyTime = blockAttribute.DestroyTime,
+                Color = blockAttribute.Color
             });
         }
         _startHandle = Timing.RunCoroutine(OnModeStarted());
@@ -136,9 +137,10 @@ public class Minecraft : Mode
     public void AddBlock(BlockType type, ushort count, Player player)
     {
         Item item = player.AddItem(MinecraftItemType);
-        ushort ItemSerial = item.Serial;
+        if (item == null)
+            return; // 인벤토리가 가득 찼거나 지급 실패
 
-        BlockSerials.Add(ItemSerial, new BlockData { Type = type, Count = count });
+        BlockSerials[item.Serial] = new BlockData { Type = type, Count = count };
     }
 
     // Placement / Interaction API
@@ -314,12 +316,17 @@ public class Minecraft : Mode
     private void DestroyBlock(Player player, Block block)
     {
         block.OnBroken(player);
+
+        Vector3 center = ToWorld(block.GridPos);
+
         if (block.Schematic != null)
             block.Schematic.Destroy();
 
+        BlockEffects.SpawnDestroyEffect(block.Info, center);
+
         try
         {
-            Pickup pickup = Pickup.CreateAndSpawn(MinecraftItemType, ToWorld(block.GridPos));
+            Pickup pickup = Pickup.CreateAndSpawn(MinecraftItemType, center);
             if (pickup != null)
             {
                 BlockSerials[pickup.Serial] = new BlockData { Type = block.Info.BlockType, Count = 1 };

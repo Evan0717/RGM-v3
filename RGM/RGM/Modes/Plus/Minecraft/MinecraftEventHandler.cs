@@ -59,11 +59,14 @@ public class MinecraftEventHandler(Minecraft minecraft)
 
     private void OnDroppedItem(DroppedItemEventArgs ev)
     {
-        if (!minecraft.BlockSerials.TryGetValue(ev.Pickup.Serial, out var data))
+        if (!minecraft.BlockSerials.TryGetValue(ev.Pickup.Serial, out var data)
+            || !minecraft.Blocks.TryGetValue(data.Type, out var info))
             return;
+
         if (ev.Player.CurrentItem == null)
             RemoveHeld(ev.Player);
-        var visual = new BlockVisual(minecraft.Blocks[data.Type], BlockForm.Dropped, ev.Pickup.Position);
+
+        var visual = new BlockVisual(info, BlockForm.Dropped, ev.Pickup.Position);
         visual.AttachTo(ev.Pickup.Transform);
     }
 
