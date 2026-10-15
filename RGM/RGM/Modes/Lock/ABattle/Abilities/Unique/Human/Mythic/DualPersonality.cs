@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CustomPlayerEffects;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.ToggleableLights;
@@ -16,7 +17,7 @@ namespace RGM.Modes.Abilities.Unique.Human.Mythic;
 
 [Ability("이중인격",
     """
-    두 가지 형상, 환멸과 연극의 모습으로 변신합니다.
+    두 가지 형상, <color=#FFE6EA>연극</color>과 <color=#191970>환멸</color>의 모습으로 변신합니다.
     지급된 아이템을 사용하여 인격을 변경할 수 있으며, 각 인격은 특정 종류의 능력치를 크게 강화시킵니다.
     """, 
     AbilityCategory.Mythic, AbilityType.MYTHIC_HUMAN_DUALPERSONALITY, RoleAbility.Human)]
@@ -33,28 +34,30 @@ public class DualPersonality : Ability
     }
 
     // 형상 전환
-    private const float TransitionDuration = 1f;
+    private const float TransitionDuration = 0.75f;
 
     // 연극의 형상
     private const float DramaHealInterval = 0.5f;
-    private const float DramaHealRatio = 0.07f;
+    private const float DramaHealRatio = 0.08f;
     private const float DramaAhpSustain = 30f;
     private const int DramaSpeedReduction = 40;
     private const float DramaDamageMultiplier = 0.7f;
-    private const float DramaLifestealRatio = 0.08f;
+    private const float DramaLifeStealRatio = 0.1f;
+    private const float DramaMaxIncomeDamage = 20f;
 
     // 환멸의 형상
     private const float DisillusionTickInterval = 1f;
-    private const float DisillusionSelfDamageRatio = 0.02f;
+    private const float DisillusionSelfDamageRatio = 0.03f;
     private const float DisillusionMinHealthRatio = 0.1f;
-    private const int DisillusionBoostIntensity = 45;
-    private const float DisillusionDamageMultiplier = 1.45f;
+    private const int DisillusionBoostIntensity = 80;
+    private const float DisillusionDamageMultiplier = 1.6f;
 
     private Form _form;
     private ushort _lanternSerial;
     private float _lockedUntil;
 
     private bool _isSpeedOverridden;
+    private bool _isApplyingFormEffect;
     private int _originalBoost;
     private int _originalSlowness;
 
@@ -71,6 +74,7 @@ public class DualPersonality : Ability
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         Exiled.Events.Handlers.Player.Hurt += OnHurt;
+        Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
 
         // 능력 획득 시 기본 형상은 연극 (Lantern ON)
         _form = Form.Drama;
@@ -88,6 +92,7 @@ public class DualPersonality : Ability
         Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+        Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
 
         Timing.KillCoroutines(_syncRoutine);
         ExitForm(_form);
@@ -150,11 +155,10 @@ public class DualPersonality : Ability
         EnterForm(next);
 
         ApplyTransitionEffects();
-        _lockedUntil = Time.time + TransitionDuration + Timing.WaitForOneFrame;
+        _lockedUntil = Time.time + TransitionDuration * 2 + Timing.WaitForOneFrame;
 
-        string formName = next == Form.Drama ? "연극" : "환멸";
-        Owner.AddHint("이중인격",
-            $"<color={ABattle.RatingColor["신화"]}>{formName}</color>의 형상으로 변신했습니다.");
+        string formName = next == Form.Drama ? "<color=#FFE6EA>연극</color>" : "<color=#191970>환멸</color>";
+        Owner.AddHint("이중인격", $"{formName}의 형상으로 변신했습니다.");
     }
 
     private void EnterForm(Form form)
@@ -190,17 +194,20 @@ public class DualPersonality : Ability
     }
 
     /// <summary>
-    /// 전환 시 생존 효과(무적 + 은신)를 부여하고, 동시에 이동을 막는다.
+    /// 전환 시 1.5초 생존 효과(무적 + 은신)를 부여하고, 동시에 0.75초간 이동 불가 상태를 만든다.
     /// 이동속도 보정과 충돌하지 않도록 『생존』의 이동속도 증가는 적용하지 않는다.
     /// </summary>
     private void ApplyTransitionEffects()
     {
-        Owner.AddEffect(EffectType.Invisible, 1, TransitionDuration);
-        Owner.AddEffect(EffectType.Ghostly, 1, TransitionDuration);
-        Owner.ApplyGodMode(TransitionDuration);
+        ApplyFormEffect(() =>
+        {
+            Owner.AddEffect(EffectType.Invisible, 1, TransitionDuration * 2);
+            Owner.AddEffect(EffectType.Ghostly, 1, TransitionDuration * 2);
+            Owner.ApplyGodMode(TransitionDuration);
 
-        Owner.AddEffect(EffectType.SinkHole, 1, TransitionDuration);
-        Owner.AddEffect(EffectType.Ensnared, 1, TransitionDuration);
+            Owner.AddEffect(EffectType.SinkHole, 1, TransitionDuration);
+            Owner.AddEffect(EffectType.Ensnared, 1, TransitionDuration);
+        });
     }
 
     #endregion
@@ -238,8 +245,11 @@ public class DualPersonality : Ability
 
         int speed = _originalBoost - _originalSlowness - DramaSpeedReduction;
 
-        SetEffectIntensity(EffectType.MovementBoost, Math.Max(speed, 0));
-        SetEffectIntensity(EffectType.Slowness, Math.Max(-speed, 0));
+        ApplyFormEffect(() =>
+        {
+            SetEffectIntensity(EffectType.MovementBoost, Math.Max(speed, 0));
+            SetEffectIntensity(EffectType.Slowness, Math.Max(-speed, 0));
+        });
     }
 
     private void RestoreSpeed()
@@ -252,8 +262,11 @@ public class DualPersonality : Ability
         if (Owner == null || !Owner.IsAlive)
             return;
 
-        SetEffectIntensity(EffectType.MovementBoost, GetBaseIntensity(EffectType.MovementBoost, _originalBoost));
-        SetEffectIntensity(EffectType.Slowness, GetBaseIntensity(EffectType.Slowness, _originalSlowness));
+        ApplyFormEffect(() =>
+        {
+            SetEffectIntensity(EffectType.MovementBoost, GetBaseIntensity(EffectType.MovementBoost, _originalBoost));
+            SetEffectIntensity(EffectType.Slowness, GetBaseIntensity(EffectType.Slowness, _originalSlowness));
+        });
     }
 
     #endregion
@@ -284,10 +297,23 @@ public class DualPersonality : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
+        if (_form == Form.Drama && ev.Player == Owner)
+            ev.DamageHandler.Damage = Math.Min(ev.DamageHandler.Damage, DramaMaxIncomeDamage);
+
         if (!IsOwnerAttack(ev.Attacker, ev.Player, ev.DamageHandler.Type))
             return;
 
         ev.DamageHandler.Damage *= _form == Form.Drama ? DramaDamageMultiplier : DisillusionDamageMultiplier;
+    }
+
+    private void OnReceivingEffect(ReceivingEffectEventArgs ev)
+    {
+        if (_form != Form.Drama || _isApplyingFormEffect || ev.Player != Owner)
+            return;
+
+        EffectType effectType = ev.Effect.GetEffectType();
+        if (ev.Intensity > 0 && !EffectManager.IsKeptBuff(effectType))
+            ev.IsAllowed = false;
     }
 
     private void OnHurt(HurtEventArgs ev)
@@ -302,7 +328,7 @@ public class DualPersonality : Ability
         switch (_form)
         {
             case Form.Drama:
-                Owner.Heal(damage * DramaLifestealRatio);
+                Owner.Heal(damage * DramaLifeStealRatio);
                 break;
 
             case Form.Disillusion:
@@ -344,7 +370,7 @@ public class DualPersonality : Ability
             return;
 
         ev.Player.AddHint("이중인격",
-            $"<b><color={ABattle.RatingColor["신화"]}>이중인격</color></b>의 랜턴입니다. 켜면 <b>연극</b>, 끄면 <b>환멸</b>의 형상이 됩니다.");
+            $"<b><color={ABattle.RatingColor["신화"]}>이중인격</color></b>의 랜턴입니다. 켜면 <b><color=#FFE6EA>연극</color></b>, 끄면 <b><color=#191970>환멸</color></b>의 형상이 됩니다.");
     }
 
     private Item GetLantern() => Owner?.Items.FirstOrDefault(x => x.Serial == _lanternSerial);
@@ -385,32 +411,18 @@ public class DualPersonality : Ability
             Owner.EnableEffect(type, (byte)Math.Min(intensity, byte.MaxValue));
     }
 
-    #endregion
+    private void ApplyFormEffect(Action action)
+    {
+        _isApplyingFormEffect = true;
+        try
+        {
+            action();
+        }
+        finally
+        {
+            _isApplyingFormEffect = false;
+        }
+    }
 
-    /*
-     * 이중인격 구현
-     *
-     * 1. 두 가지 형상(연극/환멸) 상태를 지정. 두 형상 간 전환 쿨타임은 1초로 설정. 형상 간 전환 때 마다 생존 효과 부여.
-     * 추가로, 전환 때 마다 이동 불가.(Sinkhole, Ensnared 효과 부여)
-     * 2. 능력 획득 시 기본 형상은 연극 형상으로 지정.
-     * 3. 형상 간 전환은 Lantern으로 하며, 해당 아이템 내장 상호작용 기능(Lantern ON/OFF)을 통해 전환 가능하도록 구현. 해당 아이템은 버릴 수 없도록 설정.
-     * 3-1. Lantern ON일 때 연극의 형상, OFF 일때 환멸의 형상으로 설정. 혼동을 방지하기 위해 전환 후 1 + OneFrame초 간 아이템 상호작용을 금지함.
-     * 
-     * 4. 연극의 형상 능력치
-     * 4-1. 0.5초 간격으로 최대 HP의 7% 회복, 회복량 만큼 AHP가 증가하며, 최대 AHP도 동시에 증가.
-     * 4-2. 해당 AHP는 30초간 지속되며, 30초가 지날 시 지속적으로 감소(감소량은 게임 기본 값 사용)
-     * 4-3. 이동 속도 30% 감소
-     * 4-3-1. 감속을 구현할 때, 현재 자신의 이동속도 증감량을 계산하여, 해당 값에서 -40을 적용. (단순히 이펙트를 적용하는 게 아님!)
-     * 이동속도 증감량은 현재 Owner의 MovementBoost 또는 Slowness의 intensity 값을 가져와서 계산.
-     * 증감량을 계산하였을 때, 양수면 MovementBoost, 음수면 Slowness 적용. 0이면 아무것도 적용하지 않음.
-     * 4-4. 공격력 30% 감소
-     * 4-5. 공격 시 피해량의 8%를 회복함(Owner.Heal 로 적용.)
-     *
-     * 5. 환멸의 형상 능력치
-     * 5-1. 1초 간격으로 최대 HP의 2%만큼 자가 피해를 입으며, 최소치는 최대 체력의 10%까지만 감소 가능.
-     * 5-2. 이동 속도 45% 증가.(AddEffect로 추가)
-     * 5-3. 공격력 45% 증가.
-     * 5-4. 공격 시, 자신의 잃은 HP만큼 추가 피해를 입히며, 해당 피해는 관통 고정 피해로 적용(ApplyFixedDamage)
-     * 5-5. 
-     */
+    #endregion
 }
