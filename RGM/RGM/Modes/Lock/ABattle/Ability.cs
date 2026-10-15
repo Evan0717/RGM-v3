@@ -26,7 +26,7 @@ public sealed class AddingAbilityEventArgs(
     int reflectorChain = 0,
     bool allowReflector = true,
     int extraReflectorChain = 0,
-    bool isSelectionAbility = false) : System.EventArgs
+    bool isSelectionAbility = false) : EventArgs
 {
     public Player Player { get; } = player;
     public AbilityType AbilityType { get; } = abilityType;

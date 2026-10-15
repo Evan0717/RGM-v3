@@ -19,7 +19,7 @@ public class Test : Ability
             AbilityType.NORMAL_TEST, AbilityType.RARE_FINALEXAM, AbilityType.EPIC_CSAT,
             AbilityType.NORMAL_REROLL, AbilityType.NORMAL_EXCHANGE, AbilityType.NORMAL_SUSPICIOUSSTEW,
             AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_UPGRADE,
-            AbilityType.RARE_CONTRACT, AbilityType.EPIC_GRAVEROBBER
+            AbilityType.RARE_CONTRACT
         ];
     
     public override void OnEnabled()

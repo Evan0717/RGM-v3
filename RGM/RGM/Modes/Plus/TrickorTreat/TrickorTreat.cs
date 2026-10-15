@@ -6,6 +6,7 @@ using RGM.API.Features;
 using RGM.Commands.RemoteAdminCommands;
 using System.Collections.Generic;
 using System.Linq;
+using MapGeneration.Holidays;
 using RGM.Patches;
 using UnityEngine;
 using static RGM.Variables.Variable;
@@ -25,6 +26,7 @@ namespace RGM.Modes
 아니면 누군가를 죽이거나..
 
 * 게임 시작 12분 뒤 <color=red>자동핵</color>이 작동됩니다.
+* 할로윈 이벤트 중에는 모드가 강화됩니다.
 """;
         public override string Color => "5F04B4";
 
@@ -32,6 +34,7 @@ namespace RGM.Modes
 
         private CoroutineHandle _onModeStarted;
         private readonly AutoWarhead _autoWarhead = new(12, 1);
+        private readonly bool _isHalloween = HolidayUtils.IsHolidayActive(HolidayType.Halloween);
 
         public override void OnEnabled()
         {
@@ -62,19 +65,19 @@ namespace RGM.Modes
             {
                 foreach (var door in Door.List)
                 {
-                    if (Random.Range(1, 101) > 3) continue;
-                    for (int i = 0; i < Random.Range(1, 10); i++)
-                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 32), door.Position + new Vector3(0, 2, 0));
+                    if (Random.Range(1, 101) > (_isHalloween ? 8 : 3)) continue;
+                    for (int i = 0; i < Random.Range(1, _isHalloween ? 30 : 10); i++)
+                        CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 16), door.Position + new Vector3(0, 2, 0));
                 }
 
-                foreach (var player in PlayerManager.List.Where(player => Random.Range(1, 101) <= 3))
+                foreach (var player in PlayerManager.List.Where(_ => Random.Range(1, 101) <= (_isHalloween ? 8 : 3)))
                 {
-                    CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 32), player.Position);
+                    CandyParty.Create(Tools.PickRandomCandy(), Random.Range(0.8f, 16), player.Position);
                 }
 
                 GlobalPlayer.TryPlay("treat or treat", 1.5f);
 
-                yield return Timing.WaitForSeconds(Random.Range(30, 150));
+                yield return Timing.WaitForSeconds( _isHalloween ? Random.Range(15, 60) : Random.Range(30, 150));
             }
         }
 
@@ -89,7 +92,7 @@ namespace RGM.Modes
             {
                 Timing.CallDelayed(1f, () =>
                 {
-                    for (int i = 1; i < 5; i++)
+                    for (int i = 1; i < (_isHalloween ? 7 : 5); i++)
                     {
                         player.AddRandomCandy();
                     }

@@ -420,7 +420,7 @@ public class MaxRandom : Mode
 
         List<Player> winners = [.. players.Take(targetCount)];
         
-        var reward = Random.Range(1, players.Count + 1);
+        var reward = Random.Range(1, (players.Count + 1) / 2);
 
         Timing.RunCoroutine(Tools.SetWinner(winners, reward));
     }

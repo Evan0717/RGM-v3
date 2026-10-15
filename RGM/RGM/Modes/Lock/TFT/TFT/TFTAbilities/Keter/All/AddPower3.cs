@@ -1,10 +1,13 @@
 ﻿using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using System.Collections.Generic;
+using MEC;
+using UnityEngine;
 
 namespace DAONTFT.Core.TFT.Keter.All;
 
-[TFTAbility("단련 · 통달", "피해 증폭을 얻습니다. (+60%)", TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower3, "💪")]
+[TFTAbility("단련 · 통달", "피해 증폭이 50% 증가되고, 일정 확률로 치명타가 발생합니다.", 
+    TFTAbilityLevel.Keter, TFTAbilityCategory.All, TFTAbilityPoint.Continuous, TFTAbilityType.AddPower3, "💪")]
 public class AddPower3 : TFTAbility
 {
     public override void OnEnabled()
@@ -17,11 +20,18 @@ public class AddPower3 : TFTAbility
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    public void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker != Owner)
+        if (ev.Attacker == null || 
+            ev.Attacker != Owner || 
+            !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;
 
-        ev.DamageHandler.Damage += ev.DamageHandler.Damage * 0.6f;
+        var chance = Random.Range(1, 101);
+        
+        ev.DamageHandler.Damage *= chance < 50 ? 1.5f : Mathf.Pow(1.5f , 2);
+        
+        if (chance < 50) return;
+        ev.Attacker.ShowHitMarker(1.5f);
     }
 }

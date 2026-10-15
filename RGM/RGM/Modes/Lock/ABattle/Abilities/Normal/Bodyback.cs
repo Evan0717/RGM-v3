@@ -7,8 +7,5 @@ namespace RGM.Modes.Abilities.Normal;
     AbilityCategory.Normal, AbilityType.NORMAL_BODYBACK, isUnique:true)]
 public class Bodyback : Ability
 {
-    public override void OnEnabled()
-    {
-        Owner.AddEffect(EffectType.BodyshotReduction, 4);
-    }
+    public override void OnEnabled() => Owner.AddEffect(EffectType.BodyshotReduction, 4);
 }

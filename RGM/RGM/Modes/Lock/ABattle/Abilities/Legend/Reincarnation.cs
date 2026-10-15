@@ -15,6 +15,7 @@ namespace RGM.Modes.Abilities.Legend;
 [Ability("리인카네이션", """
                    사망 판정을 받을 시, 60초간 모든 공격에 무적이 되며, 능력치가 상승합니다.
                    단, 일정 횟수 이상 적 타격에 실패할 시 사망합니다.
+                   영혼 계약 완료 시, 8초간 『생존』 효과를 부여합니다.
                    """, AbilityCategory.Legend, AbilityType.LEGEND_REINCARNATION)]
 public class Reincarnation : Ability, IDeathPreventionAbility
 {
@@ -244,6 +245,12 @@ public class Reincarnation : Ability, IDeathPreventionAbility
 
         Owner.Health = Owner.MaxHealth;
         _isCoolingDown = true;
+        
+        Owner.AddEffect(EffectType.Invisible, 1, 8);
+        Owner.AddEffect(EffectType.Ghostly, 1, 8);
+        Owner.AddEffect(EffectType.MovementBoost, 40, 8);
+        Owner.ApplyGodMode(8);
+        
         Owner.AddHint("리인카네이션",
             $"영혼 계약을 달성했습니다. {CooldownDuration:0}초 후 다시 사용할 수 있습니다.");
 

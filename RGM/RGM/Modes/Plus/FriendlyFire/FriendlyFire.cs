@@ -8,6 +8,7 @@ using PlayerRoles;
 using RGM.API.Features;
 using RGM.API.DataBases;
 using Exiled.API.Enums;
+using MapGeneration.Holidays;
 using RGM.Patches;
 
 namespace RGM.Modes
@@ -40,9 +41,9 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
         public static FriendlyFire Instance;
 
         private const float Meleedamage = 25f;
-        List<Player> HumanMeleeCooldown = new();
-        int Scp106AttackTeamCoolDown = 0;
-        List<Player> Scp106Stacks = new();
+        private readonly List<Player> _humanMeleeCooldown = [];
+        private int _scp106AttackTeamCoolDown;
+        private readonly List<Player> _scp106Stacks = [];
 
         private CoroutineHandle _onModeStarted;
         private readonly AutoWarhead _autoWarhead = new(10, 1);
@@ -97,7 +98,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
             harmony.UnpatchAll();
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
             foreach (var player in PlayerManager.List)
             {
@@ -106,129 +107,119 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
 
             yield break;
         }
-        
-        public void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
+
+        private void OnSpawned(Exiled.Events.EventArgs.Player.SpawnedEventArgs ev)
         {
             Spawned(ev.Player);
         }
 
-        public void Spawned(Player player)
+        private void Spawned(Player player)
         {
-            if (new List<RoleTypeId>() { RoleTypeId.Scp173, RoleTypeId.Scp106 }.Contains(player.Role.Type) || player.IsHuman)
+            if (new List<RoleTypeId> { RoleTypeId.Scp173, RoleTypeId.Scp106 }.Contains(player.Role.Type) || player.IsHuman)
                 player.AddHint("어동오적", $"<size=20>[ALT]ㅣ같은 진영에게 피해를 입힐 수 있습니다.</size>", 10);
 
             else if (player.Role.Type == RoleTypeId.Scp939)
                 player.AddHint("어동오적 939", $"<size=20>런지를 사용하는 도중 근접한 SCP를 쳐다보면 해당 개체에 피해를 입힐 수 있습니다.</size>", 10);
         }
 
-        public IEnumerator<float> OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)
+        private IEnumerator<float> OnTogglingNoClip(Exiled.Events.EventArgs.Player.TogglingNoClipEventArgs ev)
         {
             if (ev.Player.IsHuman && !ev.Player.IsCuffed)
             {
-                if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
+                if (!ev.Player.TryGetLookPlayer(2f, out Player player, out RaycastHit? hit)) yield break;
+                if (ev.Player == player || _humanMeleeCooldown.Contains(ev.Player)) yield break;
+
+                float DamageCalcu(string pos)
                 {
-                    if (ev.Player != player && !HumanMeleeCooldown.Contains(ev.Player))
+                    switch (pos)
                     {
-                        float damageCalcu(string pos)
-                        {
-                            switch (pos)
-                            {
-                                case "Head":
-                                    return Meleedamage * 2f;
+                        case "Head":
+                            return Meleedamage * 2f;
 
-                                case "Chest":
-                                    return Meleedamage;
+                        case "Chest":
+                            return Meleedamage;
 
-                                default:
-                                    return Meleedamage * 0.7f;
-                            }
-                        }
+                        default:
+                            return Meleedamage * 0.7f;
+                    }
+                }
 
-                        float damage = damageCalcu(hit.Value.transform.name);
+                if (hit != null)
+                {
+                    float damage = DamageCalcu(hit.Value.transform.name);
 
-                        ev.Player.ShowHitMarker(damage / Meleedamage);
-                        player.Hit(ev.Player, damage);
-                        ev.Player.Grab();
+                    ev.Player.ShowHitMarker(damage / Meleedamage);
+                    player.Hit(ev.Player, damage);
+                }
 
-                        HumanMeleeCooldown.Add(ev.Player);
+                ev.Player.Grab();
+
+                _humanMeleeCooldown.Add(ev.Player);
+
+                yield return Timing.WaitForSeconds(1);
+
+                _humanMeleeCooldown.Remove(ev.Player);
+            }
+            else switch (ev.Player.Role.Type)
+            {
+                case RoleTypeId.Scp173:
+                {
+                    if (!ev.Player.TryGetLookPlayer(2f, out Player player, out RaycastHit? hit)) yield break;
+                    if (ev.Player.Role is not Exiled.API.Features.Roles.Scp173Role { BlinkCooldown: 0f }) yield break;
+                    if (ev.Player == player || !player.IsScpRole()) yield break;
+                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.2f);
+                    Server.ExecuteCommand($"/cassie <color=#ff0000>{(Trans.Role[ev.Player.Role.Type])}</color>이(가) <color=#ff0000>{(Trans.Role[player.Role.Type])}</color>의 뒷통수를 쳤습니다.");
+                    player.Hit(ev.Player, player.MaxHealth);
+                    break;
+                }
+                case RoleTypeId.Scp106:
+                {
+                    if (!ev.Player.TryGetLookPlayer(2f, out Player player, out RaycastHit? hit)) yield break;
+                    if (ev.Player == player || !player.IsScpRole() || _scp106AttackTeamCoolDown > 0) yield break;
+                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.9f);
+                    player.Hurt(40, DamageType.Scp106);
+                    _scp106AttackTeamCoolDown = 1;
+
+                    if (_scp106Stacks.Contains(player))
+                    {
+                        player.EnableEffect(EffectType.PocketCorroding);
+
+                        _scp106AttackTeamCoolDown = 0;
+                    }
+                    else
+                    {
+                        _scp106Stacks.Add(player);
 
                         yield return Timing.WaitForSeconds(1);
 
-                        HumanMeleeCooldown.Remove(ev.Player);
+                        _scp106AttackTeamCoolDown = 0;
+
+                        yield return Timing.WaitForSeconds(9);
+
+                        _scp106Stacks.Remove(player);
                     }
-                }
-            }
-            else if (ev.Player.Role.Type == RoleTypeId.Scp173)
-            {
-                if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
-                {
-                    if (ev.Player.Role is Exiled.API.Features.Roles.Scp173Role scp173)
-                    {
-                        if (scp173.BlinkCooldown == 0f)
-                        {
-                            if (ev.Player != player && player.IsScpRole())
-                            {
-                                Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.2f);
-                                Server.ExecuteCommand($"/cassie <color=#ff0000>{(Trans.Role[ev.Player.Role.Type])}</color>이(가) <color=#ff0000>{(Trans.Role[player.Role.Type])}</color>의 뒷통수를 쳤습니다.");
-                                player.Hit(ev.Player, player.MaxHealth);
-                            }
-                        }
-                    }
-                }
-            }
-            else if (ev.Player.Role.Type == RoleTypeId.Scp106)
-            {
-                if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
-                {
-                    if (ev.Player != player && player.IsScpRole() && Scp106AttackTeamCoolDown <= 0)
-                    {
-                        Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.9f);
-                        player.Hurt(40, DamageType.Scp106);
-                        Scp106AttackTeamCoolDown = 1;
 
-                        if (Scp106Stacks.Contains(player))
-                        {
-                            player.EnableEffect(EffectType.PocketCorroding);
-
-                            Scp106AttackTeamCoolDown = 0;
-                        }
-                        else
-                        {
-                            Scp106Stacks.Add(player);
-
-                            yield return Timing.WaitForSeconds(1);
-
-                            Scp106AttackTeamCoolDown = 0;
-
-                            yield return Timing.WaitForSeconds(9);
-
-                            Scp106Stacks.Remove(player);
-                        }
-                    }
+                    break;
                 }
             }
         }
 
-        public IEnumerator<float> OnBlinking(Exiled.Events.EventArgs.Scp173.BlinkingEventArgs ev)
+        private IEnumerator<float> OnBlinking(Exiled.Events.EventArgs.Scp173.BlinkingEventArgs ev)
         {
             yield return Timing.WaitForSeconds(0.02f);
 
-            if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
-            {
-                if (ev.Player != player && player.IsScpRole())
-                {
-                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.5f);
-                    Server.ExecuteCommand($"/cassie <color=#ff0000>{( Trans.Role[ev.Player.Role.Type])}</color>이(가)  <color=#ff0000>{( Trans.Role[player.Role.Type])}</color>의 뒷통수를 쳤습니다.");
-                    player.Hit(ev.Player, player.MaxHealth);
-                }
-            }
+            if (!ev.Player.TryGetLookPlayer(2f, out Player player, out RaycastHit? hit)) yield break;
+            if (ev.Player == player || !player.IsScpRole()) yield break;
+            Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 1.5f);
+            Server.ExecuteCommand($"/cassie <color=#ff0000>{Trans.Role[ev.Player.Role.Type]}</color>이(가)  <color=#ff0000>{Trans.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
+            player.Hit(ev.Player, player.MaxHealth);
         }
 
-        public IEnumerator<float> OnLunging(Exiled.Events.EventArgs.Scp939.LungingEventArgs ev)
+        private IEnumerator<float> OnLunging(Exiled.Events.EventArgs.Scp939.LungingEventArgs ev)
         {
             for (float i = 0; i < 0.7f; i += 0.01f)
             {
-                if (Tools.TryGetLookPlayer(ev.Player, 2f, out Player player, out RaycastHit? hit))
+                if (ev.Player.TryGetLookPlayer(2f, out Player player, out RaycastHit? hit))
                 {
                     if (ev.Player != player && player.IsScpRole())
                     {
@@ -236,7 +227,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
                         player.Hit(ev.Player, player.MaxHealth);
 
                         if (ev.Player.IsDead)
-                            Server.ExecuteCommand($"/cassie <color=#ff0000>{( Trans.Role[ev.Player.Role.Type])}</color>이(가)  <color=#ff0000>{( Trans.Role[player.Role.Type])}</color>의 뒷통수를 쳤습니다.");
+                            Server.ExecuteCommand($"/cassie <color=#ff0000>{Trans.Role[ev.Player.Role.Type]}</color>이(가)  <color=#ff0000>{Trans.Role[player.Role.Type]}</color>의 뒷통수를 쳤습니다.");
                     }
                 }
 
@@ -244,7 +235,7 @@ SCP 진영의 경우 기본 공격으로 다른 플레이어를 공격할 수 �
             }
         }
 
-        public class HitboxPatchPostfix
+        private class HitboxPatchPostfix
         {
             public static void Postfix(ref bool __result)
             {
