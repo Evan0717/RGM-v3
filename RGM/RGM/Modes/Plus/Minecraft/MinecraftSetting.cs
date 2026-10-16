@@ -44,24 +44,31 @@ public static class MinecraftSetting
 
     private static void OnSSInput(ReferenceHub hub, ServerSpecificSettingBase setting)
     {
-        if (setting is not SSKeybindSetting { SyncIsPressed: true } keybind)
+        if (setting is not SSKeybindSetting keybind)
             return;
 
         Player player = Player.Get(hub);
-        if (player == null || !player.IsAlive)
+        Minecraft minecraft = Minecraft.Instance;
+        if (player == null || minecraft == null)
             return;
 
-        Minecraft minecraft = Minecraft.Instance;
+        bool pressed = keybind.SyncIsPressed;
 
         switch (keybind.SettingId)
         {
-            case PlaceKeyId:
+            case BreakKeyId:
+                // 누르면 시작, 떼면 중단 (죽어 있으면 시작하지 않음)
+                if (pressed && player.IsAlive)
+                    minecraft.StartMining(player);
+                else
+                    minecraft.StopMining(player);
+                break;
+
+            case PlaceKeyId when pressed && player.IsAlive:
                 minecraft.TryPlaceHeldBlock(player);
                 break;
-            case BreakKeyId:
-                minecraft.TryDestroyBlock(player);
-                break;
-            case InteractKeyId:
+
+            case InteractKeyId when pressed && player.IsAlive:
                 minecraft.TryInteract(player);
                 break;
         }

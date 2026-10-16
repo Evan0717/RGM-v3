@@ -4,6 +4,7 @@ using ProjectMER.Features;
 using ProjectMER.Features.Objects;
 using System;
 using UnityEngine;
+using MEC;
 
 namespace RGM.Modes;
 
@@ -24,6 +25,7 @@ public class BlockInfo
     public string SchematicName { get; set; }
     public BlockType BlockType { get; set; }
     public float DestroyTime { get; set; }
+    public string Color { get; set; } = "FFFFFF";
 }
 
 [AttributeUsage(AttributeTargets.Class)]
@@ -31,12 +33,14 @@ public class BlockAttribute(
     string name,
     string SchematicName,
     BlockType blockType,
-    float DestroyTime) : Attribute
+    float DestroyTime,
+    string color = "FFFFFF") : Attribute
 {
     public string Name { get; } = name;
     public string SchematicName { get; } = SchematicName;
     public BlockType blockType = blockType;
     public float DestroyTime { get; } = DestroyTime;
+    public string Color { get; } = color;
 }
 
 public class BlockData
@@ -102,5 +106,55 @@ public class BlockVisual
         Schematic.transform.localRotation = Quaternion.identity;
     }
 
-    public void Destroy() => Schematic?.Destroy();
+    public void Destroy()
+    {
+        if (Schematic != null)   // 유니티의 null 체크는 파괴된 오브젝트도 걸러냄
+            Schematic.Destroy();
+    }
+}
+public static class BlockEffects
+{
+    private const string DestroyEffectSchematic = "BlockDestroyEffect";
+    private const float EffectLifetime = 1f;
+
+    public static void SpawnDestroyEffect(BlockInfo info, Vector3 position)
+    {
+        try
+        {
+            SchematicObject effect = ObjectSpawner.SpawnSchematic(DestroyEffectSchematic, position);
+            if (effect == null)
+            {
+                Log.Error($"Schematic '{DestroyEffectSchematic}' not found.");
+                return;
+            }
+
+            // 모든 프리미티브에 블록 색을 입힘
+            Color color = ParseColor(info.Color);
+            foreach (GameObject go in effect.AttachedBlocks)
+            {
+                if (go.TryGetComponent(out PrimitiveObjectToy toy))
+                    toy.NetworkMaterialColor = color;
+            }
+
+            // 5초 뒤 삭제
+            Timing.CallDelayed(EffectLifetime, () =>
+            {
+                if (effect != null)   // 이미 사라졌으면 건너뜀
+                    effect.Destroy();
+            });
+        }
+        catch (Exception e)
+        {
+            // 이펙트 때문에 블록 파괴 흐름이 끊기지 않게 예외는 여기서 처리
+            Log.Error($"Failed to spawn block destroy effect: {e}");
+        }
+    }
+
+    private static Color ParseColor(string hex)
+    {
+        if (!string.IsNullOrEmpty(hex) && ColorUtility.TryParseHtmlString("#" + hex.TrimStart('#'), out Color color))
+            return color;
+
+        return Color.white; // 잘못된 값이면 흰색
+    }
 }
