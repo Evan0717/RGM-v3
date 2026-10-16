@@ -20,7 +20,7 @@ namespace RGM.Modes.Abilities.Unique.Human.Mythic;
     두 가지 형상, <color=#FFE6EA>연극</color>과 <color=#191970>환멸</color>의 모습으로 변신합니다.
     지급된 아이템을 사용하여 인격을 변경할 수 있으며, 각 인격은 특정 종류의 능력치를 크게 강화시킵니다.
     """, 
-    AbilityCategory.Mythic, AbilityType.MYTHIC_HUMAN_DUALPERSONALITY, RoleAbility.Human)]
+    AbilityCategory.Mythic, AbilityType.MYTHIC_HUMAN_DUALPERSONALITY, RoleAbility.Human, isUnique:true)]
 
 public class DualPersonality : Ability
 {
