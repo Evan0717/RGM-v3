@@ -40,17 +40,18 @@ public class DualPersonality : Ability
     private const float DramaHealInterval = 0.5f;
     private const float DramaHealRatio = 0.08f;
     private const float DramaAhpSustain = 30f;
+    private const float DramaMaxAhpRatio = 0.8f;
     private const int DramaSpeedReduction = 40;
-    private const float DramaDamageMultiplier = 0.7f;
-    private const float DramaLifeStealRatio = 0.1f;
+    private const float DramaDamageMultiplier = 0.6f;
+    private const float DramaLifeStealRatio = 0.8f;
     private const float DramaMaxIncomeDamage = 20f;
 
     // 환멸의 형상
     private const float DisillusionTickInterval = 1f;
-    private const float DisillusionSelfDamageRatio = 0.03f;
-    private const float DisillusionMinHealthRatio = 0.1f;
+    private const float DisillusionSelfDamageRatio = 0.05f;
+    private const float DisillusionMinHealthRatio = 0.2f;
     private const int DisillusionBoostIntensity = 80;
-    private const float DisillusionDamageMultiplier = 1.6f;
+    private const float DisillusionDamageMultiplier = 1.8f;
 
     private Form _form;
     private ushort _lanternSerial;
@@ -66,8 +67,7 @@ public class DualPersonality : Ability
 
     public override void OnEnabled()
     {
-        Item lantern = Owner.AddItem(ItemType.Lantern);
-        _lanternSerial = lantern.Serial;
+        GiveLantern();
 
         Exiled.Events.Handlers.Player.TogglingFlashlight += OnTogglingFlashlight;
         Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
@@ -131,9 +131,12 @@ public class DualPersonality : Ability
             if (Owner == null || !Owner.IsAlive)
                 continue;
 
-            if (GetLantern()?.Base is not ToggleableLightItemBase light)
+            // SeveredHands의 강제 드롭이나 914 기반 아이템 교체는 DroppingItem 이벤트를
+            // 우회할 수 있으므로, 랜턴의 소유 및 종류를 계속 검증하여 복구한다.
+            if (!EnsureLantern())
                 continue;
 
+            ToggleableLightItemBase light = (ToggleableLightItemBase)GetLantern().Base;
             Form lanternForm = light.IsEmittingLight ? Form.Drama : Form.Disillusion;
             if (lanternForm == _form)
                 continue;
@@ -150,12 +153,15 @@ public class DualPersonality : Ability
         if (_form == next)
             return;
 
+        // MEC의 WaitForOneFrame은 yield 전용 표식이므로 시간 계산에 사용하지 않는다.
+        // 전환 효과를 적용하기 전에 잠금을 시작해 처리 중 발생하는 추가 토글도 막는다.
+        _lockedUntil = Time.time + TransitionDuration * 2;
+
         ExitForm(_form);
         _form = next;
         EnterForm(next);
 
         ApplyTransitionEffects();
-        _lockedUntil = Time.time + TransitionDuration * 2 + Timing.WaitForOneFrame;
 
         string formName = next == Form.Drama ? "<color=#FFE6EA>연극</color>" : "<color=#191970>환멸</color>";
         Owner.AddHint("이중인격", $"{formName}의 형상으로 변신했습니다.");
@@ -223,12 +229,15 @@ public class DualPersonality : Ability
             if (Owner == null || !Owner.IsAlive)
                 yield break;
 
-            float amount = Owner.MaxHealth * DramaHealRatio;
+            float amount = Mathf.Min(Owner.MaxHealth * DramaHealRatio, Owner.MaxHealth - Owner.Health);
+            if (amount <= 0f)
+                continue;
+
             Owner.Heal(amount);
 
-            // 회복량만큼 AHP와 최대 AHP를 함께 증가시킨다. (30초 유지 후 기본 감소량으로 감소)
-            float limit = Owner.ArtificialHealth + amount;
-            Owner.MaxArtificialHealth = Mathf.Max(Owner.MaxArtificialHealth, limit);
+            // 실제 HP 회복량만큼 AHP와 최대 AHP를 함께 증가시키되, 최대 HP의 80%를 넘지 않게 한다.
+            float limit = Mathf.Min(Owner.MaxArtificialHealth + amount, Owner.MaxHealth * DramaMaxAhpRatio);
+            Owner.MaxArtificialHealth = limit;
             Owner.AddAhp(amount, limit, sustain: DramaAhpSustain);
         }
     }
@@ -282,7 +291,7 @@ public class DualPersonality : Ability
             if (Owner == null || !Owner.IsAlive)
                 yield break;
 
-            // 최대 체력의 10% 아래로는 감소하지 않는다.
+            // 최대 체력의 20% 아래로는 감소하지 않는다.
             float minHealth = Owner.MaxHealth * DisillusionMinHealthRatio;
             float damage = Math.Min(Owner.MaxHealth * DisillusionSelfDamageRatio, Owner.Health - minHealth);
 
@@ -298,7 +307,20 @@ public class DualPersonality : Ability
     private void OnHurting(HurtingEventArgs ev)
     {
         if (_form == Form.Drama && ev.Player == Owner)
-            ev.DamageHandler.Damage = Math.Min(ev.DamageHandler.Damage, DramaMaxIncomeDamage);
+        {
+            // 즉사 피해(SCP-173 등)는 Damage가 -1(KillValue)이라 Math.Min으로는 상한이 적용되지 않고,
+            // 게임이 방어/체력 계산 없이 바로 사망 처리한다. 상한 피해로 바꿔 일반 피해 계산을 거치게 한다.
+            // 시스템 사망(BlockDamageTypes)은 기존처럼 막지 않는다.
+            if (ev.IsInstantKill)
+            {
+                if (!Datas.BlockDamageTypes.Contains(ev.DamageHandler.Type))
+                    ev.DamageHandler.Damage = DramaMaxIncomeDamage;
+            }
+            else
+            {
+                ev.DamageHandler.Damage = Math.Min(ev.DamageHandler.Damage, DramaMaxIncomeDamage);
+            }
+        }
 
         if (!IsOwnerAttack(ev.Attacker, ev.Player, ev.DamageHandler.Type))
             return;
@@ -332,9 +354,9 @@ public class DualPersonality : Ability
                 break;
 
             case Form.Disillusion:
-                // 잃은 HP만큼 관통 고정 피해를 추가로 입힌다.
+                // 잃은 HP만큼 관통 고정 피해를 추가로 입힌다 (최대 3000까지 적용).
                 float lostHealth = Owner.MaxHealth - Owner.Health;
-                if (lostHealth > 0f && ApplyFixedDamage.Apply(Owner, ev.Player, lostHealth))
+                if (lostHealth > 0f && ApplyFixedDamage.Apply(Owner, ev.Player, Mathf.Min(lostHealth, 3000f)))
                     Owner.ShowHitMarker(1.25f);
                 break;
         }
@@ -354,6 +376,30 @@ public class DualPersonality : Ability
     #endregion
 
     #region Lantern
+
+    /// <summary>
+    /// 형상 전환 수단인 랜턴이 강제 드롭되거나 다른 아이템으로 교체되었으면 새로 지급한다.
+    /// </summary>
+    private bool EnsureLantern()
+    {
+        Item lantern = GetLantern();
+        if (lantern?.Base is ToggleableLightItemBase)
+            return true;
+
+        // 동일 Serial의 아이템이 다른 종류로 바뀐 경우, 해당 아이템을 제거한 뒤 랜턴으로 복구한다.
+        if (lantern != null)
+            Owner.RemoveItem(lantern);
+
+        GiveLantern();
+        return GetLantern()?.Base is ToggleableLightItemBase;
+    }
+
+    private void GiveLantern()
+    {
+        Item lantern = Owner.AddItem(ItemType.Lantern);
+        _lanternSerial = lantern.Serial;
+        SetLanternState(_form == Form.Drama);
+    }
 
     private void OnDroppingItem(DroppingItemEventArgs ev)
     {

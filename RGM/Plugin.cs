@@ -177,12 +177,14 @@ namespace RGM
             Harmony weaponHarmony = new Harmony($"Harmony.Weapon - {DateTime.Now.Ticks}");
             Harmony seedHarmony = new Harmony($"Harmony.Seed - {DateTime.Now.Ticks}");
             Harmony statHarmony = new Harmony($"Harmony.Stats - {DateTime.Now.Ticks}");
+            Harmony settingsHarmony = new Harmony($"Harmony.Settings - {DateTime.Now.Ticks}");
 
             LoadoutPatch.Apply();
             Scp049Patch.Apply(scpHarmony);
             Scp173Patch.Apply(scpHarmony);
             WeaponPatch.Apply(weaponHarmony);
             HpAndShieldLimit.Apply(statHarmony);
+            ServerSpecificSettingsPatch.Apply(settingsHarmony);
             seedHarmony.CreateClassProcessor(typeof(SeedSynchronizerAwakePatch)).Patch();
             seedHarmony.CreateClassProcessor(typeof(SeedSynchronizerNewPlayerPatch)).Patch();
         }

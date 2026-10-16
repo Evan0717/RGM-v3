@@ -289,7 +289,7 @@ public class ABattleEventHandler(ABattle aBattle)
         switch (players.Count)
         {
             case 1:
-                Timing.RunCoroutine(Tools.SetWinner([.. players], players.Count / 2));
+                Timing.RunCoroutine(Tools.SetWinner([.. players], PlayerManager.List.Count / 2));
                 break;
             case > 1:
                 Timing.RunCoroutine(Tools.SetWinner([.. players], 1));

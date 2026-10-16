@@ -121,7 +121,10 @@ public class ABattle : Mode
         { "치매", "32% 확률로 획득했던 워크스테이션에서 능력을 다시 획득할 수 있습니다."},
         { "3 + 1", "능력 획득 시, 동일 등급의 랜덤한 능력을 1개 얻습니다." },
         { "수저", "능력 선택창에서 등장하는 능력의 수가 최대 5개까지 늘어날 수 있습니다." },
-        { "전주곡", $"스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다." },
+        { "전주곡", $"""
+                  스폰 즉시 <color={RatingColor["영웅"]}>영웅</color> 등급의 능력을 얻습니다.
+                  추가 확률로 <color={RatingColor["영웅"]}>영웅</color> 능력을 1개 더 획득하며, 그 중 낮은 확률로 <color={RatingColor["전설"]}>전설</color> 능력을 획득할 수 있습니다.
+                  """ },
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
         { "스펙업", "능력을 획득할 때마다 15(SCP 45)만큼 최대 체력이 증가합니다." },
         { "캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다." },
@@ -1677,13 +1680,21 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("전주곡"))
         {
             if (player.IsNonePlayer()) return;
-
-            player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+            var giveEpic = Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
             [
                 AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
                 AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
-                AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
-            ]).First());
+                AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER,
+            ]).First();
+
+            var giveLegend = Instance.GetRandomAbilities(player, AbilityCategory.Legend, 1,
+            [AbilityType.LEGEND_RESURRECTION, AbilityType.LEGEND_TRANSITION]).First();
+            
+            player.AddAbility(giveEpic);
+            if (Random.Range(1, 101) <= 50)
+            {
+                player.AddAbility(Random.Range(1, 101) <= 10 ? giveLegend : giveEpic);
+            }
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)
