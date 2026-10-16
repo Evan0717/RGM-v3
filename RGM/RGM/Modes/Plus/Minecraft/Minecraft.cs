@@ -36,10 +36,13 @@ public class Minecraft : Mode
     public readonly Dictionary<BlockType, BlockInfo> Blocks = new();
     public readonly Dictionary<Vector3Int, Block> World = new();
     public readonly Dictionary<ushort, BlockData> BlockSerials = new();
+    private const float MiningTick = 0.1f;      // 진행도를 갱신하는 간격(초)
+    private const float SwingInterval = 0.2f;   // 파는 동안 휘두르는 간격(초)
+    private const float BreakCooldown = 0.25f;  // 블록 하나를 부순 뒤 다음 블록을 파기 전 대기
     private MinecraftEventHandler _eventHandler;
     private CoroutineHandle _startHandle;
 
-    // Lifecycle
+    // 참고: 여기 있는 대부분의 주석들은 클롣드가 해준건데 귀찮아서 안 지움.
     public override void OnEnabled()
     {
         Instance = this;
@@ -68,7 +71,8 @@ public class Minecraft : Mode
                 Name = blockAttribute.Name,
                 SchematicName = blockAttribute.SchematicName,
                 BlockType = blockAttribute.blockType,
-                DestroyTime = blockAttribute.DestroyTime
+                DestroyTime = blockAttribute.DestroyTime,
+                Color = blockAttribute.Color
             });
         }
         _startHandle = Timing.RunCoroutine(OnModeStarted());
@@ -78,11 +82,16 @@ public class Minecraft : Mode
 
     public override void OnDisabled()
     {
-        _eventHandler.UnRegisterEvents();   // 이벤트를 먼저 끊고
+        MinecraftSetting.Unregister();                 // 추가: 키 입력을 먼저 끊음
+        _eventHandler.UnRegisterEvents();
         Timing.KillCoroutines(_startHandle);
 
+        foreach (var p in _mining.Keys.ToList())       // 추가: 파는 중이던 코루틴 정리
+            StopMining(p);
+
         foreach (var block in World.Values)
-            block.Schematic?.Destroy();
+            if (block.Schematic != null)
+                block.Schematic.Destroy();
         World.Clear();
 
         foreach (var player in Player.List)
@@ -90,10 +99,11 @@ public class Minecraft : Mode
                 player.RemoveItem(item);
 
         foreach (var pickup in Pickup.List.Where(p => BlockSerials.ContainsKey(p.Serial)).ToList())
-            pickup.Destroy(); // Dropped 스키매틱도 같이 사라짐
+            pickup.Destroy();
 
         BlockSerials.Clear();
         Blocks.Clear();
+        Instance = null;                               // 추가
     }
 
     // Startup coroutine
@@ -127,9 +137,10 @@ public class Minecraft : Mode
     public void AddBlock(BlockType type, ushort count, Player player)
     {
         Item item = player.AddItem(MinecraftItemType);
-        ushort ItemSerial = item.Serial;
+        if (item == null)
+            return; // 인벤토리가 가득 찼거나 지급 실패
 
-        BlockSerials.Add(ItemSerial, new BlockData { Type = type, Count = count });
+        BlockSerials[item.Serial] = new BlockData { Type = type, Count = count };
     }
 
     // Placement / Interaction API
@@ -178,8 +189,6 @@ public class Minecraft : Mode
             BlockSerials.Remove(item.Serial);
             player.RemoveItem(item); // 개수가 0이면 아이템 제거
         }
-
-        _eventHandler.SwingHeld(player);
         return true;
     }
 
@@ -192,32 +201,6 @@ public class Minecraft : Mode
             return false;
 
         _eventHandler.SwingHeld(player);
-        return true;
-    }
-
-    public bool TryDestroyBlock(Player player)
-    {
-        if (!TryGetLookedBlock(player, out Block block))
-            return false;
-
-        block.OnBroken(player);
-        block.Schematic?.Destroy();
-        World.Remove(block.GridPos);
-        _eventHandler.SwingHeld(player);
-
-        try
-        {
-            Pickup pickup = Pickup.CreateAndSpawn(MinecraftItemType, ToWorld(block.GridPos));
-            if (pickup != null)
-                BlockSerials[pickup.Serial] = new BlockData { Type = block.Info.BlockType, Count = 1 };
-            var visual = new BlockVisual(block.Info, BlockForm.Dropped, pickup.Transform.position);
-            visual.AttachTo(pickup.Transform);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"Failed to spawn block pickup: {ex}");
-        }
-
         return true;
     }
 
@@ -243,4 +226,130 @@ public class Minecraft : Mode
         grid.x * GridSize,
         grid.y * GridSize,
         grid.z * GridSize);
+
+    private sealed class MiningState
+    {
+        public Block Target;
+        public float Progress;
+        public float SwingTimer;
+        public CoroutineHandle Handle;
+    }
+
+    private readonly Dictionary<Player, MiningState> _mining = new();
+
+    public void StartMining(Player player)
+    {
+        StopMining(player); // 이미 파던 게 있으면 정리 (중복 방지)
+
+        var state = new MiningState();
+        _mining[player] = state;
+        state.Handle = Timing.RunCoroutine(MiningLoop(player, state));
+    }
+
+    public void StopMining(Player player)
+    {
+        if (!_mining.TryGetValue(player, out MiningState state))
+            return;
+
+        Timing.KillCoroutines(state.Handle);
+        _mining.Remove(player);
+    }
+
+    private IEnumerator<float> MiningLoop(Player player, MiningState state)
+    {
+        while (player.IsConnected && player.IsAlive)
+        {
+            if (!TryGetLookedBlock(player, out Block block))
+            {
+                // 허공이나 블록이 아닌 곳을 보면 리셋
+                state.Target = null;
+                state.Progress = 0f;
+            }
+            else
+            {
+                if (block != state.Target) // 다른 블록을 쳐다보면 리셋
+                {
+                    state.Target = block;
+                    state.Progress = 0f;
+                }
+
+                float destroyTime = Mathf.Max(block.Info.DestroyTime, 0.05f);
+                state.Progress += MiningTick * GetMiningSpeed(player, block) / destroyTime;
+
+                state.SwingTimer -= MiningTick;
+                if (state.SwingTimer <= 0f)
+                {
+                    _eventHandler.SwingHeld(player);
+                    state.SwingTimer = SwingInterval;
+                }
+
+                if (state.Progress >= 1f)
+                {
+                    DestroyBlock(player, block);
+                    state.Target = null;
+                    state.Progress = 0f;
+
+                    yield return Timing.WaitForSeconds(BreakCooldown);
+                    continue;
+                }
+
+                player.AddHint("블록 파괴", $"<size=24>{ProgressBar(state.Progress)}</size>", MiningTick * 3);
+            }
+
+            yield return Timing.WaitForSeconds(MiningTick);
+        }
+
+        // 죽거나 나가서 루프가 끝난 경우 정리
+        if (_mining.TryGetValue(player, out MiningState current) && current == state)
+            _mining.Remove(player);
+    }
+
+    // 도구에 따른 파괴 속도 배율. 지금은 항상 1배이고, 나중에 든 도구에 따라 바꾸는 자리
+    private static float GetMiningSpeed(Player player, Block block) => 1f;
+
+    private static string ProgressBar(float progress, int length = 10)
+    {
+        int filled = Mathf.Clamp(Mathf.RoundToInt(progress * length), 0, length);
+        return new string('█', filled) + new string('░', length - filled);
+    }
+
+    private void DestroyBlock(Player player, Block block)
+    {
+        block.OnBroken(player);
+
+        Vector3 center = ToWorld(block.GridPos);
+
+        if (block.Schematic != null)
+            block.Schematic.Destroy();
+
+        BlockEffects.SpawnDestroyEffect(block.Info, center);
+
+        try
+        {
+            Pickup pickup = Pickup.CreateAndSpawn(MinecraftItemType, center);
+            if (pickup != null)
+            {
+                BlockSerials[pickup.Serial] = new BlockData { Type = block.Info.BlockType, Count = 1 };
+                var visual = new BlockVisual(block.Info, BlockForm.Dropped, pickup.Transform.position);
+                visual.AttachTo(pickup.Transform);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to spawn dropped block pickup: {e}");
+        }
+
+        World.Remove(block.GridPos);
+    }
+
+    // 즉시 파괴 (관리자/테스트용). 파괴 로직은 DestroyBlock을 같이 씀
+    public bool TryDestroyBlock(Player player)
+    {
+        if (!TryGetLookedBlock(player, out Block block))
+            return false;
+
+        DestroyBlock(player, block);
+        _eventHandler.SwingHeld(player);
+        return true;
+    }
 }
