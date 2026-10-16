@@ -1680,13 +1680,21 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("전주곡"))
         {
             if (player.IsNonePlayer()) return;
-
-            player.AddAbility(Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+            var giveEpic = Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
             [
                 AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
                 AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
-                AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER
-            ]).First());
+                AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER,
+            ]).First();
+
+            var giveLegend = Instance.GetRandomAbilities(player, AbilityCategory.Legend, 1,
+            [AbilityType.LEGEND_RESURRECTION, AbilityType.LEGEND_TRANSITION]).First();
+            
+            player.AddAbility(giveEpic);
+            if (Random.Range(1, 101) <= 50)
+            {
+                player.AddAbility(Random.Range(1, 101) <= 10 ? giveLegend : giveEpic);
+            }
         }
 
         if (player.Role.Type == RoleTypeId.Scp096)

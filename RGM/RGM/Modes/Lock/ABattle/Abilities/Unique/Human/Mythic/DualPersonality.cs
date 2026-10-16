@@ -354,9 +354,9 @@ public class DualPersonality : Ability
                 break;
 
             case Form.Disillusion:
-                // 잃은 HP만큼 관통 고정 피해를 추가로 입힌다 (최대 2000까지 적용).
+                // 잃은 HP만큼 관통 고정 피해를 추가로 입힌다 (최대 3000까지 적용).
                 float lostHealth = Owner.MaxHealth - Owner.Health;
-                if (lostHealth > 0f && ApplyFixedDamage.Apply(Owner, ev.Player, Mathf.Min(lostHealth, 2000f)))
+                if (lostHealth > 0f && ApplyFixedDamage.Apply(Owner, ev.Player, Mathf.Min(lostHealth, 3000f)))
                     Owner.ShowHitMarker(1.25f);
                 break;
         }

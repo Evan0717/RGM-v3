@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static RGM.Variables.Variable;
-using Random = UnityEngine.Random;
 
 namespace RGM.API.Features
 {

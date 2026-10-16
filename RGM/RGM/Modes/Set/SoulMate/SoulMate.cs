@@ -344,7 +344,7 @@ namespace RGM.Modes
             {
                 case 1:
                     loneWinners.AddRange(players);
-                    Timing.RunCoroutine(Tools.SetWinner(loneWinners, players.Count / 2));
+                    Timing.RunCoroutine(Tools.SetWinner(loneWinners, PlayerManager.List.Count / 2));
                     break;
                 case 2 when
                     _soulMates.TryGetValue(players[0], out var soulMate) &&
@@ -352,7 +352,7 @@ namespace RGM.Modes
                     _soulMates.TryGetValue(players[1], out soulMate) &&
                     soulMate == players[0]:
                     soulMateWinners.AddRange(players);
-                    Timing.RunCoroutine(Tools.SetWinner(soulMateWinners, players.Count / 4));
+                    Timing.RunCoroutine(Tools.SetWinner(soulMateWinners, PlayerManager.List.Count / 4));
                     break;
                 case > 0:
                     Timing.RunCoroutine(Tools.SetWinner(players, 1));
