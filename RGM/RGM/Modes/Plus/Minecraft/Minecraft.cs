@@ -331,7 +331,7 @@ public class Minecraft : Mode
             Log.Error($"Failed to spawn dropped block pickup: {e}");
         }
 
-        World.Remove(block.GridPos);
+        _world.Remove(block.GridPos);
     }
 
     // 즉시 파괴 (관리자/테스트용). 파괴 로직은 DestroyBlock을 같이 씀

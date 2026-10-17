@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Exiled.API.Enums;
-using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
@@ -46,30 +44,19 @@ public class CBR : Mode
         Timing.CallDelayed(Timing.WaitForOneFrame * 15, () => { Round.IsLocked = false; });
     }
 
-    private void OnHurting(HurtingEventArgs ev)
-    {
-        if (ev.Player.IsNPC) return;
-
-        ev.DamageHandler.Damage = _damage;
-    }
+    private void OnHurting(HurtingEventArgs ev) => ev.DamageHandler.Damage = _damage;
 
     private static void Start()
     {
-        foreach (var player in PlayerManager.List.Where(x => !x.IsNPC)) 
-            Timing.RunCoroutine(AddItem(player));
-
-        Server.ExecuteCommand("/decontamination f");
+        foreach (var player in PlayerManager.List.Where(x => x.Role !=  RoleTypeId.ClassD)) Timing.RunCoroutine(AddItem(player));
+        Timing.CallDelayed(Timing.WaitForOneFrame * 15, () => Server.ExecuteCommand("/decontamination f"));
     }
 
     private static IEnumerator<float> AddItem(Player pl)
     {
-        var room = Room.Get(RoomType.Lcz173).Position;
-        
-        pl.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.Respawn);
-        pl.Teleport(room);
-        
+        pl.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.None);
         while (pl.Items.Count < 8) pl.AddItem(ItemType.Medkit);
-        yield return Timing.WaitForOneFrame;
+        yield break;
     }
     
     public override string Name => "화생방";
