@@ -16,8 +16,8 @@ public class Proficiency : Ability
 
     public override void OnDisabled()
     {
-        // Exiled.Events.Handlers.Player.Dying -= OnDying;
-        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
+        // Exiled.Events.Handlers.Player.Died -= OnDied;
     }
     
     private void OnDying(DyingEventArgs ev)
@@ -33,8 +33,7 @@ public class Proficiency : Ability
     
     private void OnDied(DiedEventArgs ev)
     {
-        if (ev.Attacker != Owner || ev.Player == Owner)
-            return;
+        if (ev.Attacker != Owner || ev.Player == Owner) return;
 
         Timing.CallDelayed(0.1f, () =>
         {
