@@ -3,6 +3,7 @@ using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using RGM.API.Features;
+using RGM.Features;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Mythic;
