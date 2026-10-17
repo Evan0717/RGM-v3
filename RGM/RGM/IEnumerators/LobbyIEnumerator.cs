@@ -108,7 +108,7 @@ namespace RGM.IEnumerators
 
                 if (PlayerManager.List.Count() > 1)
                 {
-                    float maxPlayers = 35;
+                    float maxPlayers = 30;
                     float pressMultiplier = Math.Max(1, maxPlayers / Server.PlayerCount);
                     float pressAmount = 0.012f * pressMultiplier;
 
