@@ -936,7 +936,7 @@
       <HintPath>$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll</HintPath>
     </Reference>
     <Reference Include="LabApi, Version=1.1.7.0, Culture=neutral, processorArchitecture=Amd64">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\LabApi.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\LabApi.dll</HintPath>
     </Reference>
     <!--    <Reference Include="LabApiExtensions">
       <HintPath>$(EXILED_REFERENCES)\LabApiExtensions.dll</HintPath>
@@ -955,8 +955,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NorthwoodLib, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\NorthwoodLib.dll</HintPath>
+    <Reference Include="NorthwoodLib">
+      <HintPath>$(EXILED_REFERENCES)\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="Pooling">
       <HintPath>$(EXILED_REFERENCES)\Pooling.dll</HintPath>
