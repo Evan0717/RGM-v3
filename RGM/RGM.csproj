@@ -1025,6 +1025,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayerManages\" />
+    <Folder Include="RGM\Modes\Lock\ABattle\Abilities\Unique\Scp173\Epic\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
     <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
