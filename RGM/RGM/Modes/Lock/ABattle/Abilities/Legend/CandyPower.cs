@@ -16,6 +16,7 @@ public class CandyPower : Ability
         EffectType.WhiteCandy,
         EffectType.Metal,
         EffectType.MovementBoost,
+        EffectType.Lightweight,
         EffectType.Spicy
     ];
     
