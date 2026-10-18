@@ -2,7 +2,6 @@
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
-using static RGM.Variables.Variable;
 
 namespace RGM.API.Features
 {

@@ -21,10 +21,7 @@ public class CandyPower : Ability
     
     public override void OnEnabled()
     {
-        foreach (var effect in _effects)
-        {
-            Owner.AddEffect(effect, 90);
-        }
+        _effects.ForEach(effect => Owner.AddEffect(effect, 90));
 
         Owner.MaxHealth += 500;
         Owner.Health += 500;
