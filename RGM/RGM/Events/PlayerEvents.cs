@@ -201,15 +201,19 @@ namespace RGM.Events
 
                 Tools.TeleportToLobby(ev.Player);
 
-                ItemType itemType = ItemType.Coin;
-
                 if (HolidayUtils.IsHolidayActive(HolidayType.Christmas))
-                    itemType = ItemType.Snowball;
-
+                {
+                    ev.Player.AddItem(ItemType.Snowball);
+                }
                 else if (HolidayUtils.IsHolidayActive(HolidayType.Halloween))
+                {
                     ev.Player.AddItem(ItemType.Lantern);
+                }
+                else
+                {
+                    ev.Player.AddItem(ItemType.Coin);
+                }
 
-                ev.Player.AddItem(itemType);
                 ev.Player.EnableEffect(EffectType.MovementBoost, 50);
                 ev.Player.EnableEffect(EffectType.Lightweight, 100);
 
@@ -783,11 +787,11 @@ namespace RGM.Events
                 ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) &&
                 lightweight.IsEnabled)
             {
-                if (HolidayUtils.IsHolidayActive(HolidayType.Halloween) &&
-                    ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) && metal.IsEnabled)
-                {
-                }
-                else
+                // Metal supplies its custom landing sound through the successful
+                // fall-damage pipeline. Cancelling this hit prevents the server
+                // from sending the fall message, so the sound never plays.
+                if (!ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) ||
+                    !metal.IsEnabled)
                     ev.IsAllowed = false;
             }
 
@@ -1014,11 +1018,11 @@ namespace RGM.Events
                 var role = ev.Player.Role;
                 var target = PlayerManager.List.Where(x => !x.IsNPC && x.IsDead).GetRandomValue();
                 float hp = ev.Player.Health;
-            
+
                 target.RoleManager.ServerSetRole(role.Type, RoleChangeReason.None);
                 target.Health = hp;
             }
-            
+
             MultiBroadcast.API.MultiBroadcast.AddMapBroadcast(10,
                 $"<size=20>{ev.Target.Nickname}(이)가 서버에서 <color=red>추방</color>되었습니다. (사유: {ev.Reason})</size>");
         }
