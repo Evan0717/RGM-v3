@@ -787,11 +787,11 @@ namespace RGM.Events
                 ev.Player.TryGetEffect(EffectType.Lightweight, out StatusEffectBase lightweight) &&
                 lightweight.IsEnabled)
             {
-                if (HolidayUtils.IsHolidayActive(HolidayType.Halloween) &&
-                    ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) && metal.IsEnabled)
-                {
-                }
-                else
+                // Metal supplies its custom landing sound through the successful
+                // fall-damage pipeline. Cancelling this hit prevents the server
+                // from sending the fall message, so the sound never plays.
+                if (!ev.Player.TryGetEffect(EffectType.Metal, out StatusEffectBase metal) ||
+                    !metal.IsEnabled)
                     ev.IsAllowed = false;
             }
 

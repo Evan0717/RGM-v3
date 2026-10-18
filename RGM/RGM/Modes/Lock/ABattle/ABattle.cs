@@ -491,6 +491,8 @@ public class ABattle : Mode
                 case AbilityHolidayType.Halloween when !HolidayUtils.IsHolidayActive(HolidayType.Halloween):
                     continue;
                 case AbilityHolidayType.None:
+                case AbilityHolidayType.Christmas:
+                case AbilityHolidayType.Halloween:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

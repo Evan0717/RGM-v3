@@ -539,6 +539,8 @@ public enum AbilityType
     RARE_SCP173_MIRAGE, // [전용 희귀] 신기루
     RARE_SCP173_IMMENSEWEIGHT, // [전용 희귀] 육중한 무게
 
+    EPIC_SCP173_CONFIRMKILL, // [전용 영웅] 확인 사살
+
     LEGEND_SCP173_DEBRIS, // [전용 전설] 파편
 
     MYTHIC_SCP173_COMPULSION, // [전용 신화] 강박증

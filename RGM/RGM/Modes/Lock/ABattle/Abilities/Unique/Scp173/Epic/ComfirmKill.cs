@@ -6,7 +6,7 @@ namespace RGM.Modes.Abilities.Unique.Scp173.Epic;
 
 [Ability("확인 사살", 
     "SCP-173의 기본 공격에 『사망』 효과가 적용됩니다.", 
-    AbilityCategory.Legend, AbilityType.LEGEND_SCP173_DEBRIS, RoleAbility.Scp173)]
+    AbilityCategory.Epic, AbilityType.EPIC_SCP173_CONFIRMKILL, RoleAbility.Scp173)]
 
 public class ComfirmKill : Ability
 {
