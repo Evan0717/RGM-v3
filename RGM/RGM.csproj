@@ -894,7 +894,7 @@
       <HintPath>$(EXILED_REFERENCES)\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
@@ -906,7 +906,7 @@
       <HintPath>$(EXILED_REFERENCES)\Caress.dll</HintPath>
     </Reference>
     <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\CommandSystem.Core.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="DiscordInteraction">
       <HintPath>$(EXILED_REFERENCES)\DiscordInteraction.dll</HintPath>
@@ -936,7 +936,7 @@
       <HintPath>$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll</HintPath>
     </Reference>
     <Reference Include="LabApi, Version=1.1.7.0, Culture=neutral, processorArchitecture=Amd64">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\LabApi.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\LabApi.dll</HintPath>
     </Reference>
     <!--    <Reference Include="LabApiExtensions">
       <HintPath>$(EXILED_REFERENCES)\LabApiExtensions.dll</HintPath>
@@ -956,7 +956,7 @@
       <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NorthwoodLib, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\NorthwoodLib.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="Pooling">
       <HintPath>$(EXILED_REFERENCES)\Pooling.dll</HintPath>
@@ -1021,7 +1021,7 @@
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>packages\ExMod.Exiled.9.15.1\lib\net48\YamlDotNet.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
