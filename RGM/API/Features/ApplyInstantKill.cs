@@ -39,6 +39,13 @@ public static class ApplyInstantKill
     private static readonly HashSet<Player> PendingRetries = [];
 
     /// <summary>
+    /// <see langword="true"/> while this class is itself dealing its kill damage.
+    /// Hurting handlers that call <see cref="Apply"/> must ignore events raised in
+    /// this state, otherwise the damage re-enters the handler and overflows the stack.
+    /// </summary>
+    public static bool IsApplying { get; private set; }
+
+    /// <summary>
     /// Kills <paramref name="target"/>, crediting <paramref name="attacker"/>.
     /// </summary>
     /// <returns>
@@ -111,6 +118,8 @@ public static class ApplyInstantKill
                 detectedDying = true;
         }
 
+        bool previousIsApplying = IsApplying;
+        IsApplying = true;
         Exiled.Events.Handlers.Player.Dying += OnDying;
         try
         {
@@ -123,6 +132,7 @@ public static class ApplyInstantKill
         }
         finally
         {
+            IsApplying = previousIsApplying;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             dyingRaised = detectedDying;
 

@@ -35,13 +35,6 @@ public class Rosehip : Ability
         Exiled.Events.Handlers.Player.ChangedItem += OnChangedItem;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
     }
-
-    public override void OnDisabled()
-    {
-        Exiled.Events.Handlers.Player.ChangedItem -= OnChangedItem;
-        Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-        _resolvedUntil.Clear();
-    }
     
     private void OnChangedItem(ChangedItemEventArgs ev)
     {

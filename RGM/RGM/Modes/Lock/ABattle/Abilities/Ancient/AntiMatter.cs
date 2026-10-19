@@ -47,7 +47,10 @@ public class AntiMatter : Ability
         if (ev.Player == Owner && ev.IsAllowed)
             FixIncomingDamage(ev);
 
-        if (ev.Attacker != Owner ||
+        // ApplyInstantKill 이 일으키는 피해(Crushed)에는 폭발/사망 효과를 다시 적용하지 않는다.
+        if (ApplyInstantKill.IsApplying ||
+            ev.Attacker != Owner ||
+            ev.Player == Owner ||
             !ev.IsAllowed ||
             ev.DamageHandler.Damage <= 0f ||
             ev.DamageHandler.Type == DamageType.Explosion ||
@@ -63,6 +66,10 @@ public class AntiMatter : Ability
         var grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, Owner);
         grenade.FuseTime = 0.01f;
         grenade.SpawnActive(ev.Player.Position, Owner);
+
+        // 원래 공격은 취소하고 사망 효과로 대체한다. 취소하지 않으면 진행 중인 원래 피해와
+        // Hurting 안에서 발생시킨 사망 피해가 충돌해 첫 타격의 사망 효과가 누락될 수 있다.
+        ev.IsAllowed = false;
         ApplyInstantKill.Apply(Owner, ev.Player);
     }
 

@@ -1,5 +1,6 @@
 ﻿using Exiled.Events.EventArgs.Player;
 using MEC;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes.Abilities.Epic;
@@ -22,7 +23,9 @@ public class SharpEyes : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker == null || 
+        // ApplyInstantKill 의 사망 피해(재시도 포함)는 일반 공격이 아니므로 크리티컬/히트마커를 적용하지 않는다.
+        if (ApplyInstantKill.IsApplying ||
+            ev.Attacker == null || 
             ev.Attacker != Owner || 
             !HitboxIdentity.IsEnemy(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
             return;

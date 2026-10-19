@@ -21,7 +21,9 @@ public class ComfirmKill : Ability
 
     private void OnHurting(HurtingEventArgs ev)
     {
-        if (ev.Attacker != Owner ||
+        // ApplyInstantKill's own damage raises Hurting again; ignore it to avoid infinite recursion.
+        if (ApplyInstantKill.IsApplying ||
+            ev.Attacker != Owner ||
             ev.Player == Owner ||
             !ev.IsInstantKill)
             return;
