@@ -19,22 +19,24 @@ public class Minecraft : Mode
 {
     public override string Name => "마인크래프트";
     public override string Description => "A mode that turns the map into a Minecraft world.";
+
     public override string Detail =>
         """
         [ESC] -> [Settings] -> [Server-specific] -> 상호작용, 설치, 파괴 키를 할당하세요.
         블록은 설치할 수 있으며, 도구는 파괴 속도에 영향을 줍니다.
         """;
+
     public override string Color => "#00FF00";
     public override string Author => "Ragdoll";
 
     public static Minecraft Instance;
 
-    public const float GridSize = 1f;
-    public const float MaxDistance = 5f;
-    public const int BuildMask = 1 << 0;
-    public readonly ItemType MinecraftItemType = ItemType.KeycardJanitor; // 블록 설치용 아이템
+    private const float GridSize = 1f;
+    private const float MaxDistance = 5f;
+    private const int BuildMask = 1 << 0;
+    private const ItemType MinecraftItemType = ItemType.KeycardJanitor; // 블록 설치용 아이템
     public readonly Dictionary<BlockType, BlockInfo> Blocks = new();
-    public readonly Dictionary<Vector3Int, Block> World = new();
+    private readonly Dictionary<Vector3Int, Block> _world = new();
     public readonly Dictionary<ushort, BlockData> BlockSerials = new();
     private const float MiningTick = 0.1f;      // 진행도를 갱신하는 간격(초)
     private const float SwingInterval = 0.2f;   // 파는 동안 휘두르는 간격(초)
@@ -52,11 +54,9 @@ public class Minecraft : Mode
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
         {
             var blockAttribute = type.GetCustomAttribute<BlockAttribute>();
-            if (blockAttribute == null)
-                continue;
+            if (blockAttribute == null) continue;
 
-            if (!typeof(Block).IsAssignableFrom(type))
-                continue;
+            if (!typeof(Block).IsAssignableFrom(type)) continue;
 
             if (Blocks.TryGetValue(blockAttribute.blockType, out var existing))
             {
@@ -75,6 +75,7 @@ public class Minecraft : Mode
                 Color = blockAttribute.Color
             });
         }
+
         _startHandle = Timing.RunCoroutine(OnModeStarted());
         _eventHandler.RegisterEvents();
         MinecraftSetting.Register();
@@ -82,24 +83,22 @@ public class Minecraft : Mode
 
     public override void OnDisabled()
     {
-        MinecraftSetting.Unregister();                 // 추가: 키 입력을 먼저 끊음
-        _eventHandler.UnRegisterEvents();
+        MinecraftSetting.Unregister();                 // 추가: 키 입력을 먼저 끊음_eventHandler.UnRegisterEvents(); 
         Timing.KillCoroutines(_startHandle);
 
         foreach (var p in _mining.Keys.ToList())       // 추가: 파는 중이던 코루틴 정리
             StopMining(p);
 
-        foreach (var block in World.Values)
-            if (block.Schematic != null)
+        foreach (var block in _world.Values)if (block.Schematic != null)
                 block.Schematic.Destroy();
-        World.Clear();
+        _world.Clear();
 
         foreach (var player in Player.List)
-            foreach (var item in player.Items.Where(i => BlockSerials.ContainsKey(i.Serial)).ToList())
-                player.RemoveItem(item);
+            player.Items.Where(i => BlockSerials.ContainsKey(i.Serial)).ToList().ForEach(x => player.RemoveItem(x));
 
-        foreach (var pickup in Pickup.List.Where(p => BlockSerials.ContainsKey(p.Serial)).ToList())
-            pickup.Destroy();
+        // Dropped 스키매틱도 같이 사라짐
+        Pickup.List.Where(p => BlockSerials.ContainsKey(p.Serial)).ToList().ForEach(x => x.Destroy());
+
 
         BlockSerials.Clear();
         Blocks.Clear();
@@ -113,12 +112,12 @@ public class Minecraft : Mode
         foreach (var player in PlayerManager.List.Where(p => p != null && p.IsAlive))
         {
             Spawned(player);
-            player.AddHint("경고", 
+            player.AddHint("경고",
                 $"""
-                [ESC] -> [Settings] -> [Server-specific] -> 상호작용, 설치, 파괴 키를 할당하세요.
-                <color=#ff0000>블록을 이용한 맵 탈출, 아군 세력간 트롤은 제재될 수 있습니다.
-                플레이어 위치에 블록을 설치하면 튕겨나올 수 있으니 가급적이면 자제하세요.</color>
-                """,
+                 [ESC] -> [Settings] -> [Server-specific] -> 상호작용, 설치, 파괴 키를 할당하세요.
+                 <color=#ff0000>블록을 이용한 맵 탈출, 아군 세력간 트롤은 제재될 수 있습니다.
+                 플레이어 위치에 블록을 설치하면 튕겨나올 수 있으니 가급적이면 자제하세요.</color>
+                 """,
                 10f);
         }
     }
@@ -126,15 +125,14 @@ public class Minecraft : Mode
     // Spawn / Inventory API
     public void Spawned(Player player)
     {
-        BlockType RandomBlockType = Tools.EnumToList<BlockType>().Where(t => t != BlockType.Air).GetRandomValue();
-        AddBlock(RandomBlockType, (ushort)32, player);
+        BlockType randomBlockType = Tools.EnumToList<BlockType>().Where(t => t != BlockType.Air).GetRandomValue();
+        AddBlock(randomBlockType, 32, player);
 
         player.EnableEffect(EffectType.Lightweight, 30);
-        if (player.Role == RoleTypeId.Scp096)
-            player.EnableEffect(EffectType.Lightweight, 40);
+        if (player.Role == RoleTypeId.Scp096) player.EnableEffect(EffectType.Lightweight, 40);
     }
 
-    public void AddBlock(BlockType type, ushort count, Player player)
+    private void AddBlock(BlockType type, ushort count, Player player)
     {
         Item item = player.AddItem(MinecraftItemType);
         if (item == null)
@@ -144,19 +142,16 @@ public class Minecraft : Mode
     }
 
     // Placement / Interaction API
-    public bool TryPlaceBlock(Player player, BlockType type)
+    private bool TryPlaceBlock(Player player, BlockType type)
     {
         if (!Blocks.TryGetValue(type, out var info))
             return false;
 
         Transform cam = player.CameraTransform;
-        if (!Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, MaxDistance, BuildMask))
-            return false;
+        if (!Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, MaxDistance, BuildMask)) return false;
 
         Vector3Int grid = ToGrid(hit.point + hit.normal * (GridSize * 0.05f));
-
-        if (World.ContainsKey(grid))
-            return false;
+        if (_world.ContainsKey(grid)) return false;
 
         var visual = new BlockVisual(info, BlockForm.Placed, ToWorld(grid));
         if (visual.Schematic == null)
@@ -170,7 +165,7 @@ public class Minecraft : Mode
         block.GridPos = grid;
         block.Schematic = visual.Schematic;
 
-        World[grid] = block;
+        _world[grid] = block;
         block.OnPlaced(player, hit);
         _eventHandler.SwingHeld(player);
         return true;
@@ -181,8 +176,7 @@ public class Minecraft : Mode
         if (player.CurrentItem is not { } item || !BlockSerials.TryGetValue(item.Serial, out BlockData data))
             return false;
 
-        if (!TryPlaceBlock(player, data.Type))
-            return false;
+        if (!TryPlaceBlock(player, data.Type)) return false;
 
         if (--data.Count <= 0)
         {
@@ -194,11 +188,9 @@ public class Minecraft : Mode
 
     public bool TryInteract(Player player)
     {
-        if (!TryGetLookedBlock(player, out Block block))
-            return false;
+        if (!TryGetLookedBlock(player, out Block block)) return false;
 
-        if (!block.OnInteract(player))
-            return false;
+        if (!block.OnInteract(player)) return false;
 
         _eventHandler.SwingHeld(player);
         return true;
@@ -214,7 +206,7 @@ public class Minecraft : Mode
             return false;
 
         Vector3Int grid = ToGrid(hit.point - hit.normal * (GridSize * 0.5f));
-        return World.TryGetValue(grid, out block);
+        return _world.TryGetValue(grid, out block);
     }
 
     private static Vector3Int ToGrid(Vector3 pos) => new(
@@ -339,7 +331,7 @@ public class Minecraft : Mode
             Log.Error($"Failed to spawn dropped block pickup: {e}");
         }
 
-        World.Remove(block.GridPos);
+        _world.Remove(block.GridPos);
     }
 
     // 즉시 파괴 (관리자/테스트용). 파괴 로직은 DestroyBlock을 같이 씀

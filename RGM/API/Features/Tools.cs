@@ -1096,7 +1096,7 @@ namespace RGM.API.Features
                     player.IsGodModeEnabled = false;
                     while (player.IsAlive)
                     {
-                        ApplyInstantKill.Apply(attacker, player);
+                        player.RoleManager.ServerSetRole(RoleTypeId.Spectator, RoleChangeReason.Died);
                         yield return Timing.WaitForSeconds(0.2f);
                     }
 

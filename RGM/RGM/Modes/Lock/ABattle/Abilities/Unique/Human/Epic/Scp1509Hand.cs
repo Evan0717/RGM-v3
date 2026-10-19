@@ -3,9 +3,6 @@ using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using RGM.API.DataBases;
-using RGM.API.Features;
-using RGM.Modes.Sets.AddScp.Scps;
-using SecretAPI.Extensions;
 
 namespace RGM.Modes.Abilities.Unique.Human.Epic;
 
