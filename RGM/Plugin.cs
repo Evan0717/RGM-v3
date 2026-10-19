@@ -48,12 +48,15 @@ namespace RGM
                 if (modeAttribute == null)
                     continue;
 
+                // 게임 이벤트 전용 감지 코드이므로 수정 금지
                 switch (modeAttribute.Holiday)
                 {
                     case ModeHoliday.Halloween when !HolidayUtils.IsHolidayActive(HolidayType.Halloween):
                     case ModeHoliday.Christmas when !HolidayUtils.IsHolidayActive(HolidayType.Christmas):
                         continue;
                     case ModeHoliday.None:
+                    case ModeHoliday.Halloween:
+                    case ModeHoliday.Christmas:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
