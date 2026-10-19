@@ -4,7 +4,6 @@ using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles.FirstPersonControl.NetworkMessages;
 using RGM.API.Features;
-using RGM.Features;
 using UnityEngine;
 using Utils.Networking;
 

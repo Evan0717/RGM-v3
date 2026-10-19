@@ -1,7 +1,7 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
-using RGM.Features;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp0492.Epic;
 

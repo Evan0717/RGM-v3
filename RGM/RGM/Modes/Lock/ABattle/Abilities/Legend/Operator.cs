@@ -4,7 +4,6 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Attachments;
 using InventorySystem.Items.Firearms.Modules;
 using RGM.API.Features;
-using RGM.Features;
 
 namespace RGM.Modes.Abilities.Legend;
 

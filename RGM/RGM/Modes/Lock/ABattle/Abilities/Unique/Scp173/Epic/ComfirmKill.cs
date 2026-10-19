@@ -1,5 +1,5 @@
 ﻿using Exiled.Events.EventArgs.Player;
-using RGM.Features;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp173.Epic;
 

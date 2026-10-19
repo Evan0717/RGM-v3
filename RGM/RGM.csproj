@@ -64,6 +64,9 @@
     <Compile Include="API\Components\BoxColliderThingsComponent.cs" />
     <Compile Include="API\Components\ThingsComponent.cs" />
     <Compile Include="API\Databases\Datas.cs" />
+    <Compile Include="API\Features\ApplyFixedDamage.cs" />
+    <Compile Include="API\Features\ApplyInstantKill.cs" />
+    <Compile Include="API\Features\ApplyLethalDamage.cs" />
     <Compile Include="API\Features\AudioManager.cs" />
     <Compile Include="API\Features\ChatManager.cs" />
     <Compile Include="API\Features\EffectManager.cs" />
@@ -113,9 +116,6 @@
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\SetPlayerRC.cs" />
     <Compile Include="RGM\Events\MEREvents.cs" />
     <Compile Include="RGM\Events\Scp\Scp1509Events.cs" />
-    <Compile Include="RGM\Features\ApplyFixedDamage.cs" />
-    <Compile Include="RGM\Features\ApplyInstantKill.cs" />
-    <Compile Include="RGM\Features\ApplyLethalDamage.cs" />
     <Compile Include="RGM\IEnumerators\LobbyIEnumerator.cs" />
     <Compile Include="RGM\IEnumerators\ServerIEnumerator.cs" />
     <Compile Include="RGM\Commands\RemoteAdminCommands\ShopFeatures\Custom.cs" />

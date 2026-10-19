@@ -7,7 +7,6 @@ using PlayerRoles.PlayableScps.Scp106;
 using PlayerStatsSystem;
 using RGM.API.Features;
 using RGM.API.DataBases;
-using RGM.Features;
 using Random = UnityEngine.Random;
 using Scp106Role = Exiled.API.Features.Roles.Scp106Role;
 
