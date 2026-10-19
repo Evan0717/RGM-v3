@@ -8,7 +8,7 @@ using InventorySystem.Items.Firearms.Modules;
 using InventorySystem.Items.Firearms.ShotEvents;
 using PlayerStatsSystem;
 
-namespace RGM.Features;
+namespace RGM.API.Features;
 
 /// <summary>
 /// Applies Particle Disruptor damage while preserving normal cancellation and

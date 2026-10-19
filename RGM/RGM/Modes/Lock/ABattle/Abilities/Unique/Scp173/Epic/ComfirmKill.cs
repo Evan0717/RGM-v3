@@ -1,6 +1,5 @@
-﻿using Exiled.API.Enums;
-using Exiled.Events.EventArgs.Player;
-using RGM.Features;
+﻿using Exiled.Events.EventArgs.Player;
+using RGM.API.Features;
 
 namespace RGM.Modes.Abilities.Unique.Scp173.Epic;
 
@@ -24,7 +23,7 @@ public class ComfirmKill : Ability
     {
         if (ev.Attacker != Owner ||
             ev.Player == Owner ||
-            ev.DamageHandler.Type != DamageType.Scp173)
+            !ev.IsInstantKill)
             return;
 
         ev.IsAllowed = false;

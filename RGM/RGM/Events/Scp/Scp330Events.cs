@@ -19,9 +19,12 @@ namespace RGM.Events
     {
         public static void OnInteractingScp330(InteractingScp330EventArgs ev)
         {
+            if (HolidayUtils.IsHolidayActive(HolidayType.Halloween))
+                ev.ShouldSever = ev.UsageCount >= 6;
+
             if (ev.Player.IsScpRole())
                 return;
-
+            
             Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
                 ev.Player.TryRemoveCandу(ev.Candy);

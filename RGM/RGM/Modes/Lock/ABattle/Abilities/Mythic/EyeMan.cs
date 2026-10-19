@@ -10,7 +10,6 @@ using ProjectMER.Features.Objects;
 using ProjectMER.Features;
 using Mirror;
 using LabApi.Features.Wrappers;
-using RGM.Features;
 
 namespace RGM.Modes.Abilities.Mythic;
 

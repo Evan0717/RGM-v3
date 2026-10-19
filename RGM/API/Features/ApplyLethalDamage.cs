@@ -2,7 +2,7 @@ using System;
 using Exiled.API.Features;
 using PlayerStatsSystem;
 
-namespace RGM.Features;
+namespace RGM.API.Features;
 
 /// <summary>
 /// Deals damage equal to the target's maximum health, ignoring damage modifiers.

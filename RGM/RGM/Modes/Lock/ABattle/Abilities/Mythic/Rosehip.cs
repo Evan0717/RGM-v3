@@ -8,7 +8,6 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
 using RGM.API.Features;
-using RGM.Features;
 using Random = UnityEngine.Random;
 
 namespace RGM.Modes.Abilities.Mythic;
