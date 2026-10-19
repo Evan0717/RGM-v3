@@ -31,7 +31,8 @@ namespace RGM.API.Features
             EffectType.Decontaminating,
             EffectType.InsufficientLighting,
             EffectType.SoundtrackMute,
-            EffectType.SeveredHands
+            EffectType.SeveredHands,
+            EffectType.Marshmallow
         ];
 
         public static bool IsKeptBuff(EffectType effectType) => KeptBuffs.Contains(effectType);
