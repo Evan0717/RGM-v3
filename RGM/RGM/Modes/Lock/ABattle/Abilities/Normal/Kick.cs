@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System.Collections.Generic;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
@@ -10,7 +11,8 @@ namespace RGM.Modes.Abilities.Normal;
 public class Kick : Ability
 {
     private const float Meleedamage = 20f;
-    private static int _meleeCooldown;
+    // 플레이어별 쿨타임. (능력이 중복 보유되어도 한 번만 발동되도록 static 유지)
+    private static readonly HashSet<Player> CooldownPlayers = [];
 
     public override void OnEnabled()
     {
@@ -31,14 +33,16 @@ public class Kick : Ability
             return;
 
         if (!ev.Player.TryGetLookPlayer(4.7f, out Player player, out RaycastHit? hit)) return;
-        if (ev.Player == player || _meleeCooldown > 0 ||
+        if (ev.Player == player || CooldownPlayers.Contains(ev.Player) ||
             !HitboxIdentity.IsEnemy(ev.Player.ReferenceHub, player.ReferenceHub)) return;
 
         float damage = DamageCalc(hit?.transform.name) * Owner.AbilityCount(AbilityType.NORMAL_KICK);
         
         if (Owner.HasAbility(AbilityType.SYNERGY_SOCCERKICK))
         {
-            player.ExplodeGrenade(ignore:true, instakill:false);
+            // 폭발의 투척자를 피해자가 아닌 공격자(Owner)로 지정한다.
+            // 피해자가 투척자이면 즉사 처리 직후 투척자가 사망 상태가 되어 폭발이 정상 처리되지 않는다.
+            player.ExplodeGrenade(fuseTime: 0.01f, ignore: true, instakill: false, thrower: Owner);
             ApplyInstantKill.Apply(Owner, player);
         }
         else
@@ -48,9 +52,10 @@ public class Kick : Ability
         Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, damage / Meleedamage);
         ev.Player.Grab();
 
-        _meleeCooldown = 1;
+        Player kicker = ev.Player;
+        CooldownPlayers.Add(kicker);
 
-        Timing.CallDelayed(1f, () => _meleeCooldown = 0);
+        Timing.CallDelayed(1f, () => CooldownPlayers.Remove(kicker));
         return;
 
         float DamageCalc(string pos)
