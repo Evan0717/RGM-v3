@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RGM.API.Features;
@@ -27,7 +28,8 @@ public class MarshMellow : Ability
         {
             Owner.AddAbility(AbilityType.NORMAL_SWIFT);
         }
-
+        
+        Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
         Exiled.Events.Handlers.Player.Hurting += OnHurting;
         
         _marshmallowCoroutine = Timing.RunCoroutine(MarshmallowCoroutine());
@@ -35,6 +37,7 @@ public class MarshMellow : Ability
 
     public override void OnDisabled()
     {
+        Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
 
         Timing.KillCoroutines(_marshmallowCoroutine);
@@ -49,6 +52,26 @@ public class MarshMellow : Ability
 
         ev.DamageHandler.Damage += isScpRole ? 30 : 60;
         ev.Attacker.Heal(ev.DamageHandler.Damage * (isScpRole ? 0.05f : 0.1f));
+    }
+    
+    private void OnInteractingDoor(InteractingDoorEventArgs ev)
+    {
+        if (ev.Player != Owner)
+            return;
+
+        if (ev.Door.Type == DoorType.Scp079First)
+        {
+            ev.Player.AddHint("헤비도어", "이 헤비도어는 능력으로 개폐가 불가능합니다.", 1.2f);
+            return;
+        }
+
+        if (Warhead.IsInProgress)
+        {
+            ev.Player.AddHint("알파 핵탄투", "알파 핵탄투가 작동 중일때는 문을 개폐할 수 없습니다.", 1.2f);
+            return;
+        }
+
+        ev.IsAllowed = true;
     }
 
     private IEnumerator<float> MarshmallowCoroutine()
