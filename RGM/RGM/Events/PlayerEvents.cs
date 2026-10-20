@@ -720,8 +720,9 @@ namespace RGM.Events
                 }.Contains(ev.Reason) &&
                 (CurrentMode.GetModeData().Info == ModeInfo.Plus ||
                  (CurrentMode.GetModeData().Info == ModeInfo.Lock &&
-                  CurrentMode != ModeType.RussianRoulette &&
-                  CurrentMode != ModeType.WitGame)))
+                  CurrentMode == ModeType.EchoBattle &&
+                  CurrentMode == ModeType.Rank &&
+                  CurrentMode == ModeType.TFT)))
             {
                 ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 10);
             }
