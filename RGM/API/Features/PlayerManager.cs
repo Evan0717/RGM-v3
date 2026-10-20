@@ -911,21 +911,24 @@ namespace RGM.API.Features
         }
 
         public static void ExplodeGrenade(this Player player, Vector3? pos = null, float fuseTime = 0,
-            ItemType grenade = ItemType.GrenadeHE, bool ignore = false, bool instakill = true)
+            ItemType grenade = ItemType.GrenadeHE, bool ignore = false, bool instakill = true,
+            Player thrower = null)
         {
             pos ??= player.Position;
+            // thrower가 지정되지 않으면 기존처럼 player 본인이 투척자가 된다.
+            thrower ??= player;
             if (grenade == ItemType.GrenadeFlash)
             {
-                var g = (FlashGrenade)Item.Create(grenade, player);
+                var g = (FlashGrenade)Item.Create(grenade, thrower);
                 g.FuseTime = fuseTime;
-                g.SpawnActive(pos.Value, player);
+                g.SpawnActive(pos.Value, thrower);
             }
             else
             {
-                var g = (ExplosiveGrenade)Item.Create(grenade, player);
+                var g = (ExplosiveGrenade)Item.Create(grenade, thrower);
                 g.FuseTime = fuseTime;
                 g.MaxRadius = ignore ? 0 : g.MaxRadius;
-                g.SpawnActive(pos.Value, player);
+                g.SpawnActive(pos.Value, thrower);
 
                 if (!instakill) return;
                 ApplyInstantKill.Apply(player, player);
