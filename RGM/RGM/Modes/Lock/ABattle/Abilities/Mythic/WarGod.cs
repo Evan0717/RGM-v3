@@ -27,9 +27,7 @@ public class WarGod : Ability
     private void OnChangedItem(ChangedItemEventArgs ev)
     {
         if (ev.Item == null || ev.Player == null) return;
-        if (_lightWarriorSerial != ev.Player.CurrentItem.Serial) return;
-        if (_lightWarriorSerial == ev.Item.Serial)
-            ev.Player.AddHint("광전사", $"<b><color={ABattle.RatingColor["신화"]}>광전사</color></b> 능력이 있는 <b>제일버드</b>입니다!");
+        if (_lightWarriorSerial != ev.Player.CurrentItem.Serial) return; 
         if (ev.Item?.Serial != _lightWarriorSerial)
             return;
         

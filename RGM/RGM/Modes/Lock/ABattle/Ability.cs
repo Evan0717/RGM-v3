@@ -431,6 +431,7 @@ public enum AbilityType
     MYTHIC_HAMMER, // [신화] 철퇴
     MYTHIC_ANCHOR, //[신화] 구속
     MYTHIC_SOLDIER76, // [신화] 솔져: 76
+    MYTHIC_DEMONCORE, // [신화] 데몬 코어
 
     // 고대 //
     ANCIENT_ALEPHONE, // [고대] Aleph-1
