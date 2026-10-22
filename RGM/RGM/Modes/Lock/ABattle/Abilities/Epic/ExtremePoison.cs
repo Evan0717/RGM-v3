@@ -29,7 +29,7 @@ public class ExtremePoison : Ability
                 Duration * Owner.AbilityCount(AbilityType.EPIC_EXTREMEPOISON));
             ev.Attacker.EnableEffect(EffectType.Bleeding, 1,
                 Duration * Owner.AbilityCount(AbilityType.EPIC_EXTREMEPOISON));
-            ev.Attacker.EnableEffect(EffectType.Exhausted, 1,
+            ev.Attacker.EnableEffect(EffectType.Asphyxiated, 1,
                 Duration * Owner.AbilityCount(AbilityType.EPIC_EXTREMEPOISON));
             ev.Attacker.EnableEffect(EffectType.Corroding, 1,
                 Duration * Owner.AbilityCount(AbilityType.EPIC_EXTREMEPOISON));

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -90,14 +91,7 @@ public class EMP : Ability
                 continue;
 
             scp079.Scp2176LostTime = Scp079SignalLostDuration;
-            if (scp079.Level <= 1)
-            {
-                scp079.Level = 1;
-            }
-            else
-            {
-                scp079.Level -= 1;
-            }
+            scp079.Level = Math.Max(1, scp079.Level - 1);
         }
 
         _suppressScp2176Effect = true;
