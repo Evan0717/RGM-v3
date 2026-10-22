@@ -140,6 +140,7 @@
     <Compile Include="RGM\Modes\Lock\ABattle\ABattleSetting.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Ancient\Terminal.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\DestroyedReflector.cs" />
+    <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Dummy\StolenByGhost.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Legend\Operator.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Mythic\DemonCore.cs" />
     <Compile Include="RGM\Modes\Lock\ABattle\Abilities\Normal\FastReturn.cs" />

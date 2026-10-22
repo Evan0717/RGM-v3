@@ -19,7 +19,7 @@ namespace RGM.Modes.Abilities.Unique.Human.Legend;
 [Ability("전자 유령",
     """
     전자 유령이 되어 시설 시스템에 간섭합니다.
-    지급된 무전기를 우클릭 시, 모든 적 세력 인원에게서 각 인원 마다 능력을 1개(25% 확률로 추가 1개, 무한 반복 가능) 강탈합니다. 강탈한 능력은 반사경 및 복제로 능력 복제가 불가합니다.
+    지급된 무전기를 우클릭 시, 모든 적 세력 인원에게서 각 인원 마다 능력을 1개(25% 확률로 추가) 강탈합니다. 강탈한 능력은 반사경 및 복제로 능력 복제가 불가합니다.
     추가로, 5초간 모든 시설 시스템을 정지시키며, SCP-079의 신호를 15초간 차단시키고, 레벨을 2 감소시킵니다.
     사용 시 재사용 대기시간 60초가 적용됩니다.
     """, 
@@ -40,6 +40,12 @@ public class ElectronicsGhost : Ability
     private bool _suppressScp2176Effect;
     private CoroutineHandle _radioRoutine;
 
+    private readonly List<AbilityType> _exceptAbilities =
+    [
+        AbilityType.NORMAL_REROLL, AbilityType.NORMAL_EXCHANGE, AbilityType.NORMAL_SUSPICIOUSSTEW,
+        AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_UPGRADE,
+        AbilityType.RARE_CONTRACT
+    ];
     public override void OnEnabled()
     {
         GiveRadio();
@@ -138,7 +144,7 @@ public class ElectronicsGhost : Ability
         if (_isCoolingDown)
         {
             float remaining = Mathf.Max(0f, _cooldownEndTime - Time.time);
-            ev.Player.AddHint("전자 유령 재사용 대기시간", $"전자 유령이 충전 중입니다. ({remaining:0}초)");
+            ev.Player.AddHint("전자 유령 재사용 대기시간", $"지금은 간섭할 수 없습니다. {remaining:0}초 후 재 침투가 가능합니다.");
             return;
         }
 
@@ -188,10 +194,12 @@ public class ElectronicsGhost : Ability
 
     private bool TryStealAbility(Player victim)
     {
-        List<Ability> candidates = victim.GetAbilities()
+        var candidates = victim.GetAbilities()
             .Where(a => a.Data.RoleAbility == RoleAbility.None &&
                         a.Data.Category is not (AbilityCategory.None or AbilityCategory.Dummy
                             or AbilityCategory.Ancient or AbilityCategory.Synergy))
+            // 강탈 제외 목록에 있는 능력은 강탈하지 않는다.
+            .Where(a => !_exceptAbilities.Contains(a.Data.AbilityType))
             // 유니크 능력은 항상 1개만 유지되므로, 이미 보유 중이면 강탈 대상에서 제외한다.
             .Where(a => !a.Data.IsUnique || !Owner.HasAbility(a.Data.AbilityType))
             .ToList();
@@ -206,6 +214,7 @@ public class ElectronicsGhost : Ability
                 continue;
 
             victim.RemoveAbility(target);
+            victim.AddAbility(AbilityType.DUMMY_STOLENBYGHOST); // 강탈당할 때마다 1개씩 부여
             victim.AddHint("전자 유령", $"{target.Data.GetFormattedName()} 능력을 <b>전자 유령</b>에게 강탈당했습니다!");
             return true;
         }

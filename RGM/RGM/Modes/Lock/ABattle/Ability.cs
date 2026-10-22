@@ -301,6 +301,7 @@ public enum AbilityType
     DUMMY_GOCMEMBER, // [더미] U.N.G.O.C 대원
     DUMMY_GRUPMENBER, // [더미] GRU-P 대원
     DUMMY_DESTROYEDREFLECTOR, // [더미] 파괴된 반사경
+    DUMMY_STOLENBYGHOST, // [더미] 전자 유령 간섭
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
