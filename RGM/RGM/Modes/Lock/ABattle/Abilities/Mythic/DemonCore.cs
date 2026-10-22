@@ -35,6 +35,7 @@ public class DemonCore : Ability
     private bool _detonated;
     private bool _watchingSwing;
     private bool _watchingCharge;
+    private bool _charging;
 
     public override void OnEnabled()
     {
@@ -77,7 +78,7 @@ public class DemonCore : Ability
     private void OnSwinging(SwingingEventArgs ev)
     {
         // 이 이벤트는 서버가 공격을 수락하기 전에 온다. 수락된 휘두르기만 한 프레임 뒤에 센다.
-        if (_detonated || _watchingSwing || !ev.IsAllowed || ev.Player == null ||
+        if (_detonated || _charging || _watchingSwing || !ev.IsAllowed || ev.Player == null ||
             ev.Item is not Jailbird jailbird || jailbird.Serial != _demonCoreSerial ||
             jailbird.Base._attackTriggered)
         {
@@ -92,7 +93,7 @@ public class DemonCore : Ability
     private void ConfirmSwing(Player attacker)
     {
         _watchingSwing = false;
-        if (_detonated || attacker?.CurrentItem is not Jailbird jailbird ||
+        if (_detonated || _charging || attacker?.CurrentItem is not Jailbird jailbird ||
             jailbird.Serial != _demonCoreSerial || !jailbird.Base._attackTriggered)
         {
             return;
@@ -107,6 +108,9 @@ public class DemonCore : Ability
         if (ev.Jailbird?.Serial != _demonCoreSerial)
             return;
 
+        // 돌진도 Swinging 이벤트를 발생시킨다. 이동 전 휘두르기로 사용 횟수가
+        // 소모되지 않도록 돌진 완료 이벤트에서만 집계한다.
+        _charging = true;
         ResetDurability(ev.Jailbird);
     }
 
@@ -118,6 +122,7 @@ public class DemonCore : Ability
             return;
         }
 
+        _charging = false;
         _watchingCharge = true;
         Player attacker = ev.Player;
         Timing.CallDelayed(Timing.WaitForOneFrame, () => ConfirmCharge(attacker));

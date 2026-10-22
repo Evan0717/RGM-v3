@@ -22,7 +22,7 @@ public class PhysicalStrengthening : Ability
     {
         while (true)
         {
-            Owner.Heal(3);
+            Owner.Health += 3;
 
             yield return Timing.WaitForSeconds(4f);
         }

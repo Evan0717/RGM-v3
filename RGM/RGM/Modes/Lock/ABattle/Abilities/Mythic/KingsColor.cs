@@ -38,12 +38,17 @@ public class KingsColor : Ability
 
     private IEnumerator<float> Kingscolor()
     {
+        // 첫 번째 능력 인스턴스만 자체 효과를 처리한다.
+        if (Owner.AbilityCount(AbilityType.MYTHIC_KINGSCOLOR) != 1)
+            yield break;
+        
         _lightSource = LabApi.Features.Wrappers.LightSourceToy.Create();
         _lightSource.Color = Color.red;
         _lightSource.Intensity = 8;
         _lightSource.Range = 24;
-
-        while (Owner.IsAlive)
+        var abilityCount = Owner.AbilityCount(AbilityType.MYTHIC_KINGSCOLOR);
+        
+        while (IsOwnerValid())
         {
             foreach (var player in PlayerManager.List.Where(x => x.IsAlive && x != Owner))
             {
@@ -59,7 +64,7 @@ public class KingsColor : Ability
                 player.EnableEffect(EffectType.Slowness, 80, 1f);
                 player.CurrentItem = null;
                 ApplyFixedDamage.Apply(player, target,
-                    target.IsScpRole() ? target.MaxHealth * 0.04f : target.MaxHealth * 0.16f);
+                    (target.IsScpRole() ? target.MaxHealth * 0.04f : target.MaxHealth * 0.16f) * abilityCount);
             }
 
             yield return Timing.WaitForSeconds(0.067f);
@@ -117,5 +122,13 @@ public class KingsColor : Ability
                 break;
             }
         }
+    }
+    
+    private bool IsOwnerValid()
+    {
+        return Owner != null &&
+               Owner.ReferenceHub != null &&
+               Owner.IsConnected &&
+               Owner.IsAlive;
     }
 }
