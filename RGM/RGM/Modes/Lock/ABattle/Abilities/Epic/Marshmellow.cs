@@ -12,7 +12,7 @@ namespace RGM.Modes.Abilities.Epic;
                       최대 체력이 400 증가하고, 기본 공격 데미지가 60 증가하며, 이동 속도가 20%p 증가합니다.
                       추가로, 피해량의 10% 만큼 회복하며, SCP 진영이 사용 시 버프 효과가 50% 감소합니다.
                       """,
-    AbilityCategory.Epic, AbilityType.EPIC_MARSHMELLOW,
+    AbilityCategory.Epic, AbilityType.EPIC_HALLOWEEN_MARSHMELLOW,
     RoleAbility.None, false, AbilityHolidayType.Halloween, isUnique: true)]
 public class MarshMellow : Ability
 {

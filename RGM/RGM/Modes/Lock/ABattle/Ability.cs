@@ -362,8 +362,6 @@ public enum AbilityType
     RARE_DND, // [희귀] 자리 비움
     RARE_SPACETRAVEL, // [희귀] 이차원 도약
     RARE_ORGANICMILK, // [희귀] 유기농 우유
-    RARE_CANDYBAG, // [희귀] 사탕 봉지
-    RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
     RARE_FINALEXAM, // [희귀] 기말고사
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
@@ -390,7 +388,6 @@ public enum AbilityType
     EPIC_SCP127, // [영웅] 인생의 동반자
     EPIC_ANTISCP207, // [영웅] 초재생
     EPIC_SCP1509, // [영웅] 마체테
-    EPIC_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
@@ -410,7 +407,6 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] Lava Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
-    LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
     LEGEND_REINCARNATION, // [전설] 리인카네이션
     LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
@@ -428,10 +424,8 @@ public enum AbilityType
     MYTHIC_TOOLGUN, // [신화] 딸깍
     MYTHIC_KINGSCOLOR, // [신화] 패왕색 패기
     MYTHIC_ROSEHIP, // [신화] 장미칼
-    MYTHIC_HAMMER, // [신화] 철퇴
     MYTHIC_ANCHOR, //[신화] 구속
     MYTHIC_SOLDIER76, // [신화] 솔져: 76
-    MYTHIC_DEMONCORE, // [신화] 데몬 코어
 
     // 고대 //
     ANCIENT_ALEPHONE, // [고대] Aleph-1
@@ -686,10 +680,22 @@ public enum AbilityType
       반사경
       상급변이
       복제
-      대격변 생성기
-      무제한
      */
+    
+    // 시즌 이벤트 전용
+    // 할로윈
+    RARE_HALLOWEEN_CANDYBAG, // [희귀] 사탕 봉지
+    
+    EPIC_HALLOWEEN_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
+    
+    LEGEND_HALLOWEEN_CANDYPOWER, // [전설] 섬뜩한 힘
+    
+    MYTHIC_HALLOWEEN_HAMMER, // [신화] 철퇴
+    MYTHIC_HALLOWEEN_DEMONCORE, // [신화] 데몬 코어
 
+    // 크리스마스
+    RARE_CHRISTMAS_DOBBYISFREE, // [희귀] 도비는 자유에요
+    
     // 플라밍고
     NORMAL_FLAMINGO_MINIFACTORY, // [전용 일반] 미니 공장
 
