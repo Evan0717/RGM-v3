@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using Mirror;
 using ProjectMER.Features.Objects;
 using ProjectMER.Features;
 using MEC;
@@ -28,15 +29,18 @@ public class LavaChicken : Ability
 
     private IEnumerator<float> OnStarted()
     {
-        // 동일 능력을 처음 획득했을 때만 스키매틱을 생성한다.
-        if (Owner.AbilityCount(AbilityType.LEGEND_LAVACHICKEN) == 1)
-            _lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205));
+        // 첫 번째 능력 인스턴스만 자체 효과를 처리한다.
+        if (Owner.AbilityCount(AbilityType.LEGEND_LAVACHICKEN) != 1)
+            yield break;
+
+        _lava = ObjectSpawner.SpawnSchematic("LavaChicken", new Vector3(1205, 1205, 1205));
 
         while (IsOwnerValid())
         {
             try
             {
                 Vector3 ownerPosition = Owner.Position;
+                var abilityCount = Owner.AbilityCount(AbilityType.LEGEND_LAVACHICKEN);
 
                 if (_lava != null && Physics.Raycast(ownerPosition, Vector3.down, out RaycastHit hit, 100, (LayerMask)1))
                 {
@@ -51,7 +55,7 @@ public class LavaChicken : Ability
                              HitboxIdentity.IsEnemy(x.ReferenceHub, Owner.ReferenceHub)))
                 {
                     if (Vector3.Distance(player.Position, ownerPosition) > 6.5f) continue;
-                    var damage = player.IsScpRole() ? player.MaxHealth * 0.008f : player.MaxHealth * 0.024f;
+                    var damage = (player.IsScpRole() ? player.MaxHealth * 0.008f : player.MaxHealth * 0.024f) * abilityCount;
 
                     if (player.HasAbility(AbilityType.RARE_UNDINE))
                     {
@@ -63,9 +67,9 @@ public class LavaChicken : Ability
                             $"<color={ABattle.RatingColor["희귀"]}><b>운디네</b></color>가 화염으로부터 당신을 보호하기 위해 노력하고 있습니다.",
                             0.5f);
                     }
-
-                    Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
+                    
                     player.Hit(Owner, damage);
+                    Owner.ShowHitMarker(0.75f);
                 }
             }
             catch (Exception e)
@@ -89,10 +93,13 @@ public class LavaChicken : Ability
 
     private void DestroyLava()
     {
-        if (_lava == null || !_lava)
+        SchematicObject lava = _lava;
+        _lava = null;
+
+        if (lava == null || !lava)
             return;
 
-        _lava.Destroy();
-        _lava = null;
+        NetworkServer.Destroy(lava.gameObject);
+        lava.Destroy();
     }
 }

@@ -18,6 +18,7 @@ namespace RGM.Modes.Abilities.Mythic;
 public class EyeMan : Ability
 {
     private CoroutineHandle _twinkle;
+    private SchematicObject _beam;
 
     public override void OnEnabled()
     {
@@ -31,10 +32,15 @@ public class EyeMan : Ability
 
     private IEnumerator<float> Twinkle()
     {
-        SchematicObject beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205));
-        beam.GetComponentsInChildren<PrimitiveObjectToy>().ToList().ForEach(x => x.MovementSmoothing = 0);
-
-        while (Owner.IsAlive)
+        // 첫 번째 능력 인스턴스만 자체 효과를 처리한다.
+        if (Owner.AbilityCount(AbilityType.MYTHIC_EYEMAN) != 1)
+            yield break;
+        
+        _beam = ObjectSpawner.SpawnSchematic("눈빛맨", new Vector3(1205, 1205, 1205));
+        _beam.GetComponentsInChildren<PrimitiveObjectToy>().ToList().ForEach(x => x.MovementSmoothing = 0);
+        var abilityCount = Owner.AbilityCount(AbilityType.MYTHIC_EYEMAN);
+        
+        while (IsOwnerValid())
         {
             try
             {
@@ -42,21 +48,21 @@ public class EyeMan : Ability
                 {
                     if (Owner != target && HitboxIdentity.IsEnemy(Owner.ReferenceHub, target.ReferenceHub))
                     {
-                        beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.3f;
-                        beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
+                        _beam.Position = Owner.CameraTransform.position + Owner.CameraTransform.forward * 0.3f;
+                        _beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
                         target.EnableEffect(EffectType.SinkHole, 1, 0.5f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.5f);
-                        target.EnableEffect(EffectType.Slowness, 30, 0.5f);
+                        target.EnableEffect(EffectType.Slowness, 40, 0.5f);
                         target.CurrentItem = null;
                         ApplyFixedDamage.Apply(Owner, target,
-                            target.IsScpRole() ? target.MaxHealth * 0.04f : target.MaxHealth * 0.12f);
+                            (target.IsScpRole() ? target.MaxHealth * 0.04f : target.MaxHealth * 0.12f) * abilityCount);
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
                     else
-                        beam.Position = new Vector3(1205, 1205, 1205);
+                        _beam.Position = new Vector3(1205, 1205, 1205);
                 }
                 else
-                    beam.Position = new Vector3(1205, 1205, 1205);
+                    _beam.Position = new Vector3(1205, 1205, 1205);
             }
             catch (Exception e)
             {
@@ -66,7 +72,15 @@ public class EyeMan : Ability
             yield return Timing.WaitForSeconds(0.067f);
         }
 
-        NetworkServer.Destroy(beam.gameObject);
-        beam.Destroy();
+        NetworkServer.Destroy(_beam.gameObject);
+        _beam.Destroy();
+    }
+    
+    private bool IsOwnerValid()
+    {
+        return Owner != null &&
+               Owner.ReferenceHub != null &&
+               Owner.IsConnected &&
+               Owner.IsAlive;
     }
 }
