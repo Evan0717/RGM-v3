@@ -14,12 +14,12 @@ namespace RGM.Modes.Abilities.Normal;
                """, AbilityCategory.Normal, AbilityType.NORMAL_TEST, RoleAbility.None, true)]
 public class Test : Ability
 {
-    public static readonly List<AbilityType> ExceptAbilities =
+    public static readonly List<AbilityType> TestExceptAbilities =
         [
             AbilityType.NORMAL_TEST, AbilityType.RARE_FINALEXAM, AbilityType.EPIC_CSAT,
             AbilityType.NORMAL_REROLL, AbilityType.NORMAL_EXCHANGE, AbilityType.NORMAL_SUSPICIOUSSTEW,
             AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_UPGRADE,
-            AbilityType.RARE_CONTRACT
+            AbilityType.RARE_CONTRACT, AbilityType.EPIC_HALLOWEEN_MARSHMELLOW, AbilityType.LEGEND_HALLOWEEN_CANDYPOWER
         ];
     
     public override void OnEnabled()
@@ -40,7 +40,7 @@ public class Test : Ability
                         ? Convert.ToByte(Random.Range(1, 101)) <= 55 && Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND)
                             ? AbilityCategory.Epic : AbilityCategory.Rare : AbilityCategory.Normal;
 
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, ExceptAbilities)[0]);   //시험류 안 나오게 해야할 것 같음. (보류)
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, TestExceptAbilities)[0]);   //시험류 안 나오게 해야할 것 같음. (보류)
                 }
                 Owner.AddAbility(AbilityType.DUMMY_TESTSUCCESS);
             }

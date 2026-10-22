@@ -13,7 +13,7 @@ namespace RGM.Modes.Abilities.Mythic;
                   착지하는 순간 일대가 초토화됩니다.
                   착지 지점 반경 10m 이내의 모든 적은 『죽음에 이르는 공격』을 받습니다.
                   """, 
-    AbilityCategory.Mythic, AbilityType.MYTHIC_HAMMER, 
+    AbilityCategory.Mythic, AbilityType.MYTHIC_HALLOWEEN_HAMMER, 
     RoleAbility.None, false, AbilityHolidayType.Halloween)]
 public class Hammer : Ability
 {

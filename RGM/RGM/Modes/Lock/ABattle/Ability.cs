@@ -301,6 +301,7 @@ public enum AbilityType
     DUMMY_GOCMEMBER, // [더미] U.N.G.O.C 대원
     DUMMY_GRUPMENBER, // [더미] GRU-P 대원
     DUMMY_DESTROYEDREFLECTOR, // [더미] 파괴된 반사경
+    DUMMY_STOLENBYGHOST, // [더미] 전자 유령 간섭
 
     // 일반 //
     NORMAL_WORKOUT, // [일반] 운동
@@ -362,8 +363,6 @@ public enum AbilityType
     RARE_DND, // [희귀] 자리 비움
     RARE_SPACETRAVEL, // [희귀] 이차원 도약
     RARE_ORGANICMILK, // [희귀] 유기농 우유
-    RARE_CANDYBAG, // [희귀] 사탕 봉지
-    RARE_DOBBYISFREE, // [희귀] 도비는 자유에요
     RARE_FINALEXAM, // [희귀] 기말고사
     RARE_BULLSEYE, // [희귀] 불스아이
     RARE_HYPERBODY, // [희귀] 하이퍼 바디
@@ -381,7 +380,6 @@ public enum AbilityType
     EPIC_TRANSITION, // [영웅] 변이
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
     EPIC_DISGUISE, // [영웅] 위장술
-    EPIC_GRAVEROBBER, // [영웅] 도굴꾼
     EPIC_FALLENKINGSSWORD, // [영웅] 몰락한 왕의 검
     EPIC_SCP1344, // [영웅] 투시
     EPIC_PRIEST, // [영웅] 성직자
@@ -390,7 +388,6 @@ public enum AbilityType
     EPIC_SCP127, // [영웅] 인생의 동반자
     EPIC_ANTISCP207, // [영웅] 초재생
     EPIC_SCP1509, // [영웅] 마체테
-    EPIC_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
     EPIC_CONTEXPERT, // [영웅] 격리 전문가
     EPIC_RAMBO, // [영웅] 람보
     EPIC_SPRINGFIELDM1A, // [영웅] Springfield M1A
@@ -410,7 +407,6 @@ public enum AbilityType
     LEGEND_LAVACHICKEN, // [전설] Lava Chicken
     LEGEND_FLAMETHROWER, // [전설] 화염 방사기
     LEGEND_OTHERWORLDLIGHT, // [전설] 이계의 빛
-    LEGEND_CANDYPOWER, // [전설] 섬뜩한 힘
     LEGEND_JOHNWICK, // [전설] 존 윅
     LEGEND_REINCARNATION, // [전설] 리인카네이션
     LEGEND_ZERORULE, // [전설] 현을 푸는 제 0법칙
@@ -428,7 +424,6 @@ public enum AbilityType
     MYTHIC_TOOLGUN, // [신화] 딸깍
     MYTHIC_KINGSCOLOR, // [신화] 패왕색 패기
     MYTHIC_ROSEHIP, // [신화] 장미칼
-    MYTHIC_HAMMER, // [신화] 철퇴
     MYTHIC_ANCHOR, //[신화] 구속
     MYTHIC_SOLDIER76, // [신화] 솔져: 76
 
@@ -454,6 +449,7 @@ public enum AbilityType
     EPIC_DIVER, // [영웅] 잠수부
     EPIC_TURTLE, // [영웅] 거북 도사
     EPIC_REPAIRMAN, // [영웅] 수리 기사
+    EPIC_GRAVEROBBER, // [영웅] 도굴꾼
     
     // 유니크 전설
     LEGEND_REFLECTOR, // [전설] 반사경
@@ -476,13 +472,14 @@ public enum AbilityType
     EPIC_HUMAN_REBIRTH, // [전용 영웅] 환생
     EPIC_HUMAN_URGENTSUPPORT, // [전용 영웅] 긴급 지원
     EPIC_HUMAN_SCP1509HAND, // [전용 영웅] 마체테 클로
+    EPIC_HUMAN_EMP, // [전용 영웅] EMP
     
     LEGEND_HUMAN_SCP008, // [전용 전설] SCP-008, 좀비 전염병
     LEGEND_HUMAN_SCP035, // [전용 전설] SCP-035, 빙의 가면
     LEGEND_HUMAN_SCP457, // [전용 전설] SCP-457, 불타는 남자
     LEGEND_HUMAN_SCP966, // [전용 전설] SCP-966, 잠을 죽이는 자
     LEGEND_HUMAN_SCP999, // [전용 전설] SCP-999, 간지럼 괴물
-    LEGEND_HUMAN_EMP, // [전용 전설] EMP
+    LEGEND_HUMAN_ELECTRONICSGHOST, // [전용 전설] 전자 유령
     
     MYTHIC_HUMAN_DUALPERSONALITY, // [전용 신화] 이중인격
 
@@ -685,10 +682,22 @@ public enum AbilityType
       반사경
       상급변이
       복제
-      대격변 생성기
-      무제한
      */
+    
+    // 시즌 이벤트 전용
+    // 할로윈
+    RARE_HALLOWEEN_CANDYBAG, // [희귀] 사탕 봉지
+    
+    EPIC_HALLOWEEN_MARSHMELLOW, // [영웅] !!마쉬멜로우!!
+    
+    LEGEND_HALLOWEEN_CANDYPOWER, // [전설] 섬뜩한 힘
+    
+    MYTHIC_HALLOWEEN_HAMMER, // [신화] 철퇴
+    MYTHIC_HALLOWEEN_DEMONCORE, // [신화] 데몬 코어
 
+    // 크리스마스
+    RARE_CHRISTMAS_DOBBYISFREE, // [희귀] 도비는 자유에요
+    
     // 플라밍고
     NORMAL_FLAMINGO_MINIFACTORY, // [전용 일반] 미니 공장
 

@@ -1241,7 +1241,7 @@ public class ABattle : Mode
             [
                 AbilityType.NORMAL_REROLL, AbilityType.NORMAL_EXCHANGE, AbilityType.NORMAL_SUSPICIOUSSTEW,
                 AbilityType.RARE_DND, AbilityType.RARE_TELEPORTATION, AbilityType.RARE_UPGRADE,
-                AbilityType.RARE_CONTRACT, AbilityType.EPIC_GRAVEROBBER
+                AbilityType.RARE_CONTRACT, AbilityType.EPIC_GRAVEROBBER, AbilityType.EPIC_HALLOWEEN_MARSHMELLOW
             ]).First());
         }
 

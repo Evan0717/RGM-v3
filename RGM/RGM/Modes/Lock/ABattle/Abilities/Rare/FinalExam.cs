@@ -31,7 +31,7 @@ public class FinalExam : Ability
                         ? Convert.ToByte(Random.Range(1, 101)) <= 35 && Owner.HasAbility(AbilityType.SYNERGY_BRILLIANTMIND)
                             ? AbilityCategory.Legend : AbilityCategory.Epic : AbilityCategory.Rare;
                     
-                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, Test.ExceptAbilities)[0]);
+                    Owner.AddAbility(ABattle.Instance.GetRandomAbilities(Owner, category, 1, Test.TestExceptAbilities)[0]);
                 }
                 Owner.AddAbility(AbilityType.DUMMY_FINALEXAMSUCCESS);
             }
