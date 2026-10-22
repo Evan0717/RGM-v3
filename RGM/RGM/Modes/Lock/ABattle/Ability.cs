@@ -379,7 +379,6 @@ public enum AbilityType
     EPIC_TRANSITION, // [영웅] 변이
     EPIC_SUICIDEBOMBER, // [영웅] 수어사이드 봄버맨
     EPIC_DISGUISE, // [영웅] 위장술
-    EPIC_GRAVEROBBER, // [영웅] 도굴꾼
     EPIC_FALLENKINGSSWORD, // [영웅] 몰락한 왕의 검
     EPIC_SCP1344, // [영웅] 투시
     EPIC_PRIEST, // [영웅] 성직자
@@ -449,6 +448,7 @@ public enum AbilityType
     EPIC_DIVER, // [영웅] 잠수부
     EPIC_TURTLE, // [영웅] 거북 도사
     EPIC_REPAIRMAN, // [영웅] 수리 기사
+    EPIC_GRAVEROBBER, // [영웅] 도굴꾼
     
     // 유니크 전설
     LEGEND_REFLECTOR, // [전설] 반사경
@@ -471,13 +471,14 @@ public enum AbilityType
     EPIC_HUMAN_REBIRTH, // [전용 영웅] 환생
     EPIC_HUMAN_URGENTSUPPORT, // [전용 영웅] 긴급 지원
     EPIC_HUMAN_SCP1509HAND, // [전용 영웅] 마체테 클로
+    EPIC_HUMAN_EMP, // [전용 영웅] EMP
     
     LEGEND_HUMAN_SCP008, // [전용 전설] SCP-008, 좀비 전염병
     LEGEND_HUMAN_SCP035, // [전용 전설] SCP-035, 빙의 가면
     LEGEND_HUMAN_SCP457, // [전용 전설] SCP-457, 불타는 남자
     LEGEND_HUMAN_SCP966, // [전용 전설] SCP-966, 잠을 죽이는 자
     LEGEND_HUMAN_SCP999, // [전용 전설] SCP-999, 간지럼 괴물
-    LEGEND_HUMAN_EMP, // [전용 전설] EMP
+    LEGEND_HUMAN_ELECTRONICSGHOST, // [전용 전설] 전자 유령
     
     MYTHIC_HUMAN_DUALPERSONALITY, // [전용 신화] 이중인격
 
