@@ -11,22 +11,22 @@ using Interactables.Interobjects.DoorUtils;
 using MEC;
 using RGM.API.Features;
 
-namespace RGM.Modes.Abilities.Unique.Human.Legend;
+namespace RGM.Modes.Abilities.Unique.Human.Epic;
 
 [Ability("EMP",
     """
     시설에 강력한 전자기장 공격을 가합니다.
-    모든 시설이 15초 간 정지되며, SCP-079의 신호를 45초간 차단시키고, 레벨을 1로 초기화합니다.
+    모든 시설이 10초 간 정지되며, SCP-079의 신호를 30초간 차단시키고, 레벨을 1 감소시킵니다.
     사용 시 재사용 대기시간 120초가 적용됩니다.
     """, 
-    AbilityCategory.Legend, AbilityType.LEGEND_HUMAN_EMP, RoleAbility.Human)]
+    AbilityCategory.Epic, AbilityType.EPIC_HUMAN_EMP, RoleAbility.Human)]
 
 public class EMP : Ability
 {
     private ushort _empSerial;
     private const float EmpCooldown = 120f;
-    private const float BlackoutDuration = 15f;
-    private const float Scp079SignalLostDuration = 45f;
+    private const float BlackoutDuration = 10f;
+    private const float Scp079SignalLostDuration = 30f;
     private bool _isCoolingDown;
     private bool _suppressScp2176Effect;
 
@@ -45,7 +45,7 @@ public class EMP : Ability
         if (ev.Item?.Serial != _empSerial)
             return;
         
-        ev.Player.AddHint("EMP", $"<b><color={ABattle.RatingColor["전설"]}>EMP</color></b> 능력이 있는 <b>무전기</b>입니다!");
+        ev.Player.AddHint("EMP", $"<b><color={ABattle.RatingColor["영웅"]}>EMP</color></b> 능력이 있는 <b>무전기</b>입니다!");
     }
 
     private void OnTogglingRadio(TogglingRadioEventArgs ev)
@@ -81,7 +81,7 @@ public class EMP : Ability
                 lift.ChangeLock(DoorLockReason.None);
         });
 
-        if (Warhead.IsInProgress)
+        if (Warhead.IsInProgress && !DeadmanSwitch.IsDeadmanSwitchEnabled) // 데드맨 스위치는 종료할 수 없음.
             Warhead.Stop();
 
         foreach (Player player in Player.List)
@@ -90,7 +90,14 @@ public class EMP : Ability
                 continue;
 
             scp079.Scp2176LostTime = Scp079SignalLostDuration;
-            scp079.Level = 1;
+            if (scp079.Level <= 1)
+            {
+                scp079.Level = 1;
+            }
+            else
+            {
+                scp079.Level -= 1;
+            }
         }
 
         _suppressScp2176Effect = true;
