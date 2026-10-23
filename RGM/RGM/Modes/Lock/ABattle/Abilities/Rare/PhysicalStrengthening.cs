@@ -22,9 +22,10 @@ public class PhysicalStrengthening : Ability
     {
         while (true)
         {
-            Owner.Health += 3;
+            if (Owner.MaxHealth > Owner.Health)
+                Owner.Health += 1;
 
-            yield return Timing.WaitForSeconds(4f);
+            yield return Timing.WaitForSeconds(1f);
         }
     }
 }

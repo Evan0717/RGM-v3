@@ -238,7 +238,7 @@ public class DualPersonality : Ability
             // 실제 HP 회복량만큼 AHP와 최대 AHP를 함께 증가시키되, 최대 HP의 80%를 넘지 않게 한다.
             float limit = Mathf.Min(Owner.MaxArtificialHealth + amount, Owner.MaxHealth * DramaMaxAhpRatio);
             Owner.MaxArtificialHealth = limit;
-            Owner.AddAhp(amount, limit, sustain: DramaAhpSustain);
+            Owner.AddAhp(amount * (Owner.HasAbility(AbilityType.SYNERGY_HEALER) ? 4 : 1), limit, sustain: DramaAhpSustain);
         }
     }
 
@@ -354,9 +354,9 @@ public class DualPersonality : Ability
                 break;
 
             case Form.Disillusion:
-                // 잃은 HP만큼 관통 고정 피해를 추가로 입힌다 (최대 3000까지 적용).
+                // 잃은 HP만큼 관통 고정 피해를 추가로 입힌다 (최대 4000까지 적용).
                 float lostHealth = Owner.MaxHealth - Owner.Health;
-                if (lostHealth > 0f && ApplyFixedDamage.Apply(Owner, ev.Player, Mathf.Min(lostHealth, 3000f)))
+                if (lostHealth > 0f && ApplyFixedDamage.Apply(Owner, ev.Player, Mathf.Min(lostHealth, 4000f)))
                     Owner.ShowHitMarker(1.25f);
                 break;
         }
