@@ -15,8 +15,6 @@ public class RepairMan : Ability
         Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
         Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
         Exiled.Events.Handlers.Player.UnlockingGenerator += OnUnlockingGenerator;
-        Exiled.Events.Handlers.Player.OpeningGenerator += OnOpeningGenerator;
-        Exiled.Events.Handlers.Player.ClosingGenerator += OnClosingGenerator;
     }
 
     public override void OnDisabled()
@@ -25,8 +23,6 @@ public class RepairMan : Ability
         Exiled.Events.Handlers.Player.TriggeringTesla -= OnTriggeringTesla;
         Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
         Exiled.Events.Handlers.Player.UnlockingGenerator -= OnUnlockingGenerator;
-        Exiled.Events.Handlers.Player.OpeningGenerator -= OnOpeningGenerator;
-        Exiled.Events.Handlers.Player.ClosingGenerator -= OnClosingGenerator;
     }
 
     private void OnInteractingDoor(InteractingDoorEventArgs ev)
@@ -66,22 +62,6 @@ public class RepairMan : Ability
     }
 
     private void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
-    {
-        if (ev.Player != Owner)
-            return;
-
-        ev.IsAllowed = true;
-    }
-
-    private void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
-    {
-        if (ev.Player != Owner)
-            return;
-
-        ev.IsAllowed = true;
-    }
-
-    private void OnClosingGenerator(ClosingGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
