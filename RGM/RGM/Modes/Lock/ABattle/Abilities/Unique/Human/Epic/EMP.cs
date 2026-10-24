@@ -90,7 +90,7 @@ public class EMP : Ability
             if (player.Role is not Scp079Role scp079)
                 continue;
 
-            scp079.Scp2176LostTime = Scp079SignalLostDuration;
+            scp079.LoseSignal(Scp079SignalLostDuration);
             scp079.Level = Math.Max(1, scp079.Level - 1);
         }
 
