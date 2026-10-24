@@ -19,17 +19,17 @@ namespace RGM.Modes.Abilities.Unique.Human.Legend;
 [Ability("전자 유령",
     """
     전자 유령이 되어 시설 시스템에 간섭합니다.
-    지급된 무전기를 우클릭 시, 모든 적 세력 인원에게서 각 인원 마다 능력을 1개(25% 확률로 추가) 강탈합니다. 강탈한 능력은 반사경 및 복제로 능력 복제가 불가합니다.
-    추가로, 5초간 모든 시설 시스템을 정지시키며, SCP-079의 신호를 15초간 차단시키고, 레벨을 2 감소시킵니다.
-    사용 시 재사용 대기시간 60초가 적용됩니다.
+    지급된 무전기를 우클릭 시, 모든 적 세력 인원에게서 각 인원 마다 능력을 1개(25% 확률로 연쇄) 강탈합니다. 강탈한 능력은 반사경 및 복제로 능력 복제가 불가합니다.
+    추가로, 7초간 모든 시설 시스템을 정지시키며, SCP-079의 신호를 20초간 차단시키고, 레벨을 2 감소시킵니다.
+    사용 시 재사용 대기시간 75초가 적용됩니다.
     """, 
     AbilityCategory.Legend, AbilityType.LEGEND_HUMAN_ELECTRONICSGHOST, RoleAbility.Human, isUnique:true)]
 
 public class ElectronicsGhost : Ability
 {
-    private const float ElectronicsGhostCooldown = 60f;
-    private const float BlackoutDuration = 5f;
-    private const float Scp079SignalLostDuration = 15f;
+    private const float ElectronicsGhostCooldown = 75f;
+    private const float BlackoutDuration = 7f;
+    private const float Scp079SignalLostDuration = 20f;
     private const int Scp079LevelPenalty = 2;
     private const float ExtraStealChance = 0.25f;
     private const float RadioCheckInterval = 0.1f;
@@ -162,7 +162,7 @@ public class ElectronicsGhost : Ability
     }
 
     /// <summary>
-    /// 모든 적 세력 인원에게서 능력을 1개 강탈하고, 25% 확률로 추가 강탈을 반복한다.
+    /// 모든 적 세력 인원에게서 능력을 1개 강탈하고, 30% 확률로 추가 강탈을 반복한다.
     /// </summary>
     private void StealAbilities()
     {
@@ -262,7 +262,7 @@ public class ElectronicsGhost : Ability
             if (player.Role is not Scp079Role scp079)
                 continue;
 
-            scp079.Scp2176LostTime = Scp079SignalLostDuration;
+            scp079.LoseSignal(Scp079SignalLostDuration);
             scp079.Level = Math.Max(1, scp079.Level - Scp079LevelPenalty); // 1 이하로 내려가면 1로 보정
         }
     }

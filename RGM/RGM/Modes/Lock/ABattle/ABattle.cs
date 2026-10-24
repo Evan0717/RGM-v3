@@ -1554,11 +1554,11 @@ public class ABattle : Mode
         return category switch
         {
             AbilityCategory.Ancient => 40,
-            AbilityCategory.Mythic => 20,
-            AbilityCategory.Legend => 15,
-            AbilityCategory.Epic => 12,
-            AbilityCategory.Rare => 9,
-            _ => 6
+            AbilityCategory.Mythic => 36,
+            AbilityCategory.Legend => 23,
+            AbilityCategory.Epic => 13,
+            AbilityCategory.Rare => 10,
+            _ => 8
         };
     }
 
