@@ -15,16 +15,14 @@ public class Lucky : Ability
     {
         Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
         Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
-        Exiled.Events.Handlers.Player.OpeningGenerator += OnOpeningGenerator;
-        Exiled.Events.Handlers.Player.ClosingGenerator += OnClosingGenerator;
+        Exiled.Events.Handlers.Player.UnlockingGenerator += OnUnlockingGenerator;
     }
 
     public override void OnDisabled()
     {
         Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
         Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
-        Exiled.Events.Handlers.Player.OpeningGenerator -= OnOpeningGenerator;
-        Exiled.Events.Handlers.Player.ClosingGenerator -= OnClosingGenerator;
+        Exiled.Events.Handlers.Player.UnlockingGenerator -= OnUnlockingGenerator;
     }
 
     private void OnInteractingDoor(InteractingDoorEventArgs ev)
@@ -44,7 +42,7 @@ public class Lucky : Ability
             return;
         }
 
-        if (Convert.ToByte(Random.Range(1, 101)) > 5) return;
+        if (Convert.ToByte(Random.Range(1, 101)) > 10) return;
         ev.IsAllowed = false;
 
         ev.Door.IsOpen = !ev.Door.IsOpen;
@@ -55,29 +53,18 @@ public class Lucky : Ability
         if (ev.Player != Owner)
             return;
 
-        if (Convert.ToByte(Random.Range(1, 101)) > 5) return;
+        if (Convert.ToByte(Random.Range(1, 101)) > 10) return;
         ev.IsAllowed = false;
 
         ev.InteractingChamber.IsOpen = !ev.InteractingChamber.IsOpen;
     }
 
-    private void OnOpeningGenerator(OpeningGeneratorEventArgs ev)
+    private void OnUnlockingGenerator(UnlockingGeneratorEventArgs ev)
     {
         if (ev.Player != Owner)
             return;
 
-        if (Convert.ToByte(Random.Range(1, 101)) > 5) return;
-        ev.IsAllowed = false;
-        ev.Generator.IsOpen = false;
-    }
-
-    private void OnClosingGenerator(ClosingGeneratorEventArgs ev)
-    {
-        if (ev.Player != Owner)
-            return;
-
-        if (Convert.ToByte(Random.Range(1, 101)) > 5) return;
-        ev.IsAllowed = false;
-        ev.Generator.IsOpen = true;
+        if (Convert.ToByte(Random.Range(1, 101)) > 10) return;
+        ev.IsAllowed = true;
     }
 }

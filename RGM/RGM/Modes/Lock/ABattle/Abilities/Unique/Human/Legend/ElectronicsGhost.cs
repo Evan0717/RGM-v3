@@ -162,7 +162,7 @@ public class ElectronicsGhost : Ability
     }
 
     /// <summary>
-    /// 모든 적 세력 인원에게서 능력을 1개 강탈하고, 30% 확률로 추가 강탈을 반복한다.
+    /// 모든 적 세력 인원에게서 능력을 1개 강탈하고, 25% 확률로 추가 강탈을 반복한다.
     /// </summary>
     private void StealAbilities()
     {
