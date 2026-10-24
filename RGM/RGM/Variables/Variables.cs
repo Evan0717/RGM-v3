@@ -48,29 +48,29 @@ namespace RGM.Variables
 
         // -------------------------------------------------------------------------------------------------
 
-        public static List<Transform> First = new();
-        public static List<Transform> Second = new();
-        public static List<Transform> Third = new();
-        public static List<Transform> Fourth = new();
-        public static List<Transform> Numbers = new();
-        public static List<Transform> RandomColors = new();
-        public static List<Transform> RandomLights = new();
-        public static List<Transform> Balls = new();
-        public static List<Mode> EnabledModeList = new();
-        public static List<ModeType> SubModeVote = new();
-        public static List<Player> JumpScareCooldown = new();
-        public static List<Player> GodModePlayers = new();
-        public static List<Player> ChatCooldown = new();
-        public static List<Player> EmotionCooldown = new();
-        public static List<Player> BugVotePlayers = new();
-        public static List<Player> BugVoteUsers = new();
-        public static List<Player> IntercomPlayers = new();
-        public static List<Player> ShopCooldown = new();
-        public static List<ModeType> HighlightModes = new();
-        public static List<Player> SuggestPlayers = new();
-        public static List<Player> MuteBGMPlayers = new();
-        public static List<string> UsedItems = new();
-        public static List<string> UsingGameChipUsers = new();
+        public static List<Transform> First = [];
+        public static List<Transform> Second = [];
+        public static List<Transform> Third = [];
+        public static List<Transform> Fourth = [];
+        public static List<Transform> Numbers = [];
+        public static List<Transform> RandomColors = [];
+        public static List<Transform> RandomLights = [];
+        public static List<Transform> Balls = [];
+        public static readonly List<Mode> EnabledModeList = [];
+        public static readonly List<ModeType> SubModeVote = [];
+        public static readonly List<Player> JumpScareCooldown = [];
+        public static readonly List<Player> GodModePlayers = [];
+        public static readonly List<Player> ChatCooldown = [];
+        public static readonly List<Player> EmotionCooldown = [];
+        public static readonly List<Player> BugVotePlayers = [];
+        public static readonly List<Player> BugVoteUsers = [];
+        public static readonly List<Player> IntercomPlayers = [];
+        public static readonly List<Player> ShopCooldown = [];
+        public static readonly List<ModeType> HighlightModes = [];
+        public static readonly List<Player> SuggestPlayers = [];
+        public static readonly List<Player> MuteBGMPlayers = [];
+        public static readonly List<string> UsedItems = [];
+        public static readonly List<string> UsingGameChipUsers = [];
         
         public static readonly List<string> Maps =
         [
@@ -351,19 +351,19 @@ namespace RGM.Variables
         // -------------------------------------------------------------------------------------------------
 
         public static Dictionary<ModeType, ModeData> ModeList = new();
-        public static Dictionary<ModeType, List<Player>> ModeVote = new();
-        public static Dictionary<string, float> OnGround = new();
-        public static Dictionary<Player, Room> CurrentRoom = new();
-        public static Dictionary<string, PlayerInfo> PlayersInfo = new();
-        public static Dictionary<string, PlayerReport> PlayersReport = new();
-        public static Dictionary<Player, AudioPlayer> PlayersAudio = new();
-        public static Dictionary<Door, int> InteractedDoors = new();
-        public static Dictionary<string, string> DiscordIdToUserId = new();
-        public static Dictionary<Player, List<string>> Chats = new();
-        public static Dictionary<Player, LabApi.Features.Wrappers.TextToy> Texts = new();
         public static Dictionary<Player, List<SettingBase>> PlayerSetting = new();
-        public static Dictionary<Player, string> TranslatorPlayers = new();
-        public static Dictionary<Player, Dictionary<EffectType, int>> EffectIntensities = new();
+        public static Dictionary<string, string> DiscordIdToUserId = new();
+        public static Dictionary<Player, Room> CurrentRoom = new();
+        public static readonly Dictionary<ModeType, List<Player>> ModeVote = new();
+        public static readonly Dictionary<string, float> OnGround = new();
+        public static readonly Dictionary<string, PlayerInfo> PlayersInfo = new();
+        public static readonly Dictionary<string, PlayerReport> PlayersReport = new();
+        public static readonly Dictionary<Player, AudioPlayer> PlayersAudio = new();
+        public static readonly Dictionary<Door, int> InteractedDoors = new();
+        public static readonly Dictionary<Player, List<string>> Chats = new();
+        public static readonly Dictionary<Player, LabApi.Features.Wrappers.TextToy> Texts = new();
+        public static readonly Dictionary<Player, string> TranslatorPlayers = new();
+        public static readonly Dictionary<Player, Dictionary<EffectType, int>> EffectIntensities = new();
         public static readonly Dictionary<string, string> KillEffects = new()
         {
             {"영혼 가출", "죽은 상대에게서 혼을 추출해냅니다!"},
@@ -449,7 +449,10 @@ namespace RGM.Variables
             {"도파민 우선", "하지만 재밌었죠?"},
             {"2026", "아무도 알아주지 않을 길을 걷는 자"},
             {"2025 Last Survivor", "2025 연말 이벤트의 마지막 생존자"},
-            {"마음만큼은 어린이", "2026년도 어린이날(5월 5일) 기념"}
+            {"마음만큼은 어린이", "2026년도 어린이날(5월 5일) 기념"},
+            {"ChessPiece The King", "랜덤게임모드 시즌 2 경험치 랭킹 1위 보상"},
+            {"ChessPiece The Queen", "랜덤게임모드 시즌 2 경험치 랭킹 2위 보상"},
+            {"ChessPiece The Rook", "랜덤게임모드 시즌 2 경험치 랭킹 3위 보상"},
         };
         public static readonly Dictionary<string, string> Icons = new()
         {

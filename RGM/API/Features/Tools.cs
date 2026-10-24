@@ -1087,16 +1087,16 @@ namespace RGM.API.Features
             {
                 player.Position += Vector3.up * speed;
                 elapsed += Time.deltaTime;
-                if (elapsed >= 0.9f)
+                if (elapsed >= 1f)
                 {
                     ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-                    grenade.FuseTime = 0.6f;
+                    grenade.FuseTime = 0.2f;
                     grenade.SpawnActive(player.Position, attacker);
-                    player.IsGodModeEnabled = false;
+                    GodModePlayers.Remove(player);
                     while (player.IsAlive)
                     {
                         ApplyInstantKill.Apply(attacker, player);
-                        yield return Timing.WaitForSeconds(0.2f);
+                        yield return Timing.WaitForSeconds(0.1f);
                     }
 
                     yield break;
