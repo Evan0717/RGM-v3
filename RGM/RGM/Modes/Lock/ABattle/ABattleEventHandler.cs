@@ -111,12 +111,11 @@ public class ABattleEventHandler(ABattle aBattle)
             return;
 
         if (ABattle.CurrentExtraModes.Contains("환상") && aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
-            Convert.ToByte(Random.Range(1, 101)) <= 5)
+            Convert.ToByte(Random.Range(1, 101)) <= 22)
         {
+            var currentRole = ev.Player.Role.Type;
             ev.Player.RemoveAllAbilities();
-            ev.Player.ClearInventory();
-            if (!ev.Player.IsScpRole()) 
-                ev.Player.GrantLoadout();
+            ev.Player.Role.Set(currentRole, RoleSpawnFlags.All);
             return;
         }
 
@@ -185,10 +184,10 @@ public class ABattleEventHandler(ABattle aBattle)
         if (ABattle.CurrentExtraModes.Contains("환상"))
         {
             if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
-                Convert.ToByte(Random.Range(1, 101)) <= 5)
+                Convert.ToByte(Random.Range(1, 101)) <= 22)
             {
                 ev.Player.RemoveAllAbilities();
-                ev.Player.ClearInventory();
+                ev.Player.Role.Set(RoleTypeId.Scp079);
                 return;
             }
         }

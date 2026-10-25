@@ -132,7 +132,7 @@ public class ABattle : Mode
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
         { "스펙업", "능력을 획득할 때마다 15(SCP 45)만큼 최대 체력이 증가합니다." },
         { "캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다." },
-        { "환상", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 5% 확룔로 모든 능력과 아이템이 초기화됩니다." },
+        //{ "환상", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 22% 확룔로 모든 능력과 아이템이 초기화됩니다." },
         { "지원", "45 ~ 165초 중 랜덤 간격으로 모두에게 능력 선택창이 열립니다." },
         {
             "난장판",
@@ -1696,20 +1696,20 @@ public class ABattle : Mode
         if (CurrentExtraModes.Contains("전주곡"))
         {
             if (player.IsNonePlayer()) return;
-            var giveEpic = Instance.GetRandomAbilities(player, AbilityCategory.Epic, 1,
+            var giveEpic = Instance.GetRandomAbilities(player, AbilityCategory.Epic, 2,
             [
                 AbilityType.EPIC_PRIEST, AbilityType.EPIC_RAMBO, AbilityType.EPIC_SUICIDEBOMBER,
                 AbilityType.EPIC_TERRORISTREMAINS, AbilityType.EPIC_SCP127, AbilityType.EPIC_SCP1509,
                 AbilityType.EPIC_CSAT, AbilityType.EPIC_RANDOMCHEST, AbilityType.EPIC_GRAVEROBBER,
-            ]).First();
+            ]);
 
             var giveLegend = Instance.GetRandomAbilities(player, AbilityCategory.Legend, 1,
                 [AbilityType.LEGEND_RESURRECTION, AbilityType.LEGEND_TRANSITION]).First();
 
-            player.AddAbility(giveEpic);
+            player.AddAbility(giveEpic[0]);
             if (Random.Range(1, 101) <= 50)
             {
-                player.AddAbility(Random.Range(1, 101) <= 10 ? giveLegend : giveEpic);
+                player.AddAbility(Random.Range(1, 101) <= 10 ? giveLegend : giveEpic[1]);
             }
         }
 
