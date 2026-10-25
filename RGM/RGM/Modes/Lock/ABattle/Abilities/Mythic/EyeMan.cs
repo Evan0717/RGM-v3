@@ -52,10 +52,10 @@ public class EyeMan : Ability
                         _beam.Rotation = Quaternion.LookRotation(Owner.CameraTransform.forward);
                         target.EnableEffect(EffectType.SinkHole, 1, 0.5f);
                         target.EnableEffect(EffectType.Blinded, 1, 0.5f);
-                        target.EnableEffect(EffectType.Slowness, 40, 0.5f);
+                        target.EnableEffect(EffectType.Slowness, 60, 0.5f);
                         target.CurrentItem = null;
                         ApplyFixedDamage.Apply(Owner, target,
-                            (target.IsScpRole() ? target.MaxHealth * 0.04f : target.MaxHealth * 0.12f) * abilityCount);
+                            (target.IsScpRole() ? target.MaxHealth * 0.05f : target.MaxHealth * 0.2f) * abilityCount);
                         Hitmarker.SendHitmarkerDirectly(Owner.ReferenceHub, 0.5f);
                     }
                     else
