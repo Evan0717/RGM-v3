@@ -80,14 +80,13 @@ namespace RGM.IEnumerators
 
         public static IEnumerator<float> ModeResetButton()
         {
-            float RemainingPress = 20;
+            float RemainingPress = 15;
             bool ButtonPressed = false;
             Transform redObject = null;
 
             while (!ButtonPressed)
             {
                 bool pressing = false;
-                RaycastHit hit;
                 int stack = 0;
 
                 foreach (var player in PlayerManager.List)
@@ -95,7 +94,7 @@ namespace RGM.IEnumerators
                     if (player == null || !player.IsConnected)
                         continue;
 
-                    if (Physics.Raycast(player.Position, Vector3.down, out hit, 1f, (LayerMask)1))
+                    if (Physics.Raycast(player.Position, Vector3.down, out var hit, 1f, (LayerMask)1))
                     {
                         if (hit.transform.name == "ModeResetRed")
                         {
@@ -106,7 +105,7 @@ namespace RGM.IEnumerators
                     }
                 }
 
-                if (PlayerManager.List.Count() > 1)
+                if (PlayerManager.List.Count > 1)
                 {
                     float maxPlayers = 30;
                     float pressMultiplier = Math.Max(1, maxPlayers / Server.PlayerCount);

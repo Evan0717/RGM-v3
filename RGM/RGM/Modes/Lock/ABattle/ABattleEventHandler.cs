@@ -11,6 +11,7 @@ using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Scp1507;
 using static RGM.Variables.Variable;
 using Exiled.API.Enums;
+using Exiled.CustomItems.API;
 using Exiled.Events.EventArgs.Server;
 using PlayerRoles;
 using RGM.API.Features;
@@ -106,25 +107,23 @@ public class ABattleEventHandler(ABattle aBattle)
         if (IsDementiaReuseBlocked(ev.Player, controller))
             return;
 
-        if (!ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+        if (!ABattle.CurrentExtraModes.Contains("환상") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
             return;
 
-        if (ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
-            Convert.ToByte(Random.Range(1, 101)) <= 10)
+        if (ABattle.CurrentExtraModes.Contains("환상") && aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
+            Convert.ToByte(Random.Range(1, 101)) <= 5)
         {
-            /*if (GodModePlayers.Contains(ev.Player))
-                GodModePlayers.Remove(ev.Player);
-
             ev.Player.RemoveAllAbilities();
-            ev.Player.Kill("욕심을 부리다가 아사했습니다.");*/
-            ApplyInstantKill.Apply(ev.Player, ev.Player);
+            ev.Player.ClearInventory();
+            if (!ev.Player.IsScpRole()) 
+                ev.Player.GrantLoadout();
             return;
         }
 
         if (aBattle.Selections.ContainsKey(ev.Player))
             aBattle.Selections[ev.Player].Clear();
 
-        if (ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+        if (ABattle.CurrentExtraModes.Contains("환상") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
             aBattle.StartSelect(ev.Player);
 
         if (!aBattle.PlayerWorkstations.TryGetValue(ev.Player, out var workstations))
@@ -180,20 +179,16 @@ public class ABattleEventHandler(ABattle aBattle)
         if (IsDementiaReuseBlocked(ev.Player, controller))
             return;
 
-        if (!ABattle.CurrentExtraModes.Contains("대출") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
+        if (!ABattle.CurrentExtraModes.Contains("환상") && aBattle.PlayerWorkstations[ev.Player].Contains(controller))
             return;
 
-        if (ABattle.CurrentExtraModes.Contains("대출"))
+        if (ABattle.CurrentExtraModes.Contains("환상"))
         {
             if (aBattle.PlayerWorkstations[ev.Player].Contains(controller) &&
-                Convert.ToByte(Random.Range(1, 101)) <= 10)
+                Convert.ToByte(Random.Range(1, 101)) <= 5)
             {
-                /*if (GodModePlayers.Contains(ev.Player))
-                GodModePlayers.Remove(ev.Player);
-
                 ev.Player.RemoveAllAbilities();
-                ev.Player.Kill("욕심을 부리다가 아사했습니다.");*/
-                ApplyInstantKill.Apply(ev.Player, ev.Player);
+                ev.Player.ClearInventory();
                 return;
             }
         }
@@ -201,7 +196,7 @@ public class ABattleEventHandler(ABattle aBattle)
         if (aBattle.Selections.ContainsKey(ev.Player))
             aBattle.Selections[ev.Player].Clear();
 
-        if (ABattle.CurrentExtraModes.Contains("대출"))
+        if (ABattle.CurrentExtraModes.Contains("환상"))
             aBattle.StartSelect(ev.Player);
 
         if (!aBattle.PlayerWorkstations.TryGetValue(ev.Player, out var workstations))

@@ -148,19 +148,6 @@ namespace RGM.Modes
                                 _posDict[player] = player.Position;
                                 break;
                             }
-                            case BlockedActions.Jumping:
-                            case BlockedActions.Attacking:
-                            case BlockedActions.Speaking:
-                            case BlockedActions.UsingItem:
-                            case BlockedActions.InteractingDoor:
-                            case BlockedActions.OpenGenerator:
-                            case BlockedActions.HeldKeyCard:
-                            case BlockedActions.HeldGun:
-                            case BlockedActions.HeldMedicalItem:
-                            case BlockedActions.Escaping:
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
                         }
                     }
                     catch (Exception e)
