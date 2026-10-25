@@ -71,26 +71,28 @@ public class ABattle : Mode
     public override string Author => "GoldenPig1205, DeniA, and RGM Contributors :D";
 
     public static ABattle Instance;
-    private static readonly Mutex _chaosModeLock = new();
+    private ABattleEventHandler _eventHandler;
 
+    public event Action<AddingAbilityEventArgs> AddingAbility;
+    
     // 동기화 객체
     private readonly object _selectionLock = new();
     private readonly object _cursorLock = new();
 
-    public Dictionary<Player, List<WorkstationController>> PlayerWorkstations = new();
-    public Dictionary<AbilityType, AbilityData> Abilities = new();
-    public Dictionary<Player, List<Ability>> PlayerAbilities = new();
-    public Dictionary<Player, List<AbilityType>> Selections = new();
-    public Dictionary<Player, bool> IsSelecting = new();
-    public Dictionary<Player, bool> IsLifeUsed = new();
-    public Dictionary<Player, RoleTypeId> LastDeathRoles = new();
-
-    private Dictionary<AbilityType, List<AbilityType>> SynergyAbilities = new();
-    private Dictionary<Player, int> SelectionCursor = new();
-    public event Action<AddingAbilityEventArgs> AddingAbility;
-    private Mutex _chaosMutex = new();
-    private ABattleEventHandler _eventHandler;
-
+    public readonly Dictionary<Player, List<WorkstationController>> PlayerWorkstations = new();
+    public readonly Dictionary<AbilityType, AbilityData> Abilities = new();
+    public readonly Dictionary<Player, List<Ability>> PlayerAbilities = new();
+    public readonly Dictionary<Player, List<AbilityType>> Selections = new();
+    public readonly Dictionary<Player, bool> IsSelecting = new();
+    public readonly Dictionary<Player, bool> IsLifeUsed = new();
+    public readonly Dictionary<Player, RoleTypeId> LastDeathRoles = new();
+    
+    private readonly Dictionary<AbilityType, List<AbilityType>> _synergyAbilities = new();
+    private readonly Dictionary<Player, int> _selectionCursor = new();
+    private readonly Mutex _chaosMutex = new();
+    
+    private static readonly Mutex ChaosModeLock = new();
+    
     public static readonly Dictionary<string, string> RatingColor = new()
     {
         { "일반", "#A4A4A4" },
@@ -130,7 +132,7 @@ public class ABattle : Mode
         { "잔칫상", $"<color={RatingColor["희귀"]}>희귀</color> 이상 등급의 능력이 등장할 확률이 높아집니다." },
         { "스펙업", "능력을 획득할 때마다 15(SCP 45)만큼 최대 체력이 증가합니다." },
         { "캐시 청소", "8분마다 모든 유저의 워크스테이션 획득 기록이 초기화됩니다." },
-        //{ "대출", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 18% 확률로 아사합니다." },
+        { "환상", "워크스테이션 제한이 해제됩니다. 각 워크스테이션마다 처음 1회를 제외하고 추가로 얻으려고 시도하는 경우, 5% 확룔로 모든 능력과 아이템이 초기화됩니다." },
         { "지원", "45 ~ 165초 중 랜덤 간격으로 모두에게 능력 선택창이 열립니다." },
         {
             "난장판",
@@ -265,7 +267,7 @@ public class ABattle : Mode
 
         IEnumerator<float> Chaos()
         {
-            if (!_chaosModeLock.WaitOne(5)) yield break;
+            if (!ChaosModeLock.WaitOne(5)) yield break;
 
             yield return Timing.WaitForSeconds(0.1f);
 
@@ -279,7 +281,7 @@ public class ABattle : Mode
             }
 
             FriendlyFire.Instance.OnDisabled();
-            _chaosModeLock.ReleaseMutex();
+            ChaosModeLock.ReleaseMutex();
         }
 
         IEnumerator<float> ChaosMaker()
@@ -523,7 +525,7 @@ public class ABattle : Mode
 
             if (requiresAbilityAttribute != null && requiresAbilityAttribute.Abilities.Length > 0)
             {
-                SynergyAbilities.Add(abilityAttribute.Type, requiresAbilityAttribute.Abilities.ToList());
+                _synergyAbilities.Add(abilityAttribute.Type, requiresAbilityAttribute.Abilities.ToList());
 
                 Abilities[abilityAttribute.Type].Category = AbilityCategory.Synergy;
                 Abilities[abilityAttribute.Type].Requires = requiresAbilityAttribute.Abilities.ToList();
@@ -577,7 +579,7 @@ public class ABattle : Mode
         LastDeathRoles.Clear();
         lock (_cursorLock)
         {
-            SelectionCursor.Clear();
+            _selectionCursor.Clear();
         }
 
         ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ABattleSetting.OnSSInput;
@@ -989,7 +991,7 @@ public class ABattle : Mode
     {
         List<Ability> abilities = PlayerAbilities[player];
 
-        foreach (var synergy in SynergyAbilities)
+        foreach (var synergy in _synergyAbilities)
         {
             // 시너지 능력의 요구사항이 중복을 포함할 수 있도록, 각 요구 능력의 개수를 세서 비교
             bool hasAllRequired = true;
@@ -1052,7 +1054,7 @@ public class ABattle : Mode
     // 플레이어로부터 시너지 능력 확인 후 제거
     private void RemoveSynergyAbility(List<Ability> abilities)
     {
-        foreach (var synergy in SynergyAbilities)
+        foreach (var synergy in _synergyAbilities)
         {
             if (!synergy.Value.All(req => abilities.Any(a => a.Data.AbilityType == req)) &&
                 abilities.Any(a => a.Data.AbilityType == synergy.Key))
@@ -1103,7 +1105,7 @@ public class ABattle : Mode
         LastDeathRoles.Remove(player);
         lock (_cursorLock)
         {
-            SelectionCursor.Remove(player);
+            _selectionCursor.Remove(player);
         }
     }
 
@@ -1307,7 +1309,7 @@ public class ABattle : Mode
         lock (_selectionLock)
         {
             Selections[player] = abilities;
-            SelectionCursor[player] = 0;
+            _selectionCursor[player] = 0;
         }
 
         if (Convert.ToByte(Random.Range(1, 101)) <= roleAbilityChance) // 전용 능력
@@ -1396,7 +1398,7 @@ public class ABattle : Mode
                         abilities.Count == 0)
                     {
                         Selections.Remove(player);
-                        SelectionCursor.Remove(player);
+                        _selectionCursor.Remove(player);
                         IsSelecting[player] = false;
                         shouldClose = true;
                     }
@@ -1440,7 +1442,7 @@ public class ABattle : Mode
 
             selectedAbility = currentAbilities[Random.Range(0, currentAbilities.Count)];
             Selections.Remove(player);
-            SelectionCursor.Remove(player);
+            _selectionCursor.Remove(player);
             IsSelecting[player] = false;
         }
 
@@ -1482,10 +1484,10 @@ public class ABattle : Mode
 
         string BuildSelectionText(List<AbilityType> abilities)
         {
-            if (!SelectionCursor.ContainsKey(player))
-                SelectionCursor[player] = 0;
+            if (!_selectionCursor.ContainsKey(player))
+                _selectionCursor[player] = 0;
 
-            int cursor = SelectionCursor[player];
+            int cursor = _selectionCursor[player];
             if (abilities.Count > 0)
                 cursor = Math.Max(0, Math.Min(cursor, abilities.Count - 1));
 
@@ -1587,7 +1589,7 @@ public class ABattle : Mode
                 // 첫 입력이 선택권을 즉시 소비하도록 처리해 다음 프레임에 도착한 입력을 차단한다.
                 ability = abilities[index - 1];
                 Selections.Remove(player);
-                SelectionCursor.Remove(player);
+                _selectionCursor.Remove(player);
                 IsSelecting[player] = false;
             }
         }
@@ -1610,16 +1612,16 @@ public class ABattle : Mode
 
         lock (_cursorLock) // 교차 동기화 방지
         {
-            if (!SelectionCursor.ContainsKey(player))
-                SelectionCursor[player] = 0;
+            if (!_selectionCursor.ContainsKey(player))
+                _selectionCursor[player] = 0;
 
-            int cursor = SelectionCursor[player];
+            int cursor = _selectionCursor[player];
             cursor = (cursor + delta) % abilities.Count;
 
             if (cursor < 0)
                 cursor += abilities.Count;
 
-            SelectionCursor[player] = cursor;
+            _selectionCursor[player] = cursor;
         }
 
         PlayersAudio[player].TryPlay("Select");
@@ -1635,12 +1637,12 @@ public class ABattle : Mode
                 return false;
             }
 
-            if (!SelectionCursor.ContainsKey(player))
-                SelectionCursor[player] = 0;
+            if (!_selectionCursor.ContainsKey(player))
+                _selectionCursor[player] = 0;
 
             PlayersAudio[player].TryPlay("SelectConfirm", 1.5f);
 
-            int cursor = Math.Max(0, Math.Min(SelectionCursor[player], abilities.Count - 1));
+            int cursor = Math.Max(0, Math.Min(_selectionCursor[player], abilities.Count - 1));
             return Select(player, cursor + 1, out response);
         }
     }
@@ -1682,7 +1684,7 @@ public class ABattle : Mode
         {
             if (PlayerWorkstations.ContainsKey(player))
                 IsSelecting[player] = false;
-            SelectionCursor.Remove(player);
+            _selectionCursor.Remove(player);
         }
 
         if (PlayerWorkstations.ContainsKey(player))
