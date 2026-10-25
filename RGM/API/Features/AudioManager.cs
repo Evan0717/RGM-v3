@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 
 namespace RGM.API.Features
 {
@@ -18,20 +19,36 @@ namespace RGM.API.Features
          */
         public static AudioClipPlayback TryPlay(this AudioPlayer audioPlayer, string clipName, float volume = 1, bool loop = false, bool destroyOnEnd = true)
         {
+            if (audioPlayer == null)
+            {
+                Log.Warn($"Cannot play audio clip '{clipName}': the audio player is unavailable.");
+                return null;
+            }
+
             string audioDir = Paths.Plugins + "/audio/";
             string clipPath = System.IO.Path.Combine(audioDir, clipName + ".ogg");
 
-            if (System.IO.File.Exists(clipPath))
+            if (!System.IO.File.Exists(clipPath))
+                return null;
+
+            try
             {
-                if (!AudioClipStorage.AudioClips.ContainsKey(clipName))
+                if (!AudioClipStorage.AudioClips.TryGetValue(clipName, out var clip) || clip == null)
                     AudioClipStorage.LoadClip(clipPath, clipName);
 
-                AudioClipPlayback audioClipPlayback = audioPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
+                if (!AudioClipStorage.AudioClips.TryGetValue(clipName, out clip) || clip == null)
+                {
+                    Log.Warn($"Cannot play audio clip '{clipName}': loading '{clipPath}' failed.");
+                    return null;
+                }
 
-                return audioClipPlayback;
+                return audioPlayer.AddClip(clipName, volume, loop, destroyOnEnd);
             }
-
-            return null;
+            catch (Exception exception)
+            {
+                Log.Error($"Failed to play audio clip '{clipName}' from '{clipPath}': {exception}");
+                return null;
+            }
         }
     }
 }
