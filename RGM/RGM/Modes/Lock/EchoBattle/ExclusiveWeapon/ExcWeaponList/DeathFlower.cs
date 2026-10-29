@@ -10,12 +10,12 @@ namespace RGM.Modes.ExclusiveWeapon;
 
 /// <summary>
 /// Death Flower.
-/// Passive: HP 15%+(res*3%) and critical chance 5%. On lethal hit: invuln/invis/speed for (0.9s*res), max 3 times.
+/// Passive: HP 15%+(res*3%) and critical chance 5%. On lethal hit: invuln/invis/speed for (0.8s*res), max 3 times.
 /// On trigger: heal MaxHP * (10% + 5%*res).
 /// </summary>
 [ExclusiveWeapon(
     "피안화",
-    "HP 15% + (공진 수치 * 3%) 및 크리티컬 확률 5% 증가. 사망에 이르는 피해 시 (0.9초 * 공진 수치)간 무적·투명·이속 증가(최대 3회). 발동 시 최대 체력의 10% + (4% * 공진 수치) 회복.",
+    "HP 15% + (공진 수치 * 3%) 및 크리티컬 확률 5% 증가. 사망에 이르는 피해 시 (0.8초 * 공진 수치)간 무적·투명·이속 증가(최대 3회). 발동 시 최대 체력의 10% + (3% * 공진 수치) 회복.",
     ExclusiveWeaponType.DeathFlower)]
 public class DeathFlower : ExcWeapon
 {
@@ -28,10 +28,10 @@ public class DeathFlower : ExcWeapon
     public override float PassiveHpPercent => 15f + Resonance * 3f;
     public override float PassiveCriticalChance => 5f;
 
-    const int MaxTriggers = 3;
+    private const int MaxTriggers = 3;
 
-    int _triggersUsed;
-    bool _invulnerable;
+    private int _triggersUsed;
+    private bool _invulnerable;
 
     public override void OnEnabled()
     {
@@ -48,7 +48,7 @@ public class DeathFlower : ExcWeapon
         _triggersUsed = 0;
     }
 
-    void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Player != Owner || Owner == null || !Owner.IsAlive)
             return;
@@ -63,24 +63,24 @@ public class DeathFlower : ExcWeapon
         if (_triggersUsed >= MaxTriggers)
             return;
 
-        float damage = ev.DamageHandler?.Damage ?? 0f;
+        var damage = ev.DamageHandler?.Damage ?? 0f;
         if (damage <= 0f && !ev.IsInstantKill)
             return;
 
-        float totalHp = Owner.Health + Owner.ArtificialHealth + Owner.HumeShield;
-        bool lethal = ev.IsInstantKill || damage >= totalHp;
+        var totalHp = Owner.Health + Owner.ArtificialHealth + Owner.HumeShield;
+        var lethal = ev.IsInstantKill || damage >= totalHp;
         if (!lethal)
             return;
 
         _triggersUsed++;
         ev.IsAllowed = false;
-        ev.DamageHandler.Damage = 0f;
+        if (ev.DamageHandler != null) ev.DamageHandler.Damage = 0f;
 
-        float duration = 0.9f * Resonance;
-        float speedBonus = 25f;
-        float heal = Owner.MaxHealth * (0.10f + 0.04f * Resonance);
+        var duration = 0.8f * Resonance;
+        var speedBonus = 25f;
+        var heal = Owner.MaxHealth * (0.10f + 0.03f * Resonance);
 
-        float room = Owner.MaxHealth - Owner.Health;
+        var room = Owner.MaxHealth - Owner.Health;
         if (room > 0f)
             // Heal()은 Healing 이벤트를 발생시켜 치료 효과 보너스가 적용된다.
             Owner.Health += Mathf.Min(heal, room);
@@ -99,7 +99,7 @@ public class DeathFlower : ExcWeapon
             2f);
     }
 
-    IEnumerator<float> InvulnerabilityRoutine(float duration)
+    private IEnumerator<float> InvulnerabilityRoutine(float duration)
     {
         yield return Timing.WaitForSeconds(duration);
         _invulnerable = false;

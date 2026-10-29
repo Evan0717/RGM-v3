@@ -1,5 +1,5 @@
 using Exiled.Events.EventArgs.Player;
-using RGM.Modes;
+using RGM.API.Features;
 using UnityEngine;
 
 namespace RGM.Modes.ExclusiveWeapon;
@@ -10,7 +10,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "쿠모키리",
-    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 공진 수치 * (공진 수치 + 1) / 2 확률로 618.03 * (0.5 + 0.5 * 공진 수치) 만큼 고정 피해.",
+    "공격력 11% + (공진 수치 * 2%) 증가. 적 타격 시 공진 수치 * (공진 수치 + 1) / 2 확률로 618.03 * (1 + 0.25 * 공진 수치) 만큼 고정 피해.",
     ExclusiveWeaponType.KumoKiri)]
 public class KumoKiri : ExcWeapon
 {
@@ -22,7 +22,7 @@ public class KumoKiri : ExcWeapon
 
     public override float PassiveAttackPercent => 11f + Resonance * 2f;
 
-    const float FixedDamage = 618.03f;
+    private const float FixedDamage = 618.03f;
 
     public override void OnEnabled()
     {
@@ -34,12 +34,12 @@ public class KumoKiri : ExcWeapon
         Exiled.Events.Handlers.Player.Hurting -= OnHurting;
     }
 
-    void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (ev.Attacker != Owner || Owner == null)
             return;
 
-        if (EchoStats.IsApplyingFixedDamage(ev.Player))
+        if (ApplyFixedDamage.IsApplying)
             return;
 
         if (ev.DamageHandler == null || ev.DamageHandler.Damage <= 0f)
@@ -51,14 +51,17 @@ public class KumoKiri : ExcWeapon
         if (EchoStats.AreAttackModifiersIgnored(Owner))
             return;
 
-        float chance = Resonance * (Resonance + 1) / 2f;
+        var chance = Resonance * (Resonance + 1) / 2f;
         if (Random.Range(0f, 100f) >= chance)
             return;
 
-        EchoStats.DealFixedDamage(ev.Player, Owner, FixedDamage * (0.5f + 0.5f * Resonance));
+        var damage = FixedDamage * (1f + 0.25f * (Resonance - 1));
+        if (!ApplyFixedDamage.Apply(Owner, ev.Player, damage))
+            return;
+
         EchoBattleCore.ShowNotification(
             Owner,
-            $"<color=#cc88ff>쿠모키리</color> 고정 피해 +{FixedDamage * (0.5f + 0.5f * Resonance):0.##}",
+            $"<color=#cc88ff>쿠모키리</color> 고정 피해 +{damage:0.###}",
             1.2f);
     }
 }

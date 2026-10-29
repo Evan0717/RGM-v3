@@ -11,7 +11,10 @@ namespace RGM.Modes.ExclusiveWeapon;
 /// </summary>
 [ExclusiveWeapon(
     "스펙트럼 블래스터",
-    "공격력 8% + (공진 수치 * 2%) 증가. 적 공격 시 0.8초 간격으로 이동속도 (1 * 공진 수치)%만큼 증가.\n최대 8스택 중첩, 5초 지속, 5초 내에 적 공격 시 효과 지속 시간 갱신.",
+    """
+    공격력 8% + (공진 수치 * 2%) 증가. 적 공격 시 0.6초 간격으로 이동속도 (2 * 공진 수치)%만큼 증가.
+    최대 7스택 중첩, 5초 지속, 5초 내에 적 공격 시 효과 지속 시간 갱신.
+    """,
     ExclusiveWeaponType.SpectrumBlaster)]
 public class SpectrumBlaster : ExcWeapon
 {
@@ -22,9 +25,9 @@ public class SpectrumBlaster : ExcWeapon
     public override float SecondaryStatMax => 29.3f;
     public override float PassiveAttackPercent => 8f + Resonance * 2f;
 
-    const float StackIntervalSeconds = 0.8f;
+    const float StackIntervalSeconds = 0.6f;
     const float DurationSeconds = 5f;
-    const int MaxStacks = 8;
+    const int MaxStacks = 7;
 
     int _stacks;
     float _lastStackAt;
@@ -74,7 +77,7 @@ public class SpectrumBlaster : ExcWeapon
         }
 
         _lastHitAt = now;
-        byte movementBoost = (byte)Mathf.Clamp(_stacks * Resonance, 1, byte.MaxValue);
+        byte movementBoost = (byte)Mathf.Clamp(_stacks * 2 * Resonance, 1, byte.MaxValue);
         Owner.EnableEffect(EffectType.MovementBoost, movementBoost, DurationSeconds);
     }
 }
