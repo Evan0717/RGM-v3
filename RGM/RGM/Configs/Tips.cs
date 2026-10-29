@@ -7,7 +7,7 @@ namespace RGM
 {
     public class Tips
     {
-        public static List<string> LobbyTips { get; set; } =
+        public static List<string> LobbyTips { get; } =
         [
             "꺼진 모드도 다시 보라. 어느 순간 개편되어 있을 수 있다.",
             "<b>워크스테이션 업그레이드</b> 모드는 초기에 \"능력자 대전\" 형식으로 기획되었다.",

@@ -29,7 +29,7 @@ namespace RGM
 
         public override string Name => "RGM";
         public override string Author => "GoldenPig1205";
-        public override Version Version { get; } = new(3, 23, 12);
+        public override Version Version { get; } = new(3, 23, 15);
         public override Version RequiredExiledVersion { get; } = new(9, 15, 0, 0);
 
         public override void OnEnabled()
@@ -120,7 +120,6 @@ namespace RGM
                 Exiled.Events.Handlers.Player.Banning += OnBanning;
                 Exiled.Events.Handlers.Player.ChangingGroup += OnChangingGroup;
                 Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
-                Exiled.Events.Handlers.Player.DamagingShootingTarget += OnDamagingShootingTarget;
                 Exiled.Events.Handlers.Player.Escaping += OnEscaping;
 
                 Exiled.Events.Handlers.Warhead.Detonating += OnDetonating;

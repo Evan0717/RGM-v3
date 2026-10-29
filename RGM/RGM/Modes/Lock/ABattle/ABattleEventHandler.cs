@@ -9,9 +9,7 @@ using UnityEngine;
 using Exiled.Events.EventArgs.Scp079;
 using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Scp1507;
-using static RGM.Variables.Variable;
 using Exiled.API.Enums;
-using Exiled.CustomItems.API;
 using Exiled.Events.EventArgs.Server;
 using PlayerRoles;
 using RGM.API.Features;
@@ -73,8 +71,6 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnSpawned(SpawnedEventArgs ev)
     {
-        if (!ev.Player.IsScpRole()) ev.Player.ApplyGodMode(50f);
-
         if (_pendingAbilityRestores.TryGetValue(ev.Player, out var abilities))
         {
             _pendingAbilityRestores.Remove(ev.Player);
@@ -92,6 +88,9 @@ public class ABattleEventHandler(ABattle aBattle)
 
         if (player.IsAlive)
             ABattle.ApplyPrelude(player);
+        
+        if (!player.IsScp) 
+            player.ApplyGodMode(50f);
     }
 
     private void OnJumping(JumpingEventArgs ev)

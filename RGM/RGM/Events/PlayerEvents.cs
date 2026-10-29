@@ -56,7 +56,8 @@ namespace RGM.Events
             ev.Player.Setup();
 
             /*
-             * 현재 출석 체크 기능 작동 안 함. 점검 필요.
+             * 현재 출석 체크 기능 작동 안 함.
+             * 인데 왜 재부팅하니 다시 작동하는지 모르겟음.
              */
             List<string> defaultValues = [.. Enumerable.Repeat("0", 35)];
 
@@ -649,6 +650,7 @@ namespace RGM.Events
                     {
                         ev.Player.MaxHealth = 4500;
                         ev.Player.Health = ev.Player.MaxHealth;
+                        // 라운드 시작시 단 1번만 작동함. 매 스폰마다 작동하도록 수정해야 함.
                     }
 
                     if (CurrentMode != ModeType.None && CurrentMode.GetModeData().Info == ModeInfo.Plus)
@@ -719,6 +721,8 @@ namespace RGM.Events
                     SpawnReason.Escaped
                 }.Contains(ev.Reason) &&
                 (CurrentMode.GetModeData().Info == ModeInfo.Plus ||
+                 (CurrentMode.GetModeData().Info == ModeInfo.Set && 
+                  CurrentMode == ModeType.SoulMate) ||
                  (CurrentMode.GetModeData().Info == ModeInfo.Lock &&
                   CurrentMode == ModeType.EchoBattle &&
                   CurrentMode == ModeType.Rank &&
@@ -956,7 +960,7 @@ namespace RGM.Events
             if (pickup == null)
                 return;
 
-            Timing.CallDelayed(5 * 60, () =>
+            Timing.CallDelayed(3 * 60, () =>
             {
                 if (pickup.Base == null)
                     return;
@@ -971,7 +975,7 @@ namespace RGM.Events
             if (ammoPickups == null)
                 return;
 
-            Timing.CallDelayed(5 * 60, () =>
+            Timing.CallDelayed(3 * 60, () =>
             {
                 foreach (var ammo in ammoPickups)
                 {
@@ -1052,14 +1056,6 @@ namespace RGM.Events
         {
             if (SelectMode.Contains("Secret") && Round.IsLobby)
                 ev.IsAllowed = false;
-        }
-
-        public static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
-        {
-            if (ev.ShootingTarget == Target1 || ev.ShootingTarget == Target2)
-            {
-                ShootingTargetSignal = true;
-            }
         }
 
         public static void OnEscaping(EscapingEventArgs ev)

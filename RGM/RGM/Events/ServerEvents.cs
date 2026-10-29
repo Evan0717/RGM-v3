@@ -88,7 +88,6 @@ namespace RGM.Events
             Timing.RunCoroutine(ModeResetButton());
             Timing.RunCoroutine(IsFallDown());
             Timing.RunCoroutine(Ball());
-            Timing.RunCoroutine(MovingShootingTarget());
 
             var rand = Random.Range(1, 6);
 
