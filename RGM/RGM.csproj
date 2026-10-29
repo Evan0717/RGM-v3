@@ -720,12 +720,6 @@
     <Compile Include="RGM\Modes\Plus\Minecraft\Blocks\WhiteConcrete.cs" />
     <Compile Include="RGM\Modes\Plus\Minecraft\Minecraft.cs" />
     <Compile Include="RGM\Modes\Plus\Minecraft\MinecraftSetting.cs" />
-    <Compile Include="RGM\Modes\Plus\Store\StoreEventHandler.cs" />
-    <Compile Include="RGM\Modes\Plus\Store\StoreItems\Starter\기본인간의_의지.cs" />
-    <Compile Include="RGM\Modes\Plus\Store\Store.cs" />
-    <Compile Include="RGM\Modes\Plus\Store\StoreSetting.cs" />
-    <Compile Include="RGM\Modes\Plus\Store\StoreItem.cs" />
-    <Compile Include="RGM\Modes\Plus\Store\Variables\ServerManagers.cs" />
     <Compile Include="RGM\Modes\Lock\TFT\TFT.cs" />
     <Compile Include="RGM\Modes\Plus\BomberMan\BomberMan.cs" />
     <Compile Include="RGM\Modes\Plus\DogFight\DogFight.cs" />
@@ -1031,10 +1025,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RGM\Commands\RemoteAdminCommands\AdminFeatures\PlayerManages\" />
-    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Basic\" />
-    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Completed\" />
-    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Component\" />
-    <Folder Include="RGM\Modes\Plus\Store\StoreItems\Prism\" />
     <Folder Include="RGM\Modes\Set\TTT\Roles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
