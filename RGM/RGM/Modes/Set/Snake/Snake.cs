@@ -13,8 +13,7 @@ using AFK;
 
 namespace RGM.Modes
 {
-    // 플레이어와 겹쳐 있을 경우 스네이크 점수를 뺏어오는 버그 있음
-    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.Snake)]
+    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.Snake)]
     public class Snake : Mode
     {
         public override string Name => "스네이크";
@@ -66,6 +65,7 @@ namespace RGM.Modes
             Exiled.Events.Handlers.Player.Died -= OnDied;
 
             SnakeEventManager.Cleanup();
+            SnakeGameMonitor.StopMonitoring();
 
             SnakeEventManager.OnSnakeGameEnd -= OnSnakeGameEnd;
             SnakeEventManager.OnSnakeScoreChanged -= OnSnakeScoreChanged;

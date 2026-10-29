@@ -12,6 +12,9 @@ namespace RGM.Modes.SnakeSystem
     {
         private static CoroutineHandle _monitorCoroutine;
         private static Dictionary<Player, PlayerSnakeData> _playerSnakeData = new Dictionary<Player, PlayerSnakeData>();
+        // A SnakeDisplay represents one game session. It must never be used to
+        // update the score of every player standing near it.
+        private static Dictionary<SnakeDisplay, Player> _displayOwners = new Dictionary<SnakeDisplay, Player>();
 
         private class PlayerSnakeData
         {
@@ -35,6 +38,7 @@ namespace RGM.Modes.SnakeSystem
                 Timing.KillCoroutines(_monitorCoroutine);
 
             _playerSnakeData.Clear();
+            _displayOwners.Clear();
         }
 
         private static IEnumerator<float> MonitorSnakeGames()
@@ -80,7 +84,7 @@ namespace RGM.Modes.SnakeSystem
                 if (isHoldingSnakeCard)
                 {
                     var activeDisplay = FindActiveDisplayForPlayer(player, snakeDisplays);
-                    if (activeDisplay != null)
+                    if (activeDisplay != null && IsDisplayOwnedByPlayer(activeDisplay, player))
                     {
                         ProcessPlayerSnakeDisplay(player, activeDisplay);
                     }
@@ -94,6 +98,8 @@ namespace RGM.Modes.SnakeSystem
                     {
                         _playerSnakeData[player].IsPlayingSnake = false;
                     }
+
+                    ReleaseDisplaysOwnedBy(player);
                 }
             }
         }
@@ -108,18 +114,10 @@ namespace RGM.Modes.SnakeSystem
                     return false;
                 }
 
-                var itemType = currentItem.Type.ToString();
-
-                // Tüm keycard türlerini kontrol et
-                bool isKeycard = itemType.Contains("Keycard") || itemType.Contains("Card");
-
-                if (isKeycard)
-                {
-                    // Keycard tutuyorsa muhtemelen Snake oynuyor
-                    return true;
-                }
-
-                return false;
+                // Snake is played only with the Chaos Insurgency keycard.
+                // Treating every keycard as a Snake card made nearby players
+                // observe and receive the same display's score.
+                return currentItem.Type == ItemType.KeycardChaosInsurgency;
             }
             catch (Exception ex)
             {
@@ -158,6 +156,34 @@ namespace RGM.Modes.SnakeSystem
             }
 
             return closestDisplay;
+        }
+
+        private static bool IsDisplayOwnedByPlayer(SnakeDisplay display, Player player)
+        {
+            if (_displayOwners.TryGetValue(display, out var owner))
+            {
+                if (owner != null && owner.IsConnected && owner.IsAlive && IsPlayerHoldingSnakeCard(owner))
+                    return owner == player;
+
+                _displayOwners.Remove(display);
+            }
+
+            _displayOwners[display] = player;
+            return true;
+        }
+
+        private static void ReleaseDisplaysOwnedBy(Player player)
+        {
+            var displaysToRelease = new List<SnakeDisplay>();
+
+            foreach (var entry in _displayOwners)
+            {
+                if (entry.Value == player)
+                    displaysToRelease.Add(entry.Key);
+            }
+
+            foreach (var display in displaysToRelease)
+                _displayOwners.Remove(display);
         }
 
         private static void ProcessPlayerSnakeDisplay(Player player, SnakeDisplay display)
@@ -259,6 +285,7 @@ namespace RGM.Modes.SnakeSystem
             foreach (var player in playersToRemove)
             {
                 _playerSnakeData.Remove(player);
+                ReleaseDisplaysOwnedBy(player);
             }
         }
 
@@ -268,6 +295,8 @@ namespace RGM.Modes.SnakeSystem
             {
                 _playerSnakeData.Remove(player);
             }
+
+            ReleaseDisplaysOwnedBy(player);
         }
     }
 }
