@@ -140,7 +140,7 @@ $"""
             if (ev.Attacker != null)
             {
                 float s = ev.Attacker.CurrentSpectatingPlayers.Count();
-                ev.DamageHandler.Damage = ev.DamageHandler.Damage + ev.DamageHandler.Damage * (0.15f * s);
+                ev.DamageHandler.Damage += ev.DamageHandler.Damage * (0.15f * s);
             }
         }
 
