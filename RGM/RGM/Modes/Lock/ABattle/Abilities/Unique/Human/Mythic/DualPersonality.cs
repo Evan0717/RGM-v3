@@ -146,6 +146,7 @@ public class DualPersonality : Ability
             else
                 SetForm(lanternForm);
         }
+        // ReSharper disable once IteratorNeverReturns
     }
 
     private void SetForm(Form next)
