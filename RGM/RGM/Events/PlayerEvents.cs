@@ -960,7 +960,7 @@ namespace RGM.Events
             if (pickup == null)
                 return;
 
-            Timing.CallDelayed(5 * 60, () =>
+            Timing.CallDelayed(3 * 60, () =>
             {
                 if (pickup.Base == null)
                     return;
@@ -975,7 +975,7 @@ namespace RGM.Events
             if (ammoPickups == null)
                 return;
 
-            Timing.CallDelayed(5 * 60, () =>
+            Timing.CallDelayed(3 * 60, () =>
             {
                 foreach (var ammo in ammoPickups)
                 {
@@ -1056,14 +1056,6 @@ namespace RGM.Events
         {
             if (SelectMode.Contains("Secret") && Round.IsLobby)
                 ev.IsAllowed = false;
-        }
-
-        public static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
-        {
-            if (ev.ShootingTarget == Target1 || ev.ShootingTarget == Target2)
-            {
-                ShootingTargetSignal = true;
-            }
         }
 
         public static void OnEscaping(EscapingEventArgs ev)

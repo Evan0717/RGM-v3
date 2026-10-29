@@ -39,9 +39,6 @@ namespace RGM.Variables
         public static bool IsSuggestProcessing = false;
         public static bool IsWaveEnabled = true;
         public static bool IsNonePlayerAllowed = true;
-
-        public static ShootingTargetToy Target1;
-        public static ShootingTargetToy Target2;
         
         public static TimeSpan BanTime =>
             TimeSpan.TryParse(Main.Instance?.Config?.BanTime, out var data) ? data : TimeSpan.FromDays(7);
