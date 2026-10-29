@@ -56,7 +56,7 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
 
         private IEnumerator<float> OnModeStarted()
         {
-            for (float i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
+            for (var i = 1; i < PlayerManager.List.Count / 10 + 2; i++)
                 _finders.Add(PlayerManager.List.Where(x => !_finders.Contains(x)).ToList().GetRandomValue());
 
             PlayerManager.List.ToList().ForEach(x => x.IsGodModeEnabled = true);
@@ -103,10 +103,10 @@ TIP. [ALT] 키를 통해 아군을 밀칠 수 있습니다.
 
         private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (!ev.Player.TryGetLookPlayer(2, out Player target, out RaycastHit? hit)) return;
+            if (!ev.Player.TryGetLookPlayer(2, out var target, out _)) return;
             if (!target.IsScpRole())
             {
-                ev.Player.Push(target);
+                ev.Player.Push(target, height:0.7f);
             }
         }
 
