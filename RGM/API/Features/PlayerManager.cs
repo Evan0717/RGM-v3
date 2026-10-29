@@ -642,7 +642,7 @@ namespace RGM.API.Features
             player.AddItem(scp330);
         }
 
-        public static void Push(this Player player, Player target, float distance = 5, float height = 1)
+        public static void Push(this Player player, Player target, float distance = 3, float height = 1)
         {
             Vector3 horizontalDirection = target.Position - player.Position;
             horizontalDirection.y = 0;

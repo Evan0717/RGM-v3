@@ -33,7 +33,13 @@ namespace RGM.Modes
         private const string TargetObjectName = "Scp999"; // 목표 오브젝트 이름
 
         private const int RaycastMask = 1 << 0;
+        private const float CpsWindowSeconds = 1f;
+        private const float IllegalCpsThreshold = 15.57f;
+        private const float IllegalCpsDurationSeconds = 1.2f;
         private readonly Dictionary<Player, int> _scores = new();
+        private readonly Dictionary<Player, Queue<float>> _strokeTimes = new();
+        private readonly Dictionary<Player, float> _highCpsStartedAt = new();
+        private readonly HashSet<Player> _disqualifiedPlayers = new();
         private bool _gameStarted;
         private bool _gameEnded;
         private int _time;
@@ -52,6 +58,7 @@ namespace RGM.Modes
             foreach (var player in PlayerManager.List)
             {
                 _scores[player] = 0;
+                _strokeTimes[player] = new Queue<float>();
             }
 
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
@@ -65,6 +72,9 @@ namespace RGM.Modes
             Timing.KillCoroutines(_timerHandle);
 
             _scores.Clear();
+            _strokeTimes.Clear();
+            _highCpsStartedAt.Clear();
+            _disqualifiedPlayers.Clear();
         }
 
         private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
@@ -88,7 +98,13 @@ namespace RGM.Modes
                 Tools.PlaySound(player.Transform, "scp-999", 2);
                 return;
             }
+
+            if (_disqualifiedPlayers.Contains(player))
+                return;
+
             _scores[player]++;
+            _strokeTimes[player].Enqueue(Time.realtimeSinceStartup);
+            CheckIsIllegal();
             player.ShowHitMarker();
 
             PlayersReport[player.UserId].Damage = _scores[player];
@@ -123,11 +139,16 @@ namespace RGM.Modes
 
             for (_time = 0; _time < _timeLimit; _time++)
             {
+                CheckIsIllegal();
+
                 Player leader = null;
                 int leaderScore = 0;
 
                 foreach (var entry in _scores)
                 {
+                    if (_disqualifiedPlayers.Contains(entry.Key))
+                        continue;
+
                     if (entry.Value > leaderScore)
                     {
                         leaderScore = entry.Value;
@@ -144,8 +165,7 @@ namespace RGM.Modes
                 foreach (var player in PlayerManager.List.Where(p => p != null))
                 {
                     int score = _scores.TryGetValue(player, out int value) ? value : 0;
-                    float elapsedSeconds = _time / 5f;
-                    float cps = elapsedSeconds > 0 ? score / elapsedSeconds : 0f;
+                    float cps = GetCps(player, Time.realtimeSinceStartup);
                     player.AddHint("점수", $" <size=20>{remain}초 남음 | 클릭 수: {score}회\n{leaderText}\n당신의 초당 클릭 수: {cps:F2}</size>", 0.2f);
                 }
 
@@ -153,6 +173,49 @@ namespace RGM.Modes
             }
 
             AnnounceWinner();
+        }
+
+        private void CheckIsIllegal()
+        {
+            float now = Time.realtimeSinceStartup;
+
+            foreach (var entry in _strokeTimes)
+            {
+                Player player = entry.Key;
+                if (_disqualifiedPlayers.Contains(player) || !player.IsAlive)
+                    continue;
+
+                float cps = GetCps(player, now);
+                if (cps < IllegalCpsThreshold)
+                {
+                    _highCpsStartedAt.Remove(player);
+                    continue;
+                }
+
+                if (!_highCpsStartedAt.TryGetValue(player, out float startedAt))
+                {
+                    _highCpsStartedAt[player] = now;
+                    continue;
+                }
+
+                if (now - startedAt < IllegalCpsDurationSeconds)
+                    continue;
+
+                _disqualifiedPlayers.Add(player);
+                _highCpsStartedAt.Remove(player);
+                player.Kill("꼼수를 쓰면 안되죠!");
+            }
+        }
+
+        private float GetCps(Player player, float now)
+        {
+            if (!_strokeTimes.TryGetValue(player, out Queue<float> strokeTimes))
+                return 0f;
+
+            while (strokeTimes.Count > 0 && now - strokeTimes.Peek() > CpsWindowSeconds)
+                strokeTimes.Dequeue();
+
+            return strokeTimes.Count / CpsWindowSeconds;
         }
 
         private void AnnounceWinner()
@@ -163,6 +226,9 @@ namespace RGM.Modes
 
             foreach (var entry in _scores)
             {
+                if (_disqualifiedPlayers.Contains(entry.Key))
+                    continue;
+
                 if (entry.Value > maxScore)
                 {
                     maxScore = entry.Value;
