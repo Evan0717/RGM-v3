@@ -9,12 +9,12 @@ namespace RGM.Modes.ExclusiveWeapon;
 
 /// <summary>
 /// Forged Star.
-/// Passive: Attack 11%+(res*2%). Burned target crit damage +(12%*res).
-/// Flame stacks (2s CD, 8s duration). 6 stacks explode + 7m splash 60%.
+/// Passive: Attack 11%+(res*2%). Burned target crit damage +(20%*res).
+/// Flame stacks (0.4s CD, 10s duration). 8 stacks explode + 12m splash 90%.
 /// </summary>
 [ExclusiveWeapon(
     "위조된 작은 별",
-    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (12% * 공진 수치) 증가. 불꽃 7스택 폭발 + 8.5m 스플래시(85%).",
+    "공격력 11% + (공진 수치 * 2%) 증가. 화상 대상 공격 시 크리티컬 데미지 (20% * 공진 수치) 증가. 불꽃 8스택 폭발 + 12m 스플래시(90%).",
     ExclusiveWeaponType.ForgedStar)]
 public class ForgedStar : ExcWeapon
 {
@@ -26,21 +26,21 @@ public class ForgedStar : ExcWeapon
 
     public override float PassiveAttackPercent => 11f + Resonance * 2f;
 
-    const float FlameCooldown = 1f;
-    const float FlameDuration = 8f;
-    const int FlameMaxStacks = 7;
-    const float SplashRadius = 8.5f;
-    const float SplashRatio = 0.85f;
+    private const float FlameCooldown = 0.4f;
+    private const float FlameDuration = 10f;
+    private const int FlameMaxStacks = 8;
+    private const float SplashRadius = 12f;
+    private const float SplashRatio = 0.9f;
 
-    class FlameState
+    private class FlameState
     {
         public int Stacks;
         public float ExpireAt;
     }
 
-    readonly Dictionary<uint, FlameState> _flames = new();
-    float _nextFlameAt;
-    bool _exploding;
+    private readonly Dictionary<uint, FlameState> _flames = new();
+    private float _nextFlameAt;
+    private bool _exploding;
 
     public override float GetCriticalDamageBonus(Player target)
     {
@@ -49,7 +49,7 @@ public class ForgedStar : ExcWeapon
 
         var burned = target.GetEffect(EffectType.Burned);
         if (burned != null && burned.IsEnabled)
-            return 12f * Resonance;
+            return 20f * Resonance;
 
         return 0f;
     }
@@ -69,7 +69,7 @@ public class ForgedStar : ExcWeapon
         _exploding = false;
     }
 
-    void OnHurting(HurtingEventArgs ev)
+    private void OnHurting(HurtingEventArgs ev)
     {
         if (_exploding || ev.Attacker != Owner || Owner == null)
             return;
@@ -86,12 +86,12 @@ public class ForgedStar : ExcWeapon
         TryAddFlame(ev.Player);
     }
 
-    void TryAddFlame(Player target)
+    private void TryAddFlame(Player target)
     {
         if (target == null || !target.IsAlive)
             return;
 
-        float now = Time.time;
+        var now = Time.time;
         if (now < _nextFlameAt)
         {
             RefreshDuration(target, now);
@@ -100,7 +100,7 @@ public class ForgedStar : ExcWeapon
 
         _nextFlameAt = now + FlameCooldown;
 
-        uint id = target.NetId;
+        var id = target.NetId;
         if (!_flames.TryGetValue(id, out var state) || now > state.ExpireAt)
             state = new FlameState();
 
@@ -115,26 +115,23 @@ public class ForgedStar : ExcWeapon
         }
     }
 
-    void RefreshDuration(Player target, float now)
+    private void RefreshDuration(Player target, float now)
     {
-        uint id = target.NetId;
+        var id = target.NetId;
         if (_flames.TryGetValue(id, out var state) && now <= state.ExpireAt)
             state.ExpireAt = now + FlameDuration;
     }
 
-    void Explode(Player primary)
+    private void Explode(Player primary)
     {
         if (primary == null || Owner == null)
             return;
 
-        float explosion =
-            50f
-            + 10f * Resonance
-            + primary.MaxHealth * (0.1f + 0.02f * Resonance);
+        var explosion = 140f + 10f * Resonance + primary.MaxHealth * (0.1f + 0.04f * Resonance);
 
         DealDamage(primary, explosion);
 
-        Vector3 origin = primary.Position;
+        var origin = primary.Position;
         foreach (var other in Player.List)
         {
             if (other == null || !other.IsAlive || other == primary || other == Owner)
@@ -151,11 +148,11 @@ public class ForgedStar : ExcWeapon
 
         EchoBattleCore.ShowNotification(
             Owner,
-            $"<color=#ff8844>불꽃 폭발</color> {explosion:0.#}",
+            $"<color=#ff8844>불꽃 폭발</color> {explosion:0.##}",
             1.5f);
     }
 
-    void DealDamage(Player target, float amount)
+    private void DealDamage(Player target, float amount)
     {
         if (target == null || !target.IsAlive || amount <= 0f)
             return;
