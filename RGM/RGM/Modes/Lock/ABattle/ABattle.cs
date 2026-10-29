@@ -1,4 +1,6 @@
-﻿using CommandSystem;
+﻿// ReSharper disable IteratorNeverReturns
+
+using CommandSystem;
 using DiscordInteraction.Discord;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
@@ -625,10 +627,6 @@ public class ABattle : Mode
         {
             foreach (var player in Player.List.Where(x => !x.IsNPC))
             {
-                var CurrentHint = player.CurrentHint;
-                var isStatusHint = CurrentHint != null &&
-                                   (CurrentHint.Content.Contains("워크스테이션") || CurrentHint.Content.Contains("보유 업그레이드"));
-
                 if (player.IsAlive)
                     player.AddHint("워크스테이션 힌트", FormatHint(player), 1.1f);
             }
@@ -644,8 +642,8 @@ public class ABattle : Mode
             foreach (var player in PlayerWorkstations.Keys)
             {
                 PlayerWorkstations[player].Clear();
-
-                if (player != null && player.IsConnected)
+                if (//player != null && // 이렇게 하고 문제 없으면 완전 제거
+                    player.IsConnected)
                     player.AddBroadcast(10,
                         $"<b><size=25>캐시 청소가 완료되었습니다. 이전에 방문한 워크스테이션에서 능력을 다시 얻을 수 있습니다.</size></b>");
             }
@@ -717,7 +715,7 @@ public class ABattle : Mode
 
         foreach (var cem in CurrentExtraModes)
         {
-            var extraMode = $"<size=25><b><color=#fecdcd>{cem}</color></b></size>\n<size=20>{ExtraModes[cem]}</size>";
+            var extraMode = $"<size=25><b><color=#FECDCD>{cem}</color></b></size>\n<size=20>{ExtraModes[cem]}</size>";
 
             if (enableBroadcast)
                 player.AddBroadcast(10, extraMode);
@@ -798,12 +796,7 @@ public class ABattle : Mode
             if (GlobalPlayer.ClipsById.Count(x => x.Value.Clip == name) < 1)
                 Tools.PlayGlobalAudio(name, 2f);
         }
-
-        /*if (!Abilities[type].IsUnique && allowReflector && Abilities[type].Category != AbilityCategory.Ancient &&
-            Abilities[type].Category != AbilityCategory.Synergy)
-        {
-        }*/
-
+        
         Log.Info("AddAbility called with " + player.Nickname + " and " + type);
 
         if (!PlayerAbilities.ContainsKey(player))
@@ -1384,7 +1377,7 @@ public class ABattle : Mode
 
     private IEnumerator<float> SelectionCoroutine(Player player)
     {
-        for (var i = 0; i < 80; i++)
+        for (var i = 0; i < 40; i++)
         {
             string text = null;
             bool shouldClose = false;
@@ -1410,13 +1403,13 @@ public class ABattle : Mode
 
                 if (shouldClose)
                 {
-                    player.AddHint("능력 선택", "", 0.25f);
+                    player.AddHint("능력 선택", "", 0.5f);
                 }
                 else
                 {
                     player.AddHint("능력 선택",
                         $"""
-                         <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(80 - i) / 4})</b></size>
+                         <align=left><size=40><b>능력 선택창ㅣ{SelectFormat[CheckAbilityGrade(text)]} ({(40 - i) / 2})</b></size>
 
                          <size=30>{text}</size>
 
@@ -1430,7 +1423,7 @@ public class ABattle : Mode
             if (shouldClose)
                 yield break;
 
-            yield return Timing.WaitForSeconds(0.25f);
+            yield return Timing.WaitForSeconds(0.5f);
         }
 
         AbilityType selectedAbility;
@@ -1446,7 +1439,7 @@ public class ABattle : Mode
             IsSelecting[player] = false;
         }
 
-        player.AddHint("능력 선택", "", 0.25f);
+        player.AddHint("능력 선택", "", 0.5f);
         AddAbility(player, selectedAbility, isSelectionAbility: true);
 
         yield break;
@@ -1506,9 +1499,9 @@ public class ABattle : Mode
     [
         (AbilityCategory.Ancient, 1), // 0.001
         (AbilityCategory.Mythic, 19), // 0.019
-        (AbilityCategory.Legend, 200), // 0.200
-        (AbilityCategory.Epic, 9390), // 9.390
-        (AbilityCategory.Rare, 28895), // 28.895
+        (AbilityCategory.Legend, 500), // 0.500
+        (AbilityCategory.Epic, 9190), // 9.290
+        (AbilityCategory.Rare, 28695), // 28.695
         (AbilityCategory.Normal, 61495) // 61.495
     ];
 
@@ -1516,9 +1509,9 @@ public class ABattle : Mode
     [
         (AbilityCategory.Ancient, 2), // 0.002
         (AbilityCategory.Mythic, 38), // 0.038
-        (AbilityCategory.Legend, 575), // 0.575
-        (AbilityCategory.Epic, 15570), // 15.570
-        (AbilityCategory.Rare, 34315), // 34.315
+        (AbilityCategory.Legend, 995), // 0.995
+        (AbilityCategory.Epic, 15360), // 15.360
+        (AbilityCategory.Rare, 34105), // 34.105
         (AbilityCategory.Normal, 49500) // 49.500
     ];
 

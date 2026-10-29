@@ -73,8 +73,6 @@ public class ABattleEventHandler(ABattle aBattle)
 
     private void OnSpawned(SpawnedEventArgs ev)
     {
-        if (!ev.Player.IsScpRole()) ev.Player.ApplyGodMode(50f);
-
         if (_pendingAbilityRestores.TryGetValue(ev.Player, out var abilities))
         {
             _pendingAbilityRestores.Remove(ev.Player);
@@ -92,6 +90,9 @@ public class ABattleEventHandler(ABattle aBattle)
 
         if (player.IsAlive)
             ABattle.ApplyPrelude(player);
+        
+        if (!player.IsScp) 
+            player.ApplyGodMode(50f);
     }
 
     private void OnJumping(JumpingEventArgs ev)
