@@ -1,4 +1,6 @@
-﻿using AdminToys;
+﻿// ReSharper disable IteratorNeverReturns
+
+using AdminToys;
 using Christmas.Scp2536.Gifts;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
@@ -244,9 +246,50 @@ public static class ServerIEnumerator
             yield return Timing.WaitForSeconds(1);
         }
     }
+    
+    public static IEnumerator<float> ScpGlow(Player owner)
+    {
+        var schematic = ObjectSpawner.SpawnSchematic("Light", Vector3.zero);
+        var light = schematic.GetComponentsInChildren<LightSourceToy>().First();
 
+        var flag = false;
+
+        while (owner.IsScp)
+        {
+            switch (flag)
+            {
+                case false when owner.CurrentItem != null && owner.Role is not Scp3114Role
+                {
+                    DisguiseStatus: PlayerRoles.PlayableScps.Scp3114.Scp3114Identity.DisguiseStatus.Active
+                }:
+                {
+                    flag = true;
+
+                    schematic.transform.parent = owner.Transform;
+                    schematic.transform.localPosition = Vector3.zero;
+
+                    if (ColorUtility.TryParseHtmlString("#FF5F1F", out var color))
+                        light.NetworkLightColor = color;
+                    light.NetworkLightRange = 25;
+                    light.NetworkLightIntensity = 7;
+                    break;
+                }
+                case true when owner.CurrentItem == null:
+                    flag = false;
+
+                    schematic.transform.parent = null;
+                    schematic.transform.position = Vector3.zero;
+                    break;
+            }
+
+            yield return Timing.WaitForSeconds(1);
+        }
+
+        schematic.Destroy();
+    }
+    
     // 이거 어디서 사용되는지 체크 필요
-    public static IEnumerator<float> TimezoneCheck()
+    /*public static IEnumerator<float> TimezoneCheck()
     {
         var lastProcessedDate = DateTime.MinValue.Date;
         var isProcessing = false;
@@ -356,46 +399,5 @@ public static class ServerIEnumerator
 
             yield return Timing.WaitForSeconds(60f);
         }
-    }
-
-    public static IEnumerator<float> ScpGlow(Player owner)
-    {
-        var schematic = ObjectSpawner.SpawnSchematic("Light", Vector3.zero);
-        var light = schematic.GetComponentsInChildren<LightSourceToy>().First();
-
-        var flag = false;
-
-        while (owner.IsScp)
-        {
-            switch (flag)
-            {
-                case false when owner.CurrentItem != null && owner.Role is not Scp3114Role
-                {
-                    DisguiseStatus: PlayerRoles.PlayableScps.Scp3114.Scp3114Identity.DisguiseStatus.Active
-                }:
-                {
-                    flag = true;
-
-                    schematic.transform.parent = owner.Transform;
-                    schematic.transform.localPosition = Vector3.zero;
-
-                    if (ColorUtility.TryParseHtmlString("#FF5F1F", out var color))
-                        light.NetworkLightColor = color;
-                    light.NetworkLightRange = 25;
-                    light.NetworkLightIntensity = 7;
-                    break;
-                }
-                case true when owner.CurrentItem == null:
-                    flag = false;
-
-                    schematic.transform.parent = null;
-                    schematic.transform.position = Vector3.zero;
-                    break;
-            }
-
-            yield return Timing.WaitForSeconds(1);
-        }
-
-        schematic.Destroy();
-    }
+    }*/
 }
