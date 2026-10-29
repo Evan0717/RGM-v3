@@ -487,6 +487,7 @@
     <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost3\Chibi096.cs" />
     <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost3\Chibi106.cs" />
     <Compile Include="RGM\Modes\Lock\EchoBattle\EchoList\cost3\Chibi173.cs" />
+    <Compile Include="RGM\Modes\Lock\EchoBattle\EchoSpeed.cs" />
     <Compile Include="RGM\Modes\Lock\EchoBattle\EchoStats.cs" />
     <Compile Include="RGM\Modes\Lock\EchoBattle\EchoBattleCore.cs" />
     <Compile Include="RGM\Modes\Lock\EchoBattle\EchoSetting.cs" />

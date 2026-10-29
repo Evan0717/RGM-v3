@@ -15,7 +15,7 @@ namespace RGM.Modes.ExclusiveWeapon;
 [ExclusiveWeapon(
     "서리",
     """
-    공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 0.5초마다 최대 1회 Slowness를 (2% * 공진 수치) 중첩(5초 미타격 시 해제).
+    공격력 8% + (공진 수치 * 2%) 증가. 적 타격 시 0.5초마다 적응형 이동속도 (-2 * 공진 수치)만큼 중첩(5초 미타격 시 해제).
     10스택 시 2초 + (0.4초 * 공진 수치) 속박, 이후 6초간 중첩 불가.
     """,
     ExclusiveWeaponType.FrostBurn)]
@@ -168,43 +168,12 @@ public class FrostBurn : ExcWeapon
     }
 
     /// <summary>
-    /// 대상의 현재 이동속도(MovementBoost는 양수, Slowness는 음수)에서 서리 감소량을 차감해 적용한다.
-    /// 이전에 적용한 서리 감소량은 먼저 되돌린 뒤 새 감소량으로 다시 계산한다.
-    /// 계산 값이 양수면 MovementBoost, 음수면 Slowness, 0이면 둘 다 적용하지 않는다.
+    /// 서리 이동속도 감소량을 <paramref name="reduction"/>으로 맞춘다.
+    /// 이전에 적용한 감소량과의 차이만큼만 현재 이동속도(MovementBoost - Slowness)에 반영한다.
     /// </summary>
     private static void SetSpeedReduction(Player target, FrostState state, int reduction)
     {
-        if (target == null || !target.IsAlive)
-            return;
-
-        var speed = GetIntensity(target, EffectType.MovementBoost)
-                    - GetIntensity(target, EffectType.Slowness)
-                    + state.AppliedReduction
-                    - reduction;
-
-        SetIntensity(target, EffectType.MovementBoost, Mathf.Max(speed, 0));
-        SetIntensity(target, EffectType.Slowness, Mathf.Max(-speed, 0));
-
+        EchoSpeed.Reduce(target, reduction - state.AppliedReduction);
         state.AppliedReduction = reduction;
-    }
-
-    private static int GetIntensity(Player target, EffectType type)
-    {
-        var effect = target.GetEffect(type);
-        return effect is { IsEnabled: true } ? effect.Intensity : 0;
-    }
-
-    private static void SetIntensity(Player target, EffectType type, int intensity)
-    {
-        if (intensity <= 0)
-        {
-            target.DisableEffect(type);
-            return;
-        }
-
-        // 이미 적용 중인 효과는 기존 지속 시간을 유지한다.
-        var effect = target.GetEffect(type);
-        var duration = effect is { IsEnabled: true } ? effect.Duration : 0f;
-        target.EnableEffect(type, (byte)Mathf.Min(intensity, byte.MaxValue), duration);
     }
 }
