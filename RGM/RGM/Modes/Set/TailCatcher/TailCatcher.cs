@@ -5,10 +5,8 @@ using MEC;
 using UnityEngine;
 using Exiled.API.Enums;
 using PlayerRoles;
-
 using RGM.API.Features;
 using Mirror;
-
 using static RGM.Variables.Variable;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Player;
@@ -20,29 +18,31 @@ namespace RGM.Modes
     {
         public override string Name => "꼬리 잡기";
         public override string Description => "절대로 타깃이 아닌 유저를 쏘지 마세요! 꼬리가 잡히지 않도록 하십시오.";
-        public override string Detail =>
-"""
-<color=red>꼬리가 아닌 유저를 공격하면 데미지가 반사됩니다.</color>
 
-눈치 게임과 비슷하군요!
-""";
+        public override string Detail =>
+            """
+            <color=red>꼬리가 아닌 유저를 공격하면 데미지가 반사됩니다.</color>
+
+            눈치 게임과 비슷하군요!
+            """;
+
         public override string Color => "A9F5BC";
         public override string Map => "hp";
 
         public static TailCatcter Instance;
 
-        List<Player> pl = new List<Player>();
+        private readonly List<Player> _pl = [];
 
-        CoroutineHandle _onModeStarted;
+        private CoroutineHandle _onModeStarted;
 
-        AudioClipPlayback audio;
+        private AudioClipPlayback _audio;
 
-        Player GetTarget(Player attacker)
+        private Player GetTarget(Player attacker)
         {
-            int playerIndex = pl.IndexOf(attacker);
-            int targetIndex = (playerIndex + 1) % pl.Count;
+            int playerIndex = _pl.IndexOf(attacker);
+            int targetIndex = (playerIndex + 1) % _pl.Count;
 
-            return pl[targetIndex];
+            return _pl[targetIndex];
         }
 
         public override void OnEnabled()
@@ -61,7 +61,7 @@ namespace RGM.Modes
 
             _onModeStarted = Timing.RunCoroutine(OnModeStarted());
 
-            audio = Tools.PlayGlobalAudio("Initial-D-Dancing", 1, true);
+            _audio = Tools.PlayGlobalAudio("Initial-D-Dancing", 1, true);
         }
 
         public override void OnDisabled()
@@ -76,12 +76,12 @@ namespace RGM.Modes
 
             Timing.KillCoroutines(_onModeStarted);
 
-            audio.IsPaused = true;
+            _audio.IsPaused = true;
         }
 
-        public IEnumerator<float> OnModeStarted()
+        private IEnumerator<float> OnModeStarted()
         {
-            PlayerManager.List.Where(x => !x.IsNPC).CopyTo(pl);
+            PlayerManager.List.Where(x => !x.IsNPC).CopyTo(_pl);
 
             foreach (var door in Door.List)
             {
@@ -95,11 +95,11 @@ namespace RGM.Modes
                 player.AddItem(ItemType.GunCrossvec);
             }
 
-            pl.ShuffleList();
+            _pl.ShuffleList();
 
             while (true)
             {
-                foreach (var player in PlayerManager.List.Where(pl.Contains))
+                foreach (var player in PlayerManager.List.Where(_pl.Contains))
                 {
                     Player target = GetTarget(player);
 
@@ -110,59 +110,52 @@ namespace RGM.Modes
             }
         }
 
-        public void OnInteractingDoor(InteractingDoorEventArgs ev)
+        private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnSpawned(SpawnedEventArgs ev)
+        private void OnSpawned(SpawnedEventArgs ev)
         {
             Server.ExecuteCommand($"/speak {ev.Player.Id} 1");
             IntercomPlayers.Add(ev.Player);
         }
 
-        public void OnDroppingItem(DroppingItemEventArgs ev)
+        private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
+        private void OnDroppingAmmo(DroppingAmmoEventArgs ev)
         {
             ev.IsAllowed = false;
         }
 
-        public void OnShot(ShotEventArgs ev)
+        private void OnShot(ShotEventArgs ev)
         {
             ev.Firearm.MagazineAmmo += 1;
         }
 
-        public void OnHurting(HurtingEventArgs ev)
+        private void OnHurting(HurtingEventArgs ev)
         {
             Player target = GetTarget(ev.Attacker);
 
-            if (ev.Player != target)
-            {
-                ev.Attacker.Hurt(ev.DamageHandler.Damage);
+            if (ev.Player == target) return;
+            ev.Attacker.Hurt(ev.DamageHandler.Damage);
 
-                ev.IsAllowed = false;
-            }
+            ev.IsAllowed = false;
         }
 
-
-        public void OnDying(DyingEventArgs ev)
+        private void OnDying(DyingEventArgs ev)
         {
-            if (pl.Contains(ev.Player))
-            {
-                pl.Remove(ev.Player);
+            if (!_pl.Contains(ev.Player)) return;
+            _pl.Remove(ev.Player);
 
-                if (pl.Count() < 2)
-                {
-                    Round.IsLocked = false;
+            if (_pl.Count >= 2) return;
+            Round.IsLocked = false;
 
-                    PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {pl[0].DisplayNickname}"));
-                    Timing.RunCoroutine(Tools.SetWinner(new List<Player>() { pl[0] }, 5));
-                }
-            }
+            PlayerManager.List.ToList().ForEach(x => x.AddBroadcast(20, $"승리자 : {_pl[0].DisplayNickname}"));
+            Timing.RunCoroutine(Tools.SetWinner([_pl[0]], 5));
         }
     }
 }
