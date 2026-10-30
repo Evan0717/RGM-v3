@@ -16,7 +16,7 @@ using RGM.Patches;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.WhoamI1)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.WhoamI1)]
     public class WhoamI1 : Mode
     {
         public override string Name => "나는 누구?";
