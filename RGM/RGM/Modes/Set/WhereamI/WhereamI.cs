@@ -12,7 +12,7 @@ using RGM.Patches;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.WhereamI)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.WhereamI)]
     public class WhereamI : Mode
     {
         public override string Name => "여긴 어디?";

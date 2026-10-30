@@ -25,8 +25,8 @@ public class Hammer : Ability
     public override void OnEnabled()
     {
         Owner.AddAbility(AbilityType.LEGEND_SPEEDWAGON);
-        Owner.AddEffect(EffectType.Metal, 255);
-        Owner.AddEffect(EffectType.Lightweight, 255);
+        Owner.AddEffect(EffectType.Metal, 120);
+        Owner.AddEffect(EffectType.Lightweight, 120);
         Owner.AddEffect(EffectType.DamageReduction, 80);
 
         Exiled.Events.Handlers.Player.Hurting += OnHurting;

@@ -10,7 +10,7 @@ using RGM.Patches;
 
 namespace RGM.Modes
 {
-    [Mode(ModeCategory.Public, ModeInfo.Set, ModeType.WhoamI2)]
+    [Mode(ModeCategory.Private, ModeInfo.Set, ModeType.WhoamI2)]
     public class WhoamI2 : Mode
     {
         public override string Name => "누구게?";
