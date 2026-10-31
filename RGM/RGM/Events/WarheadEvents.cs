@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Warhead;
@@ -36,20 +37,26 @@ namespace RGM.Events
 
             yield return Timing.WaitForSeconds(300);
 
-            Tools.MessageTranslated("", "시간이 너무 오래 걸립니다! 모두의 체력이 초당 5%씩 줄어듭니다!");
+            Tools.MessageTranslated("", "시간이 너무 오래 걸립니다! 모두의 체력이 점차 줄어듭니다!");
             PlayerManager.List.ToList().ForEach(x => x.EnableEffect(EffectType.PocketCorroding));
 
-            while (true)
+            const float tau = Mathf.PI * 2f;
+            var x = 1f;
+            var cubicRoot = Mathf.Pow(tau / 5, 1.0f / 3.0f);
+
+            while (!Round.IsEnded)
             {
+                var fx = Mathf.Pow(cubicRoot, x / 7) - 1;
+                
                 foreach (var player in PlayerManager.List)
                 {
-                    player.Health -= player.MaxHealth * 0.05f;
+                    player.Health -= player.MaxHealth * Mathf.Min(1, fx);
                     
                     if (player.Health <= 0 && player.IsAlive)
                         player.Kill("게임을 질질 끌어서 죽었습니다.");
                 }
-
-                yield return Timing.WaitForSeconds(1);
+                x += 0.5f;
+                yield return Timing.WaitForSeconds(0.5f);
             }
         }
 
