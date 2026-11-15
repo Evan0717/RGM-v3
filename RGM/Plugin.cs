@@ -7,7 +7,6 @@ using RGM.Patches;
 using RGM.UserSettings;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using static RGM.Events.MEREvents;
 using static RGM.Events.PlayerEvents;
